@@ -1,0 +1,202 @@
+{
+  "frames": 900,
+  "carry_weapon_pixels": 14863,
+  "carry_cases": [
+    [
+      0,
+      0,
+      -1
+    ],
+    [
+      0,
+      0,
+      1
+    ],
+    [
+      0,
+      1,
+      -1
+    ],
+    [
+      0,
+      1,
+      1
+    ],
+    [
+      0,
+      2,
+      -1
+    ],
+    [
+      0,
+      2,
+      1
+    ],
+    [
+      0,
+      3,
+      -1
+    ],
+    [
+      0,
+      3,
+      1
+    ],
+    [
+      1,
+      0,
+      -1
+    ],
+    [
+      1,
+      0,
+      1
+    ],
+    [
+      1,
+      1,
+      -1
+    ],
+    [
+      1,
+      1,
+      1
+    ],
+    [
+      1,
+      2,
+      -1
+    ],
+    [
+      1,
+      2,
+      1
+    ],
+    [
+      1,
+      3,
+      -1
+    ],
+    [
+      1,
+      3,
+      1
+    ]
+  ],
+  "windup_bridge_pixels": 19186,
+  "metal_swing_pixels": 8509,
+  "metal_swing_cases": [
+    [
+      0,
+      1,
+      -1
+    ],
+    [
+      0,
+      1,
+      1
+    ],
+    [
+      0,
+      2,
+      -1
+    ],
+    [
+      0,
+      2,
+      1
+    ],
+    [
+      0,
+      4,
+      -1
+    ],
+    [
+      0,
+      5,
+      -1
+    ],
+    [
+      0,
+      5,
+      1
+    ],
+    [
+      0,
+      6,
+      -1
+    ],
+    [
+      0,
+      6,
+      1
+    ],
+    [
+      1,
+      1,
+      -1
+    ],
+    [
+      1,
+      4,
+      1
+    ],
+    [
+      1,
+      5,
+      -1
+    ],
+    [
+      1,
+      5,
+      1
+    ],
+    [
+      1,
+      6,
+      -1
+    ]
+  ],
+  "ghost_kneecap_pixels_removed_in_game": 0,
+  "ghost_sample_frames": {},
+  "ghost_cases_seen": [],
+  "gameplay_states_identical_to_control": 605,
+  "velocity_samples": 186,
+  "velocity_24_8": 663,
+  "carry_velocity_samples": 21,
+  "full_health_KO_frames": [
+    423
+  ],
+  "run_pixels_compared": 154120,
+  "pixel_mismatches": 0,
+  "run_poses_seen": [
+    [
+      18,
+      19,
+      20,
+      21
+    ],
+    [
+      18,
+      19,
+      20,
+      21
+    ]
+  ],
+  "run_facings_seen": [
+    [
+      -1,
+      1
+    ],
+    [
+      -1,
+      1
+    ]
+  ],
+  "actual_vdp1_bytes": 410464,
+  "free_vdp1_bytes": 48024,
+  "texture_slots": 169,
+  "stable_gameplay_textures": true,
+  "method": "Controller-only local Yabause HLE/software/interpreter, read-only state tracing, no RAM writes. Physical Saturn/WebRetro not tested.",
+  "core_sha256": "f00215b3c6ee0c82a377a8403b686e09bf8684f176a0a5bd66b47b8677e4d738"
+}

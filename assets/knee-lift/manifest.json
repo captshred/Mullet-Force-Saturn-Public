@@ -1,0 +1,63 @@
+{
+  "baseline": "a44464fb557882cfb07afaeaf409ed6871cfcaf5",
+  "timing_ticks": [
+    10,
+    10,
+    10
+  ],
+  "canvas": [
+    128,
+    96
+  ],
+  "root": [
+    64,
+    92
+  ],
+  "palette_sha256": "0bc5370c89a51dc3d4c41505c3dcef0748362af8c4135d4badaa09c632e302aa",
+  "guide_sha256": "4358db9cc4218c72b39401f56f71e92faab47109c950ac9fc0a3f082ca75fc11",
+  "actors": [
+    {
+      "name": "buck",
+      "rgba_sha256": "a62132cfb71c327e7e7eed35a62706805ae230af888fa27a86dec7bc0e121e4e",
+      "changed_pixels": 543,
+      "changed_bounds": [
+        64,
+        56,
+        99,
+        92
+      ],
+      "front_sole_y": 88,
+      "rear_sole_y": 91,
+      "guide_dx": 0
+    },
+    {
+      "name": "chuck",
+      "rgba_sha256": "8101382f2b112b24f5b5b4248c7840aee3ea890ceebd01fd26ee6bd6d63dd043",
+      "changed_pixels": 587,
+      "changed_bounds": [
+        64,
+        56,
+        99,
+        92
+      ],
+      "front_sole_y": 88,
+      "rear_sole_y": 91,
+      "guide_dx": -1
+    }
+  ],
+  "overrides": {
+    "AB11.TGA": "d748be0fed0976466274f75b32b6ea64276367e694763b4329e0f7025d1328cb",
+    "AB12.TGA": "d4ad41a5c3e3f7b6a69afeab0acdbe95a1a06d18a3bc4c00c9e82222731a24e8",
+    "AC11.TGA": "0664f686a080c6bfc2bb0d5602b27853c1319e90a9e4081c4c428b84dee0d889",
+    "AC12.TGA": "3f15b8594d3322329319da95bb73cc2dd7fdc22a8f303a58c5295085af5aa618"
+  },
+  "boot_bytes": 351104,
+  "free_bytes": 107384,
+  "full_bytes": 427104,
+  "frame2_3_sha256": {
+    "buck-01.png": "0b2e6c8e8e8e654bce6dbe1c7a4be742eb2d8e3dc0244dfe29c2afa138408fbc",
+    "buck-02.png": "231019656d27d7051e304716a2995d2b12b231adf7a75e84f2fc193770ad37b1",
+    "chuck-01.png": "978c543bda653f18f30868125c1cb45fc5e5e84457bca38739c5e1b283bf75cc",
+    "chuck-02.png": "1dd5d83ca39156d88cb0898c3176d85ee3a621746ceaa546fac69ea6e026d0db"
+  }
+}

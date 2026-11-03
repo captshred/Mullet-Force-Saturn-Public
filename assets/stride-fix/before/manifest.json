@@ -1,0 +1,477 @@
+{
+  "canvas": [
+    128,
+    96
+  ],
+  "root": [
+    64,
+    92
+  ],
+  "palette": "assets/gallery/GB0.TGA",
+  "transparent_index": 0,
+  "frame_ticks": 6,
+  "unique_resources": 24,
+  "texture_bytes": 41664,
+  "naive_bytes": 41664,
+  "dedup_saved": 0,
+  "boot_vdp1_bytes": 404512,
+  "free_vdp1_bytes": 53976,
+  "slots": 159,
+  "resources": [
+    {
+      "name": "RN00.TGA",
+      "width": 56,
+      "height": 24,
+      "bytes": 1344,
+      "sha256": "cc5624c1c9792fe62b570bc678edd9cb3a97a967615121bc03eca628fc3f6d92"
+    },
+    {
+      "name": "RN01.TGA",
+      "width": 64,
+      "height": 32,
+      "bytes": 2048,
+      "sha256": "e7b381b5af9289b10c135c829f9ed780be47a22321586ecf31a95b6f77a9c50d"
+    },
+    {
+      "name": "RN02.TGA",
+      "width": 72,
+      "height": 32,
+      "bytes": 2304,
+      "sha256": "7d2b2fc0d1a252925de6b9865d31278909bf1b0604a576ddea4caa82f2d11463"
+    },
+    {
+      "name": "RN03.TGA",
+      "width": 56,
+      "height": 24,
+      "bytes": 1344,
+      "sha256": "af6c2717c400a1212f648da598266edc9f53b13f8803cbcb4db528953fec15a2"
+    },
+    {
+      "name": "RN04.TGA",
+      "width": 64,
+      "height": 32,
+      "bytes": 2048,
+      "sha256": "453ea488449b1bba8931631382a23c0f2f05846e8e609bc71adaa3e7ce19df45"
+    },
+    {
+      "name": "RN05.TGA",
+      "width": 64,
+      "height": 22,
+      "bytes": 1408,
+      "sha256": "1b14ddf82d3a2761e397755a05a7e2c17ae30f7775a6abab201225a4bb6e0ffe"
+    },
+    {
+      "name": "RN06.TGA",
+      "width": 48,
+      "height": 22,
+      "bytes": 1056,
+      "sha256": "8df7f68f70946be36d9d6289951b1d401096933da93f10b708fb8e3c8b924697"
+    },
+    {
+      "name": "RN07.TGA",
+      "width": 64,
+      "height": 32,
+      "bytes": 2048,
+      "sha256": "c2a4b8a40f28b7f2ad2bbb0d786235767f2bc049d45637ecf1b35e49b69e5c0d"
+    },
+    {
+      "name": "RN08.TGA",
+      "width": 80,
+      "height": 32,
+      "bytes": 2560,
+      "sha256": "0705c53a382821b39913c9b26ec153b67cb6221b704f180e9c1f976bebc5780c"
+    },
+    {
+      "name": "RN09.TGA",
+      "width": 64,
+      "height": 24,
+      "bytes": 1536,
+      "sha256": "34a676830768f11ce2859c8209c4b253530a423fababb5e7f04baed323b265e0"
+    },
+    {
+      "name": "RN10.TGA",
+      "width": 72,
+      "height": 32,
+      "bytes": 2304,
+      "sha256": "a8410659d0cdf1fd6822b64a629229ca5eeafb0af0863525486c459f02155582"
+    },
+    {
+      "name": "RN11.TGA",
+      "width": 32,
+      "height": 28,
+      "bytes": 896,
+      "sha256": "ecc49eaf6c0d2212a33f6c12157fe230e32c1e534b7c9cf4c0dde20eed9207c9"
+    },
+    {
+      "name": "RN12.TGA",
+      "width": 56,
+      "height": 24,
+      "bytes": 1344,
+      "sha256": "da625c171aece892a901443ae4f50bae37239456f743e6abba1455bade689817"
+    },
+    {
+      "name": "RN13.TGA",
+      "width": 64,
+      "height": 32,
+      "bytes": 2048,
+      "sha256": "7588db06369e140358ffafd5e73482237ff7b72004cadda8172daa253cf7026e"
+    },
+    {
+      "name": "RN14.TGA",
+      "width": 72,
+      "height": 32,
+      "bytes": 2304,
+      "sha256": "f9d976052835621d1be941a8bdc317c693e6bc1179b73d8d517b1f41de671dcc"
+    },
+    {
+      "name": "RN15.TGA",
+      "width": 56,
+      "height": 24,
+      "bytes": 1344,
+      "sha256": "573051a4059521f5bff9688ac5e29fd21b4384d66ff761a9cf8183bcfd4dec05"
+    },
+    {
+      "name": "RN16.TGA",
+      "width": 64,
+      "height": 32,
+      "bytes": 2048,
+      "sha256": "fc10f482e44c683ac04f38f54365a55cd27caae582df3bb307d0537ea1dc0eda"
+    },
+    {
+      "name": "RN17.TGA",
+      "width": 56,
+      "height": 20,
+      "bytes": 1120,
+      "sha256": "5c18c22c48f77f7fa7f69adec56bb4e919d730045bfe27b48122620060748e75"
+    },
+    {
+      "name": "RN18.TGA",
+      "width": 56,
+      "height": 24,
+      "bytes": 1344,
+      "sha256": "f9d31d5a094a85f609d79fed5fe3b392921a82fd12306142108c3f263cd329bf"
+    },
+    {
+      "name": "RN19.TGA",
+      "width": 64,
+      "height": 32,
+      "bytes": 2048,
+      "sha256": "9b7c6b901664e8e5ec291ff3a0fea6241d1f0c3a1b6f826dc79e027262b72a3d"
+    },
+    {
+      "name": "RN20.TGA",
+      "width": 88,
+      "height": 32,
+      "bytes": 2816,
+      "sha256": "71f6345752fe3d79f7556cde30c61924675ed1a9331f7f959a5cff7fd534b8d6"
+    },
+    {
+      "name": "RN21.TGA",
+      "width": 56,
+      "height": 24,
+      "bytes": 1344,
+      "sha256": "bff90ee073c63c5dad12ae12fa27927a8ca472ff016bfc3bb54a84f87caff896"
+    },
+    {
+      "name": "RN22.TGA",
+      "width": 64,
+      "height": 32,
+      "bytes": 2048,
+      "sha256": "343b3239ab5b9552aa11aa206003b4c54307cd7cbcc9970fa639365d45dd315e"
+    },
+    {
+      "name": "RN23.TGA",
+      "width": 32,
+      "height": 30,
+      "bytes": 960,
+      "sha256": "bfd6c4c178996afd352b473b83c086507e749ada8d24e3c1acaa96ec912c5ab5"
+    }
+  ],
+  "actors": [
+    {
+      "name": "buck",
+      "frames": [
+        {
+          "frame": 0,
+          "phase": "near contact",
+          "parts": [
+            {
+              "resource": 81,
+              "x": 44,
+              "y": 4,
+              "width": 56,
+              "height": 24
+            },
+            {
+              "resource": 82,
+              "x": 37,
+              "y": 28,
+              "width": 64,
+              "height": 32
+            },
+            {
+              "resource": 83,
+              "x": 30,
+              "y": 60,
+              "width": 72,
+              "height": 32
+            }
+          ],
+          "bounds": [
+            30,
+            5,
+            99,
+            92
+          ],
+          "sha256": "c05d386103584f3d1edeeb1b87e922c1efb6e875618cd0b1a06c75fa4e52136c"
+        },
+        {
+          "frame": 1,
+          "phase": "far knee drive",
+          "parts": [
+            {
+              "resource": 84,
+              "x": 40,
+              "y": 4,
+              "width": 56,
+              "height": 24
+            },
+            {
+              "resource": 85,
+              "x": 34,
+              "y": 28,
+              "width": 64,
+              "height": 32
+            },
+            {
+              "resource": 86,
+              "x": 33,
+              "y": 60,
+              "width": 64,
+              "height": 22
+            }
+          ],
+          "bounds": [
+            33,
+            5,
+            95,
+            81
+          ],
+          "sha256": "1b7c6c11817564d44d3b4bfa027179a734e959ff5c94becbb4e8f24c3a633e49"
+        },
+        {
+          "frame": 2,
+          "phase": "far contact",
+          "parts": [
+            {
+              "resource": 87,
+              "x": 48,
+              "y": 6,
+              "width": 48,
+              "height": 22
+            },
+            {
+              "resource": 88,
+              "x": 37,
+              "y": 28,
+              "width": 64,
+              "height": 32
+            },
+            {
+              "resource": 89,
+              "x": 26,
+              "y": 60,
+              "width": 80,
+              "height": 32
+            }
+          ],
+          "bounds": [
+            26,
+            7,
+            103,
+            92
+          ],
+          "sha256": "38034165916211dea08306d8ae372ea6d96b969f0e6717e42a64e7f92f8ba427"
+        },
+        {
+          "frame": 3,
+          "phase": "near knee drive",
+          "parts": [
+            {
+              "resource": 90,
+              "x": 38,
+              "y": 4,
+              "width": 64,
+              "height": 24
+            },
+            {
+              "resource": 91,
+              "x": 31,
+              "y": 28,
+              "width": 72,
+              "height": 32
+            },
+            {
+              "resource": 92,
+              "x": 46,
+              "y": 60,
+              "width": 32,
+              "height": 28
+            }
+          ],
+          "bounds": [
+            31,
+            4,
+            97,
+            88
+          ],
+          "sha256": "19417bb896d7a8ce9432e69a9b07fc3d2620fed2204281a5bd5ccc20d09dff06"
+        }
+      ],
+      "source_scale": 0.1896551724137931
+    },
+    {
+      "name": "chuck",
+      "frames": [
+        {
+          "frame": 0,
+          "phase": "near contact",
+          "parts": [
+            {
+              "resource": 93,
+              "x": 40,
+              "y": 4,
+              "width": 56,
+              "height": 24
+            },
+            {
+              "resource": 94,
+              "x": 32,
+              "y": 28,
+              "width": 64,
+              "height": 32
+            },
+            {
+              "resource": 95,
+              "x": 29,
+              "y": 60,
+              "width": 72,
+              "height": 32
+            }
+          ],
+          "bounds": [
+            29,
+            5,
+            99,
+            92
+          ],
+          "sha256": "ca97cd6f42ff8407705d094a358c5c362ac1e0c94a4aebe355d971f8cd20bb05"
+        },
+        {
+          "frame": 1,
+          "phase": "far knee drive",
+          "parts": [
+            {
+              "resource": 96,
+              "x": 43,
+              "y": 4,
+              "width": 56,
+              "height": 24
+            },
+            {
+              "resource": 97,
+              "x": 35,
+              "y": 28,
+              "width": 64,
+              "height": 32
+            },
+            {
+              "resource": 98,
+              "x": 34,
+              "y": 60,
+              "width": 56,
+              "height": 20
+            }
+          ],
+          "bounds": [
+            34,
+            5,
+            94,
+            80
+          ],
+          "sha256": "700b8fe1a8a2fae76b97b308dc026fdb3743b94bb46ca6a533e849437709506b"
+        },
+        {
+          "frame": 2,
+          "phase": "far contact",
+          "parts": [
+            {
+              "resource": 99,
+              "x": 42,
+              "y": 4,
+              "width": 56,
+              "height": 24
+            },
+            {
+              "resource": 100,
+              "x": 34,
+              "y": 28,
+              "width": 64,
+              "height": 32
+            },
+            {
+              "resource": 101,
+              "x": 23,
+              "y": 60,
+              "width": 88,
+              "height": 32
+            }
+          ],
+          "bounds": [
+            23,
+            5,
+            106,
+            92
+          ],
+          "sha256": "b8bcf088d3d32e3aba744a1d69aefd2c0babe4378a8fba9da13dc5f3d05479ff"
+        },
+        {
+          "frame": 3,
+          "phase": "near knee drive",
+          "parts": [
+            {
+              "resource": 102,
+              "x": 40,
+              "y": 4,
+              "width": 56,
+              "height": 24
+            },
+            {
+              "resource": 103,
+              "x": 33,
+              "y": 28,
+              "width": 64,
+              "height": 32
+            },
+            {
+              "resource": 104,
+              "x": 43,
+              "y": 60,
+              "width": 32,
+              "height": 30
+            }
+          ],
+          "bounds": [
+            33,
+            4,
+            96,
+            89
+          ],
+          "sha256": "6b2d514bfc5ed0366223a8de54db8292a531f35e4853acd7047d53a75634eecf"
+        }
+      ],
+      "source_scale": 0.17670682730923695
+    }
+  ],
+  "source_sha256": "ee7c39f9ea42fd7c6e5cd48810dcf641e5cd1e95764089ce20d950e15f70846e"
+}

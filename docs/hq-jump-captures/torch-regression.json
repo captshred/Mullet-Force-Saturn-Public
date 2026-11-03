@@ -1,0 +1,32 @@
+{
+  "gameplay_states_identical": 705,
+  "all_input_dash_bat_jab_state_identical": true,
+  "matched_native_pixels": 297853,
+  "coverage": {
+    "1:pose1:walk-1:face-1": 6100,
+    "1:pose1:walk0:face-1": 5544,
+    "0:pose1:walk-1:face1": 193689,
+    "1:pose1:walk1:face-1": 2427,
+    "1:pose1:walk2:face-1": 1402,
+    "0:pose1:walk0:face1": 45624,
+    "0:pose1:walk1:face1": 28788,
+    "0:pose1:walk2:face1": 11427,
+    "0:pose2:walk-1:face1": 2852
+  },
+  "torch_first_fire_frames": [
+    861,
+    841
+  ],
+  "texture_bytes": 456224,
+  "free_bytes": 2264,
+  "texture_slots": 250,
+  "stable_texture_vram": true,
+  "no_ram_writes": true,
+  "physical_saturn_tested": false,
+  "webretro_tested": false,
+  "limitations": [
+    "Equip is not a separate live dwell: original 60-tick transition goes straight to fire",
+    "Runtime covers Buck right/Chuck left; other mirrors are native/mocked tests",
+    "No hardware performance or audio audition claim"
+  ]
+}

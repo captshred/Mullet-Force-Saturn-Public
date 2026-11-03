@@ -1,0 +1,629 @@
+{
+  "parent": "3f26c763306e3f231fbaf52870fe9b6a301134dc",
+  "frames": [
+    {
+      "actor": 0,
+      "frame": 0,
+      "source": "assets/running/buck-0.png",
+      "changed": [],
+      "sha256": "c36be5824c562302521795afe1d82a219383e8bc7eb381b18340130e331c9dcb"
+    },
+    {
+      "actor": 0,
+      "frame": 1,
+      "source": "assets/running/buck-1.png",
+      "changed": [
+        [
+          62,
+          43
+        ],
+        [
+          63,
+          43
+        ],
+        [
+          64,
+          43
+        ],
+        [
+          65,
+          43
+        ],
+        [
+          66,
+          43
+        ],
+        [
+          67,
+          43
+        ],
+        [
+          68,
+          43
+        ],
+        [
+          69,
+          43
+        ],
+        [
+          70,
+          43
+        ],
+        [
+          71,
+          43
+        ],
+        [
+          72,
+          43
+        ],
+        [
+          73,
+          43
+        ],
+        [
+          57,
+          44
+        ],
+        [
+          58,
+          44
+        ],
+        [
+          59,
+          44
+        ],
+        [
+          60,
+          44
+        ],
+        [
+          61,
+          44
+        ],
+        [
+          62,
+          44
+        ],
+        [
+          63,
+          44
+        ],
+        [
+          64,
+          44
+        ],
+        [
+          65,
+          44
+        ],
+        [
+          66,
+          44
+        ],
+        [
+          67,
+          44
+        ],
+        [
+          68,
+          44
+        ],
+        [
+          69,
+          44
+        ],
+        [
+          70,
+          44
+        ],
+        [
+          71,
+          44
+        ]
+      ],
+      "sha256": "89e9659f4fc53c33a47d5b8a142b2718e8bcbc7420f5706151fc9279e75d70f0"
+    },
+    {
+      "actor": 0,
+      "frame": 2,
+      "source": "assets/running/buck-2.png",
+      "changed": [],
+      "sha256": "f4657e370187d7fffe3c955080804493690533933c24a690df924eebb1d55cce"
+    },
+    {
+      "actor": 0,
+      "frame": 3,
+      "source": "assets/running/buck-3.png",
+      "changed": [
+        [
+          62,
+          42
+        ],
+        [
+          65,
+          42
+        ],
+        [
+          67,
+          42
+        ],
+        [
+          68,
+          42
+        ],
+        [
+          69,
+          42
+        ],
+        [
+          70,
+          42
+        ],
+        [
+          71,
+          42
+        ],
+        [
+          73,
+          42
+        ],
+        [
+          74,
+          42
+        ],
+        [
+          75,
+          42
+        ],
+        [
+          76,
+          42
+        ],
+        [
+          57,
+          43
+        ],
+        [
+          58,
+          43
+        ],
+        [
+          59,
+          43
+        ],
+        [
+          60,
+          43
+        ],
+        [
+          61,
+          43
+        ],
+        [
+          62,
+          43
+        ],
+        [
+          63,
+          43
+        ],
+        [
+          64,
+          43
+        ],
+        [
+          65,
+          43
+        ],
+        [
+          66,
+          43
+        ],
+        [
+          67,
+          43
+        ],
+        [
+          68,
+          43
+        ],
+        [
+          69,
+          43
+        ],
+        [
+          70,
+          43
+        ],
+        [
+          71,
+          43
+        ],
+        [
+          57,
+          44
+        ],
+        [
+          58,
+          44
+        ],
+        [
+          59,
+          44
+        ],
+        [
+          60,
+          44
+        ],
+        [
+          61,
+          44
+        ],
+        [
+          62,
+          44
+        ],
+        [
+          63,
+          44
+        ],
+        [
+          64,
+          44
+        ],
+        [
+          65,
+          44
+        ],
+        [
+          66,
+          44
+        ],
+        [
+          67,
+          44
+        ],
+        [
+          68,
+          44
+        ],
+        [
+          69,
+          44
+        ],
+        [
+          70,
+          44
+        ]
+      ],
+      "sha256": "300772eae0805847994d77497de0b5f0323747c20845581451d8ac6a964d0ffd"
+    },
+    {
+      "actor": 1,
+      "frame": 0,
+      "source": "assets/chuck-denim-cleanup/chuck-0.png",
+      "changed": [],
+      "sha256": "53e7ff2cd2628235a28e8448349cadee4b4d3678eec335b408336b50e8a10d25"
+    },
+    {
+      "actor": 1,
+      "frame": 1,
+      "source": "assets/chuck-denim-cleanup/chuck-1.png",
+      "changed": [
+        [
+          62,
+          43
+        ],
+        [
+          63,
+          43
+        ],
+        [
+          64,
+          43
+        ],
+        [
+          65,
+          43
+        ],
+        [
+          66,
+          43
+        ],
+        [
+          67,
+          43
+        ],
+        [
+          71,
+          43
+        ],
+        [
+          72,
+          43
+        ],
+        [
+          57,
+          44
+        ],
+        [
+          58,
+          44
+        ],
+        [
+          59,
+          44
+        ],
+        [
+          60,
+          44
+        ],
+        [
+          61,
+          44
+        ],
+        [
+          62,
+          44
+        ],
+        [
+          63,
+          44
+        ],
+        [
+          64,
+          44
+        ],
+        [
+          65,
+          44
+        ],
+        [
+          66,
+          44
+        ],
+        [
+          67,
+          44
+        ],
+        [
+          68,
+          44
+        ],
+        [
+          69,
+          44
+        ],
+        [
+          70,
+          44
+        ],
+        [
+          71,
+          44
+        ]
+      ],
+      "sha256": "2766474f3e382ae451ed7b2e18262c502eb7a6f38957114d178ff7b573f81453"
+    },
+    {
+      "actor": 1,
+      "frame": 2,
+      "source": "assets/chuck-denim-cleanup/chuck-2.png",
+      "changed": [],
+      "sha256": "fdaae0e5d65c37d7d170a0d946fbf6bdcedbaf4200386d6e2ee092b18527831e"
+    },
+    {
+      "actor": 1,
+      "frame": 3,
+      "source": "assets/chuck-denim-cleanup/chuck-3.png",
+      "changed": [
+        [
+          57,
+          44
+        ],
+        [
+          58,
+          44
+        ],
+        [
+          59,
+          44
+        ],
+        [
+          60,
+          44
+        ],
+        [
+          61,
+          44
+        ],
+        [
+          62,
+          44
+        ],
+        [
+          63,
+          44
+        ],
+        [
+          64,
+          44
+        ],
+        [
+          65,
+          44
+        ],
+        [
+          66,
+          44
+        ],
+        [
+          67,
+          44
+        ],
+        [
+          68,
+          44
+        ],
+        [
+          69,
+          44
+        ],
+        [
+          70,
+          44
+        ]
+      ],
+      "sha256": "8a66007cf1cf6f620d56f212ca9934f271896ccdd1f802503bfd46fe4b014035"
+    }
+  ],
+  "replacements": [
+    {
+      "name": "RN04.TGA",
+      "disc_path": "RN04.TGA",
+      "source": "assets/running/RN04.TGA",
+      "actor": 0,
+      "frame": 1,
+      "piece": {
+        "resource": 85,
+        "x": 34,
+        "y": 28,
+        "width": 64,
+        "height": 38
+      },
+      "shift": 0,
+      "sha256": "d78d91cb0139e3c647a56911f229effc9299563b991218b73f6b0c3c58b01e07",
+      "source_sha256": "67aec3bf1c1c54a731c62932fb22449347c2c0bcfc9c05c22bdf6a843583873c"
+    },
+    {
+      "name": "CA21.TGA",
+      "disc_path": "COMBAT/CA21.TGA",
+      "source": "assets/attack-sequence/CA21.TGA",
+      "actor": 0,
+      "frame": 1,
+      "piece": {
+        "resource": 21,
+        "x": 34,
+        "y": 48,
+        "width": 64,
+        "height": 16
+      },
+      "shift": 16,
+      "sha256": "771431c88ba8c1887a5468e5e8cdd9bb02e42d8c9adf13abf1aa36cbd3e46440",
+      "source_sha256": "06c6637f2530fb9e6f1566c702f5ef1582389b8cc3a844122d73c24b5cca8f84"
+    },
+    {
+      "name": "RN10.TGA",
+      "disc_path": "RN10.TGA",
+      "source": "assets/running/RN10.TGA",
+      "actor": 0,
+      "frame": 3,
+      "piece": {
+        "resource": 91,
+        "x": 31,
+        "y": 28,
+        "width": 72,
+        "height": 38
+      },
+      "shift": 0,
+      "sha256": "39355e58c47dac38cf77bf06791d4a6aedb90a776074a18461caa3aaef1abefe",
+      "source_sha256": "4b7bf6b3257b7ac1ec73d031a31a4c6e84dc09896fd7d16088d19910780a2741"
+    },
+    {
+      "name": "CA27.TGA",
+      "disc_path": "COMBAT/CA27.TGA",
+      "source": "assets/attack-sequence/CA27.TGA",
+      "actor": 0,
+      "frame": 3,
+      "piece": {
+        "resource": 27,
+        "x": 31,
+        "y": 48,
+        "width": 72,
+        "height": 16
+      },
+      "shift": 16,
+      "sha256": "d488638c8607bc28feae4c73247a9629769b6e14cbb2ab3117a9b9cff9f0bef5",
+      "source_sha256": "b4c75e64da6dfdc4273ead30a68e1d7368e9e5c94989de92af304b44065f44cf"
+    },
+    {
+      "name": "RN16.TGA",
+      "disc_path": "RN16.TGA",
+      "source": "assets/running/RN16.TGA",
+      "actor": 1,
+      "frame": 1,
+      "piece": {
+        "resource": 97,
+        "x": 35,
+        "y": 28,
+        "width": 64,
+        "height": 38
+      },
+      "shift": 0,
+      "sha256": "67546b754cd80d0a53e92270cd04442db91b8ea3944b1a79dbcdc6b284252bc6",
+      "source_sha256": "d7ea8bdfb1f23fc835f46f9bce10a5de29a5ee7e184ef9035b339014df3abf3f"
+    },
+    {
+      "name": "CA49.TGA",
+      "disc_path": "COMBAT/CA49.TGA",
+      "source": "assets/attack-sequence/CA49.TGA",
+      "actor": 1,
+      "frame": 1,
+      "piece": {
+        "resource": 49,
+        "x": 35,
+        "y": 48,
+        "width": 64,
+        "height": 16
+      },
+      "shift": 16,
+      "sha256": "ff7e30338c80a8ba61ec35aee41bdb445747d331f732f284e827f6ce91a91980",
+      "source_sha256": "a1063a51b7450fd9ba07232916d1a473f3bdfb921e7166600730613d3cb04ca5"
+    },
+    {
+      "name": "RN22.TGA",
+      "disc_path": "RN22.TGA",
+      "source": "assets/chuck-denim-cleanup/RN22.TGA",
+      "actor": 1,
+      "frame": 3,
+      "piece": {
+        "resource": 103,
+        "x": 33,
+        "y": 28,
+        "width": 64,
+        "height": 38
+      },
+      "shift": 0,
+      "sha256": "62e0bb5b2cc36be008da712a1c9a23e04d0b1e31c3f52bd3af3502fdfa1d2789",
+      "source_sha256": "6d8a7834fff36d8655703862c76e5c1f6be17c8cf7e6eea233815e10c14bc96c"
+    },
+    {
+      "name": "CA55.TGA",
+      "disc_path": "COMBAT/CA55.TGA",
+      "source": "assets/chuck-denim-cleanup/CA55.TGA",
+      "actor": 1,
+      "frame": 3,
+      "piece": {
+        "resource": 55,
+        "x": 33,
+        "y": 48,
+        "width": 64,
+        "height": 16
+      },
+      "shift": 16,
+      "sha256": "d3060508dc80e7298f6510c9f235efd806382d44bcf0d86ca14f8e74bd02b945",
+      "source_sha256": "5445ba934ea2bb227803f45506677d066a03f7895e1bba4e3040b23a99214380"
+    }
+  ],
+  "boot_bytes": 446304,
+  "free_bytes": 12184,
+  "slots": 253,
+  "extra_bytes": 0,
+  "extra_definitions": 0,
+  "source_join_y": 44,
+  "root": [
+    64,
+    92
+  ]
+}

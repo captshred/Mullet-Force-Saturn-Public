@@ -1,0 +1,57 @@
+{
+  "gameplay_states_compared": 705,
+  "gameplay_byte_identical": true,
+  "dash_and_bat_state_byte_identical": true,
+  "texture_bytes": 453952,
+  "free_bytes": 4536,
+  "texture_slots": 223,
+  "stable_texture_hash": true,
+  "matched_pixels": 185011,
+  "coverage": {
+    "chuck:punch:1:keyNone": 347,
+    "chuck:punch:1:key0": 1495,
+    "chuck:punch:1:key1": 1181,
+    "buck:running-bat:1:key2": 37300,
+    "buck:running-bat:1:key3": 50526,
+    "chuck:running-bat:-1:key2": 34796,
+    "chuck:running-bat:-1:key3": 20939,
+    "buck:running-bat:-1:key2": 4954,
+    "buck:running-bat:-1:key3": 10805,
+    "buck:bat:1:key2": 7450,
+    "buck:bat:1:key3": 11937,
+    "chuck:running-bat:1:key2": 261,
+    "buck:punch:-1:keyNone": 1227,
+    "buck:punch:-1:key1": 1097,
+    "buck:punch:-1:key0": 170,
+    "buck:punch:1:key0": 196,
+    "buck:punch:1:keyNone": 330
+  },
+  "ko_frames": [
+    823
+  ],
+  "hardware_tested": false,
+  "webretro_tested": false,
+  "limitations": [
+    "Two-key prototype only; incomplete bat arc and player-specific styles",
+    "Runtime coverage is listed explicitly, not every phase/facing/occlusion combination"
+  ],
+  "captures": {
+    "chuck:punch:1:keyNone": "chuck-punch-1-keyNone.png",
+    "chuck:punch:1:key0": "chuck-punch-1-key0.png",
+    "chuck:punch:1:key1": "chuck-punch-1-key1.png",
+    "buck:running-bat:1:key2": "buck-running-bat-1-key2.png",
+    "buck:running-bat:1:key3": "buck-running-bat-1-key3.png",
+    "chuck:running-bat:-1:key2": "chuck-running-bat--1-key2.png",
+    "chuck:running-bat:-1:key3": "chuck-running-bat--1-key3.png",
+    "buck:running-bat:-1:key2": "buck-running-bat--1-key2.png",
+    "buck:running-bat:-1:key3": "buck-running-bat--1-key3.png",
+    "buck:bat:1:key2": "buck-bat-1-key2.png",
+    "buck:bat:1:key3": "buck-bat-1-key3.png",
+    "chuck:running-bat:1:key2": "chuck-running-bat-1-key2.png",
+    "buck:punch:-1:keyNone": "buck-punch--1-keyNone.png",
+    "buck:punch:-1:key1": "buck-punch--1-key1.png",
+    "buck:punch:-1:key0": "buck-punch--1-key0.png",
+    "buck:punch:1:key0": "buck-punch-1-key0.png",
+    "buck:punch:1:keyNone": "buck-punch-1-keyNone.png"
+  }
+}

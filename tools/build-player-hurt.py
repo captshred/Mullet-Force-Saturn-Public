@@ -1,0 +1,11 @@
+#!/usr/bin/env python3
+from pathlib import Path
+from PIL import Image
+import struct,json,hashlib
+R=Path(__file__).resolve().parents[1];O=R/'assets/player-hurt';pal=(R/'assets/gallery/GB0.TGA').read_bytes()[18:786];res=[];upper=[];lower=[]
+def pack(im,lo,hi):
+ q=Image.new('P',im.size);q.putpalette(im.getpalette());q.paste(im.crop((0,lo,128,hi)),(0,lo));x,y,r,b=q.getbbox();w=(r-x+7)//8*8;h=(b-y+1)//2*2;raw=bytes(q.getpixel((xx,yy)) if xx<128 and yy<96 else 0 for yy in range(y+h-1,y-1,-1) for xx in range(x,x+w));hd=bytearray(18);hd[1:3]=b'\1\1';struct.pack_into('<H',hd,5,256);hd[7]=24;struct.pack_into('<HH',hd,12,w,h);hd[16]=8;blob=bytes(hd)+pal+raw;name=f'PH{len(res):02}.TGA';(O/name).write_bytes(blob);p=dict(resource=len(res),x=x,y=y,width=w,height=h);res.append(dict(name=name,width=w,height=h,bytes=(w*h+31)&~31,sha256=hashlib.sha256(blob).hexdigest()));return p
+for n in ['buck','chuck']:
+ upper.append([pack(Image.open(O/f'{n}-hurt-{f}.png'),0,48 if f==0 else 52) for f in range(3)]);lower.append([pack(Image.open(O/f'{n}-hurt-0.png'),48,96),pack(Image.open(O/f'{n}-hurt-1.png'),52,96)])
+total=sum(p['bytes'] for p in res);m=dict(parent='53861e0a9591697e0ca41dcc4ea0e9d3fae1f101',resources=res,uppers=upper,lowers=lower,bytes=total,replaced_bytes=5120,boot_bytes=422208-5120+total,free_bytes=458488-422208+5120-total,slots=246-2+len(res),run_replacements=['RN18.TGA','RN19.TGA'],palette_banks_added=0);assert m['free_bytes']>0 and m['slots']<=255
+(O/'manifest.json').write_text(json.dumps(m,indent=2)+'\n');s=['#ifndef MF_PLAYER_HURT_DATA_H','#define MF_PLAYER_HURT_DATA_H',f'#define MF_PH_BYTES {total}u',f'#define MF_PH_NEW {len(res)}','#define MF_PH_REPLACED 5120u','static const mf_polish_resource ph_resources[MF_PH_NEW]={'];s+=['{"%s",%d,%d,%du},'%(p['name'],p['width'],p['height'],p['bytes']) for p in res];s+=['};','static const mf_polish_piece ph_upper[2][3]={'];e=lambda p:'{%d,%d,%d,%d,%d}'%tuple(p[k] for k in ['resource','x','y','width','height']);s+=['{'+','.join(map(e,pp))+'},' for pp in upper];s+=['};','static const mf_polish_piece ph_lower[2][2]={']+['{'+','.join(map(e,pp))+'},' for pp in lower]+['};','#endif'];(R/'src/player_hurt_data.h').write_text('\n'.join(s)+'\n');print('PH memory',m['boot_bytes'],m['free_bytes'],m['slots'],total)

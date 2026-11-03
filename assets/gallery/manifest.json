@@ -1,0 +1,75 @@
+{
+  "texture_bytes": 10784,
+  "palette_banks": 1,
+  "actors": [
+    {
+      "name": "Buck",
+      "width": 79,
+      "height": 88,
+      "parts": [
+        {
+          "name": "GB0.TGA",
+          "x": 21,
+          "y": 0,
+          "width": 40,
+          "height": 20,
+          "vram": 800,
+          "sha256": "dd300ff490e64e6baee4cb4aa869884a4a68fdce51751f4269dcdd07cfd527ac"
+        },
+        {
+          "name": "GB1.TGA",
+          "x": 9,
+          "y": 20,
+          "width": 64,
+          "height": 56,
+          "vram": 3584,
+          "sha256": "ae97a48336ba603f6c02f28bfadb29de099e4e0d4c14c492721f1ad474d2801a"
+        },
+        {
+          "name": "GB2.TGA",
+          "x": 0,
+          "y": 76,
+          "width": 80,
+          "height": 12,
+          "vram": 960,
+          "sha256": "9837a97ab8f9a2bbec7077ca66226e2e06db673ffb306442456bd6b7dbc15abb"
+        }
+      ]
+    },
+    {
+      "name": "Chuck",
+      "width": 82,
+      "height": 88,
+      "parts": [
+        {
+          "name": "GC0.TGA",
+          "x": 18,
+          "y": 0,
+          "width": 40,
+          "height": 20,
+          "vram": 800,
+          "sha256": "ce01f3e9c2223aa9102fd4dfd37a520e19090afef0bb29179bc6591899111d10"
+        },
+        {
+          "name": "GC1.TGA",
+          "x": 8,
+          "y": 20,
+          "width": 64,
+          "height": 56,
+          "vram": 3584,
+          "sha256": "483a4bb0e1ffaf16c902bf1df9519c2209911e5046945c8476ca2c99c3c0b105"
+        },
+        {
+          "name": "GC2.TGA",
+          "x": 0,
+          "y": 76,
+          "width": 88,
+          "height": 12,
+          "vram": 1056,
+          "sha256": "cc30c029b5c8ea1ee42461dbdd2cc5ddb145e8a52ebc01fd8c053ee82ee4b3f2"
+        }
+      ]
+    }
+  ],
+  "baseline": "178335ce694bf49c68c62d95b40dc7d02a8335ba"
+}

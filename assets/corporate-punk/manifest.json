@@ -1,0 +1,690 @@
+{
+  "baseline": "c3edb05bb3f65c8cb8c9b3c013f86752dddc6cbc",
+  "artwork_only": true,
+  "canvas": [
+    96,
+    96
+  ],
+  "root": [
+    48,
+    92
+  ],
+  "opaque_bounds": [
+    25,
+    8,
+    72,
+    92
+  ],
+  "opaque_width": 47,
+  "opaque_height": 84,
+  "facing": "right",
+  "opaque_colors": 42,
+  "raw_indices_used": [
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56
+  ],
+  "palette_entries_file": 256,
+  "hardware_palette_bank_bytes": 512,
+  "legacy_raw_indices": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14
+  ],
+  "added_palette_entries": [
+    {
+      "raw_index": 15,
+      "rgb": [
+        0,
+        0,
+        0
+      ],
+      "rgb555": 32768
+    },
+    {
+      "raw_index": 16,
+      "rgb": [
+        0,
+        0,
+        8
+      ],
+      "rgb555": 33792
+    },
+    {
+      "raw_index": 17,
+      "rgb": [
+        8,
+        0,
+        8
+      ],
+      "rgb555": 33793
+    },
+    {
+      "raw_index": 18,
+      "rgb": [
+        8,
+        8,
+        16
+      ],
+      "rgb555": 34849
+    },
+    {
+      "raw_index": 19,
+      "rgb": [
+        0,
+        16,
+        24
+      ],
+      "rgb555": 35904
+    },
+    {
+      "raw_index": 20,
+      "rgb": [
+        16,
+        16,
+        24
+      ],
+      "rgb555": 35906
+    },
+    {
+      "raw_index": 21,
+      "rgb": [
+        65,
+        8,
+        32
+      ],
+      "rgb555": 36904
+    },
+    {
+      "raw_index": 22,
+      "rgb": [
+        16,
+        16,
+        32
+      ],
+      "rgb555": 36930
+    },
+    {
+      "raw_index": 23,
+      "rgb": [
+        24,
+        24,
+        32
+      ],
+      "rgb555": 36963
+    },
+    {
+      "raw_index": 24,
+      "rgb": [
+        32,
+        24,
+        32
+      ],
+      "rgb555": 36964
+    },
+    {
+      "raw_index": 25,
+      "rgb": [
+        24,
+        24,
+        41
+      ],
+      "rgb555": 37987
+    },
+    {
+      "raw_index": 26,
+      "rgb": [
+        32,
+        32,
+        41
+      ],
+      "rgb555": 38020
+    },
+    {
+      "raw_index": 27,
+      "rgb": [
+        16,
+        41,
+        41
+      ],
+      "rgb555": 38050
+    },
+    {
+      "raw_index": 28,
+      "rgb": [
+        0,
+        49,
+        41
+      ],
+      "rgb555": 38080
+    },
+    {
+      "raw_index": 29,
+      "rgb": [
+        32,
+        32,
+        49
+      ],
+      "rgb555": 39044
+    },
+    {
+      "raw_index": 30,
+      "rgb": [
+        41,
+        32,
+        49
+      ],
+      "rgb555": 39045
+    },
+    {
+      "raw_index": 31,
+      "rgb": [
+        238,
+        0,
+        57
+      ],
+      "rgb555": 39965
+    },
+    {
+      "raw_index": 32,
+      "rgb": [
+        180,
+        8,
+        57
+      ],
+      "rgb555": 39990
+    },
+    {
+      "raw_index": 33,
+      "rgb": [
+        41,
+        41,
+        57
+      ],
+      "rgb555": 40101
+    },
+    {
+      "raw_index": 34,
+      "rgb": [
+        32,
+        49,
+        57
+      ],
+      "rgb555": 40132
+    },
+    {
+      "raw_index": 35,
+      "rgb": [
+        49,
+        49,
+        65
+      ],
+      "rgb555": 41158
+    },
+    {
+      "raw_index": 36,
+      "rgb": [
+        90,
+        57,
+        65
+      ],
+      "rgb555": 41195
+    },
+    {
+      "raw_index": 37,
+      "rgb": [
+        57,
+        49,
+        74
+      ],
+      "rgb555": 42183
+    },
+    {
+      "raw_index": 38,
+      "rgb": [
+        57,
+        57,
+        74
+      ],
+      "rgb555": 42215
+    },
+    {
+      "raw_index": 39,
+      "rgb": [
+        139,
+        90,
+        74
+      ],
+      "rgb555": 42353
+    },
+    {
+      "raw_index": 40,
+      "rgb": [
+        57,
+        57,
+        82
+      ],
+      "rgb555": 43239
+    },
+    {
+      "raw_index": 41,
+      "rgb": [
+        65,
+        57,
+        82
+      ],
+      "rgb555": 43240
+    },
+    {
+      "raw_index": 42,
+      "rgb": [
+        65,
+        65,
+        82
+      ],
+      "rgb555": 43272
+    },
+    {
+      "raw_index": 43,
+      "rgb": [
+        213,
+        123,
+        82
+      ],
+      "rgb555": 43514
+    },
+    {
+      "raw_index": 44,
+      "rgb": [
+        180,
+        230,
+        82
+      ],
+      "rgb555": 43926
+    },
+    {
+      "raw_index": 45,
+      "rgb": [
+        74,
+        74,
+        90
+      ],
+      "rgb555": 44329
+    },
+    {
+      "raw_index": 46,
+      "rgb": [
+        238,
+        0,
+        106
+      ],
+      "rgb555": 46109
+    },
+    {
+      "raw_index": 47,
+      "rgb": [
+        90,
+        82,
+        106
+      ],
+      "rgb555": 46411
+    },
+    {
+      "raw_index": 48,
+      "rgb": [
+        49,
+        180,
+        106
+      ],
+      "rgb555": 46790
+    },
+    {
+      "raw_index": 49,
+      "rgb": [
+        16,
+        115,
+        115
+      ],
+      "rgb555": 47554
+    },
+    {
+      "raw_index": 50,
+      "rgb": [
+        255,
+        164,
+        115
+      ],
+      "rgb555": 47775
+    },
+    {
+      "raw_index": 51,
+      "rgb": [
+        148,
+        123,
+        123
+      ],
+      "rgb555": 48626
+    },
+    {
+      "raw_index": 52,
+      "rgb": [
+        255,
+        172,
+        123
+      ],
+      "rgb555": 48831
+    },
+    {
+      "raw_index": 53,
+      "rgb": [
+        205,
+        180,
+        164
+      ],
+      "rgb555": 53977
+    },
+    {
+      "raw_index": 54,
+      "rgb": [
+        246,
+        213,
+        180
+      ],
+      "rgb555": 56158
+    },
+    {
+      "raw_index": 55,
+      "rgb": [
+        0,
+        164,
+        213
+      ],
+      "rgb555": 60032
+    },
+    {
+      "raw_index": 56,
+      "rgb": [
+        246,
+        246,
+        222
+      ],
+      "rgb555": 61406
+    }
+  ],
+  "unused_legacy_slots": 239,
+  "new_palette_bank_required": false,
+  "active_game_palette_changes": 0,
+  "active_vdp1_change": 0,
+  "current_playable_allocated": 351104,
+  "current_playable_free": 107384,
+  "layout_candidates": [
+    {
+      "pieces": 1,
+      "texture_bytes": 4032,
+      "layout": [
+        {
+          "x": 25,
+          "y": 8,
+          "width": 48,
+          "height": 84,
+          "payload_bytes": 4032,
+          "aligned_bytes": 4032
+        }
+      ]
+    },
+    {
+      "pieces": 2,
+      "texture_bytes": 3488,
+      "layout": [
+        {
+          "x": 30,
+          "y": 8,
+          "width": 40,
+          "height": 68,
+          "payload_bytes": 2720,
+          "aligned_bytes": 2720
+        },
+        {
+          "x": 25,
+          "y": 76,
+          "width": 48,
+          "height": 16,
+          "payload_bytes": 768,
+          "aligned_bytes": 768
+        }
+      ]
+    },
+    {
+      "pieces": 3,
+      "texture_bytes": 3200,
+      "layout": [
+        {
+          "x": 50,
+          "y": 8,
+          "width": 16,
+          "height": 12,
+          "payload_bytes": 192,
+          "aligned_bytes": 192
+        },
+        {
+          "x": 30,
+          "y": 20,
+          "width": 40,
+          "height": 56,
+          "payload_bytes": 2240,
+          "aligned_bytes": 2240
+        },
+        {
+          "x": 25,
+          "y": 76,
+          "width": 48,
+          "height": 16,
+          "payload_bytes": 768,
+          "aligned_bytes": 768
+        }
+      ]
+    },
+    {
+      "pieces": 4,
+      "texture_bytes": 3104,
+      "layout": [
+        {
+          "x": 50,
+          "y": 8,
+          "width": 16,
+          "height": 12,
+          "payload_bytes": 192,
+          "aligned_bytes": 192
+        },
+        {
+          "x": 36,
+          "y": 20,
+          "width": 32,
+          "height": 10,
+          "payload_bytes": 320,
+          "aligned_bytes": 320
+        },
+        {
+          "x": 30,
+          "y": 30,
+          "width": 40,
+          "height": 48,
+          "payload_bytes": 1920,
+          "aligned_bytes": 1920
+        },
+        {
+          "x": 25,
+          "y": 78,
+          "width": 48,
+          "height": 14,
+          "payload_bytes": 672,
+          "aligned_bytes": 672
+        }
+      ]
+    }
+  ],
+  "chosen_pieces": 3,
+  "texture_bytes": 3200,
+  "whole_texture": {
+    "x": 25,
+    "y": 8,
+    "width": 48,
+    "height": 84,
+    "payload_bytes": 4032,
+    "aligned_bytes": 4032,
+    "name": "CPWHOLE.TGA",
+    "sha256": "67771b1d6e897b29f6ad17195763ea0ce81e9f2f43b02b589f8cf31fd6682174",
+    "anchor": [
+      23,
+      84
+    ]
+  },
+  "parts": [
+    {
+      "x": 50,
+      "y": 8,
+      "width": 16,
+      "height": 12,
+      "payload_bytes": 192,
+      "aligned_bytes": 192,
+      "name": "CP0.TGA",
+      "sha256": "79ceba53cdb185a7c5e5bb761087188c916bc5c6b15462ee4584f19e0e8b386f",
+      "anchor": [
+        -2,
+        84
+      ]
+    },
+    {
+      "x": 30,
+      "y": 20,
+      "width": 40,
+      "height": 56,
+      "payload_bytes": 2240,
+      "aligned_bytes": 2240,
+      "name": "CP1.TGA",
+      "sha256": "a9ef560865df1ba09ac3fb8a4a79b8795c90d3b9932e7cc917f9afdb235c28b2",
+      "anchor": [
+        18,
+        72
+      ]
+    },
+    {
+      "x": 25,
+      "y": 76,
+      "width": 48,
+      "height": 16,
+      "payload_bytes": 768,
+      "aligned_bytes": 768,
+      "name": "CP2.TGA",
+      "sha256": "f79732384ac35db25b0811097cac537af735ed4128f57f5e4ee2629ade8a1cfc",
+      "anchor": [
+        23,
+        16
+      ]
+    }
+  ],
+  "selection_rule": "Fewest pieces within5% of minimum1..4 horizontal-band cost; even heights, minimum8px bands,8px width/32byte allocation alignment. Alternatives are not loaded together.",
+  "instance_costs": {
+    "1": {
+      "shared_texture_bytes": 3200,
+      "palette_banks": 1,
+      "draw_commands": 3,
+      "additional_texture_bytes_per_instance": 0
+    },
+    "2": {
+      "shared_texture_bytes": 3200,
+      "palette_banks": 1,
+      "draw_commands": 6,
+      "additional_texture_bytes_per_instance": 0
+    },
+    "4": {
+      "shared_texture_bytes": 3200,
+      "palette_banks": 1,
+      "draw_commands": 12,
+      "additional_texture_bytes_per_instance": 0
+    },
+    "8": {
+      "shared_texture_bytes": 3200,
+      "palette_banks": 1,
+      "draw_commands": 24,
+      "additional_texture_bytes_per_instance": 0
+    }
+  },
+  "legacy_opaque_height": 90,
+  "player_bounds": {
+    "buck": [
+      25,
+      4,
+      104,
+      92
+    ],
+    "chuck": [
+      23,
+      4,
+      105,
+      92
+    ]
+  },
+  "player_sha256": {
+    "buck": "0122645cd52d30fcf5d97ff9d065cae732968feb6a6ca256c26da38a04f7afed",
+    "chuck": "51a3b1c0386615966cee3bb4286ccb5ec84fc30e5b1c4ed70244b38440fdef38"
+  },
+  "source_sha256": {
+    "face-cleanup-edit.png": "c05a900dc2d7c540a2ae272622820d1fca8498de25cfc8882ba768ba82021e7e",
+    "isolated-reference-edit.png": "08814f75653bbda57b826aa751efda1cb344d9e95ddf7b30c27663c38c69adc1",
+    "isolated-reference.png": "e797c68262535373381c32a16f12145e73278fe84b7d6e95573c31b4daa4c36e",
+    "native-cleaned-reference.png": "c8e34338bad185bdf4ba7c9a8253f4ba3452a051b0f3f842d738f277ed2a1e5d",
+    "native-cleanup-edit.png": "cea7f53e12fd09712539facd00c77d040ef94a655c35be0a1430fe560baccbc8"
+  }
+}

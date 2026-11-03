@@ -1,0 +1,106 @@
+{
+  "scenario": "torch",
+  "single_attacker": false,
+  "frames": 1400,
+  "core_sha256": "f00215b3c6ee0c82a377a8403b686e09bf8684f176a0a5bd66b47b8677e4d738",
+  "bin_sha256": "c2f76c5e1ef7f5cc5c2ca1ca3296367bc46bf5a4704bab798e7f093ca72e2b3f",
+  "peak_active_slots": 11,
+  "custom_voice_starts": {
+    "5": 2,
+    "4": 5,
+    "3": 2,
+    "2": 7
+  },
+  "custom_active_frames": {
+    "5": 29,
+    "4": 187,
+    "3": 8,
+    "2": 55
+  },
+  "global_whoosh_connect_overlap_frames": [],
+  "output_peak": 4792,
+  "rail_samples": 0,
+  "transitions": [
+    [
+      782,
+      9,
+      5
+    ],
+    [
+      802,
+      10,
+      5
+    ],
+    [
+      841,
+      4,
+      4
+    ],
+    [
+      842,
+      5,
+      3
+    ],
+    [
+      856,
+      0,
+      4
+    ],
+    [
+      861,
+      1,
+      3
+    ],
+    [
+      870,
+      0,
+      4
+    ],
+    [
+      879,
+      2,
+      2
+    ],
+    [
+      900,
+      0,
+      4
+    ],
+    [
+      955,
+      7,
+      2
+    ],
+    [
+      974,
+      0,
+      4
+    ],
+    [
+      1035,
+      1,
+      2
+    ],
+    [
+      1116,
+      5,
+      2
+    ],
+    [
+      1215,
+      7,
+      2
+    ],
+    [
+      1296,
+      8,
+      2
+    ],
+    [
+      1359,
+      10,
+      2
+    ]
+  ],
+  "scope": "Global overlap between different players is permitted. Single-attacker scenarios assert none. No listening or hardware verification."
+}

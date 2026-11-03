@@ -1,0 +1,212 @@
+{
+  "head_guard": "All pixels y<22",
+  "tie_guard": "49<=x<61 and22<=y<52",
+  "operation": "round-half each original5-bit BGR channel; no gamma/alpha/position changes",
+  "roles": [
+    {
+      "source_raw_index": 74,
+      "target_raw_index": 74,
+      "source_bgr5": [
+        4,
+        0,
+        10
+      ],
+      "target_bgr5": [
+        2,
+        0,
+        5
+      ],
+      "target_pixels": 7,
+      "protected_pixels": 0,
+      "cloned": false
+    },
+    {
+      "source_raw_index": 100,
+      "target_raw_index": 100,
+      "source_bgr5": [
+        7,
+        0,
+        26
+      ],
+      "target_bgr5": [
+        4,
+        0,
+        13
+      ],
+      "target_pixels": 2,
+      "protected_pixels": 0,
+      "cloned": false
+    },
+    {
+      "source_raw_index": 120,
+      "target_raw_index": 120,
+      "source_bgr5": [
+        9,
+        4,
+        9
+      ],
+      "target_bgr5": [
+        5,
+        2,
+        5
+      ],
+      "target_pixels": 4,
+      "protected_pixels": 0,
+      "cloned": false
+    },
+    {
+      "source_raw_index": 121,
+      "target_raw_index": 121,
+      "source_bgr5": [
+        9,
+        4,
+        20
+      ],
+      "target_bgr5": [
+        5,
+        2,
+        10
+      ],
+      "target_pixels": 13,
+      "protected_pixels": 0,
+      "cloned": false
+    },
+    {
+      "source_raw_index": 146,
+      "target_raw_index": 146,
+      "source_bgr5": [
+        11,
+        0,
+        25
+      ],
+      "target_bgr5": [
+        6,
+        0,
+        13
+      ],
+      "target_pixels": 14,
+      "protected_pixels": 0,
+      "cloned": false
+    },
+    {
+      "source_raw_index": 162,
+      "target_raw_index": 235,
+      "source_bgr5": [
+        12,
+        0,
+        29
+      ],
+      "target_bgr5": [
+        6,
+        0,
+        15
+      ],
+      "target_pixels": 23,
+      "protected_pixels": 18,
+      "cloned": true
+    },
+    {
+      "source_raw_index": 163,
+      "target_raw_index": 163,
+      "source_bgr5": [
+        12,
+        1,
+        29
+      ],
+      "target_bgr5": [
+        6,
+        1,
+        15
+      ],
+      "target_pixels": 10,
+      "protected_pixels": 0,
+      "cloned": false
+    },
+    {
+      "source_raw_index": 175,
+      "target_raw_index": 175,
+      "source_bgr5": [
+        13,
+        0,
+        30
+      ],
+      "target_bgr5": [
+        7,
+        0,
+        15
+      ],
+      "target_pixels": 38,
+      "protected_pixels": 0,
+      "cloned": false
+    },
+    {
+      "source_raw_index": 176,
+      "target_raw_index": 236,
+      "source_bgr5": [
+        13,
+        1,
+        30
+      ],
+      "target_bgr5": [
+        7,
+        1,
+        15
+      ],
+      "target_pixels": 9,
+      "protected_pixels": 6,
+      "cloned": true
+    },
+    {
+      "source_raw_index": 186,
+      "target_raw_index": 186,
+      "source_bgr5": [
+        14,
+        0,
+        30
+      ],
+      "target_bgr5": [
+        7,
+        0,
+        15
+      ],
+      "target_pixels": 78,
+      "protected_pixels": 0,
+      "cloned": false
+    },
+    {
+      "source_raw_index": 187,
+      "target_raw_index": 187,
+      "source_bgr5": [
+        14,
+        0,
+        31
+      ],
+      "target_bgr5": [
+        7,
+        0,
+        16
+      ],
+      "target_pixels": 8,
+      "protected_pixels": 0,
+      "cloned": false
+    },
+    {
+      "source_raw_index": 192,
+      "target_raw_index": 192,
+      "source_bgr5": [
+        15,
+        0,
+        30
+      ],
+      "target_bgr5": [
+        8,
+        0,
+        15
+      ],
+      "target_pixels": 6,
+      "protected_pixels": 0,
+      "cloned": false
+    }
+  ],
+  "future_use": "Offline roles for potential palette variants only; no runtime lighting engine."
+}

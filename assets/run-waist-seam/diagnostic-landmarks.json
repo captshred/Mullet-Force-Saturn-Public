@@ -1,0 +1,138 @@
+[
+  {
+    "actor": 0,
+    "frame": 0,
+    "pelvis_landmark": [
+      68,
+      43
+    ],
+    "engine_root": [
+      64,
+      92
+    ],
+    "piece_boundaries": [
+      28,
+      72
+    ],
+    "art_join_y": 44
+  },
+  {
+    "actor": 0,
+    "frame": 1,
+    "pelvis_landmark": [
+      68,
+      42
+    ],
+    "engine_root": [
+      64,
+      92
+    ],
+    "piece_boundaries": [
+      28,
+      66
+    ],
+    "art_join_y": 44
+  },
+  {
+    "actor": 0,
+    "frame": 2,
+    "pelvis_landmark": [
+      68,
+      43
+    ],
+    "engine_root": [
+      64,
+      92
+    ],
+    "piece_boundaries": [
+      28,
+      72
+    ],
+    "art_join_y": 44
+  },
+  {
+    "actor": 0,
+    "frame": 3,
+    "pelvis_landmark": [
+      68,
+      42
+    ],
+    "engine_root": [
+      64,
+      92
+    ],
+    "piece_boundaries": [
+      28,
+      66
+    ],
+    "art_join_y": 44
+  },
+  {
+    "actor": 1,
+    "frame": 0,
+    "pelvis_landmark": [
+      69,
+      43
+    ],
+    "engine_root": [
+      64,
+      92
+    ],
+    "piece_boundaries": [
+      28,
+      72
+    ],
+    "art_join_y": 44
+  },
+  {
+    "actor": 1,
+    "frame": 1,
+    "pelvis_landmark": [
+      69,
+      42
+    ],
+    "engine_root": [
+      64,
+      92
+    ],
+    "piece_boundaries": [
+      28,
+      66
+    ],
+    "art_join_y": 44
+  },
+  {
+    "actor": 1,
+    "frame": 2,
+    "pelvis_landmark": [
+      69,
+      43
+    ],
+    "engine_root": [
+      64,
+      92
+    ],
+    "piece_boundaries": [
+      28,
+      72
+    ],
+    "art_join_y": 44
+  },
+  {
+    "actor": 1,
+    "frame": 3,
+    "pelvis_landmark": [
+      69,
+      42
+    ],
+    "engine_root": [
+      64,
+      92
+    ],
+    "piece_boundaries": [
+      28,
+      66
+    ],
+    "art_join_y": 44
+  }
+]

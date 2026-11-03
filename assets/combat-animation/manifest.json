@@ -1,0 +1,844 @@
+{
+  "parent": "20b0fcf743ace0e16f74cb3dcdf22fd93dd8ead9",
+  "quality": "limited two-key prototype per attack; NOT full-quality finished animation",
+  "canvas": [
+    160,
+    112
+  ],
+  "root": [
+    64,
+    108
+  ],
+  "head_lock": [
+    39,
+    0,
+    89,
+    24
+  ],
+  "upper_end": 48,
+  "palette": "assets/gallery/GB0.TGA",
+  "resources": [
+    {
+      "name": "CA00.TGA",
+      "width": 32,
+      "height": 12,
+      "bytes": 384,
+      "sha256": "0d9338bab09a66104d69bfff52f2a2c5459d14b9d81c3ff87c716e40fd82adc7"
+    },
+    {
+      "name": "CA01.TGA",
+      "width": 56,
+      "height": 16,
+      "bytes": 896,
+      "sha256": "db81bad75b32ce1cab491dcbfe822189ad58ce9d6e7a8335a5b2429c77c86c02"
+    },
+    {
+      "name": "CA02.TGA",
+      "width": 56,
+      "height": 16,
+      "bytes": 896,
+      "sha256": "a795525109b01b31a4c533b30e017494ce43bffd2d4f42383db49586ecb41633"
+    },
+    {
+      "name": "CA03.TGA",
+      "width": 80,
+      "height": 16,
+      "bytes": 1280,
+      "sha256": "a64271ba5ab37ffedce47b1da403bdd9e23031ca395a24d90928c8df83a90150"
+    },
+    {
+      "name": "CA04.TGA",
+      "width": 72,
+      "height": 16,
+      "bytes": 1152,
+      "sha256": "b100ef483f7258e3704c8f79221d5769ca7e1cb195b05ab759ad089cfaf95d8d"
+    },
+    {
+      "name": "CA05.TGA",
+      "width": 16,
+      "height": 6,
+      "bytes": 96,
+      "sha256": "379a4328502b9c09350e7f35f19f375bfd6cf3bb4701fcb23f38e2fb90797b60"
+    },
+    {
+      "name": "CA06.TGA",
+      "width": 56,
+      "height": 16,
+      "bytes": 896,
+      "sha256": "def88e1b75e9b648134851fbdcaf00954d5c580e4c07173c3888a0817b26aaef"
+    },
+    {
+      "name": "CA07.TGA",
+      "width": 48,
+      "height": 16,
+      "bytes": 768,
+      "sha256": "976dde1e21591e4035fa795466f06f9d4e1234c68b0fc33f5f08644c070f7f82"
+    },
+    {
+      "name": "CA08.TGA",
+      "width": 48,
+      "height": 16,
+      "bytes": 768,
+      "sha256": "290efa61d1edc0142a951f73cbe65588a2de8403f45d62dd357e6f4041771361"
+    },
+    {
+      "name": "CA09.TGA",
+      "width": 56,
+      "height": 12,
+      "bytes": 672,
+      "sha256": "91f18d4530f71e6d9c542e783b4cd3d69a50482aaf9310aee8a3857b06589b83"
+    },
+    {
+      "name": "CA10.TGA",
+      "width": 88,
+      "height": 16,
+      "bytes": 1408,
+      "sha256": "0e74b64e9298288d9bd592cb8d592bb72306fcfcfa6188ae69bbb69fa2540e70"
+    },
+    {
+      "name": "CA11.TGA",
+      "width": 88,
+      "height": 16,
+      "bytes": 1408,
+      "sha256": "0df5dfb96fc5f806fd0ca3a562ff405f44a21189e7bb91caf14341588ef80e42"
+    },
+    {
+      "name": "CA12.TGA",
+      "width": 56,
+      "height": 16,
+      "bytes": 896,
+      "sha256": "bfeb9fbf4970816fb3b032ee0c197f36887d182b94e77d59d1e4eaf5c3a1a205"
+    },
+    {
+      "name": "CA13.TGA",
+      "width": 64,
+      "height": 16,
+      "bytes": 1024,
+      "sha256": "0b74e779ff2b433c6aa310337645f11c127cec854fe9f601d10d8c47893b37ba"
+    },
+    {
+      "name": "CA14.TGA",
+      "width": 80,
+      "height": 12,
+      "bytes": 960,
+      "sha256": "9837a97ab8f9a2bbec7077ca66226e2e06db673ffb306442456bd6b7dbc15abb"
+    },
+    {
+      "name": "CA15.TGA",
+      "width": 56,
+      "height": 16,
+      "bytes": 896,
+      "sha256": "76561ed687172e506206f42765e9f86f5d27c3293e8292813c959c0dbe71ff5f"
+    },
+    {
+      "name": "CA16.TGA",
+      "width": 56,
+      "height": 16,
+      "bytes": 896,
+      "sha256": "a9127cd0a399863ecc6a65f931bae484f92ebe6bf2a2cc929b372ee4938d936f"
+    },
+    {
+      "name": "CA17.TGA",
+      "width": 24,
+      "height": 12,
+      "bytes": 288,
+      "sha256": "331115389585f57516d106d0dcc3abd541e67fd2758a896469c884b3a20fe986"
+    },
+    {
+      "name": "CA18.TGA",
+      "width": 40,
+      "height": 16,
+      "bytes": 640,
+      "sha256": "7de165644ef8cd4a4da843cbbcc4c2b8151abce647a56b2b674d88252a313c47"
+    },
+    {
+      "name": "CA19.TGA",
+      "width": 48,
+      "height": 16,
+      "bytes": 768,
+      "sha256": "0ce9e7ba55750b2863ed9356ffc44a4690e45dcde913abfb644ffab2fd10d1b9"
+    },
+    {
+      "name": "CA20.TGA",
+      "width": 40,
+      "height": 10,
+      "bytes": 416,
+      "sha256": "d1e99c3a3ad5786cdccee46a25e2f2fa0fd9d6fe72c58c8e33265678e3273e15"
+    },
+    {
+      "name": "CA21.TGA",
+      "width": 48,
+      "height": 16,
+      "bytes": 768,
+      "sha256": "215c3fa9ff68ff911807bf62c8e8f5636f11ed4478556d3cb12ee789e6ffd307"
+    },
+    {
+      "name": "CA22.TGA",
+      "width": 48,
+      "height": 16,
+      "bytes": 768,
+      "sha256": "1d0f80940eff4cdeb492c6824d1b3e232f5fce825606cad4d404095082ac09e8"
+    },
+    {
+      "name": "CA23.TGA",
+      "width": 24,
+      "height": 12,
+      "bytes": 288,
+      "sha256": "322544525cc4c5da76657e7dc0b17f6ad360b8198a272592d39b9c37dbe510a4"
+    },
+    {
+      "name": "CA24.TGA",
+      "width": 48,
+      "height": 16,
+      "bytes": 768,
+      "sha256": "0dd752400b9c7aa0b7d18e632263de9391dbc785df9f6d2052bfacaa164d8524"
+    },
+    {
+      "name": "CA25.TGA",
+      "width": 56,
+      "height": 16,
+      "bytes": 896,
+      "sha256": "6e5741f087e5cf31300c0ef8a2be697599fb6303e6742388ec070cc5ba3d0273"
+    },
+    {
+      "name": "CA26.TGA",
+      "width": 48,
+      "height": 10,
+      "bytes": 480,
+      "sha256": "68983831bd50e31fc8562bc93893753a286ef992d5ca820107f06327bca4f6d1"
+    },
+    {
+      "name": "CA27.TGA",
+      "width": 32,
+      "height": 12,
+      "bytes": 384,
+      "sha256": "80b8e0c2d8fa47455cdceac39f99d9be390f27bda57c7097514859f3cf942e19"
+    },
+    {
+      "name": "CA28.TGA",
+      "width": 56,
+      "height": 16,
+      "bytes": 896,
+      "sha256": "259056a02e686f2ff45796f5d8f0ffde5bd18b67788804fc535136d582694326"
+    },
+    {
+      "name": "CA29.TGA",
+      "width": 64,
+      "height": 16,
+      "bytes": 1024,
+      "sha256": "634ff2d9c098b9e6dd5854727029b05d8aa0bc32dea49b40e0d7b8933491332a"
+    },
+    {
+      "name": "CA30.TGA",
+      "width": 80,
+      "height": 16,
+      "bytes": 1280,
+      "sha256": "9a0943a38dcb35e223473f90ad13e55cada9971c3706bbec0f174307cc9d3f64"
+    },
+    {
+      "name": "CA31.TGA",
+      "width": 80,
+      "height": 16,
+      "bytes": 1280,
+      "sha256": "5824ef88463090b9a95ed93064cf19828a9382697cdfa19ab40d2966a595533c"
+    },
+    {
+      "name": "CA32.TGA",
+      "width": 8,
+      "height": 6,
+      "bytes": 64,
+      "sha256": "bd59cf63d1f30fc0650f729895fdf226b342473bb5632b5ed18f6395485a28f2"
+    },
+    {
+      "name": "CA33.TGA",
+      "width": 48,
+      "height": 16,
+      "bytes": 768,
+      "sha256": "99b801701fa2a9bbbbb46bd3db137021437f96d93d63bd3ab0dfc80c6755cdac"
+    },
+    {
+      "name": "CA34.TGA",
+      "width": 72,
+      "height": 16,
+      "bytes": 1152,
+      "sha256": "b78f16f8893af05084ac07dabdb60e26c3bfd2c458600d36944bc058e1595c2c"
+    },
+    {
+      "name": "CA35.TGA",
+      "width": 48,
+      "height": 16,
+      "bytes": 768,
+      "sha256": "8b3c814c0bc10059e59e885a05b735bfeb8afa0ff87767f60085b607d9e58449"
+    },
+    {
+      "name": "CA36.TGA",
+      "width": 48,
+      "height": 12,
+      "bytes": 576,
+      "sha256": "d1133610e0e2a835750d96bf21ced499f8aba7d65e148a7a10167828b08dc4c3"
+    },
+    {
+      "name": "CA37.TGA",
+      "width": 96,
+      "height": 16,
+      "bytes": 1536,
+      "sha256": "f418da757f8d5d21393b76b027191815a205595ca9e685f32e501a66a52c9ccc"
+    },
+    {
+      "name": "CA38.TGA",
+      "width": 96,
+      "height": 16,
+      "bytes": 1536,
+      "sha256": "f1b8f340959cb994de2e2942a76b027a57ad4c931b3ceaf548e5d151b2caf9ae"
+    },
+    {
+      "name": "CA39.TGA",
+      "width": 56,
+      "height": 16,
+      "bytes": 896,
+      "sha256": "cf8f476dbcba7e70e77ef49c7f7244dd1bd64336dd19891ff4bd74b4853f210a"
+    },
+    {
+      "name": "CA40.TGA",
+      "width": 64,
+      "height": 16,
+      "bytes": 1024,
+      "sha256": "a18425ea4a776669bcd716707815fb8f25fe53af7d8d4d15f98e9b435c17cafd"
+    },
+    {
+      "name": "CA41.TGA",
+      "width": 88,
+      "height": 12,
+      "bytes": 1056,
+      "sha256": "cc30c029b5c8ea1ee42461dbdd2cc5ddb145e8a52ebc01fd8c053ee82ee4b3f2"
+    },
+    {
+      "name": "CA42.TGA",
+      "width": 56,
+      "height": 16,
+      "bytes": 896,
+      "sha256": "367019d7ad723b71f9b9e7cd388366e2d48ac151f15fdee13f94fa1e32998447"
+    },
+    {
+      "name": "CA43.TGA",
+      "width": 56,
+      "height": 16,
+      "bytes": 896,
+      "sha256": "7fef39c161d7dd3e6a40dfbb671f2d57a7d364ad0bb0e92b6e9465301f43d482"
+    },
+    {
+      "name": "CA44.TGA",
+      "width": 24,
+      "height": 12,
+      "bytes": 288,
+      "sha256": "bfd847ac21914b1dc113cf1dbadeba9529f712cadab13cc69a2af5ac8366a919"
+    },
+    {
+      "name": "CA45.TGA",
+      "width": 40,
+      "height": 16,
+      "bytes": 640,
+      "sha256": "03a8edd131bbf39e6eac577aea6fc58a71aef6179b11446532be6509129f93c5"
+    },
+    {
+      "name": "CA46.TGA",
+      "width": 48,
+      "height": 16,
+      "bytes": 768,
+      "sha256": "f8be14fb307c602699b25a74ced72167e18deef4fd37ca0067949124061123e0"
+    },
+    {
+      "name": "CA47.TGA",
+      "width": 40,
+      "height": 10,
+      "bytes": 416,
+      "sha256": "8668c53547eb6f1dd7a656c117d6536e6dc3de8d72a266a76b8a3ff04987f268"
+    },
+    {
+      "name": "CA48.TGA",
+      "width": 48,
+      "height": 16,
+      "bytes": 768,
+      "sha256": "6858b9b7219ef0b608d0883a1da0803a53b950f2ef067deca3b08abe6f860ea2"
+    },
+    {
+      "name": "CA49.TGA",
+      "width": 48,
+      "height": 16,
+      "bytes": 768,
+      "sha256": "d7f2b950f883b7b0111fb379a5492247decaad9a400445ccfac43e92fbdeeddd"
+    },
+    {
+      "name": "CA50.TGA",
+      "width": 24,
+      "height": 12,
+      "bytes": 288,
+      "sha256": "f0860dd4765b25e69b81e0d9230adb36de0c83cebc96e408a9f0d3aa802f3f52"
+    },
+    {
+      "name": "CA51.TGA",
+      "width": 48,
+      "height": 16,
+      "bytes": 768,
+      "sha256": "fac73f26b0b2c4aafa7f52705dd3317a46692ec14c147dff1d58d18a4aeef672"
+    },
+    {
+      "name": "CA52.TGA",
+      "width": 56,
+      "height": 16,
+      "bytes": 896,
+      "sha256": "ffc01410eb3ce8b7621362e9a1c6a5a54123cbbfd54e3d31636cf1374b48d27f"
+    },
+    {
+      "name": "CA53.TGA",
+      "width": 48,
+      "height": 10,
+      "bytes": 480,
+      "sha256": "96e2d2baee94d6248d3719ba061e050971a240780aba82208ea1eac9be04bbdb"
+    }
+  ],
+  "frames": [
+    [
+      [
+        {
+          "resource": 0,
+          "x": 54,
+          "y": 20,
+          "width": 32,
+          "height": 12
+        },
+        {
+          "resource": 1,
+          "x": 37,
+          "y": 32,
+          "width": 56,
+          "height": 16
+        },
+        {
+          "resource": 2,
+          "x": 40,
+          "y": 48,
+          "width": 56,
+          "height": 16
+        }
+      ],
+      [
+        {
+          "resource": 0,
+          "x": 54,
+          "y": 20,
+          "width": 32,
+          "height": 12
+        },
+        {
+          "resource": 3,
+          "x": 43,
+          "y": 32,
+          "width": 80,
+          "height": 16
+        },
+        {
+          "resource": 4,
+          "x": 43,
+          "y": 48,
+          "width": 72,
+          "height": 16
+        }
+      ],
+      [
+        {
+          "resource": 5,
+          "x": 33,
+          "y": 10,
+          "width": 16,
+          "height": 6
+        },
+        {
+          "resource": 6,
+          "x": 34,
+          "y": 16,
+          "width": 56,
+          "height": 16
+        },
+        {
+          "resource": 7,
+          "x": 36,
+          "y": 32,
+          "width": 48,
+          "height": 16
+        },
+        {
+          "resource": 8,
+          "x": 36,
+          "y": 48,
+          "width": 48,
+          "height": 16
+        }
+      ],
+      [
+        {
+          "resource": 9,
+          "x": 35,
+          "y": 20,
+          "width": 56,
+          "height": 12
+        },
+        {
+          "resource": 10,
+          "x": 25,
+          "y": 32,
+          "width": 88,
+          "height": 16
+        },
+        {
+          "resource": 11,
+          "x": 27,
+          "y": 48,
+          "width": 88,
+          "height": 16
+        }
+      ]
+    ],
+    [
+      [
+        {
+          "resource": 27,
+          "x": 48,
+          "y": 20,
+          "width": 32,
+          "height": 12
+        },
+        {
+          "resource": 28,
+          "x": 38,
+          "y": 32,
+          "width": 56,
+          "height": 16
+        },
+        {
+          "resource": 29,
+          "x": 38,
+          "y": 48,
+          "width": 64,
+          "height": 16
+        }
+      ],
+      [
+        {
+          "resource": 27,
+          "x": 48,
+          "y": 20,
+          "width": 32,
+          "height": 12
+        },
+        {
+          "resource": 30,
+          "x": 41,
+          "y": 32,
+          "width": 80,
+          "height": 16
+        },
+        {
+          "resource": 31,
+          "x": 42,
+          "y": 48,
+          "width": 80,
+          "height": 16
+        }
+      ],
+      [
+        {
+          "resource": 32,
+          "x": 35,
+          "y": 11,
+          "width": 8,
+          "height": 6
+        },
+        {
+          "resource": 33,
+          "x": 35,
+          "y": 16,
+          "width": 48,
+          "height": 16
+        },
+        {
+          "resource": 34,
+          "x": 19,
+          "y": 32,
+          "width": 72,
+          "height": 16
+        },
+        {
+          "resource": 35,
+          "x": 39,
+          "y": 48,
+          "width": 48,
+          "height": 16
+        }
+      ],
+      [
+        {
+          "resource": 36,
+          "x": 33,
+          "y": 20,
+          "width": 48,
+          "height": 12
+        },
+        {
+          "resource": 37,
+          "x": 25,
+          "y": 32,
+          "width": 96,
+          "height": 16
+        },
+        {
+          "resource": 38,
+          "x": 27,
+          "y": 48,
+          "width": 96,
+          "height": 16
+        }
+      ]
+    ]
+  ],
+  "lowers": [
+    [
+      [
+        {
+          "resource": 12,
+          "x": 44,
+          "y": 64,
+          "width": 56,
+          "height": 16
+        },
+        {
+          "resource": 13,
+          "x": 34,
+          "y": 80,
+          "width": 64,
+          "height": 16
+        },
+        {
+          "resource": 14,
+          "x": 25,
+          "y": 96,
+          "width": 80,
+          "height": 12
+        }
+      ],
+      [
+        {
+          "resource": 15,
+          "x": 33,
+          "y": 64,
+          "width": 56,
+          "height": 16
+        },
+        {
+          "resource": 16,
+          "x": 32,
+          "y": 80,
+          "width": 56,
+          "height": 16
+        },
+        {
+          "resource": 17,
+          "x": 77,
+          "y": 96,
+          "width": 24,
+          "height": 12
+        }
+      ],
+      [
+        {
+          "resource": 18,
+          "x": 47,
+          "y": 64,
+          "width": 40,
+          "height": 16
+        },
+        {
+          "resource": 19,
+          "x": 33,
+          "y": 80,
+          "width": 48,
+          "height": 16
+        },
+        {
+          "resource": 20,
+          "x": 34,
+          "y": 96,
+          "width": 40,
+          "height": 10
+        }
+      ],
+      [
+        {
+          "resource": 21,
+          "x": 37,
+          "y": 64,
+          "width": 48,
+          "height": 16
+        },
+        {
+          "resource": 22,
+          "x": 36,
+          "y": 80,
+          "width": 48,
+          "height": 16
+        },
+        {
+          "resource": 23,
+          "x": 73,
+          "y": 96,
+          "width": 24,
+          "height": 12
+        }
+      ],
+      [
+        {
+          "resource": 24,
+          "x": 43,
+          "y": 64,
+          "width": 48,
+          "height": 16
+        },
+        {
+          "resource": 25,
+          "x": 29,
+          "y": 80,
+          "width": 56,
+          "height": 16
+        },
+        {
+          "resource": 26,
+          "x": 30,
+          "y": 96,
+          "width": 48,
+          "height": 10
+        }
+      ]
+    ],
+    [
+      [
+        {
+          "resource": 39,
+          "x": 40,
+          "y": 64,
+          "width": 56,
+          "height": 16
+        },
+        {
+          "resource": 40,
+          "x": 31,
+          "y": 80,
+          "width": 64,
+          "height": 16
+        },
+        {
+          "resource": 41,
+          "x": 23,
+          "y": 96,
+          "width": 88,
+          "height": 12
+        }
+      ],
+      [
+        {
+          "resource": 42,
+          "x": 32,
+          "y": 64,
+          "width": 56,
+          "height": 16
+        },
+        {
+          "resource": 43,
+          "x": 32,
+          "y": 80,
+          "width": 56,
+          "height": 16
+        },
+        {
+          "resource": 44,
+          "x": 78,
+          "y": 96,
+          "width": 24,
+          "height": 12
+        }
+      ],
+      [
+        {
+          "resource": 45,
+          "x": 47,
+          "y": 64,
+          "width": 40,
+          "height": 16
+        },
+        {
+          "resource": 46,
+          "x": 33,
+          "y": 80,
+          "width": 48,
+          "height": 16
+        },
+        {
+          "resource": 47,
+          "x": 34,
+          "y": 96,
+          "width": 40,
+          "height": 10
+        }
+      ],
+      [
+        {
+          "resource": 48,
+          "x": 36,
+          "y": 64,
+          "width": 48,
+          "height": 16
+        },
+        {
+          "resource": 49,
+          "x": 36,
+          "y": 80,
+          "width": 48,
+          "height": 16
+        },
+        {
+          "resource": 50,
+          "x": 74,
+          "y": 96,
+          "width": 24,
+          "height": 12
+        }
+      ],
+      [
+        {
+          "resource": 51,
+          "x": 43,
+          "y": 64,
+          "width": 48,
+          "height": 16
+        },
+        {
+          "resource": 52,
+          "x": 29,
+          "y": 80,
+          "width": 56,
+          "height": 16
+        },
+        {
+          "resource": 53,
+          "x": 30,
+          "y": 96,
+          "width": 48,
+          "height": 10
+        }
+      ]
+    ]
+  ],
+  "texture_bytes": 43488,
+  "boot_bytes": 453952,
+  "free_bytes": 4536,
+  "slots": 223
+}

@@ -1,0 +1,78 @@
+{
+  "gameplay_states_identical": 705,
+  "all_physics_input_jab_dash_bat_states_identical": true,
+  "matched_native_pixels": 712712,
+  "coverage": {
+    "0:phase1:face1": 17364,
+    "0:phase2:face1": 72930,
+    "1:phase1:face-1": 3133,
+    "1:phase2:face-1": 25802,
+    "0:phase3:face1": 22460,
+    "1:phase3:face-1": 7438,
+    "0:phase4:face1": 101529,
+    "1:phase4:face-1": 17969,
+    "0:phase5:face1": 34640,
+    "1:phase5:face-1": 6106,
+    "0:phase1:face-1": 11576,
+    "0:phase2:face-1": 54726,
+    "1:phase1:face1": 669,
+    "0:phase6:face-1": 43938,
+    "1:phase2:face1": 15532,
+    "1:phase6:face1": 27696,
+    "0:phase3:face-1": 22944,
+    "0:phase4:face-1": 101529,
+    "1:phase3:face1": 8621,
+    "1:phase4:face1": 24088,
+    "0:phase5:face-1": 34640,
+    "1:phase5:face1": 7004,
+    "0:phase6:face1": 36153,
+    "1:phase6:face-1": 14225
+  },
+  "aerial_bat_control_pixels": 1099577,
+  "flights": [
+    {
+      "player": 0,
+      "start_frame": 792,
+      "ground_frame": 833,
+      "simulation_ticks": 42,
+      "landing_counters": [
+        6,
+        5,
+        4,
+        3,
+        2,
+        1,
+        0
+      ]
+    },
+    {
+      "player": 1,
+      "start_frame": 796,
+      "ground_frame": 837,
+      "simulation_ticks": 42,
+      "landing_counters": [
+        6,
+        5,
+        4,
+        3,
+        2,
+        1,
+        0
+      ]
+    }
+  ],
+  "peak_jump_height_fixed": 16170,
+  "texture_bytes": 456224,
+  "free_bytes": 2264,
+  "texture_slots": 250,
+  "stable_texture_vram": true,
+  "no_ram_writes": true,
+  "real_input_transition_gifs": true,
+  "physical_saturn_tested": false,
+  "webretro_tested": false,
+  "limitations": [
+    "Aerial bat retains exact legacy complete assembly; AL0..2 are used only by that path",
+    "Crowd occlusion is masked in pixel checks; coverage is listed explicitly",
+    "No physical Saturn performance or audio audition claim"
+  ]
+}

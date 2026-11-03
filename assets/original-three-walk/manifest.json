@@ -1,0 +1,281 @@
+{
+  "creation_commit": "5a6bd3692bd4923fb1ec844db362fec35c2fc526",
+  "approved_commit": "ff24c5ec160318c4eb07da171b684a00a1d973c8",
+  "baseline": "8e86fa1a4d7e8ef74392a9f1912dcc84ffb8e431",
+  "canvas": [
+    128,
+    96
+  ],
+  "root": [
+    64,
+    92
+  ],
+  "standing_height": 88,
+  "new_texture_bytes": 0,
+  "boot_required": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    42,
+    43,
+    44,
+    60,
+    61,
+    62
+  ],
+  "boot_vdp1_bytes": 351104,
+  "boot_free_bytes": 107384,
+  "full_vdp1_bytes": 427104,
+  "full_free_bytes": 31384,
+  "boot_sprite_slots": 125,
+  "full_sprite_slots": 176,
+  "actors": [
+    {
+      "name": "buck",
+      "frames": [
+        {
+          "frame": 0,
+          "source_frame": 1,
+          "source_path": "assets/animation-study/buck-01.png",
+          "png_sha256": "0545eaaaefa6156c7185b7924f28bf25ae9c24cd811bdf0f86e21c54c1fbd31d",
+          "rgba_sha256": "609b89777946d7df39493eb7b07fd091995cdfea3ee4b377e3476948030bc2f5",
+          "parts": [
+            {
+              "x": 46,
+              "y": 4,
+              "width": 40,
+              "height": 20,
+              "resource": 3,
+              "name": "AB10.TGA",
+              "tga_sha256": "c948dc7f032ab5e61aeb49228dc8688b1970824ef77405943bd5ca5471a77811"
+            },
+            {
+              "x": 36,
+              "y": 24,
+              "width": 64,
+              "height": 56,
+              "resource": 4,
+              "name": "AB11.TGA",
+              "tga_sha256": "b022d44f72c78f161f40377fa8fafd9cac38cda68642579d2d78bfd63c492cb4"
+            },
+            {
+              "x": 30,
+              "y": 80,
+              "width": 72,
+              "height": 12,
+              "resource": 5,
+              "name": "AB12.TGA",
+              "tga_sha256": "9f87e958cce81f9803ce0c7561bfbe9d22e305269e75c635b9ca88413c6e6c77"
+            }
+          ]
+        },
+        {
+          "frame": 1,
+          "source_frame": 2,
+          "source_path": "assets/animation-study/buck-02.png",
+          "png_sha256": "0b2e6c8e8e8e654bce6dbe1c7a4be742eb2d8e3dc0244dfe29c2afa138408fbc",
+          "rgba_sha256": "facb62bd5d6e803336e9e01c2e768e6298c4dafc5612504fded79755b1cd32b9",
+          "parts": [
+            {
+              "x": 45,
+              "y": 4,
+              "width": 40,
+              "height": 20,
+              "resource": 6,
+              "name": "AB20.TGA",
+              "tga_sha256": "51f014c7adced351c5060f68aa0242c64e57816fa38312d9445708d1d07d4f4f"
+            },
+            {
+              "x": 39,
+              "y": 24,
+              "width": 56,
+              "height": 56,
+              "resource": 7,
+              "name": "AB21.TGA",
+              "tga_sha256": "b704771c5f39e9bcba17ad91032667ddbd58ea4dfd087b9e072e0ab2cfef0327"
+            },
+            {
+              "x": 37,
+              "y": 80,
+              "width": 56,
+              "height": 12,
+              "resource": 8,
+              "name": "AB22.TGA",
+              "tga_sha256": "671dc5b0c5964b6d741853dbe3a4193c913e51f557203384a4a4f726179e2b4e"
+            }
+          ]
+        },
+        {
+          "frame": 2,
+          "source_frame": 3,
+          "source_path": "assets/animation-study/buck-03.png",
+          "png_sha256": "231019656d27d7051e304716a2995d2b12b231adf7a75e84f2fc193770ad37b1",
+          "rgba_sha256": "c125607c202d1b7bcac0cd02f265806960c192fd80c10b648a978ec5d30d3901",
+          "parts": [
+            {
+              "x": 47,
+              "y": 4,
+              "width": 40,
+              "height": 20,
+              "resource": 9,
+              "name": "AB30.TGA",
+              "tga_sha256": "1ee72215f13b24c97a99cb6e82f304773ac1664cc944d03a31d9128bbdafe849"
+            },
+            {
+              "x": 42,
+              "y": 24,
+              "width": 48,
+              "height": 56,
+              "resource": 10,
+              "name": "AB31.TGA",
+              "tga_sha256": "b4ec03668850ebc404db319f7077c45756d64f7db066e5468259c494c99bfa56"
+            },
+            {
+              "x": 57,
+              "y": 80,
+              "width": 24,
+              "height": 12,
+              "resource": 11,
+              "name": "AB32.TGA",
+              "tga_sha256": "dac7c3eca1d499b661302a5ee5ec47db6541bae278a2240dcb63532c0c141846"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "chuck",
+      "frames": [
+        {
+          "frame": 0,
+          "source_frame": 1,
+          "source_path": "assets/animation-study/chuck-01.png",
+          "png_sha256": "c216944e62e27c85cf654a56c9630114b519c7feb1d37777bc06b872ee5c2c66",
+          "rgba_sha256": "e6137b3f59992e48c39e0670e359161aaa2a3439ab3395b533b3e5060776ae65",
+          "parts": [
+            {
+              "x": 44,
+              "y": 4,
+              "width": 40,
+              "height": 20,
+              "resource": 24,
+              "name": "AC10.TGA",
+              "tga_sha256": "b57667f41f7ac695572acd727588e554aa6242b2c373b68a602e2406bf334ad2"
+            },
+            {
+              "x": 36,
+              "y": 24,
+              "width": 64,
+              "height": 56,
+              "resource": 25,
+              "name": "AC11.TGA",
+              "tga_sha256": "672d417f7c81f76473fac2128bc2716c545cfc6be8da3fba086dad9f112bb339"
+            },
+            {
+              "x": 30,
+              "y": 80,
+              "width": 72,
+              "height": 12,
+              "resource": 26,
+              "name": "AC12.TGA",
+              "tga_sha256": "36be72f985435212afc939269d5991d858a99e0103a3c3a6b5b2aa0db1acd7ca"
+            }
+          ]
+        },
+        {
+          "frame": 1,
+          "source_frame": 2,
+          "source_path": "assets/animation-study/chuck-02.png",
+          "png_sha256": "978c543bda653f18f30868125c1cb45fc5e5e84457bca38739c5e1b283bf75cc",
+          "rgba_sha256": "c7ffd20f1e72c7b9f2d0d4dcab0741beec0eb3892bce5da1902bf9110ecc0b69",
+          "parts": [
+            {
+              "x": 43,
+              "y": 4,
+              "width": 40,
+              "height": 20,
+              "resource": 27,
+              "name": "AC20.TGA",
+              "tga_sha256": "8e600029de9e17d9dd6902e76f47bded4297226bb71719cbb029d77e294a8b21"
+            },
+            {
+              "x": 38,
+              "y": 24,
+              "width": 56,
+              "height": 56,
+              "resource": 28,
+              "name": "AC21.TGA",
+              "tga_sha256": "0724c77db4b73968593bc9c01586c8a0a61446b3bb9974e20b52dfe0f5913624"
+            },
+            {
+              "x": 37,
+              "y": 80,
+              "width": 56,
+              "height": 12,
+              "resource": 29,
+              "name": "AC22.TGA",
+              "tga_sha256": "3591cc30082a3a371fad70c5bd08587db9b872a3dd2b08aea42cc57bcac86cbb"
+            }
+          ]
+        },
+        {
+          "frame": 2,
+          "source_frame": 3,
+          "source_path": "assets/animation-study/chuck-03.png",
+          "png_sha256": "1dd5d83ca39156d88cb0898c3176d85ee3a621746ceaa546fac69ea6e026d0db",
+          "rgba_sha256": "59832d07d219d9926a3619c0c6ffe6b76767ffd83b921fbcb7b9bfb2e149b558",
+          "parts": [
+            {
+              "x": 47,
+              "y": 4,
+              "width": 40,
+              "height": 20,
+              "resource": 30,
+              "name": "AC30.TGA",
+              "tga_sha256": "525aaf59d8638c5036fc8fefb6c10d88ba28cee8439157310cac02a7de608ad7"
+            },
+            {
+              "x": 41,
+              "y": 24,
+              "width": 48,
+              "height": 56,
+              "resource": 31,
+              "name": "AC31.TGA",
+              "tga_sha256": "3868e2de14b4819741470a24b8822c25bad026abf9675f994aef8b5f55c78dc7"
+            },
+            {
+              "x": 57,
+              "y": 80,
+              "width": 24,
+              "height": 12,
+              "resource": 32,
+              "name": "AC32.TGA",
+              "tga_sha256": "e71b3720062abe29d066149e5c6b3d9b0505572150178057738a83b0936a0792"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

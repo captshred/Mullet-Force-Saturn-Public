@@ -1,0 +1,62 @@
+[
+  {
+    "lock": "assets/hq-torch/preserved-sha256.json",
+    "path": "src/corporate_animation.c",
+    "before": "c9882e5d4b560db83eef691a4c546cc3903f4d2e1a9a93af629ee63395894950",
+    "after": "13f0c2361e98be2f22b80a8903b35e21caaea034b0b84437293d47639554e217"
+  },
+  {
+    "lock": "assets/hq-torch/preserved-sha256.json",
+    "path": "src/corporate_bank.h",
+    "before": "e17070c2869667719c5e0dd2d4ed5f182031e4fc24329528eeeef933604309dd",
+    "after": "639ac0ec144e4d065062306113f282fef39ac1d95d70c949852815be09d8567d"
+  },
+  {
+    "lock": "assets/stride-fix/gameplay-sha256.json",
+    "path": "src/corporate_animation.c",
+    "before": "c9882e5d4b560db83eef691a4c546cc3903f4d2e1a9a93af629ee63395894950",
+    "after": "13f0c2361e98be2f22b80a8903b35e21caaea034b0b84437293d47639554e217"
+  },
+  {
+    "lock": "assets/stride-fix/gameplay-sha256.json",
+    "path": "src/corporate_bank.h",
+    "before": "e17070c2869667719c5e0dd2d4ed5f182031e4fc24329528eeeef933604309dd",
+    "after": "639ac0ec144e4d065062306113f282fef39ac1d95d70c949852815be09d8567d"
+  },
+  {
+    "lock": "assets/hq-jump/preserved-sha256.json",
+    "path": "assets/hq-torch/preserved-sha256.json",
+    "before": "b9b19e1567e868ec094abeaf195372b3fa2186f735422b96c67f2bf9eb173340",
+    "after": "ee0698aff6c89f4e9a667c88e40dbf2d335829b238f587c92a4207aaca72c2b8"
+  },
+  {
+    "lock": "assets/hq-jump/preserved-sha256.json",
+    "path": "src/corporate_animation.c",
+    "before": "c9882e5d4b560db83eef691a4c546cc3903f4d2e1a9a93af629ee63395894950",
+    "after": "13f0c2361e98be2f22b80a8903b35e21caaea034b0b84437293d47639554e217"
+  },
+  {
+    "lock": "assets/hq-jump/preserved-sha256.json",
+    "path": "src/corporate_bank.h",
+    "before": "e17070c2869667719c5e0dd2d4ed5f182031e4fc24329528eeeef933604309dd",
+    "after": "639ac0ec144e4d065062306113f282fef39ac1d95d70c949852815be09d8567d"
+  },
+  {
+    "lock": "assets/hq-jump-anatomy/preserved-sha256.json",
+    "path": "assets/hq-torch/preserved-sha256.json",
+    "before": "b9b19e1567e868ec094abeaf195372b3fa2186f735422b96c67f2bf9eb173340",
+    "after": "ee0698aff6c89f4e9a667c88e40dbf2d335829b238f587c92a4207aaca72c2b8"
+  },
+  {
+    "lock": "assets/hq-jump-anatomy/preserved-sha256.json",
+    "path": "src/corporate_animation.c",
+    "before": "c9882e5d4b560db83eef691a4c546cc3903f4d2e1a9a93af629ee63395894950",
+    "after": "13f0c2361e98be2f22b80a8903b35e21caaea034b0b84437293d47639554e217"
+  },
+  {
+    "lock": "assets/hq-jump-anatomy/preserved-sha256.json",
+    "path": "src/corporate_bank.h",
+    "before": "e17070c2869667719c5e0dd2d4ed5f182031e4fc24329528eeeef933604309dd",
+    "after": "639ac0ec144e4d065062306113f282fef39ac1d95d70c949852815be09d8567d"
+  }
+]

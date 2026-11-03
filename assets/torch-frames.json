@@ -1,0 +1,198 @@
+{
+  "buck": [
+    {
+      "name": "TU0.TGA",
+      "anchor": [
+        18,
+        87
+      ],
+      "source_size": [
+        112,
+        96
+      ],
+      "crop_origin": [
+        38,
+        5
+      ],
+      "source_rgb_sha256": "a957903ca307462d15d084d954b8ec772435b7e06e37a8f8a1cef5311870ee2b",
+      "pose": "equip"
+    },
+    {
+      "name": "TU1.TGA",
+      "anchor": [
+        14,
+        87
+      ],
+      "source_size": [
+        112,
+        96
+      ],
+      "crop_origin": [
+        42,
+        5
+      ],
+      "source_rgb_sha256": "a4c964bd70bcfc4dce66070ee71fc6278228f49de028eb4b183330cf90f75eb2",
+      "pose": "aim-fire"
+    },
+    {
+      "name": "TU2.TGA",
+      "anchor": [
+        17,
+        87
+      ],
+      "source_size": [
+        112,
+        96
+      ],
+      "crop_origin": [
+        39,
+        5
+      ],
+      "source_rgb_sha256": "622fdb014944b76b74249b61892a033730d724712c0de2335c74ddcbd7cbb3bb",
+      "pose": "put-away"
+    }
+  ],
+  "chuck": [
+    {
+      "name": "TC0.TGA",
+      "anchor": [
+        18,
+        87
+      ],
+      "source_size": [
+        112,
+        96
+      ],
+      "crop_origin": [
+        38,
+        5
+      ],
+      "source_rgb_sha256": "fdf80c6dada2fc7ac3857d950119fb9540e71bb17917b62606daa722a5a9495f",
+      "pose": "equip"
+    },
+    {
+      "name": "TC1.TGA",
+      "anchor": [
+        14,
+        87
+      ],
+      "source_size": [
+        112,
+        96
+      ],
+      "crop_origin": [
+        42,
+        5
+      ],
+      "source_rgb_sha256": "5e3a3755895c0047565a75dfbfbee4b577d1e02dec5ceca8b4540f938a92ec4e",
+      "pose": "aim-fire"
+    },
+    {
+      "name": "TC2.TGA",
+      "anchor": [
+        17,
+        87
+      ],
+      "source_size": [
+        112,
+        96
+      ],
+      "crop_origin": [
+        39,
+        5
+      ],
+      "source_rgb_sha256": "4883d560f0d42441e889ff9bd05dbce42fe4ed9fa1d79a9576c1861ad6c957c5",
+      "pose": "put-away"
+    }
+  ],
+  "flames": [
+    {
+      "name": "FL0.TGA",
+      "anchor": [
+        -33,
+        41
+      ],
+      "source_size": [
+        192,
+        104
+      ],
+      "crop_origin": [
+        129,
+        51
+      ],
+      "source_rgb_sha256": "7ff46d56fe3bfa6ff257e47d8fd5cedfe4d5d9c4c62c0cb85d003dfa89671759"
+    },
+    {
+      "name": "FL1.TGA",
+      "anchor": [
+        -33,
+        41
+      ],
+      "source_size": [
+        192,
+        104
+      ],
+      "crop_origin": [
+        129,
+        51
+      ],
+      "source_rgb_sha256": "a2e1dae7485350c5f1a26778852d2686ed13b11aba3901db9889ce949700a27e"
+    },
+    {
+      "name": "FL2.TGA",
+      "anchor": [
+        -33,
+        41
+      ],
+      "source_size": [
+        192,
+        104
+      ],
+      "crop_origin": [
+        129,
+        51
+      ],
+      "source_rgb_sha256": "e9cf41ee6eee01c4986e43ef7e36b0fd1fccdf92357b2489dabb2ac4f45d9364"
+    },
+    {
+      "name": "FL3.TGA",
+      "anchor": [
+        -33,
+        41
+      ],
+      "source_size": [
+        192,
+        104
+      ],
+      "crop_origin": [
+        129,
+        51
+      ],
+      "source_rgb_sha256": "eb0f8d766d9324d96ec7d38adb3b763715b70ea565fc310f67662d93e837f84b"
+    }
+  ],
+  "legs": {
+    "name": "NL00.TGA",
+    "anchor": [
+      20,
+      32
+    ],
+    "source_size": [
+      72,
+      96
+    ],
+    "crop_origin": [
+      16,
+      60
+    ],
+    "source_rgb_sha256": "492be3ca82ad32199385d75ba59348ef56cabe7a80ff83f5a8c4e148597a903f"
+  },
+  "nozzle": [
+    34,
+    52
+  ],
+  "floor": [
+    74,
+    92
+  ]
+}

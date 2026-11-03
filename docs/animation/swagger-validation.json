@@ -1,0 +1,191 @@
+{
+  "baseline": "05b53c0e6d70032b1cf37582a86f64deb0fa7ce2",
+  "branch": "swagger-walk-test",
+  "walk_holds_ticks": {
+    "buck": [
+      14,
+      14,
+      14
+    ],
+    "chuck": [
+      15,
+      14,
+      15
+    ]
+  },
+  "native_configurations": [
+    "vdp1",
+    "vdp1-no-gallery",
+    "vdp2-no-gallery",
+    "gallery",
+    "parallax",
+    "animation",
+    "animation-parallax",
+    "playable",
+    "playable-no-parallax",
+    "swagger",
+    "swagger-no-parallax"
+  ],
+  "host_tests": "make test (all original suites + compact bank/expansion/presentation tests); ASan/UBSan swagger player, swagger banks, preserved preview; make check for all11 native configurations",
+  "vdp1": {
+    "boot_vdp1_bytes": 346368,
+    "boot_free_bytes": 112120,
+    "expanded_vdp1_bytes": 439776,
+    "expanded_free_bytes": 18712,
+    "boot_sprite_count": 123,
+    "expanded_sprite_count": 188,
+    "new_texture_bytes": 12672
+  },
+  "swagger_runtime": {
+    "frames_run": 1050,
+    "core_sha256": "f00215b3c6ee0c82a377a8403b686e09bf8684f176a0a5bd66b47b8677e4d738",
+    "compared_pixels": 469220,
+    "mismatched_pixels": 0,
+    "fallback_compared_pixels": 828471,
+    "simulation_matches_original_renderer": true,
+    "simulation_frames_compared": 720,
+    "resident_texture_hashes": [
+      2765649594
+    ],
+    "seen_poses": [
+      [
+        0,
+        1,
+        2,
+        3,
+        12,
+        13,
+        14
+      ],
+      [
+        0,
+        1,
+        2,
+        3,
+        12,
+        13,
+        14
+      ]
+    ],
+    "facings": [
+      [
+        -1,
+        1
+      ],
+      [
+        -1,
+        1
+      ]
+    ]
+  },
+  "six_comparison_runtime": {
+    "frames_run": 1050,
+    "compared_pixels": 452213,
+    "mismatched_pixels": 0,
+    "simulation_matches_original_renderer": true,
+    "simulation_frames_compared": 720,
+    "seen_poses": [
+      [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    ],
+    "facings": [
+      [
+        -1,
+        1
+      ],
+      [
+        -1,
+        1
+      ]
+    ]
+  },
+  "review_expansion_runtime": {
+    "frames_run": 1600,
+    "core_sha256": "f00215b3c6ee0c82a377a8403b686e09bf8684f176a0a5bd66b47b8677e4d738",
+    "actual_allocations": {
+      "299": 346368,
+      "1000": 439776,
+      "1500": 439776
+    },
+    "actual_sprite_slots": {
+      "299": 123,
+      "1000": 188,
+      "1500": 188
+    },
+    "preview_idle_pair": [
+      0,
+      1
+    ],
+    "preview_compared_pixels": 28800,
+    "preview_mismatches": 0,
+    "game_return_verified": true,
+    "expanded_textures_stable": true,
+    "method": "Normal gallery Down / Start input, read-only save states. Actual allocation counters and Jo descriptor count, independent RGB565 preview reconstruction. No RAM writes/game hooks."
+  },
+  "legacy_preview_runtime": {
+    "frames_run": 2000,
+    "compared_character_region_pixels": 7171200,
+    "mismatched_pixels": 0,
+    "gallery_restore_exact": true
+  },
+  "core": "Yabause v0.9.15 8926b0c, software/interpreter/HLE BIOS, one thread, no RAM cartridge",
+  "hardware_tested": false,
+  "webretro_tested": false,
+  "swagger_resident_end": "0000000006098574",
+  "six_resident_end": "0000000006098244",
+  "source_sha256": {
+    "src/main.c": "c9ce752716c633f050f476f3731b6e6dacc087022584b7cdf6c26a2b821a896c",
+    "src/animation_preview.c": "c937ed11fcf8bcc8d883b68c9725a218da4f3376bc3bd7529ea960366e5a3ddd",
+    "src/animation_preview.h": "5a70b02f651e82a434e56feaf529c8281b7a977407c9c150c5ce002f28a87361",
+    "src/player_animation.c": "7e098f8727b8e23b66ec7944515dc973869dd369432d5bfa9e4c7e3b6310bf46",
+    "src/swagger_timing.h": "58c68457a2da9723bdfd450f905ac44693a3eec113840a112fda6d6e1d2305ab",
+    "src/swagger_data.h": "dcf8b9a1f33d9503ff3b02c8e1a1784f77d4c88933b56a844199432585610df8",
+    "src/gallery.c": "ee25b3237dbe9f66a4c7562af50d7a20e0ce9c8b3b7c5ade7ed9157e9d6c1c3c",
+    "src/game.c": "d5ecf4ddd040f159856dcf90e1fc3deb7ba3c1a359a703f9533302581aa2f5c7",
+    "src/game.h": "338e7995cc900c856779972fa7609b7df72ed255af67dc24ed7f7409861eb1e8",
+    "src/combat_config.h": "1565208b11b19226bf3a542269fc19eff09dc7a24f9447db740a70a9c58c3d87",
+    "src/input.c": "4d81c2f4659689cac0238478f049b6edb47bf48dd4fd24b44b33369b0dde28e0",
+    "assets/swagger-walk/manifest.json": "2a65c4f159002ab48f7b6a875ac571e73928d903f5cfe92e9f6142bbbe34164a"
+  },
+  "published_artifact_checks": {
+    "code_commit": "09298a3911ca83cf076665fb7cb4128747bcc88e",
+    "swagger_artifact_id": 12794575334,
+    "six_artifact_id": 12794800443,
+    "zip_integrity_and_metadata": "passed",
+    "swagger_playable_pixels": 469220,
+    "six_playable_pixels": 452213,
+    "simulation_frames_identical": 720,
+    "review_first_run": {
+      "frames_completed": 1600,
+      "last_trace_frame": 1599,
+      "trace_bytes": 662940,
+      "process_result": "SIGSEGV11 after the final trace record, during shutdown path",
+      "cause": "unresolved"
+    },
+    "review_repeat": "passed complete verification and shutdown",
+    "instrumented_review_repeat": "passed complete run, retro_unload_game and retro_deinit",
+    "game_changes_for_shutdown_issue": false
+  }
+}

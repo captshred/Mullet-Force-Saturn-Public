@@ -1,0 +1,17 @@
+{
+  "approved_idle_source": "assets/gallery/buck-88.png and chuck-88.png; copied exactly, six existing runtime IDs reused",
+  "walk_status": "Unapproved image-generation study, second iteration, derived from user-provided master designs and a six-pose reference from existing tools/buck_art.py. Not a production gait or complete moveset.",
+  "raw_source": "source-walk.png",
+  "old_pose_reference": "reference-old-walk.png",
+  "raw_master_sha256": {
+    "buck-master.png": "43c19245f4e188b2f8afbf28dd4b1d0ca656068d9897d6f4353aaeed40821e1b",
+    "chuck-master.png": "02d676932a29a98c691ef3441eb7b809b7e0def5ef016f7faed8974f68cc7965"
+  },
+  "conversion": "tools/build-animation-study.py: per-figure alpha crop, uniform 88px premultiplied Lanczos reduction, alpha128, fixed gallery palette indices1..253, no dithering; no image generation at build/runtime.",
+  "review_limits": [
+    "Near/far leg identity and support need manual cleanup",
+    "Silhouette-centering provisional; pelvis/foot landmarks need artist registration",
+    "Generated face/torso details vary from approved idle",
+    "Idle breathing and other moves not generated"
+  ]
+}

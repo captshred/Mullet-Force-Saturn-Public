@@ -1,0 +1,224 @@
+{
+  "parent": "c50d7146f38a343d5f949aadb72690864ec373fb",
+  "resources": [
+    {
+      "name": "HT00.TGA",
+      "width": 56,
+      "height": 30,
+      "bytes": 1696,
+      "palette": 0,
+      "sha256": "eaa5c6fbdb282baadf008681948b8a21619a049d98fd1a7dd29d37a3aa9853e1"
+    },
+    {
+      "name": "HT01.TGA",
+      "width": 24,
+      "height": 16,
+      "bytes": 384,
+      "palette": 1,
+      "sha256": "204d083e0bfd6eb675c02172b36c8cecbf112093d94628f5075a496306ecaf16"
+    },
+    {
+      "name": "HT02.TGA",
+      "width": 64,
+      "height": 32,
+      "bytes": 2048,
+      "palette": 0,
+      "sha256": "cf3a9781f520a4c0fab31c69ea192d1d510fe65c521c4f05ce1c6f35c12e0f42"
+    },
+    {
+      "name": "HT03.TGA",
+      "width": 16,
+      "height": 16,
+      "bytes": 256,
+      "palette": 1,
+      "sha256": "e3de8619f06c5380d1bca1e1f8fe8a5095e619436d098c7c10ed0d411eb57656"
+    },
+    {
+      "name": "HT04.TGA",
+      "width": 56,
+      "height": 32,
+      "bytes": 1792,
+      "palette": 0,
+      "sha256": "5b08fb7ea89effa0e6a5e6348cecf4277cd8280b7172a5299241c9375b93684e"
+    },
+    {
+      "name": "HT05.TGA",
+      "width": 16,
+      "height": 10,
+      "bytes": 160,
+      "palette": 1,
+      "sha256": "83bec5c721ff2a0aad5296fdab2713992ffe6316c21c9473e0a7954c616c9b80"
+    },
+    {
+      "name": "HT06.TGA",
+      "width": 64,
+      "height": 30,
+      "bytes": 1920,
+      "palette": 0,
+      "sha256": "06d4842d947b0ee04ab1ce97cd3198c445a949b5bfaf7e3f0703062f13893452"
+    },
+    {
+      "name": "HT07.TGA",
+      "width": 16,
+      "height": 16,
+      "bytes": 256,
+      "palette": 1,
+      "sha256": "31f7143b1b4484af89fcac59b9e0d92feb2030dc023caa4b841742f5f015e7aa"
+    },
+    {
+      "name": "HT08.TGA",
+      "width": 64,
+      "height": 32,
+      "bytes": 2048,
+      "palette": 0,
+      "sha256": "2b522df7ae217bb51721209804a6f63342b8c53c62724a2e1eb8651976e311db"
+    },
+    {
+      "name": "HT09.TGA",
+      "width": 32,
+      "height": 14,
+      "bytes": 448,
+      "palette": 1,
+      "sha256": "053cea1bd2c29662098034bea2e89caaff39b00c9a612edb8adbcf0554f127aa"
+    },
+    {
+      "name": "HT10.TGA",
+      "width": 64,
+      "height": 30,
+      "bytes": 1920,
+      "palette": 0,
+      "sha256": "52bcde3f7a9ead5ebd0721bd3e6106487109fa9f168be5b9ab404efd22957fa8"
+    },
+    {
+      "name": "HT11.TGA",
+      "width": 16,
+      "height": 10,
+      "bytes": 160,
+      "palette": 1,
+      "sha256": "56c436ad5312a456ac0dee3df53e1da04211972d60c926664c86844714818b44"
+    }
+  ],
+  "parts": [
+    [
+      [
+        {
+          "resource": 0,
+          "x": 37,
+          "y": 24,
+          "width": 56,
+          "height": 30
+        },
+        {
+          "resource": 1,
+          "x": 55,
+          "y": 34,
+          "width": 24,
+          "height": 16
+        }
+      ],
+      [
+        {
+          "resource": 2,
+          "x": 43,
+          "y": 24,
+          "width": 64,
+          "height": 32
+        },
+        {
+          "resource": 3,
+          "x": 72,
+          "y": 40,
+          "width": 16,
+          "height": 16
+        }
+      ],
+      [
+        {
+          "resource": 4,
+          "x": 36,
+          "y": 24,
+          "width": 56,
+          "height": 32
+        },
+        {
+          "resource": 5,
+          "x": 59,
+          "y": 47,
+          "width": 16,
+          "height": 10
+        }
+      ]
+    ],
+    [
+      [
+        {
+          "resource": 6,
+          "x": 33,
+          "y": 24,
+          "width": 64,
+          "height": 30
+        },
+        {
+          "resource": 7,
+          "x": 55,
+          "y": 34,
+          "width": 16,
+          "height": 16
+        }
+      ],
+      [
+        {
+          "resource": 8,
+          "x": 38,
+          "y": 24,
+          "width": 64,
+          "height": 32
+        },
+        {
+          "resource": 9,
+          "x": 57,
+          "y": 42,
+          "width": 32,
+          "height": 14
+        }
+      ],
+      [
+        {
+          "resource": 10,
+          "x": 32,
+          "y": 24,
+          "width": 64,
+          "height": 30
+        },
+        {
+          "resource": 11,
+          "x": 57,
+          "y": 46,
+          "width": 16,
+          "height": 10
+        }
+      ]
+    ]
+  ],
+  "texture_bytes": 13088,
+  "replaced_bytes": 16320,
+  "boot_bytes": 454400,
+  "free_bytes": 4088,
+  "slots": 244,
+  "resident_textures": 235,
+  "shared_row_views": 8,
+  "allocator_tail_views": 1,
+  "palette_banks_added": 0,
+  "root": [
+    64,
+    92
+  ],
+  "nozzle": [
+    98,
+    52
+  ],
+  "lower_view_rows": [
+    48,
+    80
+  ]
+}

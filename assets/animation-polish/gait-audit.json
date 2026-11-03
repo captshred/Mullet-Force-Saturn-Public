@@ -1,0 +1,102 @@
+{
+  "buck": [
+    {
+      "pair": [
+        1,
+        4
+      ],
+      "before": {
+        "rgba_identical": false,
+        "lower_silhouette_changed_pixels": 58,
+        "silhouette_iou": 0.9456928838951311
+      },
+      "after": {
+        "rgba_identical": false,
+        "lower_silhouette_changed_pixels": 303,
+        "silhouette_iou": 0.753257328990228
+      }
+    },
+    {
+      "pair": [
+        2,
+        5
+      ],
+      "before": {
+        "rgba_identical": false,
+        "lower_silhouette_changed_pixels": 175,
+        "silhouette_iou": 0.8305905130687319
+      },
+      "after": {
+        "rgba_identical": false,
+        "lower_silhouette_changed_pixels": 428,
+        "silhouette_iou": 0.6586921850079744
+      }
+    },
+    {
+      "pair": [
+        3,
+        6
+      ],
+      "before": {
+        "rgba_identical": false,
+        "lower_silhouette_changed_pixels": 21,
+        "silhouette_iou": 0.9672386895475819
+      },
+      "after": {
+        "rgba_identical": false,
+        "lower_silhouette_changed_pixels": 728,
+        "silhouette_iou": 0.3597185576077397
+      }
+    }
+  ],
+  "chuck": [
+    {
+      "pair": [
+        1,
+        4
+      ],
+      "before": {
+        "rgba_identical": false,
+        "lower_silhouette_changed_pixels": 80,
+        "silhouette_iou": 0.9320305862361937
+      },
+      "after": {
+        "rgba_identical": false,
+        "lower_silhouette_changed_pixels": 257,
+        "silhouette_iou": 0.79921875
+      }
+    },
+    {
+      "pair": [
+        2,
+        5
+      ],
+      "before": {
+        "rgba_identical": false,
+        "lower_silhouette_changed_pixels": 104,
+        "silhouette_iou": 0.9049360146252285
+      },
+      "after": {
+        "rgba_identical": false,
+        "lower_silhouette_changed_pixels": 311,
+        "silhouette_iou": 0.746742671009772
+      }
+    },
+    {
+      "pair": [
+        3,
+        6
+      ],
+      "before": {
+        "rgba_identical": false,
+        "lower_silhouette_changed_pixels": 45,
+        "silhouette_iou": 0.9363507779349364
+      },
+      "after": {
+        "rgba_identical": false,
+        "lower_silhouette_changed_pixels": 728,
+        "silhouette_iou": 0.36695652173913046
+      }
+    }
+  ]
+}

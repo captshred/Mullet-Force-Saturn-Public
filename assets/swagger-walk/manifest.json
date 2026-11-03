@@ -1,0 +1,1357 @@
+{
+  "baseline": "05b53c0e6d70032b1cf37582a86f64deb0fa7ce2",
+  "canvas": [
+    128,
+    96
+  ],
+  "root": [
+    64,
+    92
+  ],
+  "standing_height": 88,
+  "palette_sha256": "0bc5370c89a51dc3d4c41505c3dcef0748362af8c4135d4badaa09c632e302aa",
+  "guide_sha256": "2509fe98faa227b785f2d08fe5b5e0cf7f0830d2c92c8b7105b738c96a6d7afd",
+  "old_resource_count": 81,
+  "resources": [
+    {
+      "name": "GB0.TGA",
+      "source": "original",
+      "old_ref": [
+        0,
+        0,
+        0
+      ],
+      "width": 40,
+      "height": 20,
+      "aligned_bytes": 800
+    },
+    {
+      "name": "GB1.TGA",
+      "source": "original",
+      "old_ref": [
+        0,
+        0,
+        1
+      ],
+      "width": 64,
+      "height": 56,
+      "aligned_bytes": 3584
+    },
+    {
+      "name": "GB2.TGA",
+      "source": "original",
+      "old_ref": [
+        0,
+        0,
+        2
+      ],
+      "width": 80,
+      "height": 12,
+      "aligned_bytes": 960
+    },
+    {
+      "name": "AB10.TGA",
+      "source": "original",
+      "old_ref": [
+        0,
+        1,
+        0
+      ],
+      "width": 40,
+      "height": 20,
+      "aligned_bytes": 800
+    },
+    {
+      "name": "AB11.TGA",
+      "source": "original",
+      "old_ref": [
+        0,
+        1,
+        1
+      ],
+      "width": 64,
+      "height": 56,
+      "aligned_bytes": 3584
+    },
+    {
+      "name": "AB12.TGA",
+      "source": "original",
+      "old_ref": [
+        0,
+        1,
+        2
+      ],
+      "width": 72,
+      "height": 12,
+      "aligned_bytes": 864
+    },
+    {
+      "name": "AB20.TGA",
+      "source": "original",
+      "old_ref": [
+        0,
+        2,
+        0
+      ],
+      "width": 40,
+      "height": 20,
+      "aligned_bytes": 800
+    },
+    {
+      "name": "AB21.TGA",
+      "source": "original",
+      "old_ref": [
+        0,
+        2,
+        1
+      ],
+      "width": 56,
+      "height": 56,
+      "aligned_bytes": 3136
+    },
+    {
+      "name": "AB22.TGA",
+      "source": "original",
+      "old_ref": [
+        0,
+        2,
+        2
+      ],
+      "width": 56,
+      "height": 12,
+      "aligned_bytes": 672
+    },
+    {
+      "name": "AB30.TGA",
+      "source": "original",
+      "old_ref": [
+        0,
+        3,
+        0
+      ],
+      "width": 40,
+      "height": 20,
+      "aligned_bytes": 800
+    },
+    {
+      "name": "AB31.TGA",
+      "source": "original",
+      "old_ref": [
+        0,
+        3,
+        1
+      ],
+      "width": 48,
+      "height": 56,
+      "aligned_bytes": 2688
+    },
+    {
+      "name": "AB32.TGA",
+      "source": "original",
+      "old_ref": [
+        0,
+        3,
+        2
+      ],
+      "width": 24,
+      "height": 12,
+      "aligned_bytes": 288
+    },
+    {
+      "name": "AB40.TGA",
+      "source": "original",
+      "old_ref": [
+        0,
+        4,
+        0
+      ],
+      "width": 40,
+      "height": 20,
+      "aligned_bytes": 800
+    },
+    {
+      "name": "AB41.TGA",
+      "source": "original",
+      "old_ref": [
+        0,
+        4,
+        1
+      ],
+      "width": 56,
+      "height": 56,
+      "aligned_bytes": 3136
+    },
+    {
+      "name": "AB42.TGA",
+      "source": "original",
+      "old_ref": [
+        0,
+        4,
+        2
+      ],
+      "width": 72,
+      "height": 12,
+      "aligned_bytes": 864
+    },
+    {
+      "name": "AB50.TGA",
+      "source": "original",
+      "old_ref": [
+        0,
+        5,
+        0
+      ],
+      "width": 40,
+      "height": 20,
+      "aligned_bytes": 800
+    },
+    {
+      "name": "AB51.TGA",
+      "source": "original",
+      "old_ref": [
+        0,
+        5,
+        1
+      ],
+      "width": 56,
+      "height": 56,
+      "aligned_bytes": 3136
+    },
+    {
+      "name": "AB52.TGA",
+      "source": "original",
+      "old_ref": [
+        0,
+        5,
+        2
+      ],
+      "width": 56,
+      "height": 12,
+      "aligned_bytes": 672
+    },
+    {
+      "name": "AB60.TGA",
+      "source": "original",
+      "old_ref": [
+        0,
+        6,
+        0
+      ],
+      "width": 32,
+      "height": 20,
+      "aligned_bytes": 640
+    },
+    {
+      "name": "AB61.TGA",
+      "source": "original",
+      "old_ref": [
+        0,
+        6,
+        1
+      ],
+      "width": 48,
+      "height": 56,
+      "aligned_bytes": 2688
+    },
+    {
+      "name": "AB62.TGA",
+      "source": "original",
+      "old_ref": [
+        0,
+        6,
+        2
+      ],
+      "width": 24,
+      "height": 12,
+      "aligned_bytes": 288
+    },
+    {
+      "name": "GC0.TGA",
+      "source": "original",
+      "old_ref": [
+        1,
+        0,
+        0
+      ],
+      "width": 40,
+      "height": 20,
+      "aligned_bytes": 800
+    },
+    {
+      "name": "GC1.TGA",
+      "source": "original",
+      "old_ref": [
+        1,
+        0,
+        1
+      ],
+      "width": 64,
+      "height": 56,
+      "aligned_bytes": 3584
+    },
+    {
+      "name": "GC2.TGA",
+      "source": "original",
+      "old_ref": [
+        1,
+        0,
+        2
+      ],
+      "width": 88,
+      "height": 12,
+      "aligned_bytes": 1056
+    },
+    {
+      "name": "AC10.TGA",
+      "source": "original",
+      "old_ref": [
+        1,
+        1,
+        0
+      ],
+      "width": 40,
+      "height": 20,
+      "aligned_bytes": 800
+    },
+    {
+      "name": "AC11.TGA",
+      "source": "original",
+      "old_ref": [
+        1,
+        1,
+        1
+      ],
+      "width": 64,
+      "height": 56,
+      "aligned_bytes": 3584
+    },
+    {
+      "name": "AC12.TGA",
+      "source": "original",
+      "old_ref": [
+        1,
+        1,
+        2
+      ],
+      "width": 72,
+      "height": 12,
+      "aligned_bytes": 864
+    },
+    {
+      "name": "AC20.TGA",
+      "source": "original",
+      "old_ref": [
+        1,
+        2,
+        0
+      ],
+      "width": 40,
+      "height": 20,
+      "aligned_bytes": 800
+    },
+    {
+      "name": "AC21.TGA",
+      "source": "original",
+      "old_ref": [
+        1,
+        2,
+        1
+      ],
+      "width": 56,
+      "height": 56,
+      "aligned_bytes": 3136
+    },
+    {
+      "name": "AC22.TGA",
+      "source": "original",
+      "old_ref": [
+        1,
+        2,
+        2
+      ],
+      "width": 56,
+      "height": 12,
+      "aligned_bytes": 672
+    },
+    {
+      "name": "AC30.TGA",
+      "source": "original",
+      "old_ref": [
+        1,
+        3,
+        0
+      ],
+      "width": 40,
+      "height": 20,
+      "aligned_bytes": 800
+    },
+    {
+      "name": "AC31.TGA",
+      "source": "original",
+      "old_ref": [
+        1,
+        3,
+        1
+      ],
+      "width": 48,
+      "height": 56,
+      "aligned_bytes": 2688
+    },
+    {
+      "name": "AC32.TGA",
+      "source": "original",
+      "old_ref": [
+        1,
+        3,
+        2
+      ],
+      "width": 24,
+      "height": 12,
+      "aligned_bytes": 288
+    },
+    {
+      "name": "AC40.TGA",
+      "source": "original",
+      "old_ref": [
+        1,
+        4,
+        0
+      ],
+      "width": 40,
+      "height": 20,
+      "aligned_bytes": 800
+    },
+    {
+      "name": "AC41.TGA",
+      "source": "original",
+      "old_ref": [
+        1,
+        4,
+        1
+      ],
+      "width": 56,
+      "height": 56,
+      "aligned_bytes": 3136
+    },
+    {
+      "name": "AC42.TGA",
+      "source": "original",
+      "old_ref": [
+        1,
+        4,
+        2
+      ],
+      "width": 72,
+      "height": 12,
+      "aligned_bytes": 864
+    },
+    {
+      "name": "AC50.TGA",
+      "source": "original",
+      "old_ref": [
+        1,
+        5,
+        0
+      ],
+      "width": 40,
+      "height": 20,
+      "aligned_bytes": 800
+    },
+    {
+      "name": "AC51.TGA",
+      "source": "original",
+      "old_ref": [
+        1,
+        5,
+        1
+      ],
+      "width": 56,
+      "height": 56,
+      "aligned_bytes": 3136
+    },
+    {
+      "name": "AC52.TGA",
+      "source": "original",
+      "old_ref": [
+        1,
+        5,
+        2
+      ],
+      "width": 56,
+      "height": 12,
+      "aligned_bytes": 672
+    },
+    {
+      "name": "AC60.TGA",
+      "source": "original",
+      "old_ref": [
+        1,
+        6,
+        0
+      ],
+      "width": 40,
+      "height": 20,
+      "aligned_bytes": 800
+    },
+    {
+      "name": "AC61.TGA",
+      "source": "original",
+      "old_ref": [
+        1,
+        6,
+        1
+      ],
+      "width": 48,
+      "height": 56,
+      "aligned_bytes": 2688
+    },
+    {
+      "name": "AC62.TGA",
+      "source": "original",
+      "old_ref": [
+        1,
+        6,
+        2
+      ],
+      "width": 24,
+      "height": 12,
+      "aligned_bytes": 288
+    },
+    {
+      "name": "P000.TGA",
+      "source": "polish",
+      "width": 64,
+      "height": 56,
+      "aligned_bytes": 3584
+    },
+    {
+      "name": "P001.TGA",
+      "source": "polish",
+      "width": 64,
+      "height": 56,
+      "aligned_bytes": 3584
+    },
+    {
+      "name": "P002.TGA",
+      "source": "polish",
+      "width": 64,
+      "height": 56,
+      "aligned_bytes": 3584
+    },
+    {
+      "name": "P003.TGA",
+      "source": "polish",
+      "width": 56,
+      "height": 44,
+      "aligned_bytes": 2464
+    },
+    {
+      "name": "P004.TGA",
+      "source": "polish",
+      "width": 56,
+      "height": 32,
+      "aligned_bytes": 1792
+    },
+    {
+      "name": "P005.TGA",
+      "source": "polish",
+      "width": 72,
+      "height": 12,
+      "aligned_bytes": 864
+    },
+    {
+      "name": "P006.TGA",
+      "source": "polish",
+      "width": 56,
+      "height": 44,
+      "aligned_bytes": 2464
+    },
+    {
+      "name": "P007.TGA",
+      "source": "polish",
+      "width": 48,
+      "height": 32,
+      "aligned_bytes": 1536
+    },
+    {
+      "name": "P008.TGA",
+      "source": "polish",
+      "width": 56,
+      "height": 12,
+      "aligned_bytes": 672
+    },
+    {
+      "name": "P009.TGA",
+      "source": "polish",
+      "width": 24,
+      "height": 32,
+      "aligned_bytes": 768
+    },
+    {
+      "name": "P010.TGA",
+      "source": "polish",
+      "width": 24,
+      "height": 12,
+      "aligned_bytes": 288
+    },
+    {
+      "name": "P011.TGA",
+      "source": "polish",
+      "width": 48,
+      "height": 20,
+      "aligned_bytes": 960
+    },
+    {
+      "name": "P012.TGA",
+      "source": "polish",
+      "width": 80,
+      "height": 24,
+      "aligned_bytes": 1920
+    },
+    {
+      "name": "P013.TGA",
+      "source": "polish",
+      "width": 48,
+      "height": 24,
+      "aligned_bytes": 1152
+    },
+    {
+      "name": "P014.TGA",
+      "source": "polish",
+      "width": 64,
+      "height": 20,
+      "aligned_bytes": 1280
+    },
+    {
+      "name": "P015.TGA",
+      "source": "polish",
+      "width": 40,
+      "height": 34,
+      "aligned_bytes": 1376
+    },
+    {
+      "name": "P016.TGA",
+      "source": "polish",
+      "width": 16,
+      "height": 10,
+      "aligned_bytes": 160
+    },
+    {
+      "name": "P017.TGA",
+      "source": "polish",
+      "width": 64,
+      "height": 56,
+      "aligned_bytes": 3584
+    },
+    {
+      "name": "P018.TGA",
+      "source": "polish",
+      "width": 64,
+      "height": 56,
+      "aligned_bytes": 3584
+    },
+    {
+      "name": "P019.TGA",
+      "source": "polish",
+      "width": 64,
+      "height": 56,
+      "aligned_bytes": 3584
+    },
+    {
+      "name": "P020.TGA",
+      "source": "polish",
+      "width": 64,
+      "height": 56,
+      "aligned_bytes": 3584
+    },
+    {
+      "name": "P021.TGA",
+      "source": "polish",
+      "width": 56,
+      "height": 44,
+      "aligned_bytes": 2464
+    },
+    {
+      "name": "P022.TGA",
+      "source": "polish",
+      "width": 56,
+      "height": 32,
+      "aligned_bytes": 1792
+    },
+    {
+      "name": "P023.TGA",
+      "source": "polish",
+      "width": 72,
+      "height": 12,
+      "aligned_bytes": 864
+    },
+    {
+      "name": "P024.TGA",
+      "source": "polish",
+      "width": 56,
+      "height": 44,
+      "aligned_bytes": 2464
+    },
+    {
+      "name": "P025.TGA",
+      "source": "polish",
+      "width": 48,
+      "height": 32,
+      "aligned_bytes": 1536
+    },
+    {
+      "name": "P026.TGA",
+      "source": "polish",
+      "width": 56,
+      "height": 12,
+      "aligned_bytes": 672
+    },
+    {
+      "name": "P027.TGA",
+      "source": "polish",
+      "width": 56,
+      "height": 44,
+      "aligned_bytes": 2464
+    },
+    {
+      "name": "P028.TGA",
+      "source": "polish",
+      "width": 24,
+      "height": 32,
+      "aligned_bytes": 768
+    },
+    {
+      "name": "P029.TGA",
+      "source": "polish",
+      "width": 32,
+      "height": 12,
+      "aligned_bytes": 384
+    },
+    {
+      "name": "P030.TGA",
+      "source": "polish",
+      "width": 56,
+      "height": 44,
+      "aligned_bytes": 2464
+    },
+    {
+      "name": "P031.TGA",
+      "source": "polish",
+      "width": 48,
+      "height": 20,
+      "aligned_bytes": 960
+    },
+    {
+      "name": "P032.TGA",
+      "source": "polish",
+      "width": 72,
+      "height": 24,
+      "aligned_bytes": 1728
+    },
+    {
+      "name": "P033.TGA",
+      "source": "polish",
+      "width": 48,
+      "height": 24,
+      "aligned_bytes": 1152
+    },
+    {
+      "name": "P034.TGA",
+      "source": "polish",
+      "width": 64,
+      "height": 20,
+      "aligned_bytes": 1280
+    },
+    {
+      "name": "P035.TGA",
+      "source": "polish",
+      "width": 56,
+      "height": 44,
+      "aligned_bytes": 2464
+    },
+    {
+      "name": "P036.TGA",
+      "source": "polish",
+      "width": 40,
+      "height": 32,
+      "aligned_bytes": 1280
+    },
+    {
+      "name": "P037.TGA",
+      "source": "polish",
+      "width": 16,
+      "height": 12,
+      "aligned_bytes": 192
+    },
+    {
+      "name": "P038.TGA",
+      "source": "polish",
+      "width": 64,
+      "height": 56,
+      "aligned_bytes": 3584
+    },
+    {
+      "name": "S000.TGA",
+      "source": "swagger",
+      "width": 48,
+      "height": 36,
+      "aligned_bytes": 1728
+    },
+    {
+      "name": "S001.TGA",
+      "source": "swagger",
+      "width": 64,
+      "height": 8,
+      "aligned_bytes": 512
+    },
+    {
+      "name": "S002.TGA",
+      "source": "swagger",
+      "width": 40,
+      "height": 40,
+      "aligned_bytes": 1600
+    },
+    {
+      "name": "S003.TGA",
+      "source": "swagger",
+      "width": 48,
+      "height": 4,
+      "aligned_bytes": 192
+    },
+    {
+      "name": "S004.TGA",
+      "source": "swagger",
+      "width": 40,
+      "height": 20,
+      "aligned_bytes": 800
+    },
+    {
+      "name": "S005.TGA",
+      "source": "swagger",
+      "width": 64,
+      "height": 24,
+      "aligned_bytes": 1536
+    },
+    {
+      "name": "S006.TGA",
+      "source": "swagger",
+      "width": 48,
+      "height": 34,
+      "aligned_bytes": 1632
+    },
+    {
+      "name": "S007.TGA",
+      "source": "swagger",
+      "width": 64,
+      "height": 10,
+      "aligned_bytes": 640
+    },
+    {
+      "name": "S008.TGA",
+      "source": "swagger",
+      "width": 40,
+      "height": 36,
+      "aligned_bytes": 1440
+    },
+    {
+      "name": "S009.TGA",
+      "source": "swagger",
+      "width": 48,
+      "height": 8,
+      "aligned_bytes": 384
+    },
+    {
+      "name": "S010.TGA",
+      "source": "swagger",
+      "width": 48,
+      "height": 34,
+      "aligned_bytes": 1632
+    },
+    {
+      "name": "S011.TGA",
+      "source": "swagger",
+      "width": 56,
+      "height": 10,
+      "aligned_bytes": 576
+    }
+  ],
+  "new_texture_bytes": 12672,
+  "naive_piece_bytes": 27456,
+  "boot_vdp1_bytes": 346368,
+  "boot_free_bytes": 112120,
+  "expanded_vdp1_bytes": 439776,
+  "expanded_free_bytes": 18712,
+  "boot_required": [
+    0,
+    1,
+    2,
+    21,
+    22,
+    23,
+    42,
+    43,
+    44,
+    45,
+    48,
+    60,
+    61,
+    62,
+    63,
+    66,
+    81,
+    82,
+    83,
+    84,
+    85,
+    86,
+    87,
+    88,
+    89,
+    90,
+    91,
+    92
+  ],
+  "boot_sprite_count": 123,
+  "expanded_sprite_count": 188,
+  "actors": [
+    {
+      "name": "buck",
+      "frames": [
+        {
+          "frame": 0,
+          "parts": [
+            {
+              "resource": 48,
+              "x": 41,
+              "y": 4,
+              "width": 56,
+              "height": 44
+            },
+            {
+              "resource": 81,
+              "x": 36,
+              "y": 48,
+              "width": 48,
+              "height": 36
+            },
+            {
+              "resource": 82,
+              "x": 34,
+              "y": 84,
+              "width": 64,
+              "height": 8
+            }
+          ],
+          "upper_source_frame": 5,
+          "rgba_sha256": "3a26618929e387eda399489f2b24fc45a191ea0e99599d0a96e218d00dc09024",
+          "floor_x": [
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            71,
+            72,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            79,
+            80,
+            81,
+            82,
+            83,
+            84,
+            85,
+            86,
+            87,
+            88,
+            89,
+            90
+          ],
+          "bounds": [
+            34,
+            4,
+            93,
+            92
+          ]
+        },
+        {
+          "frame": 1,
+          "parts": [
+            {
+              "resource": 45,
+              "x": 41,
+              "y": 4,
+              "width": 56,
+              "height": 44
+            },
+            {
+              "resource": 83,
+              "x": 45,
+              "y": 48,
+              "width": 40,
+              "height": 40
+            },
+            {
+              "resource": 84,
+              "x": 45,
+              "y": 88,
+              "width": 48,
+              "height": 4
+            }
+          ],
+          "upper_source_frame": 4,
+          "rgba_sha256": "01cb34f453021fe0834d387962dfe502ec7215d9d09da54d83742eb102913057",
+          "floor_x": [
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            79,
+            80,
+            81,
+            82,
+            83,
+            84,
+            85
+          ],
+          "bounds": [
+            41,
+            4,
+            93,
+            92
+          ]
+        },
+        {
+          "frame": 2,
+          "parts": [
+            {
+              "resource": 48,
+              "x": 41,
+              "y": 4,
+              "width": 56,
+              "height": 44
+            },
+            {
+              "resource": 85,
+              "x": 44,
+              "y": 48,
+              "width": 40,
+              "height": 20
+            },
+            {
+              "resource": 86,
+              "x": 32,
+              "y": 68,
+              "width": 64,
+              "height": 24
+            }
+          ],
+          "upper_source_frame": 8,
+          "rgba_sha256": "1fc112c7fa44a2525cd7c13dee6b5c6c20f48dc289524750899db49d13fff9b6",
+          "floor_x": [
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            71,
+            72,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            79,
+            80,
+            81,
+            82,
+            83,
+            84,
+            85,
+            86,
+            87,
+            88,
+            89,
+            90,
+            91
+          ],
+          "bounds": [
+            32,
+            4,
+            93,
+            92
+          ]
+        }
+      ]
+    },
+    {
+      "name": "chuck",
+      "frames": [
+        {
+          "frame": 0,
+          "parts": [
+            {
+              "resource": 66,
+              "x": 39,
+              "y": 4,
+              "width": 56,
+              "height": 44
+            },
+            {
+              "resource": 87,
+              "x": 38,
+              "y": 48,
+              "width": 48,
+              "height": 34
+            },
+            {
+              "resource": 88,
+              "x": 35,
+              "y": 82,
+              "width": 64,
+              "height": 10
+            }
+          ],
+          "upper_source_frame": 5,
+          "rgba_sha256": "09a1df16b5664a856a896786a8fa66d980b7e58506fce7b4e590b6898fdc7dc2",
+          "floor_x": [
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            72,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            79,
+            80,
+            81,
+            82,
+            83,
+            84,
+            85,
+            86,
+            87,
+            88,
+            89,
+            90,
+            91,
+            92,
+            93,
+            94
+          ],
+          "bounds": [
+            35,
+            4,
+            95,
+            92
+          ]
+        },
+        {
+          "frame": 1,
+          "parts": [
+            {
+              "resource": 63,
+              "x": 39,
+              "y": 4,
+              "width": 56,
+              "height": 44
+            },
+            {
+              "resource": 89,
+              "x": 46,
+              "y": 48,
+              "width": 40,
+              "height": 36
+            },
+            {
+              "resource": 90,
+              "x": 44,
+              "y": 84,
+              "width": 48,
+              "height": 8
+            }
+          ],
+          "upper_source_frame": 4,
+          "rgba_sha256": "920bb65feb4e80c4342a08cbd4cbb0382be9752d6792d9f6f9137e9a664ffd59",
+          "floor_x": [
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            79,
+            80,
+            81,
+            82,
+            83,
+            84,
+            85
+          ],
+          "bounds": [
+            39,
+            4,
+            93,
+            92
+          ]
+        },
+        {
+          "frame": 2,
+          "parts": [
+            {
+              "resource": 66,
+              "x": 39,
+              "y": 4,
+              "width": 56,
+              "height": 44
+            },
+            {
+              "resource": 91,
+              "x": 35,
+              "y": 48,
+              "width": 48,
+              "height": 34
+            },
+            {
+              "resource": 92,
+              "x": 37,
+              "y": 82,
+              "width": 56,
+              "height": 10
+            }
+          ],
+          "upper_source_frame": 8,
+          "rgba_sha256": "f1dc8ef0268733273b5578fe27f527a56f4f10fa398138c2c7e04f1afce82607",
+          "floor_x": [
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            70,
+            71,
+            72,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            79,
+            80,
+            81,
+            82,
+            83,
+            84,
+            85,
+            86,
+            87,
+            88,
+            89,
+            90,
+            91
+          ],
+          "bounds": [
+            35,
+            4,
+            93,
+            92
+          ]
+        }
+      ]
+    }
+  ],
+  "tga_sha256": {
+    "S000.TGA": "e6e9b29a27220add6cce5b50865595f1621739bc979c43e41812d9ad1eaef4fd",
+    "S001.TGA": "ec3fbd537f921385323712ad221681416417a421ac740499634e0d939e48a482",
+    "S002.TGA": "5f95f3edcafea9a6dfec1af13e58ac553dcd5a2aeab95a935a02e5554f517128",
+    "S003.TGA": "16ad7e9e2d02663098e4eb07780329ed34dca299ab0585e1f902fcdd393395d6",
+    "S004.TGA": "edc53945c5cda0da0d6ca4090c84e77dd96e75c44f75e86b615e96ab5d9c58ab",
+    "S005.TGA": "1de45f1756ad1da76d470b0d899116d36e3a339441ea51871e65e043efad776c",
+    "S006.TGA": "06ce5584eaeb9abf31bb4d76d0c5d0345f56e6631ed722f2bc3696956fac0805",
+    "S007.TGA": "340637772a3b2a667945436f6654ccdc5bca2875da9875bbc1ff9cfb474929be",
+    "S008.TGA": "8f5b8c1f32a08395754116d6dc64243a82f2b30055959539a772d31f261434c1",
+    "S009.TGA": "3dd29eab8dbd08ade2ea7b5d60b20d28ceffe6aec7d39930791cc7ecb21638e4",
+    "S010.TGA": "17e62a29b882989cc3a124083a3e32bb840c6cd1d6cc4d9a35eee080d9a7a40f",
+    "S011.TGA": "e971e92eda68d3344960e525c737438f94782ce7c8fb122bfc26139639e8c735"
+  }
+}

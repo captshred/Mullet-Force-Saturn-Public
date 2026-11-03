@@ -1,0 +1,11 @@
+#ifndef MF_ORIGINAL_THREE_TIMING_H
+#define MF_ORIGINAL_THREE_TIMING_H
+/* Presentation only, at 60 Hz. Both builds use the same untouched artwork. */
+#define MF_ORIGINAL_HOLD_MODERATE 8
+#define MF_ORIGINAL_HOLD_SLOW 10
+#if MF_ORIGINAL_WALK_SLOW
+#define MF_ORIGINAL_FRAME_HOLD MF_ORIGINAL_HOLD_SLOW
+#else
+#define MF_ORIGINAL_FRAME_HOLD MF_ORIGINAL_HOLD_MODERATE
+#endif
+#endif

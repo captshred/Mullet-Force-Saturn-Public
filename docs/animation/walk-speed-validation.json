@@ -1,0 +1,85 @@
+{
+  "core_sha256": "f00215b3c6ee0c82a377a8403b686e09bf8684f176a0a5bd66b47b8677e4d738",
+  "bios": "HLE",
+  "renderer": "software",
+  "cpu": "interpreter",
+  "frames_run": 1050,
+  "compared_pixels": 452213,
+  "mismatched_pixels": 0,
+  "fallback_compared_pixels": 828471,
+  "simulation_matches_original_renderer": true,
+  "simulation_frames_compared": 720,
+  "resident_texture_hashes": [
+    3809488739
+  ],
+  "seen_poses": [
+    [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ]
+  ],
+  "facings": [
+    [
+      -1,
+      1
+    ],
+    [
+      -1,
+      1
+    ]
+  ],
+  "hardware_tested": false,
+  "baseline": "d5d4da1c78a689fadd8aa3f6cd241ccf6c873f73",
+  "scope": "Playable high-detail walk selection only; gallery/control cadence unchanged",
+  "playback_rate": [
+    3,
+    4
+  ],
+  "old_loop_ticks": 30,
+  "new_loop_ticks": 40,
+  "frame_holds_ticks": [
+    7,
+    7,
+    6,
+    7,
+    7,
+    6
+  ],
+  "vdp1_allocated": 427104,
+  "vdp1_free": 31384,
+  "resident_image_end": "0x06098034",
+  "tests": [
+    "make test",
+    "make check",
+    "native combined playable build",
+    "ASan/UBSan player animation test",
+    "local libretro Yabause playable/control comparison"
+  ],
+  "source_sha256": {
+    "src/player_animation.c": "160cdbede8cb49dff1f35873585cabff722798bd9cfe832a543d20df4f9f177c",
+    "src/game.c": "d5ecf4ddd040f159856dcf90e1fc3deb7ba3c1a359a703f9533302581aa2f5c7",
+    "src/game.h": "338e7995cc900c856779972fa7609b7df72ed255af67dc24ed7f7409861eb1e8",
+    "src/combat_config.h": "1565208b11b19226bf3a542269fc19eff09dc7a24f9447db740a70a9c58c3d87",
+    "src/animation_polish_data.h": "d765307544cee8091d9dde08aa09d56d05c39fc6b9dd9390aaa99966f1917197"
+  }
+}

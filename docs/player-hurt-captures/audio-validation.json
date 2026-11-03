@@ -1,0 +1,30 @@
+{
+  "buck": {
+    "custom_voice_starts": {
+      "2": 2,
+      "5": 16,
+      "6": 9
+    },
+    "output_peak": 6021,
+    "clipped_samples": 0
+  },
+  "chuck": {
+    "custom_voice_starts": {
+      "2": 3,
+      "5": 14,
+      "6": 10
+    },
+    "output_peak": 5679,
+    "clipped_samples": 0
+  },
+  "run": {
+    "custom_voice_starts": {
+      "7": 5,
+      "6": 3,
+      "1": 1,
+      "2": 1
+    },
+    "output_peak": 5791,
+    "clipped_samples": 0
+  }
+}

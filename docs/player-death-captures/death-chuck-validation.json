@@ -1,0 +1,26 @@
+{
+  "mode": "death",
+  "mirrored": false,
+  "automatic_recovery_verified": true,
+  "gameplay_states_identical": 2305,
+  "matched_native_pixels": 325189,
+  "unchanged_outside_pixels": 7728192,
+  "coverage": {
+    "1:death0:face1": 20810,
+    "1:death1:face1": 44209,
+    "1:death2:face1": 248122,
+    "0:hurt0:face1": 4151,
+    "0:hurt1:face1": 2868,
+    "0:hurt2:face1": 5029
+  },
+  "run_poses_seen": [],
+  "carry_to_swing_samples": 0,
+  "texture_bytes": 446304,
+  "free_bytes": 12184,
+  "definitions": 253,
+  "unchanged_cram": true,
+  "stable_texture_vram": true,
+  "physical_saturn_tested": false,
+  "webretro_tested": false,
+  "no_ram_writes": true
+}

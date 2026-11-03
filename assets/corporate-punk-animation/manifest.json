@@ -1,0 +1,252 @@
+{
+  "approved_commit": "c25d00c15805149273c5ef8ab8f33f54d920b2dd",
+  "canvas": [
+    96,
+    96
+  ],
+  "root": [
+    48,
+    92
+  ],
+  "palette": "../corporate-punk/palette.bgr24",
+  "resources": [
+    {
+      "name": "CP00.TGA",
+      "width": 16,
+      "height": 12,
+      "bytes": 192,
+      "sha256": "79ceba53cdb185a7c5e5bb761087188c916bc5c6b15462ee4584f19e0e8b386f"
+    },
+    {
+      "name": "CP01.TGA",
+      "width": 40,
+      "height": 56,
+      "bytes": 2240,
+      "sha256": "a9ef560865df1ba09ac3fb8a4a79b8795c90d3b9932e7cc917f9afdb235c28b2"
+    },
+    {
+      "name": "CP02.TGA",
+      "width": 48,
+      "height": 16,
+      "bytes": 768,
+      "sha256": "f79732384ac35db25b0811097cac537af735ed4128f57f5e4ee2629ade8a1cfc"
+    },
+    {
+      "name": "CP03.TGA",
+      "width": 40,
+      "height": 56,
+      "bytes": 2240,
+      "sha256": "60538deac1465f78ce24b4351ec56cf649b71c7a61245025796b07bac9d8dad9"
+    },
+    {
+      "name": "CP04.TGA",
+      "width": 40,
+      "height": 56,
+      "bytes": 2240,
+      "sha256": "58ac28d9c7d204fa6ded98017407e7c935d0b356d907e2aed9e9ec9262c1a769"
+    },
+    {
+      "name": "CP05.TGA",
+      "width": 48,
+      "height": 56,
+      "bytes": 2688,
+      "sha256": "b902dc9bc5e7019e756c540a2d28e333641a422cc45e3ecbe26f3efcf3c43724"
+    },
+    {
+      "name": "CP06.TGA",
+      "width": 40,
+      "height": 16,
+      "bytes": 640,
+      "sha256": "494eaa4c4bf14d3d8249a10194ae3b0ed1956ef8f966e10b9a35c4baa78c8ade"
+    },
+    {
+      "name": "CP07.TGA",
+      "width": 40,
+      "height": 56,
+      "bytes": 2240,
+      "sha256": "2cc53428b449abefc6f06edcf1b1299107d475e98aaceaa3f2d9b3f8f57f144a"
+    },
+    {
+      "name": "CP08.TGA",
+      "width": 48,
+      "height": 16,
+      "bytes": 768,
+      "sha256": "fd30b591cfa8bbc57c6d1c5b7802d7c17c48a650d2cf540af8784727385263e3"
+    }
+  ],
+  "poses": [
+    {
+      "name": "idle-0",
+      "parts": [
+        {
+          "resource": 0,
+          "x": 50,
+          "y": 8,
+          "width": 16,
+          "height": 12
+        },
+        {
+          "resource": 1,
+          "x": 30,
+          "y": 20,
+          "width": 40,
+          "height": 56
+        },
+        {
+          "resource": 2,
+          "x": 25,
+          "y": 76,
+          "width": 48,
+          "height": 16
+        }
+      ]
+    },
+    {
+      "name": "idle-1",
+      "parts": [
+        {
+          "resource": 0,
+          "x": 50,
+          "y": 8,
+          "width": 16,
+          "height": 12
+        },
+        {
+          "resource": 3,
+          "x": 30,
+          "y": 20,
+          "width": 40,
+          "height": 56
+        },
+        {
+          "resource": 2,
+          "x": 25,
+          "y": 76,
+          "width": 48,
+          "height": 16
+        }
+      ]
+    },
+    {
+      "name": "idle-2",
+      "parts": [
+        {
+          "resource": 0,
+          "x": 50,
+          "y": 8,
+          "width": 16,
+          "height": 12
+        },
+        {
+          "resource": 4,
+          "x": 30,
+          "y": 20,
+          "width": 40,
+          "height": 56
+        },
+        {
+          "resource": 2,
+          "x": 25,
+          "y": 76,
+          "width": 48,
+          "height": 16
+        }
+      ]
+    },
+    {
+      "name": "walk-0",
+      "parts": [
+        {
+          "resource": 0,
+          "x": 50,
+          "y": 8,
+          "width": 16,
+          "height": 12
+        },
+        {
+          "resource": 5,
+          "x": 30,
+          "y": 20,
+          "width": 48,
+          "height": 56
+        },
+        {
+          "resource": 6,
+          "x": 32,
+          "y": 76,
+          "width": 40,
+          "height": 16
+        }
+      ]
+    },
+    {
+      "name": "walk-1",
+      "parts": [
+        {
+          "resource": 0,
+          "x": 50,
+          "y": 8,
+          "width": 16,
+          "height": 12
+        },
+        {
+          "resource": 1,
+          "x": 30,
+          "y": 20,
+          "width": 40,
+          "height": 56
+        },
+        {
+          "resource": 2,
+          "x": 25,
+          "y": 76,
+          "width": 48,
+          "height": 16
+        }
+      ]
+    },
+    {
+      "name": "walk-2",
+      "parts": [
+        {
+          "resource": 0,
+          "x": 50,
+          "y": 8,
+          "width": 16,
+          "height": 12
+        },
+        {
+          "resource": 7,
+          "x": 30,
+          "y": 20,
+          "width": 40,
+          "height": 56
+        },
+        {
+          "resource": 8,
+          "x": 27,
+          "y": 76,
+          "width": 48,
+          "height": 16
+        }
+      ]
+    }
+  ],
+  "texture_bytes": 14016,
+  "texture_slots": 9,
+  "idle_holds": [
+    24,
+    12,
+    18
+  ],
+  "walk_holds": [
+    7,
+    7,
+    7
+  ],
+  "boot_bytes": 365120,
+  "boot_free": 93368,
+  "full_bytes": 441120,
+  "full_free": 17368,
+  "boot_slots": 134
+}

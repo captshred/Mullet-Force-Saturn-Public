@@ -1,0 +1,462 @@
+{
+  "parent": "f45cad4b4d4fdf56e9030997c7536df714866ef6",
+  "canvas": [
+    96,
+    96
+  ],
+  "root": [
+    48,
+    92
+  ],
+  "selected_height": 92,
+  "opaque_bounds": [
+    16,
+    0,
+    80,
+    92
+  ],
+  "palette_added": 220,
+  "palette_opaque_colors": 180,
+  "resources": [
+    {
+      "name": "CP00.TGA",
+      "width": 40,
+      "height": 22,
+      "bytes": 896,
+      "sha256": "01dbfa0e30afe3650c5c03ab1197ea73798ad4dd634569905fbd1b6f085b5e40"
+    },
+    {
+      "name": "CP01.TGA",
+      "width": 56,
+      "height": 30,
+      "bytes": 1696,
+      "sha256": "7bd5df76af9b4c8f8532677bb5f23f42d77fbab9f408b5d1a5b491365ff363b9"
+    },
+    {
+      "name": "CP02.TGA",
+      "width": 48,
+      "height": 24,
+      "bytes": 1152,
+      "sha256": "aac8f19c8d386433da6965786aaff566bad8a150f0229331c1a8da58079aa883"
+    },
+    {
+      "name": "CP03.TGA",
+      "width": 64,
+      "height": 16,
+      "bytes": 1024,
+      "sha256": "8474a47afa8e9e44434f7d540c045151b80275f9a573f8c46c7caa53220b5c71"
+    },
+    {
+      "name": "CP04.TGA",
+      "width": 56,
+      "height": 30,
+      "bytes": 1696,
+      "sha256": "f666b0e9a3659eb60dca5618ecbaa4c2783b78e55fc2c7c7a20190c6dfbdcca1"
+    },
+    {
+      "name": "CP05.TGA",
+      "width": 56,
+      "height": 30,
+      "bytes": 1696,
+      "sha256": "084832ef27deae3dcb0161032a1f58e89396d6b60d5f034ce92d967bca4a0c16"
+    },
+    {
+      "name": "CP06.TGA",
+      "width": 40,
+      "height": 24,
+      "bytes": 960,
+      "sha256": "be2ec9b2a172c26c9237301a28ce4de4f46800618e752e486a32d9c025b5ff77"
+    },
+    {
+      "name": "CP07.TGA",
+      "width": 48,
+      "height": 16,
+      "bytes": 768,
+      "sha256": "86c9f6f2a29ded2b1953724c74b1b1386c54072c19e287f6fe72828c6941a134"
+    },
+    {
+      "name": "CP08.TGA",
+      "width": 40,
+      "height": 24,
+      "bytes": 960,
+      "sha256": "e233a8067115c72f83d21dde561c1803ed3ef0f7da86d0d641616f0ea5442911"
+    },
+    {
+      "name": "CP09.TGA",
+      "width": 56,
+      "height": 16,
+      "bytes": 896,
+      "sha256": "13be1e4a10aeca01f0323e5f13282d1719a69c88c56ae69852ba1f59da39d847"
+    }
+  ],
+  "poses": [
+    {
+      "name": "idle-0",
+      "parts": [
+        {
+          "resource": 0,
+          "x": 36,
+          "y": 0,
+          "width": 40,
+          "height": 22
+        },
+        {
+          "resource": 1,
+          "x": 27,
+          "y": 22,
+          "width": 56,
+          "height": 30
+        },
+        {
+          "resource": 2,
+          "x": 23,
+          "y": 52,
+          "width": 48,
+          "height": 24
+        },
+        {
+          "resource": 3,
+          "x": 16,
+          "y": 76,
+          "width": 64,
+          "height": 16
+        }
+      ]
+    },
+    {
+      "name": "idle-1",
+      "parts": [
+        {
+          "resource": 0,
+          "x": 36,
+          "y": 0,
+          "width": 40,
+          "height": 22
+        },
+        {
+          "resource": 4,
+          "x": 27,
+          "y": 22,
+          "width": 56,
+          "height": 30
+        },
+        {
+          "resource": 2,
+          "x": 23,
+          "y": 52,
+          "width": 48,
+          "height": 24
+        },
+        {
+          "resource": 3,
+          "x": 16,
+          "y": 76,
+          "width": 64,
+          "height": 16
+        }
+      ]
+    },
+    {
+      "name": "idle-2",
+      "parts": [
+        {
+          "resource": 0,
+          "x": 36,
+          "y": 0,
+          "width": 40,
+          "height": 22
+        },
+        {
+          "resource": 5,
+          "x": 27,
+          "y": 22,
+          "width": 56,
+          "height": 30
+        },
+        {
+          "resource": 2,
+          "x": 23,
+          "y": 52,
+          "width": 48,
+          "height": 24
+        },
+        {
+          "resource": 3,
+          "x": 16,
+          "y": 76,
+          "width": 64,
+          "height": 16
+        }
+      ]
+    },
+    {
+      "name": "walk-0",
+      "parts": [
+        {
+          "resource": 0,
+          "x": 36,
+          "y": 0,
+          "width": 40,
+          "height": 22
+        },
+        {
+          "resource": 1,
+          "x": 27,
+          "y": 22,
+          "width": 56,
+          "height": 30
+        },
+        {
+          "resource": 6,
+          "x": 35,
+          "y": 52,
+          "width": 40,
+          "height": 24
+        },
+        {
+          "resource": 7,
+          "x": 30,
+          "y": 76,
+          "width": 48,
+          "height": 16
+        }
+      ]
+    },
+    {
+      "name": "walk-1",
+      "parts": [
+        {
+          "resource": 0,
+          "x": 36,
+          "y": 0,
+          "width": 40,
+          "height": 22
+        },
+        {
+          "resource": 1,
+          "x": 27,
+          "y": 22,
+          "width": 56,
+          "height": 30
+        },
+        {
+          "resource": 2,
+          "x": 23,
+          "y": 52,
+          "width": 48,
+          "height": 24
+        },
+        {
+          "resource": 3,
+          "x": 16,
+          "y": 76,
+          "width": 64,
+          "height": 16
+        }
+      ]
+    },
+    {
+      "name": "walk-2",
+      "parts": [
+        {
+          "resource": 0,
+          "x": 36,
+          "y": 0,
+          "width": 40,
+          "height": 22
+        },
+        {
+          "resource": 1,
+          "x": 27,
+          "y": 22,
+          "width": 56,
+          "height": 30
+        },
+        {
+          "resource": 8,
+          "x": 29,
+          "y": 52,
+          "width": 40,
+          "height": 24
+        },
+        {
+          "resource": 9,
+          "x": 24,
+          "y": 76,
+          "width": 56,
+          "height": 16
+        }
+      ]
+    }
+  ],
+  "texture_bytes": 11744,
+  "texture_slots": 10,
+  "pieces_per_pose": 4,
+  "layout_candidates": [
+    {
+      "cuts": [
+        0,
+        26,
+        76,
+        92
+      ],
+      "bytes": 21088,
+      "resources": 11,
+      "pieces_per_pose": 3
+    },
+    {
+      "cuts": [
+        0,
+        26,
+        52,
+        92
+      ],
+      "bytes": 14304,
+      "resources": 9,
+      "pieces_per_pose": 3
+    },
+    {
+      "cuts": [
+        0,
+        26,
+        52,
+        76,
+        92
+      ],
+      "bytes": 13344,
+      "resources": 12,
+      "pieces_per_pose": 4
+    },
+    {
+      "cuts": [
+        0,
+        22,
+        52,
+        76,
+        92
+      ],
+      "bytes": 11744,
+      "resources": 10,
+      "pieces_per_pose": 4
+    },
+    {
+      "cuts": [
+        0,
+        26,
+        52,
+        68,
+        92
+      ],
+      "bytes": 13536,
+      "resources": 12,
+      "pieces_per_pose": 4
+    },
+    {
+      "cuts": [
+        0,
+        26,
+        52,
+        68,
+        80,
+        92
+      ],
+      "bytes": 13248,
+      "resources": 15,
+      "pieces_per_pose": 5
+    }
+  ],
+  "selected_cuts": [
+    0,
+    22,
+    52,
+    76,
+    92
+  ],
+  "idle_holds": [
+    24,
+    12,
+    18
+  ],
+  "walk_holds": [
+    7,
+    7,
+    7
+  ],
+  "boot_bytes": 362848,
+  "boot_free": 95640,
+  "full_bytes": 438848,
+  "full_free": 19640,
+  "boot_slots": 135,
+  "full_slots": 186,
+  "comparison_metrics": {
+    "Buck88": {
+      "bounds": [
+        25,
+        4,
+        104,
+        92
+      ],
+      "width": 79,
+      "height": 88,
+      "opaque_rgb555_colors": 193,
+      "same_color_horizontal_pair_fraction": 0.0818
+    },
+    "Chuck88": {
+      "bounds": [
+        23,
+        4,
+        105,
+        92
+      ],
+      "width": 82,
+      "height": 88,
+      "opaque_rgb555_colors": 226,
+      "same_color_horizontal_pair_fraction": 0.0828
+    },
+    "Old84": {
+      "bounds": [
+        25,
+        8,
+        72,
+        92
+      ],
+      "width": 47,
+      "height": 84,
+      "opaque_rgb555_colors": 42,
+      "same_color_horizontal_pair_fraction": 0.1883
+    },
+    "New88": {
+      "bounds": [
+        16,
+        4,
+        81,
+        92
+      ],
+      "width": 65,
+      "height": 88,
+      "opaque_rgb555_colors": 187,
+      "same_color_horizontal_pair_fraction": 0.1519
+    },
+    "New92": {
+      "bounds": [
+        16,
+        0,
+        80,
+        92
+      ],
+      "width": 64,
+      "height": 92,
+      "opaque_rgb555_colors": 180,
+      "same_color_horizontal_pair_fraction": 0.203
+    }
+  },
+  "source_sha256": {
+    "animation-refinement-guide.png": "8bc407bd625f2a6bda9d5e0110eff8a71c3b3617c64e0069d1a04c7c095ccfc7",
+    "early-88-reference.png": "76ff8bc4fde47a4cb8549b567dc5b1ae39f0875da8163f0d95664ab882228b19",
+    "early-92-reference.png": "ffaada38c2f4cc1ac5a0332c3a8dacdd9166de89a0788788a281bbba45a529b9",
+    "master-candidate-guide.png": "f3a83beef6355547e61db54e1cfbf6d21f43689ad1944456fe65514d18764690",
+    "native-cluster-cleanup-guide.png": "0c1e7c6e44f3d4b5e01b5f7d6e6b9b42d3fa21e4f702e022c8d4d694274d2c8d",
+    "native-head-grid-guide.png": "ee8599b396d047ccf121315ffed4fc5a594d1bb0249afeb4d8cbf6da76928e0f",
+    "native-master-reference.png": "ee3edf30ba001ab09aea61df77e31cc893b552f353a4b425fef9c8fd5f47b5ba"
+  }
+}

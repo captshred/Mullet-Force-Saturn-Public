@@ -1,0 +1,278 @@
+{
+  "native_scale": 1,
+  "standing_height": 88,
+  "damage_frame": 8,
+  "defeat_frame": 13,
+  "frames": [
+    {
+      "name": "BU00.TGA",
+      "anchor": [
+        18,
+        87
+      ],
+      "source_size": [
+        72,
+        96
+      ],
+      "crop_origin": [
+        18,
+        5
+      ],
+      "source_rgb_sha256": "7f2611017b1629dbf6c399288c8abfa9b917e48abd0a0eeaeeb00edb3caf541c",
+      "pose": "idle-guard",
+      "lower_id": 0
+    },
+    {
+      "name": "BU01.TGA",
+      "anchor": [
+        18,
+        86
+      ],
+      "source_size": [
+        72,
+        96
+      ],
+      "crop_origin": [
+        18,
+        6
+      ],
+      "source_rgb_sha256": "09cace2eee0f59347579f32c0783d231d1a8f5f0e47e620824e85caeef119286",
+      "pose": "idle-breathe",
+      "lower_id": 1
+    },
+    {
+      "name": "BU02.TGA",
+      "anchor": [
+        19,
+        87
+      ],
+      "source_size": [
+        72,
+        96
+      ],
+      "crop_origin": [
+        17,
+        5
+      ],
+      "source_rgb_sha256": "946542b5b7732aa67873d2d4c2b847d12dc4ece79f1b45d75a10c0cb0429a08f",
+      "pose": "walk-contact-L",
+      "lower_id": 2
+    },
+    {
+      "name": "BU03.TGA",
+      "anchor": [
+        20,
+        85
+      ],
+      "source_size": [
+        72,
+        96
+      ],
+      "crop_origin": [
+        16,
+        7
+      ],
+      "source_rgb_sha256": "444dec4a7c81ec6e1f5f8e23b62f39cfd17dfbf08c5db167e880efe3998e5f04",
+      "pose": "walk-down-L",
+      "lower_id": 3
+    },
+    {
+      "name": "BU04.TGA",
+      "anchor": [
+        18,
+        86
+      ],
+      "source_size": [
+        72,
+        96
+      ],
+      "crop_origin": [
+        18,
+        6
+      ],
+      "source_rgb_sha256": "fa826992646f597a5621d72269d489645c2fd58c620ea8f33d47d05b5028183e",
+      "pose": "walk-pass-L",
+      "lower_id": 4
+    },
+    {
+      "name": "BU05.TGA",
+      "anchor": [
+        17,
+        87
+      ],
+      "source_size": [
+        72,
+        96
+      ],
+      "crop_origin": [
+        19,
+        5
+      ],
+      "source_rgb_sha256": "2c657c3f01b2527a2fe061eb19549e0511cccdcc47c5ad15277055313530de64",
+      "pose": "walk-contact-R",
+      "lower_id": 5
+    },
+    {
+      "name": "BU06.TGA",
+      "anchor": [
+        16,
+        85
+      ],
+      "source_size": [
+        72,
+        96
+      ],
+      "crop_origin": [
+        20,
+        7
+      ],
+      "source_rgb_sha256": "9a5be55f4c6cc172d264924189854cdeffddf97ec5265c795b5af2abd0895538",
+      "pose": "walk-down-R",
+      "lower_id": 6
+    },
+    {
+      "name": "BU07.TGA",
+      "anchor": [
+        18,
+        86
+      ],
+      "source_size": [
+        72,
+        96
+      ],
+      "crop_origin": [
+        18,
+        6
+      ],
+      "source_rgb_sha256": "407cd1f0f43df2f1bb2352a334786fb0575f472fe06e570f030f9d4ae8f577a8",
+      "pose": "walk-pass-R",
+      "lower_id": 7
+    },
+    {
+      "name": "BU08.TGA",
+      "anchor": [
+        22,
+        85
+      ],
+      "source_size": [
+        72,
+        96
+      ],
+      "crop_origin": [
+        14,
+        7
+      ],
+      "source_rgb_sha256": "dd2ade5857ff3248a07ac2fb2456eb25a7f66abeeca9fa76eb519b3d0524be41",
+      "pose": "punch-coil",
+      "lower_id": 8
+    },
+    {
+      "name": "BU09.TGA",
+      "anchor": [
+        13,
+        87
+      ],
+      "source_size": [
+        112,
+        96
+      ],
+      "crop_origin": [
+        43,
+        5
+      ],
+      "source_rgb_sha256": "7ff599f721e8b69abe97976cf151687863931df61aed8812f1d418445d16a388",
+      "pose": "punch-contact",
+      "lower_id": 9
+    },
+    {
+      "name": "BU10.TGA",
+      "anchor": [
+        16,
+        86
+      ],
+      "source_size": [
+        72,
+        96
+      ],
+      "crop_origin": [
+        20,
+        6
+      ],
+      "source_rgb_sha256": "a4ab3ceb4490a271ebfc0db7dcb4b2361fff05725ca3dc7f580706f005f84b85",
+      "pose": "punch-recover",
+      "lower_id": 10
+    },
+    {
+      "name": "BU11.TGA",
+      "anchor": [
+        20,
+        82
+      ],
+      "source_size": [
+        72,
+        96
+      ],
+      "crop_origin": [
+        16,
+        10
+      ],
+      "source_rgb_sha256": "41b33493c5e60e56b6ca5867ae71166c785ba56d001062765fb608dc0e4444ab",
+      "pose": "jump-takeoff",
+      "lower_id": 11
+    },
+    {
+      "name": "BU12.TGA",
+      "anchor": [
+        18,
+        88
+      ],
+      "source_size": [
+        72,
+        96
+      ],
+      "crop_origin": [
+        18,
+        4
+      ],
+      "source_rgb_sha256": "ee20417055d2e4e6781841578a949e16e3a04d19ca66ec64b9937005c91ee6a7",
+      "pose": "jump-air",
+      "lower_id": 12
+    },
+    {
+      "name": "BU13.TGA",
+      "anchor": [
+        20,
+        81
+      ],
+      "source_size": [
+        72,
+        96
+      ],
+      "crop_origin": [
+        16,
+        11
+      ],
+      "source_rgb_sha256": "2a8cd71d0f4be99e8d49121e6734a4861dabdef6970f12fe2ccf22e05358555c",
+      "pose": "jump-land",
+      "lower_id": 13
+    },
+    {
+      "name": "BU14.TGA",
+      "anchor": [
+        16,
+        87
+      ],
+      "source_size": [
+        112,
+        96
+      ],
+      "crop_origin": [
+        40,
+        5
+      ],
+      "source_rgb_sha256": "5cac7714bf0c0b09e3ae8e921ea5e280185e3b63568dda61d0df0fd9b5ba9efa",
+      "pose": "jump-kick",
+      "lower_id": 14
+    }
+  ]
+}

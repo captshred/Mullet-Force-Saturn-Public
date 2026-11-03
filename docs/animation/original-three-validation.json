@@ -1,0 +1,158 @@
+{
+  "baseline": "8e86fa1a4d7e8ef74392a9f1912dcc84ffb8e431",
+  "creation_commit": "5a6bd3692bd4923fb1ec844db362fec35c2fc526",
+  "approved_commit": "ff24c5ec160318c4eb07da171b684a00a1d973c8",
+  "timings": {
+    "moderate": [
+      8,
+      8,
+      8
+    ],
+    "slow": [
+      10,
+      10,
+      10
+    ]
+  },
+  "boot_allocated": 351104,
+  "boot_free": 107384,
+  "boot_slots": 125,
+  "expanded_allocated": 427104,
+  "expanded_free": 31384,
+  "expanded_slots": 176,
+  "difference_vs_swagger_boot": 4736,
+  "new_texture_bytes": 0,
+  "native_configurations": 13,
+  "hardware_tested": false,
+  "webretro_tested": false,
+  "core": "Yabause v0.9.15 8926b0c software/interpreter/HLE BIOS, 1 thread, no RAM cartridge",
+  "moderate": {
+    "frames_run": 1050,
+    "compared_pixels": 431782,
+    "mismatched_pixels": 0,
+    "fallback_compared_pixels": 828471,
+    "simulation_matches_original_renderer": true,
+    "simulation_frames_compared": 720,
+    "seen_poses": [
+      [
+        0,
+        1,
+        2,
+        3,
+        15,
+        16,
+        17
+      ],
+      [
+        0,
+        1,
+        2,
+        3,
+        15,
+        16,
+        17
+      ]
+    ],
+    "facings": [
+      [
+        -1,
+        1
+      ],
+      [
+        -1,
+        1
+      ]
+    ],
+    "resident_texture_hashes": [
+      991047180
+    ],
+    "core_sha256": "f00215b3c6ee0c82a377a8403b686e09bf8684f176a0a5bd66b47b8677e4d738"
+  },
+  "slow": {
+    "frames_run": 1050,
+    "compared_pixels": 432603,
+    "mismatched_pixels": 0,
+    "fallback_compared_pixels": 828471,
+    "simulation_matches_original_renderer": true,
+    "simulation_frames_compared": 720,
+    "seen_poses": [
+      [
+        0,
+        1,
+        2,
+        3,
+        15,
+        16,
+        17
+      ],
+      [
+        0,
+        1,
+        2,
+        3,
+        15,
+        16,
+        17
+      ]
+    ],
+    "facings": [
+      [
+        -1,
+        1
+      ],
+      [
+        -1,
+        1
+      ]
+    ],
+    "resident_texture_hashes": [
+      991047180
+    ],
+    "core_sha256": "f00215b3c6ee0c82a377a8403b686e09bf8684f176a0a5bd66b47b8677e4d738"
+  },
+  "review": {
+    "frames_run": 1600,
+    "core_sha256": "f00215b3c6ee0c82a377a8403b686e09bf8684f176a0a5bd66b47b8677e4d738",
+    "actual_allocations": {
+      "299": 351104,
+      "1000": 427104,
+      "1500": 427104
+    },
+    "actual_sprite_slots": {
+      "299": 125,
+      "1000": 176,
+      "1500": 176
+    },
+    "preview_idle_pair": [
+      1,
+      1
+    ],
+    "preview_compared_pixels": 28800,
+    "preview_mismatches": 0,
+    "game_return_verified": true,
+    "expanded_textures_stable": true,
+    "method": "Normal gallery Down / Start input, read-only save states. Actual allocation counters and Jo descriptor count, independent RGB565 preview reconstruction. No RAM writes/game hooks."
+  },
+  "legacy_preview": {
+    "frames_run": 2000,
+    "compared_character_region_pixels": 7171200,
+    "mismatched_pixels": 0,
+    "gallery_restore_exact": true
+  },
+  "source_sha256": {
+    "src/main.c": "80482070b1bcabed1cab79f90bb1fe1b994cf3d7b28f1610f4f35dc22de6bb4d",
+    "src/animation_preview.c": "1402832cd449f761f6a306539ba9c365c1962590ab9c81c101705357402198dd",
+    "src/player_animation.c": "2ae785a11ad9a8b7ae50d51fe14d0ab427f3a47dfa0fb99064afcabcfa3f5c48",
+    "src/original_three_data.h": "8296841c0f3764df275dc9da1c5f5b74f91374079af49dce01ea7eede2011d84",
+    "src/original_three_timing.h": "f8724c263685598d51275d24bfba83ef75ba2a38ab769caf5df89a62e6c38a96",
+    "src/game.c": "d5ecf4ddd040f159856dcf90e1fc3deb7ba3c1a359a703f9533302581aa2f5c7",
+    "src/game.h": "338e7995cc900c856779972fa7609b7df72ed255af67dc24ed7f7409861eb1e8",
+    "src/combat_config.h": "1565208b11b19226bf3a542269fc19eff09dc7a24f9447db740a70a9c58c3d87",
+    "src/input.c": "4d81c2f4659689cac0238478f049b6edb47bf48dd4fd24b44b33369b0dde28e0",
+    "assets/original-three-walk/manifest.json": "4a31bb16e6f34fde4543ac299da6c45eafda902380c260434341c6dae46773b0"
+  },
+  "resident_end": {
+    "moderate": "00000000060983c4",
+    "slow": "00000000060983c4"
+  }
+}

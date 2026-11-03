@@ -1,0 +1,2442 @@
+{
+  "core": "Yabause v0.9.15 8926b0c",
+  "core_sha256": "f00215b3c6ee0c82a377a8403b686e09bf8684f176a0a5bd66b47b8677e4d738",
+  "bios": "HLE",
+  "renderer": "software",
+  "frames_run": 2000,
+  "checks": [
+    {
+      "capture_frame": 359,
+      "set": "polish",
+      "pose": 0,
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 389,
+      "set": "polish",
+      "pose": 1,
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 409,
+      "set": "polish",
+      "pose": 2,
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 429,
+      "set": "polish",
+      "pose": 3,
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 449,
+      "set": "polish",
+      "pose": 0,
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 469,
+      "set": "polish",
+      "pose": 0,
+      "facing": -1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 489,
+      "set": "polish",
+      "pose": 1,
+      "facing": -1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 509,
+      "set": "polish",
+      "pose": 2,
+      "facing": -1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 529,
+      "set": "polish",
+      "pose": 3,
+      "facing": -1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 549,
+      "set": "polish",
+      "pose": 4,
+      "facing": -1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 569,
+      "set": "polish",
+      "pose": 5,
+      "facing": -1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 589,
+      "set": "polish",
+      "pose": 6,
+      "facing": -1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 609,
+      "set": "polish",
+      "pose": 7,
+      "facing": -1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 629,
+      "set": "polish",
+      "pose": 8,
+      "facing": -1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 649,
+      "set": "polish",
+      "pose": 9,
+      "facing": -1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 669,
+      "set": "polish",
+      "pose": 9,
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 689,
+      "set": "polish",
+      "pose": 8,
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 709,
+      "set": "polish",
+      "pose": 7,
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 729,
+      "set": "polish",
+      "pose": 6,
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 749,
+      "set": "polish",
+      "pose": 5,
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 769,
+      "set": "polish",
+      "pose": 4,
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1069,
+      "set": "polish",
+      "pose": 0,
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1199,
+      "set": "polish",
+      "pose": 0,
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1459,
+      "set": "polish",
+      "pose": 0,
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 789,
+      "set": "original",
+      "pose": 1,
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 809,
+      "set": "original",
+      "pose": 2,
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 829,
+      "set": "original",
+      "pose": 3,
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 849,
+      "set": "original",
+      "pose": 4,
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 869,
+      "set": "original",
+      "pose": 5,
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 889,
+      "set": "original",
+      "pose": 6,
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 909,
+      "set": "original",
+      "pose": 6,
+      "facing": -1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 929,
+      "set": "original",
+      "pose": 5,
+      "facing": -1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 949,
+      "set": "original",
+      "pose": 4,
+      "facing": -1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 969,
+      "set": "original",
+      "pose": 3,
+      "facing": -1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 989,
+      "set": "original",
+      "pose": 2,
+      "facing": -1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1009,
+      "set": "original",
+      "pose": 1,
+      "facing": -1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1029,
+      "set": "original",
+      "pose": 0,
+      "facing": -1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1049,
+      "set": "original",
+      "pose": 0,
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1120,
+      "set": "polish",
+      "matching_poses": [
+        7
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1121,
+      "set": "polish",
+      "matching_poses": [
+        7
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1122,
+      "set": "polish",
+      "matching_poses": [
+        7
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1123,
+      "set": "polish",
+      "matching_poses": [
+        7
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1124,
+      "set": "polish",
+      "matching_poses": [
+        8
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1125,
+      "set": "polish",
+      "matching_poses": [
+        8
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1126,
+      "set": "polish",
+      "matching_poses": [
+        8
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1127,
+      "set": "polish",
+      "matching_poses": [
+        8
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1128,
+      "set": "polish",
+      "matching_poses": [
+        8
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1129,
+      "set": "polish",
+      "matching_poses": [
+        9
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1130,
+      "set": "polish",
+      "matching_poses": [
+        9
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1131,
+      "set": "polish",
+      "matching_poses": [
+        9
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1132,
+      "set": "polish",
+      "matching_poses": [
+        9
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1133,
+      "set": "polish",
+      "matching_poses": [
+        9
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1134,
+      "set": "polish",
+      "matching_poses": [
+        10
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1135,
+      "set": "polish",
+      "matching_poses": [
+        10
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1136,
+      "set": "polish",
+      "matching_poses": [
+        10
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1137,
+      "set": "polish",
+      "matching_poses": [
+        10
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1138,
+      "set": "polish",
+      "matching_poses": [
+        10
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1139,
+      "set": "polish",
+      "matching_poses": [
+        1,
+        11
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1140,
+      "set": "polish",
+      "matching_poses": [
+        1,
+        11
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1141,
+      "set": "polish",
+      "matching_poses": [
+        1,
+        11
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1142,
+      "set": "polish",
+      "matching_poses": [
+        1,
+        11
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1143,
+      "set": "polish",
+      "matching_poses": [
+        1,
+        11
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1144,
+      "set": "polish",
+      "matching_poses": [
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1145,
+      "set": "polish",
+      "matching_poses": [
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1146,
+      "set": "polish",
+      "matching_poses": [
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1147,
+      "set": "polish",
+      "matching_poses": [
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1148,
+      "set": "polish",
+      "matching_poses": [
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1149,
+      "set": "polish",
+      "matching_poses": [
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1150,
+      "set": "polish",
+      "matching_poses": [
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1151,
+      "set": "polish",
+      "matching_poses": [
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1152,
+      "set": "polish",
+      "matching_poses": [
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1153,
+      "set": "polish",
+      "matching_poses": [
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1154,
+      "set": "polish",
+      "matching_poses": [
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1155,
+      "set": "polish",
+      "matching_poses": [
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1156,
+      "set": "polish",
+      "matching_poses": [
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1157,
+      "set": "polish",
+      "matching_poses": [
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1158,
+      "set": "polish",
+      "matching_poses": [
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1159,
+      "set": "polish",
+      "matching_poses": [
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1470,
+      "set": "polish-idle-auto",
+      "poses": [
+        1,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1471,
+      "set": "polish-idle-auto",
+      "poses": [
+        1,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1472,
+      "set": "polish-idle-auto",
+      "poses": [
+        1,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1473,
+      "set": "polish-idle-auto",
+      "poses": [
+        1,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1474,
+      "set": "polish-idle-auto",
+      "poses": [
+        1,
+        1
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1475,
+      "set": "polish-idle-auto",
+      "poses": [
+        1,
+        1
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1476,
+      "set": "polish-idle-auto",
+      "poses": [
+        1,
+        1
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1477,
+      "set": "polish-idle-auto",
+      "poses": [
+        1,
+        1
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1478,
+      "set": "polish-idle-auto",
+      "poses": [
+        1,
+        1
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1479,
+      "set": "polish-idle-auto",
+      "poses": [
+        1,
+        1
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1480,
+      "set": "polish-idle-auto",
+      "poses": [
+        1,
+        1
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1481,
+      "set": "polish-idle-auto",
+      "poses": [
+        1,
+        1
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1482,
+      "set": "polish-idle-auto",
+      "poses": [
+        1,
+        1
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1483,
+      "set": "polish-idle-auto",
+      "poses": [
+        1,
+        1
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1484,
+      "set": "polish-idle-auto",
+      "poses": [
+        2,
+        1
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1485,
+      "set": "polish-idle-auto",
+      "poses": [
+        2,
+        1
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1486,
+      "set": "polish-idle-auto",
+      "poses": [
+        2,
+        1
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1487,
+      "set": "polish-idle-auto",
+      "poses": [
+        2,
+        1
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1488,
+      "set": "polish-idle-auto",
+      "poses": [
+        2,
+        1
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1489,
+      "set": "polish-idle-auto",
+      "poses": [
+        2,
+        1
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1490,
+      "set": "polish-idle-auto",
+      "poses": [
+        2,
+        1
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1491,
+      "set": "polish-idle-auto",
+      "poses": [
+        2,
+        1
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1492,
+      "set": "polish-idle-auto",
+      "poses": [
+        2,
+        2
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1493,
+      "set": "polish-idle-auto",
+      "poses": [
+        2,
+        2
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1494,
+      "set": "polish-idle-auto",
+      "poses": [
+        2,
+        2
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1495,
+      "set": "polish-idle-auto",
+      "poses": [
+        2,
+        2
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1496,
+      "set": "polish-idle-auto",
+      "poses": [
+        2,
+        2
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1497,
+      "set": "polish-idle-auto",
+      "poses": [
+        2,
+        2
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1498,
+      "set": "polish-idle-auto",
+      "poses": [
+        2,
+        2
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1499,
+      "set": "polish-idle-auto",
+      "poses": [
+        2,
+        2
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1500,
+      "set": "polish-idle-auto",
+      "poses": [
+        2,
+        2
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1501,
+      "set": "polish-idle-auto",
+      "poses": [
+        2,
+        2
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1502,
+      "set": "polish-idle-auto",
+      "poses": [
+        2,
+        2
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1503,
+      "set": "polish-idle-auto",
+      "poses": [
+        2,
+        2
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1504,
+      "set": "polish-idle-auto",
+      "poses": [
+        2,
+        2
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1505,
+      "set": "polish-idle-auto",
+      "poses": [
+        2,
+        2
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1506,
+      "set": "polish-idle-auto",
+      "poses": [
+        2,
+        2
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1507,
+      "set": "polish-idle-auto",
+      "poses": [
+        2,
+        2
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1508,
+      "set": "polish-idle-auto",
+      "poses": [
+        3,
+        2
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1509,
+      "set": "polish-idle-auto",
+      "poses": [
+        3,
+        2
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1510,
+      "set": "polish-idle-auto",
+      "poses": [
+        3,
+        2
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1511,
+      "set": "polish-idle-auto",
+      "poses": [
+        3,
+        2
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1512,
+      "set": "polish-idle-auto",
+      "poses": [
+        3,
+        2
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1513,
+      "set": "polish-idle-auto",
+      "poses": [
+        3,
+        2
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1514,
+      "set": "polish-idle-auto",
+      "poses": [
+        3,
+        2
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1515,
+      "set": "polish-idle-auto",
+      "poses": [
+        3,
+        2
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1516,
+      "set": "polish-idle-auto",
+      "poses": [
+        3,
+        3
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1517,
+      "set": "polish-idle-auto",
+      "poses": [
+        3,
+        3
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1518,
+      "set": "polish-idle-auto",
+      "poses": [
+        3,
+        3
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1519,
+      "set": "polish-idle-auto",
+      "poses": [
+        3,
+        3
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1520,
+      "set": "polish-idle-auto",
+      "poses": [
+        3,
+        3
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1521,
+      "set": "polish-idle-auto",
+      "poses": [
+        3,
+        3
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1522,
+      "set": "polish-idle-auto",
+      "poses": [
+        3,
+        3
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1523,
+      "set": "polish-idle-auto",
+      "poses": [
+        3,
+        3
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1524,
+      "set": "polish-idle-auto",
+      "poses": [
+        0,
+        3
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1525,
+      "set": "polish-idle-auto",
+      "poses": [
+        0,
+        3
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1526,
+      "set": "polish-idle-auto",
+      "poses": [
+        0,
+        3
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1527,
+      "set": "polish-idle-auto",
+      "poses": [
+        0,
+        3
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1528,
+      "set": "polish-idle-auto",
+      "poses": [
+        0,
+        3
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1529,
+      "set": "polish-idle-auto",
+      "poses": [
+        0,
+        3
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1530,
+      "set": "polish-idle-auto",
+      "poses": [
+        0,
+        3
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1531,
+      "set": "polish-idle-auto",
+      "poses": [
+        0,
+        3
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1532,
+      "set": "polish-idle-auto",
+      "poses": [
+        0,
+        3
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1533,
+      "set": "polish-idle-auto",
+      "poses": [
+        0,
+        3
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1534,
+      "set": "polish-idle-auto",
+      "poses": [
+        0,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1535,
+      "set": "polish-idle-auto",
+      "poses": [
+        0,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1536,
+      "set": "polish-idle-auto",
+      "poses": [
+        0,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1537,
+      "set": "polish-idle-auto",
+      "poses": [
+        0,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1538,
+      "set": "polish-idle-auto",
+      "poses": [
+        0,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1539,
+      "set": "polish-idle-auto",
+      "poses": [
+        0,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1540,
+      "set": "polish-idle-auto",
+      "poses": [
+        0,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1541,
+      "set": "polish-idle-auto",
+      "poses": [
+        0,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1542,
+      "set": "polish-idle-auto",
+      "poses": [
+        0,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1543,
+      "set": "polish-idle-auto",
+      "poses": [
+        0,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1544,
+      "set": "polish-idle-auto",
+      "poses": [
+        0,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1545,
+      "set": "polish-idle-auto",
+      "poses": [
+        0,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1546,
+      "set": "polish-idle-auto",
+      "poses": [
+        0,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1547,
+      "set": "polish-idle-auto",
+      "poses": [
+        0,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1548,
+      "set": "polish-idle-auto",
+      "poses": [
+        1,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1549,
+      "set": "polish-idle-auto",
+      "poses": [
+        1,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1550,
+      "set": "polish-idle-auto",
+      "poses": [
+        1,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1551,
+      "set": "polish-idle-auto",
+      "poses": [
+        1,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1552,
+      "set": "polish-idle-auto",
+      "poses": [
+        1,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1553,
+      "set": "polish-idle-auto",
+      "poses": [
+        1,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1554,
+      "set": "polish-idle-auto",
+      "poses": [
+        1,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1555,
+      "set": "polish-idle-auto",
+      "poses": [
+        1,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1556,
+      "set": "polish-idle-auto",
+      "poses": [
+        1,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1557,
+      "set": "polish-idle-auto",
+      "poses": [
+        1,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1558,
+      "set": "polish-idle-auto",
+      "poses": [
+        1,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1559,
+      "set": "polish-idle-auto",
+      "poses": [
+        1,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1560,
+      "set": "polish-idle-auto",
+      "poses": [
+        1,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1561,
+      "set": "polish-idle-auto",
+      "poses": [
+        1,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1562,
+      "set": "polish-idle-auto",
+      "poses": [
+        1,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1563,
+      "set": "polish-idle-auto",
+      "poses": [
+        1,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1564,
+      "set": "polish-idle-auto",
+      "poses": [
+        2,
+        1
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1565,
+      "set": "polish-idle-auto",
+      "poses": [
+        2,
+        1
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1566,
+      "set": "polish-idle-auto",
+      "poses": [
+        2,
+        1
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1567,
+      "set": "polish-idle-auto",
+      "poses": [
+        2,
+        1
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1568,
+      "set": "polish-idle-auto",
+      "poses": [
+        2,
+        1
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1569,
+      "set": "polish-idle-auto",
+      "poses": [
+        2,
+        1
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1570,
+      "set": "polish-idle-auto",
+      "poses": [
+        2,
+        1
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1571,
+      "set": "polish-idle-auto",
+      "poses": [
+        2,
+        1
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1572,
+      "set": "polish-idle-auto",
+      "poses": [
+        2,
+        1
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1573,
+      "set": "polish-idle-auto",
+      "poses": [
+        2,
+        1
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1574,
+      "set": "polish-idle-auto",
+      "poses": [
+        2,
+        1
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1575,
+      "set": "polish-idle-auto",
+      "poses": [
+        2,
+        1
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1576,
+      "set": "polish-idle-auto",
+      "poses": [
+        2,
+        1
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1577,
+      "set": "polish-idle-auto",
+      "poses": [
+        2,
+        1
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1578,
+      "set": "polish-idle-auto",
+      "poses": [
+        2,
+        1
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1579,
+      "set": "polish-idle-auto",
+      "poses": [
+        2,
+        1
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1580,
+      "set": "polish-idle-auto",
+      "poses": [
+        2,
+        1
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1581,
+      "set": "polish-idle-auto",
+      "poses": [
+        2,
+        1
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1582,
+      "set": "polish-idle-auto",
+      "poses": [
+        2,
+        2
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1583,
+      "set": "polish-idle-auto",
+      "poses": [
+        2,
+        2
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1584,
+      "set": "polish-idle-auto",
+      "poses": [
+        2,
+        2
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1585,
+      "set": "polish-idle-auto",
+      "poses": [
+        2,
+        2
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1586,
+      "set": "polish-idle-auto",
+      "poses": [
+        2,
+        2
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1587,
+      "set": "polish-idle-auto",
+      "poses": [
+        2,
+        2
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1588,
+      "set": "polish-idle-auto",
+      "poses": [
+        3,
+        2
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1589,
+      "set": "polish-idle-auto",
+      "poses": [
+        3,
+        2
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1590,
+      "set": "polish-idle-auto",
+      "poses": [
+        3,
+        2
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1591,
+      "set": "polish-idle-auto",
+      "poses": [
+        3,
+        2
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1592,
+      "set": "polish-idle-auto",
+      "poses": [
+        3,
+        2
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1593,
+      "set": "polish-idle-auto",
+      "poses": [
+        3,
+        2
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1594,
+      "set": "polish-idle-auto",
+      "poses": [
+        3,
+        2
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1595,
+      "set": "polish-idle-auto",
+      "poses": [
+        3,
+        2
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1596,
+      "set": "polish-idle-auto",
+      "poses": [
+        3,
+        2
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1597,
+      "set": "polish-idle-auto",
+      "poses": [
+        3,
+        2
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1598,
+      "set": "polish-idle-auto",
+      "poses": [
+        3,
+        2
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1599,
+      "set": "polish-idle-auto",
+      "poses": [
+        3,
+        2
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1600,
+      "set": "polish-idle-auto",
+      "poses": [
+        3,
+        2
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1601,
+      "set": "polish-idle-auto",
+      "poses": [
+        3,
+        2
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1602,
+      "set": "polish-idle-auto",
+      "poses": [
+        3,
+        2
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1603,
+      "set": "polish-idle-auto",
+      "poses": [
+        3,
+        2
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1604,
+      "set": "polish-idle-auto",
+      "poses": [
+        0,
+        2
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1605,
+      "set": "polish-idle-auto",
+      "poses": [
+        0,
+        2
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1606,
+      "set": "polish-idle-auto",
+      "poses": [
+        0,
+        3
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1607,
+      "set": "polish-idle-auto",
+      "poses": [
+        0,
+        3
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1608,
+      "set": "polish-idle-auto",
+      "poses": [
+        0,
+        3
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1609,
+      "set": "polish-idle-auto",
+      "poses": [
+        0,
+        3
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1610,
+      "set": "polish-idle-auto",
+      "poses": [
+        0,
+        3
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1611,
+      "set": "polish-idle-auto",
+      "poses": [
+        0,
+        3
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1612,
+      "set": "polish-idle-auto",
+      "poses": [
+        0,
+        3
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1613,
+      "set": "polish-idle-auto",
+      "poses": [
+        0,
+        3
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1614,
+      "set": "polish-idle-auto",
+      "poses": [
+        0,
+        3
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1615,
+      "set": "polish-idle-auto",
+      "poses": [
+        0,
+        3
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1616,
+      "set": "polish-idle-auto",
+      "poses": [
+        0,
+        3
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1617,
+      "set": "polish-idle-auto",
+      "poses": [
+        0,
+        3
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1618,
+      "set": "polish-idle-auto",
+      "poses": [
+        0,
+        3
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1619,
+      "set": "polish-idle-auto",
+      "poses": [
+        0,
+        3
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1620,
+      "set": "polish-idle-auto",
+      "poses": [
+        0,
+        3
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1621,
+      "set": "polish-idle-auto",
+      "poses": [
+        0,
+        3
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1622,
+      "set": "polish-idle-auto",
+      "poses": [
+        0,
+        3
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1623,
+      "set": "polish-idle-auto",
+      "poses": [
+        0,
+        3
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1624,
+      "set": "polish-idle-auto",
+      "poses": [
+        0,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1625,
+      "set": "polish-idle-auto",
+      "poses": [
+        0,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1626,
+      "set": "polish-idle-auto",
+      "poses": [
+        0,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1627,
+      "set": "polish-idle-auto",
+      "poses": [
+        0,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1628,
+      "set": "polish-idle-auto",
+      "poses": [
+        1,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1629,
+      "set": "polish-idle-auto",
+      "poses": [
+        1,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1630,
+      "set": "polish-idle-auto",
+      "poses": [
+        1,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1631,
+      "set": "polish-idle-auto",
+      "poses": [
+        1,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1632,
+      "set": "polish-idle-auto",
+      "poses": [
+        1,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1633,
+      "set": "polish-idle-auto",
+      "poses": [
+        1,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1634,
+      "set": "polish-idle-auto",
+      "poses": [
+        1,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1635,
+      "set": "polish-idle-auto",
+      "poses": [
+        1,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1636,
+      "set": "polish-idle-auto",
+      "poses": [
+        1,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1637,
+      "set": "polish-idle-auto",
+      "poses": [
+        1,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1638,
+      "set": "polish-idle-auto",
+      "poses": [
+        1,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1639,
+      "set": "polish-idle-auto",
+      "poses": [
+        1,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 1640,
+      "set": "polish-idle-auto",
+      "poses": [
+        1,
+        0
+      ],
+      "facing": 1,
+      "mismatched_pixels": 0
+    }
+  ],
+  "compared_character_region_pixels": 7171200,
+  "mismatched_pixels": 0,
+  "gallery_restore_exact": true,
+  "bridge_seen": true,
+  "idle_duration_checks": [
+    {
+      "actor": 0,
+      "complete_holds_verified": [
+        [
+          2,
+          24
+        ],
+        [
+          3,
+          16
+        ],
+        [
+          0,
+          24
+        ],
+        [
+          1,
+          16
+        ],
+        [
+          2,
+          24
+        ],
+        [
+          3,
+          16
+        ],
+        [
+          0,
+          24
+        ]
+      ]
+    },
+    {
+      "actor": 1,
+      "complete_holds_verified": [
+        [
+          1,
+          18
+        ],
+        [
+          2,
+          24
+        ],
+        [
+          3,
+          18
+        ],
+        [
+          0,
+          30
+        ],
+        [
+          1,
+          18
+        ],
+        [
+          2,
+          24
+        ],
+        [
+          3,
+          18
+        ]
+      ]
+    }
+  ],
+  "region": "Whole 320x90 actor/ground region y122..211; independent native PNG + street reconstruction, SGL raster origin (+1,+1), RGB565 quantization.",
+  "source_sha256": {
+    "src/animation_preview.c": "72cb69f9bd0155834ab86167542b9cfc9e94de19380934154207c7a168f46d3e",
+    "src/animation_data.h": "2a63bf1319c3f28dd1cec8244e34c947364a24cac347e9ad3b5981241de9ec00",
+    "src/animation_polish_data.h": "cbba0bce90a34c0558266a89f76a0012f61f187aab048542a54ecf0158b76156",
+    "src/gallery.c": "c25da0fa7040cee2e789c31a444c6e578c72acdc5eb617627549ae6c7a121991",
+    "src/main.c": "124f415deaf0e256df03395ed33cd51eb7bca43f64e54bf71cb74131f34fccb2",
+    "src/game.c": "d5ecf4ddd040f159856dcf90e1fc3deb7ba3c1a359a703f9533302581aa2f5c7"
+  },
+  "tested_commit": "f7c54435117764062d96f1f51edc787dd9a20a47",
+  "native_build_configurations_passed": [
+    "vdp1",
+    "vdp1-no-gallery",
+    "vdp2-no-gallery",
+    "gallery",
+    "parallax",
+    "animation",
+    "animation-parallax"
+  ],
+  "host_tests": "make test and ASan/UBSan preview test passed"
+}

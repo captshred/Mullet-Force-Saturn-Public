@@ -1,0 +1,34 @@
+{
+  "frames_run_per_build": 2800,
+  "simulation_frames_identical": 2470,
+  "compared_enemy_pixels": 375840,
+  "pixel_mismatches": 0,
+  "poses_seen": [
+    "walk-0",
+    "walk-1",
+    "walk-2"
+  ],
+  "facings_seen": [
+    -1,
+    1
+  ],
+  "enemy_states_seen": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "warm_frames_candidates": 2,
+  "actual_loaded_slots": 134,
+  "actual_allocated_bytes": 365120,
+  "free_bytes": 93368,
+  "texture_memory_stable": true,
+  "normal_and_warm_palette_entries_verified": 42,
+  "legacy_enemy_palette_entries_preserved": true,
+  "core_sha256": "f00215b3c6ee0c82a377a8403b686e09bf8684f176a0a5bd66b47b8677e4d738",
+  "method": "Controller-driven local Yabause libretro, software renderer, interpreter, HLE BIOS; read-only save states. No RAM writes. Not WebRetro or physical hardware."
+}

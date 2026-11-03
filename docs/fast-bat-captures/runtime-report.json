@@ -1,0 +1,90 @@
+{
+  "build_commit": "41e9760b2c618a33da072ec3058fccdb50796f53",
+  "build_source_sha256": "7f53d55636bf844328bc2ee60b1984270e4424b8ec717e763f8c38673c14cd02",
+  "core": "Yabause libretro / HLE / no RAM cartridge",
+  "no_ram_writes": true,
+  "webretro_tested": false,
+  "physical_saturn_tested": false,
+  "actors": [
+    {
+      "actor": "buck",
+      "attacks": [
+        832,
+        902,
+        972
+      ],
+      "contacts": [
+        {
+          "frame": 835,
+          "attack_counter_after_step": 5,
+          "score_delta": 360,
+          "broken": 1,
+          "enemy_hp": [
+            0,
+            6
+          ]
+        },
+        {
+          "frame": 905,
+          "attack_counter_after_step": 5,
+          "score_delta": 250,
+          "broken": 1,
+          "enemy_hp": [
+            0,
+            0
+          ]
+        }
+      ],
+      "exact_contact_samples": 21,
+      "matched_native_pixels": 28420,
+      "left_swing_verified": true,
+      "airborne_kick_verified": true,
+      "planted_bat_verified": true,
+      "score_at_1000": 610,
+      "broken_at_1000": 1
+    },
+    {
+      "actor": "chuck",
+      "attacks": [
+        816,
+        902,
+        972
+      ],
+      "contacts": [
+        {
+          "frame": 819,
+          "attack_counter_after_step": 5,
+          "score_delta": 360,
+          "broken": 1,
+          "enemy_hp": [
+            0,
+            6
+          ]
+        },
+        {
+          "frame": 905,
+          "attack_counter_after_step": 5,
+          "score_delta": 250,
+          "broken": 1,
+          "enemy_hp": [
+            0,
+            0
+          ]
+        }
+      ],
+      "exact_contact_samples": 15,
+      "matched_native_pixels": 20304,
+      "left_swing_verified": true,
+      "airborne_kick_verified": true,
+      "planted_bat_verified": true,
+      "score_at_1000": 610,
+      "broken_at_1000": 1
+    }
+  ],
+  "texture_bytes": 446304,
+  "free_bytes": 12184,
+  "definitions": 253,
+  "texture_allocation_delta": 0,
+  "registrations_freed": 0,
+  "airborne_assets_retained": true
+}

@@ -1,0 +1,1859 @@
+{
+  "checkpoint": "ff24c5ec160318c4eb07da171b684a00a1d973c8",
+  "canvas": [
+    128,
+    96
+  ],
+  "root": [
+    64,
+    92
+  ],
+  "standing_height": 88,
+  "palette_sha256": "0bc5370c89a51dc3d4c41505c3dcef0748362af8c4135d4badaa09c632e302aa",
+  "walk_ticks": 5,
+  "existing_piece_occurrences": 42,
+  "existing_unique_pieces": 42,
+  "new_texture_bytes": 74688,
+  "naive_polished_bytes": 120032,
+  "dedup_saved_bytes": 45344,
+  "total_vdp1_bytes": 430496,
+  "extra_palette_bytes": 0,
+  "guide_pixels_used": 69,
+  "resources": [
+    {
+      "name": "GB0.TGA",
+      "source": "original",
+      "old_ref": [
+        0,
+        0,
+        0
+      ],
+      "width": 40,
+      "height": 20,
+      "aligned_bytes": 800
+    },
+    {
+      "name": "GB1.TGA",
+      "source": "original",
+      "old_ref": [
+        0,
+        0,
+        1
+      ],
+      "width": 64,
+      "height": 56,
+      "aligned_bytes": 3584
+    },
+    {
+      "name": "GB2.TGA",
+      "source": "original",
+      "old_ref": [
+        0,
+        0,
+        2
+      ],
+      "width": 80,
+      "height": 12,
+      "aligned_bytes": 960
+    },
+    {
+      "name": "AB10.TGA",
+      "source": "original",
+      "old_ref": [
+        0,
+        1,
+        0
+      ],
+      "width": 40,
+      "height": 20,
+      "aligned_bytes": 800
+    },
+    {
+      "name": "AB11.TGA",
+      "source": "original",
+      "old_ref": [
+        0,
+        1,
+        1
+      ],
+      "width": 64,
+      "height": 56,
+      "aligned_bytes": 3584
+    },
+    {
+      "name": "AB12.TGA",
+      "source": "original",
+      "old_ref": [
+        0,
+        1,
+        2
+      ],
+      "width": 72,
+      "height": 12,
+      "aligned_bytes": 864
+    },
+    {
+      "name": "AB20.TGA",
+      "source": "original",
+      "old_ref": [
+        0,
+        2,
+        0
+      ],
+      "width": 40,
+      "height": 20,
+      "aligned_bytes": 800
+    },
+    {
+      "name": "AB21.TGA",
+      "source": "original",
+      "old_ref": [
+        0,
+        2,
+        1
+      ],
+      "width": 56,
+      "height": 56,
+      "aligned_bytes": 3136
+    },
+    {
+      "name": "AB22.TGA",
+      "source": "original",
+      "old_ref": [
+        0,
+        2,
+        2
+      ],
+      "width": 56,
+      "height": 12,
+      "aligned_bytes": 672
+    },
+    {
+      "name": "AB30.TGA",
+      "source": "original",
+      "old_ref": [
+        0,
+        3,
+        0
+      ],
+      "width": 40,
+      "height": 20,
+      "aligned_bytes": 800
+    },
+    {
+      "name": "AB31.TGA",
+      "source": "original",
+      "old_ref": [
+        0,
+        3,
+        1
+      ],
+      "width": 48,
+      "height": 56,
+      "aligned_bytes": 2688
+    },
+    {
+      "name": "AB32.TGA",
+      "source": "original",
+      "old_ref": [
+        0,
+        3,
+        2
+      ],
+      "width": 24,
+      "height": 12,
+      "aligned_bytes": 288
+    },
+    {
+      "name": "AB40.TGA",
+      "source": "original",
+      "old_ref": [
+        0,
+        4,
+        0
+      ],
+      "width": 40,
+      "height": 20,
+      "aligned_bytes": 800
+    },
+    {
+      "name": "AB41.TGA",
+      "source": "original",
+      "old_ref": [
+        0,
+        4,
+        1
+      ],
+      "width": 56,
+      "height": 56,
+      "aligned_bytes": 3136
+    },
+    {
+      "name": "AB42.TGA",
+      "source": "original",
+      "old_ref": [
+        0,
+        4,
+        2
+      ],
+      "width": 72,
+      "height": 12,
+      "aligned_bytes": 864
+    },
+    {
+      "name": "AB50.TGA",
+      "source": "original",
+      "old_ref": [
+        0,
+        5,
+        0
+      ],
+      "width": 40,
+      "height": 20,
+      "aligned_bytes": 800
+    },
+    {
+      "name": "AB51.TGA",
+      "source": "original",
+      "old_ref": [
+        0,
+        5,
+        1
+      ],
+      "width": 56,
+      "height": 56,
+      "aligned_bytes": 3136
+    },
+    {
+      "name": "AB52.TGA",
+      "source": "original",
+      "old_ref": [
+        0,
+        5,
+        2
+      ],
+      "width": 56,
+      "height": 12,
+      "aligned_bytes": 672
+    },
+    {
+      "name": "AB60.TGA",
+      "source": "original",
+      "old_ref": [
+        0,
+        6,
+        0
+      ],
+      "width": 32,
+      "height": 20,
+      "aligned_bytes": 640
+    },
+    {
+      "name": "AB61.TGA",
+      "source": "original",
+      "old_ref": [
+        0,
+        6,
+        1
+      ],
+      "width": 48,
+      "height": 56,
+      "aligned_bytes": 2688
+    },
+    {
+      "name": "AB62.TGA",
+      "source": "original",
+      "old_ref": [
+        0,
+        6,
+        2
+      ],
+      "width": 24,
+      "height": 12,
+      "aligned_bytes": 288
+    },
+    {
+      "name": "GC0.TGA",
+      "source": "original",
+      "old_ref": [
+        1,
+        0,
+        0
+      ],
+      "width": 40,
+      "height": 20,
+      "aligned_bytes": 800
+    },
+    {
+      "name": "GC1.TGA",
+      "source": "original",
+      "old_ref": [
+        1,
+        0,
+        1
+      ],
+      "width": 64,
+      "height": 56,
+      "aligned_bytes": 3584
+    },
+    {
+      "name": "GC2.TGA",
+      "source": "original",
+      "old_ref": [
+        1,
+        0,
+        2
+      ],
+      "width": 88,
+      "height": 12,
+      "aligned_bytes": 1056
+    },
+    {
+      "name": "AC10.TGA",
+      "source": "original",
+      "old_ref": [
+        1,
+        1,
+        0
+      ],
+      "width": 40,
+      "height": 20,
+      "aligned_bytes": 800
+    },
+    {
+      "name": "AC11.TGA",
+      "source": "original",
+      "old_ref": [
+        1,
+        1,
+        1
+      ],
+      "width": 64,
+      "height": 56,
+      "aligned_bytes": 3584
+    },
+    {
+      "name": "AC12.TGA",
+      "source": "original",
+      "old_ref": [
+        1,
+        1,
+        2
+      ],
+      "width": 72,
+      "height": 12,
+      "aligned_bytes": 864
+    },
+    {
+      "name": "AC20.TGA",
+      "source": "original",
+      "old_ref": [
+        1,
+        2,
+        0
+      ],
+      "width": 40,
+      "height": 20,
+      "aligned_bytes": 800
+    },
+    {
+      "name": "AC21.TGA",
+      "source": "original",
+      "old_ref": [
+        1,
+        2,
+        1
+      ],
+      "width": 56,
+      "height": 56,
+      "aligned_bytes": 3136
+    },
+    {
+      "name": "AC22.TGA",
+      "source": "original",
+      "old_ref": [
+        1,
+        2,
+        2
+      ],
+      "width": 56,
+      "height": 12,
+      "aligned_bytes": 672
+    },
+    {
+      "name": "AC30.TGA",
+      "source": "original",
+      "old_ref": [
+        1,
+        3,
+        0
+      ],
+      "width": 40,
+      "height": 20,
+      "aligned_bytes": 800
+    },
+    {
+      "name": "AC31.TGA",
+      "source": "original",
+      "old_ref": [
+        1,
+        3,
+        1
+      ],
+      "width": 48,
+      "height": 56,
+      "aligned_bytes": 2688
+    },
+    {
+      "name": "AC32.TGA",
+      "source": "original",
+      "old_ref": [
+        1,
+        3,
+        2
+      ],
+      "width": 24,
+      "height": 12,
+      "aligned_bytes": 288
+    },
+    {
+      "name": "AC40.TGA",
+      "source": "original",
+      "old_ref": [
+        1,
+        4,
+        0
+      ],
+      "width": 40,
+      "height": 20,
+      "aligned_bytes": 800
+    },
+    {
+      "name": "AC41.TGA",
+      "source": "original",
+      "old_ref": [
+        1,
+        4,
+        1
+      ],
+      "width": 56,
+      "height": 56,
+      "aligned_bytes": 3136
+    },
+    {
+      "name": "AC42.TGA",
+      "source": "original",
+      "old_ref": [
+        1,
+        4,
+        2
+      ],
+      "width": 72,
+      "height": 12,
+      "aligned_bytes": 864
+    },
+    {
+      "name": "AC50.TGA",
+      "source": "original",
+      "old_ref": [
+        1,
+        5,
+        0
+      ],
+      "width": 40,
+      "height": 20,
+      "aligned_bytes": 800
+    },
+    {
+      "name": "AC51.TGA",
+      "source": "original",
+      "old_ref": [
+        1,
+        5,
+        1
+      ],
+      "width": 56,
+      "height": 56,
+      "aligned_bytes": 3136
+    },
+    {
+      "name": "AC52.TGA",
+      "source": "original",
+      "old_ref": [
+        1,
+        5,
+        2
+      ],
+      "width": 56,
+      "height": 12,
+      "aligned_bytes": 672
+    },
+    {
+      "name": "AC60.TGA",
+      "source": "original",
+      "old_ref": [
+        1,
+        6,
+        0
+      ],
+      "width": 40,
+      "height": 20,
+      "aligned_bytes": 800
+    },
+    {
+      "name": "AC61.TGA",
+      "source": "original",
+      "old_ref": [
+        1,
+        6,
+        1
+      ],
+      "width": 48,
+      "height": 56,
+      "aligned_bytes": 2688
+    },
+    {
+      "name": "AC62.TGA",
+      "source": "original",
+      "old_ref": [
+        1,
+        6,
+        2
+      ],
+      "width": 24,
+      "height": 12,
+      "aligned_bytes": 288
+    },
+    {
+      "name": "P000.TGA",
+      "source": "polish",
+      "width": 64,
+      "height": 56,
+      "aligned_bytes": 3584
+    },
+    {
+      "name": "P001.TGA",
+      "source": "polish",
+      "width": 64,
+      "height": 56,
+      "aligned_bytes": 3584
+    },
+    {
+      "name": "P002.TGA",
+      "source": "polish",
+      "width": 64,
+      "height": 56,
+      "aligned_bytes": 3584
+    },
+    {
+      "name": "P003.TGA",
+      "source": "polish",
+      "width": 64,
+      "height": 56,
+      "aligned_bytes": 3584
+    },
+    {
+      "name": "P004.TGA",
+      "source": "polish",
+      "width": 72,
+      "height": 12,
+      "aligned_bytes": 864
+    },
+    {
+      "name": "P005.TGA",
+      "source": "polish",
+      "width": 56,
+      "height": 56,
+      "aligned_bytes": 3136
+    },
+    {
+      "name": "P006.TGA",
+      "source": "polish",
+      "width": 56,
+      "height": 12,
+      "aligned_bytes": 672
+    },
+    {
+      "name": "P007.TGA",
+      "source": "polish",
+      "width": 56,
+      "height": 56,
+      "aligned_bytes": 3136
+    },
+    {
+      "name": "P008.TGA",
+      "source": "polish",
+      "width": 24,
+      "height": 12,
+      "aligned_bytes": 288
+    },
+    {
+      "name": "P009.TGA",
+      "source": "polish",
+      "width": 56,
+      "height": 56,
+      "aligned_bytes": 3136
+    },
+    {
+      "name": "P010.TGA",
+      "source": "polish",
+      "width": 72,
+      "height": 12,
+      "aligned_bytes": 864
+    },
+    {
+      "name": "P011.TGA",
+      "source": "polish",
+      "width": 56,
+      "height": 56,
+      "aligned_bytes": 3136
+    },
+    {
+      "name": "P012.TGA",
+      "source": "polish",
+      "width": 56,
+      "height": 12,
+      "aligned_bytes": 672
+    },
+    {
+      "name": "P013.TGA",
+      "source": "polish",
+      "width": 56,
+      "height": 56,
+      "aligned_bytes": 3136
+    },
+    {
+      "name": "P014.TGA",
+      "source": "polish",
+      "width": 24,
+      "height": 12,
+      "aligned_bytes": 288
+    },
+    {
+      "name": "P015.TGA",
+      "source": "polish",
+      "width": 64,
+      "height": 56,
+      "aligned_bytes": 3584
+    },
+    {
+      "name": "P016.TGA",
+      "source": "polish",
+      "width": 64,
+      "height": 56,
+      "aligned_bytes": 3584
+    },
+    {
+      "name": "P017.TGA",
+      "source": "polish",
+      "width": 64,
+      "height": 56,
+      "aligned_bytes": 3584
+    },
+    {
+      "name": "P018.TGA",
+      "source": "polish",
+      "width": 64,
+      "height": 56,
+      "aligned_bytes": 3584
+    },
+    {
+      "name": "P019.TGA",
+      "source": "polish",
+      "width": 64,
+      "height": 56,
+      "aligned_bytes": 3584
+    },
+    {
+      "name": "P020.TGA",
+      "source": "polish",
+      "width": 72,
+      "height": 12,
+      "aligned_bytes": 864
+    },
+    {
+      "name": "P021.TGA",
+      "source": "polish",
+      "width": 56,
+      "height": 56,
+      "aligned_bytes": 3136
+    },
+    {
+      "name": "P022.TGA",
+      "source": "polish",
+      "width": 56,
+      "height": 12,
+      "aligned_bytes": 672
+    },
+    {
+      "name": "P023.TGA",
+      "source": "polish",
+      "width": 56,
+      "height": 56,
+      "aligned_bytes": 3136
+    },
+    {
+      "name": "P024.TGA",
+      "source": "polish",
+      "width": 32,
+      "height": 12,
+      "aligned_bytes": 384
+    },
+    {
+      "name": "P025.TGA",
+      "source": "polish",
+      "width": 56,
+      "height": 56,
+      "aligned_bytes": 3136
+    },
+    {
+      "name": "P026.TGA",
+      "source": "polish",
+      "width": 72,
+      "height": 12,
+      "aligned_bytes": 864
+    },
+    {
+      "name": "P027.TGA",
+      "source": "polish",
+      "width": 56,
+      "height": 56,
+      "aligned_bytes": 3136
+    },
+    {
+      "name": "P028.TGA",
+      "source": "polish",
+      "width": 56,
+      "height": 12,
+      "aligned_bytes": 672
+    },
+    {
+      "name": "P029.TGA",
+      "source": "polish",
+      "width": 56,
+      "height": 56,
+      "aligned_bytes": 3136
+    },
+    {
+      "name": "P030.TGA",
+      "source": "polish",
+      "width": 32,
+      "height": 12,
+      "aligned_bytes": 384
+    },
+    {
+      "name": "P031.TGA",
+      "source": "polish",
+      "width": 64,
+      "height": 56,
+      "aligned_bytes": 3584
+    }
+  ],
+  "actors": [
+    {
+      "name": "buck",
+      "idle_ticks": [
+        24,
+        16,
+        24,
+        16
+      ],
+      "frames": [
+        {
+          "frame": 0,
+          "kind": "idle",
+          "parts": [
+            {
+              "resource": 0,
+              "name": "GB0.TGA",
+              "x": 46,
+              "y": 4,
+              "width": 40,
+              "height": 20
+            },
+            {
+              "resource": 1,
+              "name": "GB1.TGA",
+              "x": 34,
+              "y": 24,
+              "width": 64,
+              "height": 56
+            },
+            {
+              "resource": 2,
+              "name": "GB2.TGA",
+              "x": 25,
+              "y": 80,
+              "width": 80,
+              "height": 12
+            }
+          ],
+          "rgba_sha256": "de5897a9ed75de3555f7f0373c86aa3bf44c9a684781bda3470c513c3604dab9",
+          "bounds": [
+            25,
+            4,
+            104,
+            92
+          ]
+        },
+        {
+          "frame": 1,
+          "kind": "idle",
+          "parts": [
+            {
+              "resource": 0,
+              "name": "GB0.TGA",
+              "x": 46,
+              "y": 4,
+              "width": 40,
+              "height": 20
+            },
+            {
+              "resource": 42,
+              "name": "P000.TGA",
+              "x": 34,
+              "y": 24,
+              "width": 64,
+              "height": 56
+            },
+            {
+              "resource": 2,
+              "name": "GB2.TGA",
+              "x": 25,
+              "y": 80,
+              "width": 80,
+              "height": 12
+            }
+          ],
+          "rgba_sha256": "32fa6e3831ffadbb314d8be9caf5bc07c95943f7a6f00ca267a4c0ebf2092dd9",
+          "bounds": [
+            25,
+            4,
+            104,
+            92
+          ]
+        },
+        {
+          "frame": 2,
+          "kind": "idle",
+          "parts": [
+            {
+              "resource": 0,
+              "name": "GB0.TGA",
+              "x": 46,
+              "y": 4,
+              "width": 40,
+              "height": 20
+            },
+            {
+              "resource": 43,
+              "name": "P001.TGA",
+              "x": 34,
+              "y": 24,
+              "width": 64,
+              "height": 56
+            },
+            {
+              "resource": 2,
+              "name": "GB2.TGA",
+              "x": 25,
+              "y": 80,
+              "width": 80,
+              "height": 12
+            }
+          ],
+          "rgba_sha256": "1d5dfff83383da739f7c8fda414cef8d1a2a73a56fad9f7874eadd26f499640b",
+          "bounds": [
+            25,
+            4,
+            104,
+            92
+          ]
+        },
+        {
+          "frame": 3,
+          "kind": "idle",
+          "parts": [
+            {
+              "resource": 0,
+              "name": "GB0.TGA",
+              "x": 46,
+              "y": 4,
+              "width": 40,
+              "height": 20
+            },
+            {
+              "resource": 44,
+              "name": "P002.TGA",
+              "x": 34,
+              "y": 24,
+              "width": 64,
+              "height": 56
+            },
+            {
+              "resource": 2,
+              "name": "GB2.TGA",
+              "x": 25,
+              "y": 80,
+              "width": 80,
+              "height": 12
+            }
+          ],
+          "rgba_sha256": "43e9b9b449a29a10fd7243c08ccca8c4536de3c8004c6c22e3c1ee1f1b28408b",
+          "bounds": [
+            25,
+            4,
+            104,
+            92
+          ]
+        },
+        {
+          "frame": 4,
+          "kind": "walk",
+          "parts": [
+            {
+              "resource": 3,
+              "name": "AB10.TGA",
+              "x": 46,
+              "y": 4,
+              "width": 40,
+              "height": 20
+            },
+            {
+              "resource": 45,
+              "name": "P003.TGA",
+              "x": 36,
+              "y": 24,
+              "width": 64,
+              "height": 56
+            },
+            {
+              "resource": 46,
+              "name": "P004.TGA",
+              "x": 30,
+              "y": 80,
+              "width": 72,
+              "height": 12
+            }
+          ],
+          "rgba_sha256": "f395ebb27eace7e7f8e97090e4df0eca2b9343c194378d7cd7fd8f667e4930de",
+          "bounds": [
+            30,
+            4,
+            99,
+            92
+          ]
+        },
+        {
+          "frame": 5,
+          "kind": "walk",
+          "parts": [
+            {
+              "resource": 3,
+              "name": "AB10.TGA",
+              "x": 46,
+              "y": 4,
+              "width": 40,
+              "height": 20
+            },
+            {
+              "resource": 47,
+              "name": "P005.TGA",
+              "x": 41,
+              "y": 24,
+              "width": 56,
+              "height": 56
+            },
+            {
+              "resource": 48,
+              "name": "P006.TGA",
+              "x": 39,
+              "y": 80,
+              "width": 56,
+              "height": 12
+            }
+          ],
+          "rgba_sha256": "21c2fdabec59a33c543ae7724f9bee67aa05ad6909985ebd4544caaa9a57304c",
+          "bounds": [
+            39,
+            4,
+            93,
+            92
+          ]
+        },
+        {
+          "frame": 6,
+          "kind": "walk",
+          "parts": [
+            {
+              "resource": 3,
+              "name": "AB10.TGA",
+              "x": 46,
+              "y": 4,
+              "width": 40,
+              "height": 20
+            },
+            {
+              "resource": 49,
+              "name": "P007.TGA",
+              "x": 41,
+              "y": 24,
+              "width": 56,
+              "height": 56
+            },
+            {
+              "resource": 50,
+              "name": "P008.TGA",
+              "x": 57,
+              "y": 80,
+              "width": 24,
+              "height": 12
+            }
+          ],
+          "rgba_sha256": "ff32b5717c58b35af28b4657169dc031b56021707e25c804b7fa478101d56266",
+          "bounds": [
+            41,
+            4,
+            93,
+            92
+          ]
+        },
+        {
+          "frame": 7,
+          "kind": "walk",
+          "parts": [
+            {
+              "resource": 3,
+              "name": "AB10.TGA",
+              "x": 46,
+              "y": 4,
+              "width": 40,
+              "height": 20
+            },
+            {
+              "resource": 51,
+              "name": "P009.TGA",
+              "x": 37,
+              "y": 24,
+              "width": 56,
+              "height": 56
+            },
+            {
+              "resource": 52,
+              "name": "P010.TGA",
+              "x": 31,
+              "y": 80,
+              "width": 72,
+              "height": 12
+            }
+          ],
+          "rgba_sha256": "39329ffa23d93a1e1305984938d3d5ac8efb77df25100211f3d6385a3341e38d",
+          "bounds": [
+            31,
+            4,
+            99,
+            92
+          ]
+        },
+        {
+          "frame": 8,
+          "kind": "walk",
+          "parts": [
+            {
+              "resource": 3,
+              "name": "AB10.TGA",
+              "x": 46,
+              "y": 4,
+              "width": 40,
+              "height": 20
+            },
+            {
+              "resource": 53,
+              "name": "P011.TGA",
+              "x": 41,
+              "y": 24,
+              "width": 56,
+              "height": 56
+            },
+            {
+              "resource": 54,
+              "name": "P012.TGA",
+              "x": 40,
+              "y": 80,
+              "width": 56,
+              "height": 12
+            }
+          ],
+          "rgba_sha256": "90975755503afd630163597bcc7e6bd38a3a83d1d913965867b6c6da00bddbd1",
+          "bounds": [
+            40,
+            4,
+            93,
+            92
+          ]
+        },
+        {
+          "frame": 9,
+          "kind": "walk",
+          "parts": [
+            {
+              "resource": 3,
+              "name": "AB10.TGA",
+              "x": 46,
+              "y": 4,
+              "width": 40,
+              "height": 20
+            },
+            {
+              "resource": 55,
+              "name": "P013.TGA",
+              "x": 41,
+              "y": 24,
+              "width": 56,
+              "height": 56
+            },
+            {
+              "resource": 56,
+              "name": "P014.TGA",
+              "x": 57,
+              "y": 80,
+              "width": 24,
+              "height": 12
+            }
+          ],
+          "rgba_sha256": "708aeb1c3acd8666f256ab093b14c2a8a5d15544d99139a69ac56e70ee76125a",
+          "bounds": [
+            41,
+            4,
+            93,
+            92
+          ]
+        },
+        {
+          "frame": 10,
+          "kind": "bridge",
+          "parts": [
+            {
+              "resource": 3,
+              "name": "AB10.TGA",
+              "x": 46,
+              "y": 4,
+              "width": 40,
+              "height": 20
+            },
+            {
+              "resource": 57,
+              "name": "P015.TGA",
+              "x": 36,
+              "y": 24,
+              "width": 64,
+              "height": 56
+            },
+            {
+              "resource": 46,
+              "name": "P004.TGA",
+              "x": 30,
+              "y": 80,
+              "width": 72,
+              "height": 12
+            }
+          ],
+          "rgba_sha256": "d7df4093bcca94a81c2ff3d030ccd0f0c666fcdcf99ec9c8e19f80b884b5d0d7",
+          "bounds": [
+            30,
+            4,
+            99,
+            92
+          ]
+        },
+        {
+          "frame": 11,
+          "kind": "bridge",
+          "parts": [
+            {
+              "resource": 0,
+              "name": "GB0.TGA",
+              "x": 46,
+              "y": 4,
+              "width": 40,
+              "height": 20
+            },
+            {
+              "resource": 42,
+              "name": "P000.TGA",
+              "x": 34,
+              "y": 24,
+              "width": 64,
+              "height": 56
+            },
+            {
+              "resource": 2,
+              "name": "GB2.TGA",
+              "x": 25,
+              "y": 80,
+              "width": 80,
+              "height": 12
+            }
+          ],
+          "rgba_sha256": "32fa6e3831ffadbb314d8be9caf5bc07c95943f7a6f00ca267a4c0ebf2092dd9",
+          "bounds": [
+            25,
+            4,
+            104,
+            92
+          ]
+        }
+      ],
+      "walk_landmarks": [
+        {
+          "support_leg": "near",
+          "heel_x": 80,
+          "floor_y": 91,
+          "legacy_root_advance": 0.0,
+          "heel_world_keyframe": 80.0,
+          "pelvis_registration_x": 66,
+          "pelvis_source_x": 66,
+          "lower_dx": 0,
+          "support_ankle_dx": 0,
+          "contact": "heel+rear toe",
+          "trailing_lift_px": 0
+        },
+        {
+          "support_leg": "near",
+          "heel_x": 72,
+          "floor_y": 91,
+          "legacy_root_advance": 7.6171875,
+          "heel_world_keyframe": 79.6171875,
+          "pelvis_registration_x": 66,
+          "pelvis_source_x": 64,
+          "lower_dx": 2,
+          "support_ankle_dx": -4,
+          "contact": "full sole",
+          "trailing_lift_px": 2
+        },
+        {
+          "support_leg": "near",
+          "heel_x": 64,
+          "floor_y": 91,
+          "legacy_root_advance": 15.234375,
+          "heel_world_keyframe": 79.234375,
+          "pelvis_registration_x": 66,
+          "pelvis_source_x": 66,
+          "lower_dx": 0,
+          "support_ankle_dx": 2,
+          "contact": "full sole",
+          "trailing_lift_px": 0
+        },
+        {
+          "support_leg": "far",
+          "heel_x": 80,
+          "floor_y": 91,
+          "legacy_root_advance": 0.0,
+          "heel_world_keyframe": 80.0,
+          "pelvis_registration_x": 66,
+          "pelvis_source_x": 65,
+          "lower_dx": 1,
+          "support_ankle_dx": 0,
+          "contact": "heel+rear toe",
+          "trailing_lift_px": 0
+        },
+        {
+          "support_leg": "far",
+          "heel_x": 72,
+          "floor_y": 91,
+          "legacy_root_advance": 7.6171875,
+          "heel_world_keyframe": 79.6171875,
+          "pelvis_registration_x": 66,
+          "pelvis_source_x": 63,
+          "lower_dx": 3,
+          "support_ankle_dx": -4,
+          "contact": "full sole",
+          "trailing_lift_px": 2
+        },
+        {
+          "support_leg": "far",
+          "heel_x": 64,
+          "floor_y": 91,
+          "legacy_root_advance": 15.234375,
+          "heel_world_keyframe": 79.234375,
+          "pelvis_registration_x": 66,
+          "pelvis_source_x": 66,
+          "lower_dx": 0,
+          "support_ankle_dx": 2,
+          "contact": "full sole",
+          "trailing_lift_px": 0
+        }
+      ]
+    },
+    {
+      "name": "chuck",
+      "idle_ticks": [
+        30,
+        18,
+        24,
+        18
+      ],
+      "frames": [
+        {
+          "frame": 0,
+          "kind": "idle",
+          "parts": [
+            {
+              "resource": 21,
+              "name": "GC0.TGA",
+              "x": 41,
+              "y": 4,
+              "width": 40,
+              "height": 20
+            },
+            {
+              "resource": 22,
+              "name": "GC1.TGA",
+              "x": 31,
+              "y": 24,
+              "width": 64,
+              "height": 56
+            },
+            {
+              "resource": 23,
+              "name": "GC2.TGA",
+              "x": 23,
+              "y": 80,
+              "width": 88,
+              "height": 12
+            }
+          ],
+          "rgba_sha256": "4acb3b17750bd843a66652df66518cf9fe6504606832a03c1f028959ea96d6f4",
+          "bounds": [
+            23,
+            4,
+            105,
+            92
+          ]
+        },
+        {
+          "frame": 1,
+          "kind": "idle",
+          "parts": [
+            {
+              "resource": 21,
+              "name": "GC0.TGA",
+              "x": 41,
+              "y": 4,
+              "width": 40,
+              "height": 20
+            },
+            {
+              "resource": 58,
+              "name": "P016.TGA",
+              "x": 31,
+              "y": 24,
+              "width": 64,
+              "height": 56
+            },
+            {
+              "resource": 23,
+              "name": "GC2.TGA",
+              "x": 23,
+              "y": 80,
+              "width": 88,
+              "height": 12
+            }
+          ],
+          "rgba_sha256": "2b3f96da8bdfcb6b2d4af99cddcd938236122ee8f4736fe0acf14a371f1d839f",
+          "bounds": [
+            23,
+            4,
+            105,
+            92
+          ]
+        },
+        {
+          "frame": 2,
+          "kind": "idle",
+          "parts": [
+            {
+              "resource": 21,
+              "name": "GC0.TGA",
+              "x": 41,
+              "y": 4,
+              "width": 40,
+              "height": 20
+            },
+            {
+              "resource": 59,
+              "name": "P017.TGA",
+              "x": 31,
+              "y": 24,
+              "width": 64,
+              "height": 56
+            },
+            {
+              "resource": 23,
+              "name": "GC2.TGA",
+              "x": 23,
+              "y": 80,
+              "width": 88,
+              "height": 12
+            }
+          ],
+          "rgba_sha256": "0081d2c7bddc254bb7cb612d45d0a36e83a568985dc048929658c46e22032dee",
+          "bounds": [
+            23,
+            4,
+            105,
+            92
+          ]
+        },
+        {
+          "frame": 3,
+          "kind": "idle",
+          "parts": [
+            {
+              "resource": 21,
+              "name": "GC0.TGA",
+              "x": 41,
+              "y": 4,
+              "width": 40,
+              "height": 20
+            },
+            {
+              "resource": 60,
+              "name": "P018.TGA",
+              "x": 31,
+              "y": 24,
+              "width": 64,
+              "height": 56
+            },
+            {
+              "resource": 23,
+              "name": "GC2.TGA",
+              "x": 23,
+              "y": 80,
+              "width": 88,
+              "height": 12
+            }
+          ],
+          "rgba_sha256": "2d1cf3e4a9c4a80c513aea193e00c359b7fdb54799dc0011a968566542690f1c",
+          "bounds": [
+            23,
+            4,
+            105,
+            92
+          ]
+        },
+        {
+          "frame": 4,
+          "kind": "walk",
+          "parts": [
+            {
+              "resource": 24,
+              "name": "AC10.TGA",
+              "x": 44,
+              "y": 4,
+              "width": 40,
+              "height": 20
+            },
+            {
+              "resource": 61,
+              "name": "P019.TGA",
+              "x": 36,
+              "y": 24,
+              "width": 64,
+              "height": 56
+            },
+            {
+              "resource": 62,
+              "name": "P020.TGA",
+              "x": 30,
+              "y": 80,
+              "width": 72,
+              "height": 12
+            }
+          ],
+          "rgba_sha256": "96046abda8165ea187b469fa07a2c186f9153b0d4875f66f03f65059c9a39bd2",
+          "bounds": [
+            30,
+            4,
+            100,
+            92
+          ]
+        },
+        {
+          "frame": 5,
+          "kind": "walk",
+          "parts": [
+            {
+              "resource": 24,
+              "name": "AC10.TGA",
+              "x": 44,
+              "y": 4,
+              "width": 40,
+              "height": 20
+            },
+            {
+              "resource": 63,
+              "name": "P021.TGA",
+              "x": 39,
+              "y": 24,
+              "width": 56,
+              "height": 56
+            },
+            {
+              "resource": 64,
+              "name": "P022.TGA",
+              "x": 39,
+              "y": 80,
+              "width": 56,
+              "height": 12
+            }
+          ],
+          "rgba_sha256": "e3cef39a3ffb75f522a42a3abe723c66715f10d72c7e3a1f48e9120c999f830f",
+          "bounds": [
+            39,
+            4,
+            93,
+            92
+          ]
+        },
+        {
+          "frame": 6,
+          "kind": "walk",
+          "parts": [
+            {
+              "resource": 24,
+              "name": "AC10.TGA",
+              "x": 44,
+              "y": 4,
+              "width": 40,
+              "height": 20
+            },
+            {
+              "resource": 65,
+              "name": "P023.TGA",
+              "x": 39,
+              "y": 24,
+              "width": 56,
+              "height": 56
+            },
+            {
+              "resource": 66,
+              "name": "P024.TGA",
+              "x": 56,
+              "y": 80,
+              "width": 32,
+              "height": 12
+            }
+          ],
+          "rgba_sha256": "09b7563c2f0a3331f5244b2ea701a7b27e4ce4c9c956083eeb8c2717df1c424b",
+          "bounds": [
+            39,
+            4,
+            93,
+            92
+          ]
+        },
+        {
+          "frame": 7,
+          "kind": "walk",
+          "parts": [
+            {
+              "resource": 24,
+              "name": "AC10.TGA",
+              "x": 44,
+              "y": 4,
+              "width": 40,
+              "height": 20
+            },
+            {
+              "resource": 67,
+              "name": "P025.TGA",
+              "x": 37,
+              "y": 24,
+              "width": 56,
+              "height": 56
+            },
+            {
+              "resource": 68,
+              "name": "P026.TGA",
+              "x": 31,
+              "y": 80,
+              "width": 72,
+              "height": 12
+            }
+          ],
+          "rgba_sha256": "2492d8adf5f068b1b6d697f0cec172c1d104441078985dc6666c215c1ef6fa1e",
+          "bounds": [
+            31,
+            4,
+            99,
+            92
+          ]
+        },
+        {
+          "frame": 8,
+          "kind": "walk",
+          "parts": [
+            {
+              "resource": 24,
+              "name": "AC10.TGA",
+              "x": 44,
+              "y": 4,
+              "width": 40,
+              "height": 20
+            },
+            {
+              "resource": 69,
+              "name": "P027.TGA",
+              "x": 39,
+              "y": 24,
+              "width": 56,
+              "height": 56
+            },
+            {
+              "resource": 70,
+              "name": "P028.TGA",
+              "x": 39,
+              "y": 80,
+              "width": 56,
+              "height": 12
+            }
+          ],
+          "rgba_sha256": "1b65f06c6fbbc6ccd49bf668ed6910d20227da1ac37fe766e284b190c544078f",
+          "bounds": [
+            39,
+            4,
+            93,
+            92
+          ]
+        },
+        {
+          "frame": 9,
+          "kind": "walk",
+          "parts": [
+            {
+              "resource": 24,
+              "name": "AC10.TGA",
+              "x": 44,
+              "y": 4,
+              "width": 40,
+              "height": 20
+            },
+            {
+              "resource": 71,
+              "name": "P029.TGA",
+              "x": 39,
+              "y": 24,
+              "width": 56,
+              "height": 56
+            },
+            {
+              "resource": 72,
+              "name": "P030.TGA",
+              "x": 56,
+              "y": 80,
+              "width": 32,
+              "height": 12
+            }
+          ],
+          "rgba_sha256": "3ff567f2f5af68540e689d44af1ee6da8c543087d3db272885ac441158be5319",
+          "bounds": [
+            39,
+            4,
+            93,
+            92
+          ]
+        },
+        {
+          "frame": 10,
+          "kind": "bridge",
+          "parts": [
+            {
+              "resource": 24,
+              "name": "AC10.TGA",
+              "x": 44,
+              "y": 4,
+              "width": 40,
+              "height": 20
+            },
+            {
+              "resource": 73,
+              "name": "P031.TGA",
+              "x": 36,
+              "y": 24,
+              "width": 64,
+              "height": 56
+            },
+            {
+              "resource": 62,
+              "name": "P020.TGA",
+              "x": 30,
+              "y": 80,
+              "width": 72,
+              "height": 12
+            }
+          ],
+          "rgba_sha256": "32fe38fc1bcc8d51c3c089acac0b8282fe8677efbabc8f51aa2f493e2e95475b",
+          "bounds": [
+            30,
+            4,
+            100,
+            92
+          ]
+        },
+        {
+          "frame": 11,
+          "kind": "bridge",
+          "parts": [
+            {
+              "resource": 21,
+              "name": "GC0.TGA",
+              "x": 41,
+              "y": 4,
+              "width": 40,
+              "height": 20
+            },
+            {
+              "resource": 58,
+              "name": "P016.TGA",
+              "x": 31,
+              "y": 24,
+              "width": 64,
+              "height": 56
+            },
+            {
+              "resource": 23,
+              "name": "GC2.TGA",
+              "x": 23,
+              "y": 80,
+              "width": 88,
+              "height": 12
+            }
+          ],
+          "rgba_sha256": "2b3f96da8bdfcb6b2d4af99cddcd938236122ee8f4736fe0acf14a371f1d839f",
+          "bounds": [
+            23,
+            4,
+            105,
+            92
+          ]
+        }
+      ],
+      "walk_landmarks": [
+        {
+          "support_leg": "near",
+          "heel_x": 80,
+          "floor_y": 91,
+          "legacy_root_advance": 0.0,
+          "heel_world_keyframe": 80.0,
+          "pelvis_registration_x": 66,
+          "pelvis_source_x": 66,
+          "lower_dx": 0,
+          "support_ankle_dx": 1,
+          "contact": "heel+rear toe",
+          "trailing_lift_px": 0
+        },
+        {
+          "support_leg": "near",
+          "heel_x": 72,
+          "floor_y": 91,
+          "legacy_root_advance": 7.6171875,
+          "heel_world_keyframe": 79.6171875,
+          "pelvis_registration_x": 66,
+          "pelvis_source_x": 64,
+          "lower_dx": 2,
+          "support_ankle_dx": -3,
+          "contact": "full sole",
+          "trailing_lift_px": 1
+        },
+        {
+          "support_leg": "near",
+          "heel_x": 64,
+          "floor_y": 91,
+          "legacy_root_advance": 15.234375,
+          "heel_world_keyframe": 79.234375,
+          "pelvis_registration_x": 66,
+          "pelvis_source_x": 67,
+          "lower_dx": -1,
+          "support_ankle_dx": 2,
+          "contact": "full sole",
+          "trailing_lift_px": 0
+        },
+        {
+          "support_leg": "far",
+          "heel_x": 80,
+          "floor_y": 91,
+          "legacy_root_advance": 0.0,
+          "heel_world_keyframe": 80.0,
+          "pelvis_registration_x": 66,
+          "pelvis_source_x": 65,
+          "lower_dx": 1,
+          "support_ankle_dx": 0,
+          "contact": "heel+rear toe",
+          "trailing_lift_px": 0
+        },
+        {
+          "support_leg": "far",
+          "heel_x": 72,
+          "floor_y": 91,
+          "legacy_root_advance": 7.6171875,
+          "heel_world_keyframe": 79.6171875,
+          "pelvis_registration_x": 66,
+          "pelvis_source_x": 64,
+          "lower_dx": 2,
+          "support_ankle_dx": -3,
+          "contact": "full sole",
+          "trailing_lift_px": 1
+        },
+        {
+          "support_leg": "far",
+          "heel_x": 64,
+          "floor_y": 91,
+          "legacy_root_advance": 15.234375,
+          "heel_world_keyframe": 79.234375,
+          "pelvis_registration_x": 66,
+          "pelvis_source_x": 67,
+          "lower_dx": -1,
+          "support_ankle_dx": 3,
+          "contact": "full sole",
+          "trailing_lift_px": 0
+        }
+      ]
+    }
+  ],
+  "tga_sha256": {
+    "P000.TGA": "3ed714453684dc31bf0a0a5d657cbc433497698c2ddca407d031bf8e77ffa13a",
+    "P001.TGA": "fb4bd62fd10b2dd18ce591ed98614710b1e0a5a0954cb371b9bf23466bd7c9c8",
+    "P002.TGA": "e90ca7ef4e6078ecb30ba11313fa9283bcec1c4be3072cb910c7e781ce8880c5",
+    "P003.TGA": "eda00573dd7f2761df914ed971d8ef95bb9f11169a3431e0059306d1e6f5c5eb",
+    "P004.TGA": "e9f5365dd957b0da807c0e2846b2ec446d336a4897f64e912c716600f0ffbae3",
+    "P005.TGA": "ded0768f54acfadc40f4ab69daa84d016aa38bdb47a8e089b6617a5ef1113dc8",
+    "P006.TGA": "ff702ed31fb679933df06de58f002da9359c2d589b3a01ae43412f728123e255",
+    "P007.TGA": "adc24261076f8b7d5afcc53b19f3557fb5cab4bbef9a599940e4c40ba98d16ef",
+    "P008.TGA": "ed409134161c71af3d7404c1fbaeb64b3d4e4699d709638f98262106f4eb098e",
+    "P009.TGA": "130822d6323d3d2643d1e71ef0e8c253f0f9d8dc04906c200fcee8b59e1f82c6",
+    "P010.TGA": "ed0d0c2b6d4ac3916a1ed000675d6049a58d1ecc872f7ab52ea83903405f0c5e",
+    "P011.TGA": "57a5a2ec6da9a900bcca6e69450a5bc946f2dd2d769ce9cc0645cc9e4025cfa1",
+    "P012.TGA": "808fe10e1da01491299f56b68fc61ed09833b72236332b6676c6fbed700b23a5",
+    "P013.TGA": "2896e9feb11c16b61ed5066a403d7423fd858295ed33ad7b2a458bfa0e82883a",
+    "P014.TGA": "68aa19980d698f3f3471186a7ee3dd0605ce549f544175f69a39c431a0bf4eb6",
+    "P015.TGA": "154bd0029c333af50fad14f2fcae1849e5a1a40e2bf869f8ec6e4dd3280aa50a",
+    "P016.TGA": "defda51d9c60771485d9e701112f8ba060c6d964dd88ebf1b4d978386662afbc",
+    "P017.TGA": "9658369b794bf76b0af539de7c6d77c3d3052c0d6e6841773e678b8b88983c18",
+    "P018.TGA": "2c45b87b52fc66c13b3f6f8229ab9ef558c8fd611aaf10e22fb32b5f93683644",
+    "P019.TGA": "1cfee07cb6f5100970bcc34fe20441b55e1f1915df459b33049c0b1d9b65a4a3",
+    "P020.TGA": "f9a5e6b9fbcb692c69e5f5f401a09c11947e1783dad8c4d46b0fc0be36bbaa29",
+    "P021.TGA": "bfaffd5199fdc35fad2e37717045bc63a5ee1e06d9811d5b28bec67383239215",
+    "P022.TGA": "8f21d2f94c9404ff6092ce9b457cc74e0d1f5a8377819a022d8f03643e69deba",
+    "P023.TGA": "c8f5676f3410d9d796b1b3587bf4a52b9bd447bc565bedc7b6c6c0e0dc85266c",
+    "P024.TGA": "f626193cae2d72eca6613ee03d6cf733c3286f0d698cc92f474f89c87f3be525",
+    "P025.TGA": "f89832e30ed27e1e6d39c7b852691ee4ea853456e73f455ea0c6a695c024727e",
+    "P026.TGA": "9189ff34e3021e26d93cdddc0e09aed71bb4664ae43698da649b032fc924bd5c",
+    "P027.TGA": "0ec5ec02ca2ae8122f8b285b1c54cbbf1e0ff26adc577ec16c9d4c62516cd895",
+    "P028.TGA": "3d9461e5bd872ef46a8d087da147cf4c6747b8b40611a313323dfee23c318ede",
+    "P029.TGA": "0f1abb8c5e03b4a0e0cab3ef35b0514b39bf95da0be1829bf96ee4b143459a1a",
+    "P030.TGA": "d59dcbd9cda41382f4a6e70ed44f729e5dbc9ba7b9d974f552156977caad580c",
+    "P031.TGA": "5547584907cce76c8bbffe3d52d8c24b91271ba97f5742ead99572092dcf3b36"
+  },
+  "guide_sha256": "30b4ad2a5550327ab5a4ab105a7173ac7b51c54cbf2a230b61eac85ae6bd2146"
+}

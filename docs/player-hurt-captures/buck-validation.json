@@ -1,0 +1,20 @@
+{
+  "gameplay_states_identical": 705,
+  "matched_native_pixels": 15708,
+  "unchanged_outside_pixels": 24717600,
+  "coverage": {
+    "0:hurt0:face1": 7104,
+    "0:hurt1:face1": 3237,
+    "0:hurt2:face1": 5367
+  },
+  "run_poses_seen": [],
+  "carry_to_swing_samples": 0,
+  "texture_bytes": 448672,
+  "free_bytes": 9816,
+  "definitions": 254,
+  "unchanged_cram": true,
+  "stable_texture_vram": true,
+  "physical_saturn_tested": false,
+  "webretro_tested": false,
+  "no_ram_writes": true
+}

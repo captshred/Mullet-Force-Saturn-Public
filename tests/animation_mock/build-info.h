@@ -1,0 +1,1 @@
+#define MF_ANIMATION_PREVIEW 1

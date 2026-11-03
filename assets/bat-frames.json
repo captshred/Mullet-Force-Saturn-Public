@@ -1,0 +1,534 @@
+{
+  "air_lower_for_frame": [
+    0,
+    0,
+    1,
+    1,
+    2,
+    2,
+    0
+  ],
+  "right_screen_rotation": "counterclockwise",
+  "buck": [
+    {
+      "name": "BT00.TGA",
+      "anchor": [
+        31,
+        87
+      ],
+      "source_size": [
+        192,
+        96
+      ],
+      "crop_origin": [
+        65,
+        5
+      ],
+      "source_rgb_sha256": "b576236820593e77ddc034a4b91d73b04abec9f87e6d3718f6185815f6ad8105",
+      "pose": "bat-draw",
+      "upper_rgb_sha256": "4ea573f9db8389d308de16ed81628a8aa7d07ecada12086a041bb1611f96d39e",
+      "grip": [
+        4,
+        37
+      ],
+      "tip": [
+        -30,
+        62
+      ]
+    },
+    {
+      "name": "BT01.TGA",
+      "anchor": [
+        36,
+        87
+      ],
+      "source_size": [
+        192,
+        96
+      ],
+      "crop_origin": [
+        60,
+        5
+      ],
+      "source_rgb_sha256": "4eb52dd5e3a3cf13d2f3e3c8a763e6cb48bdf0eccb74489d81a314c9ea184e6f",
+      "pose": "bat-coil",
+      "upper_rgb_sha256": "5c10f3d770127fa788126b9fe4ea5ac51f90c19aca47f4f72bd3db0b5c269c32",
+      "grip": [
+        -1,
+        40
+      ],
+      "tip": [
+        -35,
+        72
+      ]
+    },
+    {
+      "name": "BT02.TGA",
+      "anchor": [
+        15,
+        87
+      ],
+      "source_size": [
+        192,
+        96
+      ],
+      "crop_origin": [
+        81,
+        5
+      ],
+      "source_rgb_sha256": "82ed289d47fc1193f61459467b257eeb3739031d8fc7ab76b8ccdd9b7d46145e",
+      "pose": "bat-accelerate",
+      "upper_rgb_sha256": "fdb4f4129b10d2c82432190f72b3aa2eddd90d774672ce0f9dca8ef762ba6a74",
+      "grip": [
+        23,
+        43
+      ],
+      "tip": [
+        68,
+        74
+      ]
+    },
+    {
+      "name": "BT03.TGA",
+      "anchor": [
+        12,
+        87
+      ],
+      "source_size": [
+        192,
+        96
+      ],
+      "crop_origin": [
+        84,
+        5
+      ],
+      "source_rgb_sha256": "77cc9191d4fd09e926c8acd8ad9a15eb9faf285fd1d1c3e5a10d82c0921bbc30",
+      "pose": "bat-contact",
+      "upper_rgb_sha256": "9c603544509a461fba2298ae0116a7df465f8f3def642a677b007e01c8534d9c",
+      "grip": [
+        27,
+        38
+      ],
+      "tip": [
+        82,
+        40
+      ]
+    },
+    {
+      "name": "BT04.TGA",
+      "anchor": [
+        12,
+        87
+      ],
+      "source_size": [
+        192,
+        96
+      ],
+      "crop_origin": [
+        84,
+        5
+      ],
+      "source_rgb_sha256": "32ccb9cf9c8b7fb1b95c3a65cd85bcf307eeed659cdbb88ade09e26716d0407c",
+      "pose": "bat-sweep",
+      "upper_rgb_sha256": "23921aa4ab4c05ccb405c75dfc0ad8cfb2367a03670a5c651f2fdfe61a7d5390",
+      "grip": [
+        22,
+        29
+      ],
+      "tip": [
+        55,
+        7
+      ]
+    },
+    {
+      "name": "BT05.TGA",
+      "anchor": [
+        37,
+        87
+      ],
+      "source_size": [
+        192,
+        96
+      ],
+      "crop_origin": [
+        59,
+        5
+      ],
+      "source_rgb_sha256": "abf530ed0758887e6e825803280a6d530100e2c2d31d6469d5a9aa4321d5c647",
+      "pose": "bat-follow",
+      "upper_rgb_sha256": "0c8ee1a02455394cee14c646eaff465fca2dcf19574972e6ec31df57fba87d17",
+      "grip": [
+        0,
+        28
+      ],
+      "tip": [
+        -36,
+        9
+      ]
+    },
+    {
+      "name": "BT06.TGA",
+      "anchor": [
+        34,
+        87
+      ],
+      "source_size": [
+        192,
+        96
+      ],
+      "crop_origin": [
+        62,
+        5
+      ],
+      "source_rgb_sha256": "c76a01099ddf486298fab63aea8bbd3c143b64730ac626d7c45d92f28c60eee0",
+      "pose": "bat-recover",
+      "upper_rgb_sha256": "25f0d1a2a32da704df115f432c0ae5d19f54fdbb635c04759fe5792111de073e",
+      "grip": [
+        5,
+        32
+      ],
+      "tip": [
+        -34,
+        25
+      ]
+    }
+  ],
+  "legs": {
+    "name": "LEGS.TGA",
+    "anchor": [
+      20,
+      34
+    ],
+    "source_size": [
+      72,
+      96
+    ],
+    "crop_origin": [
+      16,
+      58
+    ],
+    "source_rgb_sha256": "4b2b8f50479c515c6a75fcd9dcd3618e15877016ffb927debb8264810ae500e3"
+  },
+  "air_legs": [
+    {
+      "name": "AL0.TGA",
+      "anchor": [
+        29,
+        34
+      ],
+      "source_size": [
+        96,
+        96
+      ],
+      "crop_origin": [
+        19,
+        58
+      ],
+      "source_rgb_sha256": "84721dd6ec82ccce46d3ebc2e109156b98ac4311084a9e6b048d6b13231429be"
+    },
+    {
+      "name": "AL1.TGA",
+      "anchor": [
+        24,
+        34
+      ],
+      "source_size": [
+        96,
+        96
+      ],
+      "crop_origin": [
+        24,
+        58
+      ],
+      "source_rgb_sha256": "fc55cc16c30dfaabcc4cf1b61e62f1de53cc229f641c866552bd45c2a19d9047"
+    },
+    {
+      "name": "AL2.TGA",
+      "anchor": [
+        27,
+        34
+      ],
+      "source_size": [
+        96,
+        96
+      ],
+      "crop_origin": [
+        21,
+        58
+      ],
+      "source_rgb_sha256": "bc6dd1af6708c96d8aa9e33ec8e3d72001329e9a178082c7d83b580b7d2df511"
+    }
+  ],
+  "chuck": [
+    {
+      "name": "CT00.TGA",
+      "anchor": [
+        31,
+        87
+      ],
+      "source_size": [
+        192,
+        96
+      ],
+      "crop_origin": [
+        65,
+        5
+      ],
+      "source_rgb_sha256": "2bcf663f304ee636a42b92ef51548bab790309ba6d4481ec994d78e016adeb72",
+      "pose": "bat-draw",
+      "upper_rgb_sha256": "e75cffa9f969740a21f5f42b2210fa157d64d696fcef7f1e38cfcdbeee58f7cb",
+      "grip": [
+        4,
+        37
+      ],
+      "tip": [
+        -30,
+        62
+      ]
+    },
+    {
+      "name": "CT01.TGA",
+      "anchor": [
+        36,
+        87
+      ],
+      "source_size": [
+        192,
+        96
+      ],
+      "crop_origin": [
+        60,
+        5
+      ],
+      "source_rgb_sha256": "b7af50f125351750b664f4e741f19072719ec9dc24487b618b9e83454e60a784",
+      "pose": "bat-coil",
+      "upper_rgb_sha256": "5d5ad83a97b8038e6ea41ed9c10586f6b1b573e45c3a7f84bebc14b502d33616",
+      "grip": [
+        -1,
+        40
+      ],
+      "tip": [
+        -35,
+        72
+      ]
+    },
+    {
+      "name": "CT02.TGA",
+      "anchor": [
+        15,
+        87
+      ],
+      "source_size": [
+        192,
+        96
+      ],
+      "crop_origin": [
+        81,
+        5
+      ],
+      "source_rgb_sha256": "68ae13ba8df42a35380d61dedcea7e1b900f1aa8e6c8969ee483df5e617cb573",
+      "pose": "bat-accelerate",
+      "upper_rgb_sha256": "89220d739a1dbfaaa865e3a66428270b442d4be389e7de20e5ea9b24688ab045",
+      "grip": [
+        23,
+        43
+      ],
+      "tip": [
+        68,
+        74
+      ]
+    },
+    {
+      "name": "CT03.TGA",
+      "anchor": [
+        12,
+        87
+      ],
+      "source_size": [
+        192,
+        96
+      ],
+      "crop_origin": [
+        84,
+        5
+      ],
+      "source_rgb_sha256": "b69caafb5d258783b912c2eb8ef538c7e44d0b4a2733bfe98ec1a53d7868982a",
+      "pose": "bat-contact",
+      "upper_rgb_sha256": "d43ca7af159119e4ba8396d734001d237d679cc3116e388ded16fb852aba5267",
+      "grip": [
+        27,
+        38
+      ],
+      "tip": [
+        82,
+        40
+      ]
+    },
+    {
+      "name": "CT04.TGA",
+      "anchor": [
+        12,
+        87
+      ],
+      "source_size": [
+        192,
+        96
+      ],
+      "crop_origin": [
+        84,
+        5
+      ],
+      "source_rgb_sha256": "f754c531d5a8cd1dd94dfa4f80148f253dac746eeb1ede28d6684c662ca3c777",
+      "pose": "bat-sweep",
+      "upper_rgb_sha256": "526b0bd0282a9e69a2522d8d4dadad580fb3736a5e2fcb96f967239a8c614328",
+      "grip": [
+        22,
+        29
+      ],
+      "tip": [
+        55,
+        7
+      ]
+    },
+    {
+      "name": "CT05.TGA",
+      "anchor": [
+        37,
+        87
+      ],
+      "source_size": [
+        192,
+        96
+      ],
+      "crop_origin": [
+        59,
+        5
+      ],
+      "source_rgb_sha256": "fe403b72f5c285fb870d8bcc01620063e3abccc2507e560acf15a0a68c05a9df",
+      "pose": "bat-follow",
+      "upper_rgb_sha256": "189e4435d68844754b5ea7c6d97bcb05622a7375be0e4d80b1e02baf8cb3817b",
+      "grip": [
+        0,
+        28
+      ],
+      "tip": [
+        -36,
+        9
+      ]
+    },
+    {
+      "name": "CT06.TGA",
+      "anchor": [
+        34,
+        87
+      ],
+      "source_size": [
+        192,
+        96
+      ],
+      "crop_origin": [
+        62,
+        5
+      ],
+      "source_rgb_sha256": "b03e3b53ac80bdc75bda8cb1b0d432df00b216f065af6fd9e60317633dbd869d",
+      "pose": "bat-recover",
+      "upper_rgb_sha256": "d0d6b6fdb62976fbfb8723721fea60a86385c68198752720f110fc965e030c09",
+      "grip": [
+        5,
+        32
+      ],
+      "tip": [
+        -34,
+        25
+      ]
+    }
+  ],
+  "air_buck": [
+    {
+      "pose": "bat-draw",
+      "upper": "BT00.TGA",
+      "lower": "AL0.TGA",
+      "source_rgb_sha256": "d39cec32f4b0d1e58d075ccc2cf4c4bfb8d5595ea8beb81a6e61f4d3123a0581"
+    },
+    {
+      "pose": "bat-coil",
+      "upper": "BT01.TGA",
+      "lower": "AL0.TGA",
+      "source_rgb_sha256": "bf0b4bb12af0bc585e0971e8351f04f88e092bfdc681227c5421222d36b03f8c"
+    },
+    {
+      "pose": "bat-accelerate",
+      "upper": "BT02.TGA",
+      "lower": "AL1.TGA",
+      "source_rgb_sha256": "f613ae00e50d644e96cf78892c854f6f1553488681af76d7539e7cd54750ab81"
+    },
+    {
+      "pose": "bat-contact",
+      "upper": "BT03.TGA",
+      "lower": "AL1.TGA",
+      "source_rgb_sha256": "7a891a35092d6ce6cb56521e32d278b33dd147b0bbd540439bdfeeb8eda22dcf"
+    },
+    {
+      "pose": "bat-sweep",
+      "upper": "BT04.TGA",
+      "lower": "AL2.TGA",
+      "source_rgb_sha256": "b0a4c94ca471b8d7dd7619d1113126c950e4e3580db2e8b88133d770cf7c2015"
+    },
+    {
+      "pose": "bat-follow",
+      "upper": "BT05.TGA",
+      "lower": "AL2.TGA",
+      "source_rgb_sha256": "ae9cbe964b69573cc7ad6cb0886d6bd462fa4d757a72688d86f89ba2bac346f1"
+    },
+    {
+      "pose": "bat-recover",
+      "upper": "BT06.TGA",
+      "lower": "AL0.TGA",
+      "source_rgb_sha256": "f876a7922afa9e6c6ade98eba1d4a044caf6e0aca70274d9b3251364e3f32f1b"
+    }
+  ],
+  "air_chuck": [
+    {
+      "pose": "bat-draw",
+      "upper": "CT00.TGA",
+      "lower": "AL0.TGA",
+      "source_rgb_sha256": "9e16d9d170dea62d6842a38320c10b36fd193a763ecb5ef81806d09bcc741b11"
+    },
+    {
+      "pose": "bat-coil",
+      "upper": "CT01.TGA",
+      "lower": "AL0.TGA",
+      "source_rgb_sha256": "13b2d0727bba61a80313118675704df351772b895a8a44242e797e1ce1ffb50d"
+    },
+    {
+      "pose": "bat-accelerate",
+      "upper": "CT02.TGA",
+      "lower": "AL1.TGA",
+      "source_rgb_sha256": "60c46d98b2d31c594e431ca3ebb01e2fe1846f4d31402fd64aefa62c3bde8a04"
+    },
+    {
+      "pose": "bat-contact",
+      "upper": "CT03.TGA",
+      "lower": "AL1.TGA",
+      "source_rgb_sha256": "fd7fa3a13f3c8dba7e660b2e778671839fe559b05efafd375ef99406bbe211c2"
+    },
+    {
+      "pose": "bat-sweep",
+      "upper": "CT04.TGA",
+      "lower": "AL2.TGA",
+      "source_rgb_sha256": "5b8b1c0c223d51b02fef4d1d5ee3dc0aa81468d2a2aceb0b45cf741cf32e5486"
+    },
+    {
+      "pose": "bat-follow",
+      "upper": "CT05.TGA",
+      "lower": "AL2.TGA",
+      "source_rgb_sha256": "32bb95695a2142ac9d8048ce5a91a9e6e2552a0257901bc3ad32af647c2fc396"
+    },
+    {
+      "pose": "bat-recover",
+      "upper": "CT06.TGA",
+      "lower": "AL0.TGA",
+      "source_rgb_sha256": "b46f17ec5fb23f7aaf742062b8f98ef7bb1acf220bb92cc14148ba62c0cc9337"
+    }
+  ]
+}

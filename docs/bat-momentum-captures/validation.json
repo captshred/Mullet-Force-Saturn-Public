@@ -1,0 +1,64 @@
+{
+  "pre_attack_states_identical": 117,
+  "slide_delta_checks": 24,
+  "stationary_swing_checks": 81,
+  "dash_velocity_checks": 187,
+  "observed_slide_speeds": [
+    398,
+    348,
+    298,
+    248,
+    199,
+    149,
+    99,
+    49
+  ],
+  "texture_bytes": 438496,
+  "free_bytes": 19992,
+  "texture_slots": 199,
+  "stable_texture_hash": true,
+  "matched_pixels": 228072,
+  "coverage": {
+    "chuck:punch:1:keyNone": 347,
+    "chuck:punch:1:key0": 1495,
+    "chuck:punch:1:key1": 1181,
+    "buck:running-bat:1:key2": 51490,
+    "buck:running-bat:1:key3": 51649,
+    "chuck:running-bat:-1:key2": 41325,
+    "chuck:running-bat:-1:key3": 20496,
+    "buck:running-bat:-1:key2": 8130,
+    "buck:running-bat:-1:key3": 11184,
+    "buck:bat:1:key2": 9634,
+    "buck:bat:1:key3": 9155,
+    "chuck:running-bat:1:key2": 313,
+    "buck:punch:-1:keyNone": 12816,
+    "buck:punch:-1:key1": 4841,
+    "buck:punch:-1:key0": 4016
+  },
+  "ko_frames": [
+    823
+  ],
+  "hardware_tested": false,
+  "webretro_tested": false,
+  "limitations": [
+    "Two-key prototype swing still inherited; torso and legs now registered/planted",
+    "Runtime coverage is listed explicitly, not every phase/facing/occlusion combination"
+  ],
+  "captures": {
+    "chuck:punch:1:keyNone": "chuck-punch-1-keyNone.png",
+    "chuck:punch:1:key0": "chuck-punch-1-key0.png",
+    "chuck:punch:1:key1": "chuck-punch-1-key1.png",
+    "buck:running-bat:1:key2": "buck-running-bat-1-key2.png",
+    "buck:running-bat:1:key3": "buck-running-bat-1-key3.png",
+    "chuck:running-bat:-1:key2": "chuck-running-bat--1-key2.png",
+    "chuck:running-bat:-1:key3": "chuck-running-bat--1-key3.png",
+    "buck:running-bat:-1:key2": "buck-running-bat--1-key2.png",
+    "buck:running-bat:-1:key3": "buck-running-bat--1-key3.png",
+    "buck:bat:1:key2": "buck-bat-1-key2.png",
+    "buck:bat:1:key3": "buck-bat-1-key3.png",
+    "chuck:running-bat:1:key2": "chuck-running-bat-1-key2.png",
+    "buck:punch:-1:keyNone": "buck-punch--1-keyNone.png",
+    "buck:punch:-1:key1": "buck-punch--1-key1.png",
+    "buck:punch:-1:key0": "buck-punch--1-key0.png"
+  }
+}

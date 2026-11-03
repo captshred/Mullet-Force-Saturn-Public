@@ -1,0 +1,27 @@
+{
+  "world_pixels": 8192,
+  "chunk_pixels": 128,
+  "world_chunks": 64,
+  "source_chunks": 5,
+  "ring_chunks": 8,
+  "ring_map_bytes": 16384,
+  "skyline_tiles": 52,
+  "skyline_cell_reservation": 8192,
+  "skyline_map_bytes": 8192,
+  "extra_vdp2_bytes": 16384,
+  "total_vdp2_reservation": 385152,
+  "extra_palette_bytes": 0,
+  "extra_vdp1_bytes": 0,
+  "skyline_speed_denominator": 4,
+  "indices": [
+    6,
+    18,
+    53,
+    80
+  ],
+  "sha256": {
+    "PCHUNK.BIN": "78d95554572b56122d2c347c46cb8bae86e410df0a721317e2bcfd902be06ab9",
+    "PSKY.BIN": "090c55ba646239449a4adf8b175265d32226ff7d25b9a8cdf4383fdc6d05e93c",
+    "PSMAP.BIN": "46aebc647b4b0d4635f8475374adfe707521eaab4b9f509b2f54f0982c6a7b17"
+  }
+}

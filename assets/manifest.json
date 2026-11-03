@@ -1,0 +1,782 @@
+{
+  "texture_bytes": 422456,
+  "runtime_hud_bytes": 21760,
+  "total_texture_bytes": 444216,
+  "texture_budget": 458488,
+  "assets": [
+    {
+      "name": "ST0.TGA",
+      "width": 128,
+      "height": 240,
+      "bits": 8,
+      "vram": 30720,
+      "palette_group": "street"
+    },
+    {
+      "name": "ST1.TGA",
+      "width": 128,
+      "height": 240,
+      "bits": 8,
+      "vram": 30720,
+      "palette_group": "street"
+    },
+    {
+      "name": "ST2.TGA",
+      "width": 128,
+      "height": 240,
+      "bits": 8,
+      "vram": 30720,
+      "palette_group": "street"
+    },
+    {
+      "name": "ST3.TGA",
+      "width": 128,
+      "height": 240,
+      "bits": 8,
+      "vram": 30720,
+      "palette_group": "street"
+    },
+    {
+      "name": "ST4.TGA",
+      "width": 128,
+      "height": 240,
+      "bits": 8,
+      "vram": 30720,
+      "palette_group": "street"
+    },
+    {
+      "name": "BU00.TGA",
+      "width": 48,
+      "height": 55,
+      "bits": 8,
+      "vram": 2640,
+      "palette_group": "buck"
+    },
+    {
+      "name": "BU01.TGA",
+      "width": 48,
+      "height": 54,
+      "bits": 8,
+      "vram": 2592,
+      "palette_group": "buck"
+    },
+    {
+      "name": "BU02.TGA",
+      "width": 48,
+      "height": 55,
+      "bits": 8,
+      "vram": 2640,
+      "palette_group": "buck"
+    },
+    {
+      "name": "BU03.TGA",
+      "width": 48,
+      "height": 53,
+      "bits": 8,
+      "vram": 2544,
+      "palette_group": "buck"
+    },
+    {
+      "name": "BU04.TGA",
+      "width": 48,
+      "height": 54,
+      "bits": 8,
+      "vram": 2592,
+      "palette_group": "buck"
+    },
+    {
+      "name": "BU05.TGA",
+      "width": 48,
+      "height": 55,
+      "bits": 8,
+      "vram": 2640,
+      "palette_group": "buck"
+    },
+    {
+      "name": "BU06.TGA",
+      "width": 56,
+      "height": 53,
+      "bits": 8,
+      "vram": 2968,
+      "palette_group": "buck"
+    },
+    {
+      "name": "BU07.TGA",
+      "width": 56,
+      "height": 54,
+      "bits": 8,
+      "vram": 3024,
+      "palette_group": "buck"
+    },
+    {
+      "name": "BU08.TGA",
+      "width": 48,
+      "height": 53,
+      "bits": 8,
+      "vram": 2544,
+      "palette_group": "buck"
+    },
+    {
+      "name": "BU09.TGA",
+      "width": 72,
+      "height": 55,
+      "bits": 8,
+      "vram": 3960,
+      "palette_group": "buck"
+    },
+    {
+      "name": "BU10.TGA",
+      "width": 48,
+      "height": 54,
+      "bits": 8,
+      "vram": 2592,
+      "palette_group": "buck"
+    },
+    {
+      "name": "BU11.TGA",
+      "width": 48,
+      "height": 50,
+      "bits": 8,
+      "vram": 2400,
+      "palette_group": "buck"
+    },
+    {
+      "name": "BU12.TGA",
+      "width": 56,
+      "height": 56,
+      "bits": 8,
+      "vram": 3136,
+      "palette_group": "buck"
+    },
+    {
+      "name": "BU13.TGA",
+      "width": 48,
+      "height": 49,
+      "bits": 8,
+      "vram": 2352,
+      "palette_group": "buck"
+    },
+    {
+      "name": "BU14.TGA",
+      "width": 72,
+      "height": 55,
+      "bits": 8,
+      "vram": 3960,
+      "palette_group": "buck"
+    },
+    {
+      "name": "NL00.TGA",
+      "width": 48,
+      "height": 33,
+      "bits": 8,
+      "vram": 1584,
+      "palette_group": "buck"
+    },
+    {
+      "name": "NL01.TGA",
+      "width": 48,
+      "height": 33,
+      "bits": 8,
+      "vram": 1584,
+      "palette_group": "buck"
+    },
+    {
+      "name": "NL02.TGA",
+      "width": 64,
+      "height": 33,
+      "bits": 8,
+      "vram": 2112,
+      "palette_group": "buck"
+    },
+    {
+      "name": "NL03.TGA",
+      "width": 48,
+      "height": 33,
+      "bits": 8,
+      "vram": 1584,
+      "palette_group": "buck"
+    },
+    {
+      "name": "NL04.TGA",
+      "width": 40,
+      "height": 33,
+      "bits": 8,
+      "vram": 1320,
+      "palette_group": "buck"
+    },
+    {
+      "name": "NL05.TGA",
+      "width": 56,
+      "height": 33,
+      "bits": 8,
+      "vram": 1848,
+      "palette_group": "buck"
+    },
+    {
+      "name": "NL06.TGA",
+      "width": 48,
+      "height": 33,
+      "bits": 8,
+      "vram": 1584,
+      "palette_group": "buck"
+    },
+    {
+      "name": "NL07.TGA",
+      "width": 32,
+      "height": 33,
+      "bits": 8,
+      "vram": 1056,
+      "palette_group": "buck"
+    },
+    {
+      "name": "NL08.TGA",
+      "width": 48,
+      "height": 33,
+      "bits": 8,
+      "vram": 1584,
+      "palette_group": "buck"
+    },
+    {
+      "name": "NL09.TGA",
+      "width": 48,
+      "height": 33,
+      "bits": 8,
+      "vram": 1584,
+      "palette_group": "buck"
+    },
+    {
+      "name": "NL10.TGA",
+      "width": 48,
+      "height": 33,
+      "bits": 8,
+      "vram": 1584,
+      "palette_group": "buck"
+    },
+    {
+      "name": "NL11.TGA",
+      "width": 48,
+      "height": 33,
+      "bits": 8,
+      "vram": 1584,
+      "palette_group": "buck"
+    },
+    {
+      "name": "NL12.TGA",
+      "width": 40,
+      "height": 22,
+      "bits": 8,
+      "vram": 880,
+      "palette_group": "buck"
+    },
+    {
+      "name": "NL13.TGA",
+      "width": 48,
+      "height": 33,
+      "bits": 8,
+      "vram": 1584,
+      "palette_group": "buck"
+    },
+    {
+      "name": "NL14.TGA",
+      "width": 64,
+      "height": 20,
+      "bits": 8,
+      "vram": 1280,
+      "palette_group": "buck"
+    },
+    {
+      "name": "BT00.TGA",
+      "width": 56,
+      "height": 60,
+      "bits": 8,
+      "vram": 3360,
+      "palette_group": "buck"
+    },
+    {
+      "name": "BT01.TGA",
+      "width": 56,
+      "height": 69,
+      "bits": 8,
+      "vram": 3864,
+      "palette_group": "buck"
+    },
+    {
+      "name": "BT02.TGA",
+      "width": 88,
+      "height": 83,
+      "bits": 8,
+      "vram": 7304,
+      "palette_group": "buck"
+    },
+    {
+      "name": "BT03.TGA",
+      "width": 96,
+      "height": 53,
+      "bits": 8,
+      "vram": 5088,
+      "palette_group": "buck"
+    },
+    {
+      "name": "BT04.TGA",
+      "width": 72,
+      "height": 53,
+      "bits": 8,
+      "vram": 3816,
+      "palette_group": "buck"
+    },
+    {
+      "name": "BT05.TGA",
+      "width": 56,
+      "height": 53,
+      "bits": 8,
+      "vram": 2968,
+      "palette_group": "buck"
+    },
+    {
+      "name": "BT06.TGA",
+      "width": 64,
+      "height": 53,
+      "bits": 8,
+      "vram": 3392,
+      "palette_group": "buck"
+    },
+    {
+      "name": "TU0.TGA",
+      "width": 48,
+      "height": 55,
+      "bits": 8,
+      "vram": 2640,
+      "palette_group": "buck"
+    },
+    {
+      "name": "TU1.TGA",
+      "width": 56,
+      "height": 55,
+      "bits": 8,
+      "vram": 3080,
+      "palette_group": "buck"
+    },
+    {
+      "name": "TU2.TGA",
+      "width": 40,
+      "height": 60,
+      "bits": 8,
+      "vram": 2400,
+      "palette_group": "buck"
+    },
+    {
+      "name": "LEGS.TGA",
+      "width": 48,
+      "height": 35,
+      "bits": 8,
+      "vram": 1680,
+      "palette_group": "buck"
+    },
+    {
+      "name": "AL0.TGA",
+      "width": 56,
+      "height": 26,
+      "bits": 8,
+      "vram": 1456,
+      "palette_group": "buck"
+    },
+    {
+      "name": "AL1.TGA",
+      "width": 56,
+      "height": 26,
+      "bits": 8,
+      "vram": 1456,
+      "palette_group": "buck"
+    },
+    {
+      "name": "AL2.TGA",
+      "width": 64,
+      "height": 25,
+      "bits": 8,
+      "vram": 1600,
+      "palette_group": "buck"
+    },
+    {
+      "name": "CH00.TGA",
+      "width": 48,
+      "height": 55,
+      "bits": 8,
+      "vram": 2640,
+      "palette_group": "chuck"
+    },
+    {
+      "name": "CH01.TGA",
+      "width": 48,
+      "height": 54,
+      "bits": 8,
+      "vram": 2592,
+      "palette_group": "chuck"
+    },
+    {
+      "name": "CH02.TGA",
+      "width": 48,
+      "height": 55,
+      "bits": 8,
+      "vram": 2640,
+      "palette_group": "chuck"
+    },
+    {
+      "name": "CH03.TGA",
+      "width": 48,
+      "height": 53,
+      "bits": 8,
+      "vram": 2544,
+      "palette_group": "chuck"
+    },
+    {
+      "name": "CH04.TGA",
+      "width": 48,
+      "height": 54,
+      "bits": 8,
+      "vram": 2592,
+      "palette_group": "chuck"
+    },
+    {
+      "name": "CH05.TGA",
+      "width": 48,
+      "height": 55,
+      "bits": 8,
+      "vram": 2640,
+      "palette_group": "chuck"
+    },
+    {
+      "name": "CH06.TGA",
+      "width": 48,
+      "height": 53,
+      "bits": 8,
+      "vram": 2544,
+      "palette_group": "chuck"
+    },
+    {
+      "name": "CH07.TGA",
+      "width": 48,
+      "height": 54,
+      "bits": 8,
+      "vram": 2592,
+      "palette_group": "chuck"
+    },
+    {
+      "name": "CH08.TGA",
+      "width": 48,
+      "height": 53,
+      "bits": 8,
+      "vram": 2544,
+      "palette_group": "chuck"
+    },
+    {
+      "name": "CH09.TGA",
+      "width": 72,
+      "height": 55,
+      "bits": 8,
+      "vram": 3960,
+      "palette_group": "chuck"
+    },
+    {
+      "name": "CH10.TGA",
+      "width": 48,
+      "height": 54,
+      "bits": 8,
+      "vram": 2592,
+      "palette_group": "chuck"
+    },
+    {
+      "name": "CH11.TGA",
+      "width": 48,
+      "height": 50,
+      "bits": 8,
+      "vram": 2400,
+      "palette_group": "chuck"
+    },
+    {
+      "name": "CH12.TGA",
+      "width": 56,
+      "height": 56,
+      "bits": 8,
+      "vram": 3136,
+      "palette_group": "chuck"
+    },
+    {
+      "name": "CH13.TGA",
+      "width": 48,
+      "height": 49,
+      "bits": 8,
+      "vram": 2352,
+      "palette_group": "chuck"
+    },
+    {
+      "name": "CH14.TGA",
+      "width": 72,
+      "height": 55,
+      "bits": 8,
+      "vram": 3960,
+      "palette_group": "chuck"
+    },
+    {
+      "name": "CT00.TGA",
+      "width": 56,
+      "height": 60,
+      "bits": 8,
+      "vram": 3360,
+      "palette_group": "chuck"
+    },
+    {
+      "name": "CT01.TGA",
+      "width": 56,
+      "height": 69,
+      "bits": 8,
+      "vram": 3864,
+      "palette_group": "chuck"
+    },
+    {
+      "name": "CT02.TGA",
+      "width": 88,
+      "height": 83,
+      "bits": 8,
+      "vram": 7304,
+      "palette_group": "chuck"
+    },
+    {
+      "name": "CT03.TGA",
+      "width": 96,
+      "height": 53,
+      "bits": 8,
+      "vram": 5088,
+      "palette_group": "chuck"
+    },
+    {
+      "name": "CT04.TGA",
+      "width": 72,
+      "height": 53,
+      "bits": 8,
+      "vram": 3816,
+      "palette_group": "chuck"
+    },
+    {
+      "name": "CT05.TGA",
+      "width": 56,
+      "height": 53,
+      "bits": 8,
+      "vram": 2968,
+      "palette_group": "chuck"
+    },
+    {
+      "name": "CT06.TGA",
+      "width": 64,
+      "height": 53,
+      "bits": 8,
+      "vram": 3392,
+      "palette_group": "chuck"
+    },
+    {
+      "name": "TC0.TGA",
+      "width": 48,
+      "height": 55,
+      "bits": 8,
+      "vram": 2640,
+      "palette_group": "chuck"
+    },
+    {
+      "name": "TC1.TGA",
+      "width": 56,
+      "height": 55,
+      "bits": 8,
+      "vram": 3080,
+      "palette_group": "chuck"
+    },
+    {
+      "name": "TC2.TGA",
+      "width": 40,
+      "height": 60,
+      "bits": 8,
+      "vram": 2400,
+      "palette_group": "chuck"
+    },
+    {
+      "name": "EN00.TGA",
+      "width": 56,
+      "height": 90,
+      "bits": 8,
+      "vram": 5040,
+      "palette_group": "enemy"
+    },
+    {
+      "name": "EN01.TGA",
+      "width": 56,
+      "height": 89,
+      "bits": 8,
+      "vram": 4984,
+      "palette_group": "enemy"
+    },
+    {
+      "name": "EN02.TGA",
+      "width": 56,
+      "height": 90,
+      "bits": 8,
+      "vram": 5040,
+      "palette_group": "enemy"
+    },
+    {
+      "name": "EN03.TGA",
+      "width": 48,
+      "height": 89,
+      "bits": 8,
+      "vram": 4272,
+      "palette_group": "enemy"
+    },
+    {
+      "name": "EN04.TGA",
+      "width": 56,
+      "height": 90,
+      "bits": 8,
+      "vram": 5040,
+      "palette_group": "enemy"
+    },
+    {
+      "name": "EN05.TGA",
+      "width": 48,
+      "height": 89,
+      "bits": 8,
+      "vram": 4272,
+      "palette_group": "enemy"
+    },
+    {
+      "name": "EN06.TGA",
+      "width": 56,
+      "height": 90,
+      "bits": 8,
+      "vram": 5040,
+      "palette_group": "enemy"
+    },
+    {
+      "name": "EN07.TGA",
+      "width": 72,
+      "height": 90,
+      "bits": 8,
+      "vram": 6480,
+      "palette_group": "enemy"
+    },
+    {
+      "name": "EN08.TGA",
+      "width": 56,
+      "height": 89,
+      "bits": 8,
+      "vram": 4984,
+      "palette_group": "enemy"
+    },
+    {
+      "name": "EN09.TGA",
+      "width": 56,
+      "height": 90,
+      "bits": 8,
+      "vram": 5040,
+      "palette_group": "enemy"
+    },
+    {
+      "name": "EN10.TGA",
+      "width": 56,
+      "height": 82,
+      "bits": 8,
+      "vram": 4592,
+      "palette_group": "enemy"
+    },
+    {
+      "name": "EN11.TGA",
+      "width": 96,
+      "height": 21,
+      "bits": 8,
+      "vram": 2016,
+      "palette_group": "enemy"
+    },
+    {
+      "name": "FL0.TGA",
+      "width": 56,
+      "height": 46,
+      "bits": 8,
+      "vram": 2576,
+      "palette_group": "fire"
+    },
+    {
+      "name": "FL1.TGA",
+      "width": 56,
+      "height": 46,
+      "bits": 8,
+      "vram": 2576,
+      "palette_group": "fire"
+    },
+    {
+      "name": "FL2.TGA",
+      "width": 56,
+      "height": 46,
+      "bits": 8,
+      "vram": 2576,
+      "palette_group": "fire"
+    },
+    {
+      "name": "FL3.TGA",
+      "width": 56,
+      "height": 46,
+      "bits": 8,
+      "vram": 2576,
+      "palette_group": "fire"
+    },
+    {
+      "name": "EM0.TGA",
+      "width": 8,
+      "height": 12,
+      "bits": 8,
+      "vram": 96,
+      "palette_group": "fire"
+    },
+    {
+      "name": "EM1.TGA",
+      "width": 8,
+      "height": 12,
+      "bits": 8,
+      "vram": 96,
+      "palette_group": "fire"
+    },
+    {
+      "name": "CHARGE.TGA",
+      "width": 8,
+      "height": 8,
+      "bits": 8,
+      "vram": 64,
+      "palette_group": "fire"
+    },
+    {
+      "name": "DR0.TGA",
+      "width": 32,
+      "height": 48,
+      "vram": 3072
+    },
+    {
+      "name": "DR1.TGA",
+      "width": 32,
+      "height": 48,
+      "vram": 3072
+    },
+    {
+      "name": "DR2.TGA",
+      "width": 32,
+      "height": 48,
+      "vram": 3072
+    },
+    {
+      "name": "SHADOW.TGA",
+      "width": 48,
+      "height": 12,
+      "vram": 1152
+    },
+    {
+      "name": "HIT.TGA",
+      "width": 32,
+      "height": 32,
+      "vram": 2048
+    }
+  ]
+}

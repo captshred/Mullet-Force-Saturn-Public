@@ -1,0 +1,538 @@
+{
+  "format": 1,
+  "ppqn": 480,
+  "duration_ticks": 279840,
+  "duration_seconds": 213.292299,
+  "tracks": [
+    {
+      "index": 0,
+      "name": "Drop Zone",
+      "channels": [],
+      "end_tick": 153120,
+      "programs": [],
+      "events": {
+        "meta": 6
+      },
+      "bend_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "index": 1,
+      "name": "Distortion Guitar",
+      "channels": [
+        1
+      ],
+      "end_tick": 279840,
+      "programs": [
+        30
+      ],
+      "events": {
+        "note_on": 2025,
+        "meta": 3,
+        "program": 1,
+        "cc": 3,
+        "note_off": 2025,
+        "bend": 598
+      },
+      "bend_range": [
+        0,
+        2047
+      ]
+    },
+    {
+      "index": 2,
+      "name": "Distortion Guitar",
+      "channels": [
+        3
+      ],
+      "end_tick": 279840,
+      "programs": [
+        30
+      ],
+      "events": {
+        "note_on": 2023,
+        "meta": 3,
+        "program": 1,
+        "cc": 3,
+        "note_off": 2023,
+        "bend": 598
+      },
+      "bend_range": [
+        0,
+        2047
+      ]
+    },
+    {
+      "index": 3,
+      "name": "Electric Bass",
+      "channels": [
+        5
+      ],
+      "end_tick": 279840,
+      "programs": [
+        36
+      ],
+      "events": {
+        "note_on": 865,
+        "meta": 3,
+        "program": 1,
+        "cc": 3,
+        "note_off": 865,
+        "bend": 10
+      },
+      "bend_range": [
+        0,
+        682
+      ]
+    },
+    {
+      "index": 4,
+      "name": "Overdriven Guitar",
+      "channels": [
+        7
+      ],
+      "end_tick": 82560,
+      "programs": [
+        29
+      ],
+      "events": {
+        "meta": 3,
+        "program": 1,
+        "cc": 3,
+        "note_on": 100,
+        "note_off": 100
+      },
+      "bend_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "index": 5,
+      "name": "Overdriven Guitar",
+      "channels": [
+        9
+      ],
+      "end_tick": 82560,
+      "programs": [
+        29
+      ],
+      "events": {
+        "meta": 3,
+        "program": 1,
+        "cc": 3,
+        "note_on": 107,
+        "note_off": 107
+      },
+      "bend_range": [
+        0,
+        0
+      ]
+    }
+  ],
+  "tempos": [
+    {
+      "tick": 0,
+      "microseconds_per_beat": 365853,
+      "bpm": 164.00029520053135
+    }
+  ],
+  "time_signatures": [
+    {
+      "tick": 0,
+      "numerator": 4,
+      "denominator": 4
+    },
+    {
+      "tick": 151680,
+      "numerator": 3,
+      "denominator": 4
+    },
+    {
+      "tick": 153120,
+      "numerator": 4,
+      "denominator": 4
+    }
+  ],
+  "notes": 5120,
+  "max_simultaneous_notes": 11,
+  "peak_with_100ms_release": 28,
+  "same_key_overlaps": 0,
+  "unmatched_offs": 0,
+  "unclosed_notes": 0,
+  "controllers": {
+    "(1, 6)": [
+      6
+    ],
+    "(1, 100)": [
+      0
+    ],
+    "(1, 101)": [
+      0
+    ],
+    "(3, 6)": [
+      6
+    ],
+    "(3, 100)": [
+      0
+    ],
+    "(3, 101)": [
+      0
+    ],
+    "(5, 6)": [
+      6
+    ],
+    "(5, 100)": [
+      0
+    ],
+    "(5, 101)": [
+      0
+    ],
+    "(7, 6)": [
+      6
+    ],
+    "(7, 100)": [
+      0
+    ],
+    "(7, 101)": [
+      0
+    ],
+    "(9, 6)": [
+      6
+    ],
+    "(9, 100)": [
+      0
+    ],
+    "(9, 101)": [
+      0
+    ]
+  },
+  "drum_notes": [],
+  "music_instrument_boost": [
+    {
+      "voice": 0,
+      "tl_before": 20,
+      "tl_after": 4,
+      "pcm_multiplier": 1.0,
+      "actual_boost_db": 6.0,
+      "residual_pcm_boost_safe": true,
+      "peak_after": 29765
+    },
+    {
+      "voice": 1,
+      "tl_before": 18,
+      "tl_after": 2,
+      "pcm_multiplier": 1.0,
+      "actual_boost_db": 6.0,
+      "residual_pcm_boost_safe": true,
+      "peak_after": 23350
+    },
+    {
+      "voice": 2,
+      "tl_before": 14,
+      "tl_after": 0,
+      "pcm_multiplier": 1.0901844923851276,
+      "actual_boost_db": 6.0,
+      "residual_pcm_boost_safe": true,
+      "peak_after": 32261
+    },
+    {
+      "voice": 3,
+      "tl_before": 12,
+      "tl_after": 0,
+      "pcm_multiplier": 1.0,
+      "actual_boost_db": 4.5,
+      "residual_pcm_boost_safe": false,
+      "peak_after": 30476
+    },
+    {
+      "voice": 4,
+      "tl_before": 16,
+      "tl_after": 0,
+      "pcm_multiplier": 1.0,
+      "actual_boost_db": 6.0,
+      "residual_pcm_boost_safe": true,
+      "peak_after": 27024
+    },
+    {
+      "voice": 5,
+      "tl_before": 24,
+      "tl_after": 8,
+      "pcm_multiplier": 1.0,
+      "actual_boost_db": 6.0,
+      "residual_pcm_boost_safe": true,
+      "peak_after": 17285
+    },
+    {
+      "voice": 6,
+      "tl_before": 24,
+      "tl_after": 8,
+      "pcm_multiplier": 1.0,
+      "actual_boost_db": 6.0,
+      "residual_pcm_boost_safe": true,
+      "peak_after": 22314
+    },
+    {
+      "voice": 7,
+      "tl_before": 22,
+      "tl_after": 6,
+      "pcm_multiplier": 1.0,
+      "actual_boost_db": 6.0,
+      "residual_pcm_boost_safe": true,
+      "peak_after": 24905
+    }
+  ],
+  "sfx_retrigger_ticks": [
+    6,
+    8,
+    8
+  ],
+  "latest_relative_sfx_gain": 0.85,
+  "linear_mix": {
+    "requested": {
+      "music_gain": 1.5,
+      "sfx_gain": 0.6375,
+      "master_headroom": 0.9,
+      "reference": "999cef8bca349aeec02d4f24b90ca0ac83b03f9b",
+      "note": "Retain previous PCM music scaling/headroom; add music gain by reducing TON TL attenuation, compensate residual in PCM only when safe. SFX PCM gain is previous 0.75 times 0.85. No master increase/clamp.",
+      "music_boost_db": 6.0,
+      "pcm_reference": "52698c08dea78afee5d4806e1138e6036e5a04bf",
+      "reference_sfx_gain": 0.75
+    },
+    "music_pcm": {
+      "multiplier": 1.35,
+      "peak_before": 22575,
+      "peak_after": 30476,
+      "hard_clipped_samples": 0
+    },
+    "sfx_pcm": {
+      "multiplier": 0.57375,
+      "peak_before": 25699,
+      "peak_after": 14745,
+      "hard_clipped_samples": 0
+    },
+    "pcm_gain_ratio_before_instrument_boost": 2.3529411764705883
+  },
+  "percussion": {
+    "channel_human": 10,
+    "channel_zero_based": 9,
+    "note_on_counts": {},
+    "total_note_ons": 0,
+    "tracks": [
+      {
+        "track": 0,
+        "channels_zero_based": [],
+        "drum_note_on_counts": {},
+        "drum_note_off_counts": {}
+      },
+      {
+        "track": 1,
+        "channels_zero_based": [
+          0
+        ],
+        "drum_note_on_counts": {},
+        "drum_note_off_counts": {}
+      },
+      {
+        "track": 2,
+        "channels_zero_based": [
+          2
+        ],
+        "drum_note_on_counts": {},
+        "drum_note_off_counts": {}
+      },
+      {
+        "track": 3,
+        "channels_zero_based": [
+          4
+        ],
+        "drum_note_on_counts": {},
+        "drum_note_off_counts": {}
+      },
+      {
+        "track": 4,
+        "channels_zero_based": [
+          6
+        ],
+        "drum_note_on_counts": {},
+        "drum_note_off_counts": {}
+      },
+      {
+        "track": 5,
+        "channels_zero_based": [
+          8
+        ],
+        "drum_note_on_counts": {},
+        "drum_note_off_counts": {}
+      }
+    ],
+    "diagnosis": "No source percussion events; no replacement part generated"
+  },
+  "source_sha256": "69b888385d2733576b7ca31558954d31c39c841afe8998397b89e9f746a80328",
+  "max_bend_error_cents": 4.3212890625,
+  "substitutions": [
+    "GM programs replaced by original PCM instruments per config.json",
+    "Pitch bends rounded to native SEQ 7-bit precision",
+    "Note-off velocity is not represented by SEQ gate durations",
+    "Tick-zero program/RPN setup moved before simultaneous initial note-ons",
+    "Names, key and time signatures remain in source/report, not in playable SEQ"
+  ],
+  "unsupported": [],
+  "release_peak": 22,
+  "music_voice_budget": 24,
+  "sfx_ports": 6,
+  "torch_audio": {
+    "ignition_gain": 0.45,
+    "hiss_gain": 0.2,
+    "shared_hiss_bus": true
+  },
+  "physical_voice_bound": 32,
+  "custom_combat": [
+    {
+      "file": "Jab_1.wav",
+      "source_sha256": "3e0e0ca178667c6a28b29826e25df6586a2cfbf2506869ec9bb0d4085a4888dd",
+      "source_channels": 2,
+      "source_frames": 17919,
+      "sample_rate": 44100,
+      "trim_start": 0,
+      "trim_end_exclusive": 17844,
+      "frames": 17844,
+      "duration_seconds": 0.40462585034013604,
+      "mono": "arithmetic mean, no resampling",
+      "edge_fade_frames": [
+        16,
+        96
+      ],
+      "source_mono_peak": 0.712432861328125,
+      "gain_before_ton": 0.9513906808396818,
+      "target_final_peak_fraction": 0.35
+    },
+    {
+      "file": "CONNECT_1.wav",
+      "source_sha256": "5954bdf862ae18da373bc868e1b795f6db56c29dfad45ae4bfb5246a57e1da18",
+      "source_channels": 1,
+      "source_frames": 23559,
+      "sample_rate": 44100,
+      "trim_start": 536,
+      "trim_end_exclusive": 21448,
+      "frames": 20912,
+      "duration_seconds": 0.47419501133786846,
+      "mono": "arithmetic mean, no resampling",
+      "edge_fade_frames": [
+        16,
+        96
+      ],
+      "source_mono_peak": 0.883453369140625,
+      "gain_before_ton": 0.9864241005009862,
+      "target_final_peak_fraction": 0.45
+    },
+    {
+      "file": "bat woosh_1.wav",
+      "source_sha256": "881a3b58254d2da8073b26a0aa0acc6bb7827311b7a4365fa18c2d60d33e110b",
+      "source_channels": 2,
+      "source_frames": 23559,
+      "sample_rate": 44100,
+      "trim_start": 0,
+      "trim_end_exclusive": 22978,
+      "frames": 22978,
+      "duration_seconds": 0.5210430839002268,
+      "mono": "arithmetic mean, no resampling",
+      "edge_fade_frames": [
+        16,
+        96
+      ],
+      "source_mono_peak": 0.755706787109375,
+      "gain_before_ton": 0.9737894518661946,
+      "target_final_peak_fraction": 0.38
+    }
+  ],
+  "custom_gates": [
+    405,
+    472,
+    517
+  ],
+  "sfx_active_bound": 6,
+  "sfx_release_tail_bound": 4,
+  "sound_ram_regions": [
+    {
+      "name": "driver/work",
+      "start": 0,
+      "size": 45056,
+      "end": 45056
+    },
+    {
+      "name": "transfer/work",
+      "start": 45056,
+      "size": 4096,
+      "end": 49152
+    },
+    {
+      "name": "DSP reserved",
+      "start": 49152,
+      "size": 65600,
+      "end": 114752
+    },
+    {
+      "name": "DSP program reserved",
+      "start": 114752,
+      "size": 1344,
+      "end": 116096
+    },
+    {
+      "name": "PCM/work reserve",
+      "start": 116096,
+      "size": 32768,
+      "end": 148864
+    },
+    {
+      "name": "FX.SEQ",
+      "start": 148864,
+      "size": 328,
+      "end": 149192
+    },
+    {
+      "name": "FX.TON",
+      "start": 149232,
+      "size": 170564,
+      "end": 319796
+    },
+    {
+      "name": "STAGE.SEQ",
+      "start": 319796,
+      "size": 29528,
+      "end": 349324
+    },
+    {
+      "name": "STAGE.TON",
+      "start": 349324,
+      "size": 70676,
+      "end": 420000
+    }
+  ],
+  "sound_ram_high_water": 420000,
+  "sound_ram_unallocated": 104328,
+  "outputs": {
+    "STAGE.SEQ": {
+      "bytes": 29528,
+      "sha256": "0858a4a9af303a853ba6aac2df5aa98ec119fbb6d0d22ce8cf4a8cec5fb08eff"
+    },
+    "STAGE.TON": {
+      "bytes": 70676,
+      "sha256": "35b0552bde242eef8e49fbd16ae2fff991aa4058d34490d0de32eb77258f25b8"
+    },
+    "FX.SEQ": {
+      "bytes": 328,
+      "sha256": "24683e63c1fd27167d4a7b75b3965c806ab5fb7e81906bd0291dcddb2a28c32d"
+    },
+    "FX.TON": {
+      "bytes": 170564,
+      "sha256": "3ce8fcde51eed6d98fa0b69bc39274eddd740995058e53d1e14333dbd9b4475c"
+    },
+    "CUSTOM.MAP": {
+      "bytes": 56,
+      "sha256": "8c669c0329c9405ca989571f30712cb5f69eacde1bba04e1ee2348d530db41cb"
+    }
+  }
+}

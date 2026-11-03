@@ -1,0 +1,38 @@
+{
+  "core": "libretro Yabause v0.9.15",
+  "core_commit": "8926b0c6c347f8c5c755911ddb0ac695420ffbf8",
+  "core_sha256": "f00215b3c6ee0c82a377a8403b686e09bf8684f176a0a5bd66b47b8677e4d738",
+  "bios": "HLE",
+  "renderer": "software",
+  "cpu": "interpreter",
+  "threads": 1,
+  "expansion_cartridge": "none",
+  "viewport": [
+    320,
+    240
+  ],
+  "forward_camera_range": [
+    0,
+    7872
+  ],
+  "backward_camera_range": [
+    7871,
+    0
+  ],
+  "positions": 15745,
+  "compared_pixels": 1209216000,
+  "mismatched_pixels": 0,
+  "method": "Separate background-only ROM uses actual street.c/parallax.c and pinned Jo/SGL. Host camera write, six frames settle per camera, complete RGB565-output comparison with independently reconstructed original street and skyline. Actual controls and gallery/gameplay are tested separately.",
+  "source_sha256": {
+    "src/street.c": "6c37499a4af7bbab979ed1de21c66621241566510a84ad8cf0fd1f4a2f5cfd09",
+    "src/parallax.c": "a7b2f3a31806e23617c429cbdc50f5a74d253285e8bc60bee47f5ab1f96c56b9",
+    "assets/parallax/PCHUNK.BIN": "78d95554572b56122d2c347c46cb8bae86e410df0a721317e2bcfd902be06ab9",
+    "assets/parallax/PSKY.BIN": "090c55ba646239449a4adf8b175265d32226ff7d25b9a8cdf4383fdc6d05e93c",
+    "assets/parallax/PSMAP.BIN": "46aebc647b4b0d4635f8475374adfe707521eaab4b9f509b2f54f0982c6a7b17"
+  },
+  "limitations": [
+    "No physical Saturn test",
+    "No WebRetro test of this new candidate",
+    "No CD streaming or frame-time compatibility claim"
+  ]
+}

@@ -1,0 +1,232 @@
+{
+  "baseline": "84f7ba38ea239119d98e86cfabe57daa1ca97679",
+  "files": {
+    "src/game.c": {
+      "before_sha256": "00190273f267fdc04f3a8934351faae91b5f8de0dd57bf35afcbf9c010ff0061",
+      "after_sha256": "7456b18710ad3fe0467f0e715fdf43adabcd3fa8544a4aa851dcae375e2df215",
+      "edits": [
+        {
+          "start": 2,
+          "end": 3,
+          "before": [],
+          "after": [
+            "#include \"punch_combo.h\"\n"
+          ]
+        },
+        {
+          "start": 137,
+          "end": 140,
+          "before": [],
+          "after": [
+            "#if MF_PUNCH_COMBO\n",
+            "    mf_combo_reset(g,index);\n",
+            "#endif\n"
+          ]
+        },
+        {
+          "start": 347,
+          "end": 350,
+          "before": [],
+          "after": [
+            "#if MF_PUNCH_COMBO\n",
+            "        mf_combo_begin(g,index);\n",
+            "#endif\n"
+          ]
+        },
+        {
+          "start": 367,
+          "end": 370,
+          "before": [],
+          "after": [
+            "#if MF_PUNCH_COMBO\n",
+            "            mf_combo_reset(g,index);\n",
+            "#endif\n"
+          ]
+        },
+        {
+          "start": 394,
+          "end": 398,
+          "before": [],
+          "after": [
+            "#if MF_PUNCH_COMBO\n",
+            "            if(!p->bat && !p->attack_air)mf_combo_begin(g,index);\n",
+            "            else mf_combo_reset(g,index);\n",
+            "#endif\n"
+          ]
+        },
+        {
+          "start": 518,
+          "end": 521,
+          "before": [],
+          "after": [
+            "#if MF_PUNCH_COMBO\n",
+            "        mf_combo_tick(g,i,(connected&(1u<<i))!=0);\n",
+            "#endif\n"
+          ]
+        },
+        {
+          "start": 568,
+          "end": 571,
+          "before": [],
+          "after": [
+            "#if MF_PUNCH_COMBO\n",
+            "        if(!p->bat && !p->attack_air && g->combo[i].phase==2)total=MF_CROSS_TOTAL_TICKS;\n",
+            "#endif\n"
+          ]
+        }
+      ]
+    },
+    "src/game.h": {
+      "before_sha256": "9634944080b713ac3e19171ed693f4f49d67ea7f0e54ef9c39db754a54dfec5f",
+      "after_sha256": "214d6c83ab0d67f2176a7c651863204e875d22cd6c20464562f362baf0130cc7",
+      "edits": [
+        {
+          "start": 47,
+          "end": 50,
+          "before": [],
+          "after": [
+            "#if MF_PUNCH_COMBO\n",
+            "typedef struct {int next,phase,timeout;} mf_punch_combo;\n",
+            "#endif\n"
+          ]
+        },
+        {
+          "start": 65,
+          "end": 68,
+          "before": [],
+          "after": [
+            "#if MF_PUNCH_COMBO\n",
+            "    mf_punch_combo combo[MF_PLAYERS];\n",
+            "#endif\n"
+          ]
+        }
+      ]
+    },
+    "src/jab_repeat.h": {
+      "before_sha256": "a3092eb9e8c3f331b5fbac8531b2eb697ef7ccf6119707c3c8af2b3da8045468",
+      "after_sha256": "631682c747dadd9b182b1b5c1ba39296a7b218385fc70812ef56ae5c97152270",
+      "edits": [
+        {
+          "start": 22,
+          "end": 27,
+          "before": [
+            "        if(g->players[actor].attack>=MF_JAB_REPEAT_COUNTER){g->jab[actor].buffer=0;return 1;}\n"
+          ],
+          "after": [
+            "        int earliest=MF_JAB_REPEAT_COUNTER;\n",
+            "#if MF_PUNCH_COMBO\n",
+            "        if(g->combo[actor].phase==2)earliest+=MF_CROSS_RECOVERY_EXTRA;\n",
+            "#endif\n",
+            "        if(g->players[actor].attack>=earliest){g->jab[actor].buffer=0;return 1;}\n"
+          ]
+        }
+      ]
+    },
+    "src/jab_config.h": {
+      "before_sha256": "4b0b2e734558df5c729546bbe04eb6f7c16b99fc9e05fd9fb2bbf431d88bcfad",
+      "after_sha256": "12517739a49459ab5139432252943f6c1946166c605ab9729d85ef086100452e",
+      "edits": [
+        {
+          "start": 4,
+          "end": 13,
+          "before": [],
+          "after": [
+            "#endif\n",
+            "#ifndef MF_PUNCH_COMBO\n",
+            "#define MF_PUNCH_COMBO 0\n",
+            "#endif\n",
+            "#define MF_COMBO_TIMEOUT_TICKS 45\n",
+            "#define MF_CROSS_RECOVERY_EXTRA 4\n",
+            "#define MF_CROSS_TOTAL_TICKS (24+MF_CROSS_RECOVERY_EXTRA)\n",
+            "#if MF_PUNCH_COMBO && (!MF_JAB_COHESION || !MF_FAST_RUNNING_BAT)\n",
+            "#error Punch combo requires the latest responsive jab / fast-bat profile\n"
+          ]
+        }
+      ]
+    },
+    "src/animation_preview.c": {
+      "before_sha256": "5ae7d0bb214040d353dce2cf9480996fa89711623d7103663f83262c87382dc3",
+      "after_sha256": "0633ad1ac9a720de85ee7996883f6687bfc6bbd640c90ded14d9e34a2433b715",
+      "edits": [
+        {
+          "start": 355,
+          "end": 373,
+          "before": [],
+          "after": [
+            "#if MF_PUNCH_COMBO\n",
+            "static int cross_ids[2],cross_loaded;\n",
+            "int mf_cross_load(void)\n",
+            "{\n",
+            "    unsigned base=end_of(last_resource);int a;\n",
+            "    if(cross_loaded)return 1;\n",
+            "    /* Exactly two remaining definitions; no removal/redefinition of old views. */\n",
+            "    if(base+7040u>0x7fef8u || jo_get_last_sprite_id()+2>=JO_MAX_SPRITE)return 0;\n",
+            "    jo_set_tga_default_palette(resource_palette);\n",
+            "    for(a=0;a<2;a++) {\n",
+            "        int id=jo_sprite_add_tga(\"COMBO\",a?\"XC1.TGA\":\"XC0.TGA\",1);\n",
+            "        if(id<0 || jo_sprite_get_width(id)!=80 || jo_sprite_get_height(id)!=44 || end_of(id)>0x7fef8u)return 0;\n",
+            "        cross_ids[a]=id;last_resource=id;\n",
+            "    }\n",
+            "    jo_set_tga_default_palette(JO_NULL);texture_bytes=end_of(last_resource)-0x10000u;\n",
+            "    cross_loaded=1;return end_of(last_resource)==base+7040u;\n",
+            "}\n",
+            "#endif\n"
+          ]
+        },
+        {
+          "start": 418,
+          "end": 432,
+          "before": [],
+          "after": [
+            "#if MF_PUNCH_COMBO\n",
+            "    if(!p->bat && !p->attack_air && g->combo[actor].phase==2 && cross_loaded) {\n",
+            "        /* Same hit window6..10. Contact remains visible through post-step11. */\n",
+            "        if(p->attack<=11) {\n",
+            "            jo_sprite_restore_sprite_scale();jo_sprite_disable_horizontal_flip();jo_sprite_set_palette(palette_id);\n",
+            "            if(p->facing<0)jo_sprite_enable_horizontal_flip();\n",
+            "            ca_draw_list(seq_lower[actor],center,ground,p->facing,depth);\n",
+            "            jo_sprite_draw3D2(cross_ids[actor],p->facing>0?center-24:center-56,ground-88,depth-1);\n",
+            "            jo_sprite_disable_horizontal_flip();return 1;\n",
+            "        }\n",
+            "        if(p->attack<=16+MF_CROSS_RECOVERY_EXTRA)return jab_recovery_draw(actor,center,ground,p->facing,depth);\n",
+            "        return mf_animation_draw_actor(actor,0,center,ground,p->facing,depth);\n",
+            "    }\n",
+            "#endif\n"
+          ]
+        }
+      ]
+    },
+    "src/animation_preview.h": {
+      "before_sha256": "278758b357ca99965487d9530b3825093c3b8cf097ed98e874d2e927d273a85c",
+      "after_sha256": "c3410c9a45a8202c7ec21ef054c352543bd3c3e526a1b259f29eb7621ba666f6",
+      "edits": [
+        {
+          "start": 27,
+          "end": 30,
+          "before": [],
+          "after": [
+            "#if MF_PUNCH_COMBO\n",
+            "int mf_cross_load(void);\n",
+            "#endif\n"
+          ]
+        }
+      ]
+    },
+    "src/main.c": {
+      "before_sha256": "127446c5b095fcee9d943618fd9d44302964065a0174795db1055e7e116339c7",
+      "after_sha256": "93ecac0dbf0f9f1d286342736da9a170169229aef4f00842633040d9b7457ee5",
+      "edits": [
+        {
+          "start": 233,
+          "end": 236,
+          "before": [],
+          "after": [
+            "#endif\n",
+            "#if MF_PUNCH_COMBO\n",
+            "    if(!asset_error && !mf_cross_load())asset_failure(730,\"CROSS\",0);\n"
+          ]
+        }
+      ]
+    }
+  }
+}

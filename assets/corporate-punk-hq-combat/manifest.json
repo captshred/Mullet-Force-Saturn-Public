@@ -1,0 +1,78 @@
+{
+  "parent": "bba999c0621f0d6f16aa13a2f776cc7dd25105a0",
+  "canvas": [
+    144,
+    112
+  ],
+  "root": [
+    64,
+    108
+  ],
+  "resources": [
+    {
+      "name": "CQ00.TGA",
+      "width": 72,
+      "height": 30,
+      "bytes": 2176,
+      "sha256": "9e2f578aa96f7d9cacae92abe231c2e7bf87d5da0979ed2a107fd42afb7f6dea"
+    },
+    {
+      "name": "CQ01.TGA",
+      "width": 72,
+      "height": 94,
+      "bytes": 6784,
+      "sha256": "4ba0e7776417712d19cf25f467272a0ac234b4c08437a8ac71a7064067c123e8"
+    },
+    {
+      "name": "CQ02.TGA",
+      "width": 112,
+      "height": 74,
+      "bytes": 8288,
+      "sha256": "ed10accc5987024d87c96a2239c8b23498f99ac21197c30a900b2409f6457c73"
+    },
+    {
+      "name": "CQ03.TGA",
+      "width": 112,
+      "height": 36,
+      "bytes": 4032,
+      "sha256": "6a01fdd674fe99ff58253531685ba1f1485f2b3b8bad5382395772efdcbc3520"
+    }
+  ],
+  "parts": {
+    "strike": {
+      "resource": 10,
+      "x": 26,
+      "y": 22,
+      "width": 72,
+      "height": 30
+    },
+    "hurt": {
+      "resource": 11,
+      "x": 11,
+      "y": -1,
+      "width": 72,
+      "height": 94
+    },
+    "fall": {
+      "resource": 12,
+      "x": -13,
+      "y": 13,
+      "width": 112,
+      "height": 74
+    },
+    "ground": {
+      "resource": 13,
+      "x": 0,
+      "y": 57,
+      "width": 112,
+      "height": 36
+    }
+  },
+  "texture_bytes": 21280,
+  "replaced_bytes": 56960,
+  "boot_bytes": 422208,
+  "free_bytes": 36280,
+  "slots": 246,
+  "palette_banks_added": 0,
+  "shared_idle_walk_bytes": 11744
+}

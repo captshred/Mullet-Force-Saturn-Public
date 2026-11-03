@@ -1,0 +1,147 @@
+{
+  "commit": "1e5c67ac7b81209d5642e137858888885ce8e083",
+  "source_sha256": "224e5318db91c530287ff7913c85153607878242e15dcd79ae80554f1c21e17c",
+  "method": "Real two-pad libretro input; read-only save-state traces; Yabause HLE/no cartridge",
+  "webretro_tested": false,
+  "physical_saturn_tested": false,
+  "no_ram_writes": true,
+  "texture_bytes": 453344,
+  "free_bytes": 5144,
+  "definitions": 255,
+  "scenarios": [
+    {
+      "mirror": false,
+      "starts": [
+        [
+          [
+            802,
+            0
+          ],
+          [
+            814,
+            1
+          ],
+          [
+            826,
+            2
+          ],
+          [
+            842,
+            0
+          ],
+          [
+            854,
+            1
+          ],
+          [
+            866,
+            2
+          ]
+        ],
+        [
+          [
+            806,
+            0
+          ],
+          [
+            818,
+            1
+          ],
+          [
+            830,
+            2
+          ],
+          [
+            846,
+            0
+          ],
+          [
+            858,
+            1
+          ],
+          [
+            870,
+            2
+          ]
+        ]
+      ],
+      "exact_cross_samples": [
+        20,
+        16
+      ],
+      "matched_native_pixels": [
+        8700,
+        8070
+      ],
+      "timeout_restart_verified": true,
+      "vram_stable": true
+    },
+    {
+      "mirror": true,
+      "starts": [
+        [
+          [
+            802,
+            0
+          ],
+          [
+            814,
+            1
+          ],
+          [
+            826,
+            2
+          ],
+          [
+            842,
+            0
+          ],
+          [
+            854,
+            1
+          ],
+          [
+            866,
+            2
+          ]
+        ],
+        [
+          [
+            806,
+            0
+          ],
+          [
+            818,
+            1
+          ],
+          [
+            830,
+            2
+          ],
+          [
+            846,
+            0
+          ],
+          [
+            858,
+            1
+          ],
+          [
+            870,
+            2
+          ]
+        ]
+      ],
+      "exact_cross_samples": [
+        20,
+        16
+      ],
+      "matched_native_pixels": [
+        15180,
+        4096
+      ],
+      "timeout_restart_verified": true,
+      "vram_stable": true
+    }
+  ]
+}

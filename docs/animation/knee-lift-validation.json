@@ -1,0 +1,140 @@
+{
+  "baseline": "a44464fb557882cfb07afaeaf409ed6871cfcaf5",
+  "timing_ticks": [
+    10,
+    10,
+    10
+  ],
+  "boot_allocated": 351104,
+  "boot_free": 107384,
+  "expanded_allocated": 427104,
+  "expanded_free": 31384,
+  "vdp1_change": 0,
+  "new_texture_slots": 0,
+  "boot_sprite_slots": 125,
+  "expanded_sprite_slots": 176,
+  "resident_end": "0x060983C4",
+  "native_configurations": 14,
+  "hardware_tested": false,
+  "webretro_tested": false,
+  "frame2_3_sha256": {
+    "buck-01.png": "0b2e6c8e8e8e654bce6dbe1c7a4be742eb2d8e3dc0244dfe29c2afa138408fbc",
+    "buck-02.png": "231019656d27d7051e304716a2995d2b12b231adf7a75e84f2fc193770ad37b1",
+    "chuck-01.png": "978c543bda653f18f30868125c1cb45fc5e5e84457bca38739c5e1b283bf75cc",
+    "chuck-02.png": "1dd5d83ca39156d88cb0898c3176d85ee3a621746ceaa546fac69ea6e026d0db"
+  },
+  "art_changes": [
+    {
+      "name": "buck",
+      "rgba_sha256": "a62132cfb71c327e7e7eed35a62706805ae230af888fa27a86dec7bc0e121e4e",
+      "changed_pixels": 543,
+      "changed_bounds": [
+        64,
+        56,
+        99,
+        92
+      ],
+      "front_sole_y": 88,
+      "rear_sole_y": 91,
+      "guide_dx": 0
+    },
+    {
+      "name": "chuck",
+      "rgba_sha256": "8101382f2b112b24f5b5b4248c7840aee3ea890ceebd01fd26ee6bd6d63dd043",
+      "changed_pixels": 587,
+      "changed_bounds": [
+        64,
+        56,
+        99,
+        92
+      ],
+      "front_sole_y": 88,
+      "rear_sole_y": 91,
+      "guide_dx": -1
+    }
+  ],
+  "runtime": {
+    "frames_run": 1050,
+    "compared_pixels": 430830,
+    "mismatched_pixels": 0,
+    "fallback_compared_pixels": 828471,
+    "simulation_matches_original_renderer": true,
+    "simulation_frames_compared": 720,
+    "seen_poses": [
+      [
+        0,
+        1,
+        2,
+        3,
+        15,
+        16,
+        17
+      ],
+      [
+        0,
+        1,
+        2,
+        3,
+        15,
+        16,
+        17
+      ]
+    ],
+    "facings": [
+      [
+        -1,
+        1
+      ],
+      [
+        -1,
+        1
+      ]
+    ],
+    "resident_texture_hashes": [
+      1949764483
+    ],
+    "core_sha256": "f00215b3c6ee0c82a377a8403b686e09bf8684f176a0a5bd66b47b8677e4d738"
+  },
+  "baseline_runtime": {
+    "frames_run": 1050,
+    "compared_pixels": 432603,
+    "mismatched_pixels": 0,
+    "simulation_matches_original_renderer": true,
+    "simulation_frames_compared": 720
+  },
+  "review_runtime": {
+    "frames_run": 1600,
+    "core_sha256": "f00215b3c6ee0c82a377a8403b686e09bf8684f176a0a5bd66b47b8677e4d738",
+    "actual_allocations": {
+      "299": 351104,
+      "1000": 427104,
+      "1500": 427104
+    },
+    "actual_sprite_slots": {
+      "299": 125,
+      "1000": 176,
+      "1500": 176
+    },
+    "preview_idle_pair": [
+      1,
+      1
+    ],
+    "preview_compared_pixels": 28800,
+    "preview_mismatches": 0,
+    "game_return_verified": true,
+    "expanded_textures_stable": true,
+    "method": "Normal gallery Down / Start input, read-only save states. Actual allocation counters and Jo descriptor count, independent RGB565 preview reconstruction. No RAM writes/game hooks."
+  },
+  "source_sha256": {
+    "src/main.c": "80482070b1bcabed1cab79f90bb1fe1b994cf3d7b28f1610f4f35dc22de6bb4d",
+    "src/game.c": "d5ecf4ddd040f159856dcf90e1fc3deb7ba3c1a359a703f9533302581aa2f5c7",
+    "src/game.h": "338e7995cc900c856779972fa7609b7df72ed255af67dc24ed7f7409861eb1e8",
+    "src/player_animation.c": "2ae785a11ad9a8b7ae50d51fe14d0ab427f3a47dfa0fb99064afcabcfa3f5c48",
+    "src/original_three_timing.h": "f8724c263685598d51275d24bfba83ef75ba2a38ab769caf5df89a62e6c38a96",
+    "src/original_three_data.h": "8296841c0f3764df275dc9da1c5f5b74f91374079af49dce01ea7eede2011d84",
+    "src/animation_preview.c": "1402832cd449f761f6a306539ba9c365c1962590ab9c81c101705357402198dd",
+    "src/combat_config.h": "1565208b11b19226bf3a542269fc19eff09dc7a24f9447db740a70a9c58c3d87",
+    "src/input.c": "4d81c2f4659689cac0238478f049b6edb47bf48dd4fd24b44b33369b0dde28e0",
+    "assets/knee-lift/manifest.json": "12134cc37d296bfbb0512e10472ab6024f7523a10cf6ab8f85eba6eb41b7bf16"
+  }
+}

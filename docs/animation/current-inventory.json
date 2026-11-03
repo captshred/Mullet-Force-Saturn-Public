@@ -1,0 +1,2558 @@
+{
+  "anchor_arrays": {
+    "normal_lower_anchor": [
+      [
+        20,
+        32
+      ],
+      [
+        20,
+        32
+      ],
+      [
+        25,
+        32
+      ],
+      [
+        21,
+        32
+      ],
+      [
+        13,
+        32
+      ],
+      [
+        22,
+        32
+      ],
+      [
+        17,
+        32
+      ],
+      [
+        11,
+        32
+      ],
+      [
+        20,
+        32
+      ],
+      [
+        20,
+        32
+      ],
+      [
+        20,
+        32
+      ],
+      [
+        22,
+        32
+      ],
+      [
+        19,
+        32
+      ],
+      [
+        22,
+        32
+      ],
+      [
+        7,
+        32
+      ]
+    ],
+    "buck_lower_for_frame": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14
+    ],
+    "buck_bat_anchor": [
+      [
+        31,
+        87
+      ],
+      [
+        36,
+        87
+      ],
+      [
+        15,
+        87
+      ],
+      [
+        12,
+        87
+      ],
+      [
+        12,
+        87
+      ],
+      [
+        37,
+        87
+      ],
+      [
+        34,
+        87
+      ]
+    ],
+    "buck_torch_anchor": [
+      [
+        18,
+        87
+      ],
+      [
+        14,
+        87
+      ],
+      [
+        17,
+        87
+      ]
+    ],
+    "bat_legs_anchor": [
+      20,
+      34
+    ],
+    "air_legs_anchor": [
+      [
+        29,
+        34
+      ],
+      [
+        24,
+        34
+      ],
+      [
+        27,
+        34
+      ]
+    ],
+    "air_lower_for_frame": [
+      0,
+      0,
+      1,
+      1,
+      2,
+      2,
+      0
+    ],
+    "buck_anchor": [
+      [
+        18,
+        87
+      ],
+      [
+        18,
+        86
+      ],
+      [
+        19,
+        87
+      ],
+      [
+        20,
+        85
+      ],
+      [
+        18,
+        86
+      ],
+      [
+        17,
+        87
+      ],
+      [
+        16,
+        85
+      ],
+      [
+        18,
+        86
+      ],
+      [
+        22,
+        85
+      ],
+      [
+        13,
+        87
+      ],
+      [
+        16,
+        86
+      ],
+      [
+        20,
+        82
+      ],
+      [
+        18,
+        88
+      ],
+      [
+        20,
+        81
+      ],
+      [
+        16,
+        87
+      ]
+    ],
+    "chuck_lower_for_frame": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14
+    ],
+    "chuck_bat_anchor": [
+      [
+        31,
+        87
+      ],
+      [
+        36,
+        87
+      ],
+      [
+        15,
+        87
+      ],
+      [
+        12,
+        87
+      ],
+      [
+        12,
+        87
+      ],
+      [
+        37,
+        87
+      ],
+      [
+        34,
+        87
+      ]
+    ],
+    "chuck_torch_anchor": [
+      [
+        18,
+        87
+      ],
+      [
+        14,
+        87
+      ],
+      [
+        17,
+        87
+      ]
+    ],
+    "chuck_anchor": [
+      [
+        17,
+        87
+      ],
+      [
+        17,
+        86
+      ],
+      [
+        18,
+        87
+      ],
+      [
+        19,
+        85
+      ],
+      [
+        17,
+        86
+      ],
+      [
+        16,
+        87
+      ],
+      [
+        15,
+        85
+      ],
+      [
+        17,
+        86
+      ],
+      [
+        21,
+        85
+      ],
+      [
+        12,
+        87
+      ],
+      [
+        15,
+        86
+      ],
+      [
+        19,
+        82
+      ],
+      [
+        17,
+        88
+      ],
+      [
+        19,
+        81
+      ],
+      [
+        15,
+        87
+      ]
+    ],
+    "enemy_anchor": [
+      [
+        20,
+        89
+      ],
+      [
+        20,
+        88
+      ],
+      [
+        23,
+        89
+      ],
+      [
+        19,
+        88
+      ],
+      [
+        20,
+        89
+      ],
+      [
+        19,
+        88
+      ],
+      [
+        24,
+        89
+      ],
+      [
+        20,
+        89
+      ],
+      [
+        20,
+        88
+      ],
+      [
+        24,
+        89
+      ],
+      [
+        24,
+        81
+      ],
+      [
+        42,
+        20
+      ]
+    ],
+    "flame_anchor": [
+      [
+        -33,
+        41
+      ],
+      [
+        -33,
+        41
+      ],
+      [
+        -33,
+        41
+      ],
+      [
+        -33,
+        41
+      ]
+    ]
+  },
+  "source_commit": "ba4938ecac49715f241446b617f5336d95888d0a",
+  "source_hashes": {
+    "src/game.c": "d5ecf4ddd040f159856dcf90e1fc3deb7ba3c1a359a703f9533302581aa2f5c7",
+    "src/game.h": "338e7995cc900c856779972fa7609b7df72ed255af67dc24ed7f7409861eb1e8",
+    "src/combat_config.h": "1565208b11b19226bf3a542269fc19eff09dc7a24f9447db740a70a9c58c3d87",
+    "src/art_data.h": "d98bee3e4ca646d61e3023f4502a2147bfccd2b3c5994a7c87e38518502209f7",
+    "tools/draw-assets.py": "74690c55ef8741fa3e07b2f5855fe905a3d2712c625858bc7c5138bb86a0cc77",
+    "tools/buck_art.py": "0c2aa77af7ad84e4d4c9800cb6588681916dbf82db2b4b6aee1d045b122f369a"
+  },
+  "actors": {
+    "buck": {
+      "standing_height": 88,
+      "frames": [
+        {
+          "name": "BU00.TGA",
+          "anchor": [
+            18,
+            87
+          ],
+          "source_size": [
+            72,
+            96
+          ],
+          "crop_origin": [
+            18,
+            5
+          ],
+          "source_rgb_sha256": "7f2611017b1629dbf6c399288c8abfa9b917e48abd0a0eeaeeb00edb3caf541c",
+          "pose": "idle-guard",
+          "lower_id": 0,
+          "index": 0,
+          "category": "normal",
+          "resource": {
+            "name": "BU00.TGA",
+            "width": 48,
+            "height": 55,
+            "bits": 8,
+            "vram": 2640,
+            "palette_group": "buck",
+            "aligned_bytes": 2656,
+            "sha256": "027cf7bfcd46c9fc497a997d28f4da69ddcbe57ddbc9ce86340c74cd95b1328b"
+          }
+        },
+        {
+          "name": "BU01.TGA",
+          "anchor": [
+            18,
+            86
+          ],
+          "source_size": [
+            72,
+            96
+          ],
+          "crop_origin": [
+            18,
+            6
+          ],
+          "source_rgb_sha256": "09cace2eee0f59347579f32c0783d231d1a8f5f0e47e620824e85caeef119286",
+          "pose": "idle-breathe",
+          "lower_id": 1,
+          "index": 1,
+          "category": "normal",
+          "resource": {
+            "name": "BU01.TGA",
+            "width": 48,
+            "height": 54,
+            "bits": 8,
+            "vram": 2592,
+            "palette_group": "buck",
+            "aligned_bytes": 2592,
+            "sha256": "cc779370c9966b495e0ff1f6ef34b5c437e27321c72afe7d6558566bbe0ba17f"
+          }
+        },
+        {
+          "name": "BU02.TGA",
+          "anchor": [
+            19,
+            87
+          ],
+          "source_size": [
+            72,
+            96
+          ],
+          "crop_origin": [
+            17,
+            5
+          ],
+          "source_rgb_sha256": "946542b5b7732aa67873d2d4c2b847d12dc4ece79f1b45d75a10c0cb0429a08f",
+          "pose": "walk-contact-L",
+          "lower_id": 2,
+          "index": 2,
+          "category": "normal",
+          "resource": {
+            "name": "BU02.TGA",
+            "width": 48,
+            "height": 55,
+            "bits": 8,
+            "vram": 2640,
+            "palette_group": "buck",
+            "aligned_bytes": 2656,
+            "sha256": "1e3617e66ac5be510327c917ec02283748cd94665935f27babe2eecb8616cc55"
+          }
+        },
+        {
+          "name": "BU03.TGA",
+          "anchor": [
+            20,
+            85
+          ],
+          "source_size": [
+            72,
+            96
+          ],
+          "crop_origin": [
+            16,
+            7
+          ],
+          "source_rgb_sha256": "444dec4a7c81ec6e1f5f8e23b62f39cfd17dfbf08c5db167e880efe3998e5f04",
+          "pose": "walk-down-L",
+          "lower_id": 3,
+          "index": 3,
+          "category": "normal",
+          "resource": {
+            "name": "BU03.TGA",
+            "width": 48,
+            "height": 53,
+            "bits": 8,
+            "vram": 2544,
+            "palette_group": "buck",
+            "aligned_bytes": 2560,
+            "sha256": "727bd7c738737987fa22195f7b57d11443b4b37d1c382e4ba97e73ac1679cc50"
+          }
+        },
+        {
+          "name": "BU04.TGA",
+          "anchor": [
+            18,
+            86
+          ],
+          "source_size": [
+            72,
+            96
+          ],
+          "crop_origin": [
+            18,
+            6
+          ],
+          "source_rgb_sha256": "fa826992646f597a5621d72269d489645c2fd58c620ea8f33d47d05b5028183e",
+          "pose": "walk-pass-L",
+          "lower_id": 4,
+          "index": 4,
+          "category": "normal",
+          "resource": {
+            "name": "BU04.TGA",
+            "width": 48,
+            "height": 54,
+            "bits": 8,
+            "vram": 2592,
+            "palette_group": "buck",
+            "aligned_bytes": 2592,
+            "sha256": "6d5572acdca9e0823d6f699e01ee8b2664399c45c9dd0aceccf612e07597a9bc"
+          }
+        },
+        {
+          "name": "BU05.TGA",
+          "anchor": [
+            17,
+            87
+          ],
+          "source_size": [
+            72,
+            96
+          ],
+          "crop_origin": [
+            19,
+            5
+          ],
+          "source_rgb_sha256": "2c657c3f01b2527a2fe061eb19549e0511cccdcc47c5ad15277055313530de64",
+          "pose": "walk-contact-R",
+          "lower_id": 5,
+          "index": 5,
+          "category": "normal",
+          "resource": {
+            "name": "BU05.TGA",
+            "width": 48,
+            "height": 55,
+            "bits": 8,
+            "vram": 2640,
+            "palette_group": "buck",
+            "aligned_bytes": 2656,
+            "sha256": "ca105804a9f3483891dc259157931b9ab979c5b7507a83501232dbf4428d889a"
+          }
+        },
+        {
+          "name": "BU06.TGA",
+          "anchor": [
+            16,
+            85
+          ],
+          "source_size": [
+            72,
+            96
+          ],
+          "crop_origin": [
+            20,
+            7
+          ],
+          "source_rgb_sha256": "9a5be55f4c6cc172d264924189854cdeffddf97ec5265c795b5af2abd0895538",
+          "pose": "walk-down-R",
+          "lower_id": 6,
+          "index": 6,
+          "category": "normal",
+          "resource": {
+            "name": "BU06.TGA",
+            "width": 56,
+            "height": 53,
+            "bits": 8,
+            "vram": 2968,
+            "palette_group": "buck",
+            "aligned_bytes": 2976,
+            "sha256": "9cacaf9a203f77fbf056402dabb12483d31826e4cf7a2d3c74b2d7145ce420b3"
+          }
+        },
+        {
+          "name": "BU07.TGA",
+          "anchor": [
+            18,
+            86
+          ],
+          "source_size": [
+            72,
+            96
+          ],
+          "crop_origin": [
+            18,
+            6
+          ],
+          "source_rgb_sha256": "407cd1f0f43df2f1bb2352a334786fb0575f472fe06e570f030f9d4ae8f577a8",
+          "pose": "walk-pass-R",
+          "lower_id": 7,
+          "index": 7,
+          "category": "normal",
+          "resource": {
+            "name": "BU07.TGA",
+            "width": 56,
+            "height": 54,
+            "bits": 8,
+            "vram": 3024,
+            "palette_group": "buck",
+            "aligned_bytes": 3040,
+            "sha256": "50192825e1117bd7e6983539fc86f3012575bd0d73b94f8dd8e2fb8521d161a9"
+          }
+        },
+        {
+          "name": "BU08.TGA",
+          "anchor": [
+            22,
+            85
+          ],
+          "source_size": [
+            72,
+            96
+          ],
+          "crop_origin": [
+            14,
+            7
+          ],
+          "source_rgb_sha256": "dd2ade5857ff3248a07ac2fb2456eb25a7f66abeeca9fa76eb519b3d0524be41",
+          "pose": "punch-coil",
+          "lower_id": 8,
+          "index": 8,
+          "category": "normal",
+          "resource": {
+            "name": "BU08.TGA",
+            "width": 48,
+            "height": 53,
+            "bits": 8,
+            "vram": 2544,
+            "palette_group": "buck",
+            "aligned_bytes": 2560,
+            "sha256": "31cecea6e34b8a9e549ca955963d8ac5c70fa7396251ef27844b0525232bc383"
+          }
+        },
+        {
+          "name": "BU09.TGA",
+          "anchor": [
+            13,
+            87
+          ],
+          "source_size": [
+            112,
+            96
+          ],
+          "crop_origin": [
+            43,
+            5
+          ],
+          "source_rgb_sha256": "7ff599f721e8b69abe97976cf151687863931df61aed8812f1d418445d16a388",
+          "pose": "punch-contact",
+          "lower_id": 9,
+          "index": 9,
+          "category": "normal",
+          "resource": {
+            "name": "BU09.TGA",
+            "width": 72,
+            "height": 55,
+            "bits": 8,
+            "vram": 3960,
+            "palette_group": "buck",
+            "aligned_bytes": 3968,
+            "sha256": "3fb408b13ebfdadbf5870f0e90424f73a01be9c5e4bafd45bfe7aeb44222804b"
+          }
+        },
+        {
+          "name": "BU10.TGA",
+          "anchor": [
+            16,
+            86
+          ],
+          "source_size": [
+            72,
+            96
+          ],
+          "crop_origin": [
+            20,
+            6
+          ],
+          "source_rgb_sha256": "a4ab3ceb4490a271ebfc0db7dcb4b2361fff05725ca3dc7f580706f005f84b85",
+          "pose": "punch-recover",
+          "lower_id": 10,
+          "index": 10,
+          "category": "normal",
+          "resource": {
+            "name": "BU10.TGA",
+            "width": 48,
+            "height": 54,
+            "bits": 8,
+            "vram": 2592,
+            "palette_group": "buck",
+            "aligned_bytes": 2592,
+            "sha256": "53cb44930210f0000a6563c6e93007fffba8599125c3ea80de8339f90fdf3fb7"
+          }
+        },
+        {
+          "name": "BU11.TGA",
+          "anchor": [
+            20,
+            82
+          ],
+          "source_size": [
+            72,
+            96
+          ],
+          "crop_origin": [
+            16,
+            10
+          ],
+          "source_rgb_sha256": "41b33493c5e60e56b6ca5867ae71166c785ba56d001062765fb608dc0e4444ab",
+          "pose": "jump-takeoff",
+          "lower_id": 11,
+          "index": 11,
+          "category": "normal",
+          "resource": {
+            "name": "BU11.TGA",
+            "width": 48,
+            "height": 50,
+            "bits": 8,
+            "vram": 2400,
+            "palette_group": "buck",
+            "aligned_bytes": 2400,
+            "sha256": "06b2e6a48292a2ea8f2b63834825677d47c9b1502bc3f66c3cf52aad3b9e3477"
+          }
+        },
+        {
+          "name": "BU12.TGA",
+          "anchor": [
+            18,
+            88
+          ],
+          "source_size": [
+            72,
+            96
+          ],
+          "crop_origin": [
+            18,
+            4
+          ],
+          "source_rgb_sha256": "ee20417055d2e4e6781841578a949e16e3a04d19ca66ec64b9937005c91ee6a7",
+          "pose": "jump-air",
+          "lower_id": 12,
+          "index": 12,
+          "category": "normal",
+          "resource": {
+            "name": "BU12.TGA",
+            "width": 56,
+            "height": 56,
+            "bits": 8,
+            "vram": 3136,
+            "palette_group": "buck",
+            "aligned_bytes": 3136,
+            "sha256": "5833e7277f270f5ec25f44b3aa492bc78660bb91c8c613c62e72cc121b335b41"
+          }
+        },
+        {
+          "name": "BU13.TGA",
+          "anchor": [
+            20,
+            81
+          ],
+          "source_size": [
+            72,
+            96
+          ],
+          "crop_origin": [
+            16,
+            11
+          ],
+          "source_rgb_sha256": "2a8cd71d0f4be99e8d49121e6734a4861dabdef6970f12fe2ccf22e05358555c",
+          "pose": "jump-land",
+          "lower_id": 13,
+          "index": 13,
+          "category": "normal",
+          "resource": {
+            "name": "BU13.TGA",
+            "width": 48,
+            "height": 49,
+            "bits": 8,
+            "vram": 2352,
+            "palette_group": "buck",
+            "aligned_bytes": 2368,
+            "sha256": "8c797f3c66d0cce299a8dd1b7b0e701f63444a510a62870c33800b5d90cd8c9b"
+          }
+        },
+        {
+          "name": "BU14.TGA",
+          "anchor": [
+            16,
+            87
+          ],
+          "source_size": [
+            112,
+            96
+          ],
+          "crop_origin": [
+            40,
+            5
+          ],
+          "source_rgb_sha256": "5cac7714bf0c0b09e3ae8e921ea5e280185e3b63568dda61d0df0fd9b5ba9efa",
+          "pose": "jump-kick",
+          "lower_id": 14,
+          "index": 14,
+          "category": "normal",
+          "resource": {
+            "name": "BU14.TGA",
+            "width": 72,
+            "height": 55,
+            "bits": 8,
+            "vram": 3960,
+            "palette_group": "buck",
+            "aligned_bytes": 3968,
+            "sha256": "cd9436ba28bde550d700597cfbe3b99a5b391409dddfcc8cf26a5d1fa98c9f2e"
+          }
+        },
+        {
+          "name": "BT00.TGA",
+          "anchor": [
+            31,
+            87
+          ],
+          "source_size": [
+            192,
+            96
+          ],
+          "crop_origin": [
+            65,
+            5
+          ],
+          "source_rgb_sha256": "b576236820593e77ddc034a4b91d73b04abec9f87e6d3718f6185815f6ad8105",
+          "pose": "bat-draw",
+          "upper_rgb_sha256": "4ea573f9db8389d308de16ed81628a8aa7d07ecada12086a041bb1611f96d39e",
+          "grip": [
+            4,
+            37
+          ],
+          "tip": [
+            -30,
+            62
+          ],
+          "index": 0,
+          "category": "bat",
+          "resource": {
+            "name": "BT00.TGA",
+            "width": 56,
+            "height": 60,
+            "bits": 8,
+            "vram": 3360,
+            "palette_group": "buck",
+            "aligned_bytes": 3360,
+            "sha256": "789a802c558c71adf4ed8f40d7fd8f65c328023ccf76790619aa3760e299b11e"
+          }
+        },
+        {
+          "name": "BT01.TGA",
+          "anchor": [
+            36,
+            87
+          ],
+          "source_size": [
+            192,
+            96
+          ],
+          "crop_origin": [
+            60,
+            5
+          ],
+          "source_rgb_sha256": "4eb52dd5e3a3cf13d2f3e3c8a763e6cb48bdf0eccb74489d81a314c9ea184e6f",
+          "pose": "bat-coil",
+          "upper_rgb_sha256": "5c10f3d770127fa788126b9fe4ea5ac51f90c19aca47f4f72bd3db0b5c269c32",
+          "grip": [
+            -1,
+            40
+          ],
+          "tip": [
+            -35,
+            72
+          ],
+          "index": 1,
+          "category": "bat",
+          "resource": {
+            "name": "BT01.TGA",
+            "width": 56,
+            "height": 69,
+            "bits": 8,
+            "vram": 3864,
+            "palette_group": "buck",
+            "aligned_bytes": 3872,
+            "sha256": "df921f4e717b4557452c25d48f95ab05e9dea8ee9d4df84fab9a95359bbc6880"
+          }
+        },
+        {
+          "name": "BT02.TGA",
+          "anchor": [
+            15,
+            87
+          ],
+          "source_size": [
+            192,
+            96
+          ],
+          "crop_origin": [
+            81,
+            5
+          ],
+          "source_rgb_sha256": "82ed289d47fc1193f61459467b257eeb3739031d8fc7ab76b8ccdd9b7d46145e",
+          "pose": "bat-accelerate",
+          "upper_rgb_sha256": "fdb4f4129b10d2c82432190f72b3aa2eddd90d774672ce0f9dca8ef762ba6a74",
+          "grip": [
+            23,
+            43
+          ],
+          "tip": [
+            68,
+            74
+          ],
+          "index": 2,
+          "category": "bat",
+          "resource": {
+            "name": "BT02.TGA",
+            "width": 88,
+            "height": 83,
+            "bits": 8,
+            "vram": 7304,
+            "palette_group": "buck",
+            "aligned_bytes": 7328,
+            "sha256": "426ddda57dd708b718aac97c8aa043656d1a2fbe0031eead4944654155efbd20"
+          }
+        },
+        {
+          "name": "BT03.TGA",
+          "anchor": [
+            12,
+            87
+          ],
+          "source_size": [
+            192,
+            96
+          ],
+          "crop_origin": [
+            84,
+            5
+          ],
+          "source_rgb_sha256": "77cc9191d4fd09e926c8acd8ad9a15eb9faf285fd1d1c3e5a10d82c0921bbc30",
+          "pose": "bat-contact",
+          "upper_rgb_sha256": "9c603544509a461fba2298ae0116a7df465f8f3def642a677b007e01c8534d9c",
+          "grip": [
+            27,
+            38
+          ],
+          "tip": [
+            82,
+            40
+          ],
+          "index": 3,
+          "category": "bat",
+          "resource": {
+            "name": "BT03.TGA",
+            "width": 96,
+            "height": 53,
+            "bits": 8,
+            "vram": 5088,
+            "palette_group": "buck",
+            "aligned_bytes": 5088,
+            "sha256": "bb9d30ae827f7c9d763af1e81560f5bf3aa49d617e1cc1cb82b6aeaf3b958cd9"
+          }
+        },
+        {
+          "name": "BT04.TGA",
+          "anchor": [
+            12,
+            87
+          ],
+          "source_size": [
+            192,
+            96
+          ],
+          "crop_origin": [
+            84,
+            5
+          ],
+          "source_rgb_sha256": "32ccb9cf9c8b7fb1b95c3a65cd85bcf307eeed659cdbb88ade09e26716d0407c",
+          "pose": "bat-sweep",
+          "upper_rgb_sha256": "23921aa4ab4c05ccb405c75dfc0ad8cfb2367a03670a5c651f2fdfe61a7d5390",
+          "grip": [
+            22,
+            29
+          ],
+          "tip": [
+            55,
+            7
+          ],
+          "index": 4,
+          "category": "bat",
+          "resource": {
+            "name": "BT04.TGA",
+            "width": 72,
+            "height": 53,
+            "bits": 8,
+            "vram": 3816,
+            "palette_group": "buck",
+            "aligned_bytes": 3840,
+            "sha256": "874ac65901c0a763e74449444828d10599b64088b4a277432e922e981cb52693"
+          }
+        },
+        {
+          "name": "BT05.TGA",
+          "anchor": [
+            37,
+            87
+          ],
+          "source_size": [
+            192,
+            96
+          ],
+          "crop_origin": [
+            59,
+            5
+          ],
+          "source_rgb_sha256": "abf530ed0758887e6e825803280a6d530100e2c2d31d6469d5a9aa4321d5c647",
+          "pose": "bat-follow",
+          "upper_rgb_sha256": "0c8ee1a02455394cee14c646eaff465fca2dcf19574972e6ec31df57fba87d17",
+          "grip": [
+            0,
+            28
+          ],
+          "tip": [
+            -36,
+            9
+          ],
+          "index": 5,
+          "category": "bat",
+          "resource": {
+            "name": "BT05.TGA",
+            "width": 56,
+            "height": 53,
+            "bits": 8,
+            "vram": 2968,
+            "palette_group": "buck",
+            "aligned_bytes": 2976,
+            "sha256": "aa8f21767d9fd12de65a1f26c82a5c65067d38146284a230bdaccfb7ecb8c5ac"
+          }
+        },
+        {
+          "name": "BT06.TGA",
+          "anchor": [
+            34,
+            87
+          ],
+          "source_size": [
+            192,
+            96
+          ],
+          "crop_origin": [
+            62,
+            5
+          ],
+          "source_rgb_sha256": "c76a01099ddf486298fab63aea8bbd3c143b64730ac626d7c45d92f28c60eee0",
+          "pose": "bat-recover",
+          "upper_rgb_sha256": "25f0d1a2a32da704df115f432c0ae5d19f54fdbb635c04759fe5792111de073e",
+          "grip": [
+            5,
+            32
+          ],
+          "tip": [
+            -34,
+            25
+          ],
+          "index": 6,
+          "category": "bat",
+          "resource": {
+            "name": "BT06.TGA",
+            "width": 64,
+            "height": 53,
+            "bits": 8,
+            "vram": 3392,
+            "palette_group": "buck",
+            "aligned_bytes": 3392,
+            "sha256": "da1183c0fa655fa313164fd30ec6ff2006321c50497424ab190fabb542edaa27"
+          }
+        },
+        {
+          "name": "TU0.TGA",
+          "anchor": [
+            18,
+            87
+          ],
+          "source_size": [
+            112,
+            96
+          ],
+          "crop_origin": [
+            38,
+            5
+          ],
+          "source_rgb_sha256": "a957903ca307462d15d084d954b8ec772435b7e06e37a8f8a1cef5311870ee2b",
+          "pose": "equip",
+          "index": 0,
+          "category": "torch",
+          "resource": {
+            "name": "TU0.TGA",
+            "width": 48,
+            "height": 55,
+            "bits": 8,
+            "vram": 2640,
+            "palette_group": "buck",
+            "aligned_bytes": 2656,
+            "sha256": "7b20bd20b1848c050ec6c5edbe387b098cd7ce207b76f24cb71791316e35ced7"
+          }
+        },
+        {
+          "name": "TU1.TGA",
+          "anchor": [
+            14,
+            87
+          ],
+          "source_size": [
+            112,
+            96
+          ],
+          "crop_origin": [
+            42,
+            5
+          ],
+          "source_rgb_sha256": "a4c964bd70bcfc4dce66070ee71fc6278228f49de028eb4b183330cf90f75eb2",
+          "pose": "aim-fire",
+          "index": 1,
+          "category": "torch",
+          "resource": {
+            "name": "TU1.TGA",
+            "width": 56,
+            "height": 55,
+            "bits": 8,
+            "vram": 3080,
+            "palette_group": "buck",
+            "aligned_bytes": 3104,
+            "sha256": "181fec570d453afbd50a7596a1c6ca3b35019366575bfe85edb245c0d33c4473"
+          }
+        },
+        {
+          "name": "TU2.TGA",
+          "anchor": [
+            17,
+            87
+          ],
+          "source_size": [
+            112,
+            96
+          ],
+          "crop_origin": [
+            39,
+            5
+          ],
+          "source_rgb_sha256": "622fdb014944b76b74249b61892a033730d724712c0de2335c74ddcbd7cbb3bb",
+          "pose": "put-away",
+          "index": 2,
+          "category": "torch",
+          "resource": {
+            "name": "TU2.TGA",
+            "width": 40,
+            "height": 60,
+            "bits": 8,
+            "vram": 2400,
+            "palette_group": "buck",
+            "aligned_bytes": 2400,
+            "sha256": "33c7a665e74c0c596de22af29071339a0df6d7e4369281ab68c60858dc9947ae"
+          }
+        }
+      ]
+    },
+    "chuck": {
+      "standing_height": 88,
+      "frames": [
+        {
+          "name": "CH00.TGA",
+          "anchor": [
+            17,
+            87
+          ],
+          "source_size": [
+            72,
+            96
+          ],
+          "crop_origin": [
+            19,
+            5
+          ],
+          "source_rgb_sha256": "003c385b1ce066aca5ea08607e86e7b07f15f9cd574f9a7b6863260f0fab07be",
+          "pose": "idle-guard",
+          "lower_id": 0,
+          "index": 0,
+          "category": "normal",
+          "resource": {
+            "name": "CH00.TGA",
+            "width": 48,
+            "height": 55,
+            "bits": 8,
+            "vram": 2640,
+            "palette_group": "chuck",
+            "aligned_bytes": 2656,
+            "sha256": "08d57a328e43a37cbcdeb754ee6b2cbc6358b1d8b7a8905dd9b2a70ec2bba2b6"
+          }
+        },
+        {
+          "name": "CH01.TGA",
+          "anchor": [
+            17,
+            86
+          ],
+          "source_size": [
+            72,
+            96
+          ],
+          "crop_origin": [
+            19,
+            6
+          ],
+          "source_rgb_sha256": "df981da4c8a8ea2ab189f607bcbefa4ef1a0169900e8da616c949e1c0e219462",
+          "pose": "idle-breathe",
+          "lower_id": 1,
+          "index": 1,
+          "category": "normal",
+          "resource": {
+            "name": "CH01.TGA",
+            "width": 48,
+            "height": 54,
+            "bits": 8,
+            "vram": 2592,
+            "palette_group": "chuck",
+            "aligned_bytes": 2592,
+            "sha256": "9288150372c2e8f208bebc96bb10c6aa3f3c635ce685ed1fa46926137bfa7e5c"
+          }
+        },
+        {
+          "name": "CH02.TGA",
+          "anchor": [
+            18,
+            87
+          ],
+          "source_size": [
+            72,
+            96
+          ],
+          "crop_origin": [
+            18,
+            5
+          ],
+          "source_rgb_sha256": "862f7493bf3bd749d9d1ff95017fef8a00f4e4c35d02437640e58f4d001e0971",
+          "pose": "walk-contact-L",
+          "lower_id": 2,
+          "index": 2,
+          "category": "normal",
+          "resource": {
+            "name": "CH02.TGA",
+            "width": 48,
+            "height": 55,
+            "bits": 8,
+            "vram": 2640,
+            "palette_group": "chuck",
+            "aligned_bytes": 2656,
+            "sha256": "4381a3fce28855c24150c35345447675b5aae6a40a4c15783d8307021876eb4d"
+          }
+        },
+        {
+          "name": "CH03.TGA",
+          "anchor": [
+            19,
+            85
+          ],
+          "source_size": [
+            72,
+            96
+          ],
+          "crop_origin": [
+            17,
+            7
+          ],
+          "source_rgb_sha256": "85c65cb74f0f62cc29c119c83a2610d0f7f708d479ebaea25e547936959efb60",
+          "pose": "walk-down-L",
+          "lower_id": 3,
+          "index": 3,
+          "category": "normal",
+          "resource": {
+            "name": "CH03.TGA",
+            "width": 48,
+            "height": 53,
+            "bits": 8,
+            "vram": 2544,
+            "palette_group": "chuck",
+            "aligned_bytes": 2560,
+            "sha256": "bb3c27dd9a7ee3adf22ab906250addfbaa3f0334aad951917beb8865679965d9"
+          }
+        },
+        {
+          "name": "CH04.TGA",
+          "anchor": [
+            17,
+            86
+          ],
+          "source_size": [
+            72,
+            96
+          ],
+          "crop_origin": [
+            19,
+            6
+          ],
+          "source_rgb_sha256": "a27f3acc545f8f16659261838546ddbda973c9734bcc6eaea04f0bf32cd6c205",
+          "pose": "walk-pass-L",
+          "lower_id": 4,
+          "index": 4,
+          "category": "normal",
+          "resource": {
+            "name": "CH04.TGA",
+            "width": 48,
+            "height": 54,
+            "bits": 8,
+            "vram": 2592,
+            "palette_group": "chuck",
+            "aligned_bytes": 2592,
+            "sha256": "2a30d9d0c3a781b8c64988101902aca287dcc9a586c96085798c49e13e5ac8f4"
+          }
+        },
+        {
+          "name": "CH05.TGA",
+          "anchor": [
+            16,
+            87
+          ],
+          "source_size": [
+            72,
+            96
+          ],
+          "crop_origin": [
+            20,
+            5
+          ],
+          "source_rgb_sha256": "e9c3301847e63baebe170682c1d7e3cec0253a2cef45109aa4de7ed4b79dd09d",
+          "pose": "walk-contact-R",
+          "lower_id": 5,
+          "index": 5,
+          "category": "normal",
+          "resource": {
+            "name": "CH05.TGA",
+            "width": 48,
+            "height": 55,
+            "bits": 8,
+            "vram": 2640,
+            "palette_group": "chuck",
+            "aligned_bytes": 2656,
+            "sha256": "f6dc5e7c731400091723c5bf99f0b9f862c8e4e2bdabbee2a6362dea925af510"
+          }
+        },
+        {
+          "name": "CH06.TGA",
+          "anchor": [
+            15,
+            85
+          ],
+          "source_size": [
+            72,
+            96
+          ],
+          "crop_origin": [
+            21,
+            7
+          ],
+          "source_rgb_sha256": "4577ec9bb405bab227829a99cb7074f795bf12e2d3a12baa350d507a792aaf3d",
+          "pose": "walk-down-R",
+          "lower_id": 6,
+          "index": 6,
+          "category": "normal",
+          "resource": {
+            "name": "CH06.TGA",
+            "width": 48,
+            "height": 53,
+            "bits": 8,
+            "vram": 2544,
+            "palette_group": "chuck",
+            "aligned_bytes": 2560,
+            "sha256": "ede3541890d52f9c9600d57500920100df22f40a7617c0489fae1398e317bd98"
+          }
+        },
+        {
+          "name": "CH07.TGA",
+          "anchor": [
+            17,
+            86
+          ],
+          "source_size": [
+            72,
+            96
+          ],
+          "crop_origin": [
+            19,
+            6
+          ],
+          "source_rgb_sha256": "bb026342ba988e21be749bc2707dcbbeb24087649a2f57d2b48d79bad2995869",
+          "pose": "walk-pass-R",
+          "lower_id": 7,
+          "index": 7,
+          "category": "normal",
+          "resource": {
+            "name": "CH07.TGA",
+            "width": 48,
+            "height": 54,
+            "bits": 8,
+            "vram": 2592,
+            "palette_group": "chuck",
+            "aligned_bytes": 2592,
+            "sha256": "5231bdf2124d8edf81f4e91f83dab95937e595ee58aba793278fdaa7421fabf7"
+          }
+        },
+        {
+          "name": "CH08.TGA",
+          "anchor": [
+            21,
+            85
+          ],
+          "source_size": [
+            72,
+            96
+          ],
+          "crop_origin": [
+            15,
+            7
+          ],
+          "source_rgb_sha256": "45f827ed87edb5d1f7f1013b7fe3bebcfb976606ca73a9c1f8b25c23aafe20b1",
+          "pose": "punch-coil",
+          "lower_id": 8,
+          "index": 8,
+          "category": "normal",
+          "resource": {
+            "name": "CH08.TGA",
+            "width": 48,
+            "height": 53,
+            "bits": 8,
+            "vram": 2544,
+            "palette_group": "chuck",
+            "aligned_bytes": 2560,
+            "sha256": "5409df8a1785fb77823a729607d4924c5d8dff58cccc09d202a9314d75a62db6"
+          }
+        },
+        {
+          "name": "CH09.TGA",
+          "anchor": [
+            12,
+            87
+          ],
+          "source_size": [
+            112,
+            96
+          ],
+          "crop_origin": [
+            44,
+            5
+          ],
+          "source_rgb_sha256": "54c7bb9f3b73da5cf95e5660fb941682a177e2a99871463986de4be27c6d4c6a",
+          "pose": "punch-contact",
+          "lower_id": 9,
+          "index": 9,
+          "category": "normal",
+          "resource": {
+            "name": "CH09.TGA",
+            "width": 72,
+            "height": 55,
+            "bits": 8,
+            "vram": 3960,
+            "palette_group": "chuck",
+            "aligned_bytes": 3968,
+            "sha256": "969032fbabddc03c75e6c4e226acd1380a491d6f2bf4cc3bf61161507531df3c"
+          }
+        },
+        {
+          "name": "CH10.TGA",
+          "anchor": [
+            15,
+            86
+          ],
+          "source_size": [
+            72,
+            96
+          ],
+          "crop_origin": [
+            21,
+            6
+          ],
+          "source_rgb_sha256": "186cb2ef5a49bc90d938c6d92767f758e38572dc8eb8b686de71fcd2bf6a3e2b",
+          "pose": "punch-recover",
+          "lower_id": 10,
+          "index": 10,
+          "category": "normal",
+          "resource": {
+            "name": "CH10.TGA",
+            "width": 48,
+            "height": 54,
+            "bits": 8,
+            "vram": 2592,
+            "palette_group": "chuck",
+            "aligned_bytes": 2592,
+            "sha256": "3a9af844682b3057a81c1bfef266a52587b9cf2c63dbfbbad6c4723f5019afb6"
+          }
+        },
+        {
+          "name": "CH11.TGA",
+          "anchor": [
+            19,
+            82
+          ],
+          "source_size": [
+            72,
+            96
+          ],
+          "crop_origin": [
+            17,
+            10
+          ],
+          "source_rgb_sha256": "4ed3513be46eed111534fa13299044827d6e98ad35ba56f2bb61ffbd516e530f",
+          "pose": "jump-takeoff",
+          "lower_id": 11,
+          "index": 11,
+          "category": "normal",
+          "resource": {
+            "name": "CH11.TGA",
+            "width": 48,
+            "height": 50,
+            "bits": 8,
+            "vram": 2400,
+            "palette_group": "chuck",
+            "aligned_bytes": 2400,
+            "sha256": "b90a035b4b265dc59e778ff28450698273a627814b22a6191948ea0d557b697f"
+          }
+        },
+        {
+          "name": "CH12.TGA",
+          "anchor": [
+            17,
+            88
+          ],
+          "source_size": [
+            72,
+            96
+          ],
+          "crop_origin": [
+            19,
+            4
+          ],
+          "source_rgb_sha256": "959bc3de573ca9615cf36aae1152f85ad9c5a144f43815e29b97a7f697f9d0fe",
+          "pose": "jump-air",
+          "lower_id": 12,
+          "index": 12,
+          "category": "normal",
+          "resource": {
+            "name": "CH12.TGA",
+            "width": 56,
+            "height": 56,
+            "bits": 8,
+            "vram": 3136,
+            "palette_group": "chuck",
+            "aligned_bytes": 3136,
+            "sha256": "e99b1008e0088793102da5d3d1e14f3ef2f86ae1e727bcf65b08ff44385819cc"
+          }
+        },
+        {
+          "name": "CH13.TGA",
+          "anchor": [
+            19,
+            81
+          ],
+          "source_size": [
+            72,
+            96
+          ],
+          "crop_origin": [
+            17,
+            11
+          ],
+          "source_rgb_sha256": "ce36c2dc8626449b6b6ce217c0cdba9b494bbb737a1beab81a1833961cdada13",
+          "pose": "jump-land",
+          "lower_id": 13,
+          "index": 13,
+          "category": "normal",
+          "resource": {
+            "name": "CH13.TGA",
+            "width": 48,
+            "height": 49,
+            "bits": 8,
+            "vram": 2352,
+            "palette_group": "chuck",
+            "aligned_bytes": 2368,
+            "sha256": "be8a7bf2549d644328ab44257898aa151dd4762816d590bed88a4286b6674d5a"
+          }
+        },
+        {
+          "name": "CH14.TGA",
+          "anchor": [
+            15,
+            87
+          ],
+          "source_size": [
+            112,
+            96
+          ],
+          "crop_origin": [
+            41,
+            5
+          ],
+          "source_rgb_sha256": "a70b8bec856b14026003628d4f9750c19083f24052d7e08dbebb04bdc6899ea9",
+          "pose": "jump-kick",
+          "lower_id": 14,
+          "index": 14,
+          "category": "normal",
+          "resource": {
+            "name": "CH14.TGA",
+            "width": 72,
+            "height": 55,
+            "bits": 8,
+            "vram": 3960,
+            "palette_group": "chuck",
+            "aligned_bytes": 3968,
+            "sha256": "949ac1233c3a7d51087e6d26165d6d5d80455769e07683fc37dd311215a5d0ee"
+          }
+        },
+        {
+          "name": "CT00.TGA",
+          "anchor": [
+            31,
+            87
+          ],
+          "source_size": [
+            192,
+            96
+          ],
+          "crop_origin": [
+            65,
+            5
+          ],
+          "source_rgb_sha256": "2bcf663f304ee636a42b92ef51548bab790309ba6d4481ec994d78e016adeb72",
+          "pose": "bat-draw",
+          "upper_rgb_sha256": "e75cffa9f969740a21f5f42b2210fa157d64d696fcef7f1e38cfcdbeee58f7cb",
+          "grip": [
+            4,
+            37
+          ],
+          "tip": [
+            -30,
+            62
+          ],
+          "index": 0,
+          "category": "bat",
+          "resource": {
+            "name": "CT00.TGA",
+            "width": 56,
+            "height": 60,
+            "bits": 8,
+            "vram": 3360,
+            "palette_group": "chuck",
+            "aligned_bytes": 3360,
+            "sha256": "d89014785b5d01765e8610f7027f5c35ce0cd4bbc9a6fa3876ae70d0314a0055"
+          }
+        },
+        {
+          "name": "CT01.TGA",
+          "anchor": [
+            36,
+            87
+          ],
+          "source_size": [
+            192,
+            96
+          ],
+          "crop_origin": [
+            60,
+            5
+          ],
+          "source_rgb_sha256": "b7af50f125351750b664f4e741f19072719ec9dc24487b618b9e83454e60a784",
+          "pose": "bat-coil",
+          "upper_rgb_sha256": "5d5ad83a97b8038e6ea41ed9c10586f6b1b573e45c3a7f84bebc14b502d33616",
+          "grip": [
+            -1,
+            40
+          ],
+          "tip": [
+            -35,
+            72
+          ],
+          "index": 1,
+          "category": "bat",
+          "resource": {
+            "name": "CT01.TGA",
+            "width": 56,
+            "height": 69,
+            "bits": 8,
+            "vram": 3864,
+            "palette_group": "chuck",
+            "aligned_bytes": 3872,
+            "sha256": "e0cef71928416e438f78b80306262f63352fe4d240a0622f3f925cfd7efa916f"
+          }
+        },
+        {
+          "name": "CT02.TGA",
+          "anchor": [
+            15,
+            87
+          ],
+          "source_size": [
+            192,
+            96
+          ],
+          "crop_origin": [
+            81,
+            5
+          ],
+          "source_rgb_sha256": "68ae13ba8df42a35380d61dedcea7e1b900f1aa8e6c8969ee483df5e617cb573",
+          "pose": "bat-accelerate",
+          "upper_rgb_sha256": "89220d739a1dbfaaa865e3a66428270b442d4be389e7de20e5ea9b24688ab045",
+          "grip": [
+            23,
+            43
+          ],
+          "tip": [
+            68,
+            74
+          ],
+          "index": 2,
+          "category": "bat",
+          "resource": {
+            "name": "CT02.TGA",
+            "width": 88,
+            "height": 83,
+            "bits": 8,
+            "vram": 7304,
+            "palette_group": "chuck",
+            "aligned_bytes": 7328,
+            "sha256": "44e7eee491ffacca2b026b3b4c5b01a95eee6723d1ed14a984114b907ad64792"
+          }
+        },
+        {
+          "name": "CT03.TGA",
+          "anchor": [
+            12,
+            87
+          ],
+          "source_size": [
+            192,
+            96
+          ],
+          "crop_origin": [
+            84,
+            5
+          ],
+          "source_rgb_sha256": "b69caafb5d258783b912c2eb8ef538c7e44d0b4a2733bfe98ec1a53d7868982a",
+          "pose": "bat-contact",
+          "upper_rgb_sha256": "d43ca7af159119e4ba8396d734001d237d679cc3116e388ded16fb852aba5267",
+          "grip": [
+            27,
+            38
+          ],
+          "tip": [
+            82,
+            40
+          ],
+          "index": 3,
+          "category": "bat",
+          "resource": {
+            "name": "CT03.TGA",
+            "width": 96,
+            "height": 53,
+            "bits": 8,
+            "vram": 5088,
+            "palette_group": "chuck",
+            "aligned_bytes": 5088,
+            "sha256": "42e83c08a0076ba606d08cb9dffe513574aa07af684a5a20be9046b4d0f40ef1"
+          }
+        },
+        {
+          "name": "CT04.TGA",
+          "anchor": [
+            12,
+            87
+          ],
+          "source_size": [
+            192,
+            96
+          ],
+          "crop_origin": [
+            84,
+            5
+          ],
+          "source_rgb_sha256": "f754c531d5a8cd1dd94dfa4f80148f253dac746eeb1ede28d6684c662ca3c777",
+          "pose": "bat-sweep",
+          "upper_rgb_sha256": "526b0bd0282a9e69a2522d8d4dadad580fb3736a5e2fcb96f967239a8c614328",
+          "grip": [
+            22,
+            29
+          ],
+          "tip": [
+            55,
+            7
+          ],
+          "index": 4,
+          "category": "bat",
+          "resource": {
+            "name": "CT04.TGA",
+            "width": 72,
+            "height": 53,
+            "bits": 8,
+            "vram": 3816,
+            "palette_group": "chuck",
+            "aligned_bytes": 3840,
+            "sha256": "013df7a50ea482e9277860f40c8c52ded9c84081db20deda3ed29431af47d1b8"
+          }
+        },
+        {
+          "name": "CT05.TGA",
+          "anchor": [
+            37,
+            87
+          ],
+          "source_size": [
+            192,
+            96
+          ],
+          "crop_origin": [
+            59,
+            5
+          ],
+          "source_rgb_sha256": "fe403b72f5c285fb870d8bcc01620063e3abccc2507e560acf15a0a68c05a9df",
+          "pose": "bat-follow",
+          "upper_rgb_sha256": "189e4435d68844754b5ea7c6d97bcb05622a7375be0e4d80b1e02baf8cb3817b",
+          "grip": [
+            0,
+            28
+          ],
+          "tip": [
+            -36,
+            9
+          ],
+          "index": 5,
+          "category": "bat",
+          "resource": {
+            "name": "CT05.TGA",
+            "width": 56,
+            "height": 53,
+            "bits": 8,
+            "vram": 2968,
+            "palette_group": "chuck",
+            "aligned_bytes": 2976,
+            "sha256": "d30b2f9fc7e12f0169a680bcb606d25764dfc7093a94d6f0971add026713ee42"
+          }
+        },
+        {
+          "name": "CT06.TGA",
+          "anchor": [
+            34,
+            87
+          ],
+          "source_size": [
+            192,
+            96
+          ],
+          "crop_origin": [
+            62,
+            5
+          ],
+          "source_rgb_sha256": "b03e3b53ac80bdc75bda8cb1b0d432df00b216f065af6fd9e60317633dbd869d",
+          "pose": "bat-recover",
+          "upper_rgb_sha256": "d0d6b6fdb62976fbfb8723721fea60a86385c68198752720f110fc965e030c09",
+          "grip": [
+            5,
+            32
+          ],
+          "tip": [
+            -34,
+            25
+          ],
+          "index": 6,
+          "category": "bat",
+          "resource": {
+            "name": "CT06.TGA",
+            "width": 64,
+            "height": 53,
+            "bits": 8,
+            "vram": 3392,
+            "palette_group": "chuck",
+            "aligned_bytes": 3392,
+            "sha256": "872b7cc5ce2bce1fad0c153cda7489f85644cb8b51e029d88bd5618f7657b741"
+          }
+        },
+        {
+          "name": "TC0.TGA",
+          "anchor": [
+            18,
+            87
+          ],
+          "source_size": [
+            112,
+            96
+          ],
+          "crop_origin": [
+            38,
+            5
+          ],
+          "source_rgb_sha256": "fdf80c6dada2fc7ac3857d950119fb9540e71bb17917b62606daa722a5a9495f",
+          "pose": "equip",
+          "index": 0,
+          "category": "torch",
+          "resource": {
+            "name": "TC0.TGA",
+            "width": 48,
+            "height": 55,
+            "bits": 8,
+            "vram": 2640,
+            "palette_group": "chuck",
+            "aligned_bytes": 2656,
+            "sha256": "2e0480af334006c95ec2bee213937fe075ceea9e4ff0f30024291a5f60231926"
+          }
+        },
+        {
+          "name": "TC1.TGA",
+          "anchor": [
+            14,
+            87
+          ],
+          "source_size": [
+            112,
+            96
+          ],
+          "crop_origin": [
+            42,
+            5
+          ],
+          "source_rgb_sha256": "5e3a3755895c0047565a75dfbfbee4b577d1e02dec5ceca8b4540f938a92ec4e",
+          "pose": "aim-fire",
+          "index": 1,
+          "category": "torch",
+          "resource": {
+            "name": "TC1.TGA",
+            "width": 56,
+            "height": 55,
+            "bits": 8,
+            "vram": 3080,
+            "palette_group": "chuck",
+            "aligned_bytes": 3104,
+            "sha256": "16d5c5e38bef0a27bfae6a7aff962a1eaa69882258e19024d42709fedb57f7f6"
+          }
+        },
+        {
+          "name": "TC2.TGA",
+          "anchor": [
+            17,
+            87
+          ],
+          "source_size": [
+            112,
+            96
+          ],
+          "crop_origin": [
+            39,
+            5
+          ],
+          "source_rgb_sha256": "4883d560f0d42441e889ff9bd05dbce42fe4ed9fa1d79a9576c1861ad6c957c5",
+          "pose": "put-away",
+          "index": 2,
+          "category": "torch",
+          "resource": {
+            "name": "TC2.TGA",
+            "width": 40,
+            "height": 60,
+            "bits": 8,
+            "vram": 2400,
+            "palette_group": "chuck",
+            "aligned_bytes": 2400,
+            "sha256": "188c9e72920beb51346bcadc2058157d6491a107c437f05f419c9029f2d2b052"
+          }
+        }
+      ]
+    }
+  },
+  "shared_lowers": [
+    {
+      "name": "NL00.TGA",
+      "width": 48,
+      "height": 33,
+      "bits": 8,
+      "vram": 1584,
+      "palette_group": "buck",
+      "aligned_bytes": 1600,
+      "sha256": "7d64dfa2ed919ec8e466720da59d83a2ec04bee6224d42bbb6d782067ef412b7"
+    },
+    {
+      "name": "NL01.TGA",
+      "width": 48,
+      "height": 33,
+      "bits": 8,
+      "vram": 1584,
+      "palette_group": "buck",
+      "aligned_bytes": 1600,
+      "sha256": "3690a4502ccdcf94a38ec086982d7418bac8b6d7321b90ee1b54314480827782"
+    },
+    {
+      "name": "NL02.TGA",
+      "width": 64,
+      "height": 33,
+      "bits": 8,
+      "vram": 2112,
+      "palette_group": "buck",
+      "aligned_bytes": 2112,
+      "sha256": "75d7a4aa8bf40ad5a4bb1bc299de42a39b80f14894bb3b3b514fde87a7cb737a"
+    },
+    {
+      "name": "NL03.TGA",
+      "width": 48,
+      "height": 33,
+      "bits": 8,
+      "vram": 1584,
+      "palette_group": "buck",
+      "aligned_bytes": 1600,
+      "sha256": "e34a20e6e04aaa3db3837812eb84ce9a84f53d4ec679ccf2b5d30e28c814a56c"
+    },
+    {
+      "name": "NL04.TGA",
+      "width": 40,
+      "height": 33,
+      "bits": 8,
+      "vram": 1320,
+      "palette_group": "buck",
+      "aligned_bytes": 1344,
+      "sha256": "31ae947a8a0d308ab0b0c105e0292de473cdb3e7ef2940e59c912fe496dc18dc"
+    },
+    {
+      "name": "NL05.TGA",
+      "width": 56,
+      "height": 33,
+      "bits": 8,
+      "vram": 1848,
+      "palette_group": "buck",
+      "aligned_bytes": 1856,
+      "sha256": "885997eebb545a86edd53402c83fd855cc2c4be6ced8dd4284b00493a8bcb69e"
+    },
+    {
+      "name": "NL06.TGA",
+      "width": 48,
+      "height": 33,
+      "bits": 8,
+      "vram": 1584,
+      "palette_group": "buck",
+      "aligned_bytes": 1600,
+      "sha256": "07d70ded03f4d2c743e9d28b88581f8fa53625ff1c76897e42c271c6335555d4"
+    },
+    {
+      "name": "NL07.TGA",
+      "width": 32,
+      "height": 33,
+      "bits": 8,
+      "vram": 1056,
+      "palette_group": "buck",
+      "aligned_bytes": 1056,
+      "sha256": "b2446c5d97cb795a1652bdc5597aeb2fcd1298b18e8cc9407ba69386d964fbf5"
+    },
+    {
+      "name": "NL08.TGA",
+      "width": 48,
+      "height": 33,
+      "bits": 8,
+      "vram": 1584,
+      "palette_group": "buck",
+      "aligned_bytes": 1600,
+      "sha256": "411d0a0b2df19f28a825a7798585b647635adb623e2be849f0ce802c88d29ea3"
+    },
+    {
+      "name": "NL09.TGA",
+      "width": 48,
+      "height": 33,
+      "bits": 8,
+      "vram": 1584,
+      "palette_group": "buck",
+      "aligned_bytes": 1600,
+      "sha256": "7afcb623e0d3e128b21de7f8124d62dc65256b60fea78002065a47bba5e2ddf7"
+    },
+    {
+      "name": "NL10.TGA",
+      "width": 48,
+      "height": 33,
+      "bits": 8,
+      "vram": 1584,
+      "palette_group": "buck",
+      "aligned_bytes": 1600,
+      "sha256": "eda24b2ba18db6be34fd0c076061b768ab234f06587aea49ca5c7485a04b1c39"
+    },
+    {
+      "name": "NL11.TGA",
+      "width": 48,
+      "height": 33,
+      "bits": 8,
+      "vram": 1584,
+      "palette_group": "buck",
+      "aligned_bytes": 1600,
+      "sha256": "9ef5298806774d1f767f746333f9fe8cc8643c0cdd35f26cf8a4644d789b5695"
+    },
+    {
+      "name": "NL12.TGA",
+      "width": 40,
+      "height": 22,
+      "bits": 8,
+      "vram": 880,
+      "palette_group": "buck",
+      "aligned_bytes": 896,
+      "sha256": "d584112340a626740056dd6d95064be321e8ce9be771ab3913d869acd7369068"
+    },
+    {
+      "name": "NL13.TGA",
+      "width": 48,
+      "height": 33,
+      "bits": 8,
+      "vram": 1584,
+      "palette_group": "buck",
+      "aligned_bytes": 1600,
+      "sha256": "e019ab48b05d09bb5450cc1a5dc65cc508fed80752e11155c6d2e948d52196aa"
+    },
+    {
+      "name": "NL14.TGA",
+      "width": 64,
+      "height": 20,
+      "bits": 8,
+      "vram": 1280,
+      "palette_group": "buck",
+      "aligned_bytes": 1280,
+      "sha256": "1d5fd16a6f67d72fe123223ac34d6d9159ed023af859cf31f5ca9d080c0969f2"
+    },
+    {
+      "name": "LEGS.TGA",
+      "width": 48,
+      "height": 35,
+      "bits": 8,
+      "vram": 1680,
+      "palette_group": "buck",
+      "aligned_bytes": 1696,
+      "sha256": "0d2645f6ff714d0daee583dc41add680ad752e836cd6b8aec72260632b8288d4"
+    },
+    {
+      "name": "AL0.TGA",
+      "width": 56,
+      "height": 26,
+      "bits": 8,
+      "vram": 1456,
+      "palette_group": "buck",
+      "aligned_bytes": 1472,
+      "sha256": "22bd6718fcf2d04d84c0d3bdac7f4abcfcf6d98448f97fefc5df99c7b8a339fa"
+    },
+    {
+      "name": "AL1.TGA",
+      "width": 56,
+      "height": 26,
+      "bits": 8,
+      "vram": 1456,
+      "palette_group": "buck",
+      "aligned_bytes": 1472,
+      "sha256": "5ef4c5b50f7053a55af929d52f8b8d0aa20b1576b88effd86e1da41d2f609822"
+    },
+    {
+      "name": "AL2.TGA",
+      "width": 64,
+      "height": 25,
+      "bits": 8,
+      "vram": 1600,
+      "palette_group": "buck",
+      "aligned_bytes": 1600,
+      "sha256": "f76dc03726bb6b6a678509667a200de84016a225e7147c3909ac1c09bc46b67f"
+    }
+  ],
+  "resources_by_palette": {
+    "street": {
+      "textures": 5,
+      "aligned_bytes": 153600,
+      "raw_bytes": 153600
+    },
+    "buck": {
+      "textures": 44,
+      "aligned_bytes": 109920,
+      "raw_bytes": 109440
+    },
+    "chuck": {
+      "textures": 25,
+      "aligned_bytes": 79872,
+      "raw_bytes": 79640
+    },
+    "enemy": {
+      "textures": 12,
+      "aligned_bytes": 56960,
+      "raw_bytes": 56800
+    },
+    "fire": {
+      "textures": 7,
+      "aligned_bytes": 10624,
+      "raw_bytes": 10560
+    },
+    "rgb16": {
+      "textures": 5,
+      "aligned_bytes": 12416,
+      "raw_bytes": 12416
+    }
+  },
+  "runtime_contract": {
+    "clock_hz": 60,
+    "normal_priority": [
+      "defeated",
+      "hurt",
+      "airborne",
+      "punch",
+      "landing",
+      "walk",
+      "idle"
+    ],
+    "renderer_priority": [
+      "torch if alive and not hurt",
+      "bat if alive and attacking and not hurt",
+      "normal"
+    ],
+    "states": [
+      {
+        "state": "idle",
+        "frames": [
+          0,
+          1
+        ],
+        "selector": "(g.ticks/32)%2",
+        "ticks_per_pose": 32
+      },
+      {
+        "state": "walk",
+        "frames": [
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "selector": "2+(p.walk/5)%6",
+        "ticks_per_pose": 5,
+        "loop_ticks": 30
+      },
+      {
+        "state": "punch/hurt-coil",
+        "frames": [
+          8
+        ],
+        "attack_counters": [
+          1,
+          5
+        ],
+        "hurt_ticks": 12
+      },
+      {
+        "state": "punch-contact",
+        "frames": [
+          9
+        ],
+        "attack_counters": [
+          6,
+          10
+        ],
+        "active_ground": [
+          6,
+          10
+        ]
+      },
+      {
+        "state": "punch-recovery",
+        "frames": [
+          10
+        ],
+        "attack_counters": [
+          11,
+          24
+        ]
+      },
+      {
+        "state": "jump-rise",
+        "frames": [
+          11
+        ],
+        "selector": "height>0 and vz>1200; not attacking"
+      },
+      {
+        "state": "jump-air",
+        "frames": [
+          12
+        ],
+        "selector": "height>0 and vz<=1200; not attacking"
+      },
+      {
+        "state": "landing/defeated",
+        "frames": [
+          13
+        ],
+        "landing_ticks": 6,
+        "defeated_recovery_ticks": 120
+      },
+      {
+        "state": "air-attack",
+        "frames": [
+          14
+        ],
+        "selector": "height>0 and attack>0; normal renderer",
+        "active_air": [
+          3,
+          15
+        ]
+      },
+      {
+        "state": "bat ground/air",
+        "frames": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "attack_counter_intervals": [
+          [
+            1,
+            5
+          ],
+          [
+            6,
+            11
+          ],
+          [
+            12,
+            13
+          ],
+          [
+            14,
+            16
+          ],
+          [
+            17,
+            19
+          ],
+          [
+            20,
+            27
+          ],
+          [
+            28,
+            36
+          ]
+        ],
+        "active_counters": [
+          12,
+          17
+        ],
+        "air_land_resume_counter": 28
+      },
+      {
+        "state": "torch",
+        "frames": [
+          0,
+          1,
+          2
+        ],
+        "names": [
+          "equip",
+          "fire",
+          "away"
+        ],
+        "charge_ticks": 60,
+        "cue_ticks": 40,
+        "equip_ticks": 6,
+        "away_ticks": 6,
+        "note": "Current charge path enters FIRE directly; EQUIP renderer/timer exists but is not entered by this path. Fire held until release/interruption. Damage interval 12 ticks."
+      }
+    ],
+    "jump": {
+      "initial_vz_24_8": 1510,
+      "gravity_24_8_per_tick": 74,
+      "normal_flight_ticks": 42,
+      "maximum_rendered_height_pixels": 63,
+      "root_translation": "world_y - height/256"
+    },
+    "hitboxes_relative_to_ground_root": {
+      "player_hurt": {
+        "x": [
+          -12,
+          12
+        ],
+        "ground_depth": [
+          -8,
+          8
+        ],
+        "z_above_air_height": [
+          4,
+          84
+        ]
+      },
+      "enemy_hurt": {
+        "x": [
+          -13,
+          13
+        ],
+        "ground_depth": [
+          -8,
+          8
+        ],
+        "z": [
+          4,
+          84
+        ]
+      },
+      "punch_right": {
+        "x": [
+          6,
+          52
+        ],
+        "depth": [
+          -8,
+          8
+        ],
+        "z": [
+          30,
+          58
+        ]
+      },
+      "air_kick_right": {
+        "x": [
+          6,
+          54
+        ],
+        "depth": [
+          -8,
+          8
+        ],
+        "z_above_air_height": [
+          24,
+          45
+        ]
+      },
+      "bat_right": {
+        "x": [
+          6,
+          78
+        ],
+        "depth": [
+          -8,
+          8
+        ],
+        "z_by_counter": {
+          "12..13": [
+            14,
+            58
+          ],
+          "14..16": [
+            40,
+            64
+          ],
+          "17": [
+            54,
+            90
+          ]
+        }
+      },
+      "enemy_attack_right": {
+        "x": [
+          8,
+          40
+        ],
+        "depth": [
+          -8,
+          8
+        ],
+        "z": [
+          36,
+          64
+        ]
+      },
+      "torch": {
+        "x_nominal": [
+          34,
+          74
+        ],
+        "x_tolerance": [
+          30,
+          78
+        ],
+        "depth_tolerance": 8,
+        "sloping_z": "40*(74-x)/40 with +/-5 tolerance; ground only"
+      }
+    },
+    "simulation_notes": [
+      "Counters increment at end of simulation; intervals are counter values, not a promise of first rendered dwell.",
+      "3-tick hitstop freezes g.ticks, locomotion and attack counters; input/torch preprocessing precedes hitstop.",
+      "A target is hit once per punch/bat via hit_mask. Artwork must not change active intervals.",
+      "Invulnerability 60 ticks after hit; hurt 12; defeated recovery 120. Respawn gives 120 invulnerability ticks.",
+      "Ground bat freezes walking; normal movement 390/256 px/tick, ground punch 100/256, torch 140/256, diagonal factor 181/256."
+    ]
+  },
+  "original_vdp2_runtime_vdp1_bytes": 291552,
+  "with_approved_gallery_bytes": 302336,
+  "enemies_current_maximum": 2
+}

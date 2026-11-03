@@ -1,0 +1,4155 @@
+{
+  "fallback_checks": [
+    {
+      "frame": 530,
+      "actor": 1,
+      "state": "bat",
+      "compared_pixels": 14368,
+      "mismatches": 0
+    },
+    {
+      "frame": 535,
+      "actor": 0,
+      "state": "jump",
+      "compared_pixels": 21728,
+      "mismatches": 0
+    },
+    {
+      "frame": 535,
+      "actor": 1,
+      "state": "bat",
+      "compared_pixels": 22176,
+      "mismatches": 0
+    },
+    {
+      "frame": 540,
+      "actor": 0,
+      "state": "jump",
+      "compared_pixels": 22176,
+      "mismatches": 0
+    },
+    {
+      "frame": 540,
+      "actor": 1,
+      "state": "bat",
+      "compared_pixels": 22176,
+      "mismatches": 0
+    },
+    {
+      "frame": 545,
+      "actor": 0,
+      "state": "kick",
+      "compared_pixels": 22176,
+      "mismatches": 0
+    },
+    {
+      "frame": 545,
+      "actor": 1,
+      "state": "bat",
+      "compared_pixels": 22176,
+      "mismatches": 0
+    },
+    {
+      "frame": 550,
+      "actor": 0,
+      "state": "kick",
+      "compared_pixels": 22176,
+      "mismatches": 0
+    },
+    {
+      "frame": 550,
+      "actor": 1,
+      "state": "bat",
+      "compared_pixels": 22176,
+      "mismatches": 0
+    },
+    {
+      "frame": 555,
+      "actor": 0,
+      "state": "kick",
+      "compared_pixels": 22176,
+      "mismatches": 0
+    },
+    {
+      "frame": 555,
+      "actor": 1,
+      "state": "bat",
+      "compared_pixels": 22176,
+      "mismatches": 0
+    },
+    {
+      "frame": 560,
+      "actor": 0,
+      "state": "kick",
+      "compared_pixels": 22176,
+      "mismatches": 0
+    },
+    {
+      "frame": 560,
+      "actor": 1,
+      "state": "bat",
+      "compared_pixels": 22176,
+      "mismatches": 0
+    },
+    {
+      "frame": 565,
+      "actor": 0,
+      "state": "kick",
+      "compared_pixels": 12704,
+      "mismatches": 0
+    },
+    {
+      "frame": 570,
+      "actor": 0,
+      "state": "jump",
+      "compared_pixels": 11040,
+      "mismatches": 0
+    },
+    {
+      "frame": 575,
+      "actor": 0,
+      "state": "jump",
+      "compared_pixels": 10016,
+      "mismatches": 0
+    },
+    {
+      "frame": 580,
+      "actor": 0,
+      "state": "jump",
+      "compared_pixels": 12448,
+      "mismatches": 0
+    },
+    {
+      "frame": 585,
+      "actor": 0,
+      "state": "landing",
+      "compared_pixels": 20608,
+      "mismatches": 0
+    },
+    {
+      "frame": 585,
+      "actor": 1,
+      "state": "punch",
+      "compared_pixels": 22176,
+      "mismatches": 0
+    },
+    {
+      "frame": 590,
+      "actor": 1,
+      "state": "punch",
+      "compared_pixels": 14368,
+      "mismatches": 0
+    },
+    {
+      "frame": 595,
+      "actor": 1,
+      "state": "punch",
+      "compared_pixels": 14368,
+      "mismatches": 0
+    },
+    {
+      "frame": 600,
+      "actor": 1,
+      "state": "punch",
+      "compared_pixels": 14368,
+      "mismatches": 0
+    },
+    {
+      "frame": 605,
+      "actor": 1,
+      "state": "punch",
+      "compared_pixels": 14368,
+      "mismatches": 0
+    },
+    {
+      "frame": 645,
+      "actor": 1,
+      "state": "torch",
+      "compared_pixels": 14368,
+      "mismatches": 0
+    },
+    {
+      "frame": 650,
+      "actor": 0,
+      "state": "hurt",
+      "compared_pixels": 20608,
+      "mismatches": 0
+    },
+    {
+      "frame": 650,
+      "actor": 1,
+      "state": "torch",
+      "compared_pixels": 22176,
+      "mismatches": 0
+    },
+    {
+      "frame": 655,
+      "actor": 0,
+      "state": "hurt",
+      "compared_pixels": 20608,
+      "mismatches": 0
+    },
+    {
+      "frame": 655,
+      "actor": 1,
+      "state": "torch",
+      "compared_pixels": 22176,
+      "mismatches": 0
+    },
+    {
+      "frame": 660,
+      "actor": 0,
+      "state": "hurt",
+      "compared_pixels": 20608,
+      "mismatches": 0
+    },
+    {
+      "frame": 660,
+      "actor": 1,
+      "state": "torch",
+      "compared_pixels": 22176,
+      "mismatches": 0
+    },
+    {
+      "frame": 665,
+      "actor": 1,
+      "state": "torch",
+      "compared_pixels": 14551,
+      "mismatches": 0
+    },
+    {
+      "frame": 670,
+      "actor": 1,
+      "state": "torch",
+      "compared_pixels": 14551,
+      "mismatches": 0
+    },
+    {
+      "frame": 675,
+      "actor": 1,
+      "state": "torch",
+      "compared_pixels": 14551,
+      "mismatches": 0
+    },
+    {
+      "frame": 680,
+      "actor": 1,
+      "state": "torch",
+      "compared_pixels": 14551,
+      "mismatches": 0
+    },
+    {
+      "frame": 685,
+      "actor": 1,
+      "state": "torch",
+      "compared_pixels": 14551,
+      "mismatches": 0
+    },
+    {
+      "frame": 690,
+      "actor": 1,
+      "state": "torch",
+      "compared_pixels": 14551,
+      "mismatches": 0
+    },
+    {
+      "frame": 695,
+      "actor": 1,
+      "state": "torch",
+      "compared_pixels": 14551,
+      "mismatches": 0
+    },
+    {
+      "frame": 700,
+      "actor": 1,
+      "state": "torch",
+      "compared_pixels": 14551,
+      "mismatches": 0
+    },
+    {
+      "frame": 705,
+      "actor": 1,
+      "state": "torch",
+      "compared_pixels": 14551,
+      "mismatches": 0
+    },
+    {
+      "frame": 710,
+      "actor": 1,
+      "state": "torch",
+      "compared_pixels": 14551,
+      "mismatches": 0
+    },
+    {
+      "frame": 715,
+      "actor": 1,
+      "state": "torch",
+      "compared_pixels": 14551,
+      "mismatches": 0
+    },
+    {
+      "frame": 735,
+      "actor": 0,
+      "state": "hurt",
+      "compared_pixels": 12490,
+      "mismatches": 0
+    },
+    {
+      "frame": 740,
+      "actor": 0,
+      "state": "hurt",
+      "compared_pixels": 12886,
+      "mismatches": 0
+    },
+    {
+      "frame": 745,
+      "actor": 0,
+      "state": "hurt",
+      "compared_pixels": 13018,
+      "mismatches": 0
+    },
+    {
+      "frame": 770,
+      "actor": 0,
+      "state": "punch",
+      "compared_pixels": 12160,
+      "mismatches": 0
+    },
+    {
+      "frame": 775,
+      "actor": 0,
+      "state": "punch",
+      "compared_pixels": 12160,
+      "mismatches": 0
+    },
+    {
+      "frame": 780,
+      "actor": 0,
+      "state": "punch",
+      "compared_pixels": 12160,
+      "mismatches": 0
+    },
+    {
+      "frame": 785,
+      "actor": 0,
+      "state": "punch",
+      "compared_pixels": 12160,
+      "mismatches": 0
+    },
+    {
+      "frame": 790,
+      "actor": 0,
+      "state": "punch",
+      "compared_pixels": 12160,
+      "mismatches": 0
+    }
+  ],
+  "fallback_compared_pixels": 828471,
+  "frames_run": 1050,
+  "character_pixel_checks": [
+    {
+      "frame": 345,
+      "actor": 0,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 443,
+      "mismatches": 0
+    },
+    {
+      "frame": 345,
+      "actor": 1,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 555,
+      "mismatches": 0
+    },
+    {
+      "frame": 346,
+      "actor": 0,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 443,
+      "mismatches": 0
+    },
+    {
+      "frame": 346,
+      "actor": 1,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 555,
+      "mismatches": 0
+    },
+    {
+      "frame": 347,
+      "actor": 0,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 443,
+      "mismatches": 0
+    },
+    {
+      "frame": 347,
+      "actor": 1,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 555,
+      "mismatches": 0
+    },
+    {
+      "frame": 348,
+      "actor": 0,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 443,
+      "mismatches": 0
+    },
+    {
+      "frame": 348,
+      "actor": 1,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 555,
+      "mismatches": 0
+    },
+    {
+      "frame": 349,
+      "actor": 0,
+      "pose": 1,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 443,
+      "mismatches": 0
+    },
+    {
+      "frame": 349,
+      "actor": 1,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 555,
+      "mismatches": 0
+    },
+    {
+      "frame": 350,
+      "actor": 0,
+      "pose": 1,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 443,
+      "mismatches": 0
+    },
+    {
+      "frame": 350,
+      "actor": 1,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 555,
+      "mismatches": 0
+    },
+    {
+      "frame": 351,
+      "actor": 0,
+      "pose": 1,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 443,
+      "mismatches": 0
+    },
+    {
+      "frame": 351,
+      "actor": 1,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 555,
+      "mismatches": 0
+    },
+    {
+      "frame": 352,
+      "actor": 0,
+      "pose": 1,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 443,
+      "mismatches": 0
+    },
+    {
+      "frame": 352,
+      "actor": 1,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 555,
+      "mismatches": 0
+    },
+    {
+      "frame": 353,
+      "actor": 0,
+      "pose": 1,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 443,
+      "mismatches": 0
+    },
+    {
+      "frame": 353,
+      "actor": 1,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 555,
+      "mismatches": 0
+    },
+    {
+      "frame": 354,
+      "actor": 0,
+      "pose": 1,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 443,
+      "mismatches": 0
+    },
+    {
+      "frame": 354,
+      "actor": 1,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 555,
+      "mismatches": 0
+    },
+    {
+      "frame": 355,
+      "actor": 0,
+      "pose": 1,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 443,
+      "mismatches": 0
+    },
+    {
+      "frame": 355,
+      "actor": 1,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 555,
+      "mismatches": 0
+    },
+    {
+      "frame": 356,
+      "actor": 0,
+      "pose": 1,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 443,
+      "mismatches": 0
+    },
+    {
+      "frame": 357,
+      "actor": 0,
+      "pose": 1,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 443,
+      "mismatches": 0
+    },
+    {
+      "frame": 358,
+      "actor": 0,
+      "pose": 1,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 443,
+      "mismatches": 0
+    },
+    {
+      "frame": 359,
+      "actor": 0,
+      "pose": 1,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 443,
+      "mismatches": 0
+    },
+    {
+      "frame": 360,
+      "actor": 0,
+      "pose": 1,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 443,
+      "mismatches": 0
+    },
+    {
+      "frame": 360,
+      "actor": 1,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 555,
+      "mismatches": 0
+    },
+    {
+      "frame": 361,
+      "actor": 0,
+      "pose": 1,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 443,
+      "mismatches": 0
+    },
+    {
+      "frame": 361,
+      "actor": 1,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 555,
+      "mismatches": 0
+    },
+    {
+      "frame": 362,
+      "actor": 0,
+      "pose": 1,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 443,
+      "mismatches": 0
+    },
+    {
+      "frame": 362,
+      "actor": 1,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 555,
+      "mismatches": 0
+    },
+    {
+      "frame": 363,
+      "actor": 0,
+      "pose": 1,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 443,
+      "mismatches": 0
+    },
+    {
+      "frame": 363,
+      "actor": 1,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 555,
+      "mismatches": 0
+    },
+    {
+      "frame": 364,
+      "actor": 0,
+      "pose": 1,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 443,
+      "mismatches": 0
+    },
+    {
+      "frame": 365,
+      "actor": 0,
+      "pose": 4,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 420,
+      "mismatches": 0
+    },
+    {
+      "frame": 366,
+      "actor": 0,
+      "pose": 4,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 445,
+      "mismatches": 0
+    },
+    {
+      "frame": 367,
+      "actor": 0,
+      "pose": 4,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 470,
+      "mismatches": 0
+    },
+    {
+      "frame": 368,
+      "actor": 0,
+      "pose": 4,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 494,
+      "mismatches": 0
+    },
+    {
+      "frame": 368,
+      "actor": 1,
+      "pose": 4,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 334,
+      "mismatches": 0
+    },
+    {
+      "frame": 369,
+      "actor": 0,
+      "pose": 5,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 480,
+      "mismatches": 0
+    },
+    {
+      "frame": 369,
+      "actor": 1,
+      "pose": 5,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 365,
+      "mismatches": 0
+    },
+    {
+      "frame": 370,
+      "actor": 0,
+      "pose": 5,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 480,
+      "mismatches": 0
+    },
+    {
+      "frame": 370,
+      "actor": 1,
+      "pose": 5,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 365,
+      "mismatches": 0
+    },
+    {
+      "frame": 371,
+      "actor": 0,
+      "pose": 5,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 502,
+      "mismatches": 0
+    },
+    {
+      "frame": 371,
+      "actor": 1,
+      "pose": 5,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 399,
+      "mismatches": 0
+    },
+    {
+      "frame": 372,
+      "actor": 0,
+      "pose": 5,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 523,
+      "mismatches": 0
+    },
+    {
+      "frame": 373,
+      "actor": 0,
+      "pose": 5,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 545,
+      "mismatches": 0
+    },
+    {
+      "frame": 374,
+      "actor": 0,
+      "pose": 6,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 399,
+      "mismatches": 0
+    },
+    {
+      "frame": 375,
+      "actor": 0,
+      "pose": 6,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 399,
+      "mismatches": 0
+    },
+    {
+      "frame": 376,
+      "actor": 0,
+      "pose": 6,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 413,
+      "mismatches": 0
+    },
+    {
+      "frame": 376,
+      "actor": 1,
+      "pose": 6,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 538,
+      "mismatches": 0
+    },
+    {
+      "frame": 377,
+      "actor": 0,
+      "pose": 6,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 428,
+      "mismatches": 0
+    },
+    {
+      "frame": 377,
+      "actor": 1,
+      "pose": 6,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 575,
+      "mismatches": 0
+    },
+    {
+      "frame": 378,
+      "actor": 0,
+      "pose": 6,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 443,
+      "mismatches": 0
+    },
+    {
+      "frame": 378,
+      "actor": 1,
+      "pose": 6,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 617,
+      "mismatches": 0
+    },
+    {
+      "frame": 379,
+      "actor": 0,
+      "pose": 7,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 802,
+      "mismatches": 0
+    },
+    {
+      "frame": 379,
+      "actor": 1,
+      "pose": 7,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 663,
+      "mismatches": 0
+    },
+    {
+      "frame": 380,
+      "actor": 0,
+      "pose": 7,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 802,
+      "mismatches": 0
+    },
+    {
+      "frame": 381,
+      "actor": 0,
+      "pose": 7,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 835,
+      "mismatches": 0
+    },
+    {
+      "frame": 382,
+      "actor": 0,
+      "pose": 7,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 835,
+      "mismatches": 0
+    },
+    {
+      "frame": 383,
+      "actor": 0,
+      "pose": 7,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 835,
+      "mismatches": 0
+    },
+    {
+      "frame": 384,
+      "actor": 0,
+      "pose": 8,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 871,
+      "mismatches": 0
+    },
+    {
+      "frame": 384,
+      "actor": 1,
+      "pose": 8,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 708,
+      "mismatches": 0
+    },
+    {
+      "frame": 385,
+      "actor": 0,
+      "pose": 8,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 871,
+      "mismatches": 0
+    },
+    {
+      "frame": 385,
+      "actor": 1,
+      "pose": 8,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 708,
+      "mismatches": 0
+    },
+    {
+      "frame": 386,
+      "actor": 0,
+      "pose": 8,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 871,
+      "mismatches": 0
+    },
+    {
+      "frame": 386,
+      "actor": 1,
+      "pose": 8,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 708,
+      "mismatches": 0
+    },
+    {
+      "frame": 387,
+      "actor": 0,
+      "pose": 8,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 871,
+      "mismatches": 0
+    },
+    {
+      "frame": 387,
+      "actor": 1,
+      "pose": 8,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 708,
+      "mismatches": 0
+    },
+    {
+      "frame": 388,
+      "actor": 0,
+      "pose": 8,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 871,
+      "mismatches": 0
+    },
+    {
+      "frame": 389,
+      "actor": 0,
+      "pose": 9,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 628,
+      "mismatches": 0
+    },
+    {
+      "frame": 390,
+      "actor": 0,
+      "pose": 9,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 628,
+      "mismatches": 0
+    },
+    {
+      "frame": 391,
+      "actor": 0,
+      "pose": 9,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 628,
+      "mismatches": 0
+    },
+    {
+      "frame": 392,
+      "actor": 0,
+      "pose": 9,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 628,
+      "mismatches": 0
+    },
+    {
+      "frame": 392,
+      "actor": 1,
+      "pose": 9,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 712,
+      "mismatches": 0
+    },
+    {
+      "frame": 393,
+      "actor": 0,
+      "pose": 9,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 650,
+      "mismatches": 0
+    },
+    {
+      "frame": 393,
+      "actor": 1,
+      "pose": 9,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 712,
+      "mismatches": 0
+    },
+    {
+      "frame": 394,
+      "actor": 0,
+      "pose": 4,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 830,
+      "mismatches": 0
+    },
+    {
+      "frame": 394,
+      "actor": 1,
+      "pose": 4,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 782,
+      "mismatches": 0
+    },
+    {
+      "frame": 395,
+      "actor": 0,
+      "pose": 4,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 893,
+      "mismatches": 0
+    },
+    {
+      "frame": 395,
+      "actor": 1,
+      "pose": 4,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 880,
+      "mismatches": 0
+    },
+    {
+      "frame": 396,
+      "actor": 0,
+      "pose": 4,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 934,
+      "mismatches": 0
+    },
+    {
+      "frame": 397,
+      "actor": 0,
+      "pose": 4,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 1017,
+      "mismatches": 0
+    },
+    {
+      "frame": 398,
+      "actor": 0,
+      "pose": 4,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 1083,
+      "mismatches": 0
+    },
+    {
+      "frame": 399,
+      "actor": 0,
+      "pose": 5,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 1133,
+      "mismatches": 0
+    },
+    {
+      "frame": 400,
+      "actor": 0,
+      "pose": 5,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 1239,
+      "mismatches": 0
+    },
+    {
+      "frame": 400,
+      "actor": 1,
+      "pose": 5,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 1278,
+      "mismatches": 0
+    },
+    {
+      "frame": 401,
+      "actor": 0,
+      "pose": 5,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 1410,
+      "mismatches": 0
+    },
+    {
+      "frame": 401,
+      "actor": 1,
+      "pose": 5,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 1459,
+      "mismatches": 0
+    },
+    {
+      "frame": 402,
+      "actor": 0,
+      "pose": 5,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 1522,
+      "mismatches": 0
+    },
+    {
+      "frame": 402,
+      "actor": 1,
+      "pose": 5,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 1565,
+      "mismatches": 0
+    },
+    {
+      "frame": 403,
+      "actor": 0,
+      "pose": 5,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 1687,
+      "mismatches": 0
+    },
+    {
+      "frame": 403,
+      "actor": 1,
+      "pose": 5,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 1680,
+      "mismatches": 0
+    },
+    {
+      "frame": 404,
+      "actor": 0,
+      "pose": 6,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 1509,
+      "mismatches": 0
+    },
+    {
+      "frame": 405,
+      "actor": 0,
+      "pose": 6,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 1713,
+      "mismatches": 0
+    },
+    {
+      "frame": 406,
+      "actor": 0,
+      "pose": 6,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 1804,
+      "mismatches": 0
+    },
+    {
+      "frame": 407,
+      "actor": 0,
+      "pose": 6,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 1929,
+      "mismatches": 0
+    },
+    {
+      "frame": 408,
+      "actor": 0,
+      "pose": 6,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 2022,
+      "mismatches": 0
+    },
+    {
+      "frame": 408,
+      "actor": 1,
+      "pose": 6,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2168,
+      "mismatches": 0
+    },
+    {
+      "frame": 409,
+      "actor": 0,
+      "pose": 7,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 2550,
+      "mismatches": 0
+    },
+    {
+      "frame": 409,
+      "actor": 1,
+      "pose": 7,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2297,
+      "mismatches": 0
+    },
+    {
+      "frame": 410,
+      "actor": 0,
+      "pose": 7,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 2629,
+      "mismatches": 0
+    },
+    {
+      "frame": 410,
+      "actor": 1,
+      "pose": 7,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2407,
+      "mismatches": 0
+    },
+    {
+      "frame": 411,
+      "actor": 0,
+      "pose": 7,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 2672,
+      "mismatches": 0
+    },
+    {
+      "frame": 411,
+      "actor": 1,
+      "pose": 7,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2470,
+      "mismatches": 0
+    },
+    {
+      "frame": 412,
+      "actor": 0,
+      "pose": 7,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 2718,
+      "mismatches": 0
+    },
+    {
+      "frame": 413,
+      "actor": 0,
+      "pose": 7,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 2726,
+      "mismatches": 0
+    },
+    {
+      "frame": 414,
+      "actor": 0,
+      "pose": 8,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 2755,
+      "mismatches": 0
+    },
+    {
+      "frame": 415,
+      "actor": 0,
+      "pose": 8,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 2755,
+      "mismatches": 0
+    },
+    {
+      "frame": 416,
+      "actor": 0,
+      "pose": 8,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 2755,
+      "mismatches": 0
+    },
+    {
+      "frame": 416,
+      "actor": 1,
+      "pose": 8,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2820,
+      "mismatches": 0
+    },
+    {
+      "frame": 417,
+      "actor": 0,
+      "pose": 8,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 2755,
+      "mismatches": 0
+    },
+    {
+      "frame": 417,
+      "actor": 1,
+      "pose": 8,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2820,
+      "mismatches": 0
+    },
+    {
+      "frame": 418,
+      "actor": 0,
+      "pose": 8,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 2755,
+      "mismatches": 0
+    },
+    {
+      "frame": 418,
+      "actor": 1,
+      "pose": 8,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2820,
+      "mismatches": 0
+    },
+    {
+      "frame": 419,
+      "actor": 0,
+      "pose": 9,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 2523,
+      "mismatches": 0
+    },
+    {
+      "frame": 419,
+      "actor": 1,
+      "pose": 9,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2587,
+      "mismatches": 0
+    },
+    {
+      "frame": 420,
+      "actor": 0,
+      "pose": 9,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 2523,
+      "mismatches": 0
+    },
+    {
+      "frame": 421,
+      "actor": 0,
+      "pose": 9,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 2523,
+      "mismatches": 0
+    },
+    {
+      "frame": 422,
+      "actor": 0,
+      "pose": 9,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 2523,
+      "mismatches": 0
+    },
+    {
+      "frame": 423,
+      "actor": 0,
+      "pose": 9,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 2523,
+      "mismatches": 0
+    },
+    {
+      "frame": 424,
+      "actor": 0,
+      "pose": 4,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 2672,
+      "mismatches": 0
+    },
+    {
+      "frame": 424,
+      "actor": 1,
+      "pose": 4,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2872,
+      "mismatches": 0
+    },
+    {
+      "frame": 425,
+      "actor": 0,
+      "pose": 4,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2672,
+      "mismatches": 0
+    },
+    {
+      "frame": 425,
+      "actor": 1,
+      "pose": 4,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 2872,
+      "mismatches": 0
+    },
+    {
+      "frame": 426,
+      "actor": 0,
+      "pose": 4,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2672,
+      "mismatches": 0
+    },
+    {
+      "frame": 426,
+      "actor": 1,
+      "pose": 4,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 2872,
+      "mismatches": 0
+    },
+    {
+      "frame": 427,
+      "actor": 0,
+      "pose": 4,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2672,
+      "mismatches": 0
+    },
+    {
+      "frame": 427,
+      "actor": 1,
+      "pose": 4,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 2872,
+      "mismatches": 0
+    },
+    {
+      "frame": 428,
+      "actor": 0,
+      "pose": 4,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2672,
+      "mismatches": 0
+    },
+    {
+      "frame": 429,
+      "actor": 0,
+      "pose": 5,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2562,
+      "mismatches": 0
+    },
+    {
+      "frame": 430,
+      "actor": 0,
+      "pose": 5,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2562,
+      "mismatches": 0
+    },
+    {
+      "frame": 431,
+      "actor": 0,
+      "pose": 5,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2562,
+      "mismatches": 0
+    },
+    {
+      "frame": 432,
+      "actor": 0,
+      "pose": 5,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2562,
+      "mismatches": 0
+    },
+    {
+      "frame": 432,
+      "actor": 1,
+      "pose": 5,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 2748,
+      "mismatches": 0
+    },
+    {
+      "frame": 433,
+      "actor": 0,
+      "pose": 5,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2562,
+      "mismatches": 0
+    },
+    {
+      "frame": 433,
+      "actor": 1,
+      "pose": 5,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 2748,
+      "mismatches": 0
+    },
+    {
+      "frame": 434,
+      "actor": 0,
+      "pose": 6,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2242,
+      "mismatches": 0
+    },
+    {
+      "frame": 434,
+      "actor": 1,
+      "pose": 6,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 2410,
+      "mismatches": 0
+    },
+    {
+      "frame": 435,
+      "actor": 0,
+      "pose": 6,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2242,
+      "mismatches": 0
+    },
+    {
+      "frame": 435,
+      "actor": 1,
+      "pose": 6,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 2390,
+      "mismatches": 0
+    },
+    {
+      "frame": 436,
+      "actor": 0,
+      "pose": 6,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2220,
+      "mismatches": 0
+    },
+    {
+      "frame": 437,
+      "actor": 0,
+      "pose": 6,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2182,
+      "mismatches": 0
+    },
+    {
+      "frame": 438,
+      "actor": 0,
+      "pose": 6,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2140,
+      "mismatches": 0
+    },
+    {
+      "frame": 439,
+      "actor": 0,
+      "pose": 7,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2582,
+      "mismatches": 0
+    },
+    {
+      "frame": 440,
+      "actor": 0,
+      "pose": 7,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2538,
+      "mismatches": 0
+    },
+    {
+      "frame": 440,
+      "actor": 1,
+      "pose": 7,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 2385,
+      "mismatches": 0
+    },
+    {
+      "frame": 441,
+      "actor": 0,
+      "pose": 7,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2482,
+      "mismatches": 0
+    },
+    {
+      "frame": 441,
+      "actor": 1,
+      "pose": 7,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 2286,
+      "mismatches": 0
+    },
+    {
+      "frame": 442,
+      "actor": 0,
+      "pose": 7,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2419,
+      "mismatches": 0
+    },
+    {
+      "frame": 442,
+      "actor": 1,
+      "pose": 7,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 2204,
+      "mismatches": 0
+    },
+    {
+      "frame": 443,
+      "actor": 0,
+      "pose": 7,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2292,
+      "mismatches": 0
+    },
+    {
+      "frame": 443,
+      "actor": 1,
+      "pose": 7,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 2079,
+      "mismatches": 0
+    },
+    {
+      "frame": 444,
+      "actor": 0,
+      "pose": 8,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2170,
+      "mismatches": 0
+    },
+    {
+      "frame": 445,
+      "actor": 0,
+      "pose": 8,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2056,
+      "mismatches": 0
+    },
+    {
+      "frame": 446,
+      "actor": 0,
+      "pose": 8,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 1944,
+      "mismatches": 0
+    },
+    {
+      "frame": 447,
+      "actor": 0,
+      "pose": 8,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 1833,
+      "mismatches": 0
+    },
+    {
+      "frame": 448,
+      "actor": 0,
+      "pose": 8,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 1707,
+      "mismatches": 0
+    },
+    {
+      "frame": 448,
+      "actor": 1,
+      "pose": 8,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 1634,
+      "mismatches": 0
+    },
+    {
+      "frame": 449,
+      "actor": 0,
+      "pose": 9,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 1304,
+      "mismatches": 0
+    },
+    {
+      "frame": 449,
+      "actor": 1,
+      "pose": 9,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 1459,
+      "mismatches": 0
+    },
+    {
+      "frame": 450,
+      "actor": 0,
+      "pose": 9,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 1202,
+      "mismatches": 0
+    },
+    {
+      "frame": 450,
+      "actor": 1,
+      "pose": 9,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 1333,
+      "mismatches": 0
+    },
+    {
+      "frame": 451,
+      "actor": 0,
+      "pose": 9,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 1091,
+      "mismatches": 0
+    },
+    {
+      "frame": 451,
+      "actor": 1,
+      "pose": 9,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 1207,
+      "mismatches": 0
+    },
+    {
+      "frame": 452,
+      "actor": 0,
+      "pose": 9,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 984,
+      "mismatches": 0
+    },
+    {
+      "frame": 453,
+      "actor": 0,
+      "pose": 9,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 877,
+      "mismatches": 0
+    },
+    {
+      "frame": 454,
+      "actor": 0,
+      "pose": 4,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 888,
+      "mismatches": 0
+    },
+    {
+      "frame": 455,
+      "actor": 0,
+      "pose": 0,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 900,
+      "mismatches": 0
+    },
+    {
+      "frame": 456,
+      "actor": 0,
+      "pose": 0,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 870,
+      "mismatches": 0
+    },
+    {
+      "frame": 456,
+      "actor": 1,
+      "pose": 4,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 1121,
+      "mismatches": 0
+    },
+    {
+      "frame": 457,
+      "actor": 0,
+      "pose": 0,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 813,
+      "mismatches": 0
+    },
+    {
+      "frame": 457,
+      "actor": 1,
+      "pose": 4,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 1046,
+      "mismatches": 0
+    },
+    {
+      "frame": 458,
+      "actor": 0,
+      "pose": 0,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 787,
+      "mismatches": 0
+    },
+    {
+      "frame": 458,
+      "actor": 1,
+      "pose": 4,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 1010,
+      "mismatches": 0
+    },
+    {
+      "frame": 459,
+      "actor": 0,
+      "pose": 0,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 741,
+      "mismatches": 0
+    },
+    {
+      "frame": 459,
+      "actor": 1,
+      "pose": 5,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 778,
+      "mismatches": 0
+    },
+    {
+      "frame": 460,
+      "actor": 0,
+      "pose": 0,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 720,
+      "mismatches": 0
+    },
+    {
+      "frame": 461,
+      "actor": 0,
+      "pose": 0,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 686,
+      "mismatches": 0
+    },
+    {
+      "frame": 462,
+      "actor": 0,
+      "pose": 0,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 671,
+      "mismatches": 0
+    },
+    {
+      "frame": 463,
+      "actor": 0,
+      "pose": 0,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 648,
+      "mismatches": 0
+    },
+    {
+      "frame": 464,
+      "actor": 0,
+      "pose": 0,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 640,
+      "mismatches": 0
+    },
+    {
+      "frame": 464,
+      "actor": 1,
+      "pose": 6,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 710,
+      "mismatches": 0
+    },
+    {
+      "frame": 465,
+      "actor": 0,
+      "pose": 0,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 640,
+      "mismatches": 0
+    },
+    {
+      "frame": 465,
+      "actor": 1,
+      "pose": 6,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 710,
+      "mismatches": 0
+    },
+    {
+      "frame": 466,
+      "actor": 0,
+      "pose": 0,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 640,
+      "mismatches": 0
+    },
+    {
+      "frame": 466,
+      "actor": 1,
+      "pose": 6,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 710,
+      "mismatches": 0
+    },
+    {
+      "frame": 467,
+      "actor": 0,
+      "pose": 0,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 640,
+      "mismatches": 0
+    },
+    {
+      "frame": 467,
+      "actor": 1,
+      "pose": 6,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 710,
+      "mismatches": 0
+    },
+    {
+      "frame": 468,
+      "actor": 0,
+      "pose": 0,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 640,
+      "mismatches": 0
+    },
+    {
+      "frame": 468,
+      "actor": 1,
+      "pose": 6,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 710,
+      "mismatches": 0
+    },
+    {
+      "frame": 469,
+      "actor": 0,
+      "pose": 0,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 640,
+      "mismatches": 0
+    },
+    {
+      "frame": 469,
+      "actor": 1,
+      "pose": 7,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 713,
+      "mismatches": 0
+    },
+    {
+      "frame": 470,
+      "actor": 0,
+      "pose": 0,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 640,
+      "mismatches": 0
+    },
+    {
+      "frame": 470,
+      "actor": 1,
+      "pose": 7,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 710,
+      "mismatches": 0
+    },
+    {
+      "frame": 471,
+      "actor": 0,
+      "pose": 0,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 639,
+      "mismatches": 0
+    },
+    {
+      "frame": 471,
+      "actor": 1,
+      "pose": 7,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 710,
+      "mismatches": 0
+    },
+    {
+      "frame": 472,
+      "actor": 0,
+      "pose": 0,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 637,
+      "mismatches": 0
+    },
+    {
+      "frame": 472,
+      "actor": 1,
+      "pose": 7,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 710,
+      "mismatches": 0
+    },
+    {
+      "frame": 473,
+      "actor": 0,
+      "pose": 0,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 634,
+      "mismatches": 0
+    },
+    {
+      "frame": 473,
+      "actor": 1,
+      "pose": 7,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 710,
+      "mismatches": 0
+    },
+    {
+      "frame": 474,
+      "actor": 0,
+      "pose": 0,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 634,
+      "mismatches": 0
+    },
+    {
+      "frame": 474,
+      "actor": 1,
+      "pose": 8,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 708,
+      "mismatches": 0
+    },
+    {
+      "frame": 475,
+      "actor": 0,
+      "pose": 0,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 628,
+      "mismatches": 0
+    },
+    {
+      "frame": 475,
+      "actor": 1,
+      "pose": 8,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 708,
+      "mismatches": 0
+    },
+    {
+      "frame": 476,
+      "actor": 0,
+      "pose": 0,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 619,
+      "mismatches": 0
+    },
+    {
+      "frame": 476,
+      "actor": 1,
+      "pose": 8,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 708,
+      "mismatches": 0
+    },
+    {
+      "frame": 477,
+      "actor": 0,
+      "pose": 0,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 607,
+      "mismatches": 0
+    },
+    {
+      "frame": 477,
+      "actor": 1,
+      "pose": 8,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 708,
+      "mismatches": 0
+    },
+    {
+      "frame": 478,
+      "actor": 0,
+      "pose": 0,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 593,
+      "mismatches": 0
+    },
+    {
+      "frame": 478,
+      "actor": 1,
+      "pose": 8,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 708,
+      "mismatches": 0
+    },
+    {
+      "frame": 479,
+      "actor": 0,
+      "pose": 1,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 578,
+      "mismatches": 0
+    },
+    {
+      "frame": 479,
+      "actor": 1,
+      "pose": 9,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 712,
+      "mismatches": 0
+    },
+    {
+      "frame": 480,
+      "actor": 0,
+      "pose": 1,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 562,
+      "mismatches": 0
+    },
+    {
+      "frame": 480,
+      "actor": 1,
+      "pose": 9,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 712,
+      "mismatches": 0
+    },
+    {
+      "frame": 481,
+      "actor": 0,
+      "pose": 1,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 562,
+      "mismatches": 0
+    },
+    {
+      "frame": 481,
+      "actor": 1,
+      "pose": 9,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 712,
+      "mismatches": 0
+    },
+    {
+      "frame": 482,
+      "actor": 0,
+      "pose": 1,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 545,
+      "mismatches": 0
+    },
+    {
+      "frame": 482,
+      "actor": 1,
+      "pose": 9,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 712,
+      "mismatches": 0
+    },
+    {
+      "frame": 483,
+      "actor": 0,
+      "pose": 1,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 528,
+      "mismatches": 0
+    },
+    {
+      "frame": 483,
+      "actor": 1,
+      "pose": 9,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 712,
+      "mismatches": 0
+    },
+    {
+      "frame": 484,
+      "actor": 0,
+      "pose": 1,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 512,
+      "mismatches": 0
+    },
+    {
+      "frame": 484,
+      "actor": 1,
+      "pose": 4,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 712,
+      "mismatches": 0
+    },
+    {
+      "frame": 485,
+      "actor": 0,
+      "pose": 1,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 495,
+      "mismatches": 0
+    },
+    {
+      "frame": 485,
+      "actor": 1,
+      "pose": 4,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 707,
+      "mismatches": 0
+    },
+    {
+      "frame": 486,
+      "actor": 0,
+      "pose": 1,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 478,
+      "mismatches": 0
+    },
+    {
+      "frame": 486,
+      "actor": 1,
+      "pose": 4,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 701,
+      "mismatches": 0
+    },
+    {
+      "frame": 487,
+      "actor": 0,
+      "pose": 1,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 462,
+      "mismatches": 0
+    },
+    {
+      "frame": 487,
+      "actor": 1,
+      "pose": 4,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 693,
+      "mismatches": 0
+    },
+    {
+      "frame": 488,
+      "actor": 0,
+      "pose": 1,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 462,
+      "mismatches": 0
+    },
+    {
+      "frame": 488,
+      "actor": 1,
+      "pose": 4,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 691,
+      "mismatches": 0
+    },
+    {
+      "frame": 489,
+      "actor": 0,
+      "pose": 1,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 446,
+      "mismatches": 0
+    },
+    {
+      "frame": 489,
+      "actor": 1,
+      "pose": 5,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 681,
+      "mismatches": 0
+    },
+    {
+      "frame": 490,
+      "actor": 0,
+      "pose": 1,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 430,
+      "mismatches": 0
+    },
+    {
+      "frame": 490,
+      "actor": 1,
+      "pose": 5,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 673,
+      "mismatches": 0
+    },
+    {
+      "frame": 491,
+      "actor": 0,
+      "pose": 1,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 415,
+      "mismatches": 0
+    },
+    {
+      "frame": 491,
+      "actor": 1,
+      "pose": 5,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 661,
+      "mismatches": 0
+    },
+    {
+      "frame": 492,
+      "actor": 0,
+      "pose": 1,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 400,
+      "mismatches": 0
+    },
+    {
+      "frame": 492,
+      "actor": 1,
+      "pose": 5,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 653,
+      "mismatches": 0
+    },
+    {
+      "frame": 493,
+      "actor": 0,
+      "pose": 1,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 386,
+      "mismatches": 0
+    },
+    {
+      "frame": 493,
+      "actor": 1,
+      "pose": 5,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 641,
+      "mismatches": 0
+    },
+    {
+      "frame": 494,
+      "actor": 0,
+      "pose": 1,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 375,
+      "mismatches": 0
+    },
+    {
+      "frame": 494,
+      "actor": 1,
+      "pose": 6,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 635,
+      "mismatches": 0
+    },
+    {
+      "frame": 495,
+      "actor": 0,
+      "pose": 2,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 375,
+      "mismatches": 0
+    },
+    {
+      "frame": 495,
+      "actor": 1,
+      "pose": 6,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 627,
+      "mismatches": 0
+    },
+    {
+      "frame": 496,
+      "actor": 0,
+      "pose": 2,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 366,
+      "mismatches": 0
+    },
+    {
+      "frame": 496,
+      "actor": 1,
+      "pose": 6,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 619,
+      "mismatches": 0
+    },
+    {
+      "frame": 497,
+      "actor": 0,
+      "pose": 2,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 357,
+      "mismatches": 0
+    },
+    {
+      "frame": 497,
+      "actor": 1,
+      "pose": 6,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 607,
+      "mismatches": 0
+    },
+    {
+      "frame": 498,
+      "actor": 0,
+      "pose": 2,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 350,
+      "mismatches": 0
+    },
+    {
+      "frame": 498,
+      "actor": 1,
+      "pose": 6,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 599,
+      "mismatches": 0
+    },
+    {
+      "frame": 499,
+      "actor": 0,
+      "pose": 2,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 344,
+      "mismatches": 0
+    },
+    {
+      "frame": 499,
+      "actor": 1,
+      "pose": 7,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 587,
+      "mismatches": 0
+    },
+    {
+      "frame": 500,
+      "actor": 0,
+      "pose": 2,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 339,
+      "mismatches": 0
+    },
+    {
+      "frame": 500,
+      "actor": 1,
+      "pose": 7,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 579,
+      "mismatches": 0
+    },
+    {
+      "frame": 501,
+      "actor": 0,
+      "pose": 2,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 334,
+      "mismatches": 0
+    },
+    {
+      "frame": 501,
+      "actor": 1,
+      "pose": 7,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 567,
+      "mismatches": 0
+    },
+    {
+      "frame": 502,
+      "actor": 0,
+      "pose": 2,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 334,
+      "mismatches": 0
+    },
+    {
+      "frame": 502,
+      "actor": 1,
+      "pose": 7,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 563,
+      "mismatches": 0
+    },
+    {
+      "frame": 503,
+      "actor": 0,
+      "pose": 2,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 330,
+      "mismatches": 0
+    },
+    {
+      "frame": 503,
+      "actor": 1,
+      "pose": 7,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 551,
+      "mismatches": 0
+    },
+    {
+      "frame": 504,
+      "actor": 0,
+      "pose": 2,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 327,
+      "mismatches": 0
+    },
+    {
+      "frame": 504,
+      "actor": 1,
+      "pose": 8,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 541,
+      "mismatches": 0
+    },
+    {
+      "frame": 505,
+      "actor": 0,
+      "pose": 2,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 325,
+      "mismatches": 0
+    },
+    {
+      "frame": 505,
+      "actor": 1,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 576,
+      "mismatches": 0
+    },
+    {
+      "frame": 506,
+      "actor": 0,
+      "pose": 2,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 323,
+      "mismatches": 0
+    },
+    {
+      "frame": 506,
+      "actor": 1,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 572,
+      "mismatches": 0
+    },
+    {
+      "frame": 507,
+      "actor": 0,
+      "pose": 2,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 322,
+      "mismatches": 0
+    },
+    {
+      "frame": 507,
+      "actor": 1,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 568,
+      "mismatches": 0
+    },
+    {
+      "frame": 508,
+      "actor": 0,
+      "pose": 2,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 322,
+      "mismatches": 0
+    },
+    {
+      "frame": 508,
+      "actor": 1,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 564,
+      "mismatches": 0
+    },
+    {
+      "frame": 509,
+      "actor": 0,
+      "pose": 2,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 322,
+      "mismatches": 0
+    },
+    {
+      "frame": 509,
+      "actor": 1,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 564,
+      "mismatches": 0
+    },
+    {
+      "frame": 510,
+      "actor": 0,
+      "pose": 2,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 322,
+      "mismatches": 0
+    },
+    {
+      "frame": 510,
+      "actor": 1,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 560,
+      "mismatches": 0
+    },
+    {
+      "frame": 511,
+      "actor": 0,
+      "pose": 2,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 322,
+      "mismatches": 0
+    },
+    {
+      "frame": 511,
+      "actor": 1,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 559,
+      "mismatches": 0
+    },
+    {
+      "frame": 512,
+      "actor": 0,
+      "pose": 2,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 322,
+      "mismatches": 0
+    },
+    {
+      "frame": 512,
+      "actor": 1,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 559,
+      "mismatches": 0
+    },
+    {
+      "frame": 513,
+      "actor": 0,
+      "pose": 2,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 322,
+      "mismatches": 0
+    },
+    {
+      "frame": 513,
+      "actor": 1,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 559,
+      "mismatches": 0
+    },
+    {
+      "frame": 514,
+      "actor": 0,
+      "pose": 2,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 322,
+      "mismatches": 0
+    },
+    {
+      "frame": 514,
+      "actor": 1,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 559,
+      "mismatches": 0
+    },
+    {
+      "frame": 515,
+      "actor": 0,
+      "pose": 2,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 321,
+      "mismatches": 0
+    },
+    {
+      "frame": 515,
+      "actor": 1,
+      "pose": 4,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 539,
+      "mismatches": 0
+    },
+    {
+      "frame": 516,
+      "actor": 0,
+      "pose": 2,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 321,
+      "mismatches": 0
+    },
+    {
+      "frame": 516,
+      "actor": 1,
+      "pose": 4,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 539,
+      "mismatches": 0
+    },
+    {
+      "frame": 517,
+      "actor": 0,
+      "pose": 2,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 320,
+      "mismatches": 0
+    },
+    {
+      "frame": 517,
+      "actor": 1,
+      "pose": 4,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 539,
+      "mismatches": 0
+    },
+    {
+      "frame": 518,
+      "actor": 0,
+      "pose": 2,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 318,
+      "mismatches": 0
+    },
+    {
+      "frame": 518,
+      "actor": 1,
+      "pose": 4,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 539,
+      "mismatches": 0
+    },
+    {
+      "frame": 519,
+      "actor": 0,
+      "pose": 3,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 315,
+      "mismatches": 0
+    },
+    {
+      "frame": 519,
+      "actor": 1,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 559,
+      "mismatches": 0
+    },
+    {
+      "frame": 520,
+      "actor": 0,
+      "pose": 3,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 311,
+      "mismatches": 0
+    },
+    {
+      "frame": 520,
+      "actor": 1,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 559,
+      "mismatches": 0
+    },
+    {
+      "frame": 525,
+      "actor": 0,
+      "pose": 3,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 293,
+      "mismatches": 0
+    },
+    {
+      "frame": 525,
+      "actor": 1,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 559,
+      "mismatches": 0
+    },
+    {
+      "frame": 580,
+      "actor": 1,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 341,
+      "mismatches": 0
+    },
+    {
+      "frame": 610,
+      "actor": 1,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 559,
+      "mismatches": 0
+    },
+    {
+      "frame": 615,
+      "actor": 0,
+      "pose": 1,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 414,
+      "mismatches": 0
+    },
+    {
+      "frame": 615,
+      "actor": 1,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 559,
+      "mismatches": 0
+    },
+    {
+      "frame": 620,
+      "actor": 1,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 559,
+      "mismatches": 0
+    },
+    {
+      "frame": 625,
+      "actor": 1,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 554,
+      "mismatches": 0
+    },
+    {
+      "frame": 630,
+      "actor": 1,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 492,
+      "mismatches": 0
+    },
+    {
+      "frame": 635,
+      "actor": 1,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 395,
+      "mismatches": 0
+    },
+    {
+      "frame": 640,
+      "actor": 1,
+      "pose": 1,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 316,
+      "mismatches": 0
+    },
+    {
+      "frame": 665,
+      "actor": 0,
+      "pose": 0,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 644,
+      "mismatches": 0
+    },
+    {
+      "frame": 675,
+      "actor": 0,
+      "pose": 0,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 644,
+      "mismatches": 0
+    },
+    {
+      "frame": 690,
+      "actor": 0,
+      "pose": 1,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 644,
+      "mismatches": 0
+    },
+    {
+      "frame": 700,
+      "actor": 0,
+      "pose": 1,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 397,
+      "mismatches": 0
+    },
+    {
+      "frame": 725,
+      "actor": 1,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 559,
+      "mismatches": 0
+    },
+    {
+      "frame": 730,
+      "actor": 1,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 559,
+      "mismatches": 0
+    },
+    {
+      "frame": 735,
+      "actor": 1,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 559,
+      "mismatches": 0
+    },
+    {
+      "frame": 740,
+      "actor": 1,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 559,
+      "mismatches": 0
+    },
+    {
+      "frame": 745,
+      "actor": 1,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 559,
+      "mismatches": 0
+    },
+    {
+      "frame": 750,
+      "actor": 0,
+      "pose": 0,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 591,
+      "mismatches": 0
+    },
+    {
+      "frame": 750,
+      "actor": 1,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 559,
+      "mismatches": 0
+    },
+    {
+      "frame": 755,
+      "actor": 1,
+      "pose": 1,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 559,
+      "mismatches": 0
+    },
+    {
+      "frame": 760,
+      "actor": 1,
+      "pose": 1,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 559,
+      "mismatches": 0
+    },
+    {
+      "frame": 765,
+      "actor": 1,
+      "pose": 1,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 559,
+      "mismatches": 0
+    },
+    {
+      "frame": 770,
+      "actor": 1,
+      "pose": 1,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 559,
+      "mismatches": 0
+    },
+    {
+      "frame": 775,
+      "actor": 1,
+      "pose": 2,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 559,
+      "mismatches": 0
+    },
+    {
+      "frame": 780,
+      "actor": 1,
+      "pose": 2,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 559,
+      "mismatches": 0
+    },
+    {
+      "frame": 785,
+      "actor": 1,
+      "pose": 2,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 559,
+      "mismatches": 0
+    },
+    {
+      "frame": 790,
+      "actor": 1,
+      "pose": 2,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 559,
+      "mismatches": 0
+    },
+    {
+      "frame": 795,
+      "actor": 1,
+      "pose": 2,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 559,
+      "mismatches": 0
+    },
+    {
+      "frame": 800,
+      "actor": 0,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 453,
+      "mismatches": 0
+    },
+    {
+      "frame": 800,
+      "actor": 1,
+      "pose": 3,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 559,
+      "mismatches": 0
+    },
+    {
+      "frame": 805,
+      "actor": 1,
+      "pose": 3,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 559,
+      "mismatches": 0
+    },
+    {
+      "frame": 810,
+      "actor": 1,
+      "pose": 3,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 559,
+      "mismatches": 0
+    },
+    {
+      "frame": 815,
+      "actor": 1,
+      "pose": 3,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 559,
+      "mismatches": 0
+    },
+    {
+      "frame": 820,
+      "actor": 1,
+      "pose": 3,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 559,
+      "mismatches": 0
+    },
+    {
+      "frame": 825,
+      "actor": 0,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 453,
+      "mismatches": 0
+    },
+    {
+      "frame": 825,
+      "actor": 1,
+      "pose": 3,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 559,
+      "mismatches": 0
+    },
+    {
+      "frame": 830,
+      "actor": 0,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 453,
+      "mismatches": 0
+    },
+    {
+      "frame": 830,
+      "actor": 1,
+      "pose": 3,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 559,
+      "mismatches": 0
+    },
+    {
+      "frame": 835,
+      "actor": 0,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 453,
+      "mismatches": 0
+    },
+    {
+      "frame": 835,
+      "actor": 1,
+      "pose": 3,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 559,
+      "mismatches": 0
+    },
+    {
+      "frame": 840,
+      "actor": 0,
+      "pose": 1,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 449,
+      "mismatches": 0
+    },
+    {
+      "frame": 840,
+      "actor": 1,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 559,
+      "mismatches": 0
+    },
+    {
+      "frame": 845,
+      "actor": 0,
+      "pose": 1,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 413,
+      "mismatches": 0
+    },
+    {
+      "frame": 845,
+      "actor": 1,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 559,
+      "mismatches": 0
+    },
+    {
+      "frame": 850,
+      "actor": 0,
+      "pose": 1,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 358,
+      "mismatches": 0
+    },
+    {
+      "frame": 850,
+      "actor": 1,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 559,
+      "mismatches": 0
+    },
+    {
+      "frame": 855,
+      "actor": 0,
+      "pose": 4,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 337,
+      "mismatches": 0
+    },
+    {
+      "frame": 855,
+      "actor": 1,
+      "pose": 4,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 539,
+      "mismatches": 0
+    },
+    {
+      "frame": 860,
+      "actor": 0,
+      "pose": 5,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 336,
+      "mismatches": 0
+    },
+    {
+      "frame": 860,
+      "actor": 1,
+      "pose": 5,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 538,
+      "mismatches": 0
+    },
+    {
+      "frame": 865,
+      "actor": 0,
+      "pose": 6,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 356,
+      "mismatches": 0
+    },
+    {
+      "frame": 865,
+      "actor": 1,
+      "pose": 6,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 538,
+      "mismatches": 0
+    },
+    {
+      "frame": 870,
+      "actor": 0,
+      "pose": 7,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 892,
+      "mismatches": 0
+    },
+    {
+      "frame": 870,
+      "actor": 1,
+      "pose": 7,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 541,
+      "mismatches": 0
+    },
+    {
+      "frame": 875,
+      "actor": 0,
+      "pose": 8,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 1078,
+      "mismatches": 0
+    },
+    {
+      "frame": 875,
+      "actor": 1,
+      "pose": 8,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 688,
+      "mismatches": 0
+    },
+    {
+      "frame": 880,
+      "actor": 0,
+      "pose": 9,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 1235,
+      "mismatches": 0
+    },
+    {
+      "frame": 880,
+      "actor": 1,
+      "pose": 9,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 1134,
+      "mismatches": 0
+    },
+    {
+      "frame": 885,
+      "actor": 0,
+      "pose": 4,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 1463,
+      "mismatches": 0
+    },
+    {
+      "frame": 885,
+      "actor": 1,
+      "pose": 4,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 1853,
+      "mismatches": 0
+    },
+    {
+      "frame": 890,
+      "actor": 0,
+      "pose": 5,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 1582,
+      "mismatches": 0
+    },
+    {
+      "frame": 890,
+      "actor": 1,
+      "pose": 5,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 2320,
+      "mismatches": 0
+    },
+    {
+      "frame": 895,
+      "actor": 0,
+      "pose": 6,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 1717,
+      "mismatches": 0
+    },
+    {
+      "frame": 895,
+      "actor": 1,
+      "pose": 6,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 2410,
+      "mismatches": 0
+    },
+    {
+      "frame": 900,
+      "actor": 0,
+      "pose": 7,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 1975,
+      "mismatches": 0
+    },
+    {
+      "frame": 900,
+      "actor": 1,
+      "pose": 7,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 2744,
+      "mismatches": 0
+    },
+    {
+      "frame": 905,
+      "actor": 0,
+      "pose": 8,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2152,
+      "mismatches": 0
+    },
+    {
+      "frame": 905,
+      "actor": 1,
+      "pose": 8,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 2618,
+      "mismatches": 0
+    },
+    {
+      "frame": 910,
+      "actor": 0,
+      "pose": 9,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2363,
+      "mismatches": 0
+    },
+    {
+      "frame": 910,
+      "actor": 1,
+      "pose": 9,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 2283,
+      "mismatches": 0
+    },
+    {
+      "frame": 915,
+      "actor": 0,
+      "pose": 4,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 2134,
+      "mismatches": 0
+    },
+    {
+      "frame": 915,
+      "actor": 1,
+      "pose": 4,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2329,
+      "mismatches": 0
+    },
+    {
+      "frame": 920,
+      "actor": 0,
+      "pose": 5,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 1550,
+      "mismatches": 0
+    },
+    {
+      "frame": 920,
+      "actor": 1,
+      "pose": 5,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2345,
+      "mismatches": 0
+    },
+    {
+      "frame": 925,
+      "actor": 0,
+      "pose": 6,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 802,
+      "mismatches": 0
+    },
+    {
+      "frame": 925,
+      "actor": 1,
+      "pose": 6,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2364,
+      "mismatches": 0
+    },
+    {
+      "frame": 930,
+      "actor": 0,
+      "pose": 7,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 655,
+      "mismatches": 0
+    },
+    {
+      "frame": 930,
+      "actor": 1,
+      "pose": 7,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2579,
+      "mismatches": 0
+    },
+    {
+      "frame": 935,
+      "actor": 1,
+      "pose": 8,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2761,
+      "mismatches": 0
+    },
+    {
+      "frame": 940,
+      "actor": 1,
+      "pose": 9,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2587,
+      "mismatches": 0
+    },
+    {
+      "frame": 945,
+      "actor": 1,
+      "pose": 4,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2872,
+      "mismatches": 0
+    },
+    {
+      "frame": 950,
+      "actor": 1,
+      "pose": 5,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2729,
+      "mismatches": 0
+    },
+    {
+      "frame": 955,
+      "actor": 1,
+      "pose": 6,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2321,
+      "mismatches": 0
+    },
+    {
+      "frame": 960,
+      "actor": 0,
+      "pose": 7,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 315,
+      "mismatches": 0
+    },
+    {
+      "frame": 960,
+      "actor": 1,
+      "pose": 7,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2653,
+      "mismatches": 0
+    },
+    {
+      "frame": 965,
+      "actor": 0,
+      "pose": 8,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 434,
+      "mismatches": 0
+    },
+    {
+      "frame": 965,
+      "actor": 1,
+      "pose": 8,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2620,
+      "mismatches": 0
+    },
+    {
+      "frame": 970,
+      "actor": 0,
+      "pose": 9,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 593,
+      "mismatches": 0
+    },
+    {
+      "frame": 970,
+      "actor": 1,
+      "pose": 9,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2470,
+      "mismatches": 0
+    },
+    {
+      "frame": 975,
+      "actor": 0,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 779,
+      "mismatches": 0
+    },
+    {
+      "frame": 975,
+      "actor": 1,
+      "pose": 0,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2854,
+      "mismatches": 0
+    },
+    {
+      "frame": 980,
+      "actor": 0,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 779,
+      "mismatches": 0
+    },
+    {
+      "frame": 980,
+      "actor": 1,
+      "pose": 0,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2854,
+      "mismatches": 0
+    },
+    {
+      "frame": 985,
+      "actor": 0,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 779,
+      "mismatches": 0
+    },
+    {
+      "frame": 985,
+      "actor": 1,
+      "pose": 0,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2854,
+      "mismatches": 0
+    },
+    {
+      "frame": 990,
+      "actor": 0,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 779,
+      "mismatches": 0
+    },
+    {
+      "frame": 990,
+      "actor": 1,
+      "pose": 0,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2854,
+      "mismatches": 0
+    },
+    {
+      "frame": 995,
+      "actor": 0,
+      "pose": 0,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 779,
+      "mismatches": 0
+    },
+    {
+      "frame": 995,
+      "actor": 1,
+      "pose": 0,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2854,
+      "mismatches": 0
+    },
+    {
+      "frame": 1000,
+      "actor": 0,
+      "pose": 1,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 780,
+      "mismatches": 0
+    },
+    {
+      "frame": 1000,
+      "actor": 1,
+      "pose": 0,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2854,
+      "mismatches": 0
+    },
+    {
+      "frame": 1005,
+      "actor": 0,
+      "pose": 1,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 780,
+      "mismatches": 0
+    },
+    {
+      "frame": 1005,
+      "actor": 1,
+      "pose": 1,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2850,
+      "mismatches": 0
+    },
+    {
+      "frame": 1010,
+      "actor": 0,
+      "pose": 1,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 630,
+      "mismatches": 0
+    },
+    {
+      "frame": 1010,
+      "actor": 1,
+      "pose": 1,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2859,
+      "mismatches": 0
+    },
+    {
+      "frame": 1015,
+      "actor": 0,
+      "pose": 2,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 513,
+      "mismatches": 0
+    },
+    {
+      "frame": 1015,
+      "actor": 1,
+      "pose": 1,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2867,
+      "mismatches": 0
+    },
+    {
+      "frame": 1020,
+      "actor": 0,
+      "pose": 2,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 409,
+      "mismatches": 0
+    },
+    {
+      "frame": 1020,
+      "actor": 1,
+      "pose": 1,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2870,
+      "mismatches": 0
+    },
+    {
+      "frame": 1025,
+      "actor": 0,
+      "pose": 2,
+      "facing": 1,
+      "pipeline_lag": -3,
+      "pixels": 321,
+      "mismatches": 0
+    },
+    {
+      "frame": 1025,
+      "actor": 1,
+      "pose": 2,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2869,
+      "mismatches": 0
+    },
+    {
+      "frame": 1030,
+      "actor": 1,
+      "pose": 2,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2869,
+      "mismatches": 0
+    },
+    {
+      "frame": 1035,
+      "actor": 1,
+      "pose": 2,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2869,
+      "mismatches": 0
+    },
+    {
+      "frame": 1040,
+      "actor": 1,
+      "pose": 2,
+      "facing": -1,
+      "pipeline_lag": -3,
+      "pixels": 2870,
+      "mismatches": 0
+    }
+  ],
+  "compared_pixels": 450339,
+  "mismatched_pixels": 0,
+  "seen_poses": [
+    [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ]
+  ],
+  "facings": [
+    [
+      -1,
+      1
+    ],
+    [
+      -1,
+      1
+    ]
+  ],
+  "display_pipeline_lags": {
+    "-3": 413
+  },
+  "resident_texture_hashes": [
+    3809488739
+  ],
+  "simulation_matches_original_renderer": true,
+  "simulation_frames_compared": 720,
+  "method": "Normal controller input, read-only libretro save states; native indexed source -> hardware RGB565. Roots from actual world/camera state; possible actor/drum occlusions excluded. No game hooks or RAM writes.",
+  "core_sha256": "f00215b3c6ee0c82a377a8403b686e09bf8684f176a0a5bd66b47b8677e4d738",
+  "bios": "HLE",
+  "renderer": "software",
+  "cpu": "interpreter",
+  "hardware_tested": false,
+  "playable_bin_sha256": "9b95d0acc4ce31c0bb5a914350dd1a9f1779c1787117dfca5a4f94c310c8e0ff",
+  "control_bin_sha256": "687a127710b50e7b9c8c6748d9f2c44e307e9935bd1fe28a3f6a99a0cce20485",
+  "source_sha256": {
+    "src/main.c": "fe864ed79efefb48e1c2bd0ab4b7576e470fcd14e20dacc93a805f026ce13aab",
+    "src/game.c": "d5ecf4ddd040f159856dcf90e1fc3deb7ba3c1a359a703f9533302581aa2f5c7",
+    "src/game.h": "338e7995cc900c856779972fa7609b7df72ed255af67dc24ed7f7409861eb1e8",
+    "src/player_animation.c": "5e15d00cec293bfff0f9b91ea5cb82cf3e8abb4ab7ac955ecee74fbe5173ad33",
+    "src/player_animation.h": "a52c9c48a3ff6599403565e7318ef614991663ed9f66d0bd4a9b3005009b37d8",
+    "src/animation_preview.c": "cc164467ad20968a8bb4b0f93b0cad304c7fc3f0d91daf1eae5d6df99798fc82",
+    "src/animation_preview.h": "241ae8bacfd3af04b9349eb4d7519b4da9698df02c1690a462c6072e59b94176",
+    "src/animation_polish_data.h": "d765307544cee8091d9dde08aa09d56d05c39fc6b9dd9390aaa99966f1917197",
+    "assets/animation-polish/manifest.json": "39c454b0714bd2aa768c8387923a0f2539cdba79e711826c154faac32c582e1b",
+    "tests/runtime/playable-frontend.c": "8a8ee5dbfca94882b5fd09d75e470252d3f016a29202cbed0765984d3fd96d19"
+  },
+  "vdp1": {
+    "allocated": 427104,
+    "budget": 458488,
+    "free": 31384,
+    "new_playable_texture_bytes": 0,
+    "palette_bank": 7,
+    "extra_palette_bytes": 0
+  },
+  "native_configurations": [
+    "vdp1",
+    "vdp1-no-gallery",
+    "vdp2-no-gallery",
+    "gallery",
+    "parallax",
+    "animation",
+    "animation-parallax",
+    "playable",
+    "playable-no-parallax"
+  ],
+  "checkpoint": "e7e41a013f58d6b7d320d1874b0c7cc9319855c3",
+  "core": "Yabause v0.9.15 8926b0c (software/interpreter/HLE, 1 thread, no RAM cartridge)"
+}

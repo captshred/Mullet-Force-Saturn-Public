@@ -1,0 +1,12 @@
+{
+  "src/game.c": "88efc2737eb6e97c11e5b56f75e98007e6d3b2fa3f3f76d28cce20650c1c1db2",
+  "src/game.h": "365cbe552f5418aae27d3fa99696a34b18e94295158ed32db4c20d68cf6fa1aa",
+  "src/input.c": "4d81c2f4659689cac0238478f049b6edb47bf48dd4fd24b44b33369b0dde28e0",
+  "src/input.h": "747b843f629814f246a5cb0b94f73d2ee361f5a1b9dfbe46058a4086b921a53b",
+  "src/dash_config.h": "7c1adc1126041079d3b0e5e137f4d59a0dbe4dec2d195bb2c74683be719df8c8",
+  "src/run_bat_config.h": "00484faba20a7a90988d8f5a24fbb3302e8cf0cc7324c0e69bc689c449cc935a",
+  "src/combat_config.h": "1565208b11b19226bf3a542269fc19eff09dc7a24f9447db740a70a9c58c3d87",
+  "src/player_animation.c": "69d23b89cabee48b96b28f04ce2b331d47b9674f0f283a32c876a04633fc56c5",
+  "src/corporate_animation.c": "13f0c2361e98be2f22b80a8903b35e21caaea034b0b84437293d47639554e217",
+  "src/corporate_bank.h": "639ac0ec144e4d065062306113f282fef39ac1d95d70c949852815be09d8567d"
+}

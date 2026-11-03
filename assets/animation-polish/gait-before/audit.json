@@ -1,0 +1,265 @@
+{
+  "buck": [
+    {
+      "walk_pair": [
+        1,
+        4
+      ],
+      "rgba_identical": false,
+      "lower_rgba_changed_pixels": 952,
+      "lower_silhouette_changed_pixels": 59,
+      "silhouette_iou": 0.9479717813051146,
+      "floor_x_first": [
+        40,
+        41,
+        42,
+        80,
+        81,
+        82,
+        83,
+        84
+      ],
+      "floor_x_second": [
+        41,
+        42,
+        43,
+        80,
+        81,
+        82,
+        83,
+        84
+      ]
+    },
+    {
+      "walk_pair": [
+        2,
+        5
+      ],
+      "rgba_identical": false,
+      "lower_rgba_changed_pixels": 972,
+      "lower_silhouette_changed_pixels": 180,
+      "silhouette_iou": 0.8357664233576643,
+      "floor_x_first": [
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89
+      ],
+      "floor_x_second": [
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89
+      ]
+    },
+    {
+      "walk_pair": [
+        3,
+        6
+      ],
+      "rgba_identical": false,
+      "lower_rgba_changed_pixels": 572,
+      "lower_silhouette_changed_pixels": 24,
+      "silhouette_iou": 0.9654676258992806,
+      "floor_x_first": [
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80
+      ],
+      "floor_x_second": [
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80
+      ]
+    }
+  ],
+  "chuck": [
+    {
+      "walk_pair": [
+        1,
+        4
+      ],
+      "rgba_identical": false,
+      "lower_rgba_changed_pixels": 1018,
+      "lower_silhouette_changed_pixels": 81,
+      "silhouette_iou": 0.9349397590361446,
+      "floor_x_first": [
+        40,
+        41,
+        42,
+        80,
+        81,
+        82,
+        83,
+        84
+      ],
+      "floor_x_second": [
+        41,
+        42,
+        43,
+        80,
+        81,
+        82,
+        83,
+        84
+      ]
+    },
+    {
+      "walk_pair": [
+        2,
+        5
+      ],
+      "rgba_identical": false,
+      "lower_rgba_changed_pixels": 974,
+      "lower_silhouette_changed_pixels": 105,
+      "silhouette_iou": 0.9091695501730104,
+      "floor_x_first": [
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90
+      ],
+      "floor_x_second": [
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90
+      ]
+    },
+    {
+      "walk_pair": [
+        3,
+        6
+      ],
+      "rgba_identical": false,
+      "lower_rgba_changed_pixels": 619,
+      "lower_silhouette_changed_pixels": 47,
+      "silhouette_iou": 0.9384816753926701,
+      "floor_x_first": [
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81
+      ],
+      "floor_x_second": [
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80
+      ]
+    }
+  ]
+}

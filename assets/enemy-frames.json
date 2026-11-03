@@ -1,0 +1,212 @@
+{
+  "native_scale": 1,
+  "standing_height": 90,
+  "damage_frame": 9,
+  "defeat_frame": 11,
+  "frames": [
+    {
+      "name": "EN00.TGA",
+      "anchor": [
+        20,
+        89
+      ],
+      "source_size": [
+        72,
+        96
+      ],
+      "crop_origin": [
+        16,
+        3
+      ],
+      "source_rgb_sha256": "5e618c08447961012298119f5f48102f0b1d08f40b66dd2a40aa914f5c98e5ab",
+      "pose": "idle"
+    },
+    {
+      "name": "EN01.TGA",
+      "anchor": [
+        20,
+        88
+      ],
+      "source_size": [
+        72,
+        96
+      ],
+      "crop_origin": [
+        16,
+        4
+      ],
+      "source_rgb_sha256": "7a51be4632597349b49dfcfcecb9e47b29e70e5877e1129bd1eda3f94e7eb126",
+      "pose": "guard"
+    },
+    {
+      "name": "EN02.TGA",
+      "anchor": [
+        23,
+        89
+      ],
+      "source_size": [
+        72,
+        96
+      ],
+      "crop_origin": [
+        13,
+        3
+      ],
+      "source_rgb_sha256": "9a60c9584aefd54d4a08c5bb1ac032ac9a10ccc10f8551a689777eb3d8f4be18",
+      "pose": "walk-L"
+    },
+    {
+      "name": "EN03.TGA",
+      "anchor": [
+        19,
+        88
+      ],
+      "source_size": [
+        72,
+        96
+      ],
+      "crop_origin": [
+        17,
+        4
+      ],
+      "source_rgb_sha256": "9ddd44039d97043ef51c246f39494c235f3494a24e93c1f5c2d51a7328160f86",
+      "pose": "pass-L"
+    },
+    {
+      "name": "EN04.TGA",
+      "anchor": [
+        20,
+        89
+      ],
+      "source_size": [
+        72,
+        96
+      ],
+      "crop_origin": [
+        16,
+        3
+      ],
+      "source_rgb_sha256": "296b8cf762224a45e5ee67f29221a83568bbfd6e3f2c7282b74840fa880cf8e4",
+      "pose": "walk-R"
+    },
+    {
+      "name": "EN05.TGA",
+      "anchor": [
+        19,
+        88
+      ],
+      "source_size": [
+        72,
+        96
+      ],
+      "crop_origin": [
+        17,
+        4
+      ],
+      "source_rgb_sha256": "596d83a0ea2486eff10871bb55e2ca1d33faa7208988344308520cd54fb5e7db",
+      "pose": "pass-R"
+    },
+    {
+      "name": "EN06.TGA",
+      "anchor": [
+        24,
+        89
+      ],
+      "source_size": [
+        72,
+        96
+      ],
+      "crop_origin": [
+        12,
+        3
+      ],
+      "source_rgb_sha256": "b1982d009e23ea5124148419ec35d75091fea3eb638f0a6c7f2d5a4b5fc2167b",
+      "pose": "windup"
+    },
+    {
+      "name": "EN07.TGA",
+      "anchor": [
+        20,
+        89
+      ],
+      "source_size": [
+        112,
+        96
+      ],
+      "crop_origin": [
+        36,
+        3
+      ],
+      "source_rgb_sha256": "c493f0403d948f527ae1f7742acac97bc97ae62cb1f054003e6daef1a68ac334",
+      "pose": "punch"
+    },
+    {
+      "name": "EN08.TGA",
+      "anchor": [
+        20,
+        88
+      ],
+      "source_size": [
+        72,
+        96
+      ],
+      "crop_origin": [
+        16,
+        4
+      ],
+      "source_rgb_sha256": "7a51be4632597349b49dfcfcecb9e47b29e70e5877e1129bd1eda3f94e7eb126",
+      "pose": "recover"
+    },
+    {
+      "name": "EN09.TGA",
+      "anchor": [
+        24,
+        89
+      ],
+      "source_size": [
+        72,
+        96
+      ],
+      "crop_origin": [
+        12,
+        3
+      ],
+      "source_rgb_sha256": "557e45e162347efa059b5a98e944a942dbc422f0d914f71099330978bd2a9bb0",
+      "pose": "hit"
+    },
+    {
+      "name": "EN10.TGA",
+      "anchor": [
+        24,
+        81
+      ],
+      "source_size": [
+        112,
+        96
+      ],
+      "crop_origin": [
+        32,
+        11
+      ],
+      "source_rgb_sha256": "819f5f79a540d60bffabc25573c20baa4976c9dba1165a1c907b76f6df5d2f7b",
+      "pose": "fall"
+    },
+    {
+      "name": "EN11.TGA",
+      "anchor": [
+        42,
+        20
+      ],
+      "source_size": [
+        112,
+        96
+      ],
+      "crop_origin": [
+        14,
+        72
+      ],
+      "source_rgb_sha256": "ada9c473e35289b429d1c895a62114fa8c8eb5c8871ff9b1bfa670d05a7044c9",
+      "pose": "defeated"
+    }
+  ]
+}

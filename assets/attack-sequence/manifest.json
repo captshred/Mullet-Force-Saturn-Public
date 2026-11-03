@@ -1,0 +1,946 @@
+{
+  "parent": "1686681ee6ff4bedd100d94bad914c7dca8dcd81",
+  "canvas": [
+    160,
+    112
+  ],
+  "root": [
+    64,
+    108
+  ],
+  "palette": "assets/gallery/GB0.TGA",
+  "resources": [
+    {
+      "name": "CA00.TGA",
+      "width": 48,
+      "height": 16,
+      "bytes": 768,
+      "sha256": "e6e62bb55cd14ffc856cbfa57ecf0a8a25d48931ee4ed2681aff456b8cd81dff"
+    },
+    {
+      "name": "CA01.TGA",
+      "width": 64,
+      "height": 16,
+      "bytes": 1024,
+      "sha256": "0b74e779ff2b433c6aa310337645f11c127cec854fe9f601d10d8c47893b37ba"
+    },
+    {
+      "name": "CA02.TGA",
+      "width": 80,
+      "height": 12,
+      "bytes": 960,
+      "sha256": "9837a97ab8f9a2bbec7077ca66226e2e06db673ffb306442456bd6b7dbc15abb"
+    },
+    {
+      "name": "CA03.TGA",
+      "width": 32,
+      "height": 12,
+      "bytes": 384,
+      "sha256": "0d9338bab09a66104d69bfff52f2a2c5459d14b9d81c3ff87c716e40fd82adc7"
+    },
+    {
+      "name": "CA04.TGA",
+      "width": 80,
+      "height": 16,
+      "bytes": 1280,
+      "sha256": "a64271ba5ab37ffedce47b1da403bdd9e23031ca395a24d90928c8df83a90150"
+    },
+    {
+      "name": "CA05.TGA",
+      "width": 72,
+      "height": 16,
+      "bytes": 1152,
+      "sha256": "b100ef483f7258e3704c8f79221d5769ca7e1cb195b05ab759ad089cfaf95d8d"
+    },
+    {
+      "name": "CA06.TGA",
+      "width": 88,
+      "height": 16,
+      "bytes": 1408,
+      "sha256": "b3de2eeb2b3b8e5b09ce3bc2da70e33572c5c5a9fc686d222109ed622ca5e65f"
+    },
+    {
+      "name": "CA07.TGA",
+      "width": 88,
+      "height": 16,
+      "bytes": 1408,
+      "sha256": "0df5dfb96fc5f806fd0ca3a562ff405f44a21189e7bb91caf14341588ef80e42"
+    },
+    {
+      "name": "CA08.TGA",
+      "width": 48,
+      "height": 16,
+      "bytes": 768,
+      "sha256": "104a7cd5cd7439128075f6e91d8116af3d51e9f8ce89194180bfada364065781"
+    },
+    {
+      "name": "CA09.TGA",
+      "width": 48,
+      "height": 16,
+      "bytes": 768,
+      "sha256": "847338089249bf7265104c88ecf29dd11e2d15df4acfc7c5c1c0a70d7d99684d"
+    },
+    {
+      "name": "CA10.TGA",
+      "width": 40,
+      "height": 16,
+      "bytes": 640,
+      "sha256": "4336b408896039acd7d63e83c37c156646d3d1abb06fb12ffd132393fd4bdf20"
+    },
+    {
+      "name": "CA11.TGA",
+      "width": 8,
+      "height": 2,
+      "bytes": 32,
+      "sha256": "bf11dfff086a92388b993631a966fec27f07a1488409458f5a2691fdb039a182"
+    },
+    {
+      "name": "CA12.TGA",
+      "width": 16,
+      "height": 6,
+      "bytes": 96,
+      "sha256": "25c6b3d40d51561559ef3e96e8c2122eb38f61d3b101417534402e00972dd809"
+    },
+    {
+      "name": "CA13.TGA",
+      "width": 48,
+      "height": 16,
+      "bytes": 768,
+      "sha256": "56a5b4471ff2cbd418c62ba62249ba5258292d779404341282f0b5c9aba75856"
+    },
+    {
+      "name": "CA14.TGA",
+      "width": 48,
+      "height": 16,
+      "bytes": 768,
+      "sha256": "71afb8b5cec3d3bc5a057ce0ae4fe3bfa2560b37ee188caf927f927c1331764b"
+    },
+    {
+      "name": "CA15.TGA",
+      "width": 48,
+      "height": 16,
+      "bytes": 768,
+      "sha256": "0ac9e988028d761de3ab739d0919a1290d5743de647a42f9db0a8bcc6b643373"
+    },
+    {
+      "name": "CA16.TGA",
+      "width": 40,
+      "height": 12,
+      "bytes": 480,
+      "sha256": "b61c0a3e11510c8d0cb64463bceac1bca7b5cb1f099384c18a896b86ca5dcaa7"
+    },
+    {
+      "name": "CA17.TGA",
+      "width": 56,
+      "height": 16,
+      "bytes": 896,
+      "sha256": "d83081ab24063a12accff1124dbad41db450104f72eda36357bdc2c750c88df5"
+    },
+    {
+      "name": "CA18.TGA",
+      "width": 64,
+      "height": 16,
+      "bytes": 1024,
+      "sha256": "bb0565a7bfa082d280db12a23358ba18aef54de834e17c63ae9dbe3063a72834"
+    },
+    {
+      "name": "CA19.TGA",
+      "width": 40,
+      "height": 12,
+      "bytes": 480,
+      "sha256": "fffe1bc62cc14ca9508ad07b7394441540c3595ad603c75bb1b8228c0122e3b8"
+    },
+    {
+      "name": "CA20.TGA",
+      "width": 64,
+      "height": 16,
+      "bytes": 1024,
+      "sha256": "a7bcc096ea943be116e4d66fd64a39b4b371ab87318d3e6759901a67b30df122"
+    },
+    {
+      "name": "CA21.TGA",
+      "width": 64,
+      "height": 16,
+      "bytes": 1024,
+      "sha256": "06c6637f2530fb9e6f1566c702f5ef1582389b8cc3a844122d73c24b5cca8f84"
+    },
+    {
+      "name": "CA22.TGA",
+      "width": 32,
+      "height": 10,
+      "bytes": 320,
+      "sha256": "08bdd77df038b9509d49d79cdf37d9b81d37142f44064cf5fb44f3b7214fbb89"
+    },
+    {
+      "name": "CA23.TGA",
+      "width": 56,
+      "height": 16,
+      "bytes": 896,
+      "sha256": "419d907db42b14a24337d753b7fc57a74d516592a441a18c835a79b032bf8e0b"
+    },
+    {
+      "name": "CA24.TGA",
+      "width": 64,
+      "height": 16,
+      "bytes": 1024,
+      "sha256": "c329cd761b5eea43a011758ede3ca83d0244e61dfae2dde3d3beece583ed28f9"
+    },
+    {
+      "name": "CA25.TGA",
+      "width": 40,
+      "height": 12,
+      "bytes": 480,
+      "sha256": "a36dd012629f2bd4795511cc9645eed06c83e042a23a43dd8020a52f6431b7d1"
+    },
+    {
+      "name": "CA26.TGA",
+      "width": 64,
+      "height": 16,
+      "bytes": 1024,
+      "sha256": "f867263992291d2d530beb89c89c21109e659451956deb47a5f9a0c7987b5870"
+    },
+    {
+      "name": "CA27.TGA",
+      "width": 72,
+      "height": 16,
+      "bytes": 1152,
+      "sha256": "b4c75e64da6dfdc4273ead30a68e1d7368e9e5c94989de92af304b44065f44cf"
+    },
+    {
+      "name": "CA28.TGA",
+      "width": 48,
+      "height": 16,
+      "bytes": 768,
+      "sha256": "c5c80cbca62904e8e06a8e9e4a22f2aece8ad9ee8b12d2a35d8a957d417b75f2"
+    },
+    {
+      "name": "CA29.TGA",
+      "width": 64,
+      "height": 16,
+      "bytes": 1024,
+      "sha256": "a18425ea4a776669bcd716707815fb8f25fe53af7d8d4d15f98e9b435c17cafd"
+    },
+    {
+      "name": "CA30.TGA",
+      "width": 88,
+      "height": 12,
+      "bytes": 1056,
+      "sha256": "cc30c029b5c8ea1ee42461dbdd2cc5ddb145e8a52ebc01fd8c053ee82ee4b3f2"
+    },
+    {
+      "name": "CA31.TGA",
+      "width": 32,
+      "height": 12,
+      "bytes": 384,
+      "sha256": "80b8e0c2d8fa47455cdceac39f99d9be390f27bda57c7097514859f3cf942e19"
+    },
+    {
+      "name": "CA32.TGA",
+      "width": 80,
+      "height": 16,
+      "bytes": 1280,
+      "sha256": "9a0943a38dcb35e223473f90ad13e55cada9971c3706bbec0f174307cc9d3f64"
+    },
+    {
+      "name": "CA33.TGA",
+      "width": 80,
+      "height": 16,
+      "bytes": 1280,
+      "sha256": "5824ef88463090b9a95ed93064cf19828a9382697cdfa19ab40d2966a595533c"
+    },
+    {
+      "name": "CA34.TGA",
+      "width": 96,
+      "height": 16,
+      "bytes": 1536,
+      "sha256": "655824f8a930b257daad1e69db2d7b56d64e500d52a97535f790281e7540c9f9"
+    },
+    {
+      "name": "CA35.TGA",
+      "width": 96,
+      "height": 16,
+      "bytes": 1536,
+      "sha256": "f1b8f340959cb994de2e2942a76b027a57ad4c931b3ceaf548e5d151b2caf9ae"
+    },
+    {
+      "name": "CA36.TGA",
+      "width": 48,
+      "height": 16,
+      "bytes": 768,
+      "sha256": "a45655dd56b80fbbec6e4d05586317f690278125b7835b5f89c54516304717a4"
+    },
+    {
+      "name": "CA37.TGA",
+      "width": 56,
+      "height": 16,
+      "bytes": 896,
+      "sha256": "713dc661b3cc5b1e1f0939905ad3c28894024968a01961e5d28fbc8cb2bf1919"
+    },
+    {
+      "name": "CA38.TGA",
+      "width": 32,
+      "height": 16,
+      "bytes": 512,
+      "sha256": "cbb33e7574bfddcd6cb635d1458715c44fc01be5741e6ba18a663010f838e513"
+    },
+    {
+      "name": "CA39.TGA",
+      "width": 8,
+      "height": 2,
+      "bytes": 32,
+      "sha256": "c38040f6d234ba77de277a04c94b7c2036dfe25ac74d5779fa203df700dc1f1a"
+    },
+    {
+      "name": "CA40.TGA",
+      "width": 16,
+      "height": 6,
+      "bytes": 96,
+      "sha256": "79fed69245d9fde076382b444bbc4c2987445ddffdbc99c6a7c69562d7387b2f"
+    },
+    {
+      "name": "CA41.TGA",
+      "width": 56,
+      "height": 16,
+      "bytes": 896,
+      "sha256": "4223c342bbcb64494f55915f65b5636113af2bb7333af1b4feefd4301f9f231d"
+    },
+    {
+      "name": "CA42.TGA",
+      "width": 48,
+      "height": 16,
+      "bytes": 768,
+      "sha256": "1728f49e30b595c814a9f2f089e50bcef00ee21fb5a44993dad99536f6aca8e0"
+    },
+    {
+      "name": "CA43.TGA",
+      "width": 48,
+      "height": 16,
+      "bytes": 768,
+      "sha256": "a6ce67a45567acf73cfe5e35eb6b27a3b4a485ce6afd6280434b8ffd2bdbbfeb"
+    },
+    {
+      "name": "CA44.TGA",
+      "width": 48,
+      "height": 12,
+      "bytes": 576,
+      "sha256": "15cc3d55931bda61bfbfaad1a658ca4dd45d16987adf705e391f536fcdd8ac8e"
+    },
+    {
+      "name": "CA45.TGA",
+      "width": 56,
+      "height": 16,
+      "bytes": 896,
+      "sha256": "0c02d419611116550ecbfd80d2720a154fef4837ac06c03fe18366bc287e221e"
+    },
+    {
+      "name": "CA46.TGA",
+      "width": 64,
+      "height": 16,
+      "bytes": 1024,
+      "sha256": "7822ff89e4d628b73463ef7ff0b053fb9c88268fe9c09935ca049af60f098f0b"
+    },
+    {
+      "name": "CA47.TGA",
+      "width": 40,
+      "height": 12,
+      "bytes": 480,
+      "sha256": "c4be3d39027e58aa942ff34596d7f84ff269f5c8098a606be9f9f70ccb523bf9"
+    },
+    {
+      "name": "CA48.TGA",
+      "width": 56,
+      "height": 16,
+      "bytes": 896,
+      "sha256": "c78751f1d49829057c4e922dbc03bc32b136320978fe98ab0e6a96dafb172d8f"
+    },
+    {
+      "name": "CA49.TGA",
+      "width": 64,
+      "height": 16,
+      "bytes": 1024,
+      "sha256": "a1063a51b7450fd9ba07232916d1a473f3bdfb921e7166600730613d3cb04ca5"
+    },
+    {
+      "name": "CA50.TGA",
+      "width": 40,
+      "height": 12,
+      "bytes": 480,
+      "sha256": "dff22d0d278d9e07ae24d4e8de1009d76a55c7d00931b226e73814e95b06184a"
+    },
+    {
+      "name": "CA51.TGA",
+      "width": 56,
+      "height": 16,
+      "bytes": 896,
+      "sha256": "3ad70d269ffac6f12a610c2876be8fe7964383887f6617190b3e5e44a541ac4f"
+    },
+    {
+      "name": "CA52.TGA",
+      "width": 64,
+      "height": 16,
+      "bytes": 1024,
+      "sha256": "df0b3ddfa35724d77de1e040ed4b1a3dada36176f5562d9ee20ff7ab7bd62ecb"
+    },
+    {
+      "name": "CA53.TGA",
+      "width": 40,
+      "height": 12,
+      "bytes": 480,
+      "sha256": "efc2ba469cf8bff7dff1b66c2792751763be96979a9806aeb1957cccbb397b6e"
+    },
+    {
+      "name": "CA54.TGA",
+      "width": 64,
+      "height": 16,
+      "bytes": 1024,
+      "sha256": "c8b637adacef6260d6152fa1ba903c69b27325e9ad773668f25929bd5d34b715"
+    },
+    {
+      "name": "CA55.TGA",
+      "width": 64,
+      "height": 16,
+      "bytes": 1024,
+      "sha256": "53106791e5057f1ed1fb3b633efcb84dda2960d2ed6b33e97c88134adddd6f3b"
+    },
+    {
+      "name": "CA56.TGA",
+      "width": 48,
+      "height": 6,
+      "bytes": 288,
+      "sha256": "4fa8400a931d5aa4e35f855e39c693e5fd01db9d28706cbea10c31475e80636c"
+    },
+    {
+      "name": "CA57.TGA",
+      "width": 16,
+      "height": 14,
+      "bytes": 224,
+      "sha256": "cda63228ed81290cc558d60e6f681b415f928d5220f15e509c85836e0e8054fd"
+    },
+    {
+      "name": "CA58.TGA",
+      "width": 24,
+      "height": 16,
+      "bytes": 384,
+      "sha256": "e5e018900a6b4f3d3732fe34979e4e2d053288d9651ed56d6a07808930d9905a"
+    },
+    {
+      "name": "CA59.TGA",
+      "width": 8,
+      "height": 4,
+      "bytes": 32,
+      "sha256": "3ad4a227056a022508865528ee8c4a42e9d8f995b7b90086be9ae92e58533fba"
+    }
+  ],
+  "frames": [
+    [
+      [
+        {
+          "resource": 3,
+          "x": 54,
+          "y": 20,
+          "width": 32,
+          "height": 12
+        },
+        {
+          "resource": 4,
+          "x": 43,
+          "y": 32,
+          "width": 80,
+          "height": 16
+        },
+        {
+          "resource": 5,
+          "x": 43,
+          "y": 48,
+          "width": 72,
+          "height": 16
+        }
+      ],
+      [
+        {
+          "resource": 3,
+          "x": 54,
+          "y": 20,
+          "width": 32,
+          "height": 12
+        },
+        {
+          "resource": 6,
+          "x": 45,
+          "y": 32,
+          "width": 88,
+          "height": 16
+        },
+        {
+          "resource": 7,
+          "x": 47,
+          "y": 48,
+          "width": 88,
+          "height": 16
+        }
+      ],
+      [
+        {
+          "resource": 3,
+          "x": 54,
+          "y": 20,
+          "width": 32,
+          "height": 12
+        },
+        {
+          "resource": 8,
+          "x": 42,
+          "y": 32,
+          "width": 48,
+          "height": 16
+        },
+        {
+          "resource": 9,
+          "x": 45,
+          "y": 48,
+          "width": 48,
+          "height": 16
+        },
+        {
+          "resource": 10,
+          "x": 79,
+          "y": 64,
+          "width": 40,
+          "height": 16
+        },
+        {
+          "resource": 11,
+          "x": 113,
+          "y": 80,
+          "width": 8,
+          "height": 2
+        }
+      ],
+      [
+        {
+          "resource": 12,
+          "x": 93,
+          "y": 10,
+          "width": 16,
+          "height": 6
+        },
+        {
+          "resource": 13,
+          "x": 54,
+          "y": 16,
+          "width": 48,
+          "height": 16
+        },
+        {
+          "resource": 14,
+          "x": 46,
+          "y": 32,
+          "width": 48,
+          "height": 16
+        },
+        {
+          "resource": 15,
+          "x": 47,
+          "y": 48,
+          "width": 48,
+          "height": 16
+        }
+      ],
+      [
+        {
+          "resource": 16,
+          "x": 54,
+          "y": 21,
+          "width": 40,
+          "height": 12
+        },
+        {
+          "resource": 17,
+          "x": 42,
+          "y": 32,
+          "width": 56,
+          "height": 16
+        },
+        {
+          "resource": 18,
+          "x": 37,
+          "y": 48,
+          "width": 64,
+          "height": 16
+        }
+      ],
+      [
+        {
+          "resource": 19,
+          "x": 53,
+          "y": 21,
+          "width": 40,
+          "height": 12
+        },
+        {
+          "resource": 20,
+          "x": 38,
+          "y": 32,
+          "width": 64,
+          "height": 16
+        },
+        {
+          "resource": 21,
+          "x": 34,
+          "y": 48,
+          "width": 64,
+          "height": 16
+        }
+      ],
+      [
+        {
+          "resource": 22,
+          "x": 63,
+          "y": 23,
+          "width": 32,
+          "height": 10
+        },
+        {
+          "resource": 23,
+          "x": 44,
+          "y": 32,
+          "width": 56,
+          "height": 16
+        },
+        {
+          "resource": 24,
+          "x": 37,
+          "y": 48,
+          "width": 64,
+          "height": 16
+        }
+      ],
+      [
+        {
+          "resource": 25,
+          "x": 48,
+          "y": 20,
+          "width": 40,
+          "height": 12
+        },
+        {
+          "resource": 26,
+          "x": 35,
+          "y": 32,
+          "width": 64,
+          "height": 16
+        },
+        {
+          "resource": 27,
+          "x": 31,
+          "y": 48,
+          "width": 72,
+          "height": 16
+        }
+      ]
+    ],
+    [
+      [
+        {
+          "resource": 31,
+          "x": 48,
+          "y": 20,
+          "width": 32,
+          "height": 12
+        },
+        {
+          "resource": 32,
+          "x": 41,
+          "y": 32,
+          "width": 80,
+          "height": 16
+        },
+        {
+          "resource": 33,
+          "x": 42,
+          "y": 48,
+          "width": 80,
+          "height": 16
+        }
+      ],
+      [
+        {
+          "resource": 31,
+          "x": 48,
+          "y": 20,
+          "width": 32,
+          "height": 12
+        },
+        {
+          "resource": 34,
+          "x": 41,
+          "y": 32,
+          "width": 96,
+          "height": 16
+        },
+        {
+          "resource": 35,
+          "x": 47,
+          "y": 48,
+          "width": 96,
+          "height": 16
+        }
+      ],
+      [
+        {
+          "resource": 31,
+          "x": 48,
+          "y": 20,
+          "width": 32,
+          "height": 12
+        },
+        {
+          "resource": 36,
+          "x": 39,
+          "y": 32,
+          "width": 48,
+          "height": 16
+        },
+        {
+          "resource": 37,
+          "x": 43,
+          "y": 48,
+          "width": 56,
+          "height": 16
+        },
+        {
+          "resource": 38,
+          "x": 90,
+          "y": 64,
+          "width": 32,
+          "height": 16
+        },
+        {
+          "resource": 39,
+          "x": 112,
+          "y": 80,
+          "width": 8,
+          "height": 2
+        }
+      ],
+      [
+        {
+          "resource": 40,
+          "x": 93,
+          "y": 10,
+          "width": 16,
+          "height": 6
+        },
+        {
+          "resource": 41,
+          "x": 48,
+          "y": 16,
+          "width": 56,
+          "height": 16
+        },
+        {
+          "resource": 42,
+          "x": 41,
+          "y": 32,
+          "width": 48,
+          "height": 16
+        },
+        {
+          "resource": 43,
+          "x": 47,
+          "y": 48,
+          "width": 48,
+          "height": 16
+        }
+      ],
+      [
+        {
+          "resource": 44,
+          "x": 49,
+          "y": 21,
+          "width": 48,
+          "height": 12
+        },
+        {
+          "resource": 45,
+          "x": 38,
+          "y": 32,
+          "width": 56,
+          "height": 16
+        },
+        {
+          "resource": 46,
+          "x": 32,
+          "y": 48,
+          "width": 64,
+          "height": 16
+        }
+      ],
+      [
+        {
+          "resource": 47,
+          "x": 51,
+          "y": 21,
+          "width": 40,
+          "height": 12
+        },
+        {
+          "resource": 48,
+          "x": 41,
+          "y": 32,
+          "width": 56,
+          "height": 16
+        },
+        {
+          "resource": 49,
+          "x": 35,
+          "y": 48,
+          "width": 64,
+          "height": 16
+        }
+      ],
+      [
+        {
+          "resource": 50,
+          "x": 54,
+          "y": 21,
+          "width": 40,
+          "height": 12
+        },
+        {
+          "resource": 51,
+          "x": 37,
+          "y": 32,
+          "width": 56,
+          "height": 16
+        },
+        {
+          "resource": 52,
+          "x": 34,
+          "y": 48,
+          "width": 64,
+          "height": 16
+        }
+      ],
+      [
+        {
+          "resource": 53,
+          "x": 51,
+          "y": 20,
+          "width": 40,
+          "height": 12
+        },
+        {
+          "resource": 54,
+          "x": 37,
+          "y": 32,
+          "width": 64,
+          "height": 16
+        },
+        {
+          "resource": 55,
+          "x": 33,
+          "y": 48,
+          "width": 64,
+          "height": 16
+        }
+      ]
+    ]
+  ],
+  "lowers": [
+    [
+      {
+        "resource": 0,
+        "x": 44,
+        "y": 64,
+        "width": 48,
+        "height": 16
+      },
+      {
+        "resource": 1,
+        "x": 34,
+        "y": 80,
+        "width": 64,
+        "height": 16
+      },
+      {
+        "resource": 2,
+        "x": 25,
+        "y": 96,
+        "width": 80,
+        "height": 12
+      }
+    ],
+    [
+      {
+        "resource": 28,
+        "x": 40,
+        "y": 64,
+        "width": 48,
+        "height": 16
+      },
+      {
+        "resource": 29,
+        "x": 31,
+        "y": 80,
+        "width": 64,
+        "height": 16
+      },
+      {
+        "resource": 30,
+        "x": 23,
+        "y": 96,
+        "width": 88,
+        "height": 12
+      }
+    ]
+  ],
+  "weapons": [
+    [
+      {
+        "resource": 56,
+        "x": 4,
+        "y": 38,
+        "width": 48,
+        "height": 6
+      }
+    ],
+    [
+      {
+        "resource": 57,
+        "x": 30,
+        "y": 34,
+        "width": 16,
+        "height": 14
+      },
+      {
+        "resource": 58,
+        "x": 14,
+        "y": 48,
+        "width": 24,
+        "height": 16
+      },
+      {
+        "resource": 59,
+        "x": 14,
+        "y": 64,
+        "width": 8,
+        "height": 4
+      }
+    ]
+  ],
+  "texture_bytes": 47168,
+  "boot_bytes": 457632,
+  "free_bytes": 856,
+  "slots": 229,
+  "key_names": [
+    "jab",
+    "impact",
+    "forward_down",
+    "follow_up",
+    "carry0",
+    "carry1",
+    "carry2",
+    "carry3"
+  ]
+}

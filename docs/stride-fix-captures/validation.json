@@ -1,0 +1,42 @@
+{
+  "frames": 900,
+  "gameplay_states_identical_to_control": 605,
+  "velocity_samples": 186,
+  "velocity_24_8": 663,
+  "carry_velocity_samples": 21,
+  "full_health_KO_frames": [
+    423
+  ],
+  "run_pixels_compared": 148432,
+  "pixel_mismatches": 0,
+  "run_poses_seen": [
+    [
+      18,
+      19,
+      20,
+      21
+    ],
+    [
+      18,
+      19,
+      20,
+      21
+    ]
+  ],
+  "run_facings_seen": [
+    [
+      -1,
+      1
+    ],
+    [
+      -1,
+      1
+    ]
+  ],
+  "actual_vdp1_bytes": 401952,
+  "free_vdp1_bytes": 56536,
+  "texture_slots": 159,
+  "stable_gameplay_textures": true,
+  "method": "Controller-only local Yabause HLE/software/interpreter, read-only state tracing, no RAM writes. Physical Saturn/WebRetro not tested.",
+  "core_sha256": "f00215b3c6ee0c82a377a8403b686e09bf8684f176a0a5bd66b47b8677e4d738"
+}

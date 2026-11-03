@@ -1,0 +1,25 @@
+{
+  "source_sha256": {
+    "ST0.TGA": "2be1897301b0a5d7867e6d93b008df50b098cf54ecb4664d61c9a8126102c302",
+    "ST1.TGA": "1c1feb2c1161daf9103dd79e267eb359d716d087dc298985a00aa3e59883cff9",
+    "ST2.TGA": "e32cc01390c19c541df9af23af75e2b30e25d79cbb988e49eb24804cb048163c",
+    "ST3.TGA": "3fc74e1ac4f1f0464739a26a30ddd43e6d89e881dea709e83358d8ac9e5b0468",
+    "ST4.TGA": "4aea29ed242d6f80d41c25eceb955caefff11724bf5fe5278bb9ea3575470b04"
+  },
+  "width": 640,
+  "height": 240,
+  "tile_count": 1410,
+  "cell_bytes": 90240,
+  "map_bytes": 16384,
+  "palette_bytes": 510,
+  "street_vdp2_bytes": 106624,
+  "sdk_protected_bytes": 262144,
+  "reserved_vdp2_bytes": 368768,
+  "vdp1_recovered_bytes": 153600,
+  "palette_bank": 1,
+  "sha256": {
+    "STCELLS.BIN": "55821a1ffdfc153c39f8a1081f0d4afae0b4dc8bb8b8d6ef1857b76221fb4b54",
+    "STMAP.BIN": "8a7a9403a7c81aa0859a5039db20c4130f4eedbc365c788758a4031b34309f8a",
+    "STPAL.BIN": "85d0dd3189f035d7f01f6c9fdacf4ac53a0091d18559434a4bf7644db3133eb0"
+  }
+}

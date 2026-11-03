@@ -1,0 +1,33 @@
+{
+  "pd-run": {
+    "output_peak": 5793,
+    "rail_samples": 0,
+    "voice_starts": {
+      "7": 5,
+      "6": 3,
+      "1": 1,
+      "2": 1
+    }
+  },
+  "pd-death-buck": {
+    "output_peak": 4569,
+    "rail_samples": 0,
+    "voice_starts": {
+      "2": 17
+    }
+  },
+  "pd-death-chuck": {
+    "output_peak": 4711,
+    "rail_samples": 0,
+    "voice_starts": {
+      "2": 28
+    }
+  },
+  "pd-death-buck-left": {
+    "output_peak": 4710,
+    "rail_samples": 0,
+    "voice_starts": {
+      "2": 17
+    }
+  }
+}

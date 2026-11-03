@@ -1,0 +1,123 @@
+{
+  "core": "libretro Yabause v0.9.15 8926b0c",
+  "core_sha256": "f00215b3c6ee0c82a377a8403b686e09bf8684f176a0a5bd66b47b8677e4d738",
+  "bios": "HLE",
+  "renderer": "software",
+  "frames_run": 1200,
+  "checks": [
+    {
+      "capture_frame": 359,
+      "pose": 0,
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 389,
+      "pose": 1,
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 409,
+      "pose": 2,
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 429,
+      "pose": 3,
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 449,
+      "pose": 4,
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 469,
+      "pose": 5,
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 489,
+      "pose": 6,
+      "facing": 1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 509,
+      "pose": 6,
+      "facing": -1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 529,
+      "pose": 5,
+      "facing": -1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 549,
+      "pose": 4,
+      "facing": -1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 569,
+      "pose": 3,
+      "facing": -1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 589,
+      "pose": 2,
+      "facing": -1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 609,
+      "pose": 1,
+      "facing": -1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 629,
+      "pose": 0,
+      "facing": -1,
+      "mismatched_pixels": 0
+    },
+    {
+      "capture_frame": 959,
+      "pose": 0,
+      "facing": 1,
+      "mismatched_pixels": 0
+    }
+  ],
+  "compared_character_region_pixels": 432000,
+  "mismatched_pixels": 0,
+  "pause_exact": true,
+  "gallery_restore_exact": true,
+  "region": "Whole 320x90 actor/ground region at screen y122..211; both actors plus background, UI excluded.",
+  "reference": "Original street TGAs and canonical native PNGs independently composited with SGL raster origin (+1,+1) and RGB565 output quantization.",
+  "source_sha256": {
+    "src/animation_preview.c": "d23f69aa4d34e1728638e5e657d313d2cf8f7fae275e1f315a068472e4b99684",
+    "src/animation_data.h": "2a63bf1319c3f28dd1cec8244e34c947364a24cac347e9ad3b5981241de9ec00",
+    "src/gallery.c": "c25da0fa7040cee2e789c31a444c6e578c72acdc5eb617627549ae6c7a121991",
+    "src/main.c": "80b72461e83a76d03a0b28092559442a4a573ea04644f448984284ebb1789683",
+    "src/game.c": "d5ecf4ddd040f159856dcf90e1fc3deb7ba3c1a359a703f9533302581aa2f5c7"
+  },
+  "tested_commit": "081487cd409cc3056afa09fdafe8eb329bcdd295",
+  "build_configurations_passed": [
+    "vdp1",
+    "vdp1-no-gallery",
+    "vdp2-no-gallery",
+    "gallery",
+    "parallax",
+    "animation",
+    "animation-parallax"
+  ],
+  "host_tests": "make test plus ASan/UBSan preview tests passed"
+}

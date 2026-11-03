@@ -1,0 +1,35 @@
+JO_ENGINE_SRC_DIR = ../.deps/joengine/jo_engine
+COMPILER_DIR = ../.deps/joengine/Compiler
+SRCS = main.c input.c game.c music.c gallery.c street.c parallax.c animation_preview.c player_animation.c corporate_animation.c
+JO_COMPILE_USING_SGL = 1
+JO_COMPILE_WITH_FS_MODULE = 1
+JO_COMPILE_WITH_AUDIO_MODULE = 1
+JO_COMPILE_WITH_3D_MODULE = 0
+JO_COMPILE_WITH_TGA_MODULE = 1
+JO_COMPILE_WITH_DUAL_CPU_MODULE = 0
+JO_COMPILE_WITH_RAM_CARD_MODULE = 0
+JO_COMPILE_WITH_PRINTF_MODULE = 1
+JO_DEBUG = 0
+JO_NTSC = 1
+include $(COMPILER_DIR)/COMMON/jo_engine_makefile
+# Pinned SDK control-interface initialization, same driver as Jo/SGL.
+LIBS += $(COMPILER_DIR)/COMMON/SGL_302j/LIB_ELF/LIBSND.A
+
+# Same cooked-sector format as the proven Battle Beetle pipeline.
+MKISOFS = genisoimage
+MKISOFS_FLAGS = -quiet -sysid "SEGA SATURN" -volid "MULLET_FORCE" \
+    -volset "MULLET_FORCE" -appid "MULLET_FORCE" \
+    -generic-boot $(IPFILE) -full-iso9660-filenames -o $(TARGET2) $(ASSETS_DIR)
+
+# Gameplay-only review switch; no new graphics resources.
+MF_PUNCH_COMBO ?= 0
+MF_FAST_RUNNING_BAT ?= 0
+MF_JAB_COHESION ?= 0
+MF_ATTACK_SEQUENCE ?= 0
+MF_BAT_MOMENTUM ?= 0
+MF_COMBAT_ANIMATION ?= 0
+MF_RUNNING_BAT_VISUALS ?= 0
+MF_RUN_BAT ?= 0
+MF_DASH_ENABLED ?= 0
+MF_DASH_PRESET ?= 17
+CCFLAGS += -DMF_PUNCH_COMBO=$(MF_PUNCH_COMBO) -DMF_FAST_RUNNING_BAT=$(MF_FAST_RUNNING_BAT) -DMF_JAB_COHESION=$(MF_JAB_COHESION) -DMF_ATTACK_SEQUENCE=$(MF_ATTACK_SEQUENCE) -DMF_BAT_MOMENTUM=$(MF_BAT_MOMENTUM) -DMF_COMBAT_ANIMATION=$(MF_COMBAT_ANIMATION) -DMF_RUNNING_BAT_VISUALS=$(MF_RUNNING_BAT_VISUALS) -DMF_RUN_BAT=$(MF_RUN_BAT) -DMF_DASH_ENABLED=$(MF_DASH_ENABLED) -DMF_DASH_PRESET=$(MF_DASH_PRESET)

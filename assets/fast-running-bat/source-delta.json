@@ -1,0 +1,174 @@
+{
+  "baseline": "4e677436a3ab172bd26ddfd92cd79e2752636499",
+  "files": {
+    "src/game.c": {
+      "before_sha256": "eedc1136480b34f7a339a7ebbeab95ab63d090cfbf27a5cd8c4c70ec1c04d0c7",
+      "after_sha256": "00190273f267fdc04f3a8934351faae91b5f8de0dd57bf35afcbf9c010ff0061",
+      "edits": [
+        {
+          "start": 76,
+          "end": 80,
+          "before": [],
+          "after": [
+            "#if MF_FAST_RUNNING_BAT\n",
+            "        if(p->bat==MF_BAT_RUNNING)\n",
+            "            return attackbox(p->x/256,p->y/256,0,p->facing,6,MF_BAT_REACH,30,64);\n",
+            "#endif\n"
+          ]
+        },
+        {
+          "start": 91,
+          "end": 96,
+          "before": [],
+          "after": [
+            "#if MF_FAST_RUNNING_BAT\n",
+            "    if(p->bat==MF_BAT_RUNNING)return p->active && p->health>0 && !p->hurt &&\n",
+            "        !p->height && !p->vz && !p->attack_air &&\n",
+            "        p->attack>=MF_FAST_BAT_ACTIVE_FIRST && p->attack<=MF_FAST_BAT_ACTIVE_LAST;\n",
+            "#endif\n"
+          ]
+        },
+        {
+          "start": 248,
+          "end": 251,
+          "before": [],
+          "after": [
+            "#if MF_FAST_RUNNING_BAT\n",
+            "       p->height || p->vz ||\n",
+            "#else\n"
+          ]
+        },
+        {
+          "start": 252,
+          "end": 253,
+          "before": [],
+          "after": [
+            "#endif\n"
+          ]
+        },
+        {
+          "start": 374,
+          "end": 375,
+          "before": [
+            "                p->bat=1;p->facing=rb->dir;\n"
+          ],
+          "after": [
+            "                p->bat=MF_FAST_RUNNING_BAT?MF_BAT_RUNNING:1;p->facing=rb->dir;\n"
+          ]
+        },
+        {
+          "start": 378,
+          "end": 381,
+          "before": [],
+          "after": [
+            "#if MF_FAST_RUNNING_BAT\n",
+            "                !p->height && !p->vz;\n",
+            "#else\n"
+          ]
+        },
+        {
+          "start": 382,
+          "end": 384,
+          "before": [
+            "            p->attack=1;p->attack_air=p->height>0;p->hit_mask=0;clear_gesture(p);\n"
+          ],
+          "after": [
+            "#endif\n",
+            "            p->attack=1;p->attack_air=MF_FAST_RUNNING_BAT?(p->height || p->vz)!=0:p->height>0;p->hit_mask=0;clear_gesture(p);\n"
+          ]
+        },
+        {
+          "start": 447,
+          "end": 454,
+          "before": [
+            "            p->hit_mask|=1<<i;d->hp=clamp(d->hp-(p->bat?MF_BAT_DAMAGE:1),0,3);d->flash=10;d->vx=p->facing*(p->bat?MF_BAT_KNOCKBACK:850);g->score+=10;\n"
+          ],
+          "after": [
+            "            p->hit_mask|=1<<i;\n",
+            "#if MF_FAST_RUNNING_BAT\n",
+            "            if(p->bat==MF_BAT_RUNNING)d->hp=0;\n",
+            "            else\n",
+            "#endif\n",
+            "            d->hp=clamp(d->hp-(p->bat?MF_BAT_DAMAGE:1),0,3);\n",
+            "            d->flash=10;d->vx=p->facing*(p->bat?MF_BAT_KNOCKBACK:850);g->score+=10;\n"
+          ]
+        },
+        {
+          "start": 546,
+          "end": 553,
+          "before": [],
+          "after": [
+            "#if MF_FAST_RUNNING_BAT\n",
+            "        /* One deployment whoosh; CONNECT is emitted only by a valid hit.\n",
+            "           The legacy generic swoosh event remains for planted attacks. */\n",
+            "        int total=p->bat==MF_BAT_RUNNING?MF_FAST_BAT_TOTAL_TICKS:(p->bat?MF_BAT_TOTAL_TICKS:24);\n",
+            "        if(p->bat==1 && p->attack==MF_BAT_ACTIVE_FIRST)g->events|=MF_SWOOSH;\n",
+            "        if(p->attack && ++p->attack>total)p->attack=p->bat=0;\n",
+            "#else\n"
+          ]
+        },
+        {
+          "start": 555,
+          "end": 556,
+          "before": [],
+          "after": [
+            "#endif\n"
+          ]
+        }
+      ]
+    },
+    "src/animation_preview.c": {
+      "before_sha256": "a93ecab70c2a12a6f5965b5a126548c1cdb623a34c72f1c7bb2355d949dcc9d4",
+      "after_sha256": "5ae7d0bb214040d353dce2cf9480996fa89711623d7103663f83262c87382dc3",
+      "edits": [
+        {
+          "start": 400,
+          "end": 415,
+          "before": [],
+          "after": [
+            "#if MF_FAST_RUNNING_BAT\n",
+            "    if(p->bat==MF_BAT_RUNNING && g->running_bat[actor].active) {\n",
+            "        /* Reuse the exact current four-piece carry, including waist fixes.\n",
+            "           The horizontal contact upper already contains its connected grip. */\n",
+            "        if(p->attack<MF_FAST_BAT_ACTIVE_FIRST)\n",
+            "            return mf_animation_draw_actor(actor,18+ca_last_run[actor],center,ground,p->facing,depth);\n",
+            "        if(p->attack>=MF_FAST_BAT_RECOVERY_FIRST)\n",
+            "            return mf_animation_draw_actor(actor,0,center,ground,p->facing,depth);\n",
+            "        jo_sprite_restore_sprite_scale();jo_sprite_disable_horizontal_flip();jo_sprite_set_palette(palette_id);\n",
+            "        if(p->facing<0)jo_sprite_enable_horizontal_flip();\n",
+            "        ca_draw_list(seq_lower[actor],center,ground,p->facing,depth);\n",
+            "        ca_draw_list(seq_upper[actor][1],center,ground,p->facing,depth-1);\n",
+            "        jo_sprite_disable_horizontal_flip();jo_sprite_restore_sprite_scale();return 1;\n",
+            "    }\n",
+            "#endif\n"
+          ]
+        }
+      ]
+    },
+    "src/run_bat_config.h": {
+      "before_sha256": "00484faba20a7a90988d8f5a24fbb3302e8cf0cc7324c0e69bc689c449cc935a",
+      "after_sha256": "58804b1eec6f46a2942087790e3eb65b75531b6e692cdcf4cc908c6a5797c6f5",
+      "edits": [
+        {
+          "start": 8,
+          "end": 20,
+          "before": [],
+          "after": [
+            "/* Opt-in experiment: historical profiles remain available as controls. */\n",
+            "#ifndef MF_FAST_RUNNING_BAT\n",
+            "#define MF_FAST_RUNNING_BAT 0\n",
+            "#endif\n",
+            "#if MF_FAST_RUNNING_BAT && !MF_RUN_BAT\n",
+            "#error Fast horizontal bat requires the running bat system\n",
+            "#endif\n",
+            "#define MF_BAT_RUNNING 2 /* p->bat discriminator; player/game ABI is unchanged. */\n",
+            "#define MF_FAST_BAT_ACTIVE_FIRST 4\n",
+            "#define MF_FAST_BAT_ACTIVE_LAST 7\n",
+            "#define MF_FAST_BAT_RECOVERY_FIRST 9\n",
+            "#define MF_FAST_BAT_TOTAL_TICKS 12\n"
+          ]
+        }
+      ]
+    }
+  }
+}

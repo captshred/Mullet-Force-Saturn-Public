@@ -1,0 +1,206 @@
+{
+  "source": "assets/music/drop-zone.mid",
+  "music_volume": 82,
+  "sfx_volume": 112,
+  "music_priority": 31,
+  "sfx_priority": 8,
+  "bend_semitones": 6,
+  "music_voice_budget": 24,
+  "release_budget_ms": 50,
+  "channels": {
+    "1": {
+      "programs": {
+        "30": 0
+      },
+      "volume": 100,
+      "pan": 40
+    },
+    "3": {
+      "programs": {
+        "30": 0
+      },
+      "volume": 100,
+      "pan": 88
+    },
+    "5": {
+      "programs": {
+        "36": 2
+      },
+      "volume": 112,
+      "pan": 64
+    },
+    "7": {
+      "programs": {
+        "29": 1
+      },
+      "volume": 108,
+      "pan": 52
+    },
+    "9": {
+      "programs": {
+        "29": 1
+      },
+      "volume": 108,
+      "pan": 76
+    }
+  },
+  "drum_channel": 10,
+  "drums": {
+    "35": {
+      "voice": 3,
+      "channel": 10
+    },
+    "36": {
+      "voice": 3,
+      "channel": 10
+    },
+    "38": {
+      "voice": 4,
+      "channel": 11
+    },
+    "40": {
+      "voice": 4,
+      "channel": 11
+    },
+    "42": {
+      "voice": 5,
+      "channel": 12
+    },
+    "44": {
+      "voice": 5,
+      "channel": 12
+    },
+    "46": {
+      "voice": 6,
+      "channel": 13
+    },
+    "49": {
+      "voice": 7,
+      "channel": 14
+    },
+    "51": {
+      "voice": 7,
+      "channel": 14
+    },
+    "57": {
+      "voice": 7,
+      "channel": 14
+    }
+  },
+  "instruments": [
+    {
+      "name": "crunch rhythm",
+      "program": 0,
+      "waveform": "mf_crunch",
+      "base_note": 45,
+      "loop": true,
+      "ar": 31,
+      "d1r": 12,
+      "dl": 5,
+      "d2r": 0,
+      "rr": 31,
+      "tl": 20
+    },
+    {
+      "name": "sustaining lead",
+      "program": 1,
+      "waveform": "mf_lead",
+      "base_note": 45,
+      "loop": true,
+      "ar": 30,
+      "d1r": 0,
+      "dl": 0,
+      "d2r": 0,
+      "rr": 31,
+      "tl": 18
+    },
+    {
+      "name": "punch bass",
+      "program": 2,
+      "waveform": "mf_bass",
+      "base_note": 45,
+      "loop": true,
+      "ar": 31,
+      "d1r": 14,
+      "dl": 6,
+      "d2r": 0,
+      "rr": 31,
+      "tl": 14
+    },
+    {
+      "name": "kick",
+      "program": 3,
+      "waveform": "mf_kick",
+      "is_drum": true,
+      "drum_note": 60,
+      "loop": false,
+      "ar": 31,
+      "rr": 31,
+      "tl": 12
+    },
+    {
+      "name": "snare",
+      "program": 4,
+      "waveform": "mf_snare",
+      "is_drum": true,
+      "drum_note": 60,
+      "loop": false,
+      "ar": 31,
+      "rr": 31,
+      "tl": 16
+    },
+    {
+      "name": "closed hat",
+      "program": 5,
+      "waveform": "mf_closed",
+      "is_drum": true,
+      "drum_note": 60,
+      "loop": false,
+      "ar": 31,
+      "rr": 31,
+      "tl": 24
+    },
+    {
+      "name": "open hat",
+      "program": 6,
+      "waveform": "mf_open",
+      "is_drum": true,
+      "drum_note": 60,
+      "loop": false,
+      "ar": 31,
+      "rr": 31,
+      "tl": 24
+    },
+    {
+      "name": "cymbal",
+      "program": 7,
+      "waveform": "mf_cymbal",
+      "is_drum": true,
+      "drum_note": 60,
+      "loop": false,
+      "ar": 31,
+      "rr": 31,
+      "tl": 22
+    }
+  ],
+  "linear_mix": {
+    "music_gain": 1.5,
+    "sfx_gain": 0.6375,
+    "master_headroom": 0.9,
+    "reference": "999cef8bca349aeec02d4f24b90ca0ac83b03f9b",
+    "note": "Retain previous PCM music scaling/headroom; add music gain by reducing TON TL attenuation, compensate residual in PCM only when safe. SFX PCM gain is previous 0.75 times 0.85. No master increase/clamp.",
+    "music_boost_db": 6.0,
+    "pcm_reference": "52698c08dea78afee5d4806e1138e6036e5a04bf",
+    "reference_sfx_gain": 0.75
+  },
+  "sfx_retrigger_ticks": [
+    6,
+    8,
+    8
+  ],
+  "torch_audio": {
+    "ignition_gain": 0.45,
+    "hiss_gain": 0.2,
+    "shared_hiss_bus": true
+  }
+}

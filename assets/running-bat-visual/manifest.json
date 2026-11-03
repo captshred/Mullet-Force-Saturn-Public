@@ -1,0 +1,332 @@
+{
+  "parent": "1eacf2bee026a058d179edf1c0b30888798f9316",
+  "palette": "assets/gallery/GB0.TGA",
+  "source_sha256": "8ca9036eaa963de93370e6508d7e453f75b94ffa05005e789b5ec0f4249008db",
+  "resources": [
+    {
+      "name": "RBV00.TGA",
+      "width": 32,
+      "height": 36,
+      "bytes": 1152,
+      "sha256": "f4ede08f1df5915aac57539522eb9c279a02d9694df5d8b4cc52c7159db5bb6f"
+    },
+    {
+      "name": "RBV01.TGA",
+      "width": 24,
+      "height": 23,
+      "bytes": 576,
+      "sha256": "489bb620200b705446f5914d76c7f80792a0a6d691fc534fdd7ddf7e24f85d1c"
+    },
+    {
+      "name": "RBV02.TGA",
+      "width": 48,
+      "height": 31,
+      "bytes": 1504,
+      "sha256": "60a55b9749d55eebdb88165697038ebb899dba9d953e6942916e837032310dcd"
+    },
+    {
+      "name": "RBV03.TGA",
+      "width": 56,
+      "height": 9,
+      "bytes": 512,
+      "sha256": "4a32d1933a27cb971617272d509e1bbca0e0e4eb3ed255d7a8826e9164956de2"
+    },
+    {
+      "name": "RBV04.TGA",
+      "width": 32,
+      "height": 23,
+      "bytes": 736,
+      "sha256": "a63424ccc2be2755d8a98304c2ef861f85a2f6c7633bbffd972c02344c8e97c3"
+    },
+    {
+      "name": "RBV05.TGA",
+      "width": 32,
+      "height": 21,
+      "bytes": 672,
+      "sha256": "3b8f8c88edbeed669f568c787e18abfe60e68f2daaba6150ca1201fd0d52e49c"
+    },
+    {
+      "name": "RBV06.TGA",
+      "width": 56,
+      "height": 11,
+      "bytes": 640,
+      "sha256": "d895d3cf6cd177473afa7cfe5f740b90072ed8a55572273156bc984ae6f54d2e"
+    },
+    {
+      "name": "RBV07.TGA",
+      "width": 24,
+      "height": 23,
+      "bytes": 576,
+      "sha256": "fba4f1373b214fbb8ab84b2203a743300324ff42a331b5e442baeab2c4fc2159"
+    },
+    {
+      "name": "RBV08.TGA",
+      "width": 48,
+      "height": 31,
+      "bytes": 1504,
+      "sha256": "c860211fed0cfae439c68840ef687b2894f33a81836db72c6d862f45f6241284"
+    },
+    {
+      "name": "RBV09.TGA",
+      "width": 56,
+      "height": 11,
+      "bytes": 640,
+      "sha256": "3047bb30334201aae73f4724dc3393e81c5f3b1c7313c4c6b456f5ab10e39db5"
+    }
+  ],
+  "texture_bytes": 8512,
+  "slots": 10,
+  "carry": {
+    "resource": 0,
+    "x": 2,
+    "y": 2,
+    "width": 32,
+    "height": 36,
+    "grip": [
+      22,
+      30
+    ]
+  },
+  "hands": [
+    [
+      [
+        43,
+        43
+      ],
+      [
+        41,
+        37
+      ],
+      [
+        43,
+        43
+      ],
+      [
+        37,
+        40
+      ]
+    ],
+    [
+      [
+        39,
+        43
+      ],
+      [
+        41,
+        41
+      ],
+      [
+        39,
+        37
+      ],
+      [
+        40,
+        40
+      ]
+    ]
+  ],
+  "overlays": [
+    [
+      {
+        "resource": -1,
+        "x": 0,
+        "y": 0,
+        "width": 56,
+        "height": 60,
+        "origin": [
+          -31,
+          -87
+        ],
+        "source": "BT00.TGA",
+        "wood_pixels": 120,
+        "parent_height": 60
+      },
+      {
+        "resource": 1,
+        "x": 1,
+        "y": 45,
+        "width": 24,
+        "height": 23,
+        "origin": [
+          -35,
+          -42
+        ],
+        "source": "BT01.TGA",
+        "wood_pixels": 180,
+        "parent_height": 69
+      },
+      {
+        "resource": 2,
+        "x": 42,
+        "y": 40,
+        "width": 48,
+        "height": 31,
+        "origin": [
+          27,
+          -47
+        ],
+        "source": "BT02.TGA",
+        "wood_pixels": 304,
+        "parent_height": 83
+      },
+      {
+        "resource": 3,
+        "x": 44,
+        "y": 31,
+        "width": 56,
+        "height": 9,
+        "origin": [
+          32,
+          -56
+        ],
+        "source": "BT03.TGA",
+        "wood_pixels": 284,
+        "parent_height": 53
+      },
+      {
+        "resource": 4,
+        "x": 39,
+        "y": 1,
+        "width": 32,
+        "height": 23,
+        "origin": [
+          27,
+          -86
+        ],
+        "source": "BT04.TGA",
+        "wood_pixels": 212,
+        "parent_height": 53
+      },
+      {
+        "resource": 5,
+        "x": 1,
+        "y": 3,
+        "width": 32,
+        "height": 21,
+        "origin": [
+          -36,
+          -84
+        ],
+        "source": "BT05.TGA",
+        "wood_pixels": 196,
+        "parent_height": 53
+      },
+      {
+        "resource": 6,
+        "x": 1,
+        "y": 18,
+        "width": 56,
+        "height": 11,
+        "origin": [
+          -33,
+          -69
+        ],
+        "source": "BT06.TGA",
+        "wood_pixels": 163,
+        "parent_height": 53
+      }
+    ],
+    [
+      {
+        "resource": -1,
+        "x": 0,
+        "y": 0,
+        "width": 56,
+        "height": 60,
+        "origin": [
+          -31,
+          -87
+        ],
+        "source": "CT00.TGA",
+        "wood_pixels": 123,
+        "parent_height": 60
+      },
+      {
+        "resource": 7,
+        "x": 1,
+        "y": 45,
+        "width": 24,
+        "height": 23,
+        "origin": [
+          -35,
+          -42
+        ],
+        "source": "CT01.TGA",
+        "wood_pixels": 184,
+        "parent_height": 69
+      },
+      {
+        "resource": 8,
+        "x": 42,
+        "y": 40,
+        "width": 48,
+        "height": 31,
+        "origin": [
+          27,
+          -47
+        ],
+        "source": "CT02.TGA",
+        "wood_pixels": 307,
+        "parent_height": 83
+      },
+      {
+        "resource": 3,
+        "x": 44,
+        "y": 31,
+        "width": 56,
+        "height": 9,
+        "origin": [
+          32,
+          -56
+        ],
+        "source": "CT03.TGA",
+        "wood_pixels": 284,
+        "parent_height": 53
+      },
+      {
+        "resource": 4,
+        "x": 39,
+        "y": 1,
+        "width": 32,
+        "height": 23,
+        "origin": [
+          27,
+          -86
+        ],
+        "source": "CT04.TGA",
+        "wood_pixels": 212,
+        "parent_height": 53
+      },
+      {
+        "resource": 5,
+        "x": 1,
+        "y": 3,
+        "width": 32,
+        "height": 21,
+        "origin": [
+          -36,
+          -84
+        ],
+        "source": "CT05.TGA",
+        "wood_pixels": 196,
+        "parent_height": 53
+      },
+      {
+        "resource": 9,
+        "x": 1,
+        "y": 18,
+        "width": 56,
+        "height": 11,
+        "origin": [
+          -33,
+          -69
+        ],
+        "source": "CT06.TGA",
+        "wood_pixels": 156,
+        "parent_height": 53
+      }
+    ]
+  ],
+  "boot_bytes": 410464,
+  "free_bytes": 48024
+}

@@ -1,0 +1,52 @@
+{
+  "parent": "84f7ba38ea239119d98e86cfabe57daa1ca97679",
+  "palette": "assets/gallery/GB0.TGA",
+  "palette_sha256": "0bc5370c89a51dc3d4c41505c3dcef0748362af8c4135d4badaa09c632e302aa",
+  "resources": [
+    {
+      "actor": "buck",
+      "name": "XC0.TGA",
+      "width": 80,
+      "height": 44,
+      "x": 40,
+      "y": 20,
+      "bytes": 3520,
+      "sha256": "7c1c3ed256bd868621b1ab9d700139d9afd44aa3d0e367c0b49891ee206b1cee",
+      "opaque_bounds": [
+        5,
+        0,
+        80,
+        44
+      ],
+      "used_colors": 185
+    },
+    {
+      "actor": "chuck",
+      "name": "XC1.TGA",
+      "width": 80,
+      "height": 44,
+      "x": 40,
+      "y": 20,
+      "bytes": 3520,
+      "sha256": "9111e5798778a55b032fe9ed79510eff30adb2ba73c7ca33533ed30b1653603f",
+      "opaque_bounds": [
+        3,
+        0,
+        77,
+        44
+      ],
+      "used_colors": 158
+    }
+  ],
+  "added_bytes": 7040,
+  "added_definitions": 2,
+  "boot_bytes": 453344,
+  "free_bytes": 5144,
+  "definitions": 255,
+  "head_offset": [
+    2,
+    0
+  ],
+  "shared_lower": "seq_lower[actor]",
+  "source_sha256": "8b31e9ec3e0868191d7b9c2d73e4c0c23331f7107f1ac9362f0bf187ab69e78d"
+}

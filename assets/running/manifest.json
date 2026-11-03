@@ -1,0 +1,726 @@
+{
+  "canvas": [
+    128,
+    96
+  ],
+  "root": [
+    64,
+    92
+  ],
+  "palette": "assets/gallery/GB0.TGA",
+  "transparent_index": 0,
+  "frame_ticks": 6,
+  "unique_resources": 24,
+  "texture_bytes": 39104,
+  "naive_bytes": 39104,
+  "dedup_saved": 0,
+  "boot_vdp1_bytes": 401952,
+  "free_vdp1_bytes": 56536,
+  "slots": 159,
+  "source_sha256": "ee7c39f9ea42fd7c6e5cd48810dcf641e5cd1e95764089ce20d950e15f70846e",
+  "actors": [
+    {
+      "name": "buck",
+      "frames": [
+        {
+          "frame": 0,
+          "phase": "near leads / far trails",
+          "near_phase": 0,
+          "far_phase": 1,
+          "leading_leg": "near",
+          "parts": [
+            {
+              "resource": 81,
+              "x": 44,
+              "y": 4,
+              "width": 56,
+              "height": 24
+            },
+            {
+              "resource": 82,
+              "x": 32,
+              "y": 28,
+              "width": 72,
+              "height": 44
+            },
+            {
+              "resource": 83,
+              "x": 73,
+              "y": 72,
+              "width": 32,
+              "height": 20
+            }
+          ],
+          "bounds": [
+            32,
+            5,
+            98,
+            92
+          ],
+          "sha256": "c36be5824c562302521795afe1d82a219383e8bc7eb381b18340130e331c9dcb"
+        },
+        {
+          "frame": 1,
+          "phase": "near push-off / far drives",
+          "near_phase": 2,
+          "far_phase": 3,
+          "leading_leg": "far",
+          "parts": [
+            {
+              "resource": 84,
+              "x": 40,
+              "y": 4,
+              "width": 56,
+              "height": 24
+            },
+            {
+              "resource": 85,
+              "x": 34,
+              "y": 28,
+              "width": 64,
+              "height": 38
+            },
+            {
+              "resource": 86,
+              "x": 33,
+              "y": 66,
+              "width": 40,
+              "height": 24
+            }
+          ],
+          "bounds": [
+            33,
+            5,
+            95,
+            90
+          ],
+          "sha256": "f01bd1a26c35983ad74f9319f5edf36c54cd87347f7eed9862c01d0d761094e1"
+        },
+        {
+          "frame": 2,
+          "phase": "far leads / near recovery",
+          "near_phase": 1,
+          "far_phase": 0,
+          "leading_leg": "far",
+          "parts": [
+            {
+              "resource": 87,
+              "x": 48,
+              "y": 6,
+              "width": 48,
+              "height": 22
+            },
+            {
+              "resource": 88,
+              "x": 36,
+              "y": 28,
+              "width": 64,
+              "height": 44
+            },
+            {
+              "resource": 89,
+              "x": 69,
+              "y": 72,
+              "width": 32,
+              "height": 20
+            }
+          ],
+          "bounds": [
+            36,
+            7,
+            100,
+            92
+          ],
+          "sha256": "f4657e370187d7fffe3c955080804493690533933c24a690df924eebb1d55cce"
+        },
+        {
+          "frame": 3,
+          "phase": "far push-off / near drives",
+          "near_phase": 3,
+          "far_phase": 2,
+          "leading_leg": "near",
+          "parts": [
+            {
+              "resource": 90,
+              "x": 38,
+              "y": 4,
+              "width": 64,
+              "height": 24
+            },
+            {
+              "resource": 91,
+              "x": 31,
+              "y": 28,
+              "width": 72,
+              "height": 38
+            },
+            {
+              "resource": 92,
+              "x": 29,
+              "y": 66,
+              "width": 48,
+              "height": 24
+            }
+          ],
+          "bounds": [
+            29,
+            4,
+            97,
+            90
+          ],
+          "sha256": "96dbc1d49e576f3f01fb143d8372613b152f76063d354e98a4495d466f43ef10"
+        }
+      ],
+      "leg_layers": [
+        {
+          "phase": 0,
+          "source_bounds": [
+            88,
+            50,
+            403,
+            429
+          ],
+          "source_hip": [
+            148,
+            50
+          ],
+          "native_hip": [
+            64,
+            44
+          ],
+          "native_size": [
+            40,
+            48
+          ],
+          "sha256": "63ce4ae007859e58feb87f897e7033f3e0a4a911f53d5efe9c70ba25b7c0706a"
+        },
+        {
+          "phase": 1,
+          "source_bounds": [
+            457,
+            50,
+            748,
+            266
+          ],
+          "source_hip": [
+            694,
+            50
+          ],
+          "native_hip": [
+            64,
+            44
+          ],
+          "native_size": [
+            37,
+            27
+          ],
+          "sha256": "a7ddea48a3e93197f3468ec90ea118bd89459ec1d0eeb2f525535781a2a726aa"
+        },
+        {
+          "phase": 2,
+          "source_bounds": [
+            940,
+            50,
+            1256,
+            426
+          ],
+          "source_hip": [
+            1203,
+            50
+          ],
+          "native_hip": [
+            64,
+            44
+          ],
+          "native_size": [
+            40,
+            46
+          ],
+          "sha256": "316fa4fced11401a40a852c151e652fdd1a4c437e40dc78b47a5af38c34d7855"
+        },
+        {
+          "phase": 3,
+          "source_bounds": [
+            1514,
+            50,
+            1748,
+            347
+          ],
+          "source_hip": [
+            1578,
+            50
+          ],
+          "native_hip": [
+            64,
+            44
+          ],
+          "native_size": [
+            30,
+            38
+          ],
+          "sha256": "c844698cf2d2321772fb2f24456c4701f489386dd76bdc22f55ee184b280e3d1"
+        }
+      ]
+    },
+    {
+      "name": "chuck",
+      "frames": [
+        {
+          "frame": 0,
+          "phase": "near leads / far trails",
+          "near_phase": 0,
+          "far_phase": 1,
+          "leading_leg": "near",
+          "parts": [
+            {
+              "resource": 93,
+              "x": 40,
+              "y": 4,
+              "width": 56,
+              "height": 24
+            },
+            {
+              "resource": 94,
+              "x": 32,
+              "y": 28,
+              "width": 64,
+              "height": 44
+            },
+            {
+              "resource": 95,
+              "x": 73,
+              "y": 72,
+              "width": 32,
+              "height": 20
+            }
+          ],
+          "bounds": [
+            32,
+            5,
+            99,
+            92
+          ],
+          "sha256": "53e7ff2cd2628235a28e8448349cadee4b4d3678eec335b408336b50e8a10d25"
+        },
+        {
+          "frame": 1,
+          "phase": "near push-off / far drives",
+          "near_phase": 2,
+          "far_phase": 3,
+          "leading_leg": "far",
+          "parts": [
+            {
+              "resource": 96,
+              "x": 43,
+              "y": 4,
+              "width": 56,
+              "height": 24
+            },
+            {
+              "resource": 97,
+              "x": 35,
+              "y": 28,
+              "width": 64,
+              "height": 38
+            },
+            {
+              "resource": 98,
+              "x": 33,
+              "y": 66,
+              "width": 40,
+              "height": 24
+            }
+          ],
+          "bounds": [
+            33,
+            5,
+            94,
+            90
+          ],
+          "sha256": "9cc422291f4667d5059583c33c7ee17ef8ffd5eef6ee8701bd07ba860a578309"
+        },
+        {
+          "frame": 2,
+          "phase": "far leads / near recovery",
+          "near_phase": 1,
+          "far_phase": 0,
+          "leading_leg": "far",
+          "parts": [
+            {
+              "resource": 99,
+              "x": 42,
+              "y": 4,
+              "width": 56,
+              "height": 24
+            },
+            {
+              "resource": 100,
+              "x": 34,
+              "y": 28,
+              "width": 64,
+              "height": 44
+            },
+            {
+              "resource": 101,
+              "x": 69,
+              "y": 72,
+              "width": 32,
+              "height": 20
+            }
+          ],
+          "bounds": [
+            34,
+            5,
+            95,
+            92
+          ],
+          "sha256": "ec19669b92947fa878ff066eea9aed41945397aaf49a0a3d3a94f77011b3939e"
+        },
+        {
+          "frame": 3,
+          "phase": "far push-off / near drives",
+          "near_phase": 3,
+          "far_phase": 2,
+          "leading_leg": "near",
+          "parts": [
+            {
+              "resource": 102,
+              "x": 40,
+              "y": 4,
+              "width": 56,
+              "height": 24
+            },
+            {
+              "resource": 103,
+              "x": 33,
+              "y": 28,
+              "width": 64,
+              "height": 38
+            },
+            {
+              "resource": 104,
+              "x": 29,
+              "y": 66,
+              "width": 48,
+              "height": 24
+            }
+          ],
+          "bounds": [
+            29,
+            4,
+            96,
+            90
+          ],
+          "sha256": "7a88b1ea79f7d2411dd7fb43da2389000cadc4323dfc013c49132552a4efb7c5"
+        }
+      ],
+      "leg_layers": [
+        {
+          "phase": 0,
+          "source_bounds": [
+            88,
+            475,
+            407,
+            854
+          ],
+          "source_hip": [
+            147,
+            475
+          ],
+          "native_hip": [
+            64,
+            44
+          ],
+          "native_size": [
+            40,
+            48
+          ],
+          "sha256": "e338c88c9604d420a3f65ccd22ab92180b7d9069e5f943da03680e7ec51b50c2"
+        },
+        {
+          "phase": 1,
+          "source_bounds": [
+            457,
+            474,
+            748,
+            686
+          ],
+          "source_hip": [
+            695,
+            474
+          ],
+          "native_hip": [
+            64,
+            44
+          ],
+          "native_size": [
+            37,
+            27
+          ],
+          "sha256": "968a309b9d19985ac48f138dd57827a8f87a601be4aa5ded08d62dc81ef3e7e3"
+        },
+        {
+          "phase": 2,
+          "source_bounds": [
+            940,
+            475,
+            1256,
+            854
+          ],
+          "source_hip": [
+            1202,
+            475
+          ],
+          "native_hip": [
+            64,
+            44
+          ],
+          "native_size": [
+            40,
+            46
+          ],
+          "sha256": "696a5e29d380a75ec12bf6ab5fc16f75c42eab2b204defa720131f7f9f6f64e8"
+        },
+        {
+          "phase": 3,
+          "source_bounds": [
+            1514,
+            475,
+            1748,
+            773
+          ],
+          "source_hip": [
+            1578,
+            475
+          ],
+          "native_hip": [
+            64,
+            44
+          ],
+          "native_size": [
+            30,
+            38
+          ],
+          "sha256": "46015f415d44b8f55b56d3b8f4d2b0f9b6a8bc07a2c5b0e69dbbdda6ed6d88b8"
+        }
+      ]
+    }
+  ],
+  "resources": [
+    {
+      "name": "RN00.TGA",
+      "width": 56,
+      "height": 24,
+      "bytes": 1344,
+      "sha256": "cc5624c1c9792fe62b570bc678edd9cb3a97a967615121bc03eca628fc3f6d92"
+    },
+    {
+      "name": "RN01.TGA",
+      "width": 72,
+      "height": 44,
+      "bytes": 3168,
+      "sha256": "fc718e701fc72493d8b5dd4efaf38b408f8054ebb7824e4964a9b2cfc4b9bce3"
+    },
+    {
+      "name": "RN02.TGA",
+      "width": 32,
+      "height": 20,
+      "bytes": 640,
+      "sha256": "a8ec430341c314741d397e5cd3daa59139d5b960783536bc155de152aef3f588"
+    },
+    {
+      "name": "RN03.TGA",
+      "width": 56,
+      "height": 24,
+      "bytes": 1344,
+      "sha256": "af6c2717c400a1212f648da598266edc9f53b13f8803cbcb4db528953fec15a2"
+    },
+    {
+      "name": "RN04.TGA",
+      "width": 64,
+      "height": 38,
+      "bytes": 2432,
+      "sha256": "67aec3bf1c1c54a731c62932fb22449347c2c0bcfc9c05c22bdf6a843583873c"
+    },
+    {
+      "name": "RN05.TGA",
+      "width": 40,
+      "height": 24,
+      "bytes": 960,
+      "sha256": "3731834bb7b74cb8a065729399aac6c4643350f85b7fef6f8489f346b42b29ad"
+    },
+    {
+      "name": "RN06.TGA",
+      "width": 48,
+      "height": 22,
+      "bytes": 1056,
+      "sha256": "8df7f68f70946be36d9d6289951b1d401096933da93f10b708fb8e3c8b924697"
+    },
+    {
+      "name": "RN07.TGA",
+      "width": 64,
+      "height": 44,
+      "bytes": 2816,
+      "sha256": "919281718a0a42024ab3dccf85d45138b9686c51b459f06c687a1ab13b53e9d8"
+    },
+    {
+      "name": "RN08.TGA",
+      "width": 32,
+      "height": 20,
+      "bytes": 640,
+      "sha256": "aff156578afdd5bc53698c2dd3c200b53ddc7bfc4abeb1604331f2aacc27d751"
+    },
+    {
+      "name": "RN09.TGA",
+      "width": 64,
+      "height": 24,
+      "bytes": 1536,
+      "sha256": "34a676830768f11ce2859c8209c4b253530a423fababb5e7f04baed323b265e0"
+    },
+    {
+      "name": "RN10.TGA",
+      "width": 72,
+      "height": 38,
+      "bytes": 2752,
+      "sha256": "4b7bf6b3257b7ac1ec73d031a31a4c6e84dc09896fd7d16088d19910780a2741"
+    },
+    {
+      "name": "RN11.TGA",
+      "width": 48,
+      "height": 24,
+      "bytes": 1152,
+      "sha256": "fd4e828fcad825a2b7eaee29bebaaf2edd82a2c5ce0809f6f974b7df895eb6b7"
+    },
+    {
+      "name": "RN12.TGA",
+      "width": 56,
+      "height": 24,
+      "bytes": 1344,
+      "sha256": "da625c171aece892a901443ae4f50bae37239456f743e6abba1455bade689817"
+    },
+    {
+      "name": "RN13.TGA",
+      "width": 64,
+      "height": 44,
+      "bytes": 2816,
+      "sha256": "c4d338f3d7bb261af7388503ef90655776b47e4da5ffbf3151decc0cc58dce86"
+    },
+    {
+      "name": "RN14.TGA",
+      "width": 32,
+      "height": 20,
+      "bytes": 640,
+      "sha256": "e9afbc0abb8869e8971736983729a7de591aac036038fb2c86aa9c7049bf6393"
+    },
+    {
+      "name": "RN15.TGA",
+      "width": 56,
+      "height": 24,
+      "bytes": 1344,
+      "sha256": "573051a4059521f5bff9688ac5e29fd21b4384d66ff761a9cf8183bcfd4dec05"
+    },
+    {
+      "name": "RN16.TGA",
+      "width": 64,
+      "height": 38,
+      "bytes": 2432,
+      "sha256": "d7ea8bdfb1f23fc835f46f9bce10a5de29a5ee7e184ef9035b339014df3abf3f"
+    },
+    {
+      "name": "RN17.TGA",
+      "width": 40,
+      "height": 24,
+      "bytes": 960,
+      "sha256": "389422ac57f8c25eab0d51605934e787e4addd783b29286fae72666eb5e86089"
+    },
+    {
+      "name": "RN18.TGA",
+      "width": 56,
+      "height": 24,
+      "bytes": 1344,
+      "sha256": "f9d31d5a094a85f609d79fed5fe3b392921a82fd12306142108c3f263cd329bf"
+    },
+    {
+      "name": "RN19.TGA",
+      "width": 64,
+      "height": 44,
+      "bytes": 2816,
+      "sha256": "2f8bb8f1f2ff50b0cbbc9a5287ce09e0a50c13a668b822e805c27b339a966862"
+    },
+    {
+      "name": "RN20.TGA",
+      "width": 32,
+      "height": 20,
+      "bytes": 640,
+      "sha256": "f248ca32e837cf770e3113afd3183b0d9791bfc39ff8cdede5607a03a333d591"
+    },
+    {
+      "name": "RN21.TGA",
+      "width": 56,
+      "height": 24,
+      "bytes": 1344,
+      "sha256": "bff90ee073c63c5dad12ae12fa27927a8ca472ff016bfc3bb54a84f87caff896"
+    },
+    {
+      "name": "RN22.TGA",
+      "width": 64,
+      "height": 38,
+      "bytes": 2432,
+      "sha256": "c5d746e6186ec19ac7c6ccedc99fa3cc48e1d9a73dd9fcc4374c9032c135e1b8"
+    },
+    {
+      "name": "RN23.TGA",
+      "width": 48,
+      "height": 24,
+      "bytes": 1152,
+      "sha256": "acd16e1b3278bba64a737e139fa447a49dc1aed3564658bfd65fa15d5e513c80"
+    }
+  ],
+  "stride_correction": {
+    "parent": "05f2a58f42c5246bbf46e41ebacdba78d0e3b8f3",
+    "guide_sha256": "1f190ae9f43e68e9bf2645ec504086142a27ce77237a718bdb72667a8e9da226",
+    "upper_lock_rows": 48,
+    "reused_identical_pieces": [
+      "RN00.TGA",
+      "RN03.TGA",
+      "RN06.TGA",
+      "RN09.TGA",
+      "RN12.TGA",
+      "RN15.TGA",
+      "RN18.TGA",
+      "RN21.TGA"
+    ],
+    "near_phases": [
+      0,
+      2,
+      1,
+      3
+    ],
+    "far_phases": [
+      1,
+      3,
+      0,
+      2
+    ]
+  },
+  "artifact_correction": {
+    "parent": "aae373fb6fe1b7d0ca63210a071a8bb85ad500c8",
+    "reference_sha256": "42bcbe31f1eb77667842963b0c8471b39bcddeefc02de1cee5c1af05a67f1619",
+    "masks": {
+      "assets/leg-artifact-fix/buck-1-mask.png": "d2b8d4d16d06c3305feb16bd6feee2d48c0c6a0372e333abc86088425f4d38d0",
+      "assets/leg-artifact-fix/buck-3-mask.png": "d2b8d4d16d06c3305feb16bd6feee2d48c0c6a0372e333abc86088425f4d38d0",
+      "assets/leg-artifact-fix/chuck-1-mask.png": "d2b8d4d16d06c3305feb16bd6feee2d48c0c6a0372e333abc86088425f4d38d0",
+      "assets/leg-artifact-fix/chuck-3-mask.png": "d2b8d4d16d06c3305feb16bd6feee2d48c0c6a0372e333abc86088425f4d38d0"
+    },
+    "unchanged_frames": [
+      0,
+      2
+    ],
+    "edit_bounds": [
+      54,
+      43,
+      90,
+      48
+    ]
+  }
+}

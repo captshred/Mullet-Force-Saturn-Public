@@ -1,0 +1,97 @@
+{
+  "scenario": "jab",
+  "single_attacker": false,
+  "frames": 1400,
+  "core_sha256": "f00215b3c6ee0c82a377a8403b686e09bf8684f176a0a5bd66b47b8677e4d738",
+  "bin_sha256": "cee46e50dbb50f184777360d11e18cb92792a09f54d7cbb9e3a4f0364515f569",
+  "peak_active_slots": 11,
+  "custom_voice_starts": {
+    "5": 9,
+    "2": 6
+  },
+  "custom_active_frames": {
+    "5": 154,
+    "2": 49
+  },
+  "global_whoosh_connect_overlap_frames": [],
+  "output_peak": 4717,
+  "rail_samples": 0,
+  "transitions": [
+    [
+      802,
+      9,
+      5
+    ],
+    [
+      806,
+      10,
+      5
+    ],
+    [
+      815,
+      5,
+      5
+    ],
+    [
+      819,
+      6,
+      5
+    ],
+    [
+      827,
+      7,
+      5
+    ],
+    [
+      831,
+      4,
+      5
+    ],
+    [
+      872,
+      4,
+      5
+    ],
+    [
+      882,
+      5,
+      5
+    ],
+    [
+      952,
+      6,
+      5
+    ],
+    [
+      973,
+      8,
+      2
+    ],
+    [
+      1053,
+      5,
+      2
+    ],
+    [
+      1133,
+      9,
+      2
+    ],
+    [
+      1196,
+      8,
+      2
+    ],
+    [
+      1283,
+      11,
+      2
+    ],
+    [
+      1375,
+      12,
+      2
+    ]
+  ],
+  "scope": "Global overlap between different players is permitted. Single-attacker scenarios assert none. No listening or hardware verification."
+}

@@ -1,0 +1,9 @@
+{
+  "runtime_cram_bytes": 4096,
+  "new_palette_banks": 0,
+  "enemy_bank": 4,
+  "burn_bank": 5,
+  "legacy_entries_0_to_14_identical_to_parent": true,
+  "new_normal_and_burn_entries_verified": 42,
+  "method": "Read-only local Yabause VDP2 CRAM state at frame350"
+}

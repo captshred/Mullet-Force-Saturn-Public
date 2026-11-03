@@ -1,0 +1,12 @@
+{
+  "running_bat_one_hit_kos": [
+    {
+      "frame": 823,
+      "enemy": 0,
+      "previous_hp": 6,
+      "new_hp": 0
+    }
+  ],
+  "torch_burn_and_defeat_observed": true,
+  "player2_confirmed_connect_frames": 15
+}

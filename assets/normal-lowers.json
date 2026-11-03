@@ -1,0 +1,242 @@
+[
+  {
+    "name": "NL00.TGA",
+    "anchor": [
+      20,
+      32
+    ],
+    "source_size": [
+      72,
+      96
+    ],
+    "crop_origin": [
+      16,
+      60
+    ],
+    "source_rgb_sha256": "492be3ca82ad32199385d75ba59348ef56cabe7a80ff83f5a8c4e148597a903f"
+  },
+  {
+    "name": "NL01.TGA",
+    "anchor": [
+      20,
+      32
+    ],
+    "source_size": [
+      72,
+      96
+    ],
+    "crop_origin": [
+      16,
+      60
+    ],
+    "source_rgb_sha256": "1a617fdf5981370f56d14bb8e32b07c8d7e65e5fb3e6d141d4ef77b6c0aa22e0"
+  },
+  {
+    "name": "NL02.TGA",
+    "anchor": [
+      25,
+      32
+    ],
+    "source_size": [
+      72,
+      96
+    ],
+    "crop_origin": [
+      11,
+      60
+    ],
+    "source_rgb_sha256": "e6072a3cfb3bbdc265e9d3041afdc81dfce3d7f90cdbba0de9451e206438c0a5"
+  },
+  {
+    "name": "NL03.TGA",
+    "anchor": [
+      21,
+      32
+    ],
+    "source_size": [
+      72,
+      96
+    ],
+    "crop_origin": [
+      15,
+      60
+    ],
+    "source_rgb_sha256": "a597168e327baceca5cfa64cc605061348fbae5d1e2b6e434d9689362269c785"
+  },
+  {
+    "name": "NL04.TGA",
+    "anchor": [
+      13,
+      32
+    ],
+    "source_size": [
+      72,
+      96
+    ],
+    "crop_origin": [
+      23,
+      60
+    ],
+    "source_rgb_sha256": "ca7e7cd8a63c311c5a58804cb0ec6fb0c9bd16810934179f2a12a188d0872696"
+  },
+  {
+    "name": "NL05.TGA",
+    "anchor": [
+      22,
+      32
+    ],
+    "source_size": [
+      72,
+      96
+    ],
+    "crop_origin": [
+      14,
+      60
+    ],
+    "source_rgb_sha256": "b498b9ee79393f15163e44dac1af0a5fb7ea3aedfa135c720b9a73dfceb1fe8b"
+  },
+  {
+    "name": "NL06.TGA",
+    "anchor": [
+      17,
+      32
+    ],
+    "source_size": [
+      72,
+      96
+    ],
+    "crop_origin": [
+      19,
+      60
+    ],
+    "source_rgb_sha256": "67c85982876b517208404a80eb4e72a1c982c52949dc6e1e3f2ff0159e8363bb"
+  },
+  {
+    "name": "NL07.TGA",
+    "anchor": [
+      11,
+      32
+    ],
+    "source_size": [
+      72,
+      96
+    ],
+    "crop_origin": [
+      25,
+      60
+    ],
+    "source_rgb_sha256": "e5b72fa655435f40162820dfa98f020668452b28371e4f205c8c37d6f1262d31"
+  },
+  {
+    "name": "NL08.TGA",
+    "anchor": [
+      20,
+      32
+    ],
+    "source_size": [
+      72,
+      96
+    ],
+    "crop_origin": [
+      16,
+      60
+    ],
+    "source_rgb_sha256": "c2bd929c1e350ece2f08ffb74ddb9751b3cb8ca30d1df47eadc8c22695f00886"
+  },
+  {
+    "name": "NL09.TGA",
+    "anchor": [
+      20,
+      32
+    ],
+    "source_size": [
+      112,
+      96
+    ],
+    "crop_origin": [
+      36,
+      60
+    ],
+    "source_rgb_sha256": "5b09fab91fd4ccc11309f6578676059a4e00fc873b142b6360aa25082aec594b"
+  },
+  {
+    "name": "NL10.TGA",
+    "anchor": [
+      20,
+      32
+    ],
+    "source_size": [
+      72,
+      96
+    ],
+    "crop_origin": [
+      16,
+      60
+    ],
+    "source_rgb_sha256": "9d768cc8ecc13a62292b6e1bbff5c742a456feb3d7e7c0a59398f4a41ca04240"
+  },
+  {
+    "name": "NL11.TGA",
+    "anchor": [
+      22,
+      32
+    ],
+    "source_size": [
+      72,
+      96
+    ],
+    "crop_origin": [
+      14,
+      60
+    ],
+    "source_rgb_sha256": "561fcf73558c6f318d89197a3a0351b16b822501a316ed86c10ef454b9852ed4"
+  },
+  {
+    "name": "NL12.TGA",
+    "anchor": [
+      19,
+      32
+    ],
+    "source_size": [
+      72,
+      96
+    ],
+    "crop_origin": [
+      17,
+      60
+    ],
+    "source_rgb_sha256": "325c6be53082a45d5758bd61fa5d0409063b30c89100325742a6604eaf65ed97"
+  },
+  {
+    "name": "NL13.TGA",
+    "anchor": [
+      22,
+      32
+    ],
+    "source_size": [
+      72,
+      96
+    ],
+    "crop_origin": [
+      14,
+      60
+    ],
+    "source_rgb_sha256": "d9b2ebdd46854e1bb5240a03d291dce28150ce1e19214b55e87ab5e11f9a81cb"
+  },
+  {
+    "name": "NL14.TGA",
+    "anchor": [
+      7,
+      32
+    ],
+    "source_size": [
+      112,
+      96
+    ],
+    "crop_origin": [
+      49,
+      60
+    ],
+    "source_rgb_sha256": "32a1f7486b2bc3c955125b74f6cc3fda821a4e9e91af6cb108ca9e3e41e431b6"
+  }
+]

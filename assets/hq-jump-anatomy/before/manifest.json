@@ -1,0 +1,167 @@
+{
+  "parent": "2ce28c4b0c2e809b22b43aefa659aeb8f62943cc",
+  "resources": [
+    {
+      "name": "HJ00.TGA",
+      "width": 56,
+      "height": 26,
+      "bytes": 1472,
+      "sha256": "ba7faeb37b5869ed24e69847327e4f1941e8be2c675fbb8e3d9be8d34dcbc238"
+    },
+    {
+      "name": "HJ01.TGA",
+      "width": 72,
+      "height": 46,
+      "bytes": 3328,
+      "sha256": "eb673d5936d4586a3f920cf148c6cbddce206150d145209f9362b3afdde27551"
+    },
+    {
+      "name": "HJ02.TGA",
+      "width": 48,
+      "height": 30,
+      "bytes": 1440,
+      "sha256": "9672ba083bc9a1d642190f9752c5b1bc3c408421bac35e15eb468eceb69bf8e8"
+    },
+    {
+      "name": "HJ03.TGA",
+      "width": 64,
+      "height": 46,
+      "bytes": 2944,
+      "sha256": "50b90e7bdcf5e66fb9e7f354c5c7a964fe727633f134395aa0ebc3bc01884ccc"
+    },
+    {
+      "name": "HJ04.TGA",
+      "width": 88,
+      "height": 32,
+      "bytes": 2816,
+      "sha256": "a2ad2ece8db64ff4d056ed7ea08f50ea40bc3a805e43af0718b18a04f8c18f7a"
+    },
+    {
+      "name": "HJ05.TGA",
+      "width": 64,
+      "height": 26,
+      "bytes": 1664,
+      "sha256": "ebc5d0ddddf99e896f2567b4f987b46655f450dd07ab2869f32eafb0faff0257"
+    },
+    {
+      "name": "HJ06.TGA",
+      "width": 72,
+      "height": 48,
+      "bytes": 3456,
+      "sha256": "22ed2a60f79b8a67f9b4cab4adf1182af3ae9ca1aa10274a61794398cbffe4a8"
+    },
+    {
+      "name": "HJ07.TGA",
+      "width": 48,
+      "height": 28,
+      "bytes": 1344,
+      "sha256": "75f7a8edf112b00022b4fbcc2dd35e6e2f66393164152a2f21cc607a6314aa77"
+    },
+    {
+      "name": "HJ08.TGA",
+      "width": 64,
+      "height": 48,
+      "bytes": 3072,
+      "sha256": "1e8a76cdf0fe25ebf8e83eef1bb1d791f3371a368f879d67cfe27df036cdd718"
+    },
+    {
+      "name": "HJ09.TGA",
+      "width": 96,
+      "height": 32,
+      "bytes": 3072,
+      "sha256": "438dddccd8b8ce2f3bd6f1fb2a258357c7e87ccfbdc7c708b996075ffc435ceb"
+    }
+  ],
+  "uppers": [
+    {
+      "resource": 0,
+      "x": 40,
+      "y": 24,
+      "width": 56,
+      "height": 26
+    },
+    {
+      "resource": 5,
+      "x": 34,
+      "y": 24,
+      "width": 64,
+      "height": 26
+    }
+  ],
+  "lowers": [
+    [
+      {
+        "resource": 1,
+        "x": 23,
+        "y": 44,
+        "width": 72,
+        "height": 46
+      },
+      {
+        "resource": 2,
+        "x": 40,
+        "y": 44,
+        "width": 48,
+        "height": 30
+      },
+      {
+        "resource": 3,
+        "x": 33,
+        "y": 44,
+        "width": 64,
+        "height": 46
+      },
+      {
+        "resource": 4,
+        "x": 27,
+        "y": 44,
+        "width": 88,
+        "height": 32
+      }
+    ],
+    [
+      {
+        "resource": 6,
+        "x": 22,
+        "y": 44,
+        "width": 72,
+        "height": 48
+      },
+      {
+        "resource": 7,
+        "x": 41,
+        "y": 44,
+        "width": 48,
+        "height": 28
+      },
+      {
+        "resource": 8,
+        "x": 33,
+        "y": 44,
+        "width": 64,
+        "height": 48
+      },
+      {
+        "resource": 9,
+        "x": 27,
+        "y": 44,
+        "width": 96,
+        "height": 32
+      }
+    ]
+  ],
+  "texture_bytes": 24608,
+  "replaced_bytes": 22784,
+  "boot_bytes": 456224,
+  "free_bytes": 2264,
+  "slots": 250,
+  "resident_textures": 236,
+  "new_view_definitions": 5,
+  "palette_banks_added": 0,
+  "root": [
+    64,
+    92
+  ],
+  "takeoff_vz": 1362,
+  "apex_vz": 296
+}

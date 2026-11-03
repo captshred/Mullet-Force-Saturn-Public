@@ -1,0 +1,51 @@
+{
+  "parent": "99ac5d48ea5e69fdfae7bee00edaeb462d0f8880",
+  "resources": [
+    {
+      "name": "PD0.TGA",
+      "width": 72,
+      "height": 26,
+      "bytes": 1888,
+      "sha256": "be88004cf422ff1f0e36650a11d4b933393676e0f116595f20e628433c5e0a66"
+    },
+    {
+      "name": "PD1.TGA",
+      "width": 80,
+      "height": 26,
+      "bytes": 2080,
+      "sha256": "2e85322d411ff2ad3c00ce8596557bb6e865d838420252a7f3af4010be893326"
+    }
+  ],
+  "lowers": [
+    {
+      "resource": 0,
+      "x": 25,
+      "y": 66,
+      "width": 72,
+      "height": 26
+    },
+    {
+      "resource": 1,
+      "x": 23,
+      "y": 66,
+      "width": 80,
+      "height": 26
+    }
+  ],
+  "bytes": 3968,
+  "replaced_bytes": 6336,
+  "boot_bytes": 446304,
+  "free_bytes": 12184,
+  "slots": 253,
+  "root": [
+    64,
+    92
+  ],
+  "upper_reuse": "Exact PH02 / PH07, translated down 14 native pixels at final collapse",
+  "phase_ticks": [
+    8,
+    16,
+    96
+  ],
+  "palette_banks_added": 0
+}

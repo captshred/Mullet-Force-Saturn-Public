@@ -1,0 +1,386 @@
+{
+  "parent": "0fbc5fbb6918446368187603b7f3e49d411af93a",
+  "changes": {
+    "0": [],
+    "1": [],
+    "2": [
+      [
+        51,
+        23
+      ],
+      [
+        52,
+        23
+      ],
+      [
+        51,
+        24
+      ],
+      [
+        52,
+        24
+      ],
+      [
+        51,
+        25
+      ],
+      [
+        52,
+        25
+      ],
+      [
+        51,
+        26
+      ],
+      [
+        52,
+        26
+      ],
+      [
+        51,
+        27
+      ],
+      [
+        52,
+        27
+      ],
+      [
+        51,
+        28
+      ],
+      [
+        52,
+        28
+      ],
+      [
+        51,
+        29
+      ],
+      [
+        52,
+        29
+      ],
+      [
+        51,
+        30
+      ],
+      [
+        52,
+        30
+      ],
+      [
+        51,
+        31
+      ],
+      [
+        52,
+        31
+      ],
+      [
+        51,
+        32
+      ],
+      [
+        52,
+        32
+      ],
+      [
+        51,
+        33
+      ],
+      [
+        52,
+        33
+      ],
+      [
+        51,
+        34
+      ],
+      [
+        52,
+        34
+      ]
+    ],
+    "3": [
+      [
+        57,
+        42
+      ],
+      [
+        58,
+        42
+      ],
+      [
+        59,
+        42
+      ],
+      [
+        60,
+        42
+      ],
+      [
+        61,
+        42
+      ],
+      [
+        62,
+        42
+      ],
+      [
+        63,
+        42
+      ],
+      [
+        64,
+        42
+      ],
+      [
+        65,
+        42
+      ],
+      [
+        66,
+        42
+      ],
+      [
+        67,
+        42
+      ],
+      [
+        68,
+        42
+      ],
+      [
+        69,
+        42
+      ],
+      [
+        70,
+        42
+      ],
+      [
+        71,
+        42
+      ],
+      [
+        72,
+        42
+      ],
+      [
+        73,
+        42
+      ],
+      [
+        74,
+        42
+      ],
+      [
+        75,
+        42
+      ],
+      [
+        76,
+        42
+      ],
+      [
+        77,
+        42
+      ],
+      [
+        78,
+        42
+      ],
+      [
+        79,
+        42
+      ],
+      [
+        80,
+        42
+      ],
+      [
+        81,
+        42
+      ],
+      [
+        57,
+        43
+      ],
+      [
+        58,
+        43
+      ],
+      [
+        60,
+        43
+      ],
+      [
+        61,
+        43
+      ],
+      [
+        62,
+        43
+      ],
+      [
+        63,
+        43
+      ],
+      [
+        64,
+        43
+      ],
+      [
+        65,
+        43
+      ],
+      [
+        66,
+        43
+      ],
+      [
+        67,
+        43
+      ],
+      [
+        68,
+        43
+      ],
+      [
+        69,
+        43
+      ],
+      [
+        70,
+        43
+      ],
+      [
+        71,
+        43
+      ],
+      [
+        72,
+        43
+      ],
+      [
+        73,
+        43
+      ],
+      [
+        74,
+        43
+      ],
+      [
+        75,
+        43
+      ],
+      [
+        81,
+        43
+      ]
+    ]
+  },
+  "replacements": [
+    {
+      "name": "RD0.TGA",
+      "disc_path": "RD0.TGA",
+      "source": "assets/player-death/RD0.TGA",
+      "frame": 2,
+      "piece": {
+        "resource": 99,
+        "x": 42,
+        "y": 4,
+        "width": 56,
+        "height": 24
+      },
+      "shift": 0,
+      "sha256": "272abf26e301f67c432ab9e3d2ffdb951e664eb78a9330f32e0e6e4ed0979230",
+      "source_sha256": "cb05fb6497d6dd7ec864de76abc7498436305d2e5a746548aff4dfd7e9f822b3"
+    },
+    {
+      "name": "RD1.TGA",
+      "disc_path": "RD1.TGA",
+      "source": "assets/player-death/RD1.TGA",
+      "frame": 2,
+      "piece": {
+        "resource": 100,
+        "x": 34,
+        "y": 28,
+        "width": 64,
+        "height": 44
+      },
+      "shift": 0,
+      "sha256": "bc29fb7fa0ee7abb008a6ebab3ab0dc4d119db0feae7261b8e781ef57b799435",
+      "source_sha256": "80c4f46619b1398a279502b4a75251dc12b9e938e72430b30b0609bff7849e01"
+    },
+    {
+      "name": "DT0.TGA",
+      "disc_path": "COMBAT/DT0.TGA",
+      "source": "assets/player-death/DT0.TGA",
+      "frame": 2,
+      "piece": {
+        "resource": 51,
+        "x": 37,
+        "y": 32,
+        "width": 56,
+        "height": 16
+      },
+      "shift": 16,
+      "sha256": "f5759cbab46aedd7ad0d1eef6c4e1d102ac947061f9dceb825372a111b748e04",
+      "source_sha256": "8dc677acec66e5e0917a78f81ceb8e6e1563c689f5d5c712b84218930d2c9069"
+    },
+    {
+      "name": "DT1.TGA",
+      "disc_path": "COMBAT/DT1.TGA",
+      "source": "assets/player-death/DT1.TGA",
+      "frame": 2,
+      "piece": {
+        "resource": 52,
+        "x": 34,
+        "y": 48,
+        "width": 64,
+        "height": 16
+      },
+      "shift": 16,
+      "sha256": "dcd01b65842a6b2f3d939e66d5a114e9134052a1100e69875a72e4270eca1986",
+      "source_sha256": "e1ad150a5e94c0f6f3b23cdb2f1846da9b0a3b4d19d8b7802924311a91247d71"
+    },
+    {
+      "name": "RN22.TGA",
+      "disc_path": "RN22.TGA",
+      "source": "assets/running/RN22.TGA",
+      "frame": 3,
+      "piece": {
+        "resource": 103,
+        "x": 33,
+        "y": 28,
+        "width": 64,
+        "height": 38
+      },
+      "shift": 0,
+      "sha256": "6d8a7834fff36d8655703862c76e5c1f6be17c8cf7e6eea233815e10c14bc96c",
+      "source_sha256": "c5d746e6186ec19ac7c6ccedc99fa3cc48e1d9a73dd9fcc4374c9032c135e1b8"
+    },
+    {
+      "name": "CA55.TGA",
+      "disc_path": "COMBAT/CA55.TGA",
+      "source": "assets/attack-sequence/CA55.TGA",
+      "frame": 3,
+      "piece": {
+        "resource": 55,
+        "x": 33,
+        "y": 48,
+        "width": 64,
+        "height": 16
+      },
+      "shift": 16,
+      "sha256": "5445ba934ea2bb227803f45506677d066a03f7895e1bba4e3040b23a99214380",
+      "source_sha256": "53106791e5057f1ed1fb3b633efcb84dda2960d2ed6b33e97c88134adddd6f3b"
+    }
+  ],
+  "boot_bytes": 446304,
+  "free_bytes": 12184,
+  "slots": 253,
+  "extra_bytes": 0,
+  "extra_definitions": 0
+}

@@ -1,0 +1,110 @@
+{
+  "parent": "a7e1d0522cca2d47ca0f73534955db457906ee7e",
+  "offsets": [
+    [
+      [
+        [
+          2,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ],
+      [
+        [
+          3,
+          2
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    ],
+    [
+      [
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ],
+      [
+        [
+          2,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    ]
+  ],
+  "recovery_offset": [
+    1,
+    0
+  ],
+  "texture_bytes": 457632,
+  "free_bytes": 856,
+  "texture_slots": 229,
+  "added_texture_bytes": 0,
+  "added_palette_bytes": 0,
+  "added_game_bytes": 16,
+  "buffer_ticks": 6,
+  "earliest_restart_counter": 13,
+  "elapsed_repeat_ticks": 12
+}

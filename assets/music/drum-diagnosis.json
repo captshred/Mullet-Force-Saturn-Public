@@ -1,0 +1,55 @@
+{
+  "channel_human": 10,
+  "channel_zero_based": 9,
+  "note_on_counts": {},
+  "total_note_ons": 0,
+  "tracks": [
+    {
+      "track": 0,
+      "channels_zero_based": [],
+      "drum_note_on_counts": {},
+      "drum_note_off_counts": {}
+    },
+    {
+      "track": 1,
+      "channels_zero_based": [
+        0
+      ],
+      "drum_note_on_counts": {},
+      "drum_note_off_counts": {}
+    },
+    {
+      "track": 2,
+      "channels_zero_based": [
+        2
+      ],
+      "drum_note_on_counts": {},
+      "drum_note_off_counts": {}
+    },
+    {
+      "track": 3,
+      "channels_zero_based": [
+        4
+      ],
+      "drum_note_on_counts": {},
+      "drum_note_off_counts": {}
+    },
+    {
+      "track": 4,
+      "channels_zero_based": [
+        6
+      ],
+      "drum_note_on_counts": {},
+      "drum_note_off_counts": {}
+    },
+    {
+      "track": 5,
+      "channels_zero_based": [
+        8
+      ],
+      "drum_note_on_counts": {},
+      "drum_note_off_counts": {}
+    }
+  ],
+  "diagnosis": "No source percussion events; no replacement part generated"
+}

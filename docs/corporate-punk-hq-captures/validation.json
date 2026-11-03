@@ -1,0 +1,754 @@
+{
+  "gameplay_states_identical": 1705,
+  "input_dash_jab_bat_traces_identical": true,
+  "matched_native_pixels": 712979,
+  "coverage": {
+    "0:pose3:face-1": 93856,
+    "0:pose4:face-1": 96776,
+    "0:pose5:face-1": 91403,
+    "1:pose3:face-1": 63369,
+    "1:pose4:face-1": 69064,
+    "1:pose5:face-1": 65278,
+    "0:pose0:face-1": 17381,
+    "0:pose6:face-1": 2965,
+    "0:pose7:face-1": 1383,
+    "0:pose8:face-1": 48835,
+    "1:pose8:face-1": 51351,
+    "1:pose0:face-1": 60098,
+    "1:pose6:face-1": 34520,
+    "1:pose7:face-1": 5895,
+    "1:pose9:face-1": 7835,
+    "1:pose10:face-1": 2970
+  },
+  "states_seen": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "poses_seen": [
+    -1,
+    0,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "transitions": [
+    {
+      "frame": 295,
+      "tick": 0,
+      "enemy": 0,
+      "state": 0,
+      "timer": 0,
+      "hp": 0
+    },
+    {
+      "frame": 295,
+      "tick": 0,
+      "enemy": 1,
+      "state": 0,
+      "timer": 0,
+      "hp": 0
+    },
+    {
+      "frame": 523,
+      "tick": 0,
+      "enemy": 0,
+      "state": 1,
+      "timer": 0,
+      "hp": 6
+    },
+    {
+      "frame": 523,
+      "tick": 0,
+      "enemy": 1,
+      "state": 1,
+      "timer": 0,
+      "hp": 6
+    },
+    {
+      "frame": 722,
+      "tick": 1,
+      "enemy": 0,
+      "state": 2,
+      "timer": 0,
+      "hp": 6
+    },
+    {
+      "frame": 722,
+      "tick": 1,
+      "enemy": 1,
+      "state": 2,
+      "timer": 0,
+      "hp": 6
+    },
+    {
+      "frame": 1009,
+      "tick": 288,
+      "enemy": 0,
+      "state": 3,
+      "timer": 24,
+      "hp": 6
+    },
+    {
+      "frame": 1033,
+      "tick": 312,
+      "enemy": 0,
+      "state": 4,
+      "timer": 5,
+      "hp": 6
+    },
+    {
+      "frame": 1041,
+      "tick": 317,
+      "enemy": 0,
+      "state": 5,
+      "timer": 36,
+      "hp": 6
+    },
+    {
+      "frame": 1056,
+      "tick": 332,
+      "enemy": 0,
+      "state": 6,
+      "timer": 17,
+      "hp": 5
+    },
+    {
+      "frame": 1091,
+      "tick": 361,
+      "enemy": 0,
+      "state": 5,
+      "timer": 24,
+      "hp": 4
+    },
+    {
+      "frame": 1115,
+      "tick": 385,
+      "enemy": 0,
+      "state": 1,
+      "timer": 0,
+      "hp": 4
+    },
+    {
+      "frame": 1116,
+      "tick": 386,
+      "enemy": 0,
+      "state": 2,
+      "timer": 0,
+      "hp": 4
+    },
+    {
+      "frame": 1122,
+      "tick": 392,
+      "enemy": 0,
+      "state": 6,
+      "timer": 17,
+      "hp": 3
+    },
+    {
+      "frame": 1129,
+      "tick": 396,
+      "enemy": 1,
+      "state": 6,
+      "timer": 17,
+      "hp": 5
+    },
+    {
+      "frame": 1145,
+      "tick": 409,
+      "enemy": 0,
+      "state": 5,
+      "timer": 24,
+      "hp": 3
+    },
+    {
+      "frame": 1149,
+      "tick": 413,
+      "enemy": 1,
+      "state": 5,
+      "timer": 24,
+      "hp": 5
+    },
+    {
+      "frame": 1164,
+      "tick": 428,
+      "enemy": 0,
+      "state": 6,
+      "timer": 17,
+      "hp": 2
+    },
+    {
+      "frame": 1176,
+      "tick": 437,
+      "enemy": 1,
+      "state": 1,
+      "timer": 0,
+      "hp": 5
+    },
+    {
+      "frame": 1177,
+      "tick": 438,
+      "enemy": 1,
+      "state": 2,
+      "timer": 0,
+      "hp": 5
+    },
+    {
+      "frame": 1179,
+      "tick": 440,
+      "enemy": 1,
+      "state": 6,
+      "timer": 17,
+      "hp": 4
+    },
+    {
+      "frame": 1187,
+      "tick": 445,
+      "enemy": 0,
+      "state": 5,
+      "timer": 24,
+      "hp": 2
+    },
+    {
+      "frame": 1199,
+      "tick": 457,
+      "enemy": 1,
+      "state": 5,
+      "timer": 24,
+      "hp": 4
+    },
+    {
+      "frame": 1211,
+      "tick": 469,
+      "enemy": 0,
+      "state": 1,
+      "timer": 0,
+      "hp": 2
+    },
+    {
+      "frame": 1212,
+      "tick": 470,
+      "enemy": 0,
+      "state": 2,
+      "timer": 0,
+      "hp": 2
+    },
+    {
+      "frame": 1218,
+      "tick": 476,
+      "enemy": 0,
+      "state": 6,
+      "timer": 17,
+      "hp": 1
+    },
+    {
+      "frame": 1226,
+      "tick": 481,
+      "enemy": 1,
+      "state": 1,
+      "timer": 0,
+      "hp": 4
+    },
+    {
+      "frame": 1227,
+      "tick": 482,
+      "enemy": 1,
+      "state": 2,
+      "timer": 0,
+      "hp": 4
+    },
+    {
+      "frame": 1233,
+      "tick": 488,
+      "enemy": 1,
+      "state": 6,
+      "timer": 17,
+      "hp": 3
+    },
+    {
+      "frame": 1241,
+      "tick": 493,
+      "enemy": 0,
+      "state": 5,
+      "timer": 24,
+      "hp": 1
+    },
+    {
+      "frame": 1253,
+      "tick": 505,
+      "enemy": 1,
+      "state": 5,
+      "timer": 24,
+      "hp": 3
+    },
+    {
+      "frame": 1261,
+      "tick": 513,
+      "enemy": 0,
+      "state": 7,
+      "timer": 29,
+      "hp": 0
+    },
+    {
+      "frame": 1280,
+      "tick": 529,
+      "enemy": 1,
+      "state": 1,
+      "timer": 0,
+      "hp": 3
+    },
+    {
+      "frame": 1281,
+      "tick": 530,
+      "enemy": 1,
+      "state": 2,
+      "timer": 0,
+      "hp": 3
+    },
+    {
+      "frame": 1293,
+      "tick": 542,
+      "enemy": 0,
+      "state": 0,
+      "timer": 480,
+      "hp": 0
+    },
+    {
+      "frame": 1312,
+      "tick": 561,
+      "enemy": 1,
+      "state": 3,
+      "timer": 24,
+      "hp": 3
+    },
+    {
+      "frame": 1336,
+      "tick": 585,
+      "enemy": 1,
+      "state": 4,
+      "timer": 5,
+      "hp": 3
+    },
+    {
+      "frame": 1344,
+      "tick": 590,
+      "enemy": 1,
+      "state": 5,
+      "timer": 48,
+      "hp": 3
+    },
+    {
+      "frame": 1392,
+      "tick": 638,
+      "enemy": 1,
+      "state": 1,
+      "timer": 0,
+      "hp": 3
+    },
+    {
+      "frame": 1393,
+      "tick": 639,
+      "enemy": 1,
+      "state": 2,
+      "timer": 0,
+      "hp": 3
+    },
+    {
+      "frame": 1404,
+      "tick": 650,
+      "enemy": 1,
+      "state": 3,
+      "timer": 24,
+      "hp": 3
+    },
+    {
+      "frame": 1428,
+      "tick": 674,
+      "enemy": 1,
+      "state": 4,
+      "timer": 5,
+      "hp": 3
+    },
+    {
+      "frame": 1436,
+      "tick": 679,
+      "enemy": 1,
+      "state": 5,
+      "timer": 48,
+      "hp": 3
+    },
+    {
+      "frame": 1484,
+      "tick": 727,
+      "enemy": 1,
+      "state": 1,
+      "timer": 0,
+      "hp": 3
+    },
+    {
+      "frame": 1485,
+      "tick": 728,
+      "enemy": 1,
+      "state": 2,
+      "timer": 0,
+      "hp": 3
+    },
+    {
+      "frame": 1497,
+      "tick": 740,
+      "enemy": 1,
+      "state": 3,
+      "timer": 24,
+      "hp": 3
+    },
+    {
+      "frame": 1521,
+      "tick": 764,
+      "enemy": 1,
+      "state": 4,
+      "timer": 5,
+      "hp": 3
+    },
+    {
+      "frame": 1529,
+      "tick": 769,
+      "enemy": 1,
+      "state": 5,
+      "timer": 48,
+      "hp": 3
+    },
+    {
+      "frame": 1577,
+      "tick": 817,
+      "enemy": 1,
+      "state": 1,
+      "timer": 0,
+      "hp": 3
+    },
+    {
+      "frame": 1578,
+      "tick": 818,
+      "enemy": 1,
+      "state": 2,
+      "timer": 0,
+      "hp": 3
+    },
+    {
+      "frame": 1589,
+      "tick": 829,
+      "enemy": 1,
+      "state": 3,
+      "timer": 24,
+      "hp": 3
+    },
+    {
+      "frame": 1613,
+      "tick": 853,
+      "enemy": 1,
+      "state": 4,
+      "timer": 5,
+      "hp": 3
+    },
+    {
+      "frame": 1621,
+      "tick": 858,
+      "enemy": 1,
+      "state": 5,
+      "timer": 48,
+      "hp": 3
+    },
+    {
+      "frame": 1669,
+      "tick": 906,
+      "enemy": 1,
+      "state": 1,
+      "timer": 0,
+      "hp": 3
+    },
+    {
+      "frame": 1670,
+      "tick": 907,
+      "enemy": 1,
+      "state": 2,
+      "timer": 0,
+      "hp": 3
+    },
+    {
+      "frame": 1682,
+      "tick": 919,
+      "enemy": 1,
+      "state": 3,
+      "timer": 24,
+      "hp": 3
+    },
+    {
+      "frame": 1706,
+      "tick": 943,
+      "enemy": 1,
+      "state": 4,
+      "timer": 5,
+      "hp": 3
+    },
+    {
+      "frame": 1714,
+      "tick": 948,
+      "enemy": 1,
+      "state": 5,
+      "timer": 48,
+      "hp": 3
+    },
+    {
+      "frame": 1762,
+      "tick": 996,
+      "enemy": 1,
+      "state": 1,
+      "timer": 0,
+      "hp": 3
+    },
+    {
+      "frame": 1763,
+      "tick": 997,
+      "enemy": 1,
+      "state": 2,
+      "timer": 0,
+      "hp": 3
+    },
+    {
+      "frame": 1774,
+      "tick": 1008,
+      "enemy": 1,
+      "state": 3,
+      "timer": 24,
+      "hp": 3
+    },
+    {
+      "frame": 1788,
+      "tick": 1022,
+      "enemy": 0,
+      "state": 1,
+      "timer": 0,
+      "hp": 6
+    },
+    {
+      "frame": 1789,
+      "tick": 1023,
+      "enemy": 0,
+      "state": 2,
+      "timer": 0,
+      "hp": 6
+    },
+    {
+      "frame": 1798,
+      "tick": 1032,
+      "enemy": 1,
+      "state": 4,
+      "timer": 5,
+      "hp": 3
+    },
+    {
+      "frame": 1806,
+      "tick": 1037,
+      "enemy": 1,
+      "state": 5,
+      "timer": 48,
+      "hp": 3
+    },
+    {
+      "frame": 1821,
+      "tick": 1052,
+      "enemy": 1,
+      "state": 6,
+      "timer": 17,
+      "hp": 2
+    },
+    {
+      "frame": 1856,
+      "tick": 1081,
+      "enemy": 1,
+      "state": 5,
+      "timer": 24,
+      "hp": 1
+    },
+    {
+      "frame": 1875,
+      "tick": 1100,
+      "enemy": 1,
+      "state": 7,
+      "timer": 29,
+      "hp": 0
+    },
+    {
+      "frame": 1907,
+      "tick": 1129,
+      "enemy": 1,
+      "state": 0,
+      "timer": 480,
+      "hp": 0
+    },
+    {
+      "frame": 2127,
+      "tick": 1340,
+      "enemy": 0,
+      "state": 6,
+      "timer": 17,
+      "hp": 5
+    },
+    {
+      "frame": 2147,
+      "tick": 1357,
+      "enemy": 0,
+      "state": 5,
+      "timer": 24,
+      "hp": 5
+    },
+    {
+      "frame": 2171,
+      "tick": 1381,
+      "enemy": 0,
+      "state": 1,
+      "timer": 0,
+      "hp": 5
+    },
+    {
+      "frame": 2172,
+      "tick": 1382,
+      "enemy": 0,
+      "state": 2,
+      "timer": 0,
+      "hp": 5
+    },
+    {
+      "frame": 2178,
+      "tick": 1388,
+      "enemy": 0,
+      "state": 6,
+      "timer": 17,
+      "hp": 4
+    },
+    {
+      "frame": 2198,
+      "tick": 1405,
+      "enemy": 0,
+      "state": 5,
+      "timer": 24,
+      "hp": 4
+    },
+    {
+      "frame": 2217,
+      "tick": 1424,
+      "enemy": 0,
+      "state": 6,
+      "timer": 17,
+      "hp": 3
+    },
+    {
+      "frame": 2237,
+      "tick": 1441,
+      "enemy": 0,
+      "state": 5,
+      "timer": 24,
+      "hp": 3
+    },
+    {
+      "frame": 2261,
+      "tick": 1465,
+      "enemy": 0,
+      "state": 1,
+      "timer": 0,
+      "hp": 3
+    },
+    {
+      "frame": 2262,
+      "tick": 1466,
+      "enemy": 0,
+      "state": 2,
+      "timer": 0,
+      "hp": 3
+    },
+    {
+      "frame": 2268,
+      "tick": 1472,
+      "enemy": 0,
+      "state": 6,
+      "timer": 17,
+      "hp": 2
+    },
+    {
+      "frame": 2288,
+      "tick": 1489,
+      "enemy": 0,
+      "state": 5,
+      "timer": 24,
+      "hp": 2
+    },
+    {
+      "frame": 2308,
+      "tick": 1509,
+      "enemy": 0,
+      "state": 6,
+      "timer": 17,
+      "hp": 1
+    },
+    {
+      "frame": 2328,
+      "tick": 1526,
+      "enemy": 0,
+      "state": 5,
+      "timer": 24,
+      "hp": 1
+    },
+    {
+      "frame": 2352,
+      "tick": 1550,
+      "enemy": 0,
+      "state": 1,
+      "timer": 0,
+      "hp": 1
+    },
+    {
+      "frame": 2353,
+      "tick": 1551,
+      "enemy": 0,
+      "state": 2,
+      "timer": 0,
+      "hp": 1
+    },
+    {
+      "frame": 2358,
+      "tick": 1556,
+      "enemy": 0,
+      "state": 7,
+      "timer": 29,
+      "hp": 0
+    },
+    {
+      "frame": 2390,
+      "tick": 1585,
+      "enemy": 0,
+      "state": 0,
+      "timer": 480,
+      "hp": 0
+    }
+  ],
+  "texture_bytes": 422208,
+  "free_bytes": 36280,
+  "texture_definitions": 246,
+  "stable_texture_vram": true,
+  "physical_saturn_tested": false,
+  "webretro_tested": false,
+  "no_emulated_ram_writes": true,
+  "limitations": [
+    "Pixel coverage excludes HUD and nearer actor occlusion",
+    "Native libretro Yabause HLE/software core only; no hardware performance claim"
+  ]
+}

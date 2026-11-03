@@ -1,0 +1,1 @@
+#define MF_SPRITE_GALLERY 1

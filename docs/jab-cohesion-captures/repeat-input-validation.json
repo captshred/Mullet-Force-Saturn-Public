@@ -1,0 +1,57 @@
+{
+  "controller_edges": [
+    [
+      800,
+      809,
+      821
+    ],
+    [
+      804,
+      813,
+      825
+    ]
+  ],
+  "actual_attack_start_frames": [
+    [
+      802,
+      814,
+      826
+    ],
+    [
+      806,
+      818,
+      830
+    ]
+  ],
+  "elapsed_simulation_intervals": [
+    [
+      12,
+      12
+    ],
+    [
+      12,
+      12
+    ]
+  ],
+  "hold_A_starts": [
+    872
+  ],
+  "too_early_second_press_starts": [
+    952
+  ],
+  "matched_pixels": 143755,
+  "coverage": {
+    "0:extension:1": 33324,
+    "0:impact:1": 40650,
+    "1:extension:-1": 5135,
+    "0:recovery:1": 35232,
+    "1:impact:-1": 3740,
+    "1:recovery:-1": 2186,
+    "0:guard:1": 23488
+  },
+  "stable_texture_hash": true,
+  "ram_written": false,
+  "offline_repeat_loop": false,
+  "physical_saturn_tested": false,
+  "webretro_tested": false
+}

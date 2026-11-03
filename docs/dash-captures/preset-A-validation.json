@@ -1,0 +1,41 @@
+{
+  "frames_per_build": 800,
+  "preset_numerator": 15,
+  "speed_denominator": 10,
+  "actual_dash_velocity_24_8": 585,
+  "exact_velocity_samples": 169,
+  "unchanged_normal_velocity_samples": 28,
+  "simulation_prefix_identical_before_dash": 57,
+  "approved_player_pixels_compared": 205733,
+  "pixel_mismatches": 0,
+  "dash_poses_seen": [
+    [
+      15,
+      16,
+      17
+    ],
+    [
+      15,
+      16,
+      17
+    ]
+  ],
+  "dash_facings_seen": [
+    [
+      -1,
+      1
+    ],
+    [
+      -1,
+      1
+    ]
+  ],
+  "actual_vdp1_bytes": 362848,
+  "free_vdp1_bytes": 95640,
+  "actual_texture_slots": 135,
+  "textures_identical_to_approved_lighting": true,
+  "textures_stable_during_gameplay": true,
+  "bat_jump_slowtap_landing_runtime_checks": true,
+  "core_sha256": "f00215b3c6ee0c82a377a8403b686e09bf8684f176a0a5bd66b47b8677e4d738",
+  "method": "Controller-only local Yabause software/interpreter/HLE BIOS, read-only serialized game-prefix and dash-suffix state. No RAM writes. Physical hardware/WebRetro not tested."
+}

@@ -1,0 +1,213 @@
+{
+  "format": 1,
+  "ppqn": 480,
+  "duration_ticks": 279840,
+  "duration_seconds": 213.292299,
+  "tracks": [
+    {
+      "index": 0,
+      "name": "Drop Zone",
+      "channels": [],
+      "end_tick": 153120,
+      "programs": [],
+      "events": {
+        "meta": 6
+      },
+      "bend_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "index": 1,
+      "name": "Distortion Guitar",
+      "channels": [
+        1
+      ],
+      "end_tick": 279840,
+      "programs": [
+        30
+      ],
+      "events": {
+        "note_on": 2025,
+        "meta": 3,
+        "program": 1,
+        "cc": 3,
+        "note_off": 2025,
+        "bend": 598
+      },
+      "bend_range": [
+        0,
+        2047
+      ]
+    },
+    {
+      "index": 2,
+      "name": "Distortion Guitar",
+      "channels": [
+        3
+      ],
+      "end_tick": 279840,
+      "programs": [
+        30
+      ],
+      "events": {
+        "note_on": 2023,
+        "meta": 3,
+        "program": 1,
+        "cc": 3,
+        "note_off": 2023,
+        "bend": 598
+      },
+      "bend_range": [
+        0,
+        2047
+      ]
+    },
+    {
+      "index": 3,
+      "name": "Electric Bass",
+      "channels": [
+        5
+      ],
+      "end_tick": 279840,
+      "programs": [
+        36
+      ],
+      "events": {
+        "note_on": 865,
+        "meta": 3,
+        "program": 1,
+        "cc": 3,
+        "note_off": 865,
+        "bend": 10
+      },
+      "bend_range": [
+        0,
+        682
+      ]
+    },
+    {
+      "index": 4,
+      "name": "Overdriven Guitar",
+      "channels": [
+        7
+      ],
+      "end_tick": 82560,
+      "programs": [
+        29
+      ],
+      "events": {
+        "meta": 3,
+        "program": 1,
+        "cc": 3,
+        "note_on": 100,
+        "note_off": 100
+      },
+      "bend_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "index": 5,
+      "name": "Overdriven Guitar",
+      "channels": [
+        9
+      ],
+      "end_tick": 82560,
+      "programs": [
+        29
+      ],
+      "events": {
+        "meta": 3,
+        "program": 1,
+        "cc": 3,
+        "note_on": 107,
+        "note_off": 107
+      },
+      "bend_range": [
+        0,
+        0
+      ]
+    }
+  ],
+  "tempos": [
+    {
+      "tick": 0,
+      "microseconds_per_beat": 365853,
+      "bpm": 164.00029520053135
+    }
+  ],
+  "time_signatures": [
+    {
+      "tick": 0,
+      "numerator": 4,
+      "denominator": 4
+    },
+    {
+      "tick": 151680,
+      "numerator": 3,
+      "denominator": 4
+    },
+    {
+      "tick": 153120,
+      "numerator": 4,
+      "denominator": 4
+    }
+  ],
+  "notes": 5120,
+  "max_simultaneous_notes": 11,
+  "peak_with_100ms_release": 28,
+  "same_key_overlaps": 0,
+  "unmatched_offs": 0,
+  "unclosed_notes": 0,
+  "controllers": {
+    "(1, 6)": [
+      6
+    ],
+    "(1, 100)": [
+      0
+    ],
+    "(1, 101)": [
+      0
+    ],
+    "(3, 6)": [
+      6
+    ],
+    "(3, 100)": [
+      0
+    ],
+    "(3, 101)": [
+      0
+    ],
+    "(5, 6)": [
+      6
+    ],
+    "(5, 100)": [
+      0
+    ],
+    "(5, 101)": [
+      0
+    ],
+    "(7, 6)": [
+      6
+    ],
+    "(7, 100)": [
+      0
+    ],
+    "(7, 101)": [
+      0
+    ],
+    "(9, 6)": [
+      6
+    ],
+    "(9, 100)": [
+      0
+    ],
+    "(9, 101)": [
+      0
+    ]
+  },
+  "drum_notes": []
+}

@@ -1,0 +1,167 @@
+{
+  "parent": "53861e0a9591697e0ca41dcc4ea0e9d3fae1f101",
+  "resources": [
+    {
+      "name": "PH00.TGA",
+      "width": 80,
+      "height": 42,
+      "bytes": 3360,
+      "sha256": "91fdf03ee13b979cd72a3839a806135478f6e78b242a2051814ca42568ec439b"
+    },
+    {
+      "name": "PH01.TGA",
+      "width": 56,
+      "height": 42,
+      "bytes": 2368,
+      "sha256": "d5df0f3e0f4185868f9d74070cb162d8a722fb2a5e11ea8fd5bb993cc321f352"
+    },
+    {
+      "name": "PH02.TGA",
+      "width": 56,
+      "height": 38,
+      "bytes": 2144,
+      "sha256": "5d1591f6f26ed3034fcd29f0dab2a9fa1ba77f1dd3cd598b6c8ce2b939a6b669"
+    },
+    {
+      "name": "PH03.TGA",
+      "width": 80,
+      "height": 44,
+      "bytes": 3520,
+      "sha256": "7be4731cc5d0a48dbf4f40d054b5f2ca107969f221177085188b7d4cf810a0a8"
+    },
+    {
+      "name": "PH04.TGA",
+      "width": 80,
+      "height": 40,
+      "bytes": 3200,
+      "sha256": "0f44d475ec98fbdef98aa8f62aac96a1aa5beb7ad57c0cae4b7ffe60bb3f4e55"
+    },
+    {
+      "name": "PH05.TGA",
+      "width": 88,
+      "height": 46,
+      "bytes": 4064,
+      "sha256": "ea8c35c8b2603c33352c5f79d0661048140262596e8f0ceae9e097743bc9cfd8"
+    },
+    {
+      "name": "PH06.TGA",
+      "width": 64,
+      "height": 48,
+      "bytes": 3072,
+      "sha256": "7ad3def7062cdca7b7e71da4967a8263cae4423f39ecb9ff18031c87a2ecbb3c"
+    },
+    {
+      "name": "PH07.TGA",
+      "width": 56,
+      "height": 44,
+      "bytes": 2464,
+      "sha256": "ab8655e880c31fdcd567fbb0ddcf673a4fa2fd676392ed08aecfde41cf2d3d56"
+    },
+    {
+      "name": "PH08.TGA",
+      "width": 88,
+      "height": 44,
+      "bytes": 3872,
+      "sha256": "4b473a6320f529ea04ec0aa0656e34a4fc5bc0a1dfb7e5eaa77d9e3dbc5b3a71"
+    },
+    {
+      "name": "PH09.TGA",
+      "width": 88,
+      "height": 40,
+      "bytes": 3520,
+      "sha256": "29f932b60432b6086f6d762b39806628b85316bdd99b72fe988299b17256ee65"
+    }
+  ],
+  "uppers": [
+    [
+      {
+        "resource": 0,
+        "x": 25,
+        "y": 7,
+        "width": 80,
+        "height": 42
+      },
+      {
+        "resource": 1,
+        "x": 38,
+        "y": 10,
+        "width": 56,
+        "height": 42
+      },
+      {
+        "resource": 2,
+        "x": 41,
+        "y": 14,
+        "width": 56,
+        "height": 38
+      }
+    ],
+    [
+      {
+        "resource": 5,
+        "x": 22,
+        "y": 2,
+        "width": 88,
+        "height": 46
+      },
+      {
+        "resource": 6,
+        "x": 35,
+        "y": 5,
+        "width": 64,
+        "height": 48
+      },
+      {
+        "resource": 7,
+        "x": 39,
+        "y": 8,
+        "width": 56,
+        "height": 44
+      }
+    ]
+  ],
+  "lowers": [
+    [
+      {
+        "resource": 3,
+        "x": 25,
+        "y": 48,
+        "width": 80,
+        "height": 44
+      },
+      {
+        "resource": 4,
+        "x": 26,
+        "y": 52,
+        "width": 80,
+        "height": 40
+      }
+    ],
+    [
+      {
+        "resource": 8,
+        "x": 23,
+        "y": 48,
+        "width": 88,
+        "height": 44
+      },
+      {
+        "resource": 9,
+        "x": 23,
+        "y": 52,
+        "width": 88,
+        "height": 40
+      }
+    ]
+  ],
+  "bytes": 31584,
+  "replaced_bytes": 5120,
+  "boot_bytes": 448672,
+  "free_bytes": 9816,
+  "slots": 254,
+  "run_replacements": [
+    "RN18.TGA",
+    "RN19.TGA"
+  ],
+  "palette_banks_added": 0
+}

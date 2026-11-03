@@ -1,0 +1,240 @@
+[
+  {
+    "manifest": "assets/stride-fix/gameplay-sha256.json",
+    "file": "src/game.c",
+    "old": "da25132198ba66c1b655c01ae7faa506667ff34ce334a4d02c05571a9ff55ea2",
+    "new": "88efc2737eb6e97c11e5b56f75e98007e6d3b2fa3f3f76d28cce20650c1c1db2",
+    "reason": "Custom combat audio integration; original art and soundtrack remain locked. Gameplay behavior separately compared against frozen 8c339ac source."
+  },
+  {
+    "manifest": "assets/stride-fix/gameplay-sha256.json",
+    "file": "src/game.h",
+    "old": "dd4299ce4dbaea3519275efa39a08138a825718a3f9b9810e45364ce052e51d5",
+    "new": "365cbe552f5418aae27d3fa99696a34b18e94295158ed32db4c20d68cf6fa1aa",
+    "reason": "Custom combat audio integration; original art and soundtrack remain locked. Gameplay behavior separately compared against frozen 8c339ac source."
+  },
+  {
+    "manifest": "assets/combat-animation/source/preserved-sha256.json",
+    "file": "src/game.c",
+    "old": "da25132198ba66c1b655c01ae7faa506667ff34ce334a4d02c05571a9ff55ea2",
+    "new": "88efc2737eb6e97c11e5b56f75e98007e6d3b2fa3f3f76d28cce20650c1c1db2",
+    "reason": "Custom combat audio integration; original art and soundtrack remain locked. Gameplay behavior separately compared against frozen 8c339ac source."
+  },
+  {
+    "manifest": "assets/combat-animation/source/preserved-sha256.json",
+    "file": "src/game.h",
+    "old": "dd4299ce4dbaea3519275efa39a08138a825718a3f9b9810e45364ce052e51d5",
+    "new": "365cbe552f5418aae27d3fa99696a34b18e94295158ed32db4c20d68cf6fa1aa",
+    "reason": "Custom combat audio integration; original art and soundtrack remain locked. Gameplay behavior separately compared against frozen 8c339ac source."
+  },
+  {
+    "manifest": "assets/combat-animation/source/preserved-sha256.json",
+    "file": "src/music.c",
+    "old": "9c849a61d5ae9558040121814930315c261f6be4010918b5665bd555c03abf3c",
+    "new": "cb724b5d4749afe947749a7a7c3ef88bed410aead279cd3335ad26d429a0b791",
+    "reason": "Custom combat audio integration; original art and soundtrack remain locked. Gameplay behavior separately compared against frozen 8c339ac source."
+  },
+  {
+    "manifest": "assets/combat-animation/source/preserved-sha256.json",
+    "file": "src/music.h",
+    "old": "8580096b37792681a6fd2d674bec89dd4f6e2fc781ace96590c9c27bc778fdaf",
+    "new": "a95a3564ee1113d97677b62dae97dd4c200770292534418c2d6409bb2c9ca053",
+    "reason": "Custom combat audio integration; original art and soundtrack remain locked. Gameplay behavior separately compared against frozen 8c339ac source."
+  },
+  {
+    "manifest": "assets/combat-animation/source/preserved-sha256.json",
+    "file": "src/music_data.h",
+    "old": "68c406dbbaba227da6a983e61457c9247634198e0bebe40e985d59476cc3d410",
+    "new": "88d240a1681d181309e39c3d79f4e62dce66aed1444dfa38c84bfb2a03cc9348",
+    "reason": "Custom combat audio integration; original art and soundtrack remain locked. Gameplay behavior separately compared against frozen 8c339ac source."
+  },
+  {
+    "manifest": "assets/combat-animation/source/preserved-sha256.json",
+    "file": "assets/music/report.json",
+    "old": "e1007a96711a6a7d05105d42970cd510e5ea25d40415ef41869dc5aa5df21775",
+    "new": "7ddc9b2b4a77523fe7a608fe3ec6cd866fed7e5411fb97d7bc82284d6dff1296",
+    "reason": "Custom combat audio integration; original art and soundtrack remain locked. Gameplay behavior separately compared against frozen 8c339ac source."
+  },
+  {
+    "manifest": "assets/combat-animation/source/preserved-sha256.json",
+    "file": "assets/cd/CUSTOM.MAP",
+    "old": "327e135ff12a3ff4209c35f960484176a05cb5dc5e746eb2ed5372e681f82e96",
+    "new": "8c669c0329c9405ca989571f30712cb5f69eacde1bba04e1ee2348d530db41cb",
+    "reason": "Custom combat audio integration; original art and soundtrack remain locked. Gameplay behavior separately compared against frozen 8c339ac source."
+  },
+  {
+    "manifest": "assets/combat-animation/source/preserved-sha256.json",
+    "file": "assets/cd/FX.SEQ",
+    "old": "7ed1575b7ae05594b2e124e49c8a7fd02eb87d090c3409dea45c67429b515247",
+    "new": "24683e63c1fd27167d4a7b75b3965c806ab5fb7e81906bd0291dcddb2a28c32d",
+    "reason": "Custom combat audio integration; original art and soundtrack remain locked. Gameplay behavior separately compared against frozen 8c339ac source."
+  },
+  {
+    "manifest": "assets/combat-animation/source/preserved-sha256.json",
+    "file": "assets/cd/FX.TON",
+    "old": "e7e833cb2cb914c096ed6ca5499451cd9d2885db95ca71ad6c5a0c63004a73fe",
+    "new": "3ce8fcde51eed6d98fa0b69bc39274eddd740995058e53d1e14333dbd9b4475c",
+    "reason": "Custom combat audio integration; original art and soundtrack remain locked. Gameplay behavior separately compared against frozen 8c339ac source."
+  },
+  {
+    "manifest": "assets/hq-torch/preserved-sha256.json",
+    "file": "assets/cd/CUSTOM.MAP",
+    "old": "327e135ff12a3ff4209c35f960484176a05cb5dc5e746eb2ed5372e681f82e96",
+    "new": "8c669c0329c9405ca989571f30712cb5f69eacde1bba04e1ee2348d530db41cb",
+    "reason": "Custom combat audio integration; original art and soundtrack remain locked. Gameplay behavior separately compared against frozen 8c339ac source."
+  },
+  {
+    "manifest": "assets/hq-torch/preserved-sha256.json",
+    "file": "assets/cd/FX.SEQ",
+    "old": "7ed1575b7ae05594b2e124e49c8a7fd02eb87d090c3409dea45c67429b515247",
+    "new": "24683e63c1fd27167d4a7b75b3965c806ab5fb7e81906bd0291dcddb2a28c32d",
+    "reason": "Custom combat audio integration; original art and soundtrack remain locked. Gameplay behavior separately compared against frozen 8c339ac source."
+  },
+  {
+    "manifest": "assets/hq-torch/preserved-sha256.json",
+    "file": "assets/cd/FX.TON",
+    "old": "e7e833cb2cb914c096ed6ca5499451cd9d2885db95ca71ad6c5a0c63004a73fe",
+    "new": "3ce8fcde51eed6d98fa0b69bc39274eddd740995058e53d1e14333dbd9b4475c",
+    "reason": "Custom combat audio integration; original art and soundtrack remain locked. Gameplay behavior separately compared against frozen 8c339ac source."
+  },
+  {
+    "manifest": "assets/hq-torch/preserved-sha256.json",
+    "file": "assets/music/report.json",
+    "old": "e1007a96711a6a7d05105d42970cd510e5ea25d40415ef41869dc5aa5df21775",
+    "new": "7ddc9b2b4a77523fe7a608fe3ec6cd866fed7e5411fb97d7bc82284d6dff1296",
+    "reason": "Custom combat audio integration; original art and soundtrack remain locked. Gameplay behavior separately compared against frozen 8c339ac source."
+  },
+  {
+    "manifest": "assets/hq-torch/preserved-sha256.json",
+    "file": "src/game.c",
+    "old": "5129b21c5c5cc815672e75e4d55149b7ea970f290c53e4db31966e5e6318d3eb",
+    "new": "eedc1136480b34f7a339a7ebbeab95ab63d090cfbf27a5cd8c4c70ec1c04d0c7",
+    "reason": "Custom combat audio integration; original art and soundtrack remain locked. Gameplay behavior separately compared against frozen 8c339ac source."
+  },
+  {
+    "manifest": "assets/hq-torch/preserved-sha256.json",
+    "file": "src/game.h",
+    "old": "e2b0962d410445c8892f2ad82d6bfd5618ae316c1add224b24c78d970d9eecd3",
+    "new": "9634944080b713ac3e19171ed693f4f49d67ea7f0e54ef9c39db754a54dfec5f",
+    "reason": "Custom combat audio integration; original art and soundtrack remain locked. Gameplay behavior separately compared against frozen 8c339ac source."
+  },
+  {
+    "manifest": "assets/hq-torch/preserved-sha256.json",
+    "file": "src/music.c",
+    "old": "9c849a61d5ae9558040121814930315c261f6be4010918b5665bd555c03abf3c",
+    "new": "cb724b5d4749afe947749a7a7c3ef88bed410aead279cd3335ad26d429a0b791",
+    "reason": "Custom combat audio integration; original art and soundtrack remain locked. Gameplay behavior separately compared against frozen 8c339ac source."
+  },
+  {
+    "manifest": "assets/hq-torch/preserved-sha256.json",
+    "file": "src/music.h",
+    "old": "8580096b37792681a6fd2d674bec89dd4f6e2fc781ace96590c9c27bc778fdaf",
+    "new": "a95a3564ee1113d97677b62dae97dd4c200770292534418c2d6409bb2c9ca053",
+    "reason": "Custom combat audio integration; original art and soundtrack remain locked. Gameplay behavior separately compared against frozen 8c339ac source."
+  },
+  {
+    "manifest": "assets/hq-torch/preserved-sha256.json",
+    "file": "src/music_data.h",
+    "old": "68c406dbbaba227da6a983e61457c9247634198e0bebe40e985d59476cc3d410",
+    "new": "88d240a1681d181309e39c3d79f4e62dce66aed1444dfa38c84bfb2a03cc9348",
+    "reason": "Custom combat audio integration; original art and soundtrack remain locked. Gameplay behavior separately compared against frozen 8c339ac source."
+  },
+  {
+    "manifest": "assets/hq-jump/preserved-sha256.json",
+    "file": "assets/cd/CUSTOM.MAP",
+    "old": "327e135ff12a3ff4209c35f960484176a05cb5dc5e746eb2ed5372e681f82e96",
+    "new": "8c669c0329c9405ca989571f30712cb5f69eacde1bba04e1ee2348d530db41cb",
+    "reason": "Custom combat audio integration; original art and soundtrack remain locked. Gameplay behavior separately compared against frozen 8c339ac source."
+  },
+  {
+    "manifest": "assets/hq-jump/preserved-sha256.json",
+    "file": "assets/cd/FX.SEQ",
+    "old": "7ed1575b7ae05594b2e124e49c8a7fd02eb87d090c3409dea45c67429b515247",
+    "new": "24683e63c1fd27167d4a7b75b3965c806ab5fb7e81906bd0291dcddb2a28c32d",
+    "reason": "Custom combat audio integration; original art and soundtrack remain locked. Gameplay behavior separately compared against frozen 8c339ac source."
+  },
+  {
+    "manifest": "assets/hq-jump/preserved-sha256.json",
+    "file": "assets/cd/FX.TON",
+    "old": "e7e833cb2cb914c096ed6ca5499451cd9d2885db95ca71ad6c5a0c63004a73fe",
+    "new": "3ce8fcde51eed6d98fa0b69bc39274eddd740995058e53d1e14333dbd9b4475c",
+    "reason": "Custom combat audio integration; original art and soundtrack remain locked. Gameplay behavior separately compared against frozen 8c339ac source."
+  },
+  {
+    "manifest": "assets/hq-jump/preserved-sha256.json",
+    "file": "assets/music/report.json",
+    "old": "e1007a96711a6a7d05105d42970cd510e5ea25d40415ef41869dc5aa5df21775",
+    "new": "7ddc9b2b4a77523fe7a608fe3ec6cd866fed7e5411fb97d7bc82284d6dff1296",
+    "reason": "Custom combat audio integration; original art and soundtrack remain locked. Gameplay behavior separately compared against frozen 8c339ac source."
+  },
+  {
+    "manifest": "assets/hq-jump/preserved-sha256.json",
+    "file": "src/game.c",
+    "old": "5129b21c5c5cc815672e75e4d55149b7ea970f290c53e4db31966e5e6318d3eb",
+    "new": "eedc1136480b34f7a339a7ebbeab95ab63d090cfbf27a5cd8c4c70ec1c04d0c7",
+    "reason": "Custom combat audio integration; original art and soundtrack remain locked. Gameplay behavior separately compared against frozen 8c339ac source."
+  },
+  {
+    "manifest": "assets/hq-jump/preserved-sha256.json",
+    "file": "src/game.h",
+    "old": "e2b0962d410445c8892f2ad82d6bfd5618ae316c1add224b24c78d970d9eecd3",
+    "new": "9634944080b713ac3e19171ed693f4f49d67ea7f0e54ef9c39db754a54dfec5f",
+    "reason": "Custom combat audio integration; original art and soundtrack remain locked. Gameplay behavior separately compared against frozen 8c339ac source."
+  },
+  {
+    "manifest": "assets/hq-jump/preserved-sha256.json",
+    "file": "src/music.c",
+    "old": "9c849a61d5ae9558040121814930315c261f6be4010918b5665bd555c03abf3c",
+    "new": "cb724b5d4749afe947749a7a7c3ef88bed410aead279cd3335ad26d429a0b791",
+    "reason": "Custom combat audio integration; original art and soundtrack remain locked. Gameplay behavior separately compared against frozen 8c339ac source."
+  },
+  {
+    "manifest": "assets/hq-jump/preserved-sha256.json",
+    "file": "src/music.h",
+    "old": "8580096b37792681a6fd2d674bec89dd4f6e2fc781ace96590c9c27bc778fdaf",
+    "new": "a95a3564ee1113d97677b62dae97dd4c200770292534418c2d6409bb2c9ca053",
+    "reason": "Custom combat audio integration; original art and soundtrack remain locked. Gameplay behavior separately compared against frozen 8c339ac source."
+  },
+  {
+    "manifest": "assets/hq-jump/preserved-sha256.json",
+    "file": "src/music_data.h",
+    "old": "68c406dbbaba227da6a983e61457c9247634198e0bebe40e985d59476cc3d410",
+    "new": "88d240a1681d181309e39c3d79f4e62dce66aed1444dfa38c84bfb2a03cc9348",
+    "reason": "Custom combat audio integration; original art and soundtrack remain locked. Gameplay behavior separately compared against frozen 8c339ac source."
+  },
+  {
+    "manifest": "assets/hq-jump/preserved-sha256.json",
+    "file": "assets/hq-torch/preserved-sha256.json",
+    "old": "cb6da630eb8dccd5c69b398f1d01e3fd5bc34297739a27c85381bd75d25f7a6a",
+    "new": "92ab349a9a7a1252997897ac41c1ffa6bc87eaef88209a2a4aea86d72511a76c",
+    "reason": "Custom combat audio integration; original art and soundtrack remain locked. Gameplay behavior separately compared against frozen 8c339ac source."
+  },
+  {
+    "manifest": "assets/combat-animation/source/preserved-sha256.json",
+    "file": "src/music.c",
+    "old": "cb724b5d4749afe947749a7a7c3ef88bed410aead279cd3335ad26d429a0b791",
+    "new": "bf79d845472ffd5db651feb35e25857cdfb19d685b75b1c070ea3b6e5b1972d4",
+    "reason": "Custom combat audio integration; original art and soundtrack remain locked. Gameplay behavior separately compared against frozen 8c339ac source."
+  },
+  {
+    "manifest": "assets/hq-torch/preserved-sha256.json",
+    "file": "src/music.c",
+    "old": "cb724b5d4749afe947749a7a7c3ef88bed410aead279cd3335ad26d429a0b791",
+    "new": "bf79d845472ffd5db651feb35e25857cdfb19d685b75b1c070ea3b6e5b1972d4",
+    "reason": "Custom combat audio integration; original art and soundtrack remain locked. Gameplay behavior separately compared against frozen 8c339ac source."
+  },
+  {
+    "manifest": "assets/hq-jump/preserved-sha256.json",
+    "file": "assets/hq-torch/preserved-sha256.json",
+    "old": "92ab349a9a7a1252997897ac41c1ffa6bc87eaef88209a2a4aea86d72511a76c",
+    "new": "b9b19e1567e868ec094abeaf195372b3fa2186f735422b96c67f2bf9eb173340",
+    "reason": "Custom combat audio integration; original art and soundtrack remain locked. Gameplay behavior separately compared against frozen 8c339ac source."
+  },
+  {
+    "manifest": "assets/hq-jump/preserved-sha256.json",
+    "file": "src/music.c",
+    "old": "cb724b5d4749afe947749a7a7c3ef88bed410aead279cd3335ad26d429a0b791",
+    "new": "bf79d845472ffd5db651feb35e25857cdfb19d685b75b1c070ea3b6e5b1972d4",
+    "reason": "Custom combat audio integration; original art and soundtrack remain locked. Gameplay behavior separately compared against frozen 8c339ac source."
+  }
+]

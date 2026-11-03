@@ -1,0 +1,111 @@
+{
+  "scenario": "bat",
+  "single_attacker": false,
+  "frames": 1400,
+  "core_sha256": "f00215b3c6ee0c82a377a8403b686e09bf8684f176a0a5bd66b47b8677e4d738",
+  "bin_sha256": "cee46e50dbb50f184777360d11e18cb92792a09f54d7cbb9e3a4f0364515f569",
+  "peak_active_slots": 9,
+  "custom_voice_starts": {
+    "7": 5,
+    "6": 3,
+    "1": 1,
+    "2": 1
+  },
+  "custom_active_frames": {
+    "7": 89,
+    "6": 59,
+    "1": 7,
+    "2": 9
+  },
+  "global_whoosh_connect_overlap_frames": [
+    842,
+    843,
+    844,
+    845,
+    846,
+    847,
+    848,
+    849,
+    850,
+    851,
+    1022,
+    1023,
+    1024,
+    1025,
+    1026,
+    1027,
+    1028,
+    1029,
+    1030,
+    1031,
+    1032,
+    1033,
+    1034,
+    1035,
+    1036,
+    1037,
+    1038,
+    1039,
+    1040,
+    1041,
+    1042,
+    1043,
+    1044,
+    1045
+  ],
+  "output_peak": 5653,
+  "rail_samples": 0,
+  "transitions": [
+    [
+      812,
+      5,
+      7
+    ],
+    [
+      824,
+      5,
+      6
+    ],
+    [
+      842,
+      4,
+      7
+    ],
+    [
+      922,
+      4,
+      7
+    ],
+    [
+      1006,
+      7,
+      7
+    ],
+    [
+      1018,
+      6,
+      6
+    ],
+    [
+      1022,
+      7,
+      7
+    ],
+    [
+      1112,
+      7,
+      1
+    ],
+    [
+      1124,
+      9,
+      6
+    ],
+    [
+      1343,
+      9,
+      2
+    ]
+  ],
+  "scope": "Global overlap between different players is permitted. Single-attacker scenarios assert none. No listening or hardware verification."
+}
