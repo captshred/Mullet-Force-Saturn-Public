@@ -35,7 +35,7 @@ void mf_parallax_game_draw(int camera)
        Fractional quarter-speed fixed point avoids integer-camera stepping. */
     slScrPosNbg1((camera-1)*65536,-65536);
     slScrWindow0(camera%128==0?1:0,56,319,239);
-    slScrWindow1(camera%128==0?1:0,1,319,55);
+    slScrWindow1(camera<4 || camera%128==0?1:0,1,319,55);
     slScrPosNbg2(camera*16384-65536,-65536);
 }
 int mf_parallax_error(void){return live_error;}
