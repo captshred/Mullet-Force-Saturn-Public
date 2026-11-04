@@ -34,7 +34,7 @@ int main(void){int i,n;
  /* Catch-up updates at the same VBlank cannot bypass the release guard. */
  for(i=0;i<6;i++){mf_music_update(1,0,0,clock_now);}assert(!started_song[5][6]);
  update(0);assert(started_song[5][6]==1 && !stopped_port[6]);
- for(i=0;i<2;i++){update(MF_COMBAT_CONNECT(0));}assert(started_song[5][6]==1);
+ for(i=0;i<2;i++){update(MF_COMBAT_NONKILL(0));}assert(started_song[5][6]==1);
  /* Stop command rejection never permits CONNECT to overlap the whoosh. */
  fail_stop=6;update(MF_COMBAT_CONNECT(1));update(0);assert(!started_song[6][6]);
  fail_stop=-1;update(0);assert(stopped_port[6]==1 && !started_song[6][6]);update(0);assert(started_song[6][6]==1);
@@ -51,8 +51,17 @@ int main(void){int i,n;
  fail_pause=6;mf_music_update(1,1,0,++clock_now);assert(!paused_state && pause_target==1);
  n=paused_port[5];fail_pause=-1;mf_music_update(1,1,0,++clock_now);assert(paused_state && paused_port[5]==n);
  mf_music_update(1,0,0,++clock_now);assert(!paused_state && resumed_port[5] && resumed_port[6]);
- update(MF_TORCH_IGNITE|MF_TORCH_HISS|MF_JUMP_SOUND|MF_WORLD_IMPACT);
+ update(MF_TORCH_IGNITE|MF_TORCH_HISS|MF_JUMP_SOUND|MF_WORLD_IMPACT|MF_COMBAT_DESTROY(0));
  assert(started_song[1][3] && started_song[2][1] && started_song[3][2] && started_song[4][4]);
  n=started_song[4][4];update(0);assert(!torch_playing);for(i=0;i<2;i++){update(MF_TORCH_HISS);}assert(started_song[4][4]==n);update(MF_TORCH_HISS);assert(started_song[4][4]==n+1);
+ /* Incoming and outgoing nonlethal hits share the native sample dispatcher. */
+ for(i=0;i<60;i++)update(0);
+ update(MF_COMBAT_NONKILL(0)|MF_COMBAT_NONKILL(1));assert(started_song[5][0] && started_song[6][0]);
+ n=started_song[5][0];update(MF_COMBAT_NONKILL(0)|MF_COMBAT_HURT(0));update(0);assert(started_song[5][0]==n+1);
+ update(MF_COMBAT_CONNECT(0));update(0);assert(combat[0].playing && combat[0].ends_at>clock_now);
+ for(i=0;i<60;i++)update(0);
+ n=started_song[3][2];update(MF_WORLD_IMPACT|MF_COMBAT_DESTROY(0)|MF_COMBAT_CONNECT(0));
+ assert(started_song[3][2]==n+1 && combat[0].playing);
+ assert(!started_song[3][0] && !started_song[3][6]);
  assert(started_song[0][0]==1);
  puts("PASS custom transport: independent ports, collision precedence, acknowledged stop/release guard, rejection retries, no catch-up bypass, misses/rapid repeats, two-player isolation, pause and unchanged unrelated sounds");return 0;}

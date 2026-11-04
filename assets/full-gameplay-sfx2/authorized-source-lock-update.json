@@ -1,0 +1,18 @@
+{
+  "src/game.c": {
+    "before": "f1a181af4b5a3c3d66f51a83626c89c06cf86d153fd84511b1dd62cd362e146a",
+    "after": "f1813f355f7d8ef135e7bf54cc75522218446d6837348aae90e1e5b6372cae87"
+  },
+  "src/game.h": {
+    "before": "c204e066c8d45b9e0c069017a07b00fa73f81e5e0136d2e7878f53db664526af",
+    "after": "0938bcd0c58037b885ea902307290c39831f43ce4a52817694c433b15b0c839f"
+  },
+  "src/music.c": {
+    "before": "bf79d845472ffd5db651feb35e25857cdfb19d685b75b1c070ea3b6e5b1972d4",
+    "after": "da9531e09b7bf0b84f1b420e3855b6343e03138b9fef09be0e01ee6b011d554c"
+  },
+  "src/music_data.h": {
+    "before": "88d240a1681d181309e39c3d79f4e62dce66aed1444dfa38c84bfb2a03cc9348",
+    "after": "9fa8298721d1d97770c032ff3ebccf215d7b77474a875344b537aa58bac5ae15"
+  }
+}

@@ -1,34 +1,35 @@
 name: Manual Saturn playtest build
+run-name: Saturn | ${{ inputs.profile }} | ${{ inputs.source_ref }}
 
 on:
   workflow_dispatch:
     inputs:
       profile:
-        description: Approved build to produce
+        description: Allowlisted build profile (must exist in selected source)
         type: choice
         required: true
-        default: neon-stage
+        default: arcade-impact-fx
         options:
+          - arcade-impact-fx
+          - level1-stage-clear
+          - stage-default
+          - full-gameplay-sfx2
           - gameplay-parallax
           - city-cleanup
           - neon-stage
           - bat-fix
-      commit_sha:
-        description: Optional full SHA; must match the selected approved build
+      source_ref:
+        description: Source branch, tag, or full commit SHA
         type: string
-        required: false
-        default: ''
+        required: true
+        default: '8d79a36f97dfd0b02de7d1b6b58e85b16fdc0b96'
 
 permissions:
   contents: read
 
 env:
-  LIVE_COMMIT: 60b7916ae519626a6b094ef04e0b4fa812900127
-  CLEANUP_COMMIT: c0d42d151a81f1e3072e98e1b4264470eacca3b6
-  NEON_COMMIT: d664f26108f9a958ad1d2ecea3fc2e59a2bba3b9
-  BAT_FIX_COMMIT: b1abb866aa0f6cfd09794a0ed76e5f054a6ecf6f
   BUILD_PROFILE: ${{ inputs.profile }}
-  REQUESTED_COMMIT: ${{ inputs.commit_sha }}
+  REQUESTED_REF: ${{ inputs.source_ref }}
   MF_PRESERVE_AUDIO: '1'
 
 jobs:
@@ -36,51 +37,66 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
-      - name: Resolve exact approved source
-        id: source
-        shell: bash
-        run: |
-          case "$BUILD_PROFILE" in
-            gameplay-parallax) expected="$LIVE_COMMIT" ;;
-            city-cleanup) expected="$CLEANUP_COMMIT" ;;
-            neon-stage) expected="$NEON_COMMIT" ;;
-            bat-fix) expected="$BAT_FIX_COMMIT" ;;
-            *) echo 'Unknown build profile' >&2; exit 1 ;;
-          esac
-          selected="${REQUESTED_COMMIT:-$expected}"
-          if [[ ! "$selected" =~ ^[0-9a-f]{40}$ || "$selected" != "$expected" ]]; then
-            echo 'Commit SHA must exactly match the selected approved build.' >&2
-            exit 1
-          fi
-          echo "sha=$selected" >> "$GITHUB_OUTPUT"
-      - name: Check out verified source
+      - name: Check out selected source
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           repository: captshred/Mullet-Force-Saturn-Public
-          ref: ${{ steps.source.outputs.sha }}
+          ref: ${{ inputs.source_ref }}
           persist-credentials: false
-      - name: Verify checkout
-        env:
-          SELECTED_COMMIT: ${{ steps.source.outputs.sha }}
-        run: test "$(git rev-parse HEAD)" = "$SELECTED_COMMIT"
+      - name: Resolve and record exact source SHA
+        id: source
+        shell: bash
+        run: |
+          selected=$(git rev-parse --verify 'HEAD^{commit}')
+          [[ "$selected" =~ ^[0-9a-f]{40}$ ]]
+          echo "sha=$selected" >> "$GITHUB_OUTPUT"
+          echo "MF_BUILD_COMMIT=$selected" >> "$GITHUB_ENV"
+          # Preserve arbitrary ref labels as data, never as shell commands or
+          # multiline environment-file directives.
+          printf 'Source ref: %s\nResolved commit: %s\nProfile: %s\n' "$REQUESTED_REF" "$selected" "$BUILD_PROFILE"
+          printf '### Saturn build\n\nSource: \x60%s\x60\n\nCommit: \x60%s\x60\n' "$REQUESTED_REF" "$selected" >> "$GITHUB_STEP_SUMMARY"
       - name: Install host dependencies and pinned SDK
         # Includes genisoimage; setup.sh preserves the approved Jo Engine pin.
         run: bash tools/bootstrap.sh
       - name: Build selected native profile
         shell: bash
         run: |
+          export MF_BUILD_BRANCH="$REQUESTED_REF"
           case "$BUILD_PROFILE" in
+            arcade-impact-fx) bash tools/build-arcade-impact-fx.sh --native ;;
+            level1-stage-clear) bash tools/build-level1-stage-clear.sh --native ;;
+            stage-default) bash tools/build-stage.sh --native ;;
+            full-gameplay-sfx2) bash tools/build-full-gameplay-sfx2.sh --native ;;
             gameplay-parallax) bash tools/build-gameplay-parallax.sh --native ;;
             city-cleanup) bash tools/build-city-cleanup.sh --native ;;
             neon-stage) bash tools/build-city-neon.sh --native ;;
             bat-fix) bash tools/build-punch-combo.sh --native ;;
+            *) echo 'Unsupported build profile' >&2; exit 1 ;;
           esac
       - name: Validate disc, assets and gameplay regressions
         env:
           SELECTED_COMMIT: ${{ steps.source.outputs.sha }}
         run: |
+          export MF_BUILD_BRANCH="$REQUESTED_REF"
           make check
           make test
+          if [[ "$BUILD_PROFILE" == full-gameplay-sfx2 || "$BUILD_PROFILE" == arcade-impact-fx || "$BUILD_PROFILE" == level1-stage-clear ]]; then
+            python3 tools/validate-full-gameplay-sfx2.py --disc
+            python3 tools/audit-sprite-memory.py > build/sprite-memory.csv
+            grep -Fx 'Live gameplay parallax: 1' build/BUILD-INFO.txt
+            grep -Fx 'City cleanup candidate: 1' build/BUILD-INFO.txt
+            grep -Fx 'City neon candidate: 1' build/BUILD-INFO.txt
+            grep -Fx 'Jab jab cross combo: 1' build/BUILD-INFO.txt
+          fi
+          if [[ "$BUILD_PROFILE" == arcade-impact-fx || "$BUILD_PROFILE" == level1-stage-clear ]]; then
+            python3 tools/validate-arcade-fx.py --disc
+            python3 tools/test-arcade-fx.py
+            grep -Fx 'Arcade dual FX: 1' build/BUILD-INFO.txt
+          fi
+          if [[ "$BUILD_PROFILE" == level1-stage-clear ]]; then
+            grep -Fx 'Level 1 stage clear: 1' build/BUILD-INFO.txt
+            python3 tools/test-stage-clear.py
+          fi
           grep -Fx "Commit: $SELECTED_COMMIT" build/BUILD-INFO.txt
           if [[ "$BUILD_PROFILE" == neon-stage || "$BUILD_PROFILE" == city-cleanup ]]; then
             grep -Fx 'City neon candidate: 1' build/BUILD-INFO.txt

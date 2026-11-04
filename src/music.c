@@ -13,8 +13,8 @@ static int torch_playing;
 static unsigned int audio_tick,hiss_stopped_at;
 static int hiss_guard;
 typedef struct { int playing,pending,stopping; unsigned int stopped_at,ends_at; unsigned char hit_wait; } combat_sound;
-static const unsigned char custom_ticks[3]=MF_CUSTOM_SFX_TICKS;
-static combat_sound combat[2]={{0,-1,0,0,0,0},{0,-1,0,0,0,0}};
+static const unsigned char custom_ticks[8]=MF_CUSTOM_SFX_TICKS;
+static combat_sound combat[3]={{0,-1,0,0,0,0},{0,-1,0,0,0,0},{0,-1,0,0,0,0}};
 static const unsigned char retrigger_ticks[3]=MF_SFX_RETRIGGER_TICKS;
 
 static int upload(const char *name,unsigned int expected,unsigned int address)
@@ -68,19 +68,27 @@ int mf_music_init(void)
 }
 int mf_music_ready(void) { return ready; }
 
-/* One combat control port per player, 5/6. A confirmed collision wins over
+/* Combat ports 5/6 and world destruction port 3. A confirmed collision wins over
    initiation in the same tick. Stop -> one real VBlank for RR31 -> replacement.
    The guard uses the hardware VBlank clock, not catch-up simulation steps. */
+static int combat_port(int actor) {return actor==2?3:5+actor;}
 static void combat_update(int player,int events,unsigned int now,unsigned int elapsed)
 {
-    combat_sound *c=&combat[player];int port=5+player,song=-1;
+    combat_sound *c=&combat[player];int port=combat_port(player),song=-1;
     if(c->playing && (int)(now-c->ends_at)>=0)c->playing=0;
     c->hit_wait=elapsed>=c->hit_wait?0:c->hit_wait-elapsed;
-    if(events&(MF_COMBAT_JAB(player)|MF_COMBAT_BAT(player)))c->hit_wait=0;
-    if((events&MF_COMBAT_CONNECT(player)) && !c->hit_wait) {
-        song=6;c->hit_wait=4; /* coalesce one frame/multi-target, finite fire ticks */
+    if(events&(MF_COMBAT_JAB(player)|MF_COMBAT_BAT(player)|MF_COMBAT_HURT(player)))c->hit_wait=0;
+    if(player==2 && (events&MF_WORLD_IMPACT)) {
+        song=2;
+    }else if(events&MF_COMBAT_CONNECT(player)) {
+        song=6;c->hit_wait=4; /* Lethal results always take precedence. */
+    }else if((events&MF_COMBAT_NONKILL(player)) && !c->hit_wait) {
+        song=0;c->hit_wait=4;
     }else if(events&MF_COMBAT_BAT(player))song=7;
     else if(events&MF_COMBAT_JAB(player))song=5;
+    if(player<2 && song<0 && (events&MF_COMBAT_DESTROY(player))) {
+        c->pending=-1;if(c->playing)c->stopping=1;
+    }
     if(song>=0) {
         c->pending=song;
         if(c->playing && !c->stopping)c->stopping=1;
@@ -96,21 +104,21 @@ static void combat_update(int player,int events,unsigned int now,unsigned int el
     }
     if(c->pending>=0 && SND_SetSeqVl(port,MF_SFX_VOLUME,0)==SND_RET_SET &&
        SND_StartSeq(port,0,c->pending,MF_SFX_PRIORITY)==SND_RET_SET) {
-        c->ends_at=now+custom_ticks[c->pending-5];c->playing=1;c->pending=-1;
+        c->ends_at=now+custom_ticks[c->pending];c->playing=1;c->pending=-1;
     }
 }
 void mf_music_update(int started,int paused,int events,unsigned int now)
 {
     int i;unsigned int elapsed=now-audio_tick;audio_tick=now;
     if(!ready)return;
-    if(paused || paused_state)for(i=0;i<2;i++)if(combat[i].playing)combat[i].ends_at+=elapsed;
+    if(paused || paused_state)for(i=0;i<3;i++)if(combat[i].playing)combat[i].ends_at+=elapsed;
     if(torch_playing && (!started || paused || !(events&MF_TORCH_HISS))) {
         if(SND_StopSeq(4)==SND_RET_SET){torch_playing=0;hiss_guard=1;hiss_stopped_at=now;}
     }
     if(!started) {
-        for(i=0;i<2;i++) {
+        for(i=0;i<3;i++) {
             combat[i].pending=-1;
-            if(combat[i].playing && SND_StopSeq(5+i)==SND_RET_SET)combat[i].playing=0;
+            if(combat[i].playing && SND_StopSeq(combat_port(i))==SND_RET_SET)combat[i].playing=0;
         }
         return;
     }
@@ -128,23 +136,23 @@ void mf_music_update(int started,int paused,int events,unsigned int now)
         if(pause_mask!=0x6f)return;
         paused_state=paused;pause_mask=0;pause_target=-1;
         /* A collision awaiting a replacement must not become a stale hit on resume. */
-        if(paused)for(i=0;i<2;i++)combat[i].pending=-1;
+        if(paused)for(i=0;i<3;i++)combat[i].pending=-1;
     }
     if(paused)return;
     for(i=0;i<3;i++)sfx_wait[i]=elapsed>=sfx_wait[i]?0:sfx_wait[i]-elapsed;
-    /* Shared ignition/hiss and original jump/world-impact retain their sounds.
+    /* Shared ignition/hiss and original jump retain their sounds.
        No ignition cooldown bypass: at most one retirement tail per legacy port. */
     if(hiss_guard && now-hiss_stopped_at>=3)hiss_guard=0;
     if((events&MF_TORCH_HISS) && !torch_playing && !hiss_guard) {
         if(SND_SetSeqVl(4,MF_SFX_VOLUME,0)==SND_RET_SET &&
            SND_StartSeq(4,0,4,MF_SFX_PRIORITY)==SND_RET_SET)torch_playing=1;
     }
-    for(i=0;i<3;i++)if(((i==0 && (events&MF_TORCH_IGNITE)) ||
-       (i==1 && (events&MF_JUMP_SOUND)) || (i==2 && (events&MF_WORLD_IMPACT))) && !sfx_wait[i]) {
+    for(i=0;i<2;i++)if(((i==0 && (events&MF_TORCH_IGNITE)) ||
+       (i==1 && (events&MF_JUMP_SOUND))) && !sfx_wait[i]) {
         int port=i+1;
         if(SND_StopSeq(port)!=SND_RET_SET)continue;
         if(SND_SetSeqVl(port,MF_SFX_VOLUME,0)!=SND_RET_SET)continue;
         if(SND_StartSeq(port,0,i==0?3:i,MF_SFX_PRIORITY)==SND_RET_SET)sfx_wait[i]=retrigger_ticks[i];
     }
-    for(i=0;i<2;i++)combat_update(i,events,now,elapsed);
+    for(i=0;i<3;i++)combat_update(i,i==2?(int)(events&MF_WORLD_IMPACT):events,now,elapsed);
 }

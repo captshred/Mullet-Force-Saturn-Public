@@ -1,0 +1,40 @@
+{
+  "base_commit": "2c32e134452d5cd90fcbfee2aba13c2ce6b0166b",
+  "runtime_bytes": 452800,
+  "definitions": 255,
+  "vdp1_saved_bytes": 544,
+  "vdp2_bytes": 434176,
+  "scsp_bytes": 432308,
+  "textures": {
+    "impact": {
+      "path": "assets/cd/HIT.TGA",
+      "width": 32,
+      "height": 32,
+      "format": "RGB555",
+      "vram_bytes": 2048,
+      "sha256": "e9e50079dbfe8c3ff8b9ca56a10c1016e51842eeec34eb4b6df9c0c06afd1359",
+      "approved_png_sha256": "a8580eb5ba51e18fa930a5ce1c644da676f43b96728e6e7730f84cfaa7601165",
+      "approved_rgba_sha256": "07525842bc6116e1456a172598336ca2c566171c8a0aa18473869ae7eba75a14",
+      "rgb555_be_sha256": "73f2082f19082b8617beea2747720285bdc2d7f508bb35b873e13f179ccbb202"
+    },
+    "explosion": {
+      "path": "assets/arcade-fx/EXPLODE.TGA",
+      "width": 32,
+      "height": 32,
+      "format": "RGB555",
+      "vram_bytes": 2048,
+      "sha256": "3fc80775aaf59c5521f61ed925253005bc9a225b026551b5bb33c64f9747c5c7",
+      "approved_png_sha256": "0bf6935d5a57790680991b14bf6773c5423b573e4bf29b9aaee7aac25b1650fb",
+      "approved_rgba_sha256": "f46cf99fd4b113ee469c13770a1f8e84663cd4399e61b335dd450c7d4c0e7b54",
+      "rgb555_be_sha256": "7e95f4f93162fb7bd4497604f53b521a045ede0fc5946e74e3b005c1871a7bee"
+    }
+  },
+  "legacy_slot": {
+    "path": "assets/cd/BU01.TGA",
+    "width": 48,
+    "height": 54,
+    "format": "indexed8",
+    "vram_bytes": 2592,
+    "sha256": "cc779370c9966b495e0ff1f6ef34b5c437e27321c72afe7d6558566bbe0ba17f"
+  }
+}

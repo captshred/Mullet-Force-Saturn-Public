@@ -1,0 +1,38 @@
+{
+  "parent": "b1abb866aa0f6cfd09794a0ed76e5f054a6ecf6f",
+  "width": 640,
+  "height": 240,
+  "source_sha256": "847bcfaf73d3ee19fc6cddd313f613e0f6bd20b9261b906c1b60ca45ec7caa0e",
+  "original_unique_tiles": 2330,
+  "tile_count": 1664,
+  "cell_bytes": 106496,
+  "map_bytes": 16384,
+  "palette_bytes": 510,
+  "dynamic_cell_indices": [
+    240,
+    241,
+    242,
+    243,
+    244,
+    245,
+    246,
+    247
+  ],
+  "facade_lossless_after_palette_quantization": true,
+  "merged_low_contrast_tiles": 666,
+  "max_pair_rms_rgb555": 0.5773502588272095,
+  "palette_bank": 1,
+  "extra_vdp1_bytes": 0,
+  "extra_sprite_definitions": 0,
+  "extra_cram_banks": 0,
+  "street_vdp2_bytes": 122880,
+  "sha256": {
+    "CICELL.BIN": "08ffb1464f313b276a65c745a5c030a9bfdd1c95bf476be9f68cfd4060ff4002",
+    "CIMAP.BIN": "810a643c9310838a3d5240c78eba2efb34feac7f7ac43d8b960aa8db6a655f80",
+    "CIPAL.BIN": "aae6b49de7513851fbb886c9fdeef951a23065e9ea064dd1b4b679714458ee1d",
+    "CIPIX.BIN": "6c52281ef3e0d61e2063da5fb4d75133ae87f012c6bb2669a8188e9681403929",
+    "CIREF.BIN": "bc8ad3695176add08861490c5df01e1d66cf641e7aec2c2ba285a6ad7944805c",
+    "CICHUNK.BIN": "c78f42a2dfd223aa75872aafcb9cb5d483c768dbefd0a73d7935f58bd338ae3b",
+    "CISKY.BIN": "423bcf09eb13d031f40ef6a8504a491d1eee700c890fb299174fa1fb9c79a8fe"
+  }
+}

@@ -928,8 +928,8 @@
     "bytes": 2370
   },
   "assets/cd/HIT.TGA": {
-    "sha256": "6f7a7cf8ca4a09ede18df418d88cf758479a96b8dca098fc584ebe62f25209b1",
-    "bytes": 3090
+    "bytes": 3090,
+    "sha256": "e9e50079dbfe8c3ff8b9ca56a10c1016e51842eeec34eb4b6df9c0c06afd1359"
   },
   "assets/cd/BU00.TGA": {
     "sha256": "027cf7bfcd46c9fc497a997d28f4da69ddcbe57ddbc9ce86340c74cd95b1328b",
@@ -992,8 +992,8 @@
     "bytes": 4602
   },
   "assets/cd/CUSTOM.MAP": {
-    "sha256": "8c669c0329c9405ca989571f30712cb5f69eacde1bba04e1ee2348d530db41cb",
-    "bytes": 56
+    "bytes": 56,
+    "sha256": "b395892e6a5eb7a242c3ada48228ad5ec6a972ab02ee0fc8eb68710bd769a9e8"
   },
   "assets/cd/TU0.TGA": {
     "sha256": "7b20bd20b1848c050ec6c5edbe387b098cd7ce207b76f24cb71791316e35ced7",
@@ -1008,8 +1008,8 @@
     "bytes": 2370
   },
   "assets/cd/FX.SEQ": {
-    "sha256": "24683e63c1fd27167d4a7b75b3965c806ab5fb7e81906bd0291dcddb2a28c32d",
-    "bytes": 328
+    "bytes": 328,
+    "sha256": "99a5a133d3db53a31aa0950bdaf5853f65effa81301914e44c2c61d3cc14bee6"
   },
   "assets/cd/FL1.TGA": {
     "sha256": "b4b13b91919226ac0642e63fc635a7e60091ea52bc68bfc466dd33bce0e848a8",
@@ -1084,8 +1084,8 @@
     "bytes": 5826
   },
   "assets/cd/FX.TON": {
-    "sha256": "3ce8fcde51eed6d98fa0b69bc39274eddd740995058e53d1e14333dbd9b4475c",
-    "bytes": 170564
+    "bytes": 182912,
+    "sha256": "d86a4664b4c9de8e9a1d31489a10b48cb8924f474f7c8b6fbcb0b2cc91d002e2"
   },
   "assets/cd/EN02.TGA": {
     "sha256": "d6b50d424a01dfdfcb1c91186e68f5c105e825588d5ebbf0f4f07d2b8b6db86e",
@@ -2078,5 +2078,9 @@
   "assets/stride-fix/before/RN07.TGA": {
     "sha256": "c2a4b8a40f28b7f2ad2bbb0d786235767f2bc049d45637ecf1b35e49b69e5c0d",
     "bytes": 2834
+  },
+  "assets/arcade-fx/EXPLODE.TGA": {
+    "bytes": 3090,
+    "sha256": "3fc80775aaf59c5521f61ed925253005bc9a225b026551b5bb33c64f9747c5c7"
   }
 }

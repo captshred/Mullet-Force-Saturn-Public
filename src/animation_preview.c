@@ -1,4 +1,5 @@
 #include "build-info.h"
+#include "arcade_fx_config.h"
 #if MF_ANIMATION_PREVIEW
 #include <jo/jo.h>
 #include "input.h"
@@ -181,11 +182,11 @@ static int load_bank(int full)
     if(needed)jo_set_tga_default_palette(JO_NULL);
     texture_bytes=end_of(last_resource)-0x10000u;
 #if MF_ORIGINAL_THREE_WALK
-    return texture_bytes==MF_CP_EXTRA-MF_PH_REMOVED+MF_PH_EXTRA-MF_PD_REMOVED+MF_PD_EXTRA+MF_RUN_BYTES+(full?MF_ORIGINAL_THREE_FULL_BYTES:MF_ORIGINAL_THREE_BOOT_BYTES)-MF_HT_REPLACED-MF_HJ_REPLACED;
+    return texture_bytes==MF_CP_EXTRA-MF_FX_SAVED_BYTES-MF_PH_REMOVED+MF_PH_EXTRA-MF_PD_REMOVED+MF_PD_EXTRA+MF_RUN_BYTES+(full?MF_ORIGINAL_THREE_FULL_BYTES:MF_ORIGINAL_THREE_BOOT_BYTES)-MF_HT_REPLACED-MF_HJ_REPLACED;
 #elif MF_SWAGGER_WALK
-    return texture_bytes==MF_CP_EXTRA-MF_PH_REMOVED+MF_PH_EXTRA-MF_PD_REMOVED+MF_PD_EXTRA+MF_RUN_BYTES+(full?MF_SWAGGER_FULL_BYTES:MF_SWAGGER_BOOT_BYTES);
+    return texture_bytes==MF_CP_EXTRA-MF_FX_SAVED_BYTES-MF_PH_REMOVED+MF_PH_EXTRA-MF_PD_REMOVED+MF_PD_EXTRA+MF_RUN_BYTES+(full?MF_SWAGGER_FULL_BYTES:MF_SWAGGER_BOOT_BYTES);
 #else
-    return texture_bytes==MF_CP_EXTRA-MF_PH_REMOVED+MF_PH_EXTRA-MF_PD_REMOVED+MF_PD_EXTRA+302336u+MF_ANIMATION_BYTES+MF_POLISH_BYTES;
+    return texture_bytes==MF_CP_EXTRA-MF_FX_SAVED_BYTES-MF_PH_REMOVED+MF_PH_EXTRA-MF_PD_REMOVED+MF_PD_EXTRA+302336u+MF_ANIMATION_BYTES+MF_POLISH_BYTES;
 #endif
 }
 int mf_animation_load(jo_palette *palette,const int idle_ids[2][3])
@@ -205,7 +206,7 @@ int mf_animation_load(jo_palette *palette,const int idle_ids[2][3])
     }
     jo_set_tga_default_palette(JO_NULL);
     texture_bytes=end_of(last_resource)-0x10000u;
-    if(texture_bytes!=MF_CP_EXTRA-MF_PH_REMOVED+MF_PH_EXTRA-MF_PD_REMOVED+MF_PD_EXTRA+MF_ORIGINAL_THREE_BOOT_BYTES+MF_RUN_BYTES+MF_RBV_BYTES-MF_HT_REPLACED-MF_HJ_REPLACED)return 0;
+    if(texture_bytes!=MF_CP_EXTRA-MF_FX_SAVED_BYTES-MF_PH_REMOVED+MF_PH_EXTRA-MF_PD_REMOVED+MF_PD_EXTRA+MF_ORIGINAL_THREE_BOOT_BYTES+MF_RUN_BYTES+MF_RBV_BYTES-MF_HT_REPLACED-MF_HJ_REPLACED)return 0;
 #endif
 #if MF_COMBAT_ANIMATION
     jo_set_tga_default_palette(resource_palette);
@@ -233,7 +234,7 @@ int mf_animation_load(jo_palette *palette,const int idle_ids[2][3])
     }
     jo_set_tga_default_palette(JO_NULL);
     texture_bytes=end_of(last_resource)-0x10000u;
-    if(texture_bytes!=MF_CP_EXTRA-MF_PH_REMOVED+MF_PH_EXTRA-MF_PD_REMOVED+MF_PD_EXTRA+MF_ORIGINAL_THREE_BOOT_BYTES+MF_RUN_BYTES+MF_RBV_BYTES+MF_CA_BYTES-MF_HT_REPLACED-MF_HJ_REPLACED)return 0;
+    if(texture_bytes!=MF_CP_EXTRA-MF_FX_SAVED_BYTES-MF_PH_REMOVED+MF_PH_EXTRA-MF_PD_REMOVED+MF_PD_EXTRA+MF_ORIGINAL_THREE_BOOT_BYTES+MF_RUN_BYTES+MF_RBV_BYTES+MF_CA_BYTES-MF_HT_REPLACED-MF_HJ_REPLACED)return 0;
 #endif
     return 1;
 }
@@ -435,7 +436,7 @@ int mf_combat_prototype_draw(const mf_game *g,int actor,int center,int ground,in
         /* Reuse the exact current four-piece carry, including waist fixes.
            The horizontal contact upper already contains its connected grip. */
         if(p->attack<MF_FAST_BAT_ACTIVE_FIRST)
-            return mf_animation_draw_actor(actor,18+ca_last_run[actor],center,ground,p->facing,depth);
+            return mf_animation_draw_actor(actor,18+(g->running_bat[actor].active-1),center,ground,p->facing,depth);
         if(p->attack>=MF_FAST_BAT_RECOVERY_FIRST)
             return mf_animation_draw_actor(actor,0,center,ground,p->facing,depth);
         jo_sprite_restore_sprite_scale();jo_sprite_disable_horizontal_flip();jo_sprite_set_palette(palette_id);
@@ -615,7 +616,7 @@ int mf_hq_torch_load(int enemy_palette)
         if(ht_lower[a][f]<0)return 0;
     }
     if(ht_alias(last_resource,0,jo_sprite_get_height(last_resource))<0)return 0;
-    return texture_bytes==MF_CP_EXTRA-MF_PH_REMOVED+MF_PH_EXTRA-MF_PD_REMOVED+MF_PD_EXTRA+MF_ORIGINAL_THREE_BOOT_BYTES+MF_RUN_BYTES+MF_RBV_BYTES+MF_CA_BYTES-MF_HT_REPLACED-MF_HJ_REPLACED+MF_HT_BYTES;
+    return texture_bytes==MF_CP_EXTRA-MF_FX_SAVED_BYTES-MF_PH_REMOVED+MF_PH_EXTRA-MF_PD_REMOVED+MF_PD_EXTRA+MF_ORIGINAL_THREE_BOOT_BYTES+MF_RUN_BYTES+MF_RBV_BYTES+MF_CA_BYTES-MF_HT_REPLACED-MF_HJ_REPLACED+MF_HT_BYTES;
 }
 int mf_hq_torch_draw(const mf_game *g,int actor,int center,int ground,int depth)
 {
@@ -669,7 +670,7 @@ int mf_hq_jump_load(void)
         if(hj_upper[a]<0 || hj_compress_lower[a]<0)return 0;
     }
     if(ht_alias(last_resource,0,jo_sprite_get_height(last_resource))<0)return 0;
-    return texture_bytes==MF_CP_EXTRA-MF_PH_REMOVED+MF_PH_EXTRA-MF_PD_REMOVED+MF_PD_EXTRA+MF_ORIGINAL_THREE_BOOT_BYTES+MF_RUN_BYTES+MF_RBV_BYTES+MF_CA_BYTES-MF_HT_REPLACED-MF_HJ_REPLACED+MF_HT_BYTES+MF_HJ_BYTES;
+    return texture_bytes==MF_CP_EXTRA-MF_FX_SAVED_BYTES-MF_PH_REMOVED+MF_PH_EXTRA-MF_PD_REMOVED+MF_PD_EXTRA+MF_ORIGINAL_THREE_BOOT_BYTES+MF_RUN_BYTES+MF_RBV_BYTES+MF_CA_BYTES-MF_HT_REPLACED-MF_HJ_REPLACED+MF_HT_BYTES+MF_HJ_BYTES;
 }
 static void hj_piece(int id,const mf_polish_piece *q,int center,int ground,int facing,int depth,int dy)
 {

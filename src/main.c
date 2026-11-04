@@ -3,6 +3,7 @@
 #include "music.h"
 #include "art_data.h"
 #include "build-info.h"
+#include "arcade_fx.h"
 #include "street.h"
 #if MF_CORPORATE_PUNK
 #include "corporate_animation.h"
@@ -23,6 +24,7 @@
 #endif
 
 static mf_game game;
+static int explosion=-1,spark_explosion;
 static int street[5],buck[MF_BUCK_FRAMES],chuck[MF_BUCK_FRAMES],enemy[MF_ENEMY_FRAMES],bat[2][MF_BAT_FRAMES],bat_legs,air_legs[3],normal_lower[MF_NORMAL_LOWERS],torch_art[2][3],flame[4],embers[2],charge_cue,drum[3],shadow,spark,bar,panel;
 static jo_palette street_palette,buck_palette,chuck_palette,enemy_palette,burn_palette,fire_palette;
 static int asset_error,asset_stage,asset_index,overlay=-1;
@@ -69,7 +71,13 @@ static void draw_asset_diagnostics(void)
 static volatile unsigned int vblanks;
 static unsigned int last_vblank,last_input_vblank=~0u,pending[2];
 static mf_input sampled_input[2];
-static void clock_tick(void) { ++vblanks; }
+static void clock_tick(void)
+{
+    ++vblanks;
+#if MF_CITY_NEON
+    mf_street_animate(vblanks);
+#endif
+}
 static int load(const char *name)
 {
     int id=jo_sprite_add_tga(JO_ROOT_DIR,name,JO_COLOR_RGB(255,0,255));
@@ -101,6 +109,17 @@ static void load_assets(void)
 /* PLAYERDEATH END */
         #endif
 /* PLAYERHURT END */
+#if MF_ARCADE_FX
+        if(i==1) {
+            jo_set_tga_default_palette(JO_NULL);
+            explosion=load("EXPLODE.TGA");
+            jo_set_tga_default_palette(&buck_palette);
+            buck[i]=-1;
+            if(explosion<0 || jo_sprite_get_width(explosion)!=32 || jo_sprite_get_height(explosion)!=32)
+                asset_failure(211,"EXPLODE.TGA",i);
+            continue;
+        }
+#endif
         if(MF_HQ_JUMP && (i==11 || i==12 || i==14))buck[i]=-1;
         else buck[i]=load_indexed(bu[i],i);
 
@@ -234,6 +253,11 @@ static void load_assets(void)
 #endif
 #if MF_PUNCH_COMBO
     if(!asset_error && !mf_cross_load())asset_failure(730,"CROSS",0);
+#if MF_ARCADE_FX
+    if(!asset_error && (jo_get_last_sprite_id()+1!=MF_FX_DEFINITIONS ||
+                       mf_animation_texture_bytes()!=MF_FX_TEXTURE_BYTES))
+        asset_failure(731,"FX BUDGET",0);
+#endif
 #endif
 #if MF_PARALLAX_DEMO
     if(!asset_error && !mf_parallax_load())asset_failure(800,"PARALLAX",mf_parallax_error());
@@ -272,7 +296,7 @@ static void draw_game(void)
         if(x<-32 || x>352)continue;
         if(d->hp || d->respawn<20)draw_shadow(x,y,0);
         if(d->hp && !(d->flash&1))jo_sprite_draw3D2(drum[3-d->hp],x-16,y-46,depth);
-        if(d->flash || (!d->hp && d->respawn<12))jo_sprite_draw3D2(spark,x-16,y-40,depth-1);
+        mf_fx_draw_drum(d,spark,explosion,x,y,depth);
     }
     for(j=0;j<MF_ENEMIES;j++) {
         mf_enemy *e=&game.enemies[j];int frame=mf_enemy_frame(&game,j);
@@ -379,7 +403,7 @@ static void draw_game(void)
         mf_player *p=&game.players[j];jo_sprite_set_palette(fire_palette.id);
         jo_sprite_draw3D2(charge_cue,p->x/256-game.camera+p->facing*20-4,p->y/256-49,depth_key(p->y/256,-2));
     }
-    if(game.spark)jo_sprite_draw3D2(spark,game.spark_x-game.camera-16,game.spark_y-game.spark_z-16,depth_key(game.spark_y,-1));
+    mf_fx_draw_spark(&game,spark,explosion,spark_explosion,depth_key(game.spark_y,-1));
     health_bar(16,25,80,game.players[0].health,100);
     jo_print(2,1,"BUCK");jo_printf(14,1,"%06d",game.score);
     jo_printf(2,2,"HP %03d",game.players[0].health);
@@ -514,7 +538,14 @@ static void update(void)
 #if MF_PLAYABLE_ANIMATION || MF_CORPORATE_PUNK
         int before_tick=game.ticks;
 #endif
+#if MF_ARCADE_FX
+        unsigned previous_hits[MF_PLAYERS];
+        for(j=0;j<MF_PLAYERS;j++)previous_hits[j]=(unsigned)game.players[j].hit_mask;
+#endif
         mf_game_step_inputs(&game,held,pressed,(sampled_input[0].connected?1u:0u)|(sampled_input[1].connected?2u:0u));
+#if MF_ARCADE_FX
+        spark_explosion=mf_fx_spark_explosion(&game,previous_hits,spark_explosion);
+#endif
 #if MF_PLAYABLE_ANIMATION
         if(game.ticks!=before_tick)mf_player_animation_step(&game);
 #endif

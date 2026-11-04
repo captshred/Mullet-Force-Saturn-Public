@@ -27,7 +27,10 @@ typedef struct { int x,y,vx,hp,facing,state,timer,walk,hit_done,grace,flash,targ
 #define MF_COMBAT_JAB(i) (1u << (5+3*(i)))
 #define MF_COMBAT_BAT(i) (1u << (6+3*(i)))
 #define MF_COMBAT_CONNECT(i) (1u << (7+3*(i)))
-#define MF_WORLD_IMPACT (1u<<11)
+#define MF_WORLD_IMPACT (1u<<11) /* inorganic destruction only */
+#define MF_COMBAT_HURT(i) (1u << (16+(i)))
+#define MF_COMBAT_DESTROY(i) (1u << (14+(i)))
+#define MF_COMBAT_NONKILL(i) (1u << (12+(i)))
 enum { MF_SWOOSH=1, MF_JUMP_SOUND=2, MF_IMPACT=4, MF_TORCH_HISS=8, MF_TORCH_IGNITE=16 };
 typedef struct { int x,y,hp,flash,vx,respawn; } mf_drum;
 typedef struct {
@@ -44,6 +47,7 @@ typedef struct {
     unsigned previous;
 } mf_dash_state;
 enum { MF_ENEMY_CORPORATE_PUNK, MF_ENEMY_SPECIAL };
+/* Fast profile: active/pending are zero or 1 + the captured run pose (0..3). */
 typedef struct { int active,carry,dir,pending; } mf_running_bat;
 #if MF_PUNCH_COMBO
 typedef struct {int next,phase,timeout;} mf_punch_combo;

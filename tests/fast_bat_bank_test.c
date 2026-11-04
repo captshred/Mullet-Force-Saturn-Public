@@ -10,7 +10,7 @@ int main(void)
  for(a=0;a<2;a++)for(phase=0;phase<4;phase++)for(face=-1;face<=1;face+=2){
   mf_player *p=&g.players[a];p->active=1;p->health=100;p->facing=face;p->attack=0;p->bat=0;
   g.dash[a].dir=face;g.dash[a].anim=phase*MF_RUN_FRAME_HOLD*MF_DASH_ANIM_NUM;
-  assert(!mf_combat_prototype_draw(&g,a,100,202,230));g.dash[a].dir=0;g.running_bat[a].active=1;
+  assert(!mf_combat_prototype_draw(&g,a,100,202,230));g.dash[a].dir=0;g.running_bat[a].active=1+phase;
   for(t=1;t<=12;t++){
    int k,n=0;p->attack=t;p->bat=MF_BAT_RUNNING;draws=0;copy=g;
    assert(mf_combat_prototype_draw(&g,a,100,202,230));assert(!memcmp(&g,&copy,sizeof(g)) && count==boot && !flip);
