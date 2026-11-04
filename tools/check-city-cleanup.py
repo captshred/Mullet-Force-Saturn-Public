@@ -2,11 +2,12 @@
 """Scoped art preservation, actual native formats, and packaged prop/scene checks."""
 from pathlib import Path
 import argparse,hashlib,json,struct
+from stage_preservation import stage_digest
 r=Path(__file__).resolve().parents[1];out=r/'assets/city-cleanup';base=r/'assets/city-neon'
 p=argparse.ArgumentParser();p.add_argument('--disc',action='store_true');a=p.parse_args()
 m=json.loads((out/'manifest.json').read_text());d={n:(out/n).read_bytes() for n in m['sha256']}
 for n,v in d.items():assert hashlib.sha256(v).hexdigest()==m['sha256'][n],n
-for n,h in json.loads((out/'source-lock.json').read_text()).items():assert hashlib.sha256((r/n).read_bytes()).hexdigest()==h,n
+for n,h in json.loads((out/'source-lock.json').read_text()).items():assert hashlib.sha256((r/n).read_bytes()).hexdigest()==stage_digest(n,h,'sha256'),n
 old=(base/'CIPIX.BIN').read_bytes();pixels=d['CIPIX.BIN'];mask=d['PATCHMASK.BIN'];assert len(old)==len(pixels)==len(mask)==153600
 assert sum(mask)==5521 and all(v in (0,1) for v in mask)
 for i,(x,y,k) in enumerate(zip(old,pixels,mask)):
