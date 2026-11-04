@@ -1,0 +1,256 @@
+id,path,width,height,format,allocated_bytes,vdp1_offset,palette_at_registration,usage
+0,BU00.TGA,48,55,indexed8,2656,65536,1,legacy player fallback pieces; shared lower/body consumers
+1,BU01.TGA,48,54,indexed8,2592,68192,1,legacy player fallback pieces; shared lower/body consumers
+2,BU02.TGA,48,55,indexed8,2656,70784,1,legacy player fallback pieces; shared lower/body consumers
+3,BU03.TGA,48,53,indexed8,2560,73440,1,legacy player fallback pieces; shared lower/body consumers
+4,BU04.TGA,48,54,indexed8,2592,76000,1,legacy player fallback pieces; shared lower/body consumers
+5,BU05.TGA,48,55,indexed8,2656,78592,1,legacy player fallback pieces; shared lower/body consumers
+6,BU06.TGA,56,53,indexed8,2976,81248,1,legacy player fallback pieces; shared lower/body consumers
+7,BU07.TGA,56,54,indexed8,3040,84224,1,legacy player fallback pieces; shared lower/body consumers
+8,BU09.TGA,72,55,indexed8,3968,87264,1,legacy player fallback pieces; shared lower/body consumers
+9,BU10.TGA,48,54,indexed8,2592,91232,1,legacy player fallback pieces; shared lower/body consumers
+10,BT00.TGA,56,60,indexed8,3360,93824,1,legacy bat/aerial fallback; selected fast profile does not deploy planted bat
+11,BT01.TGA,56,69,indexed8,3872,97184,1,legacy bat/aerial fallback; selected fast profile does not deploy planted bat
+12,BT02.TGA,88,83,indexed8,7328,101056,1,legacy bat/aerial fallback; selected fast profile does not deploy planted bat
+13,BT03.TGA,96,53,indexed8,5088,108384,1,legacy bat/aerial fallback; selected fast profile does not deploy planted bat
+14,BT04.TGA,72,53,indexed8,3840,113472,1,legacy bat/aerial fallback; selected fast profile does not deploy planted bat
+15,BT05.TGA,56,53,indexed8,2976,117312,1,legacy bat/aerial fallback; selected fast profile does not deploy planted bat
+16,BT06.TGA,64,53,indexed8,3392,120288,1,legacy bat/aerial fallback; selected fast profile does not deploy planted bat
+17,LEGS.TGA,48,35,indexed8,1696,123680,1,legacy bat/aerial fallback; selected fast profile does not deploy planted bat
+18,AL0.TGA,56,26,indexed8,1472,125376,1,legacy bat/aerial fallback; selected fast profile does not deploy planted bat
+19,AL1.TGA,56,26,indexed8,1472,126848,1,legacy bat/aerial fallback; selected fast profile does not deploy planted bat
+20,AL2.TGA,64,25,indexed8,1600,128320,1,legacy bat/aerial fallback; selected fast profile does not deploy planted bat
+21,NL00.TGA,48,33,indexed8,1600,129920,1,legacy player fallback pieces; shared lower/body consumers
+22,NL01.TGA,48,33,indexed8,1600,131520,1,legacy player fallback pieces; shared lower/body consumers
+23,NL02.TGA,64,33,indexed8,2112,133120,1,legacy player fallback pieces; shared lower/body consumers
+24,NL03.TGA,48,33,indexed8,1600,135232,1,legacy player fallback pieces; shared lower/body consumers
+25,NL04.TGA,40,33,indexed8,1344,136832,1,legacy player fallback pieces; shared lower/body consumers
+26,NL05.TGA,56,33,indexed8,1856,138176,1,legacy player fallback pieces; shared lower/body consumers
+27,NL06.TGA,48,33,indexed8,1600,140032,1,legacy player fallback pieces; shared lower/body consumers
+28,NL07.TGA,32,33,indexed8,1056,141632,1,legacy player fallback pieces; shared lower/body consumers
+29,NL08.TGA,48,33,indexed8,1600,142688,1,legacy player fallback pieces; shared lower/body consumers
+30,NL09.TGA,48,33,indexed8,1600,144288,1,legacy player fallback pieces; shared lower/body consumers
+31,NL10.TGA,48,33,indexed8,1600,145888,1,legacy player fallback pieces; shared lower/body consumers
+32,CH00.TGA,48,55,indexed8,2656,147488,2,legacy player fallback pieces; shared lower/body consumers
+33,CH01.TGA,48,54,indexed8,2592,150144,2,legacy player fallback pieces; shared lower/body consumers
+34,CH02.TGA,48,55,indexed8,2656,152736,2,legacy player fallback pieces; shared lower/body consumers
+35,CH03.TGA,48,53,indexed8,2560,155392,2,legacy player fallback pieces; shared lower/body consumers
+36,CH04.TGA,48,54,indexed8,2592,157952,2,legacy player fallback pieces; shared lower/body consumers
+37,CH05.TGA,48,55,indexed8,2656,160544,2,legacy player fallback pieces; shared lower/body consumers
+38,CH06.TGA,48,53,indexed8,2560,163200,2,legacy player fallback pieces; shared lower/body consumers
+39,CH07.TGA,48,54,indexed8,2592,165760,2,legacy player fallback pieces; shared lower/body consumers
+40,CH09.TGA,72,55,indexed8,3968,168352,2,legacy player fallback pieces; shared lower/body consumers
+41,CH10.TGA,48,54,indexed8,2592,172320,2,legacy player fallback pieces; shared lower/body consumers
+42,CT00.TGA,56,60,indexed8,3360,174912,2,legacy bat/aerial fallback; selected fast profile does not deploy planted bat
+43,CT01.TGA,56,69,indexed8,3872,178272,2,legacy bat/aerial fallback; selected fast profile does not deploy planted bat
+44,CT02.TGA,88,83,indexed8,7328,182144,2,legacy bat/aerial fallback; selected fast profile does not deploy planted bat
+45,CT03.TGA,96,53,indexed8,5088,189472,2,legacy bat/aerial fallback; selected fast profile does not deploy planted bat
+46,CT04.TGA,72,53,indexed8,3840,194560,2,legacy bat/aerial fallback; selected fast profile does not deploy planted bat
+47,CT05.TGA,56,53,indexed8,2976,198400,2,legacy bat/aerial fallback; selected fast profile does not deploy planted bat
+48,CT06.TGA,64,53,indexed8,3392,201376,2,legacy bat/aerial fallback; selected fast profile does not deploy planted bat
+49,CP00.TGA,40,22,indexed8,896,204768,3,Corporate Punk shared enemy bank
+50,CP01.TGA,56,30,indexed8,1696,205664,3,Corporate Punk shared enemy bank
+51,CP02.TGA,48,24,indexed8,1152,207360,3,Corporate Punk shared enemy bank
+52,CP03.TGA,64,16,indexed8,1024,208512,3,Corporate Punk shared enemy bank
+53,CP04.TGA,56,30,indexed8,1696,209536,3,Corporate Punk shared enemy bank
+54,CP05.TGA,56,30,indexed8,1696,211232,3,Corporate Punk shared enemy bank
+55,CP06.TGA,40,24,indexed8,960,212928,3,Corporate Punk shared enemy bank
+56,CP07.TGA,48,16,indexed8,768,213888,3,Corporate Punk shared enemy bank
+57,CP08.TGA,40,24,indexed8,960,214656,3,Corporate Punk shared enemy bank
+58,CP09.TGA,56,16,indexed8,896,215616,3,Corporate Punk shared enemy bank
+59,CQ00.TGA,72,30,indexed8,2176,216512,3,resident movement/gallery/review part; shared animation resource tables
+60,CQ01.TGA,72,94,indexed8,6784,218688,3,resident movement/gallery/review part; shared animation resource tables
+61,CQ02.TGA,112,74,indexed8,8288,225472,3,resident movement/gallery/review part; shared animation resource tables
+62,CQ03.TGA,112,36,indexed8,4032,233760,3,resident movement/gallery/review part; shared animation resource tables
+63,FL0.TGA,56,46,indexed8,2592,237792,5,shared torch effect
+64,FL1.TGA,56,46,indexed8,2592,240384,5,shared torch effect
+65,FL2.TGA,56,46,indexed8,2592,242976,5,shared torch effect
+66,FL3.TGA,56,46,indexed8,2592,245568,5,shared torch effect
+67,EM0.TGA,8,12,indexed8,96,248160,5,shared torch effect
+68,EM1.TGA,8,12,indexed8,96,248256,5,shared torch effect
+69,CHARGE.TGA,8,8,indexed8,64,248352,5,legacy player fallback pieces; shared lower/body consumers
+70,DR0.TGA,32,48,RGB555,3072,248416,-1,world object/effect or HUD
+71,DR1.TGA,32,48,RGB555,3072,251488,-1,world object/effect or HUD
+72,DR2.TGA,32,48,RGB555,3072,254560,-1,world object/effect or HUD
+73,SHADOW.TGA,48,12,RGB555,1152,257632,-1,world object/effect or HUD
+74,HIT.TGA,32,32,RGB555,2048,258784,-1,world object/effect or HUD
+75,generated:health-bar,80,8,RGB555,1280,260832,-1,world object/effect or HUD
+76,generated:panel,256,40,RGB555,20480,262112,-1,world object/effect or HUD
+77,GB0.TGA,40,20,indexed8,800,282592,7,resident movement/gallery/review part; shared animation resource tables
+78,GB1.TGA,64,56,indexed8,3584,283392,7,resident movement/gallery/review part; shared animation resource tables
+79,GB2.TGA,80,12,indexed8,960,286976,7,resident movement/gallery/review part; shared animation resource tables
+80,GC0.TGA,40,20,indexed8,800,287936,7,resident movement/gallery/review part; shared animation resource tables
+81,GC1.TGA,64,56,indexed8,3584,288736,7,resident movement/gallery/review part; shared animation resource tables
+82,GC2.TGA,88,12,indexed8,1056,292320,7,resident movement/gallery/review part; shared animation resource tables
+83,AB10.TGA,40,20,indexed8,800,293376,7,resident movement/gallery/review part; shared animation resource tables
+84,AB11.TGA,64,56,indexed8,3584,294176,7,resident movement/gallery/review part; shared animation resource tables
+85,AB12.TGA,72,12,indexed8,864,297760,7,resident movement/gallery/review part; shared animation resource tables
+86,AB20.TGA,40,20,indexed8,800,298624,7,resident movement/gallery/review part; shared animation resource tables
+87,AB21.TGA,56,56,indexed8,3136,299424,7,resident movement/gallery/review part; shared animation resource tables
+88,AB22.TGA,56,12,indexed8,672,302560,7,resident movement/gallery/review part; shared animation resource tables
+89,AB30.TGA,40,20,indexed8,800,303232,7,resident movement/gallery/review part; shared animation resource tables
+90,AB31.TGA,48,56,indexed8,2688,304032,7,resident movement/gallery/review part; shared animation resource tables
+91,AB32.TGA,24,12,indexed8,288,306720,7,resident movement/gallery/review part; shared animation resource tables
+92,AC10.TGA,40,20,indexed8,800,307008,7,resident movement/gallery/review part; shared animation resource tables
+93,AC11.TGA,64,56,indexed8,3584,307808,7,resident movement/gallery/review part; shared animation resource tables
+94,AC12.TGA,72,12,indexed8,864,311392,7,resident movement/gallery/review part; shared animation resource tables
+95,AC20.TGA,40,20,indexed8,800,312256,7,resident movement/gallery/review part; shared animation resource tables
+96,AC21.TGA,56,56,indexed8,3136,313056,7,resident movement/gallery/review part; shared animation resource tables
+97,AC22.TGA,56,12,indexed8,672,316192,7,resident movement/gallery/review part; shared animation resource tables
+98,AC30.TGA,40,20,indexed8,800,316864,7,resident movement/gallery/review part; shared animation resource tables
+99,AC31.TGA,48,56,indexed8,2688,317664,7,resident movement/gallery/review part; shared animation resource tables
+100,AC32.TGA,24,12,indexed8,288,320352,7,resident movement/gallery/review part; shared animation resource tables
+101,P000.TGA,64,56,indexed8,3584,320640,7,resident movement/gallery/review part; shared animation resource tables
+102,P001.TGA,64,56,indexed8,3584,324224,7,resident movement/gallery/review part; shared animation resource tables
+103,P002.TGA,64,56,indexed8,3584,327808,7,resident movement/gallery/review part; shared animation resource tables
+104,P018.TGA,64,56,indexed8,3584,331392,7,resident movement/gallery/review part; shared animation resource tables
+105,P019.TGA,64,56,indexed8,3584,334976,7,resident movement/gallery/review part; shared animation resource tables
+106,P020.TGA,64,56,indexed8,3584,338560,7,resident movement/gallery/review part; shared animation resource tables
+107,RN00.TGA,56,24,indexed8,1344,342144,7,resident movement/gallery/review part; shared animation resource tables
+108,RN01.TGA,72,44,indexed8,3168,343488,7,resident movement/gallery/review part; shared animation resource tables
+109,RN02.TGA,32,20,indexed8,640,346656,7,resident movement/gallery/review part; shared animation resource tables
+110,RN03.TGA,56,24,indexed8,1344,347296,7,resident movement/gallery/review part; shared animation resource tables
+111,RN04.TGA,64,38,indexed8,2432,348640,7,resident movement/gallery/review part; shared animation resource tables
+112,RN05.TGA,40,24,indexed8,960,351072,7,resident movement/gallery/review part; shared animation resource tables
+113,RN06.TGA,48,22,indexed8,1056,352032,7,resident movement/gallery/review part; shared animation resource tables
+114,RN07.TGA,64,44,indexed8,2816,353088,7,resident movement/gallery/review part; shared animation resource tables
+115,RN08.TGA,32,20,indexed8,640,355904,7,resident movement/gallery/review part; shared animation resource tables
+116,RN09.TGA,64,24,indexed8,1536,356544,7,resident movement/gallery/review part; shared animation resource tables
+117,RN10.TGA,72,38,indexed8,2752,358080,7,resident movement/gallery/review part; shared animation resource tables
+118,RN11.TGA,48,24,indexed8,1152,360832,7,resident movement/gallery/review part; shared animation resource tables
+119,RN12.TGA,56,24,indexed8,1344,361984,7,resident movement/gallery/review part; shared animation resource tables
+120,RN13.TGA,64,44,indexed8,2816,363328,7,resident movement/gallery/review part; shared animation resource tables
+121,RN14.TGA,32,20,indexed8,640,366144,7,resident movement/gallery/review part; shared animation resource tables
+122,RN15.TGA,56,24,indexed8,1344,366784,7,resident movement/gallery/review part; shared animation resource tables
+123,RN16.TGA,64,38,indexed8,2432,368128,7,resident movement/gallery/review part; shared animation resource tables
+124,RN17.TGA,40,24,indexed8,960,370560,7,resident movement/gallery/review part; shared animation resource tables
+125,RD0.TGA,56,24,indexed8,1344,371520,7,resident movement/gallery/review part; shared animation resource tables
+126,RD1.TGA,64,44,indexed8,2816,372864,7,resident movement/gallery/review part; shared animation resource tables
+127,RN20.TGA,32,20,indexed8,640,375680,7,resident movement/gallery/review part; shared animation resource tables
+128,RN21.TGA,56,24,indexed8,1344,376320,7,resident movement/gallery/review part; shared animation resource tables
+129,RN22.TGA,64,38,indexed8,2432,377664,7,resident movement/gallery/review part; shared animation resource tables
+130,RN23.TGA,48,24,indexed8,1152,380096,7,resident movement/gallery/review part; shared animation resource tables
+131,RBV00.TGA,32,36,indexed8,1152,381248,7,resident movement/gallery/review part; shared animation resource tables
+132,RBV01.TGA,24,23,indexed8,576,382400,7,resident movement/gallery/review part; shared animation resource tables
+133,RBV02.TGA,48,31,indexed8,1504,382976,7,resident movement/gallery/review part; shared animation resource tables
+134,RBV03.TGA,56,9,indexed8,512,384480,7,resident movement/gallery/review part; shared animation resource tables
+135,RBV04.TGA,32,23,indexed8,736,384992,7,resident movement/gallery/review part; shared animation resource tables
+136,RBV05.TGA,32,21,indexed8,672,385728,7,resident movement/gallery/review part; shared animation resource tables
+137,RBV06.TGA,56,11,indexed8,640,386400,7,resident movement/gallery/review part; shared animation resource tables
+138,RBV07.TGA,24,23,indexed8,576,387040,7,resident movement/gallery/review part; shared animation resource tables
+139,RBV08.TGA,48,31,indexed8,1504,387616,7,resident movement/gallery/review part; shared animation resource tables
+140,RBV09.TGA,56,11,indexed8,640,389120,7,resident movement/gallery/review part; shared animation resource tables
+141,COMBAT/CA00.TGA,48,16,indexed8,768,389760,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+142,COMBAT/CA01.TGA,64,16,indexed8,1024,390528,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+143,COMBAT/CA02.TGA,80,12,indexed8,960,391552,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+144,COMBAT/CA03.TGA,32,12,indexed8,384,392512,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+145,COMBAT/CA04.TGA,80,16,indexed8,1280,392896,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+146,COMBAT/CA05.TGA,72,16,indexed8,1152,394176,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+147,COMBAT/CA06.TGA,88,16,indexed8,1408,395328,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+148,COMBAT/CA07.TGA,88,16,indexed8,1408,396736,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+149,COMBAT/CA08.TGA,48,16,indexed8,768,398144,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+150,COMBAT/CA09.TGA,48,16,indexed8,768,398912,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+151,COMBAT/CA10.TGA,40,16,indexed8,640,399680,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+152,COMBAT/CA11.TGA,8,2,indexed8,32,400320,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+153,COMBAT/CA12.TGA,16,6,indexed8,96,400352,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+154,COMBAT/CA13.TGA,48,16,indexed8,768,400448,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+155,COMBAT/CA14.TGA,48,16,indexed8,768,401216,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+156,COMBAT/CA15.TGA,48,16,indexed8,768,401984,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+157,COMBAT/CA16.TGA,40,12,indexed8,480,402752,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+158,COMBAT/CA17.TGA,56,16,indexed8,896,403232,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+159,COMBAT/CA18.TGA,64,16,indexed8,1024,404128,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+160,COMBAT/CA19.TGA,40,12,indexed8,480,405152,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+161,COMBAT/CA20.TGA,64,16,indexed8,1024,405632,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+162,COMBAT/CA21.TGA,64,16,indexed8,1024,406656,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+163,COMBAT/CA22.TGA,32,10,indexed8,320,407680,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+164,COMBAT/CA23.TGA,56,16,indexed8,896,408000,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+165,COMBAT/CA24.TGA,64,16,indexed8,1024,408896,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+166,COMBAT/CA25.TGA,40,12,indexed8,480,409920,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+167,COMBAT/CA26.TGA,64,16,indexed8,1024,410400,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+168,COMBAT/CA27.TGA,72,16,indexed8,1152,411424,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+169,COMBAT/CA28.TGA,48,16,indexed8,768,412576,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+170,COMBAT/CA29.TGA,64,16,indexed8,1024,413344,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+171,COMBAT/CA30.TGA,88,12,indexed8,1056,414368,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+172,COMBAT/CA31.TGA,32,12,indexed8,384,415424,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+173,COMBAT/CA32.TGA,80,16,indexed8,1280,415808,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+174,COMBAT/CA33.TGA,80,16,indexed8,1280,417088,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+175,COMBAT/CA34.TGA,96,16,indexed8,1536,418368,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+176,COMBAT/CA35.TGA,96,16,indexed8,1536,419904,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+177,COMBAT/CA36.TGA,48,16,indexed8,768,421440,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+178,COMBAT/CA37.TGA,56,16,indexed8,896,422208,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+179,COMBAT/CA38.TGA,32,16,indexed8,512,423104,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+180,COMBAT/CA39.TGA,8,2,indexed8,32,423616,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+181,COMBAT/CA40.TGA,16,6,indexed8,96,423648,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+182,COMBAT/CA41.TGA,56,16,indexed8,896,423744,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+183,COMBAT/CA42.TGA,48,16,indexed8,768,424640,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+184,COMBAT/CA43.TGA,48,16,indexed8,768,425408,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+185,COMBAT/CA44.TGA,48,12,indexed8,576,426176,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+186,COMBAT/CA45.TGA,56,16,indexed8,896,426752,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+187,COMBAT/CA46.TGA,64,16,indexed8,1024,427648,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+188,COMBAT/CA47.TGA,40,12,indexed8,480,428672,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+189,COMBAT/CA48.TGA,56,16,indexed8,896,429152,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+190,COMBAT/CA49.TGA,64,16,indexed8,1024,430048,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+191,COMBAT/CA50.TGA,40,12,indexed8,480,431072,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+192,COMBAT/DT0.TGA,56,16,indexed8,896,431552,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+193,COMBAT/DT1.TGA,64,16,indexed8,1024,432448,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+194,COMBAT/CA53.TGA,40,12,indexed8,480,433472,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+195,COMBAT/CA54.TGA,64,16,indexed8,1024,433952,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+196,COMBAT/CA55.TGA,64,16,indexed8,1024,434976,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+197,COMBAT/CA56.TGA,48,6,indexed8,288,436000,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+198,COMBAT/CA57.TGA,16,14,indexed8,224,436288,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+199,COMBAT/CA58.TGA,24,16,indexed8,384,436512,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+200,COMBAT/CA59.TGA,8,4,indexed8,32,436896,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+201,HQTORCH/HT00.TGA,56,30,indexed8,1696,436928,-1,HQ blowtorch
+202,HQTORCH/HT01.TGA,24,16,indexed8,384,438624,-1,HQ blowtorch
+203,HQTORCH/HT02.TGA,64,32,indexed8,2048,439008,-1,HQ blowtorch
+204,HQTORCH/HT03.TGA,16,16,indexed8,256,441056,-1,HQ blowtorch
+205,HQTORCH/HT04.TGA,56,32,indexed8,1792,441312,-1,HQ blowtorch
+206,HQTORCH/HT05.TGA,16,10,indexed8,160,443104,-1,HQ blowtorch
+207,HQTORCH/HT06.TGA,64,30,indexed8,1920,443264,-1,HQ blowtorch
+208,HQTORCH/HT07.TGA,16,16,indexed8,256,445184,-1,HQ blowtorch
+209,HQTORCH/HT08.TGA,64,32,indexed8,2048,445440,-1,HQ blowtorch
+210,HQTORCH/HT09.TGA,32,14,indexed8,448,447488,-1,HQ blowtorch
+211,HQTORCH/HT10.TGA,64,30,indexed8,1920,447936,-1,HQ blowtorch
+212,HQTORCH/HT11.TGA,16,10,indexed8,160,449856,-1,HQ blowtorch
+213,alias,64,32,indexed8,0,284928,-1,stable row/tail view: HQ torch or jump; shares existing payload
+214,alias,64,32,indexed8,0,295712,-1,stable row/tail view: HQ torch or jump; shares existing payload
+215,alias,56,32,indexed8,0,300768,-1,stable row/tail view: HQ torch or jump; shares existing payload
+216,alias,48,32,indexed8,0,305184,-1,stable row/tail view: HQ torch or jump; shares existing payload
+217,alias,64,32,indexed8,0,290272,-1,stable row/tail view: HQ torch or jump; shares existing payload
+218,alias,64,32,indexed8,0,309344,-1,stable row/tail view: HQ torch or jump; shares existing payload
+219,alias,56,32,indexed8,0,314400,-1,stable row/tail view: HQ torch or jump; shares existing payload
+220,alias,48,32,indexed8,0,318816,-1,stable row/tail view: HQ torch or jump; shares existing payload
+221,alias,16,10,indexed8,0,449856,-1,stable row/tail view: HQ torch or jump; shares existing payload
+222,HQJUMP/HJ00.TGA,56,26,indexed8,1472,450016,-1,jump and aerial kick
+223,HQJUMP/HJ01.TGA,72,46,indexed8,3328,451488,-1,jump and aerial kick
+224,HQJUMP/HJ02.TGA,72,36,indexed8,2592,454816,-1,jump and aerial kick
+225,HQJUMP/HJ03.TGA,56,34,indexed8,1920,457408,-1,jump and aerial kick
+226,HQJUMP/HJ04.TGA,88,16,indexed8,1408,459328,-1,jump and aerial kick
+227,HQJUMP/HJ05.TGA,64,26,indexed8,1664,460736,-1,jump and aerial kick
+228,HQJUMP/HJ06.TGA,72,48,indexed8,3456,462400,-1,jump and aerial kick
+229,HQJUMP/HJ07.TGA,64,36,indexed8,2304,465856,-1,jump and aerial kick
+230,HQJUMP/HJ08.TGA,56,28,indexed8,1568,468160,-1,jump and aerial kick
+231,HQJUMP/HJ09.TGA,96,14,indexed8,1344,469728,-1,jump and aerial kick
+232,HQJUMP/HJ10.TGA,80,14,indexed8,1120,471072,-1,jump and aerial kick
+233,HQJUMP/HJ11.TGA,48,26,indexed8,1248,472192,-1,jump and aerial kick
+234,HQJUMP/HJ12.TGA,80,20,indexed8,1600,473440,-1,jump and aerial kick
+235,HQJUMP/HJ13.TGA,48,26,indexed8,1248,475040,-1,jump and aerial kick
+236,alias,64,24,indexed8,0,283392,-1,stable row/tail view: HQ torch or jump; shares existing payload
+237,alias,64,30,indexed8,0,284928,-1,stable row/tail view: HQ torch or jump; shares existing payload
+238,alias,64,24,indexed8,0,288736,-1,stable row/tail view: HQ torch or jump; shares existing payload
+239,alias,64,30,indexed8,0,290272,-1,stable row/tail view: HQ torch or jump; shares existing payload
+240,alias,48,26,indexed8,0,475040,-1,stable row/tail view: HQ torch or jump; shares existing payload
+241,HQHURT/PH00.TGA,80,42,indexed8,3360,476288,7,hurt reactions
+242,HQHURT/PH01.TGA,56,42,indexed8,2368,479648,7,hurt reactions
+243,HQHURT/PH02.TGA,56,38,indexed8,2144,482016,7,hurt reactions
+244,HQHURT/PH03.TGA,80,44,indexed8,3520,484160,7,hurt reactions
+245,HQHURT/PH04.TGA,80,40,indexed8,3200,487680,7,hurt reactions
+246,HQHURT/PH05.TGA,88,46,indexed8,4064,490880,7,hurt reactions
+247,HQHURT/PH06.TGA,64,48,indexed8,3072,494944,7,hurt reactions
+248,HQHURT/PH07.TGA,56,44,indexed8,2464,498016,7,hurt reactions
+249,HQHURT/PH08.TGA,88,44,indexed8,3872,500480,7,hurt reactions
+250,HQHURT/PH09.TGA,88,40,indexed8,3520,504352,7,hurt reactions
+251,HQDEATH/PD0.TGA,72,26,indexed8,1888,507872,7,death lower pieces
+252,HQDEATH/PD1.TGA,80,26,indexed8,2080,509760,7,death lower pieces
+253,COMBO/XC0.TGA,80,44,indexed8,3520,511840,7,jab-jab-cross upper
+254,COMBO/XC1.TGA,80,44,indexed8,3520,515360,7,jab-jab-cross upper

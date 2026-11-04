@@ -111,14 +111,24 @@ int main(void)
     tick(&g,MF_A,0,MF_START|MF_A,0,3);assert(!g.paused && g.players[0].charge==1);
     puts("PASS damage/defeat stop fire and stale holds remain disarmed; observed release allows a genuinely fresh press");
 
-    init(&g,1);input(&g,0,MF_RIGHT,MF_RIGHT);input(&g,0,0,0);input(&g,0,MF_RIGHT|MF_A,MF_RIGHT|MF_A);
+    init(&g,1);
+#if MF_FAST_RUNNING_BAT
+    input(&g,0,0,0); /* Fresh neutral arms dash after Start. */
+#endif
+    input(&g,0,MF_RIGHT,MF_RIGHT);input(&g,0,0,0);input(&g,0,MF_RIGHT|MF_A,MF_RIGHT|MF_A);
     assert(g.players[0].bat && !g.players[0].charge);
     hold(&g,0,180);assert(!g.players[0].torch && !g.players[0].charge);
     input(&g,0,0,0);charge(&g,0);
     init(&g,1);charge(&g,0);input(&g,0,MF_B,MF_B);
     assert(g.players[0].height>0 && !g.players[0].torch);
     init(&g,1);charge(&g,0);input(&g,0,MF_RIGHT,MF_RIGHT);input(&g,0,0,0);
-    input(&g,0,MF_RIGHT|MF_A,MF_RIGHT|MF_A);assert(g.players[0].bat && !g.players[0].torch);
+    input(&g,0,MF_RIGHT|MF_A,MF_RIGHT|MF_A);
+#if MF_FAST_RUNNING_BAT
+    /* Torch put-away has not armed a dash: cancel to an ordinary jab. */
+    assert(!g.players[0].bat && g.players[0].attack && !g.players[0].torch);
+#else
+    assert(g.players[0].bat && !g.players[0].torch);
+#endif
     puts("PASS recognized bat wins and needs fresh A; fresh jump/bat can interrupt put-away immediately after release");
 
     for(p=0;p<2;p++)for(f=-1;f<=1;f+=2){

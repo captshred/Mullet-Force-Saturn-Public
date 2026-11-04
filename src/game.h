@@ -44,6 +44,7 @@ typedef struct {
     unsigned previous;
 } mf_dash_state;
 enum { MF_ENEMY_CORPORATE_PUNK, MF_ENEMY_SPECIAL };
+/* Fast profile: active/pending are zero or 1 + the captured run pose (0..3). */
 typedef struct { int active,carry,dir,pending; } mf_running_bat;
 #if MF_PUNCH_COMBO
 typedef struct {int next,phase,timeout;} mf_punch_combo;

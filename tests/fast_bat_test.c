@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <string.h>
 #include <stdio.h>
 #include "game.h"
 #include "bat_momentum_config.h"
@@ -69,12 +70,29 @@ int main(void)
  tick(&g,MF_RIGHT|MF_A,MF_RIGHT|MF_A,MF_A,MF_A);assert(g.players[0].bat==2 && g.players[1].bat==2);
  target(&g,0,1,1,1);for(i=0;i<30;i++)tick(&g,0,0,0,0);
  assert(g.broken==3 && g.score==830);
- /* Planted bat retains duration, active counters and barrel damage. */
+ /* The second direction edge and A resolve to the approved running attack. */
  for(p=0;p<2;p++)for(f=-1;f<=1;f+=2){
-  init(&g,f);step(&g,p,direction(f),direction(f));step(&g,p,0,0);step(&g,p,direction(f)|MF_A,direction(f)|MF_A);
-  assert(g.players[p].bat==1 && !g.running_bat[p].active);target(&g,p,f,1,0);n=1;first=0;
-  while(g.players[p].attack){int t=g.players[p].attack;step(&g,p,0,0);if(g.events&MF_COMBAT_CONNECT(p))first=t;if(!g.hitstop)n++;}
-  assert(first==MF_BAT_ACTIVE_FIRST && !g.broken);for(i=0;i<3;i++)assert(g.drums[i].hp==1);
+  unsigned d=direction(f);
+  init(&g,f);step(&g,p,0,0);step(&g,p,d,d);step(&g,p,0,0);ref=g;
+  step(&g,p,d|MF_A,d|MF_A);
+  step(&ref,p,d,d);step(&ref,p,d|MF_A,MF_A);
+  assert(g.players[p].bat==MF_BAT_RUNNING && g.running_bat[p].active);
+  /* Compare every attack tick relative to its initiation, including hitboxes,
+     movement, recovery and sound. World x differs by the extra dash tick. */
+  x=ref.players[p].x-g.players[p].x;
+  for(i=0;i<MF_FAST_BAT_TOTAL_TICKS+8;i++){
+   mf_player a=g.players[p],b=ref.players[p];mf_hitbox ha,hb;
+   assert(a.attack==b.attack && a.bat==b.bat && a.attack_air==b.attack_air);
+   assert(a.x+x==b.x && a.y==b.y && a.height==b.height);
+   assert(!memcmp(&g.running_bat[p],&ref.running_bat[p],sizeof(mf_running_bat)));
+   assert(g.events==ref.events && !(g.events&MF_COMBAT_JAB(p)));
+   ha=mf_player_attackbox(&a);b.x-=x;hb=mf_player_attackbox(&b);
+   assert(!memcmp(&ha,&hb,sizeof(ha)));
+   step(&g,p,d,0);step(&ref,p,d,0);
+  }
+  /* A first forward press remains a jab, never a bat. */
+  init(&g,f);step(&g,p,0,0);step(&g,p,d|MF_A,d|MF_A);
+  assert(!g.players[p].bat && g.players[p].attack && !g.running_bat[p].active);
  }
  /* Air gestures always kick; physics matches a kick-only control. */
  for(p=0;p<2;p++)for(f=-1;f<=1;f+=2){
@@ -91,5 +109,5 @@ int main(void)
   assert(!g.players[p].attack && !g.players[p].bat && !g.players[p].bat_window);
  }
  init(&g,1);step(&g,0,MF_B|MF_A,MF_B|MF_A);assert(!g.players[0].bat && g.players[0].attack_air);
- puts("PASS fast bat: 12-tick miss, 4..7 contact, two players/facings/all run phases, three barrels and two punks once, unchanged planted damage/timing, aerial kick/physics and clean landing");return 0;
+ puts("PASS fast bat: 12-tick miss, 4..7 contact, two players/facings/all run phases, three barrels and two punks once, immediate and established dash equivalence, single-forward jab, aerial kick/physics and clean landing");return 0;
 }

@@ -435,7 +435,7 @@ int mf_combat_prototype_draw(const mf_game *g,int actor,int center,int ground,in
         /* Reuse the exact current four-piece carry, including waist fixes.
            The horizontal contact upper already contains its connected grip. */
         if(p->attack<MF_FAST_BAT_ACTIVE_FIRST)
-            return mf_animation_draw_actor(actor,18+ca_last_run[actor],center,ground,p->facing,depth);
+            return mf_animation_draw_actor(actor,18+(g->running_bat[actor].active-1),center,ground,p->facing,depth);
         if(p->attack>=MF_FAST_BAT_RECOVERY_FIRST)
             return mf_animation_draw_actor(actor,0,center,ground,p->facing,depth);
         jo_sprite_restore_sprite_scale();jo_sprite_disable_horizontal_flip();jo_sprite_set_palette(palette_id);

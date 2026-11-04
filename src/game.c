@@ -376,7 +376,7 @@ static void player_step(mf_game *g,int index,unsigned held,unsigned pressed)
 #if MF_RUN_BAT
             if(g->running_bat[index].pending && !(pressed&MF_B) && !p->height && !p->vz) {
                 mf_running_bat *rb=&g->running_bat[index];
-                rb->pending=0;rb->active=1;rb->carry=MF_RUNNING_BAT_CARRY_TICKS;
+                rb->active=rb->pending;rb->pending=0;rb->carry=MF_RUNNING_BAT_CARRY_TICKS;
 /* MOMENTUM BEGIN */
 #if MF_BAT_MOMENTUM
                 rb->carry=MF_BAT_SLIDE_TICKS;
@@ -385,10 +385,10 @@ static void player_step(mf_game *g,int index,unsigned held,unsigned pressed)
                 p->bat=MF_FAST_RUNNING_BAT?MF_BAT_RUNNING:1;p->facing=rb->dir;
             }else
 #endif
-            p->bat=p->bat_window>0 && p->combo_dir==p->facing &&
 #if MF_FAST_RUNNING_BAT
-                !p->height && !p->vz;
+            p->bat=0; /* Only an eligible dash may deploy the horizontal bat. */
 #else
+            p->bat=p->bat_window>0 && p->combo_dir==p->facing &&
                 (!(p->height || p->vz) || !p->air_bat_used);
 #endif
             p->attack=1;p->attack_air=MF_FAST_RUNNING_BAT?(p->height || p->vz)!=0:p->height>0;p->hit_mask=0;clear_gesture(p);
@@ -522,24 +522,38 @@ void mf_game_step_inputs(mf_game *g,const unsigned held[2],const unsigned presse
         mf_jab_repeat_capture(g,i,held[i],pressed[i],(connected&(1u<<i))!=0);
 #endif
 /* JAB END */
+#if MF_FAST_RUNNING_BAT
+        /* Resolve the second direction edge before classifying A. Mask only A:
+           jump, recovery, disconnect and hit-stop retain their dash guards. */
+        dash_input(g,i,held[i],pressed[i]&~MF_A,was_live,(connected&(1u<<i))!=0);
+#endif
 #if MF_RUN_BAT
         {
             mf_player *p=&g->players[i];mf_running_bat *rb=&g->running_bat[i];
             if(!(connected&(1u<<i)) || !p->health || p->hurt || (pressed[i]&MF_B))rb->pending=0;
-            /* Snapshot PREVIOUSLY active dash: activation-tick A stays planted.
-               Hit-stop may buffer this classification with the existing A edge. */
+            /* The selected fast profile includes a dash armed on this tick.
+               Hit-stop may buffer an already established dash/A classification. */
             if(was_live && (connected&(1u<<i)) && p->active && p->health && !p->hurt &&
                !p->attack && !p->height && !p->vz && !p->landing && !p->torch &&
                g->dash[i].dir && (pressed[i]&MF_A) && !(pressed[i]&MF_B) &&
                (held[i]&(MF_LEFT|MF_RIGHT))==(g->dash[i].dir>0?MF_RIGHT:MF_LEFT)) {
-                rb->pending=1;rb->dir=g->dash[i].dir;p->charge=0;p->a_blocked=1;
+                rb->pending=1;rb->dir=g->dash[i].dir;
+#if MF_FAST_RUNNING_BAT
+                /* Capture pose without changing the gameplay ABI or depending
+                   on a previous render callback (immediate/catch-up inputs). */
+                if(g->dash[i].anim>0)rb->pending+=(g->dash[i].anim/(MF_RUN_FRAME_HOLD*MF_DASH_ANIM_NUM))%4;
+#endif
+                p->charge=0;p->a_blocked=1;
             }
+#if MF_FAST_RUNNING_BAT
+            if(rb->pending)dash_clear(&g->dash[i]);
+#endif
             if(!rb->pending)torch_input(p,held[i],pressed[i],(connected&(1u<<i))!=0);
         }
 #else
         torch_input(&g->players[i],held[i],pressed[i],(connected&(1u<<i))!=0);
 #endif
-#if MF_DASH_ENABLED
+#if MF_DASH_ENABLED && !MF_FAST_RUNNING_BAT
         dash_input(g,i,held[i],pressed[i],was_live,(connected&(1u<<i))!=0);
 #endif
     }

@@ -113,6 +113,8 @@ test-fast-bat:
 	/tmp/mf-fast-bat
 	$(CC) -std=c99 -Wall -Wextra -Werror -DMF_FAST_RUNNING_BAT=1 -DMF_ATTACK_SEQUENCE=1 -DMF_BAT_MOMENTUM=1 -DMF_COMBAT_ANIMATION=1 -DMF_PLAYABLE_ANIMATION=1 -DMF_RUNNING_BAT_VISUALS=1 -DMF_RUN_BAT=1 -DMF_DASH_ENABLED=1 -DMF_ORIGINAL_THREE_WALK=1 -Itests/animation_mock -Isrc tests/fast_bat_bank_test.c -o /tmp/mf-fast-bat-bank
 	/tmp/mf-fast-bat-bank
+	$(CC) -std=c99 -Wall -Wextra -Werror -DMF_FAST_RUNNING_BAT=1 -DMF_ATTACK_SEQUENCE=1 -DMF_BAT_MOMENTUM=1 -DMF_COMBAT_ANIMATION=1 -DMF_PLAYABLE_ANIMATION=1 -DMF_RUNNING_BAT_VISUALS=1 -DMF_RUN_BAT=1 -DMF_DASH_ENABLED=1 -DMF_ORIGINAL_THREE_WALK=1 -Itests/animation_mock -Isrc tests/unified_bat_test.c src/game.c -o /tmp/mf-unified-bat
+	/tmp/mf-unified-bat
 	@for name in combat coop torch; do \
 	  $(CC) -std=c99 -Wall -Wextra -Werror -DMF_FAST_RUNNING_BAT=1 -DMF_BAT_MOMENTUM=1 -DMF_JAB_COHESION=1 -DMF_RUN_BAT=1 -DMF_DASH_ENABLED=1 -Isrc tests/$${name}_test.c src/game.c -o /tmp/mf-fast-$$name && /tmp/mf-fast-$$name || exit 1; \
 	done
