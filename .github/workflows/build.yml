@@ -1,13 +1,30 @@
-name: Approved bat-fix Saturn build
+name: Manual Saturn playtest build
 
 on:
   workflow_dispatch:
+    inputs:
+      profile:
+        description: Approved build to produce
+        type: choice
+        required: true
+        default: neon-stage
+        options:
+          - neon-stage
+          - bat-fix
+      commit_sha:
+        description: Optional full SHA; must match the selected approved build
+        type: string
+        required: false
+        default: ''
 
 permissions:
   contents: read
 
 env:
-  APPROVED_COMMIT: b1abb866aa0f6cfd09794a0ed76e5f054a6ecf6f
+  NEON_COMMIT: d664f26108f9a958ad1d2ecea3fc2e59a2bba3b9
+  BAT_FIX_COMMIT: b1abb866aa0f6cfd09794a0ed76e5f054a6ecf6f
+  BUILD_PROFILE: ${{ inputs.profile }}
+  REQUESTED_COMMIT: ${{ inputs.commit_sha }}
   MF_PRESERVE_AUDIO: '1'
 
 jobs:
@@ -15,24 +32,51 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
-      - name: Check out exact approved bat-fix source
+      - name: Resolve exact approved source
+        id: source
+        shell: bash
+        run: |
+          case "$BUILD_PROFILE" in
+            neon-stage) expected="$NEON_COMMIT" ;;
+            bat-fix) expected="$BAT_FIX_COMMIT" ;;
+            *) echo 'Unknown build profile' >&2; exit 1 ;;
+          esac
+          selected="${REQUESTED_COMMIT:-$expected}"
+          if [[ ! "$selected" =~ ^[0-9a-f]{40}$ || "$selected" != "$expected" ]]; then
+            echo 'Commit SHA must exactly match the selected approved build.' >&2
+            exit 1
+          fi
+          echo "sha=$selected" >> "$GITHUB_OUTPUT"
+      - name: Check out verified source
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           repository: captshred/Mullet-Force-Saturn-Public
-          ref: ${{ env.APPROVED_COMMIT }}
+          ref: ${{ steps.source.outputs.sha }}
           persist-credentials: false
-      - name: Verify source identity
-        run: test "$(git rev-parse HEAD)" = "$APPROVED_COMMIT"
+      - name: Verify checkout
+        env:
+          SELECTED_COMMIT: ${{ steps.source.outputs.sha }}
+        run: test "$(git rev-parse HEAD)" = "$SELECTED_COMMIT"
       - name: Install host dependencies and pinned SDK
         # Includes genisoimage; setup.sh preserves the approved Jo Engine pin.
         run: bash tools/bootstrap.sh
-      - name: Build approved punch-combo and fast-running-bat profile
-        run: bash tools/build-punch-combo.sh --native
-      - name: Validate disc, runtime assets and gameplay regressions
+      - name: Build selected native profile
+        shell: bash
+        run: |
+          case "$BUILD_PROFILE" in
+            neon-stage) bash tools/build-city-neon.sh --native ;;
+            bat-fix) bash tools/build-punch-combo.sh --native ;;
+          esac
+      - name: Validate disc, assets and gameplay regressions
+        env:
+          SELECTED_COMMIT: ${{ steps.source.outputs.sha }}
         run: |
           make check
           make test
-          grep -Fx "Commit: $APPROVED_COMMIT" build/BUILD-INFO.txt
+          grep -Fx "Commit: $SELECTED_COMMIT" build/BUILD-INFO.txt
+          if [[ "$BUILD_PROFILE" == neon-stage ]]; then
+            grep -Fx 'City neon candidate: 1' build/BUILD-INFO.txt
+          fi
       - name: Package matching playable files and checksums
         run: |
           mkdir -p build/download
@@ -45,7 +89,7 @@ jobs:
       - name: Upload playable BIN/CUE artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: mullet-force-bat-fix-${{ env.APPROVED_COMMIT }}
+          name: mullet-force-${{ inputs.profile }}-${{ steps.source.outputs.sha }}
           path: build/download/
           retention-days: 1
           if-no-files-found: error
