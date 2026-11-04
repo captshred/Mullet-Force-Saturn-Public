@@ -128,7 +128,7 @@ int main(void)
         if(i%64<32)a|=MF_UP;else a|=MF_DOWN;
         if(i%80<40)b|=MF_UP;else b|=MF_DOWN;
         tick(&g,a,b,(i%28==0?MF_A:0)|(i%137==0?MF_B:0),(i%29==0?MF_A:0)|(i%139==0?MF_B:0));
-        assert(g.events>=0 && (g.events&~4095)==0 && g.camera>=0 && g.camera<=320);
+        assert(g.events>=0 && (g.events&~262143)==0 && g.camera>=0 && g.camera<=320);
         for(j=0;j<2;j++){
             assert(g.players[j].health>=0 && g.players[j].health<=100);
             assert(g.players[j].x>=26*256 && g.players[j].x<=614*256 && g.players[j].height>=0);

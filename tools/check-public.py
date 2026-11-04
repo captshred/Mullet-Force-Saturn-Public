@@ -10,4 +10,4 @@ for name,entry in locks.items():
  data=(root/name).read_bytes()
  assert len(data)==entry['bytes'] and hashlib.sha256(data).hexdigest()==entry['sha256'],name
 subprocess.run(['python3',str(root/'tools/check-preserved-audio.py')],check=True)
-print(f'PASS {len(locks)} exported runtime payloads match selected jab-jab-cross baseline exactly.')
+print(f'PASS {len(locks)} exported runtime payloads match the approved runtime locks (SFX2 audio update).')

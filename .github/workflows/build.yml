@@ -1,66 +1,122 @@
-name: Playable Saturn build
+name: Manual Saturn playtest build
+
 on:
-  push:
-    branches: [main]
-  pull_request:
   workflow_dispatch:
+    inputs:
+      profile:
+        description: Approved build to produce
+        type: choice
+        required: true
+        default: full-gameplay-sfx2
+        options:
+          - full-gameplay-sfx2
+          - gameplay-parallax
+          - city-cleanup
+          - neon-stage
+          - bat-fix
+      commit_sha:
+        description: Optional full SHA; must match the selected approved build
+        type: string
+        required: false
+        default: ''
+
 permissions:
   contents: read
-concurrency:
-  group: saturn-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+
 env:
+  FULL_GAMEPLAY_SFX2_COMMIT: ${{ github.sha }}
+  LIVE_COMMIT: 60b7916ae519626a6b094ef04e0b4fa812900127
+  CLEANUP_COMMIT: c0d42d151a81f1e3072e98e1b4264470eacca3b6
+  NEON_COMMIT: d664f26108f9a958ad1d2ecea3fc2e59a2bba3b9
+  BAT_FIX_COMMIT: b1abb866aa0f6cfd09794a0ed76e5f054a6ecf6f
+  BUILD_PROFILE: ${{ inputs.profile }}
+  REQUESTED_COMMIT: ${{ inputs.commit_sha }}
   MF_PRESERVE_AUDIO: '1'
+
 jobs:
   playable:
     runs-on: ubuntu-24.04
     timeout-minutes: 20
-    env:
-      MF_PUNCH_COMBO: '1'
-      MF_FAST_RUNNING_BAT: '1'
-      MF_PLAYER_RUN_WAIST: '1'
-      MF_CHUCK_DENIM_CLEANUP: '1'
-      MF_PLAYER_DEATH: '1'
-      MF_PLAYER_HURT: '1'
-      MF_CP_HQ_COMBAT: '1'
-      MF_HQ_JUMP: '1'
-      MF_HQ_TORCH: '1'
-      MF_JAB_COHESION: '1'
-      MF_ATTACK_SEQUENCE: '1'
-      MF_BAT_MOMENTUM: '1'
-      MF_COMBAT_ANIMATION: '1'
-      MF_RUNNING_BAT_VISUALS: '1'
-      MF_RUN_BAT: '1'
-      MF_DASH_ENABLED: '1'
-      MF_DASH_PRESET: 'B'
-      MF_CORPORATE_LIGHTING: '1'
-      MF_CORPORATE_REFINED: '1'
-      MF_CORPORATE_PUNK: '1'
-      MF_WALK_KNEE_LIFT: '1'
-      MF_ORIGINAL_THREE_WALK: '1'
-      MF_ORIGINAL_WALK_SLOW: '1'
-      MF_PLAYABLE_ANIMATION: '1'
-      MF_ANIMATION_PREVIEW: '1'
-      MF_SPRITE_GALLERY: '1'
-      MF_VDP2_STREET: '1'
-      MF_PARALLAX_DEMO: '1'
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - name: Build selected jab-jab-cross profile
-        run: make
-      - name: Check runtime assets and disc
-        run: make check
-      - name: Run gameplay and rendering regressions
-        run: make test
-      - name: Package playable files and checksums
+      - name: Resolve exact approved source
+        id: source
+        shell: bash
+        run: |
+          case "$BUILD_PROFILE" in
+            full-gameplay-sfx2) expected="$FULL_GAMEPLAY_SFX2_COMMIT" ;;
+            gameplay-parallax) expected="$LIVE_COMMIT" ;;
+            city-cleanup) expected="$CLEANUP_COMMIT" ;;
+            neon-stage) expected="$NEON_COMMIT" ;;
+            bat-fix) expected="$BAT_FIX_COMMIT" ;;
+            *) echo 'Unknown build profile' >&2; exit 1 ;;
+          esac
+          selected="${REQUESTED_COMMIT:-$expected}"
+          if [[ ! "$selected" =~ ^[0-9a-f]{40}$ || "$selected" != "$expected" ]]; then
+            echo 'Commit SHA must exactly match the selected approved build.' >&2
+            exit 1
+          fi
+          echo "sha=$selected" >> "$GITHUB_OUTPUT"
+      - name: Check out verified source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          repository: captshred/Mullet-Force-Saturn-Public
+          ref: ${{ steps.source.outputs.sha }}
+          persist-credentials: false
+      - name: Verify checkout
+        env:
+          SELECTED_COMMIT: ${{ steps.source.outputs.sha }}
+        run: test "$(git rev-parse HEAD)" = "$SELECTED_COMMIT"
+      - name: Install host dependencies and pinned SDK
+        # Includes genisoimage; setup.sh preserves the approved Jo Engine pin.
+        run: bash tools/bootstrap.sh
+      - name: Build selected native profile
+        shell: bash
+        run: |
+          case "$BUILD_PROFILE" in
+            full-gameplay-sfx2) bash tools/build-full-gameplay-sfx2.sh --native ;;
+            gameplay-parallax) bash tools/build-gameplay-parallax.sh --native ;;
+            city-cleanup) bash tools/build-city-cleanup.sh --native ;;
+            neon-stage) bash tools/build-city-neon.sh --native ;;
+            bat-fix) bash tools/build-punch-combo.sh --native ;;
+          esac
+      - name: Validate disc, assets and gameplay regressions
+        env:
+          SELECTED_COMMIT: ${{ steps.source.outputs.sha }}
+        run: |
+          make check
+          make test
+          if [[ "$BUILD_PROFILE" == full-gameplay-sfx2 ]]; then
+            python3 tools/validate-full-gameplay-sfx2.py --disc
+            python3 tools/audit-sprite-memory.py > build/sprite-memory.csv
+            grep -Fx 'Live gameplay parallax: 1' build/BUILD-INFO.txt
+            grep -Fx 'City cleanup candidate: 1' build/BUILD-INFO.txt
+            grep -Fx 'City neon candidate: 1' build/BUILD-INFO.txt
+            grep -Fx 'Jab jab cross combo: 1' build/BUILD-INFO.txt
+          fi
+          grep -Fx "Commit: $SELECTED_COMMIT" build/BUILD-INFO.txt
+          if [[ "$BUILD_PROFILE" == neon-stage || "$BUILD_PROFILE" == city-cleanup ]]; then
+            grep -Fx 'City neon candidate: 1' build/BUILD-INFO.txt
+          fi
+          if [[ "$BUILD_PROFILE" == city-cleanup ]]; then
+            grep -Fx 'City cleanup candidate: 1' build/BUILD-INFO.txt
+          fi
+          if [[ "$BUILD_PROFILE" == gameplay-parallax ]]; then
+            grep -Fx 'Live gameplay parallax: 1' build/BUILD-INFO.txt
+            grep -Fx 'City cleanup candidate: 1' build/BUILD-INFO.txt
+          fi
+      - name: Package matching playable files and checksums
         run: |
           mkdir -p build/download
           cp build/mullet-force.bin build/mullet-force.cue build/BUILD-INFO.txt build/download/
-          cp docs/JO-ENGINE-LICENSE.txt third_party/mid2seq/LICENSE build/download/
-          (cd build/download && sha256sum mullet-force.bin mullet-force.cue > SHA256SUMS.txt)
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+          cp docs/JO-ENGINE-LICENSE.txt build/download/
+          cp third_party/mid2seq/LICENSE build/download/MID2SEQ-LICENSE.txt
+          cd build/download
+          sha256sum mullet-force.bin mullet-force.cue BUILD-INFO.txt JO-ENGINE-LICENSE.txt MID2SEQ-LICENSE.txt > SHA256SUMS.txt
+          sha256sum --check SHA256SUMS.txt
+      - name: Upload playable BIN/CUE artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: mullet-force-playable-${{ github.sha }}
+          name: mullet-force-${{ inputs.profile }}-${{ steps.source.outputs.sha }}
           path: build/download/
           retention-days: 1
           if-no-files-found: error

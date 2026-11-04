@@ -36,7 +36,7 @@ int main(void)
   while(g.players[p].attack){
    int t=g.players[p].attack;step(&g,p,direction(f),0);
    if(g.events&MF_COMBAT_BAT(p))whoosh++;
-   if(g.events&MF_COMBAT_CONNECT(p)){hits++;first=t;}
+   if(g.events&(MF_COMBAT_CONNECT(p)|MF_COMBAT_NONKILL(p))){hits++;first=t;}
    assert(!(g.events&MF_COMBAT_JAB(p)));
   }
   assert(first==MF_FAST_BAT_ACTIVE_FIRST && hits==1 && whoosh==1);
