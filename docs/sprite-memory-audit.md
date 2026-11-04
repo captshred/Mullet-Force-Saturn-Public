@@ -249,9 +249,18 @@ python3 tools/audit-sprite-memory.py --without-combo
 
 On a standard provisioned machine, install `genisoimage` using the documented
 bootstrap prerequisites instead. Build outputs and environment-local packages
-are excluded from the source commit. The exported package includes matching
+are excluded from the source commit. The local validation package includes matching
 BIN/CUE, BUILD-INFO, checksums, validation logs, audit/inventory and third-party
 notices. It is rebuilt after the source commit so its embedded commit matches.
+
+Download export is blocked in this environment: the designated projectless
+`/codex/browser/projectless/0002-we-re-continuing-development-of-mullet-force-for/output`
+path cannot be created because `/codex` is on a read-only filesystem. No general
+file-upload/export tool is exposed in the current session. The validated ZIP is
+preserved under this checkout's ignored `build/` directory; that local path must
+not be presented as a working download link. GitHub Actions was not used as an
+export workaround. Source, audit and inventory are pushed on the feature branch.
+
 
 Before visual baseline approval: perform controller-driven emulator captures of
 immediate/delayed inputs and existing combat for both directions/players, then
