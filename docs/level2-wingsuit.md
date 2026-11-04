@@ -1,5 +1,8 @@
 # Level 2 — Wingsuit Assault prototype
 
+The subsequent [VDP1/SGL restoration repair](level2-vdp1-state.md) documents the
+reported invisible sprite layer, explicit render-state setup, and retest limits.
+
 This branch implements a Saturn shooter, with host-tested gameplay and resource
 handoff. See [the E102 filesystem repair](level2-e102-fix.md) for the subsequent
 successful manual build, reported Level 1 playthrough, directory-table failure,

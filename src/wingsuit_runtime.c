@@ -34,6 +34,39 @@ static jo_palette *background_palette;
 #define WS_MAP ((void *)VDP2_VRAM_B0)
 #define WS_CELL_BYTES 2752
 #define WS_MAP_BYTES 8192
+#define WS_SPRITE_Z 100
+#define WS_SCREEN_DISTANCE 160
+#define WS_DEPTH_LEVEL 1
+#define WS_FAR_Z 1024
+/* Pinned SGL SpriteEntry rejects z <= screen_distance >> depth_level.
+   These are render-sort parameters, not player/world coordinates. */
+#if WS_SPRITE_Z <= (WS_SCREEN_DISTANCE >> WS_DEPTH_LEVEL) || WS_SPRITE_Z > WS_FAR_Z
+#error Wingsuit sprite depth must be inside the configured SGL window
+#endif
+static int restore_sprite_state(void)
+{
+    /* These are the pinned SGL APIs; do not rebuild the engine or its texture
+       table. SpriteEntry continues to reference Jo's existing definition array. */
+    slSetSprTVMode(TV_320x240);
+    slCurWindow(winFar);
+    slFrameClipSize(320,240);
+    if(!slWindow(0,0,319,239,WS_FAR_Z,160,120)){
+        load_failure("VDP1","WINDOW",1,0);return 0;
+    }
+    slSetScreenDist(WS_SCREEN_DISTANCE*65536);
+    slZdspLevel(WS_DEPTH_LEVEL);
+    slSpriteColMode(SPR_PAL_RGB);
+    slSpriteWinMode(OFF);
+    slScrWindowModeSPR(0);
+    slPrioritySpr0(4);slPrioritySpr1(4);slPrioritySpr2(4);slPrioritySpr3(4);
+    slPrioritySpr4(4);slPrioritySpr5(4);slPrioritySpr6(4);slPrioritySpr7(4);
+    slPriorityNbg1(1);slPriorityNbg0(7);
+    /* slInitSprite in pinned LIBSGL.A installs PTMR=2 (automatic frame-change
+       drawing). A sampled PTMR can be stopped/one-shot and is not a restart
+       policy. SGL's normal core slSynch submits the fresh command list. */
+    JO_VDP1_PTMR=2;
+    return 1;
+}
 static int copy_file(const char *name,void *target,int expected)
 {
     char *data=read_asset(name,expected);
@@ -53,7 +86,7 @@ static void wipe(volatile unsigned short *p,unsigned bytes)
 {unsigned i;for(i=0;i<bytes/2;i++)p[i]=0;}
 static int load_resources(void)
 {
-    unsigned trigger,wait;
+    unsigned wait;
     int i;static const char *names[]={"WBUCK.BIN","WCHUCK.BIN","WDRONE.BIN","WSHOT.BIN","WHOST.BIN","WBOOM.BIN"};
     static const int widths[]={32,32,24,8,8,32};
     /* All prior commands have passed through three core slSynch barriers.
@@ -61,7 +94,7 @@ static int load_resources(void)
     if(!background_palette || background_palette->id!=1 || !background_palette->data){load_failure("CRAM","PALETTE",1,-1);return 100;}
     /* Stop automatic VDP1 restarts, then require the current command list to
        finish. A timeout leaves VDP1 stopped and displays a text-only error. */
-    trigger=JO_VDP1_PTMR;JO_VDP1_PTMR=0;
+    JO_VDP1_PTMR=0;
     for(wait=0;wait<1000000u && !(JO_VDP1_EDSR&2u);++wait){}
     if(!(JO_VDP1_EDSR&2u)){load_failure("VDP1","BUSY",2,JO_VDP1_EDSR);return 105;}
     jo_sprite_free_all();
@@ -88,9 +121,11 @@ static int load_resources(void)
     slPlaneNbg1(PL_SIZE_1x1);slMapNbg1(WS_MAP,WS_MAP,WS_MAP,WS_MAP);
     slZoomNbg1(65536,65536);slScrPosNbg1(0,0);
     slScrWindow0(48,0,271,239);slScrWindowModeNbg1(win0_IN);
-    slPriorityNbg1(1);slPriorityNbg0(7);
-    if(slScrAutoDisp(NBG0ON|NBG1ON)<0){load_failure("VDP2","SCHEDULE",0,-1);return 104;}
-    JO_VDP1_PTMR=trigger;return 0;
+    if(slScrAutoDisp(NBG0ON|NBG1ON|SPRON)<0){load_failure("VDP2","SCHEDULE",0,-1);return 104;}
+    /* Establish sprite priority/RGB/window state after VDP2 scheduling, so it
+       never depends on an inherited Level 1 configuration or an auto helper. */
+    if(!restore_sprite_state())return 107;
+    return 0;
 }
 static int load(void)
 {
@@ -115,7 +150,7 @@ void mf_ws_runtime_begin(int coop,jo_palette *background,unsigned now)
     slScrDisp(NBG1OFF|NBG2OFF);jo_clear_screen();
 }
 static void draw(int id,int x,int y)
-{jo_sprite_draw3D2(ids[id],x,y,100);}
+{jo_sprite_draw3D2(ids[id],x,y,WS_SPRITE_Z);}
 static void render(void)
 {
     int i;slScrPosNbg1(0,-shooter.scroll*65536);

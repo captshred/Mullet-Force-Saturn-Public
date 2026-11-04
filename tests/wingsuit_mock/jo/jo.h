@@ -17,6 +17,11 @@ extern unsigned short ws_ptmr,ws_edsr;
 #define PNB_1WORD 0x8000
 #define CN_12BIT 0x4000
 #define PL_SIZE_1x1 0
+#define TV_320x240 1
+#define winFar 0
+#define SPR_PAL_RGB 1
+#define OFF 0
+#define SPRON (1<<6)
 #define NBG0ON 1
 #define NBG1ON 2
 #define NBG1OFF 0x200
@@ -45,6 +50,24 @@ void slZoomNbg1(int,int);
 void slScrPosNbg1(int,int);
 void slScrWindow0(unsigned short,unsigned short,unsigned short,unsigned short);
 void slScrWindowModeNbg1(unsigned short);
+void slSetSprTVMode(unsigned short);
+void slCurWindow(unsigned char);
+void slFrameClipSize(short,short);
+int slWindow(short,short,short,short,short,short,short);
+void slSetScreenDist(int);
+void slZdspLevel(unsigned short);
+void slSpriteColMode(unsigned short);
+void slSpriteWinMode(unsigned short);
+void slScrWindowModeSPR(unsigned short);
+void test_sprite_priority(int,int);
+#define slPrioritySpr0(n) test_sprite_priority(0,n)
+#define slPrioritySpr1(n) test_sprite_priority(1,n)
+#define slPrioritySpr2(n) test_sprite_priority(2,n)
+#define slPrioritySpr3(n) test_sprite_priority(3,n)
+#define slPrioritySpr4(n) test_sprite_priority(4,n)
+#define slPrioritySpr5(n) test_sprite_priority(5,n)
+#define slPrioritySpr6(n) test_sprite_priority(6,n)
+#define slPrioritySpr7(n) test_sprite_priority(7,n)
 void slPriorityNbg1(int);
 void slPriorityNbg0(int);
 int slScrAutoDisp(unsigned);

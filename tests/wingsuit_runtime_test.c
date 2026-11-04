@@ -5,11 +5,32 @@
 #include <stdarg.h>
 #include <jo/jo.h>
 #include "wingsuit_runtime.h"
+/* Exercise the real render routine without exposing test hooks in production. */
+#include "../src/wingsuit_runtime.c"
 unsigned short ws_vdp1[262144],ws_a0[65536],ws_b0[65536],ws_scsp[262144];
-unsigned short ws_ptmr=2,ws_edsr=2;
+unsigned short ws_ptmr=0,ws_edsr=2;
 static unsigned short cram[2048];
 static int last=254,reads,frees,resets,off,draws,fail,slots,fail_texture=-1;
 static unsigned now;
+static int vdp2_scheduled,state_step,spr_priority[8],rgb_mode,spr_window,pixel_window;
+static int screen_dist=160,depth_level=1,far_z=32767,window_fail;
+static unsigned rendered_types;
+static void next_state(int step){assert(vdp2_scheduled && ws_ptmr==0 && step==state_step+1);state_step=step;}
+void slSetSprTVMode(unsigned short mode){assert(mode==TV_320x240);state_step=0;next_state(1);}
+void slCurWindow(unsigned char window){assert(window==winFar);next_state(2);}
+void slFrameClipSize(short w,short h){assert(w==320 && h==240);next_state(3);}
+int slWindow(short l,short t,short r,short b,short z,short x,short y){
+    assert(l==0 && t==0 && r==319 && b==239 && z==1024 && x==160 && y==120);
+    next_state(4);far_z=z;return !window_fail;
+}
+void slSetScreenDist(int dist){assert(dist==160*65536);next_state(5);screen_dist=dist/65536;}
+void slZdspLevel(unsigned short level){assert(level==1);next_state(6);depth_level=level;}
+void slSpriteColMode(unsigned short mode){assert(mode==SPR_PAL_RGB);next_state(7);rgb_mode=mode;}
+void slSpriteWinMode(unsigned short mode){assert(mode==OFF);next_state(8);pixel_window=mode;}
+void slScrWindowModeSPR(unsigned short mode){assert(mode==0);next_state(9);spr_window=mode;}
+void test_sprite_priority(int slot,int priority){
+    assert(slot>=0 && slot<8 && priority==4);next_state(10+slot);spr_priority[slot]=priority;
+}
 static int in_stage,cds,missing_dir,register_fail;
 static const char *missing_asset,*short_asset;
 static char diagnostic[1024];
@@ -52,9 +73,14 @@ void slZoomNbg1(int a,int b){assert(a==65536 && b==65536);}
 void slScrPosNbg1(int a,int b){assert(a==0 && b<=0 && b>=-511*65536);}
 void slScrWindow0(unsigned short a,unsigned short b,unsigned short c,unsigned short d){assert(a==48 && !b && c==271 && d==239);}
 void slScrWindowModeNbg1(unsigned short a){assert(a==win0_IN);}
-void slPriorityNbg1(int a){assert(a==1);}
-void slPriorityNbg0(int a){assert(a==7);}
-int slScrAutoDisp(unsigned a){assert(a==(NBG0ON|NBG1ON));return 0;}
+void slPriorityNbg1(int a){assert(a==1);next_state(18);}
+void slPriorityNbg0(int a){assert(a==7);next_state(19);}
+int slScrAutoDisp(unsigned a){
+    int i;assert(a==(NBG0ON|NBG1ON|SPRON));vdp2_scheduled=1;
+    /* Poison inherited state so successful draws require explicit setup. */
+    for(i=0;i<8;i++)spr_priority[i]=0;
+    rgb_mode=0;spr_window=7;pixel_window=1;screen_dist=400;depth_level=1;return 0;
+}
 void jo_sprite_disable_horizontal_flip(void){}
 void jo_sprite_disable_vertical_flip(void){}
 void jo_sprite_disable_half_transparency(void){}
@@ -62,7 +88,14 @@ void jo_sprite_disable_dark_filter(void){}
 void jo_sprite_disable_gouraud_shading(void){}
 void jo_sprite_restore_sprite_scale(void){}
 void jo_sprite_disable_clipping(void){}
-void jo_sprite_draw3D2(int id,int x,int y,int z){(void)x;(void)y;assert(id>=0 && id<=last && z==100);++draws;}
+void jo_sprite_draw3D2(int id,int x,int y,int z){
+    int i;(void)x;(void)y;
+    assert(id>=0 && id<=last && z==100 && state_step==19 && ws_ptmr==2);
+    assert(z>(screen_dist>>depth_level) && z<=far_z);
+    assert(rgb_mode==SPR_PAL_RGB && !spr_window && !pixel_window);
+    for(i=0;i<8;i++)assert(spr_priority[i]==4);
+    rendered_types|=1u<<id;++draws;
+}
 void jo_clear_screen(void){diagnostic[0]=0;}
 void jo_print(int x,int y,const char *s){(void)s;assert(x>=0 && x<40 && y>=0 && y<30);}
 void jo_printf(int x,int y,const char *s,...){
@@ -91,8 +124,20 @@ int main(void)
     assert(!draws);
     r=reads;for(i=0;i<1000;i++)frame(in,p);
     assert(draws && reads==r && resets==1); /* no per-frame I/O/texture registrations */
+    /* Independently of gameplay stepping, each of the six real object paths
+       must submit through the initialized renderer with unchanged sort Z. */
+    mf_ws_init(&shooter,1);
+    shooter.players[0].invulnerable=shooter.players[1].invulnerable=0;
+    shooter.enemies[0]=(mf_ws_enemy){1,100*256,60*256,0,0};
+    shooter.enemies[1]=(mf_ws_enemy){0,150*256,60*256,0,12};
+    shooter.shots[0]=(mf_ws_shot){1,100*256,80*256,0,60};
+    shooter.hostile[0]=(mf_ws_shot){1,150*256,80*256,0,60};
+    rendered_types=0;render();assert(rendered_types==63u);
+    puts("PASS VDP1 state: stopped PTMR restarts in auto mode; SGL state restored after VDP2 scheduling; all six render paths accepted independently of gameplay");
+    window_fail=1;mf_ws_runtime_begin(0,&palette,now);frame(in,p);frame(in,p);frame(in,p);frame(in,p);
+    assert(ws_ptmr==0 && strstr(diagnostic,"WINDOW") && error==107);window_fail=0;
     fail_texture=0;mf_ws_runtime_begin(0,&palette,now);frame(in,p);frame(in,p);frame(in,p);
-    assert(last==-1 && resets==3);r=reads;i=draws;frame(in,p);assert(reads==r && draws==i);
+    assert(last==-1 && resets==4);r=reads;i=draws;frame(in,p);assert(reads==r && draws==i);
     fail_texture=-1;fail=1;mf_ws_runtime_begin(0,&palette,now);frame(in,p);frame(in,p);frame(in,p);
     assert(last==-1);r=reads;frame(in,p);assert(reads==r);
     fail=0;ws_edsr=0;ws_ptmr=2;r=reads;i=resets;
