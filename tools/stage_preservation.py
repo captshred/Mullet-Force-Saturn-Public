@@ -17,6 +17,19 @@ def stage_digest(name, baseline, kind):
             return hashlib.sha256(value).hexdigest() if kind=='sha256' else hashlib.sha1(b'blob '+str(len(value)).encode()+b'\0'+value).hexdigest()
         assert digest(original)==baseline,(name,'unexpected validator change')
         return digest(data)
+    if name=='README.md':
+        # Level 2 adds a documented build section. Pin its complete Git blob
+        # instead of broadly exempting README from the approved source locks.
+        path=R/'docs/level2-source-lock.json'
+        if not path.exists():return baseline
+        integration=json.loads(path.read_text())
+        assert integration['base_commit']=='467fc259b2afce35a210db4e10d467c758fced7f'
+        assert baseline=={'sha256':'c733fcee4bc84589dca10c74a286e9050ddd4692d35785938ad33e9ee987113c',
+                          'blob':'2a5ca887ec8d0d402f3aa676b1d0ac59c88eb688'}[kind],(name,'unexpected README baseline')
+        data=(R/name).read_bytes()
+        actual_blob=hashlib.sha1(b'blob '+str(len(data)).encode()+b'\0'+data).hexdigest()
+        assert actual_blob=='805c59bf3145e841ea272c7f4ebfd64774f152ac',(name,'unexpected README content')
+        return hashlib.sha256(data).hexdigest() if kind=='sha256' else actual_blob
     if name not in ALLOWED:return baseline
     change=lock['updates'][name][kind]
     assert change['before']==baseline,(name,'unexpected source baseline')
