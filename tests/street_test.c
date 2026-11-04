@@ -19,9 +19,9 @@ int GFS_NameToId(Sint8 *name)
     if(missing_name && !strcmp((char *)name,missing_name))return -1;
     if(!strcmp((char *)name,"0.BIN"))return 0;
     if(!strcmp((char *)name,"ST0.TGA"))return 1;
-    if(!strcmp((char *)name,"STCELLS.BIN"))return 11;
-    if(!strcmp((char *)name,"STMAP.BIN"))return 12;
-    if(!strcmp((char *)name,"STPAL.BIN"))return 13;
+    if(!strcmp((char *)name,MF_STREET_CELLS))return 11;
+    if(!strcmp((char *)name,MF_STREET_MAP))return 12;
+    if(!strcmp((char *)name,MF_STREET_PALETTE))return 13;
     return -1;
 }
 void jo_printf(int x,int y,const char *format,...){(void)x;(void)y;(void)format;}
@@ -29,7 +29,7 @@ char *jo_fs_read_file(const char *name,int *length)
 {
     char path[128],*data;FILE *f;long n;
     if(null_read && !strcmp(name,null_read))return NULL;
-    snprintf(path,sizeof(path),"assets/vdp2/%s",name);f=fopen(path,"rb");assert(f);
+    snprintf(path,sizeof(path),"assets/%s/%s",MF_CITY_NEON?"city-neon":"vdp2",name);f=fopen(path,"rb");assert(f);
     assert(!fseek(f,0,SEEK_END));n=ftell(f);rewind(f);assert(n>0);
     data=malloc((size_t)n);assert(data);assert(fread(data,1,(size_t)n,f)==(size_t)n);fclose(f);
     *length=(int)n-(short_file || (short_name && !strcmp(name,short_name)));reads++;return data;
@@ -38,7 +38,7 @@ void jo_free(void *p) {free(p);}
 void jo_dma_copy(const void *src,void *dst,unsigned n)
 {
     assert(!tv_on);
-    assert((dst==street_a0 && n==90240)||(dst==street_b0 && n==16384));
+    assert((dst==street_a0 && n==MF_STREET_CELL_BYTES)||(dst==street_b0 && n==16384));
     memcpy(dst,src,n);uploads++;
 }
 void jo_palette_to_cram(unsigned short *src,unsigned short *dst,unsigned n)
@@ -50,7 +50,7 @@ void *jo_vdp2_malloc(int usage,unsigned n)
 {
     assert(!tv_on && released);
     if(usage==allocation_failure)return NULL;
-    if(usage==JO_VDP2_RAM_CELL_NBG1){assert(n==90240);return street_a0+bad_bank;}
+    if(usage==JO_VDP2_RAM_CELL_NBG1){assert(n==MF_STREET_CELL_BYTES);return street_a0+bad_bank;}
     assert(usage==JO_VDP2_RAM_MAP_NBG1 && n==16384);return street_b0+wrong_map;
 }
 void slTVOff(void){tv_on=0;}
@@ -102,7 +102,27 @@ int main(void)
     assert(diagnostic.code==0 && diagnostic.step==199 && diagnostic.read_mask==7 && diagnostic.auto_result==0);
     assert(released==1 && !nbg1_bitmap && uploads==3 && reads==3 && cycles==1 && tv_on);
     assert(!sprite_uploads && colors[255]==0xbeef);
-    for(camera=90240;camera<131072;camera++)assert(street_a0[camera]==0xa5);
+#if MF_CITY_NEON
+    {
+        unsigned t;unsigned short snapshot[256],same[256];
+        unsigned char cell_copy[131072],map_copy[131072];
+        memcpy(snapshot,colors,sizeof(colors));
+        memcpy(cell_copy,street_a0,sizeof(cell_copy));memcpy(map_copy,street_b0,sizeof(map_copy));
+        for(t=0;t<2048;t++) {
+            int c;mf_street_animate(t);memcpy(same,colors,sizeof(colors));
+            mf_street_animate(t);assert(!memcmp(same,colors,sizeof(colors)));
+            for(c=0;c<256;c++)if(c<239 || c>246)assert(colors[c]==snapshot[c]);
+            for(c=239;c<=246;c++)assert(colors[c]&0x8000);
+        }
+        assert(!memcmp(cell_copy,street_a0,sizeof(cell_copy)) && !memcmp(map_copy,street_b0,sizeof(map_copy)));
+        assert(reads==3 && uploads==3 && !sprite_uploads && !sprite_draws);
+        mf_street_animate(~0u);mf_street_animate(0);
+        puts("PASS city neon: VBlank palette isolation, repeat/wrap safety, no runtime CD/texture/map uploads, stable registration");
+    }
+#else
+    mf_street_animate(123);assert(colors[255]==0xbeef);
+#endif
+    for(camera=MF_STREET_CELL_BYTES;camera<131072;camera++)assert(street_a0[camera]==0xa5);
     for(camera=16384;camera<131072;camera++)assert(street_b0[camera]==0xa5);
     for(camera=0;camera<=320;camera++) {
         mf_street_draw(sprites,pal.id,camera);
@@ -119,7 +139,7 @@ int main(void)
     assert(!mf_street_load(&pal,sprites) && diagnostic.code==122 && tv_on && uploads==6);
     short_file=0;
     {
-        const char *names[]={"STCELLS.BIN","STMAP.BIN","STPAL.BIN"};
+        const char *names[]={MF_STREET_CELLS,MF_STREET_MAP,MF_STREET_PALETTE};
         int index;
         for(index=0;index<3;index++) {
             missing_name=names[index];nbg1_bitmap=(jo_color *)street_a0;

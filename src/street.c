@@ -1,6 +1,7 @@
 #include "build-info.h"
 #include <jo/jo.h>
 #include "street.h"
+#include "city_neon.h"
 #if MF_PARALLAX_DEMO
 #include "parallax.h"
 #endif
@@ -8,6 +9,33 @@
 #ifndef MF_STREET_LEGACY_CHECK
 #define MF_STREET_LEGACY_CHECK 0
 #endif
+#if MF_CITY_NEON
+static volatile unsigned short *city_palette;
+static unsigned city_last_step=~0u;
+#endif
+/* Called from the existing VBlank callback. Only eight colors in the street's
+   existing bank are touched; no textures, maps, heap, CD reads or game clocks. */
+void mf_street_animate(unsigned vblank)
+{
+#if MF_CITY_NEON
+    unsigned step=(vblank>>3)&127u,n,i;
+    if(!city_palette || step==city_last_step)return;
+    city_last_step=step;
+    for(i=0;i<8;i++) {
+        unsigned color=city_neon_base[i],gain,r,g,b;
+        n=(step+(i>=5 && i<=6?11u:0u))&31u;
+        gain=90u+(n<16u?n:31u-n)*10u/15u;
+        /* A single letter group dips for eight VBlanks once per 1024.
+           Readability stays intact; this is a soft fault, never a blackout. */
+        if(i==7 && step==93u)gain=65u;
+        r=(color&31u)*gain/100u;g=((color>>5)&31u)*gain/100u;
+        b=((color>>10)&31u)*gain/100u;
+        city_palette[239+i]=(unsigned short)(0x8000u|r|(g<<5)|(b<<10));
+    }
+#else
+    (void)vblank;
+#endif
+}
 static mf_street_diagnostic diagnostic={
     .palette_id=-99,.root_executable=-99,.root_street=-99,
     .file_id={-99,-99,-99},.length={-1,-1,-1},.auto_result=-99
@@ -21,7 +49,7 @@ void mf_street_diagnostic_draw(int line)
     jo_printf(1,line+2,"BITMAP %08x",(unsigned)diagnostic.bitmap);
     jo_printf(1,line+3,"CELL %08x EXP25E00000",(unsigned)diagnostic.cells);
     jo_printf(1,line+4,"MAP  %08x EXP25E40000",(unsigned)diagnostic.map);
-    jo_printf(1,line+5,"CELL ID%d %d/90240",diagnostic.file_id[0],diagnostic.length[0]);
+    jo_printf(1,line+5,"CELL ID%d %d/%u",diagnostic.file_id[0],diagnostic.length[0],MF_STREET_CELL_BYTES);
     jo_printf(1,line+6,"MAP  ID%d %d/16384",diagnostic.file_id[1],diagnostic.length[1]);
     jo_printf(1,line+7,"PAL  ID%d %d/510",diagnostic.file_id[2],diagnostic.length[2]);
     jo_printf(1,line+8,"READ MASK%x AUTO%d LEGACY%d",diagnostic.read_mask,diagnostic.auto_result,MF_STREET_LEGACY_CHECK);
@@ -55,6 +83,9 @@ int mf_street_load(jo_palette *palette,int sprites[5])
 {
     int n;
     diagnostic.code=0;diagnostic.step=100;diagnostic.palette_id=palette->id;
+#if MF_CITY_NEON
+    city_palette=JO_NULL;city_last_step=~0u;
+#endif
     diagnostic.bitmap=diagnostic.cells=diagnostic.map=0;
     diagnostic.read_mask=0;diagnostic.auto_result=-99;
     for(n=0;n<3;n++){diagnostic.file_id[n]=-99;diagnostic.length[n]=-1;}
@@ -69,7 +100,7 @@ int mf_street_load(jo_palette *palette,int sprites[5])
     diagnostic.bitmap=(unsigned long)nbg1_bitmap;
     if(nbg1_bitmap) {jo_vdp2_free(nbg1_bitmap);nbg1_bitmap=JO_NULL;}
     diagnostic.step=110;
-    cells=jo_vdp2_malloc(JO_VDP2_RAM_CELL_NBG1,90240);
+    cells=jo_vdp2_malloc(JO_VDP2_RAM_CELL_NBG1,MF_STREET_CELL_BYTES);
     diagnostic.cells=(unsigned long)cells;
     if(!cells){street_failure(110);goto failed;}
     if(cells!=(void *)VDP2_VRAM_A0){street_failure(111);goto failed;}
@@ -79,9 +110,9 @@ int mf_street_load(jo_palette *palette,int sprites[5])
     /* Explicit bank bounds: never overwrite SDK text, back color or tables. */
     if(!map){street_failure(112);goto failed;}
     if(map!=(void *)VDP2_VRAM_B0){street_failure(113);goto failed;}
-    if(!copy_file("STCELLS.BIN",cells,90240,0)
-       || !copy_file("STMAP.BIN",map,16384,1)
-       || !copy_file("STPAL.BIN",palette->data,510,2))goto failed;
+    if(!copy_file(MF_STREET_CELLS,cells,MF_STREET_CELL_BYTES,0)
+       || !copy_file(MF_STREET_MAP,map,16384,1)
+       || !copy_file(MF_STREET_PALETTE,palette->data,510,2))goto failed;
     diagnostic.step=150;
     slCharNbg1(COL_TYPE_256,CHAR_SIZE_1x1);
     slPageNbg1(cells,0,PNB_1WORD|CN_12BIT);
@@ -108,6 +139,9 @@ int mf_street_load(jo_palette *palette,int sprites[5])
     if(diagnostic.auto_result<0){street_failure(150);goto failed;}
 #endif
     diagnostic.step=199;
+#if MF_CITY_NEON
+    city_palette=palette->data;
+#endif
     slTVOn();return 1;
 failed:
     slTVOn();return 0;

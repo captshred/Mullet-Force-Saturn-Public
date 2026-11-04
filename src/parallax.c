@@ -1,4 +1,5 @@
 #include "build-info.h"
+#include "city_neon.h"
 #if MF_PARALLAX_DEMO
 #include <jo/jo.h>
 #include "input.h"
@@ -45,7 +46,7 @@ int mf_parallax_load(void)
     if(!read_exact("PCHUNK.BIN",chunks,4800,810))return 0;
     for(i=0;i<2400;i++) {
         unsigned p=(unsigned)(chunks[i*2]<<8)|chunks[i*2+1];
-        if((p>>12)!=1 || (p&1) || (p&4095)>=2820){preview.error=812;return 0;}
+        if((p>>12)!=1 || (p&1) || (p&4095)>=MF_STREET_CELL_BYTES/32u){preview.error=812;return 0;}
     }
     preview.cells=jo_vdp2_malloc(JO_VDP2_RAM_MAP_NBG1,8192);
     preview.map=jo_vdp2_malloc(JO_VDP2_RAM_MAP_NBG1,8192);

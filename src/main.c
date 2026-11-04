@@ -69,7 +69,13 @@ static void draw_asset_diagnostics(void)
 static volatile unsigned int vblanks;
 static unsigned int last_vblank,last_input_vblank=~0u,pending[2];
 static mf_input sampled_input[2];
-static void clock_tick(void) { ++vblanks; }
+static void clock_tick(void)
+{
+    ++vblanks;
+#if MF_CITY_NEON
+    mf_street_animate(vblanks);
+#endif
+}
 static int load(const char *name)
 {
     int id=jo_sprite_add_tga(JO_ROOT_DIR,name,JO_COLOR_RGB(255,0,255));
