@@ -3,6 +3,10 @@
 #include "music.h"
 #include "art_data.h"
 #include "build-info.h"
+#if MF_LEVEL2_WINGSUIT
+#include "wingsuit_runtime.h"
+static volatile int stage2_owned;
+#endif
 #include "arcade_fx.h"
 #include "street.h"
 #if MF_CORPORATE_PUNK
@@ -75,6 +79,9 @@ static void clock_tick(void)
 {
     ++vblanks;
 #if MF_CITY_NEON
+    #if MF_LEVEL2_WINGSUIT
+    if(!stage2_owned)
+    #endif
     mf_street_animate(vblanks);
 #endif
 }
@@ -477,6 +484,9 @@ static void update(void)
         }
         last_input_vblank=now;
     }
+    #if MF_LEVEL2_WINGSUIT
+    if(stage2_owned){mf_ws_runtime_frame(sampled_input,pending,now);return;}
+    #endif
     if(asset_error) {draw_asset_diagnostics();return;}
 #if MF_SPRITE_GALLERY
     if(mf_gallery_active() && ((pending[0]|pending[1])&MF_C)) {
@@ -563,6 +573,12 @@ static void update(void)
         if(game.ticks!=before_tick)mf_corporate_step(&game);
 #endif
         mf_music_update(game.started,game.paused,game.events,now);
+#if MF_LEVEL2_WINGSUIT
+        if(game.stage==MF_STAGE_LEVEL2_ENTRY){
+            stage2_owned=1;pending[0]=pending[1]=0;
+            mf_ws_runtime_begin(game.players[1].active,&street_palette,now);return;
+        }
+#endif
     }
     draw_game();
 }

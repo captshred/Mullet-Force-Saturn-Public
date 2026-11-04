@@ -51,3 +51,11 @@ Structural and native tests do not establish real-Saturn compatibility.
 Original game artwork, audio and branding remain all rights reserved. Public
 access does not grant a separate license to reuse those assets. Retain applicable
 third-party notices in docs/JO-ENGINE-LICENSE.txt and third_party/mid2seq/LICENSE.
+
+## Level 2 wingsuit prototype
+
+The feature branch adds the first vertical shooter implementation after the
+40-KO stage-clear sequence. Build with `bash tools/build-level2-wingsuit.sh --native`
+or the manual workflow's `stage-default` profile. Native compilation and Saturn
+playtesting are still outstanding; see [architecture, memory, tests and build
+instructions](docs/level2-wingsuit.md). No Actions run is triggered automatically.

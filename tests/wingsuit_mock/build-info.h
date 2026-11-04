@@ -1,0 +1,1 @@
+#define MF_LEVEL2_WINGSUIT 1

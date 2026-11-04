@@ -20,4 +20,14 @@ def stage_digest(name, baseline, kind):
     if name not in ALLOWED:return baseline
     change=lock['updates'][name][kind]
     assert change['before']==baseline,(name,'unexpected source baseline')
-    return change['after']
+    value=change['after']
+    path=R/'docs/level2-source-lock.json'
+    if path.exists():
+        integration=json.loads(path.read_text())
+        assert integration['base_commit']=='467fc259b2afce35a210db4e10d467c758fced7f'
+        assert set(integration['updates'])=={'src/main.c','make/saturn.mk','tools/build-native.sh','tools/build.sh'}
+        if name in integration['updates']:
+            scoped=integration['updates'][name][kind]
+            assert scoped['before']==value,(name,'unexpected Level 2 baseline')
+            value=scoped['after']
+    return value

@@ -8,6 +8,7 @@ bootstrap:
 native:
 	bash tools/build.sh --native
 check:
+	@if [ "$$(cat build/wingsuit-mode.txt 2>/dev/null)" = 1 ]; then python3 tools/validate-wingsuit.py --disc; fi
 	python3 tools/validate-arcade-fx.py
 	python3 tools/validate-full-gameplay-sfx2.py
 	python3 tools/validate-sfx2.py
@@ -178,3 +179,8 @@ test-arcade-fx:
 test: test-stage-clear
 test-stage-clear:
 	python3 tools/test-stage-clear.py
+
+.PHONY: test-wingsuit
+test: test-wingsuit
+test-wingsuit:
+	python3 tools/test-wingsuit.py

@@ -170,6 +170,11 @@ build_branch=${MF_BUILD_BRANCH:-source-archive}
 printf '%s\n' "$live" > build/live-city-mode.txt
 printf '#define MF_BUILD_COMMIT "%s"\n' "$build_commit" > build/build-info.h
 printf '#define MF_LEVEL1_STAGE_CLEAR %s\n' "$stage_clear" >> build/build-info.h
+wingsuit=${MF_LEVEL2_WINGSUIT:-0}
+[[ $wingsuit == 0 || $wingsuit == 1 ]] || exit 1
+if [[ $wingsuit == 1 && ( $stage_clear != 1 || $live != 1 || $arcade_fx != 1 || $gallery != 1 ) ]]; then echo "Wingsuit requires the complete stage-clear profile" >&2; exit 1; fi
+printf '#define MF_LEVEL2_WINGSUIT %s\n' "$wingsuit" >> build/build-info.h
+printf '%s\n' "$wingsuit" > build/wingsuit-mode.txt
 printf '#define MF_ARCADE_FX %s\n' "$arcade_fx" >> build/build-info.h
 printf '#define MF_SPRITE_GALLERY %s\n' "$gallery" >> build/build-info.h
 printf '#define MF_VDP2_STREET %s\n' "$vdp2" >> build/build-info.h
@@ -254,6 +259,7 @@ if [[ $cleanup == 1 ]]; then sha256sum assets/city-cleanup/* tools/build-city-cl
 sha256sum build/live-city-mode.txt >> build/SOURCE-SHA256SUMS.txt
 if [[ $live == 1 ]]; then sha256sum assets/city-gameplay-parallax/* >> build/SOURCE-SHA256SUMS.txt; fi
 sha256sum build/arcade-fx-mode.txt assets/arcade-fx/* >> build/SOURCE-SHA256SUMS.txt
+if [[ $wingsuit == 1 ]]; then sha256sum assets/wingsuit/* src/wingsuit* tools/build-level2-wingsuit.sh >> build/SOURCE-SHA256SUMS.txt; fi
 source_hash=$(sha256sum build/SOURCE-SHA256SUMS.txt | cut -d' ' -f1)
 printf '#define MF_BUILD_SOURCE "%s"\n' "$source_hash" >> build/build-info.h
 printf 'Game: MULLET FORCE\nScene: Neon District playable prototype\nCommit: %s\nBranch: %s\nSDK: 556d081146211b6a1cfa6591d70f9487d406758b\n' \
@@ -349,6 +355,7 @@ if [[ $combo == 1 ]]; then
 fi
 printf 'Jab jab cross combo: %s\n' "$combo" >> build/BUILD-INFO.txt
 printf 'Player running waist seam: %s\nFast horizontal running bat: %s\n' "$waist" "$fast_bat" >> build/BUILD-INFO.txt
+printf 'Level 2 wingsuit: %s\n' "$wingsuit" >> build/BUILD-INFO.txt
 cp src/*.c src/*.h build/
 cp docs/native-music.md build/NATIVE-MUSIC.md
 cp docs/custom-combat-sfx.md build/CUSTOM-COMBAT-SFX.md
@@ -407,7 +414,8 @@ if [[ $animation == 1 ]]; then
 fi
 rm -f build/cd/EXPLODE.TGA
 if [[ $arcade_fx == 1 ]]; then cp assets/arcade-fx/EXPLODE.TGA build/cd/; fi
-make -C build -f ../make/saturn.mk MAKEFILE=../make/saturn.mk -j2 MF_LEVEL1_STAGE_CLEAR="$stage_clear" MF_PUNCH_COMBO="$combo" MF_FAST_RUNNING_BAT="$fast_bat" MF_JAB_COHESION="$jab" MF_ATTACK_SEQUENCE="$sequence" MF_BAT_MOMENTUM="$momentum" MF_COMBAT_ANIMATION="$combat" MF_RUNNING_BAT_VISUALS="$visual" MF_RUN_BAT="$run_bat" MF_DASH_ENABLED="$dash" MF_DASH_PRESET="$dash_num" game.iso
+if [[ $wingsuit == 1 ]]; then cp assets/wingsuit/*.BIN build/cd/; fi
+make -C build -f ../make/saturn.mk MAKEFILE=../make/saturn.mk -j2 MF_LEVEL2_WINGSUIT="$wingsuit" MF_LEVEL1_STAGE_CLEAR="$stage_clear" MF_PUNCH_COMBO="$combo" MF_FAST_RUNNING_BAT="$fast_bat" MF_JAB_COHESION="$jab" MF_ATTACK_SEQUENCE="$sequence" MF_BAT_MOMENTUM="$momentum" MF_COMBAT_ANIMATION="$combat" MF_RUNNING_BAT_VISUALS="$visual" MF_RUN_BAT="$run_bat" MF_DASH_ENABLED="$dash" MF_DASH_PRESET="$dash_num" game.iso
 cp build/game.iso build/mullet-force.bin
 cat > build/mullet-force.cue <<'CUE'
 FILE "mullet-force.bin" BINARY

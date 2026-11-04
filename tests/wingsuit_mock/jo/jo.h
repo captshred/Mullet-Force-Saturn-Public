@@ -1,0 +1,58 @@
+#ifndef WS_JO_MOCK_H
+#define WS_JO_MOCK_H
+#include <stddef.h>
+#include <stdint.h>
+extern unsigned short ws_vdp1[262144],ws_a0[65536],ws_b0[65536],ws_scsp[262144];
+extern unsigned short ws_ptmr,ws_edsr;
+#define JO_VDP1_PTMR ws_ptmr
+#define JO_VDP1_EDSR ws_edsr
+#define JO_VDP1_VRAM ((uintptr_t)ws_vdp1)
+#define JO_VDP1_TEXTURE_DEF_BASE_ADDRESS 0x10000
+#define JO_VDP1_USER_AREA_END_ADDR (JO_VDP1_VRAM+0x7fef8)
+#define VDP2_VRAM_A0 ((uintptr_t)ws_a0)
+#define VDP2_VRAM_B0 ((uintptr_t)ws_b0)
+#define MF_WS_SOUND_RAM ws_scsp
+#define COL_TYPE_256 4
+#define CHAR_SIZE_1x1 0
+#define PNB_1WORD 0x8000
+#define CN_12BIT 0x4000
+#define PL_SIZE_1x1 0
+#define NBG0ON 1
+#define NBG1ON 2
+#define NBG1OFF 0x200
+#define NBG2OFF 0x400
+#define win0_IN 3
+typedef unsigned short jo_color;
+typedef struct {int id;jo_color *data;} jo_palette;
+typedef struct {unsigned short width,height;jo_color *data;} jo_img;
+char *jo_fs_read_file(const char *,int *);
+void jo_free(void *);
+void jo_dma_copy(const void *,void *,unsigned);
+int jo_sprite_add(const jo_img *);
+void jo_sprite_free_all(void);
+int jo_get_last_sprite_id(void);
+void slSoundOffWait(void);
+void slScrDisp(unsigned);
+void slCharNbg1(int,int);
+void slPageNbg1(void *,void *,int);
+void slPlaneNbg1(int);
+void slMapNbg1(void *,void *,void *,void *);
+void slZoomNbg1(int,int);
+void slScrPosNbg1(int,int);
+void slScrWindow0(unsigned short,unsigned short,unsigned short,unsigned short);
+void slScrWindowModeNbg1(unsigned short);
+void slPriorityNbg1(int);
+void slPriorityNbg0(int);
+int slScrAutoDisp(unsigned);
+void jo_sprite_disable_horizontal_flip(void);
+void jo_sprite_disable_vertical_flip(void);
+void jo_sprite_disable_half_transparency(void);
+void jo_sprite_disable_dark_filter(void);
+void jo_sprite_disable_gouraud_shading(void);
+void jo_sprite_restore_sprite_scale(void);
+void jo_sprite_disable_clipping(void);
+void jo_sprite_draw3D2(int,int,int,int);
+void jo_clear_screen(void);
+void jo_print(int,int,const char *);
+void jo_printf(int,int,const char *,...);
+#endif

@@ -1,0 +1,81 @@
+#include <assert.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdarg.h>
+#include <jo/jo.h>
+#include "wingsuit_runtime.h"
+unsigned short ws_vdp1[262144],ws_a0[65536],ws_b0[65536],ws_scsp[262144];
+unsigned short ws_ptmr=2,ws_edsr=2;
+static unsigned short cram[2048];
+static int last=254,reads,frees,resets,off,draws,fail,slots,fail_texture=-1;
+static unsigned now;
+char *jo_fs_read_file(const char *name,int *size)
+{
+    char path[128];FILE *f;void *data;
+    ++reads;if(fail)return NULL;
+    if(fail_texture>=0 && strstr(name,"WDRONE"))return NULL;
+    snprintf(path,sizeof(path),"assets/wingsuit/%s",name);f=fopen(path,"rb");assert(f);
+    fseek(f,0,SEEK_END);*size=(int)ftell(f);rewind(f);data=malloc(*size);assert(data);
+    assert(fread(data,1,*size,f)==(size_t)*size);fclose(f);return data;
+}
+void jo_free(void *p){++frees;free(p);}
+void jo_dma_copy(const void *a,void *b,unsigned n){memcpy(b,a,n);}
+int jo_sprite_add(const jo_img *im){assert(last<5);slots+=im->width*im->height*2;return ++last;}
+void jo_sprite_free_all(void){++resets;last=-1;slots=0;}
+int jo_get_last_sprite_id(void){return last;}
+void slSoundOffWait(void){++off;}
+void slScrDisp(unsigned a){assert(a==(NBG1OFF|NBG2OFF));}
+void slCharNbg1(int a,int b){assert(a==COL_TYPE_256 && b==CHAR_SIZE_1x1);}
+void slPageNbg1(void *a,void *b,int c){assert(a==ws_a0 && !b && c==(PNB_1WORD|CN_12BIT));}
+void slPlaneNbg1(int a){assert(a==PL_SIZE_1x1);}
+void slMapNbg1(void *a,void *b,void *c,void *d){assert(a==ws_b0 && a==b && b==c && c==d);}
+void slZoomNbg1(int a,int b){assert(a==65536 && b==65536);}
+void slScrPosNbg1(int a,int b){assert(a==0 && b<=0 && b>=-511*65536);}
+void slScrWindow0(unsigned short a,unsigned short b,unsigned short c,unsigned short d){assert(a==48 && !b && c==271 && d==239);}
+void slScrWindowModeNbg1(unsigned short a){assert(a==win0_IN);}
+void slPriorityNbg1(int a){assert(a==1);}
+void slPriorityNbg0(int a){assert(a==7);}
+int slScrAutoDisp(unsigned a){assert(a==(NBG0ON|NBG1ON));return 0;}
+void jo_sprite_disable_horizontal_flip(void){}
+void jo_sprite_disable_vertical_flip(void){}
+void jo_sprite_disable_half_transparency(void){}
+void jo_sprite_disable_dark_filter(void){}
+void jo_sprite_disable_gouraud_shading(void){}
+void jo_sprite_restore_sprite_scale(void){}
+void jo_sprite_disable_clipping(void){}
+void jo_sprite_draw3D2(int id,int x,int y,int z){(void)x;(void)y;assert(id>=0 && id<=last && z==100);++draws;}
+void jo_clear_screen(void){}
+void jo_print(int x,int y,const char *s){(void)s;assert(x>=0 && x<40 && y>=0 && y<30);}
+void jo_printf(int x,int y,const char *s,...){(void)s;assert(x>=0 && x<40 && y>=0 && y<30);}
+static void frame(mf_input in[2],unsigned p[2]){mf_ws_runtime_frame(in,p,++now);}
+int main(void)
+{
+    mf_input in[2]={{0}};unsigned p[2]={MF_START,MF_START};jo_palette palette={1,cram+256};int i,r;
+    memset(ws_vdp1,0x55,sizeof(ws_vdp1));memset(ws_a0,0x55,sizeof(ws_a0));memset(ws_b0,0x55,sizeof(ws_b0));memset(ws_scsp,0x55,sizeof(ws_scsp));memset(cram,0x55,sizeof(cram));
+    in[0].connected=in[1].connected=1;in[0].held=in[1].held=MF_A;
+    mf_ws_runtime_begin(1,&palette,now);
+    /* Repeated callbacks without a new VBlank cannot release resources. */
+    for(i=0;i<10;i++)mf_ws_runtime_frame(in,p,now);
+    assert(!resets && !reads);frame(in,p);frame(in,p);assert(!resets);
+    frame(in,p);assert(resets==1 && off==1 && last==5 && slots==7552);
+    assert(ws_ptmr==2);
+    assert(reads==9 && frees==9 && !draws && !p[0] && !p[1]);
+    assert(ws_vdp1[0]==0x5555 && ws_vdp1[0x10000/2]==0 && ws_vdp1[0x7fef8/2]==0x5555);
+    assert(ws_a0[106496/2]==0x5555 && ws_b0[65536/2]==0x5555);
+    assert(cram[0]==0x5555 && cram[255]==0x5555 && cram[2047]==0);
+    for(i=0;i<262144;i++)assert(!ws_scsp[i]);
+    for(i=0;i<120;i++)frame(in,p);
+    assert(!draws);
+    r=reads;for(i=0;i<1000;i++)frame(in,p);
+    assert(draws && reads==r && resets==1); /* no per-frame I/O/texture registrations */
+    fail_texture=0;mf_ws_runtime_begin(0,&palette,now);frame(in,p);frame(in,p);frame(in,p);
+    assert(last==-1 && resets==3);r=reads;i=draws;frame(in,p);assert(reads==r && draws==i);
+    fail_texture=-1;fail=1;mf_ws_runtime_begin(0,&palette,now);frame(in,p);frame(in,p);frame(in,p);
+    assert(last==-1);r=reads;frame(in,p);assert(reads==r);
+    fail=0;ws_edsr=0;ws_ptmr=2;r=reads;i=resets;
+    mf_ws_runtime_begin(0,&palette,now);frame(in,p);frame(in,p);frame(in,p);
+    assert(ws_ptmr==0 && reads==r && resets==i);
+    puts("PASS actual Level 2 loader: real-VBlank drain, bank reset, 6 definitions/7552 bytes, arena bounds, CRAM/font isolation, SCSP release, no gameplay allocations/I/O, partial-load failure");
+    return 0;
+}
