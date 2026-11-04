@@ -169,6 +169,7 @@ build_branch=${MF_BUILD_BRANCH:-source-archive}
 [[ $build_commit =~ ^[0-9a-f]{40}$ || $build_commit == source-archive ]]
 printf '%s\n' "$live" > build/live-city-mode.txt
 printf '#define MF_BUILD_COMMIT "%s"\n' "$build_commit" > build/build-info.h
+printf '#define MF_LEVEL1_STAGE_CLEAR %s\n' "$stage_clear" >> build/build-info.h
 printf '#define MF_ARCADE_FX %s\n' "$arcade_fx" >> build/build-info.h
 printf '#define MF_SPRITE_GALLERY %s\n' "$gallery" >> build/build-info.h
 printf '#define MF_VDP2_STREET %s\n' "$vdp2" >> build/build-info.h
@@ -201,6 +202,7 @@ printf '#define MF_RUNNING_BAT_VISUALS %s\n' "$visual" >> build/build-info.h
 printf '#define MF_RUN_BAT %s\n' "$run_bat" >> build/build-info.h
 printf '#define MF_DASH_ENABLED %s\n#define MF_DASH_PRESET %s\n' "$dash" "$dash_num" >> build/build-info.h
 sha256sum src/*.c src/*.h make/saturn.mk assets/cd/* assets/music/config.json tools/music.py tools/custom_sfx.py tools/midi.py tools/seq.py third_party/mid2seq/*.c third_party/mid2seq/*.py > build/SOURCE-SHA256SUMS.txt
+sha256sum build/level1-stage-clear-mode.txt >> build/SOURCE-SHA256SUMS.txt
 sha256sum build/gallery-mode.txt >> build/SOURCE-SHA256SUMS.txt
 sha256sum build/vdp2-mode.txt assets/vdp2/* tools/build-street.py >> build/SOURCE-SHA256SUMS.txt
 sha256sum build/street-legacy-mode.txt >> build/SOURCE-SHA256SUMS.txt

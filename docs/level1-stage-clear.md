@@ -96,3 +96,20 @@ connections. No native BIN/CUE or emulator/hardware playtest is claimed.
 The connector's decoded retrieval corrupted five binary files; blob hash checks
 rejected them, so local all-asset/disc checks cannot pass. Remote commits retain
 all approved asset objects directly from the approved Git tree.
+
+## Completed host verification
+
+The complete profile's real boot loader paths ran with the existing host Saturn
+allocation mocks, confirming 255 definitions and 452800 VDP1 bytes. The legacy-FX
+comparison remained 255 / 453344 with every other payload dimension/format
+unchanged. SFX2 PCM hashes, tuning, one-shot gates, map/header consistency, SCSP
+bounds and preserved-audio report validation passed. GitHub tree comparison
+confirmed all 623 approved asset files retain their exact original object SHAs.
+The enabled game structure is 660 bytes versus the unchanged 636-byte baseline.
+
+The full make -k test run emitted 69 PASS results; its only failed target was the
+live-parallax asset check, blocked by the missing/rejected binary download.
+The new stage tests also cover simultaneous coop lethal candidates at kill 39,
+exact settle/clear durations, pause during clear, exclusion of special-class
+enemies and fairness across every sampled camera position. YAML and every
+workflow shell step parse. None of this is a Saturn execution or native build.
