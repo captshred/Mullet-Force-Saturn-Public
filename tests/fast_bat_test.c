@@ -35,7 +35,7 @@ int main(void)
   while(g.players[p].attack){
    int t=g.players[p].attack;step(&g,p,direction(f),0);
    if(g.events&MF_COMBAT_BAT(p))whoosh++;
-   if(g.events&MF_COMBAT_CONNECT(p)){hits++;first=t;}
+   if(g.events&(MF_COMBAT_CONNECT(p)|MF_COMBAT_NONKILL(p))){hits++;first=t;}
    assert(!(g.events&MF_COMBAT_JAB(p)));
   }
   assert(first==MF_FAST_BAT_ACTIVE_FIRST && hits==1 && whoosh==1);
@@ -73,7 +73,7 @@ int main(void)
  for(p=0;p<2;p++)for(f=-1;f<=1;f+=2){
   init(&g,f);step(&g,p,direction(f),direction(f));step(&g,p,0,0);step(&g,p,direction(f)|MF_A,direction(f)|MF_A);
   assert(g.players[p].bat==1 && !g.running_bat[p].active);target(&g,p,f,1,0);n=1;first=0;
-  while(g.players[p].attack){int t=g.players[p].attack;step(&g,p,0,0);if(g.events&MF_COMBAT_CONNECT(p))first=t;if(!g.hitstop)n++;}
+  while(g.players[p].attack){int t=g.players[p].attack;step(&g,p,0,0);if(g.events&(MF_COMBAT_CONNECT(p)|MF_COMBAT_NONKILL(p)))first=t;if(!g.hitstop)n++;}
   assert(first==MF_BAT_ACTIVE_FIRST && !g.broken);for(i=0;i<3;i++)assert(g.drums[i].hp==1);
  }
  /* Air gestures always kick; physics matches a kick-only control. */

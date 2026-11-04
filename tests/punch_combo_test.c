@@ -32,7 +32,7 @@ int main(void)
   init(&g,f);g.combo[p].next=2;press(&g,p);assert(g.combo[p].phase==2);
   g.enemies[0]=(mf_enemy){0};g.enemies[0].hp=6;g.enemies[0].x=(200+f*40)*256;g.enemies[0].y=200*256;g.enemies[0].state=MF_ENEMY_RECOVER;g.enemies[0].timer=10000;g.enemies[0].grace=10000;
   n=1;hits=0;events=1;score=0;
-  while(g.players[p].attack){int t=g.players[p].attack;tick(&g,0,0,0,0);if(g.events&MF_COMBAT_JAB(p))events++;if(g.events&MF_COMBAT_CONNECT(p)){assert(t==6);hits++;score=g.score;}}
+  while(g.players[p].attack){int t=g.players[p].attack;tick(&g,0,0,0,0);if(g.events&MF_COMBAT_JAB(p))events++;if(g.events&(MF_COMBAT_CONNECT(p)|MF_COMBAT_NONKILL(p))){assert(t==6);hits++;score=g.score;}}
   assert(g.combo[p].phase==2 && g.enemies[0].hp==5 && hits==1 && events==1 && g.score==score);(void)n;
  }
  init(&g,1);g.combo[0].next=2;press(&g,0);n=1;while(g.players[0].attack){wait(&g,1);n++;}assert(n==28);

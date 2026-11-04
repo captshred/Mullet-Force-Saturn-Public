@@ -8,6 +8,7 @@ bootstrap:
 native:
 	bash tools/build.sh --native
 check:
+	python3 tools/validate-sfx2.py
 	python3 tools/check-public.py
 	python3 tools/validate-image.py
 	python3 tools/street_validation.py
@@ -126,3 +127,9 @@ test-punch-combo:
 	/tmp/mf-combo-bank
 
 	@for name in fast_bat combat coop torch; do 	  $(CC) -std=c99 -Wall -Wextra -Werror -DMF_PUNCH_COMBO=1 -DMF_FAST_RUNNING_BAT=1 -DMF_BAT_MOMENTUM=1 -DMF_JAB_COHESION=1 -DMF_RUN_BAT=1 -DMF_DASH_ENABLED=1 -Isrc tests/$${name}_test.c src/game.c -o /tmp/mf-combo-$$name && /tmp/mf-combo-$$name || exit 1; 	done
+
+.PHONY: test-sfx2
+test: test-sfx2
+test-sfx2:
+	$(CC) -std=c99 -Wall -Wextra -Werror -Isrc tests/sfx2_test.c -o /tmp/mf-sfx2
+	/tmp/mf-sfx2

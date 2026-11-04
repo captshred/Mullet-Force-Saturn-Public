@@ -9,6 +9,7 @@ on:
         required: true
         default: neon-stage
         options:
+          - sfx-update-2
           - neon-stage
           - bat-fix
       commit_sha:
@@ -23,6 +24,7 @@ permissions:
 env:
   NEON_COMMIT: d664f26108f9a958ad1d2ecea3fc2e59a2bba3b9
   BAT_FIX_COMMIT: b1abb866aa0f6cfd09794a0ed76e5f054a6ecf6f
+  SFX2_COMMIT: ${{ github.sha }}
   BUILD_PROFILE: ${{ inputs.profile }}
   REQUESTED_COMMIT: ${{ inputs.commit_sha }}
   MF_PRESERVE_AUDIO: '1'
@@ -37,6 +39,7 @@ jobs:
         shell: bash
         run: |
           case "$BUILD_PROFILE" in
+            sfx-update-2) expected="$SFX2_COMMIT" ;;
             neon-stage) expected="$NEON_COMMIT" ;;
             bat-fix) expected="$BAT_FIX_COMMIT" ;;
             *) echo 'Unknown build profile' >&2; exit 1 ;;
@@ -65,6 +68,7 @@ jobs:
         run: |
           case "$BUILD_PROFILE" in
             neon-stage) bash tools/build-city-neon.sh --native ;;
+            sfx-update-2) bash tools/build-punch-combo.sh --native ;;
             bat-fix) bash tools/build-punch-combo.sh --native ;;
           esac
       - name: Validate disc, assets and gameplay regressions

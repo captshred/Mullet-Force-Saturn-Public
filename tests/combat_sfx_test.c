@@ -9,10 +9,10 @@ for(i=0;i<3;i++){g->drums[i].hp=0;g->drums[i].respawn=-100000;}step(g,0,0);}
 static void target(mf_game *g,int n,int actor){mf_enemy *e=&g->enemies[n];e->hp=6;e->state=MF_ENEMY_IDLE;e->x=g->players[actor].x+g->players[actor].facing*30*256;e->y=g->players[actor].y;e->grace=99999;}
 int main(void){mf_game g;int i,j,hits,starts;
 for(i=0;i<2;i++){
- init(&g);step(&g,i?0:MF_A,i?MF_A:0);assert(g.events&MF_COMBAT_JAB(i));assert(!(g.events&MF_COMBAT_CONNECT(i)));
+ init(&g);step(&g,i?0:MF_A,i?MF_A:0);assert(g.events&MF_COMBAT_JAB(i));assert(!(g.events&MF_COMBAT_NONKILL(i)));
  for(j=0;j<8;j++){step(&g,i?0:MF_A,i?MF_A:0);assert(!(g.events&MF_COMBAT_JAB(i)));}
  init(&g);target(&g,0,i);target(&g,1,i);hits=0;
- for(j=0;j<35;j++){step(&g,j==0 && !i?MF_A:0,j==0 && i?MF_A:0);if(g.events&MF_COMBAT_CONNECT(i))hits++;assert(!(g.events&MF_COMBAT_CONNECT(1-i)));}
+ for(j=0;j<35;j++){step(&g,j==0 && !i?MF_A:0,j==0 && i?MF_A:0);if(g.events&MF_COMBAT_NONKILL(i))hits++;assert(!(g.events&MF_COMBAT_NONKILL(1-i)));}
  assert(hits==1 && g.enemies[0].hp==5 && g.enemies[1].hp==5);
  /* Real forward-forward -> run -> A begins one bat whoosh, not on carrying. */
  init(&g);{unsigned d=i?MF_LEFT:MF_RIGHT;step(&g,i?0:d,i?d:0);step(&g,0,0);step(&g,i?0:d,i?d:0);assert(g.dash[i].dir);
@@ -31,10 +31,10 @@ for(i=0;i<2;i++){
  }
  /* Aerial kick has no jab whoosh; its confirmed hit still gets CONNECT. */
  init(&g);g.players[i].height=20*256;g.players[i].vz=1;target(&g,0,i);hits=0;
- for(j=0;j<20;j++){step(&g,j==0 && !i?MF_A:0,j==0 && i?MF_A:0);assert(!(g.events&MF_COMBAT_JAB(i)));if(g.events&MF_COMBAT_CONNECT(i))hits++;}assert(hits==1);
+ for(j=0;j<20;j++){step(&g,j==0 && !i?MF_A:0,j==0 && i?MF_A:0);assert(!(g.events&MF_COMBAT_JAB(i)));if(g.events&MF_COMBAT_NONKILL(i))hits++;}assert(hits==1);
 }
 init(&g);target(&g,0,1);g.players[1].torch=MF_TORCH_FIRE;
-step(&g,0,MF_A);assert(g.events&MF_COMBAT_CONNECT(1));assert(g.enemies[0].hp==5);
-step(&g,0,MF_A);assert(!(g.events&MF_COMBAT_CONNECT(1)));
+step(&g,0,MF_A);assert(g.events&MF_COMBAT_NONKILL(1));assert(g.enemies[0].hp==5);
+step(&g,0,MF_A);assert(!(g.events&MF_COMBAT_NONKILL(1)));
 init(&g);step(&g,MF_A,MF_A);assert((g.events&(MF_COMBAT_JAB(0)|MF_COMBAT_JAB(1)))==(MF_COMBAT_JAB(0)|MF_COMBAT_JAB(1)));
 puts("PASS custom events: both-player immediate jabs, held/missed attacks, same-tick multi-target impacts once, real running-bat initiation only, aerial CONNECT without whoosh");return 0;}

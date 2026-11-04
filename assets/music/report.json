@@ -494,25 +494,25 @@
     },
     {
       "name": "FX.TON",
-      "start": 149232,
-      "size": 170564,
-      "end": 319796
+      "start": 149192,
+      "size": 182912,
+      "end": 332104
     },
     {
       "name": "STAGE.SEQ",
-      "start": 319796,
+      "start": 332104,
       "size": 29528,
-      "end": 349324
+      "end": 361632
     },
     {
       "name": "STAGE.TON",
-      "start": 349324,
+      "start": 361632,
       "size": 70676,
-      "end": 420000
+      "end": 432308
     }
   ],
-  "sound_ram_high_water": 420000,
-  "sound_ram_unallocated": 104328,
+  "sound_ram_high_water": 432308,
+  "sound_ram_unallocated": 91980,
   "outputs": {
     "STAGE.SEQ": {
       "bytes": 29528,
@@ -524,15 +524,101 @@
     },
     "FX.SEQ": {
       "bytes": 328,
-      "sha256": "24683e63c1fd27167d4a7b75b3965c806ab5fb7e81906bd0291dcddb2a28c32d"
+      "sha256": "99a5a133d3db53a31aa0950bdaf5853f65effa81301914e44c2c61d3cc14bee6"
     },
     "FX.TON": {
-      "bytes": 170564,
-      "sha256": "3ce8fcde51eed6d98fa0b69bc39274eddd740995058e53d1e14333dbd9b4475c"
+      "bytes": 182912,
+      "sha256": "d86a4664b4c9de8e9a1d31489a10b48cb8924f474f7c8b6fbcb0b2cc91d002e2"
     },
     "CUSTOM.MAP": {
       "bytes": 56,
-      "sha256": "8c669c0329c9405ca989571f30712cb5f69eacde1bba04e1ee2348d530db41cb"
+      "sha256": "b395892e6a5eb7a242c3ada48228ad5ec6a972ab02ee0fc8eb68710bd769a9e8"
     }
+  },
+  "sfx_update_2": {
+    "original_voice_locks": {
+      "1": {
+        "voice_sha256": "afefaf94be5f0e07a0ed5444bb8e683c4857315e389695d5be0e5457d1b8995c",
+        "pcm_sha256": "668ba6bc464461aaa0ed1733cf56ab250e3d1c856f0efa49b1a86eb202d2c69d"
+      },
+      "3": {
+        "voice_sha256": "b10cde71ffa50ce47a040a200a30cd99d0f8c95ca5d40a776ba60fc685232003",
+        "pcm_sha256": "839457068fcfffdbe7d88c4c19941b05e1adc609566a0d8e3ec6800b602b5fb8"
+      },
+      "4": {
+        "voice_sha256": "095a7c9bd5d43839d8b597c2f5bbc59d322b59740ce94bf62aa6fe693969f989",
+        "pcm_sha256": "2c86651e3eafd16d13dcadf5ee00dd56c8ab1f58fa7d742026c0a0e7e215d779"
+      },
+      "5": {
+        "voice_sha256": "c0b358ce00f132afc3cff1cfbfc796418fe90b4e243885b56ab6ea421c117aeb",
+        "pcm_sha256": "18176fffa2f121c3ab986398116f464eb702a7a43879c6f3ee847fe6836ce6b4"
+      },
+      "6": {
+        "voice_sha256": "473e1799282ff9510ce22fbc51730e9bb639fe2f58ee4be39424e80247f62ce9",
+        "pcm_sha256": "47f5e17f0f874572e4390a87b6414ddfa6b05c34dddce54093081fe5c1d0ecdd"
+      }
+    },
+    "samples": [
+      {
+        "file": "nonkill_1.wav",
+        "voice": 0,
+        "source_sha256": "cfa8fb7415f45b22b91939af3fcee8537174cc8bddf009d20a92c3b31717f8ac",
+        "sample_rate": 22050,
+        "frames": 8044,
+        "duration_seconds": 0.36480725623582766,
+        "trim_frames": [
+          0,
+          8044
+        ],
+        "peak": 13107,
+        "pcm_sha256": "95dbb6e915125f44e38ea40d0e0231e7ec67c8f2663b0ce9e5f2fc88a7e01fed",
+        "conversion": "ffmpeg mono + bandlimited 2:1 resample, PCM16 big endian, normalized, 8/48-frame edge fades"
+      },
+      {
+        "file": "explode_1.wav",
+        "voice": 2,
+        "source_sha256": "bd306e577c4383d62145f6246b063badc908f7646d822bef7be656eb9c362ee6",
+        "sample_rate": 22050,
+        "frames": 15840,
+        "duration_seconds": 0.7183673469387755,
+        "trim_frames": [
+          39,
+          15879
+        ],
+        "peak": 13107,
+        "pcm_sha256": "2eca5219e7a0255532d46c6c0a4835dee475781787334da46bfb451363e4fa6b",
+        "conversion": "ffmpeg mono + bandlimited 2:1 resample, PCM16 big endian, normalized, 8/48-frame edge fades"
+      },
+      {
+        "file": "NEWBAT.wav",
+        "voice": 7,
+        "source_sha256": "2451e54de13c8c2f2ff8b0d9a4a271ec07c0bd1cb04ec5950a1e9372a16ca680",
+        "sample_rate": 22050,
+        "frames": 16733,
+        "duration_seconds": 0.7588662131519275,
+        "trim_frames": [
+          69,
+          16802
+        ],
+        "peak": 12451,
+        "pcm_sha256": "8aca2c9a3c080ef934fb83a987dafde9ce1828bd5a5c02242bf86197c90b6b5a",
+        "conversion": "ffmpeg mono + bandlimited 2:1 resample, PCM16 big endian, normalized, 8/48-frame edge fades"
+      }
+    ],
+    "before_high_water": 420000,
+    "after_high_water": 432308,
+    "contiguous_free": 91980,
+    "replaced_voices": [
+      0,
+      2,
+      7
+    ],
+    "unchanged_voices": [
+      1,
+      3,
+      4,
+      5,
+      6
+    ]
   }
 }
