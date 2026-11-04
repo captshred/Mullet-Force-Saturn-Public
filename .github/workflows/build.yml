@@ -9,6 +9,7 @@ on:
         required: true
         default: neon-stage
         options:
+          - city-cleanup
           - neon-stage
           - bat-fix
       commit_sha:
@@ -21,6 +22,7 @@ permissions:
   contents: read
 
 env:
+  CLEANUP_COMMIT: c0d42d151a81f1e3072e98e1b4264470eacca3b6
   NEON_COMMIT: d664f26108f9a958ad1d2ecea3fc2e59a2bba3b9
   BAT_FIX_COMMIT: b1abb866aa0f6cfd09794a0ed76e5f054a6ecf6f
   BUILD_PROFILE: ${{ inputs.profile }}
@@ -37,6 +39,7 @@ jobs:
         shell: bash
         run: |
           case "$BUILD_PROFILE" in
+            city-cleanup) expected="$CLEANUP_COMMIT" ;;
             neon-stage) expected="$NEON_COMMIT" ;;
             bat-fix) expected="$BAT_FIX_COMMIT" ;;
             *) echo 'Unknown build profile' >&2; exit 1 ;;
@@ -64,6 +67,7 @@ jobs:
         shell: bash
         run: |
           case "$BUILD_PROFILE" in
+            city-cleanup) bash tools/build-city-cleanup.sh --native ;;
             neon-stage) bash tools/build-city-neon.sh --native ;;
             bat-fix) bash tools/build-punch-combo.sh --native ;;
           esac
@@ -74,8 +78,11 @@ jobs:
           make check
           make test
           grep -Fx "Commit: $SELECTED_COMMIT" build/BUILD-INFO.txt
-          if [[ "$BUILD_PROFILE" == neon-stage ]]; then
+          if [[ "$BUILD_PROFILE" == neon-stage || "$BUILD_PROFILE" == city-cleanup ]]; then
             grep -Fx 'City neon candidate: 1' build/BUILD-INFO.txt
+          fi
+          if [[ "$BUILD_PROFILE" == city-cleanup ]]; then
+            grep -Fx 'City cleanup candidate: 1' build/BUILD-INFO.txt
           fi
       - name: Package matching playable files and checksums
         run: |
