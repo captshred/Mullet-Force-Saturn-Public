@@ -67,10 +67,12 @@ if args.disc:
    if record[25]&2:scan(data,prefix+name+'/')
    else:files[prefix+name]=data
  record=image[16*2048+156:16*2048+190];start=struct.unpack_from('<I',record,2)[0]*2048;length=struct.unpack_from('<I',record,10)[0];scan(image[start:start+length])
+ cleanup=(root/'build/city-cleanup-mode.txt').exists() and (root/'build/city-cleanup-mode.txt').read_text().strip()=='1'
+ selected={n:(root/'assets/city-cleanup'/n).read_bytes() for n in ['CICELL.BIN','CIMAP.BIN','CIPAL.BIN','CICHUNK.BIN','CISKY.BIN']} if cleanup else d
  for name in ['CICELL.BIN','CIMAP.BIN','CIPAL.BIN']:
-  if enabled:assert files[name]==d[name],name
+  if enabled:assert files[name]==selected[name],name
   else:assert name not in files,name
  if enabled and (root/'build/parallax-mode.txt').read_text().strip()=='1':
-  assert files['PCHUNK.BIN']==d['CICHUNK.BIN'] and files['PSKY.BIN']==d['CISKY.BIN']
+  assert files['PCHUNK.BIN']==selected['CICHUNK.BIN'] and files['PSKY.BIN']==selected['CISKY.BIN']
  print('PASS city disc: explicit profile and actual ISO payloads, preserved fallback paths')
 print('PASS city: native RGB555/cells/PND reconstruction, 321 cameras, isolated neon colors, translated preview, A0/B0 bounds; zero added VDP1/definitions/CRAM banks')

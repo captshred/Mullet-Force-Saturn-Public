@@ -1,0 +1,13 @@
+{
+  "src/main.c": "eaecfc33f260349440e40b0844f086e0cc5032c072d800885fc6530438a3e0ee",
+  "src/game.c": "f1a181af4b5a3c3d66f51a83626c89c06cf86d153fd84511b1dd62cd362e146a",
+  "src/game.h": "c204e066c8d45b9e0c069017a07b00fa73f81e5e0136d2e7878f53db664526af",
+  "src/input.c": "4d81c2f4659689cac0238478f049b6edb47bf48dd4fd24b44b33369b0dde28e0",
+  "src/input.h": "747b843f629814f246a5cb0b94f73d2ee361f5a1b9dfbe46058a4086b921a53b",
+  "src/music.c": "bf79d845472ffd5db651feb35e25857cdfb19d685b75b1c070ea3b6e5b1972d4",
+  "src/music_data.h": "88d240a1681d181309e39c3d79f4e62dce66aed1444dfa38c84bfb2a03cc9348",
+  "src/player_animation.c": "041e32639e25f21da46e45e8ec60894f8e04e89401afbbaddf3d82df04776823",
+  "src/corporate_animation.c": "13f0c2361e98be2f22b80a8903b35e21caaea034b0b84437293d47639554e217",
+  "src/animation_preview.c": "2db58ce6103750a429835d1827bc7dbf9000a2fffa747bf68ffa9348d069e928",
+  "src/street.c": "c78abe9d0df99c226d11813338060c6d5cc03eea2c45f73aa22aae4dbfa64af1"
+}

@@ -29,7 +29,7 @@ char *jo_fs_read_file(const char *name,int *length)
 {
     char path[128],*data;FILE *f;long n;
     if(null_read && !strcmp(name,null_read))return NULL;
-    snprintf(path,sizeof(path),"assets/%s/%s",MF_CITY_NEON?"city-neon":"vdp2",name);f=fopen(path,"rb");assert(f);
+    snprintf(path,sizeof(path),"assets/%s/%s",MF_CITY_CLEANUP?"city-cleanup":MF_CITY_NEON?"city-neon":"vdp2",name);f=fopen(path,"rb");assert(f);
     assert(!fseek(f,0,SEEK_END));n=ftell(f);rewind(f);assert(n>0);
     data=malloc((size_t)n);assert(data);assert(fread(data,1,(size_t)n,f)==(size_t)n);fclose(f);
     *length=(int)n-(short_file || (short_name && !strcmp(name,short_name)));reads++;return data;
