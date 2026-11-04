@@ -1,6 +1,52 @@
 #include "build-info.h"
 #include "city_neon.h"
-#if MF_PARALLAX_DEMO
+#if MF_LIVE_CITY_PARALLAX
+#include <jo/jo.h>
+#include "parallax.h"
+#include "live_city_data.h"
+static int live_ready,live_error;
+static int live_copy(const char *name,void *dst,int bytes)
+{
+    int length=0;char *data=jo_fs_read_file(name,&length);
+    if(!data)return 0;
+    if(length!=bytes){jo_free(data);return 0;}
+    jo_dma_copy(data,dst,bytes);jo_free(data);return 1;
+}
+int mf_parallax_load(void)
+{
+    void *cells,*map;live_ready=live_error=0;slTVOff();
+    cells=jo_vdp2_malloc(JO_VDP2_RAM_MAP_NBG1,MF_LIVE_SKY_BYTES);
+    map=jo_vdp2_malloc(JO_VDP2_RAM_MAP_NBG1,16384);
+    if(cells!=(void *)(VDP2_VRAM_B0+0x4000) || map!=(void *)(VDP2_VRAM_B0+0x4000+MF_LIVE_SKY_BYTES))goto failed;
+    if(!live_copy("LCSKY.BIN",cells,MF_LIVE_SKY_BYTES) || !live_copy("LCMAP.BIN",map,16384))goto failed;
+    slCharNbg2(COL_TYPE_256,CHAR_SIZE_1x1);slPageNbg2(cells,0,PNB_1WORD|CN_12BIT);
+    slPlaneNbg2(PL_SIZE_2x1);slMapNbg2(map,map,map,map);
+    slPriorityNbg2(1);slPriorityNbg1(2);
+    slScrWindow1(1,1,319,55);slScrWindowModeNbg2(win1_IN);
+    if(slScrAutoDisp(NBG0ON|NBG1ON|NBG2ON)<0)goto failed;
+    live_ready=1;slTVOn();return 1;
+failed:
+    live_error=860;slTVOn();return 0;
+}
+void mf_parallax_game_draw(int camera)
+{
+    if(!live_ready)return;
+    /* Same +1 raster registration and border culling as the approved street.
+       Fractional quarter-speed fixed point avoids integer-camera stepping. */
+    slScrPosNbg1((camera-1)*65536,-65536);
+    slScrWindow0(camera%128==0?1:0,56,319,239);
+    slScrWindow1(camera%128==0?1:0,1,319,55);
+    slScrPosNbg2(camera*16384-65536,-65536);
+}
+int mf_parallax_error(void){return live_error;}
+int mf_parallax_active(void){return 0;}
+int mf_parallax_enter(void){return 0;}
+void mf_parallax_leave(void){}
+void mf_parallax_update(unsigned h,unsigned t){(void)h;(void)t;}
+void mf_parallax_draw(void){}
+void mf_parallax_labels(void){}
+
+#elif MF_PARALLAX_DEMO
 #include <jo/jo.h>
 #include "input.h"
 #include "parallax.h"

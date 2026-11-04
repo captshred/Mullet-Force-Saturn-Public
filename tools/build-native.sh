@@ -2,6 +2,9 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 mkdir -p build/cd
+live=${MF_LIVE_CITY_PARALLAX:-0}
+[[ $live == 0 || $live == 1 ]] || exit 1
+if [[ $live == 1 && ${MF_CITY_CLEANUP:-0} != 1 ]]; then echo 'Live parallax requires cleanup.' >&2; exit 1; fi
 gallery=${MF_SPRITE_GALLERY:-0}
 [[ $gallery == 0 || $gallery == 1 ]] || { echo 'MF_SPRITE_GALLERY must be 0 or 1' >&2; exit 1; }
 printf '%s\n' "$gallery" > build/gallery-mode.txt
@@ -154,10 +157,12 @@ fi
 build_commit=${MF_BUILD_COMMIT:-source-archive}
 build_branch=${MF_BUILD_BRANCH:-source-archive}
 [[ $build_commit =~ ^[0-9a-f]{40}$ || $build_commit == source-archive ]]
+printf '%s\n' "$live" > build/live-city-mode.txt
 printf '#define MF_BUILD_COMMIT "%s"\n' "$build_commit" > build/build-info.h
 printf '#define MF_SPRITE_GALLERY %s\n' "$gallery" >> build/build-info.h
 printf '#define MF_VDP2_STREET %s\n' "$vdp2" >> build/build-info.h
 printf '#define MF_CITY_NEON %s\n' "$city" >> build/build-info.h
+printf '#define MF_LIVE_CITY_PARALLAX %s\n' "$live" >> build/build-info.h
 printf '#define MF_CITY_CLEANUP %s\n' "$cleanup" >> build/build-info.h
 printf '#define MF_STREET_LEGACY_CHECK %s\n' "$legacy" >> build/build-info.h
 printf '#define MF_PARALLAX_DEMO %s\n' "$parallax" >> build/build-info.h
@@ -233,12 +238,15 @@ sha256sum build/city-neon-mode.txt >> build/SOURCE-SHA256SUMS.txt
 if [[ $city == 1 ]]; then sha256sum assets/city-neon/*.BIN assets/city-neon/manifest.json tools/build-city-neon.py >> build/SOURCE-SHA256SUMS.txt; fi
 sha256sum build/city-cleanup-mode.txt >> build/SOURCE-SHA256SUMS.txt
 if [[ $cleanup == 1 ]]; then sha256sum assets/city-cleanup/* tools/build-city-cleanup.py >> build/SOURCE-SHA256SUMS.txt; fi
+sha256sum build/live-city-mode.txt >> build/SOURCE-SHA256SUMS.txt
+if [[ $live == 1 ]]; then sha256sum assets/city-gameplay-parallax/* >> build/SOURCE-SHA256SUMS.txt; fi
 source_hash=$(sha256sum build/SOURCE-SHA256SUMS.txt | cut -d' ' -f1)
 printf '#define MF_BUILD_SOURCE "%s"\n' "$source_hash" >> build/build-info.h
 printf 'Game: MULLET FORCE\nScene: Neon District playable prototype\nCommit: %s\nBranch: %s\nSDK: 556d081146211b6a1cfa6591d70f9487d406758b\n' \
     "$build_commit" "$build_branch" > build/BUILD-INFO.txt
 printf 'Source SHA256: %s\n' "$source_hash" >> build/BUILD-INFO.txt
 printf 'City neon candidate: %s\n' "$city" >> build/BUILD-INFO.txt
+printf 'Live gameplay parallax: %s\n' "$live" >> build/BUILD-INFO.txt
 printf 'City cleanup candidate: %s\n' "$cleanup" >> build/BUILD-INFO.txt
 printf 'Sprite gallery: %s\n' "$gallery" >> build/BUILD-INFO.txt
 printf 'VDP2 street: %s\n' "$vdp2" >> build/BUILD-INFO.txt
@@ -371,6 +379,8 @@ if [[ $cleanup == 1 ]]; then
         cp assets/city-cleanup/CISKY.BIN build/cd/PSKY.BIN
     fi
 fi
+rm -f build/cd/LCSKY.BIN build/cd/LCMAP.BIN
+if [[ $live == 1 ]]; then cp assets/city-gameplay-parallax/*.BIN build/cd/; fi
 rm -f build/cd/AB*.TGA build/cd/AC*.TGA build/cd/P[0-9][0-9][0-9].TGA
 rm -f build/cd/S[0-9][0-9][0-9].TGA
 if [[ $swagger == 1 ]]; then cp assets/swagger-walk/*.TGA build/cd/; fi

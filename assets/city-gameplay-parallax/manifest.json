@@ -1,0 +1,13 @@
+{
+  "sky_bytes": 32768,
+  "map_bytes": 16384,
+  "vdp2_delta": 32768,
+  "ratio": [
+    1,
+    4
+  ],
+  "sha256": {
+    "LCSKY.BIN": "672e9a1a4107bfed10e4be5102f251553b35f2f6cbc4f1d9a01b29c86f7c2149",
+    "LCMAP.BIN": "007ed4de60ad03d928d1c2dad694dac582821e0c905a358fe19045344d02f523"
+  }
+}

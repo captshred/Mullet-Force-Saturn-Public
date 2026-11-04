@@ -13,8 +13,9 @@ check:
 	python3 tools/street_validation.py
 	python3 tools/parallax_validation.py
 	python3 tools/check-city-neon.py --disc
+	python3 tools/check-gameplay-parallax.py --disc
 	python3 tools/check-city-cleanup.py --disc
-test: test-fast-bat test-punch-combo test-city-neon test-city-cleanup
+test: test-live-parallax test-fast-bat test-punch-combo test-city-neon test-city-cleanup
 	$(CC) -std=c99 -Wall -Wextra -Werror -DMF_PLAYER_DEATH=1 -DMF_PLAYER_HURT=1 -DMF_HQ_JUMP=1 -DMF_HQ_TORCH=1 -DMF_JAB_COHESION=1 -DMF_ATTACK_SEQUENCE=1 -DMF_BAT_MOMENTUM=1 -DMF_COMBAT_ANIMATION=1 -DMF_PLAYABLE_ANIMATION=1 -DMF_RUNNING_BAT_VISUALS=1 -DMF_RUN_BAT=1 -DMF_DASH_ENABLED=1 -DMF_ORIGINAL_THREE_WALK=1 -Itests/animation_mock -Isrc tests/player_death_test.c -ffunction-sections -fdata-sections -Wl,--gc-sections -o /tmp/mf-player-death
 	/tmp/mf-player-death
 	$(CC) -std=c99 -Wall -Wextra -Werror -DMF_HQ_JUMP=1 -DMF_HQ_TORCH=1 -DMF_JAB_COHESION=1 -DMF_ATTACK_SEQUENCE=1 -DMF_BAT_MOMENTUM=1 -DMF_COMBAT_ANIMATION=1 -DMF_PLAYABLE_ANIMATION=1 -DMF_RUNNING_BAT_VISUALS=1 -DMF_RUN_BAT=1 -DMF_DASH_ENABLED=1 -DMF_ORIGINAL_THREE_WALK=1 -Itests/animation_mock -Isrc tests/player_hurt_test.c -ffunction-sections -fdata-sections -Wl,--gc-sections -DMF_PLAYER_HURT=1 -o /tmp/mf-player-hurt
@@ -145,3 +146,9 @@ test-city-cleanup:
 	$(CC) -std=c99 -Wall -Wextra -Werror -DMF_CITY_NEON=1 -DMF_CITY_CLEANUP=1 -Itests/street_mock -Isrc tests/street_test.c -o /tmp/mf-city-cleanup
 	/tmp/mf-city-cleanup
 	python3 tools/check-city-cleanup.py
+
+.PHONY: test-live-parallax
+test-live-parallax:
+	$(CC) -std=c99 -Wall -Wextra -Werror -DMF_LIVE_CITY_PARALLAX=1 -DMF_CITY_NEON=1 -DMF_CITY_CLEANUP=1 -DMF_VDP2_STREET=1 -Itests/parallax_mock -Isrc tests/live_parallax_test.c -o /tmp/mf-live-parallax
+	/tmp/mf-live-parallax
+	python3 tools/check-gameplay-parallax.py

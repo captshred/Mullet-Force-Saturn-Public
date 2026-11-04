@@ -163,7 +163,11 @@ void mf_street_draw(const int sprites[5],int palette_id,int camera)
 #if MF_VDP2_STREET
     (void)sprites;(void)palette_id;
 #if MF_PARALLAX_DEMO
+#if MF_LIVE_CITY_PARALLAX
+    mf_parallax_game_draw(camera);return;
+#else
     if(mf_parallax_active()){mf_parallax_draw();return;}
+#endif
 #endif
     /* Signed multiplication avoids shifting a negative fixed-point value. */
     slScrPosNbg1((camera-1)*65536,-65536);

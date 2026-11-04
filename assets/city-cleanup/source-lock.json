@@ -8,6 +8,5 @@
   "src/music_data.h": "88d240a1681d181309e39c3d79f4e62dce66aed1444dfa38c84bfb2a03cc9348",
   "src/player_animation.c": "041e32639e25f21da46e45e8ec60894f8e04e89401afbbaddf3d82df04776823",
   "src/corporate_animation.c": "13f0c2361e98be2f22b80a8903b35e21caaea034b0b84437293d47639554e217",
-  "src/animation_preview.c": "2db58ce6103750a429835d1827bc7dbf9000a2fffa747bf68ffa9348d069e928",
-  "src/street.c": "c78abe9d0df99c226d11813338060c6d5cc03eea2c45f73aa22aae4dbfa64af1"
+  "src/animation_preview.c": "2db58ce6103750a429835d1827bc7dbf9000a2fffa747bf68ffa9348d069e928"
 }
