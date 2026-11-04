@@ -14,7 +14,7 @@ def stage_digest(name, baseline, kind):
         original=data.replace(b'from stage_preservation import stage_digest\n',b'').replace(
             b"==stage_digest(n,h,'sha256'),n",b'==h,n')
         def digest(value):
-            return hashlib.sha256(value).hexdigest() if kind=='sha256' else hashlib.sha1(b'blob '+str(len(value)).encode()+b'\\0'+value).hexdigest()
+            return hashlib.sha256(value).hexdigest() if kind=='sha256' else hashlib.sha1(b'blob '+str(len(value)).encode()+b'\0'+value).hexdigest()
         assert digest(original)==baseline,(name,'unexpected validator change')
         return digest(data)
     if name not in ALLOWED:return baseline
