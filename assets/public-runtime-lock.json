@@ -928,8 +928,8 @@
     "bytes": 2370
   },
   "assets/cd/HIT.TGA": {
-    "sha256": "6f7a7cf8ca4a09ede18df418d88cf758479a96b8dca098fc584ebe62f25209b1",
-    "bytes": 3090
+    "bytes": 3090,
+    "sha256": "e9e50079dbfe8c3ff8b9ca56a10c1016e51842eeec34eb4b6df9c0c06afd1359"
   },
   "assets/cd/BU00.TGA": {
     "sha256": "027cf7bfcd46c9fc497a997d28f4da69ddcbe57ddbc9ce86340c74cd95b1328b",
@@ -2078,5 +2078,9 @@
   "assets/stride-fix/before/RN07.TGA": {
     "sha256": "c2a4b8a40f28b7f2ad2bbb0d786235767f2bc049d45637ecf1b35e49b69e5c0d",
     "bytes": 2834
+  },
+  "assets/arcade-fx/EXPLODE.TGA": {
+    "bytes": 3090,
+    "sha256": "3fc80775aaf59c5521f61ed925253005bc9a225b026551b5bb33c64f9747c5c7"
   }
 }

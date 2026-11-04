@@ -8,12 +8,14 @@ bootstrap:
 native:
 	bash tools/build.sh --native
 check:
+	python3 tools/validate-arcade-fx.py
 	python3 tools/validate-full-gameplay-sfx2.py
 	python3 tools/validate-sfx2.py
 	python3 tools/check-public.py
 	python3 tools/validate-image.py
 	python3 tools/street_validation.py
 	python3 tools/parallax_validation.py
+	@if [ "$$(cat build/arcade-fx-mode.txt 2>/dev/null)" = 1 ]; then python3 tools/validate-arcade-fx.py --disc && python3 tools/audit-sprite-memory.py > build/sprite-memory.csv; fi
 	python3 tools/check-city-neon.py --disc
 	python3 tools/check-gameplay-parallax.py --disc
 	python3 tools/check-city-cleanup.py --disc
@@ -166,3 +168,8 @@ test-sfx2:
 test: test-full-gameplay-sfx2
 test-full-gameplay-sfx2:
 	python3 tools/test-full-gameplay-sfx2.py
+
+.PHONY: test-arcade-fx
+test: test-arcade-fx
+test-arcade-fx:
+	python3 tools/test-arcade-fx.py

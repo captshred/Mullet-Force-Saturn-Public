@@ -6,7 +6,14 @@ r=Path(__file__).resolve().parents[1]
 p=argparse.ArgumentParser();p.add_argument('--disc',action='store_true');p.add_argument('--allow-sparse',action='store_true',help='local diagnostics only: verify missing files by index blob; never used by builds/CI');a=p.parse_args()
 m=json.loads((r/'assets/full-gameplay-sfx2/preservation.json').read_text());missing=[]
 def blob(data):return hashlib.sha1(b'blob '+str(len(data)).encode()+b'\0'+data).hexdigest()
+# Explicit, hash-pinned art integration exceptions; retain every original lock.
+art=json.loads((r/'assets/arcade-fx/preservation.json').read_text())
+allowed={'assets/cd/HIT.TGA','src/main.c','src/animation_preview.c','tools/build.sh','tools/build-native.sh','tools/audit-sprite-memory.py'}
+updates=art['authorized_base_updates']
+assert set(updates)==allowed
+for name,change in updates.items():assert change['before']==m['preserved_base_blobs'][name],name
 for name,sha in m['preserved_base_blobs'].items():
+ sha=updates[name]['after'] if name in updates else sha
  path=r/name
  if not path.exists() and a.allow_sparse:
   indexed=subprocess.check_output(['git','ls-files','-s','--',name],cwd=r,text=True).split();assert indexed[1]==sha,(name,'index differs from approved base');missing.append(name);continue

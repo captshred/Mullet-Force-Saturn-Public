@@ -7,8 +7,9 @@ on:
         description: Approved build to produce
         type: choice
         required: true
-        default: full-gameplay-sfx2
+        default: arcade-impact-fx
         options:
+          - arcade-impact-fx
           - full-gameplay-sfx2
           - gameplay-parallax
           - city-cleanup
@@ -24,7 +25,8 @@ permissions:
   contents: read
 
 env:
-  FULL_GAMEPLAY_SFX2_COMMIT: ${{ github.sha }}
+  ARCADE_FX_COMMIT: ${{ github.sha }}
+  FULL_GAMEPLAY_SFX2_COMMIT: 2c32e134452d5cd90fcbfee2aba13c2ce6b0166b
   LIVE_COMMIT: 60b7916ae519626a6b094ef04e0b4fa812900127
   CLEANUP_COMMIT: c0d42d151a81f1e3072e98e1b4264470eacca3b6
   NEON_COMMIT: d664f26108f9a958ad1d2ecea3fc2e59a2bba3b9
@@ -43,6 +45,7 @@ jobs:
         shell: bash
         run: |
           case "$BUILD_PROFILE" in
+            arcade-impact-fx) expected="$ARCADE_FX_COMMIT" ;;
             full-gameplay-sfx2) expected="$FULL_GAMEPLAY_SFX2_COMMIT" ;;
             gameplay-parallax) expected="$LIVE_COMMIT" ;;
             city-cleanup) expected="$CLEANUP_COMMIT" ;;
@@ -73,6 +76,7 @@ jobs:
         shell: bash
         run: |
           case "$BUILD_PROFILE" in
+            arcade-impact-fx) bash tools/build-arcade-impact-fx.sh --native ;;
             full-gameplay-sfx2) bash tools/build-full-gameplay-sfx2.sh --native ;;
             gameplay-parallax) bash tools/build-gameplay-parallax.sh --native ;;
             city-cleanup) bash tools/build-city-cleanup.sh --native ;;
@@ -85,13 +89,18 @@ jobs:
         run: |
           make check
           make test
-          if [[ "$BUILD_PROFILE" == full-gameplay-sfx2 ]]; then
+          if [[ "$BUILD_PROFILE" == full-gameplay-sfx2 || "$BUILD_PROFILE" == arcade-impact-fx ]]; then
             python3 tools/validate-full-gameplay-sfx2.py --disc
             python3 tools/audit-sprite-memory.py > build/sprite-memory.csv
             grep -Fx 'Live gameplay parallax: 1' build/BUILD-INFO.txt
             grep -Fx 'City cleanup candidate: 1' build/BUILD-INFO.txt
             grep -Fx 'City neon candidate: 1' build/BUILD-INFO.txt
             grep -Fx 'Jab jab cross combo: 1' build/BUILD-INFO.txt
+          fi
+          if [[ "$BUILD_PROFILE" == arcade-impact-fx ]]; then
+            python3 tools/validate-arcade-fx.py --disc
+            python3 tools/test-arcade-fx.py
+            grep -Fx 'Arcade dual FX: 1' build/BUILD-INFO.txt
           fi
           grep -Fx "Commit: $SELECTED_COMMIT" build/BUILD-INFO.txt
           if [[ "$BUILD_PROFILE" == neon-stage || "$BUILD_PROFILE" == city-cleanup ]]; then

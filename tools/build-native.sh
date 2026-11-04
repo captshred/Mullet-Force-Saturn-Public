@@ -146,6 +146,12 @@ preserve_audio=${MF_PRESERVE_AUDIO:-$jab}
 [[ $preserve_audio == 0 || $preserve_audio == 1 ]] || exit 1
 if [[ $jab == 1 && $preserve_audio != 1 ]]; then echo 'Jab milestone must preserve existing audio assets.' >&2; exit 1; fi
 printf '%s\n' "$preserve_audio" > build/preserve-audio-mode.txt
+arcade_fx=${MF_ARCADE_FX:-0}
+[[ $arcade_fx == 0 || $arcade_fx == 1 ]] || exit 1
+if [[ $arcade_fx == 1 && ( $combo != 1 || $live != 1 || $cleanup != 1 || $preserve_audio != 1 ) ]]; then
+    echo 'Arcade FX requires the complete HQ gameplay/parallax + preserved SFX2 profile.' >&2; exit 1
+fi
+printf '%s\n' "$arcade_fx" > build/arcade-fx-mode.txt
 python3 tools/build-street.py
 python3 tools/build-parallax.py
 if [[ $preserve_audio == 1 ]]; then
@@ -159,6 +165,7 @@ build_branch=${MF_BUILD_BRANCH:-source-archive}
 [[ $build_commit =~ ^[0-9a-f]{40}$ || $build_commit == source-archive ]]
 printf '%s\n' "$live" > build/live-city-mode.txt
 printf '#define MF_BUILD_COMMIT "%s"\n' "$build_commit" > build/build-info.h
+printf '#define MF_ARCADE_FX %s\n' "$arcade_fx" >> build/build-info.h
 printf '#define MF_SPRITE_GALLERY %s\n' "$gallery" >> build/build-info.h
 printf '#define MF_VDP2_STREET %s\n' "$vdp2" >> build/build-info.h
 printf '#define MF_CITY_NEON %s\n' "$city" >> build/build-info.h
@@ -240,11 +247,13 @@ sha256sum build/city-cleanup-mode.txt >> build/SOURCE-SHA256SUMS.txt
 if [[ $cleanup == 1 ]]; then sha256sum assets/city-cleanup/* tools/build-city-cleanup.py >> build/SOURCE-SHA256SUMS.txt; fi
 sha256sum build/live-city-mode.txt >> build/SOURCE-SHA256SUMS.txt
 if [[ $live == 1 ]]; then sha256sum assets/city-gameplay-parallax/* >> build/SOURCE-SHA256SUMS.txt; fi
+sha256sum build/arcade-fx-mode.txt assets/arcade-fx/* >> build/SOURCE-SHA256SUMS.txt
 source_hash=$(sha256sum build/SOURCE-SHA256SUMS.txt | cut -d' ' -f1)
 printf '#define MF_BUILD_SOURCE "%s"\n' "$source_hash" >> build/build-info.h
 printf 'Game: MULLET FORCE\nScene: Neon District playable prototype\nCommit: %s\nBranch: %s\nSDK: 556d081146211b6a1cfa6591d70f9487d406758b\n' \
     "$build_commit" "$build_branch" > build/BUILD-INFO.txt
 printf 'Source SHA256: %s\n' "$source_hash" >> build/BUILD-INFO.txt
+printf 'Arcade dual FX: %s\n' "$arcade_fx" >> build/BUILD-INFO.txt
 printf 'City neon candidate: %s\n' "$city" >> build/BUILD-INFO.txt
 printf 'Live gameplay parallax: %s\n' "$live" >> build/BUILD-INFO.txt
 printf 'City cleanup candidate: %s\n' "$cleanup" >> build/BUILD-INFO.txt
@@ -389,6 +398,8 @@ if [[ $animation == 1 ]]; then
     cp assets/animation-study/*.TGA assets/animation-polish/*.TGA build/cd/
     if [[ $knee == 1 ]]; then cp assets/knee-lift/overrides/*.TGA build/cd/; fi
 fi
+rm -f build/cd/EXPLODE.TGA
+if [[ $arcade_fx == 1 ]]; then cp assets/arcade-fx/EXPLODE.TGA build/cd/; fi
 make -C build -f ../make/saturn.mk MAKEFILE=../make/saturn.mk -j2 MF_PUNCH_COMBO="$combo" MF_FAST_RUNNING_BAT="$fast_bat" MF_JAB_COHESION="$jab" MF_ATTACK_SEQUENCE="$sequence" MF_BAT_MOMENTUM="$momentum" MF_COMBAT_ANIMATION="$combat" MF_RUNNING_BAT_VISUALS="$visual" MF_RUN_BAT="$run_bat" MF_DASH_ENABLED="$dash" MF_DASH_PRESET="$dash_num" game.iso
 cp build/game.iso build/mullet-force.bin
 cat > build/mullet-force.cue <<'CUE'
