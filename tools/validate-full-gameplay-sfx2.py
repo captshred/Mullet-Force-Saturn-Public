@@ -2,6 +2,7 @@
 """Lock the complete approved gameplay/visual base and exact SFX2 payloads."""
 from pathlib import Path
 import argparse,hashlib,json,subprocess,tempfile,shutil,struct
+from stage_preservation import stage_digest
 r=Path(__file__).resolve().parents[1]
 p=argparse.ArgumentParser();p.add_argument('--disc',action='store_true');p.add_argument('--allow-sparse',action='store_true',help='local diagnostics only: verify missing files by index blob; never used by builds/CI');a=p.parse_args()
 m=json.loads((r/'assets/full-gameplay-sfx2/preservation.json').read_text());missing=[]
@@ -14,6 +15,7 @@ assert set(updates)==allowed
 for name,change in updates.items():assert change['before']==m['preserved_base_blobs'][name],name
 for name,sha in m['preserved_base_blobs'].items():
  sha=updates[name]['after'] if name in updates else sha
+ sha=stage_digest(name,sha,'blob')
  path=r/name
  if not path.exists() and a.allow_sparse:
   indexed=subprocess.check_output(['git','ls-files','-s','--',name],cwd=r,text=True).split();assert indexed[1]==sha,(name,'index differs from approved base');missing.append(name);continue

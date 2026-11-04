@@ -2,6 +2,7 @@
 """Validate exact approved FX pixels, scoped baseline preservation and disc assets."""
 from pathlib import Path
 import argparse, hashlib, json, struct
+from stage_preservation import stage_digest
 
 R=Path(__file__).resolve().parents[1]
 p=argparse.ArgumentParser(description=__doc__)
@@ -30,7 +31,7 @@ assert legacy['vram_bytes']==2592
 # approved foundation. Only the explicit source/build integration files differ.
 lock=json.loads((R/'assets/arcade-fx/preservation.json').read_text())
 for name,digest in lock['preserved_sha256'].items():
-    assert sha((R/name).read_bytes())==digest,(name,'protected foundation changed')
+    assert sha((R/name).read_bytes())==stage_digest(name,digest,'sha256'),(name,'protected foundation changed')
 if a.disc:
     assert (R/'build/arcade-fx-mode.txt').read_text().strip()=='1'
     image=(R/'build/mullet-force.bin').read_bytes();files={}

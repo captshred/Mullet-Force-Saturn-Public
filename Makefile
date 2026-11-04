@@ -173,3 +173,8 @@ test-full-gameplay-sfx2:
 test: test-arcade-fx
 test-arcade-fx:
 	python3 tools/test-arcade-fx.py
+
+.PHONY: test-stage-clear
+test: test-stage-clear
+test-stage-clear:
+	python3 tools/test-stage-clear.py

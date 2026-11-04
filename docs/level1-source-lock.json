@@ -1,0 +1,65 @@
+{
+  "base_commit": "8d79a36f97dfd0b02de7d1b6b58e85b16fdc0b96",
+  "updates": {
+    "src/game.c": {
+      "blob": {
+        "before": "f2840b2310bdd6ca47cdb7909ca3a321794ca963",
+        "after": "ebb569282844cdc6c9e874ec8e8b05c63248a7fd"
+      },
+      "sha256": {
+        "before": "f1813f355f7d8ef135e7bf54cc75522218446d6837348aae90e1e5b6372cae87",
+        "after": "5dc25170e02bf5cfb664db9822633a0e8f15651770074c0a1c266206e360cd02"
+      }
+    },
+    "src/game.h": {
+      "blob": {
+        "before": "afd0185da772edd53e73f152de23adddd2d6c970",
+        "after": "81d774d8d3383be58a7b0dc9d03d8ee55969c401"
+      },
+      "sha256": {
+        "before": "0938bcd0c58037b885ea902307290c39831f43ce4a52817694c433b15b0c839f",
+        "after": "92e75058e40cbd8076ab3d07afb231d6e0fb73856282cbbec3809fef75e4309d"
+      }
+    },
+    "src/main.c": {
+      "blob": {
+        "before": "67c2b294134acdebe5f8234e0f785750807b6f8d",
+        "after": "09848d8637386ea60393020aea91d46608db1e28"
+      },
+      "sha256": {
+        "before": "b88165d8e3378804ccc9c007844339c83a787ff39046a72e6d5f802bdbdb713f",
+        "after": "545b908e58098f5ae22fca89a4e292c937a561e96af96307c9173920ebbeed86"
+      }
+    },
+    "make/saturn.mk": {
+      "blob": {
+        "before": "ac215c4bfbcb94e5981faa5c8bbc77f6d1474b63",
+        "after": "508e7a971857827aa66985fda43292330110636e"
+      },
+      "sha256": {
+        "before": "111642cce0320b809cc3742ea2c26a21a4847b9e925773aa07c3ddd14882a990",
+        "after": "092f7f92c5c5bad2e66bb05f67b68dfa3294b58450950598955f6de02df94afa"
+      }
+    },
+    "tools/build-native.sh": {
+      "blob": {
+        "before": "5830cf88c32a4f9cf1452180c1b7e0f84b959db6",
+        "after": "de4df0e7f9a891b2159bc98f9583e358685e9e6a"
+      },
+      "sha256": {
+        "before": "cc1877d9c1f04f92b01a2f7ef93fded80c3de9cb1a687d1816a9421527bd66d9",
+        "after": "b6e72583669144db0dd78b9020f181ee3005ade808c9bbb2d823b089139f3b67"
+      }
+    },
+    "tools/build.sh": {
+      "blob": {
+        "before": "76b1e32769466fd053f694847949855150222768",
+        "after": "a88271c08a6e12417630c6f2a6c1b2da39fdaa54"
+      },
+      "sha256": {
+        "before": "14b22a2122c5719bb01bbb008e9bc53a99c3ea383d793c3b3227eb60e1ce1545",
+        "after": "8d53f8890b8af99e6c37bb7bf01eeb580135e563a3d20e9a47c290c7d461a4a6"
+      }
+    }
+  }
+}

@@ -119,10 +119,43 @@ static void enemy_spawn(mf_game *g,int index,int initial)
         if(614-x<right)right=614-x;
         y=g->players[i].y>200*256?178:218;
     }
+#if MF_LEVEL1_STAGE_CLEAR
+    (void)initial;
+    /* Score candidate screen/street boundaries against BOTH players and the
+       other slot. Never teleport into a player's attack/reaction space. */
+    {
+        static const int lanes[4]={168,188,209,229};
+        int n,best=-1,bx=0,by=0;
+        for(n=0;n<12;n++) {
+            int x,cy,quality=10000,k;
+            unsigned pick=g->spawn_rng=g->spawn_rng*1664525u+1013904223u;
+            cy=lanes[(pick>>16)&3];
+            if(n<8)x=clamp(g->camera+((n&1)?344:-24),26,614);
+            else {x=clamp(g->camera+48+(int)((pick>>8)%225u),26,614);cy=(n&1)?229:168;}
+            for(k=0;k<MF_PLAYERS;k++)if(living(&g->players[k])) {
+                int dx=abs_i(x-g->players[k].x/256),dy=abs_i(cy-g->players[k].y/256);
+                int d=dx+2*dy;
+                if(dx<80 && dy<40)d=0;
+                if(d<quality)quality=d;
+            }
+            for(k=0;k<MF_ENEMIES;k++)if(k!=index && g->enemies[k].state!=MF_ENEMY_ABSENT) {
+                int d=abs_i(x-g->enemies[k].x/256)+2*abs_i(cy-g->enemies[k].y/256);
+                if(d<48)quality=0;
+            }
+            if(quality>best){best=quality;bx=x;by=cy;}
+        }
+        if(best<110)return; /* Retry later; fairness wins over a deadline. */
+        left=bx;right=by;
+    }
+#endif
     g->enemy_class[index]=MF_ENEMY_CORPORATE_PUNK;
     *e=(mf_enemy){0};e->x=(initial?(index?530:390):(right>=left?614:26))*256;
     e->y=(index?218:y)*256;e->hp=MF_ENEMY_MAX_HP;e->facing=g->players[0].x<e->x?-1:1;
     e->state=MF_ENEMY_IDLE;e->grace=MF_ENEMY_SPAWN_GRACE+index*30;e->target=-1;
+#if MF_LEVEL1_STAGE_CLEAR
+    e->x=left*256;e->y=right*256;e->grace=MF_ENEMY_SPAWN_GRACE;
+    e->facing=g->players[0].x<e->x?-1:1;
+#endif
 }
 static void recover_player(mf_game *g,int index,int joining)
 {
@@ -148,8 +181,43 @@ void mf_game_init(mf_game *g)
 {
     int i;*g=(mf_game){0};recover_player(g,0,0);g->players[0].invulnerable=0;
     for(i=0;i<MF_DRUMS;i++)drum_reset(&g->drums[i],i);
+#if MF_LEVEL1_STAGE_CLEAR
+    g->spawn_rng=0x4d554c4cu;g->spawn_wait=60;
+    for(i=0;i<MF_ENEMIES;i++)g->enemies[i].state=MF_ENEMY_ABSENT;
+#else
     for(i=0;i<MF_ENEMIES;i++)enemy_spawn(g,i,1);
+#endif
 }
+#if MF_LEVEL1_STAGE_CLEAR
+static void stage_defeat(mf_game *g,int index)
+{
+    /* Called only at the live-HP -> DYING edge, never from despawn/respawn. */
+    if(g->stage!=MF_STAGE_LEVEL1 || g->enemy_class[index]!=MF_ENEMY_CORPORATE_PUNK)return;
+    if(++g->stage_kills==MF_STAGE_KILL_TARGET) {
+        g->stage=MF_STAGE_SETTLING;g->stage_timer=MF_STAGE_SETTLE_TICKS;
+        g->spawn_wait=g->spawn_pair=0;
+    }
+}
+static void stage_spawns(mf_game *g)
+{
+    static const int low[4]={90,66,45,30},span[4]={61,55,46,37},pairs[4]={25,40,50,65};
+    int i,phase=clamp(g->stage_kills/10,0,3),free_slots=0;
+    unsigned roll;
+    if(g->stage!=MF_STAGE_LEVEL1)return;
+    if(g->spawn_wait>0 && --g->spawn_wait>0)return;
+    for(i=0;i<MF_ENEMIES;i++)if(g->enemies[i].state==MF_ENEMY_ABSENT)++free_slots;
+    if(!free_slots)return;
+    for(i=0;i<MF_ENEMIES;i++)if(g->enemies[i].state==MF_ENEMY_ABSENT)break;
+    enemy_spawn(g,i,0);
+    if(g->enemies[i].state==MF_ENEMY_ABSENT){g->spawn_wait=15;return;}
+    roll=g->spawn_rng=g->spawn_rng*1664525u+1013904223u;
+    if(!g->spawn_pair && free_slots==2 && (int)((roll>>8)%100u)<pairs[phase]) {
+        g->spawn_pair=1;g->spawn_wait=18+(int)((roll>>16)%19u);
+    }else {
+        g->spawn_pair=0;g->spawn_wait=low[phase]+(int)((roll>>16)%(unsigned)span[phase]);
+    }
+}
+#endif
 static void choose_target(mf_game *g,mf_enemy *e,int index)
 {
     int i,best=-1,cost=0;
@@ -174,6 +242,9 @@ static void hit_sound(mf_game *g,int actor,int health,int inorganic)
 }
 static void fire_damage(mf_game *g,mf_enemy *e,int ignite,int owner)
 {
+#if MF_LEVEL1_STAGE_CLEAR
+    if(g->stage!=MF_STAGE_LEVEL1)return;
+#endif
     if(e->hp<=0 || e->state==MF_ENEMY_ABSENT || e->state==MF_ENEMY_DYING)return;
     if(ignite)g->burn_owner[e-g->enemies]=owner;
     e->hp=clamp(e->hp-(ignite?MF_TORCH_DAMAGE:MF_BURN_DAMAGE),0,MF_ENEMY_MAX_HP);e->fire_flash=4;
@@ -182,18 +253,29 @@ static void fire_damage(mf_game *g,mf_enemy *e,int ignite,int owner)
     if(!e->hp){
         e->state=MF_ENEMY_DYING;e->timer=30;e->vx=0;e->burn=e->burn_clock=0;
         g->score+=MF_ENEMY_DEFEAT_SCORE;g->events|=MF_IMPACT;
+#if MF_LEVEL1_STAGE_CLEAR
+        stage_defeat(g,(int)(e-g->enemies));
+#endif
     }
     /* No recurring HURT state: a living enemy can escape or interrupt fire. */
 }
 static void enemy_step(mf_game *g,int index)
 {
     mf_enemy *e=&g->enemies[index];mf_player *p;int dx,dy,i;
+#if MF_LEVEL1_STAGE_CLEAR
+    if(g->stage!=MF_STAGE_LEVEL1 && e->state!=MF_ENEMY_DYING)return;
+#endif
     if(e->fire_flash)--e->fire_flash;
     if(e->burn && e->hp>0){
         --e->burn;if(e->burn_clock>0 && --e->burn_clock==0){fire_damage(g,e,0,g->burn_owner[index]);e->burn_clock=MF_BURN_DAMAGE_TICKS;}
         if(!e->burn)e->burn_clock=0;
     }
-    if(e->state==MF_ENEMY_ABSENT){if(e->timer>0 && --e->timer==0)enemy_spawn(g,index,0);return;}
+    if(e->state==MF_ENEMY_ABSENT){
+#if !MF_LEVEL1_STAGE_CLEAR
+        if(e->timer>0 && --e->timer==0)enemy_spawn(g,index,0);
+#endif
+        return;
+    }
     if(e->flash)--e->flash;
     if(e->state==MF_ENEMY_DYING){
         e->x=clamp(e->x+e->vx,26*256,614*256);e->vx=e->vx*3/4;
@@ -328,7 +410,11 @@ int mf_torch_hits(const mf_player *p,mf_hitbox b)
 }
 static void torch_hits(mf_game *g,mf_player *p)
 {
-    int i;if(p->torch!=MF_TORCH_FIRE)return;
+    int i;
+#if MF_LEVEL1_STAGE_CLEAR
+    if(g->stage!=MF_STAGE_LEVEL1)return;
+#endif
+    if(p->torch!=MF_TORCH_FIRE)return;
     if(p->torch_tick>0)--p->torch_tick;
     if(p->torch_tick)return;
     p->torch_tick=MF_TORCH_DAMAGE_TICKS;
@@ -459,7 +545,11 @@ static int contact_height(const mf_player *p,int target_top)
 }
 static void player_hits(mf_game *g,mf_player *p)
 {
-    int i;if(!player_active(p))return;
+    int i;
+#if MF_LEVEL1_STAGE_CLEAR
+    if(g->stage!=MF_STAGE_LEVEL1)return;
+#endif
+    if(!player_active(p))return;
     for(i=0;i<MF_DRUMS;i++){
         mf_drum *d=&g->drums[i];
         if(d->hp && !(p->hit_mask&(1<<i)) && (d->x-p->x)*p->facing>0 &&
@@ -477,6 +567,9 @@ static void player_hits(mf_game *g,mf_player *p)
     }
     for(i=0;i<MF_ENEMIES;i++){
         mf_enemy *e=&g->enemies[i];int bit=1<<(MF_DRUMS+i);
+#if MF_LEVEL1_STAGE_CLEAR
+        if(g->stage!=MF_STAGE_LEVEL1)break;
+#endif
         if(e->hp>0 && e->state!=MF_ENEMY_ABSENT && !(p->hit_mask&bit) && (e->x-p->x)*p->facing>0 &&
            mf_boxes_overlap(mf_player_attackbox(p),mf_enemy_hurtbox(e))){
             p->hit_mask|=bit;
@@ -487,10 +580,48 @@ static void player_hits(mf_game *g,mf_player *p)
             e->hp=clamp(e->hp-(p->bat?MF_BAT_DAMAGE:(p->attack_air?2:1)),0,MF_ENEMY_MAX_HP);
             hit_sound(g,(int)(p-g->players),e->hp,0);
             e->state=e->hp?MF_ENEMY_HURT:MF_ENEMY_DYING;e->timer=e->hp?18:30;e->vx=p->facing*(p->bat?MF_BAT_KNOCKBACK:850);e->flash=10;
-            impact(g,e->x/256,e->y/256,p->bat?contact_height(p,84):48);if(!e->hp)g->score+=MF_ENEMY_DEFEAT_SCORE;
+            impact(g,e->x/256,e->y/256,p->bat?contact_height(p,84):48);if(!e->hp){
+                g->score+=MF_ENEMY_DEFEAT_SCORE;
+#if MF_LEVEL1_STAGE_CLEAR
+                stage_defeat(g,i);
+#endif
+            }
         }
     }
 }
+#if MF_LEVEL1_STAGE_CLEAR
+static void stage_transition_step(mf_game *g)
+{
+    int i;
+    if(g->stage==MF_STAGE_LEVEL2_ENTRY)return;
+    if(g->stage==MF_STAGE_SETTLING) {
+        if(g->hitstop){--g->hitstop;return;}
+        ++g->ticks;if(g->spark)--g->spark;
+        for(i=0;i<MF_ENEMIES;i++)if(g->enemies[i].state==MF_ENEMY_DYING)enemy_step(g,i);
+        for(i=0;i<MF_PLAYERS;i++) {
+            mf_player *p=&g->players[i];
+            /* Finish the existing strike/landing without taking new input,
+               healing players or allowing any further damage. */
+            if(p->height || p->vz){p->height+=p->vz;p->vz-=74;if(p->height<=0)p->height=p->vz=0;}
+            int total=p->bat==MF_BAT_RUNNING?MF_FAST_BAT_TOTAL_TICKS:(p->bat?MF_BAT_TOTAL_TICKS:24);
+#if MF_PUNCH_COMBO
+            if(!p->bat && !p->attack_air && g->combo[i].phase==2)total=MF_CROSS_TOTAL_TICKS;
+#endif
+            if(p->attack && ++p->attack>total)p->attack=p->bat=0;
+        }
+    }
+    if(--g->stage_timer>0)return;
+    if(g->stage==MF_STAGE_SETTLING) {
+        g->stage=MF_STAGE_CLEAR;g->stage_timer=MF_STAGE_CLEAR_TICKS;
+        for(i=0;i<MF_PLAYERS;i++) {
+            mf_player *p=&g->players[i];
+            p->attack=p->bat=p->attack_air=p->moving=p->buffered=0;
+            torch_cancel(p);g->running_bat[i]=(mf_running_bat){0};
+            g->dash[i]=(mf_dash_state){0};
+        }
+    }else g->stage=MF_STAGE_LEVEL2_ENTRY;
+}
+#endif
 void mf_game_step_inputs(mf_game *g,const unsigned held[2],const unsigned pressed[2],unsigned connected)
 {
     int i;
@@ -518,6 +649,9 @@ void mf_game_step_inputs(mf_game *g,const unsigned held[2],const unsigned presse
         }
         return;
     }
+#if MF_LEVEL1_STAGE_CLEAR
+    if(g->stage!=MF_STAGE_LEVEL1){stage_transition_step(g);return;}
+#endif
     for(i=0;i<MF_PLAYERS;i++){
         gesture_step(&g->players[i],held[i],pressed[i]);
 /* JAB BEGIN */
@@ -579,6 +713,9 @@ void mf_game_step_inputs(mf_game *g,const unsigned held[2],const unsigned presse
     }
     for(i=0;i<MF_PLAYERS;i++){player_hits(g,&g->players[i]);torch_hits(g,&g->players[i]);}
     for(i=0;i<MF_ENEMIES;i++)enemy_step(g,i);
+#if MF_LEVEL1_STAGE_CLEAR
+    stage_spawns(g);
+#endif
     for(i=0;i<MF_PLAYERS;i++){
         mf_player *p=&g->players[i];
 #if MF_FAST_RUNNING_BAT

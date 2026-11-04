@@ -4,6 +4,7 @@
 #include "combat_config.h"
 #include "dash_config.h"
 #include "run_bat_config.h"
+#include "stage_config.h"
 /* 24.8 ground coordinates, fixed 60 Hz NTSC simulation. */
 #define MF_SCALE 256
 #define MF_DRUMS 3
@@ -61,6 +62,10 @@ typedef struct {
     mf_dash_state dash[MF_PLAYERS];
     mf_running_bat running_bat[MF_PLAYERS];
     int enemy_class[MF_ENEMIES]; /* Explicit KO eligibility, not HP-based. */
+#if MF_LEVEL1_STAGE_CLEAR
+    int stage,stage_kills,stage_timer,spawn_wait,spawn_pair;
+    unsigned spawn_rng;
+#endif
 /* JAB BEGIN */
 #if MF_JAB_COHESION
     mf_jab_repeat_state jab[MF_PLAYERS];

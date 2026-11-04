@@ -2,6 +2,10 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 mkdir -p build/cd
+stage_clear=${MF_LEVEL1_STAGE_CLEAR:-0}
+[[ $stage_clear == 0 || $stage_clear == 1 ]] || exit 1
+if [[ $stage_clear == 1 && ${MF_ARCADE_FX:-0} != 1 ]]; then echo 'Stage clear requires THE ONE arcade FX profile.' >&2; exit 1; fi
+printf '%s\n' "$stage_clear" > build/level1-stage-clear-mode.txt
 live=${MF_LIVE_CITY_PARALLAX:-0}
 [[ $live == 0 || $live == 1 ]] || exit 1
 if [[ $live == 1 && ${MF_CITY_CLEANUP:-0} != 1 ]]; then echo 'Live parallax requires cleanup.' >&2; exit 1; fi
@@ -253,6 +257,7 @@ printf '#define MF_BUILD_SOURCE "%s"\n' "$source_hash" >> build/build-info.h
 printf 'Game: MULLET FORCE\nScene: Neon District playable prototype\nCommit: %s\nBranch: %s\nSDK: 556d081146211b6a1cfa6591d70f9487d406758b\n' \
     "$build_commit" "$build_branch" > build/BUILD-INFO.txt
 printf 'Source SHA256: %s\n' "$source_hash" >> build/BUILD-INFO.txt
+printf 'Level 1 stage clear: %s\n' "$stage_clear" >> build/BUILD-INFO.txt
 printf 'Arcade dual FX: %s\n' "$arcade_fx" >> build/BUILD-INFO.txt
 printf 'City neon candidate: %s\n' "$city" >> build/BUILD-INFO.txt
 printf 'Live gameplay parallax: %s\n' "$live" >> build/BUILD-INFO.txt
@@ -400,7 +405,7 @@ if [[ $animation == 1 ]]; then
 fi
 rm -f build/cd/EXPLODE.TGA
 if [[ $arcade_fx == 1 ]]; then cp assets/arcade-fx/EXPLODE.TGA build/cd/; fi
-make -C build -f ../make/saturn.mk MAKEFILE=../make/saturn.mk -j2 MF_PUNCH_COMBO="$combo" MF_FAST_RUNNING_BAT="$fast_bat" MF_JAB_COHESION="$jab" MF_ATTACK_SEQUENCE="$sequence" MF_BAT_MOMENTUM="$momentum" MF_COMBAT_ANIMATION="$combat" MF_RUNNING_BAT_VISUALS="$visual" MF_RUN_BAT="$run_bat" MF_DASH_ENABLED="$dash" MF_DASH_PRESET="$dash_num" game.iso
+make -C build -f ../make/saturn.mk MAKEFILE=../make/saturn.mk -j2 MF_LEVEL1_STAGE_CLEAR="$stage_clear" MF_PUNCH_COMBO="$combo" MF_FAST_RUNNING_BAT="$fast_bat" MF_JAB_COHESION="$jab" MF_ATTACK_SEQUENCE="$sequence" MF_BAT_MOMENTUM="$momentum" MF_COMBAT_ANIMATION="$combat" MF_RUNNING_BAT_VISUALS="$visual" MF_RUN_BAT="$run_bat" MF_DASH_ENABLED="$dash" MF_DASH_PRESET="$dash_num" game.iso
 cp build/game.iso build/mullet-force.bin
 cat > build/mullet-force.cue <<'CUE'
 FILE "mullet-force.bin" BINARY

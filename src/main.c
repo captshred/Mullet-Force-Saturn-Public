@@ -421,12 +421,22 @@ static void draw_game(void)
             if(e->state==MF_ENEMY_WINDUP)jo_print(10+j*26,5,"!");
         }
     }
+#if MF_LEVEL1_STAGE_CLEAR
+    jo_printf(14,3,"KOs %02d/40",game.stage_kills);
+#endif
     mode=!game.started?1:(game.paused?2:0);
+#if MF_LEVEL1_STAGE_CLEAR
+    if(!mode && game.stage>=MF_STAGE_CLEAR)mode=game.stage==MF_STAGE_CLEAR?3:4;
+#endif
     if(mode)jo_sprite_draw3D2(panel,32,164,180);
     if(mode!=overlay) {
         jo_clear_screen_line(21);jo_clear_screen_line(23);
         if(mode==1) {jo_print(10,21,"MULLET FORCE");jo_print(9,23,"PRESS START TO PLAY");}
         else if(mode==2) {jo_print(16,21,"PAUSED");jo_print(9,23,"START TO CONTINUE");}
+#if MF_LEVEL1_STAGE_CLEAR
+        else if(mode==3)jo_print(13,21,"STAGE CLEAR");
+        else if(mode==4){jo_print(15,21,"LEVEL 2");jo_print(13,23,"COMING NEXT");}
+#endif
         overlay=mode;
     }
     jo_print(2,28,"D-PAD MOVE A HIT B JUMP HOLD A1S TORCH");
