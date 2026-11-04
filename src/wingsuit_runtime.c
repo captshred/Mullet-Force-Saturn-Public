@@ -8,6 +8,22 @@ static mf_wingsuit shooter;
 static int ids[6]={-1,-1,-1,-1,-1,-1};
 static int phase,drain,title,error;
 static unsigned previous;
+static const char *failed_asset,*failed_reason;
+static int failed_expected,failed_actual;
+static int load_failure(const char *asset,const char *reason,int expected,int actual)
+{
+    failed_asset=asset;failed_reason=reason;
+    failed_expected=expected;failed_actual=actual;return 0;
+}
+static char *read_asset(const char *name,int expected)
+{
+    int size=-1;char *data;
+    if(GFS_NameToId((Sint8 *)name)<0){load_failure(name,"MISSING",expected,-1);return 0;}
+    data=jo_fs_read_file(name,&size);
+    if(!data){load_failure(name,"READ/ALLOC",expected,size);return 0;}
+    if(size!=expected){load_failure(name,"LENGTH",expected,size);jo_free(data);return 0;}
+    return data;
+}
 static jo_palette *background_palette;
 /* These arenas are allocated once by the approved Level 1 profile. Ownership
    transfers here; no VDP2 allocator cursor or live pointer is invalidated. */
@@ -20,36 +36,36 @@ static jo_palette *background_palette;
 #define WS_MAP_BYTES 8192
 static int copy_file(const char *name,void *target,int expected)
 {
-    int size=0;char *data=jo_fs_read_file(name,&size);
+    char *data=read_asset(name,expected);
     if(!data)return 0;
-    if(size!=expected){jo_free(data);return 0;}
-    jo_dma_copy(data,target,(unsigned)size);jo_free(data);return 1;
+    jo_dma_copy(data,target,(unsigned)expected);jo_free(data);return 1;
 }
 static int texture(const char *name,int w,int h)
 {
-    int size=0,id;char *data=jo_fs_read_file(name,&size);jo_img image;
+    int id;char *data=read_asset(name,w*h*2);jo_img image;
     if(!data)return -1;
-    if(size!=w*h*2){jo_free(data);return -1;}
     image.width=w;image.height=h;image.data=(jo_color *)data;
-    id=jo_sprite_add(&image);jo_free(data);return id;
+    id=jo_sprite_add(&image);jo_free(data);
+    if(id<0)load_failure(name,"REGISTER",w*h*2,id);
+    return id;
 }
 static void wipe(volatile unsigned short *p,unsigned bytes)
 {unsigned i;for(i=0;i<bytes/2;i++)p[i]=0;}
-static int load(void)
+static int load_resources(void)
 {
     unsigned trigger,wait;
     int i;static const char *names[]={"WBUCK.BIN","WCHUCK.BIN","WDRONE.BIN","WSHOT.BIN","WHOST.BIN","WBOOM.BIN"};
     static const int widths[]={32,32,24,8,8,32};
     /* All prior commands have passed through three core slSynch barriers.
        No sprites were submitted during them; no slave rendering is enabled. */
-    if(!background_palette || background_palette->id!=1 || !background_palette->data)return 100;
+    if(!background_palette || background_palette->id!=1 || !background_palette->data){load_failure("CRAM","PALETTE",1,-1);return 100;}
     /* Stop automatic VDP1 restarts, then require the current command list to
        finish. A timeout leaves VDP1 stopped and displays a text-only error. */
     trigger=JO_VDP1_PTMR;JO_VDP1_PTMR=0;
     for(wait=0;wait<1000000u && !(JO_VDP1_EDSR&2u);++wait){}
-    if(!(JO_VDP1_EDSR&2u))return 105;
+    if(!(JO_VDP1_EDSR&2u)){load_failure("VDP1","BUSY",2,JO_VDP1_EDSR);return 105;}
     jo_sprite_free_all();
-    if(jo_get_last_sprite_id()!=-1)return 101;
+    if(jo_get_last_sprite_id()!=-1){load_failure("VDP1","RESET",-1,jo_get_last_sprite_id());return 101;}
     wipe((volatile unsigned short *)(JO_VDP1_VRAM+JO_VDP1_TEXTURE_DEF_BASE_ADDRESS),
          JO_VDP1_USER_AREA_END_ADDR-(JO_VDP1_VRAM+JO_VDP1_TEXTURE_DEF_BASE_ADDRESS));
     /* slSoundOffWait halts the 68000 before releasing its entire sample bank.
@@ -65,7 +81,7 @@ static int load(void)
        !copy_file("WPAL.BIN",background_palette->data,32))return 102;
     for(i=0;i<6;i++){
         ids[i]=texture(names[i],widths[i],widths[i]);
-        if(ids[i]!=i){jo_sprite_free_all();for(i=0;i<6;i++)ids[i]=-1;return 103;}
+        if(ids[i]!=i){if(!failed_asset)load_failure(names[i],"SPRITE ID",i,ids[i]);jo_sprite_free_all();for(i=0;i<6;i++)ids[i]=-1;return 103;}
     }
     slCharNbg1(COL_TYPE_256,CHAR_SIZE_1x1);
     slPageNbg1(WS_CELLS,0,PNB_1WORD|CN_12BIT);
@@ -73,13 +89,29 @@ static int load(void)
     slZoomNbg1(65536,65536);slScrPosNbg1(0,0);
     slScrWindow0(48,0,271,239);slScrWindowModeNbg1(win0_IN);
     slPriorityNbg1(1);slPriorityNbg0(7);
-    if(slScrAutoDisp(NBG0ON|NBG1ON)<0)return 104;
+    if(slScrAutoDisp(NBG0ON|NBG1ON)<0){load_failure("VDP2","SCHEDULE",0,-1);return 104;}
     JO_VDP1_PTMR=trigger;return 0;
+}
+static int load(void)
+{
+    int result;
+    /* The pinned GFS table holds only 256 directory records. Resolve this
+       early root entry once, then give all nine reads a small private table. */
+    if(GFS_NameToId((Sint8 *)"ALEVEL2")<0){
+        load_failure("ALEVEL2","DIRECTORY",0,-1);return 106;
+    }
+    jo_fs_cd("ALEVEL2");
+    result=load_resources();
+    /* jo_fs_cd has no success return in the pinned SDK. Child file lookups
+       diagnose a failed entry; always restore the parent after the attempt. */
+    jo_fs_cd(JO_PARENT_DIR);
+    return result;
 }
 void mf_ws_runtime_begin(int coop,jo_palette *background,unsigned now)
 {
     mf_ws_init(&shooter,coop);background_palette=background;
     phase=1;drain=0;title=120;error=0;previous=now;
+    failed_asset=failed_reason=0;failed_expected=failed_actual=-1;
     slScrDisp(NBG1OFF|NBG2OFF);jo_clear_screen();
 }
 static void draw(int id,int x,int y)
@@ -120,7 +152,13 @@ void mf_ws_runtime_frame(const mf_input input[2],unsigned pressed[2],unsigned no
         if(elapsed && ++drain>=3){error=load();phase=error?4:2;jo_clear_screen();}
         return;
     }
-    if(phase==4){jo_printf(7,12,"LEVEL 2 LOAD FAILED E%d",error);return;}
+    if(phase==4){
+        jo_printf(3,10,"LEVEL 2 LOAD FAILED E%d",error);
+        jo_printf(3,12,"ASSET %s",failed_asset?failed_asset:"UNKNOWN");
+        jo_printf(3,13,"CAUSE %s",failed_reason?failed_reason:"UNKNOWN");
+        jo_printf(3,15,"EXPECT %d GOT %d",failed_expected,failed_actual);
+        jo_print(3,17,"DISC /ALEVEL2");return;
+    }
     if(phase==2){
         jo_print(15,11,"LEVEL 2");jo_print(11,13,"WINGSUIT ASSAULT");
         pressed[0]=pressed[1]=0;

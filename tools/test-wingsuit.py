@@ -10,3 +10,4 @@ with tempfile.TemporaryDirectory(prefix='mf-wingsuit-') as tmp:
   subprocess.run(['cc','-std=c99','-Wall','-Wextra','-Werror',*includes,*sources,'-o',exe],cwd=R,check=True)
   subprocess.run([exe],cwd=R,check=True)
 subprocess.run(['python3','tools/validate-wingsuit.py'],cwd=R,check=True)
+subprocess.run(['python3','tests/wingsuit_disc_test.py'],cwd=R,check=True)

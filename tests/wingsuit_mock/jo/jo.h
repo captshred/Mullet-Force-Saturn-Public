@@ -25,6 +25,10 @@ extern unsigned short ws_ptmr,ws_edsr;
 typedef unsigned short jo_color;
 typedef struct {int id;jo_color *data;} jo_palette;
 typedef struct {unsigned short width,height;jo_color *data;} jo_img;
+typedef signed char Sint8;
+#define JO_PARENT_DIR ".."
+int GFS_NameToId(Sint8 *);
+void jo_fs_cd(const char *);
 char *jo_fs_read_file(const char *,int *);
 void jo_free(void *);
 void jo_dma_copy(const void *,void *,unsigned);

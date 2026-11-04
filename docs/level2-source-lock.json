@@ -24,11 +24,11 @@
     "tools/build-native.sh": {
       "sha256": {
         "before": "bc691ccfb9aeebb6e090d5473bdeed86aea041f1d3c0ed779c6fd87d1cedf15f",
-        "after": "668e1b525eb43bb3d80f36e3ee3e7efc8de991650d2d1390af3f44cdd9945815"
+        "after": "2e0a692b00640d051cea09b4a8672ddd56153714aada70e0d3b85e5e7a064548"
       },
       "blob": {
         "before": "8f39cb1c028061129d5ddba1b88a2a67bbf8f2ad",
-        "after": "706024c2230b6f90f2bd4f1916c1e9c176245019"
+        "after": "d3c2e2bc2e55cac730062cb927a68bbde710ec73"
       }
     },
     "tools/build.sh": {

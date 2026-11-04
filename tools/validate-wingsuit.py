@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Exact runtime payloads, hardware-format budgets, and scoped Level 1 source lock."""
 from pathlib import Path
-import argparse,hashlib,json,struct,subprocess
+import argparse,hashlib,json,struct
+from wingsuit_disc import validate_disc
 R=Path(__file__).resolve().parents[1]
 p=argparse.ArgumentParser();p.add_argument('--disc',action='store_true');args=p.parse_args()
 m=json.loads((R/'assets/wingsuit/manifest.json').read_text())
@@ -9,9 +10,6 @@ assert m['textures']==6 and m['vdp1_bytes']==7552 and m['tiles']==43
 for name,f in m['files'].items():
  b=(R/'assets/wingsuit'/name).read_bytes()
  assert len(b)==f['bytes'] and hashlib.sha256(b).hexdigest()==f['sha256'],name
- if args.disc:
-  data=subprocess.check_output(['isoinfo','-i',str(R/'build/mullet-force.bin'),'-x','/'+name+';1'])
-  assert data==b,(name,'disc payload differs')
 assert sum(m['files'][n]['bytes'] for n in ('WBUCK.BIN','WCHUCK.BIN','WDRONE.BIN','WSHOT.BIN','WHOST.BIN','WBOOM.BIN'))==7552
 assert m['files']['WCELL.BIN']['bytes']==43*64==2752
 assert m['files']['WMAP.BIN']['bytes']==8192
@@ -34,6 +32,8 @@ assert source.index('if(stage2_owned){mf_ws_runtime_frame')<source.index('if(ass
 assert 'if(!stage2_owned)' in source and 'stage2_owned=1;pending[0]=pending[1]=0;' in source
 assert 'mf_ws_runtime_begin(game.players[1].active,&street_palette,now);return;' in source
 if args.disc:
+ counts=validate_disc((R/'build/mullet-force.bin').read_bytes(),{n:(R/'assets/wingsuit'/n).read_bytes() for n in m['files']})
+ print('PASS exact /ALEVEL2 ISO layout: root records %d, directory index %d, child records %d'%counts)
  assert (R/'build/wingsuit-mode.txt').read_text().strip()=='1'
  assert 'Level 2 wingsuit: 1' in (R/'build/BUILD-INFO.txt').read_text()
 print('PASS wingsuit payloads/budgets: 6 definitions, 7552 VDP1 bytes, 43 tiles, 10944 VDP2 payload bytes, 32 CRAM bytes; exact scoped integration lock')

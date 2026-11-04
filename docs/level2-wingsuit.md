@@ -1,7 +1,9 @@
 # Level 2 — Wingsuit Assault prototype
 
 This branch implements a Saturn shooter, with host-tested gameplay and resource
-handoff. It is not yet a validated playable Saturn release. The pinned SDK could
+handoff. See [the E102 filesystem repair](level2-e102-fix.md) for the subsequent
+successful manual build, reported Level 1 playthrough, directory-table failure,
+and /ALEVEL2 fix. The initial implementation status below predates that build. It is not yet a validated playable Saturn release. The pinned SDK could
 not be installed because the configured shell proxy refused connections. No
 native compilation, BIN/CUE, emulator run, real-controller test, hardware memory
 measurement, or 60 Hz performance measurement is claimed. No Actions run was
@@ -45,7 +47,7 @@ through Jo's core `slSynch()` barriers. The loader then stops automatic VDP1
 restarts (`PTMR=0`), requires current-list completion (`EDSR.CEF`), releases all
 sprite definitions, and wipes the old VDP1 texture area. A bounded wait failure
 leaves VDP1 stopped and shows an NBG0 text error. Successful loading requires
-exact file lengths and IDs 0 through 5 before restoring the saved trigger mode.
+an early /ALEVEL2 directory, exact file lengths and IDs 0 through 5 before restoring the saved trigger mode.
 Partial texture-load failure releases the partial bank and never draws it.
 Missing background files also enter a terminal text-only error state. No retry
 can accumulate registrations. Saturn validation of synchronization remains a
