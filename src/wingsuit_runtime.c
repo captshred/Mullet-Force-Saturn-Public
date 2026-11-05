@@ -95,7 +95,7 @@ static int load_resources(void)
     unsigned wait;
     int i;static const char *names[]={"WBUCK.BIN","WCHUCK.BIN","WDRONE.BIN","WSHOT.BIN","WHOST.BIN","WBOOM.BIN","WBUCKL.BIN","WBUCKR.BIN","WCHUCKL.BIN","WCHUCKR.BIN","WFL0.BIN","WFL1.BIN","WFL2.BIN","WFL3.BIN"};
     static const int widths[]={32,32,24,8,8,32,32,32,32,32,32,32,32,32};
-    static const int heights[]={32,32,24,8,8,32,32,32,32,32,128,128,128,128};
+    static const int heights[]={32,32,24,8,8,32,32,32,32,32,MF_WS_BEAM_SEGMENT_HEIGHT,MF_WS_BEAM_SEGMENT_HEIGHT,MF_WS_BEAM_SEGMENT_HEIGHT,MF_WS_BEAM_SEGMENT_HEIGHT};
     /* All prior commands have passed through three core slSynch barriers.
        No sprites were submitted during them; no slave rendering is enabled. */
     if(!background_palette || background_palette->id!=1 || !background_palette->data){load_failure("CRAM","PALETTE",1,-1);return 100;}
@@ -175,8 +175,14 @@ static void render(void)
     jo_sprite_disable_horizontal_flip();jo_sprite_disable_vertical_flip();
     jo_sprite_disable_half_transparency();jo_sprite_disable_dark_filter();
     jo_sprite_disable_gouraud_shading();jo_sprite_restore_sprite_scale();jo_sprite_disable_clipping();
-    for(i=0;i<2;i++)if(mf_ws_beam_active(&shooter,i))
-        draw(10+((shooter.ticks/3+i)&3),shooter.players[i].x/256-16,shooter.players[i].y/256-15-MF_WS_BEAM_LENGTH);
+    for(i=0;i<2;i++)if(mf_ws_beam_active(&shooter,i)){
+        int bottom=shooter.players[i].y/256-MF_WS_BEAM_EMITTER;
+        /* Tile one periodic body frame without gaps or a terminal tip. All
+           segments share phase so the wrap remains seamless during animation.
+           System clipping trims the uppermost segment at the playfield edge. */
+        for(;bottom>MF_WS_BEAM_TOP;bottom-=MF_WS_BEAM_SEGMENT_HEIGHT)
+            draw(10+((shooter.ticks/3+i)&3),shooter.players[i].x/256-16,bottom-MF_WS_BEAM_SEGMENT_HEIGHT);
+    }
     for(i=0;i<MF_WS_ENEMIES;i++){
         mf_ws_enemy *e=&shooter.enemies[i];
         if(e->active)draw(2,e->x/256-12,e->y/256-12);

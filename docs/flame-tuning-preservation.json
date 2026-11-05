@@ -1,0 +1,99 @@
+{
+  "base_commit": "5b07fe92676d4f3cc8c431be057ae6bbb6efa1fe",
+  "files": {
+    "WBUCK.BIN": {
+      "bytes": 2048,
+      "sha256": "9fa9c843be05bf9c98498462fa76d99f16048bc3e304ca502e28f81a08ca647e"
+    },
+    "WBUCKL.BIN": {
+      "bytes": 2048,
+      "sha256": "42e60af95abd2df67cf6ed10c717aa4b67a1e87e3c6af8a8c281be7152300016"
+    },
+    "WBUCKR.BIN": {
+      "bytes": 2048,
+      "sha256": "dad1a5c4bb330991a76b8831ba775fd3d93c4e70f11a946ef8425a3e5abd3249"
+    },
+    "WCHUCK.BIN": {
+      "bytes": 2048,
+      "sha256": "cbfcddef945754a4f5185e6b10a05b10c590127067dc80632419b921a256a659"
+    },
+    "WCHUCKL.BIN": {
+      "bytes": 2048,
+      "sha256": "9fc01c73ce666b083e1cbe092eab625a7d7adcfcfb246e0df4805bac1aabb713"
+    },
+    "WCHUCKR.BIN": {
+      "bytes": 2048,
+      "sha256": "326b3182f2231b99bd4665f33cfe4cdc2b649a85b9a420b083cd1864ad8e61c6"
+    },
+    "WDRONE.BIN": {
+      "bytes": 1152,
+      "sha256": "8ca9e9317dbebdac14269cd4114aaef56d370be49218b7cb0487131864a1c0d7"
+    },
+    "WSHOT.BIN": {
+      "bytes": 128,
+      "sha256": "912c344d4d05e9defaf136767f9e55ee6b35bd1d04c46ee0187c00b8fb17077d"
+    },
+    "WHOST.BIN": {
+      "bytes": 128,
+      "sha256": "7ea42936bac837f101de9879f713e2ab0e9a823269eab2fa0dcb7a6108e0fd49"
+    },
+    "WBOOM.BIN": {
+      "bytes": 2048,
+      "sha256": "5a3b1bf7fcc1433381197516def627d52ddec907eae587cc32028fe557362dfb"
+    },
+    "WCELL.BIN": {
+      "bytes": 2752,
+      "sha256": "f3bfd4f1faae13b31c2699d24d8a4fe251406948fc286857a447eb7ac419f477"
+    },
+    "WMAP.BIN": {
+      "bytes": 8192,
+      "sha256": "d22432568dc18e83f0a83b41380dc11ced413879ea2fec20e994e91a7df4c771"
+    },
+    "WPAL.BIN": {
+      "bytes": 32,
+      "sha256": "214e2441e712d7b6b716228512c279924caa9452c48609d712b23fadd548b961"
+    },
+    "WDEATH.TON": {
+      "bytes": 31744,
+      "sha256": "b3b72c2c943df626eb2d3272f3d87e0b180950838eaf99b45075cccac898a898"
+    },
+    "WDEATH.SEQ": {
+      "bytes": 44,
+      "sha256": "a0b53824659f0d02ab84fd908273e0f1f0015afde5598b55d9b7e44f1a799b18"
+    },
+    "WDEATH.MAP": {
+      "bytes": 40,
+      "sha256": "e0f2308a16149e9f9452b3e497a05cdd59deaa9ec8693211993d04ff201aa9be"
+    }
+  },
+  "sources_sha256": {
+    "src/wingsuit_audio.c": "f619dcc9085635ee2575300bd9592b909b155bf86c21dfb78fda61f8de67edab",
+    "src/wingsuit_audio.h": "fa1694ee8d5fdecc034e7e62f99aebebf98149c9fb4c2511c47f9004a54528e9",
+    "src/wingsuit_audio_data.h": "728110791834e505cc01039eb550effb34f521f21fd59e79938a46136bcaf0d2",
+    "src/main.c": "ba86af6646fe9a0940b38a828d6a2f23b9c8d89d937d3e1ab205e3fa17b1505c",
+    "src/game.c": "5dc25170e02bf5cfb664db9822633a0e8f15651770074c0a1c266206e360cd02",
+    "src/game.h": "92e75058e40cbd8076ab3d07afb231d6e0fb73856282cbbec3809fef75e4309d",
+    "src/music.c": "da9531e09b7bf0b84f1b420e3855b6343e03138b9fef09be0e01ee6b011d554c",
+    "src/music_data.h": "9fa8298721d1d97770c032ff3ebccf215d7b77474a875344b537aa58bac5ae15",
+    ".github/workflows/build.yml": "671737d635700a4b2445e1749c307e2b02ceaf6a04b18446830b555dce80274d",
+    "tests/input_mock/jo/jo.h": "10fd32a6ec5467663191044c1fefbd33d97c3a06ae5f01d68a7a4c1327ee6775"
+  },
+  "old_flame_body_width": {
+    "rows_per_frame": [
+      88,
+      128
+    ],
+    "frame_count": 4,
+    "width_sum": 4385,
+    "row_count": 160,
+    "mean_pixels": 27.40625
+  },
+  "sdk": {
+    "revision": "556d081146211b6a1cfa6591d70f9487d406758b",
+    "input_header_blob": "d5b6cab1770313a083d0a93d938d07f80de0f74c",
+    "sglarea_blob": "8cb7e597b621a77ab3d05a8f3e7118cb158544e4",
+    "sgl_x": 64,
+    "sgl_z": 16,
+    "max_polygons": 1761
+  }
+}

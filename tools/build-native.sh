@@ -358,7 +358,7 @@ if [[ $combo == 1 ]]; then
 fi
 printf 'Jab jab cross combo: %s\n' "$combo" >> build/BUILD-INFO.txt
 printf 'Player running waist seam: %s\nFast horizontal running bat: %s\n' "$waist" "$fast_bat" >> build/BUILD-INFO.txt
-printf 'Level 2 wingsuit: %s\nDev Saturn Z stage skip: %s\n' "$wingsuit" "$dev_skip" >> build/BUILD-INFO.txt
+printf 'Level 2 wingsuit: %s\nDev Saturn X stage skip: %s\n' "$wingsuit" "$dev_skip" >> build/BUILD-INFO.txt
 cp src/*.c src/*.h build/
 cp docs/native-music.md build/NATIVE-MUSIC.md
 cp docs/custom-combat-sfx.md build/CUSTOM-COMBAT-SFX.md

@@ -6,11 +6,15 @@
 #define MF_WS_HOSTILE 16
 #define MF_WS_ENEMIES 8
 #define MF_WS_FIRE_TICKS 7 /* Mobile fan minimum repeat interval. */
-#define MF_WS_FOCUS_TICKS 12 /* 0.20 s at 60 Hz; taps remain mobile. */
+#define MF_WS_FOCUS_TICKS 20 /* 0.33 s at 60 Hz; taps remain mobile. */
 #define MF_WS_MOVE_SPEED 640
 #define MF_WS_DIAGONAL_SPEED 452
 #define MF_WS_FOCUS_PERCENT 65
-#define MF_WS_BEAM_LENGTH 128
+#define MF_WS_BEAM_SEGMENT_HEIGHT 32
+#define MF_WS_BEAM_TOP 0
+#define MF_WS_BEAM_EMITTER 15
+#define MF_WS_BEAM_HALF_WIDTH 11
+#define MF_WS_BEAM_MAX_SEGMENTS 7
 #define MF_WS_BEAM_TICKS 6
 #define MF_WS_SPAWN_TICKS 45
 #define MF_WS_INVULNERABLE 120

@@ -9,15 +9,19 @@ int jo_is_input_key_pressed(int p,int key){return !(jo_inputs[p].data&key);}
 int jo_is_input_key_down(int p,int key){return !(jo_inputs[p].push&key);}
 int main(void)
 {
-    int i;for(i=0;i<2;i++){
+    int i;assert(JO_KEY_X==(1<<6) && JO_KEY_Z==(1<<4));for(i=0;i<2;i++){
         int slot=i?6:0;mf_input a;jo_inputs[slot].id=2;
-        jo_inputs[slot].data=jo_inputs[slot].push=65535^JO_KEY_Z;a=mf_input_read_port(i);
+        jo_inputs[slot].data=jo_inputs[slot].push=65535^JO_KEY_X;a=mf_input_read_port(i);
 #if MF_DEV_STAGE_SKIP
-        assert(a.held==MF_Z && a.pressed==MF_Z);
-        jo_inputs[slot].push=65535;a=mf_input_read_port(i);assert(a.held==MF_Z && !a.pressed);
+        assert(a.held==MF_X && a.pressed==MF_X);
+        jo_inputs[slot].push=65535;a=mf_input_read_port(i);assert(a.held==MF_X && !a.pressed);
 #else
         assert(!a.held && !a.pressed);
 #endif
     }
-    puts("PASS Jo Saturn Z: active-low physical ports 0/6, press versus held, no release mapping");
+    for(i=0;i<2;i++){
+        int slot=i?6:0;mf_input a;jo_inputs[slot].data=jo_inputs[slot].push=65535^JO_KEY_Z;
+        a=mf_input_read_port(i);assert(!a.held && !a.pressed);
+    }
+    puts("PASS Jo Saturn X: active-low physical ports 0/6, press versus held, no release mapping");
 }

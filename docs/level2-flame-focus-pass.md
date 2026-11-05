@@ -1,5 +1,8 @@
 # Level 2 flame / focus / death audio / development skip
 
+Historical report for the first flame build. For current beam geometry, activation,
+and Saturn X controls, see [flame tuning pass 2](level2-flame-tuning-pass2.md).
+
 Branch: `feature/level2-flame-focus-pass`. Parent: approved hero-art commit
 `785d2f8c0ea602c1d65f348154c107a4f1c3cd96`.
 
@@ -73,7 +76,7 @@ All twenty stage files retain asset-specific missing/read/length reporting;
 
 ## Development Z shortcut
 
-`MF_DEV_STAGE_SKIP=1` enables `JO_KEY_Z`, the Saturn pad Z constant (SGL bit 0),
+`MF_DEV_STAGE_SKIP=1` enables `JO_KEY_Z`, the Saturn pad Z constant (SGL bit 4),
 through the existing active-low Jo input adapter on physical ports 1 and 2
 (logical slots 0 and 6). No WebRetro keyboard key is embedded. A pressed edge in
 started, unpaused Level 1 enters its existing settling state with a one-tick timer.

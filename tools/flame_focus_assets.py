@@ -10,11 +10,14 @@ def build(out):
  palette=[(0,0,0),(216,72,32),(255,128,40),(255,216,104),(255,240,192)]
  for frame in range(4):
   b=bytearray()
-  for y in range(128):
-   center=16+int(2*math.sin(y*.23+frame*1.7));width=min(14,3+y//8)+((y*7+frame*11)%5-2)
+  for y in range(32):
+   # Periodic 32-row body: translate upward eight rows per frame. It has
+   # no tip/taper, and the same frame tiles seamlessly from end to end.
+   angle=2*math.pi*(y+frame*8)/32
+   center=16+round(math.sin(angle*2));width=12+round(1.2*math.sin(angle)+.4*math.sin(3*angle+.5))
    for x in range(32):
-    d=abs(x-center);edge=width+(1 if (y+frame*3)%11<3 else 0)
-    index=0 if d>=edge or y<(x*3+frame*5)%9 else 1 if d>width-3 else 2 if d>width*.6 else 3 if d>width*.25 else 4
+    d=abs(x-center);edge=width
+    index=0 if d>=edge else 1 if d>width-3 else 2 if d>width*.6 else 3 if d>width*.25 else 4
     r,g,bl=palette[index];v=0 if not index else 0x8000|(r>>3)|((g>>3)<<5)|((bl>>3)<<10)
     b+=struct.pack('>H',v)
   save(f'WFL{frame}.BIN',b)

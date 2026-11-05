@@ -30,7 +30,7 @@ mf_input mf_input_read_port(int port)
     READ_BUTTON(MF_C, JO_KEY_C);
     READ_BUTTON(MF_START, JO_KEY_START);
 #if MF_DEV_STAGE_SKIP
-    READ_BUTTON(MF_Z, JO_KEY_Z);
+    READ_BUTTON(MF_X, JO_KEY_X);
 #endif
 #undef READ_BUTTON
     return input;

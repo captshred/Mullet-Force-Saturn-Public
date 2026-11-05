@@ -21,7 +21,7 @@ int main(void)
         x=g.players[0].x;step(&g,MF_A|MF_RIGHT,0);assert(g.players[0].x-x==640);
     }
     x=g.players[0].x;n=shots(&g);step(&g,MF_A|MF_RIGHT,0);
-    assert(g.players[0].shot_hold==12 && g.players[0].x-x==416 && shots(&g)==n);
+    assert(g.players[0].shot_hold==MF_WS_FOCUS_TICKS && g.players[0].x-x==416 && shots(&g)==n);
     assert(mf_ws_beam_active(&g,0));
     for(i=0;i<10;i++)step(&g,MF_A,0);
     assert(shots(&g)==n); /* No focused projectile remnants exist. */
@@ -45,7 +45,7 @@ int main(void)
     setup(&g,1);focus(&g);x=g.players[0].x;y=g.players[1].x;
     step(&g,MF_A|MF_RIGHT,MF_A|MF_RIGHT);
     assert(g.players[0].x-x==416 && g.players[1].x-y==640 && g.players[1].shot_hold==1);
-    assert(g.players[0].shot_hold==12);
+    assert(g.players[0].shot_hold==MF_WS_FOCUS_TICKS);
     for(i=0;i<MF_WS_SHOTS;i++)if(g.shots[i].active && g.shots[i].owner==1)break;
     assert(i<MF_WS_SHOTS && g.shots[i].vx==-S);
     /* A short edge latched between VBlanks still emits a mobile fan. */
@@ -69,6 +69,6 @@ int main(void)
     mf_ws_step(&g,h,zero,1);assert(!memcmp(&g,&snapshot,sizeof(g)));
     setup(&g,1);focus(&g);g.game_over=1;mf_ws_step(&g,zero,p,3);
     assert(!g.game_over && !g.players[0].shot_hold && !g.players[1].shot_hold && !shots(&g));
-    printf("PASS combat pass 1: exact mobile/focus speeds, 12-tick threshold, 65%% drag, normalized diagonals, unchanged 3-way taps/attached flame, coop, atomic bursts, HUD/TTL cleanup and pause/restart; state %lu bytes\n",(unsigned long)sizeof(g));
+    printf("PASS combat pass 1: exact mobile/focus speeds, 20-tick threshold, 65%% drag, normalized diagonals, unchanged 3-way taps/attached flame, coop, atomic bursts, HUD/TTL cleanup and pause/restart; state %lu bytes\n",(unsigned long)sizeof(g));
     return 0;
 }

@@ -83,8 +83,8 @@ void mf_ws_step(mf_wingsuit *g,const unsigned held[2],const unsigned pressed[2],
     }
     for(i=0;i<2;i++)if(pulse[i])for(j=0;j<MF_WS_ENEMIES;j++){
         mf_ws_player *p=&g->players[i];mf_ws_enemy *e=&g->enemies[j];
-        if(e->active && e->x>=p->x-22*S && e->x<=p->x+22*S &&
-           e->y+10*S>=p->y-(15+MF_WS_BEAM_LENGTH)*S && e->y-10*S<=p->y-15*S){
+        if(e->active && e->x>=p->x-(MF_WS_BEAM_HALF_WIDTH+10)*S && e->x<=p->x+(MF_WS_BEAM_HALF_WIDTH+10)*S &&
+           e->y+10*S>=MF_WS_BEAM_TOP*S && e->y-10*S<=p->y-MF_WS_BEAM_EMITTER*S){
             e->active=0;e->explosion=12;p->score+=100;++g->deaths;
         }
     }

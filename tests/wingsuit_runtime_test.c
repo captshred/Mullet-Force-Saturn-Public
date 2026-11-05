@@ -90,8 +90,20 @@ int slScrAutoDisp(unsigned a){
     for(i=0;i<8;i++)spr_priority[i]=0;
     rgb_mode=0;spr_window=7;pixel_window=1;screen_dist=400;depth_level=1;return 0;
 }
-static int beam_actor;
-void jo_sprite_disable_horizontal_flip(void){beam_actor=0;}
+static int beam_draws;
+static int beam_y[2][MF_WS_BEAM_MAX_SEGMENTS],beam_n[2];
+static void check_beam_coverage(int actor)
+{
+    int row,k,bottom=shooter.players[actor].y/256-MF_WS_BEAM_EMITTER;
+    assert(beam_n[actor]>=1 && beam_n[actor]<=7);
+    assert(beam_y[actor][0]+32==bottom && beam_y[actor][beam_n[actor]-1]<=0);
+    for(k=1;k<beam_n[actor];k++)assert(beam_y[actor][k]+32==beam_y[actor][k-1]);
+    for(row=0;row<bottom;row++){
+        int covered=0;for(k=0;k<beam_n[actor];k++)covered+=row>=beam_y[actor][k] && row<beam_y[actor][k]+32;
+        assert(covered==1); /* No gaps and no overlapping alpha seams. */
+    }
+}
+void jo_sprite_disable_horizontal_flip(void){beam_draws=beam_n[0]=beam_n[1]=0;}
 void jo_sprite_disable_vertical_flip(void){}
 void jo_sprite_disable_half_transparency(void){}
 void jo_sprite_disable_dark_filter(void){}
@@ -100,7 +112,12 @@ void jo_sprite_restore_sprite_scale(void){}
 void jo_sprite_disable_clipping(void){}
 void jo_sprite_draw3D2(int id,int x,int y,int z){
     int i;
-    if(id>=10){while(beam_actor<2 && !mf_ws_beam_active(&shooter,beam_actor))++beam_actor;assert(beam_actor<2);assert(x==shooter.players[beam_actor].x/256-16 && y==shooter.players[beam_actor].y/256-15-MF_WS_BEAM_LENGTH);beam_actor++;}
+    if(id>=10){
+        int actor=-1,j;
+        for(j=0;j<2;j++)if(mf_ws_beam_active(&shooter,j) && id==10+(int)((shooter.ticks/3+j)&3))actor=j;
+        assert(actor>=0 && x==shooter.players[actor].x/256-16 && beam_n[actor]<7);
+        beam_y[actor][beam_n[actor]++]=y;++beam_draws;
+    }
     assert(id>=0 && id<=last && z==100 && state_step==19 && ws_ptmr==2);
     assert(z>(screen_dist>>depth_level) && z<=far_z);
     assert(rgb_mode==SPR_PAL_RGB && !spr_window && !pixel_window);
@@ -128,7 +145,7 @@ int main(void)
     /* Repeated callbacks without a new VBlank cannot release resources. */
     for(i=0;i<10;i++)mf_ws_runtime_frame(in,p,now);
     assert(!resets && !reads);frame(in,p);frame(in,p);assert(!resets);
-    frame(in,p);assert(resets==1 && off==1 && last==13 && slots==48512);
+    frame(in,p);assert(resets==1 && off==1 && last==13 && slots==23936);
     assert(ws_ptmr==2 && cds==2 && !in_stage);
     assert(reads==20 && frees==20 && !draws && !p[0] && !p[1]);
     assert(ws_vdp1[0]==0x5555 && ws_vdp1[0x10000/2]==0 && ws_vdp1[0x7fef8/2]==0x5555);
@@ -174,14 +191,33 @@ int main(void)
     puts("PASS player pass 2: actual per-player movement selects all six poses; vertical/opposed/bounds/disconnect/pause center; complete restart field clears stray T while preserving HUD");
     puts("PASS VDP1 state: stopped PTMR restarts in auto mode; SGL state restored after VDP2 scheduling; all six render paths accepted independently of gameplay");
     mf_ws_init(&shooter,1);shooter.spawn=10000;
-    shooter.players[0].shot_hold=shooter.players[1].shot_hold=11;
+    shooter.players[0].shot_hold=shooter.players[1].shot_hold=MF_WS_FOCUS_TICKS-1;
     shooter.enemies[0]=(mf_ws_enemy){1,130*256,100*256,0,0};
     in[0].held=MF_A|MF_RIGHT;in[1].held=MF_A|MF_LEFT;phase=3;
     audio_events=audio_pumps=0;rendered_types=0;frame(in,p);
-    assert(beam_actor==2 && audio_events==1 && audio_pumps==1);
+    check_beam_coverage(0);check_beam_coverage(1);
+    assert(beam_draws==12 && audio_events==1 && audio_pumps==1);
     assert((rendered_types&((1u<<10)|(1u<<11)))!=0);
     render();render();assert(audio_events==1 && audio_pumps==1);
-    in[0].held=in[1].held=0;frame(in,p);assert(!beam_actor && audio_events==1);
+    in[0].held=in[1].held=0;frame(in,p);assert(!beam_draws && audio_events==1);
+    {
+        static const int ys[]={16,32,47,64,128,200,223};int n,f;
+        for(n=0;n<7;n++)for(f=0;f<12;f++){
+            mf_ws_init(&shooter,1);shooter.players[0].y=shooter.players[1].y=ys[n]*256;
+            shooter.players[0].shot_hold=shooter.players[1].shot_hold=20;shooter.ticks=f;
+            render();check_beam_coverage(0);check_beam_coverage(1);
+            assert(beam_draws==2*((ys[n]-15+31)/32));
+        }
+        /* Both beams plus every original pool at its simultaneous limit. */
+        mf_ws_init(&shooter,1);shooter.players[0].y=shooter.players[1].y=223*256;
+        shooter.players[0].invulnerable=shooter.players[1].invulnerable=0;
+        shooter.players[0].shot_hold=shooter.players[1].shot_hold=20;
+        for(n=0;n<MF_WS_ENEMIES;n++)shooter.enemies[n]=(mf_ws_enemy){1,100*256,60*256,0,0};
+        for(n=0;n<MF_WS_SHOTS;n++)shooter.shots[n]=(mf_ws_shot){1,100*256,80*256,0,60,0};
+        for(n=0;n<MF_WS_HOSTILE;n++)shooter.hostile[n]=(mf_ws_shot){1,150*256,80*256,0,60,0};
+        r=draws;render();assert(beam_draws==14 && draws-r==72);
+    }
+    puts("PASS full-height renderer: seven player heights and all animation phases, contiguous row coverage, clean offscreen top, attached emitters; simultaneous two-player/all-pools maximum 72 commands");
     puts("PASS render integration: two attached animated beam draws through restored SGL; release removes draws; simulation deaths queued once, rendering never re-triggers audio");
     window_fail=1;mf_ws_runtime_begin(0,&palette,now);frame(in,p);frame(in,p);frame(in,p);frame(in,p);
     assert(ws_ptmr==0 && strstr(diagnostic,"WINDOW") && error==107);window_fail=0;
@@ -195,7 +231,7 @@ int main(void)
     ws_edsr=2;fail=0;
     {
         const char *assets[]={"WCELL.BIN","WMAP.BIN","WPAL.BIN","WBUCK.BIN","WCHUCK.BIN","WDRONE.BIN","WSHOT.BIN","WHOST.BIN","WBOOM.BIN","WBUCKL.BIN","WBUCKR.BIN","WCHUCKL.BIN","WCHUCKR.BIN","WFL0.BIN","WFL1.BIN","WFL2.BIN","WFL3.BIN","WDEATH.MAP","WDEATH.SEQ","WDEATH.TON"};
-        const int sizes[]={2752,8192,32,2048,2048,1152,128,128,2048,2048,2048,2048,2048,8192,8192,8192,8192,MF_WS_MAP_BYTES,MF_WS_SEQ_BYTES,MF_WS_TON_BYTES};
+        const int sizes[]={2752,8192,32,2048,2048,1152,128,128,2048,2048,2048,2048,2048,2048,2048,2048,2048,MF_WS_MAP_BYTES,MF_WS_SEQ_BYTES,MF_WS_TON_BYTES};
         char expected[64];int mode,a;
         for(mode=0;mode<2;mode++)for(a=0;a<20;a++){
             missing_asset=mode==0?assets[a]:NULL;short_asset=mode==1?assets[a]:NULL;
@@ -218,6 +254,6 @@ int main(void)
         assert(cds==0 && reads==r && resets==i);
     }
     puts("PASS filesystem: root table overflow reproduced; all twenty assets read in ALEVEL2; parent restored; per-asset missing/length/read/registration errors");
-    puts("PASS actual Level 2 loader: real-VBlank drain, bank reset, 14 definitions/48512 bytes, arena bounds, CRAM/font isolation, SCSP release, no gameplay allocations/I/O, partial-load failure");
+    puts("PASS actual Level 2 loader: real-VBlank drain, bank reset, 14 definitions/23936 bytes, arena bounds, CRAM/font isolation, SCSP release, no gameplay allocations/I/O, partial-load failure");
     return 0;
 }
