@@ -8,19 +8,19 @@
   "files": {
     "WBUCK.BIN": {
       "bytes": 2048,
-      "sha256": "d98d1cf5a1abfab18053e8b33333ae44d1b4a08f5bc3b58eed41a2c7e04810e5"
+      "sha256": "e2b6e5455f74901425386b2660879f7ee103e809fad1eeadafa80baf8722b6ea"
     },
     "WCHUCK.BIN": {
       "bytes": 2048,
-      "sha256": "4d0d1d273e7cfd49f5a10102288d4d36eb7cd69b2a0ed48bc251a307cc523c59"
+      "sha256": "1a6e01e3e1263dbd72e375f3d958d5ad4f58fa70cde3624e41c5fd8b6e3ae02f"
     },
     "WDRONE.BIN": {
       "bytes": 1152,
-      "sha256": "5e2295f23acf08aa1e40954ffcb1d2c4f546bcf33ef75e9f9a72f31cbe1504f2"
+      "sha256": "8ca9e9317dbebdac14269cd4114aaef56d370be49218b7cb0487131864a1c0d7"
     },
     "WSHOT.BIN": {
       "bytes": 128,
-      "sha256": "03a7d8523f8645958bfd91de6add6f891316cb7eea08deeffc11e1ab9cd7a630"
+      "sha256": "912c344d4d05e9defaf136767f9e55ee6b35bd1d04c46ee0187c00b8fb17077d"
     },
     "WHOST.BIN": {
       "bytes": 128,

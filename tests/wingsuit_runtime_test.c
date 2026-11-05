@@ -130,8 +130,8 @@ int main(void)
     shooter.players[0].invulnerable=shooter.players[1].invulnerable=0;
     shooter.enemies[0]=(mf_ws_enemy){1,100*256,60*256,0,0};
     shooter.enemies[1]=(mf_ws_enemy){0,150*256,60*256,0,12};
-    shooter.shots[0]=(mf_ws_shot){1,100*256,80*256,0,60};
-    shooter.hostile[0]=(mf_ws_shot){1,150*256,80*256,0,60};
+    shooter.shots[0]=(mf_ws_shot){1,100*256,80*256,0,60,0};
+    shooter.hostile[0]=(mf_ws_shot){1,150*256,80*256,0,60,0};
     rendered_types=0;render();assert(rendered_types==63u);
     puts("PASS VDP1 state: stopped PTMR restarts in auto mode; SGL state restored after VDP2 scheduling; all six render paths accepted independently of gameplay");
     window_fail=1;mf_ws_runtime_begin(0,&palette,now);frame(in,p);frame(in,p);frame(in,p);frame(in,p);

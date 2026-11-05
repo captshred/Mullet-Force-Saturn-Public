@@ -5,6 +5,7 @@ R=Path(__file__).resolve().parents[1]
 with tempfile.TemporaryDirectory(prefix='mf-wingsuit-') as tmp:
  for name,sources,includes in [
   ('game',['tests/wingsuit_test.c','src/wingsuit.c'],['-Isrc']),
+  ('weapons',['tests/wingsuit_weapon_test.c','src/wingsuit.c'],['-Isrc']),
   ('runtime',['tests/wingsuit_runtime_test.c','src/wingsuit.c'],['-Itests/wingsuit_mock','-Isrc'])]:
   exe=str(Path(tmp)/name)
   subprocess.run(['cc','-std=c99','-Wall','-Wextra','-Werror',*includes,*sources,'-o',exe],cwd=R,check=True)

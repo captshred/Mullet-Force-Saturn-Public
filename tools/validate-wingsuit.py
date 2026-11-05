@@ -10,6 +10,10 @@ assert m['textures']==6 and m['vdp1_bytes']==7552 and m['tiles']==43
 for name,f in m['files'].items():
  b=(R/'assets/wingsuit'/name).read_bytes()
  assert len(b)==f['bytes'] and hashlib.sha256(b).hexdigest()==f['sha256'],name
+# RGB555 payloads preserve zero transparency and native texture footprints.
+for name in ('WBUCK.BIN','WCHUCK.BIN','WDRONE.BIN','WSHOT.BIN','WHOST.BIN','WBOOM.BIN'):
+ pixels=struct.unpack('>'+str(m['files'][name]['bytes']//2)+'H',(R/'assets/wingsuit'/name).read_bytes())
+ assert all(v==0 or v&0x8000 for v in pixels),(name,'invalid RGB555 texel')
 assert sum(m['files'][n]['bytes'] for n in ('WBUCK.BIN','WCHUCK.BIN','WDRONE.BIN','WSHOT.BIN','WHOST.BIN','WBOOM.BIN'))==7552
 assert m['files']['WCELL.BIN']['bytes']==43*64==2752
 assert m['files']['WMAP.BIN']['bytes']==8192

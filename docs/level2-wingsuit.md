@@ -1,5 +1,8 @@
 # Level 2 — Wingsuit Assault prototype
 
+The confirmed playable baseline and subsequent [combat/sprite pass 1](level2-combat-pass1.md)
+have separate validation status, tuning, resource accounting and build instructions.
+
 The subsequent [VDP1/SGL restoration repair](level2-vdp1-state.md) documents the
 reported invisible sprite layer, explicit render-state setup, and retest limits.
 
