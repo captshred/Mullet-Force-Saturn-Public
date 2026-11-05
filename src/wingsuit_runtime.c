@@ -5,7 +5,12 @@
 #include "wingsuit.h"
 #include <string.h>
 static mf_wingsuit shooter;
-static int ids[6]={-1,-1,-1,-1,-1,-1};
+static int ids[10]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
+static int player_bank[2];
+static const char restart_prompt[]="1P START TO RESTART";
+static const char restart_clear[]="                   ";
+typedef char restart_field_width_must_match[(sizeof(restart_prompt)==sizeof(restart_clear))?1:-1];
+enum { WS_CENTER, WS_LEFT, WS_RIGHT };
 static int phase,drain,title,error;
 static unsigned previous;
 static const char *failed_asset,*failed_reason;
@@ -87,8 +92,8 @@ static void wipe(volatile unsigned short *p,unsigned bytes)
 static int load_resources(void)
 {
     unsigned wait;
-    int i;static const char *names[]={"WBUCK.BIN","WCHUCK.BIN","WDRONE.BIN","WSHOT.BIN","WHOST.BIN","WBOOM.BIN"};
-    static const int widths[]={32,32,24,8,8,32};
+    int i;static const char *names[]={"WBUCK.BIN","WCHUCK.BIN","WDRONE.BIN","WSHOT.BIN","WHOST.BIN","WBOOM.BIN","WBUCKL.BIN","WBUCKR.BIN","WCHUCKL.BIN","WCHUCKR.BIN"};
+    static const int widths[]={32,32,24,8,8,32,32,32,32,32};
     /* All prior commands have passed through three core slSynch barriers.
        No sprites were submitted during them; no slave rendering is enabled. */
     if(!background_palette || background_palette->id!=1 || !background_palette->data){load_failure("CRAM","PALETTE",1,-1);return 100;}
@@ -112,9 +117,9 @@ static int load_resources(void)
     if(!copy_file("WCELL.BIN",WS_CELLS,WS_CELL_BYTES) ||
        !copy_file("WMAP.BIN",WS_MAP,WS_MAP_BYTES) ||
        !copy_file("WPAL.BIN",background_palette->data,32))return 102;
-    for(i=0;i<6;i++){
+    for(i=0;i<10;i++){
         ids[i]=texture(names[i],widths[i],widths[i]);
-        if(ids[i]!=i){if(!failed_asset)load_failure(names[i],"SPRITE ID",i,ids[i]);jo_sprite_free_all();for(i=0;i<6;i++)ids[i]=-1;return 103;}
+        if(ids[i]!=i){if(!failed_asset)load_failure(names[i],"SPRITE ID",i,ids[i]);jo_sprite_free_all();for(i=0;i<10;i++)ids[i]=-1;return 103;}
     }
     slCharNbg1(COL_TYPE_256,CHAR_SIZE_1x1);
     slPageNbg1(WS_CELLS,0,PNB_1WORD|CN_12BIT);
@@ -145,12 +150,21 @@ static int load(void)
 void mf_ws_runtime_begin(int coop,jo_palette *background,unsigned now)
 {
     mf_ws_init(&shooter,coop);background_palette=background;
+    player_bank[0]=player_bank[1]=WS_CENTER;
     phase=1;drain=0;title=120;error=0;previous=now;
     failed_asset=failed_reason=0;failed_expected=failed_actual=-1;
     slScrDisp(NBG1OFF|NBG2OFF);jo_clear_screen();
 }
 static void draw(int id,int x,int y)
 {jo_sprite_draw3D2(ids[id],x,y,WS_SPRITE_Z);}
+static int bank_after_step(int old_x,const mf_ws_player *p,unsigned held,int was_game_over)
+{
+    int dx=!!(held&MF_RIGHT)-!!(held&MF_LEFT);
+    if(was_game_over || shooter.game_over || shooter.paused || !p->active || !p->lives || p->respawn)return WS_CENTER;
+    if(dx<0 && p->x<old_x)return WS_LEFT;
+    if(dx>0 && p->x>old_x)return WS_RIGHT;
+    return WS_CENTER;
+}
 static void render(void)
 {
     int i;slScrPosNbg1(0,-shooter.scroll*65536);
@@ -167,7 +181,10 @@ static void render(void)
     for(i=0;i<MF_WS_HOSTILE;i++)if(shooter.hostile[i].active)draw(4,shooter.hostile[i].x/256-4,shooter.hostile[i].y/256-4);
     for(i=0;i<2;i++){
         mf_ws_player *p=&shooter.players[i];int col=i?34:0;
-        if(p->active && p->lives && !p->respawn && (!p->invulnerable || !(shooter.ticks&4)))draw(i,p->x/256-16,p->y/256-16);
+        if(p->active && p->lives && !p->respawn && (!p->invulnerable || !(shooter.ticks&4))){
+            static const int pose[2][3]={{0,6,7},{1,8,9}};
+            draw(pose[i][player_bank[i]],p->x/256-16,p->y/256-16);
+        }
         jo_print(col,2,i?"CHUCK":"BUCK");jo_print(col,3,i?"2P":"1P");
         jo_printf(col,6,"%05d",p->score%100000);jo_print(col,8,"LIVES");jo_printf(col,9,"%d",p->lives);
         jo_print(col,12,"WPN 1");
@@ -175,7 +192,7 @@ static void render(void)
         else {jo_print(col,16,"     ");jo_print(col,17,"    ");}
     }
     jo_print(12,14,shooter.game_over?"GAME OVER       ":(shooter.paused?"PAUSED          ":"                "));
-    jo_print(10,16,shooter.game_over?"1P START TO RESTART":"                  ");
+    jo_print(10,16,shooter.game_over?restart_prompt:restart_clear);
 }
 void mf_ws_runtime_frame(const mf_input input[2],unsigned pressed[2],unsigned now)
 {
@@ -202,7 +219,9 @@ void mf_ws_runtime_frame(const mf_input input[2],unsigned pressed[2],unsigned no
     }
     if(elapsed>6)elapsed=6;
     for(i=0;i<elapsed;i++){
+        int j,was_game_over=shooter.game_over,old_x[2]={shooter.players[0].x,shooter.players[1].x};
         mf_ws_step(&shooter,held,pressed,conn);pressed[0]=pressed[1]=0;
+        for(j=0;j<2;j++)player_bank[j]=bank_after_step(old_x[j],&shooter.players[j],(conn&(1u<<j))?held[j]:0,was_game_over);
     }
     render();
 }

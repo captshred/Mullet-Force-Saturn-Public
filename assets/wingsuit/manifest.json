@@ -1,6 +1,6 @@
 {
-  "textures": 6,
-  "vdp1_bytes": 7552,
+  "textures": 10,
+  "vdp1_bytes": 15744,
   "tiles": 43,
   "vdp2_payload_bytes": 10944,
   "cram_bytes": 32,
@@ -8,11 +8,27 @@
   "files": {
     "WBUCK.BIN": {
       "bytes": 2048,
-      "sha256": "e2b6e5455f74901425386b2660879f7ee103e809fad1eeadafa80baf8722b6ea"
+      "sha256": "8b4265ef862a895cce2d51aef70cd348d67265043f810c762ae5f32b22c61e16"
+    },
+    "WBUCKL.BIN": {
+      "bytes": 2048,
+      "sha256": "9548c5e3970d4128db492ee038c516efec95ed9b74175341641bbc3fe3721c69"
+    },
+    "WBUCKR.BIN": {
+      "bytes": 2048,
+      "sha256": "83b3479147a4eb7b2be3efcecc49ec1a4210d1d654b41e89d7c2a2e9351453d0"
     },
     "WCHUCK.BIN": {
       "bytes": 2048,
-      "sha256": "1a6e01e3e1263dbd72e375f3d958d5ad4f58fa70cde3624e41c5fd8b6e3ae02f"
+      "sha256": "c3df7d0a5501ff18521cdb2f5e1c97ca8b9654968c3191fc840594fa14c8e8f2"
+    },
+    "WCHUCKL.BIN": {
+      "bytes": 2048,
+      "sha256": "9fbc4b39f87964d2d0224898da938ed6dc03fddca6a73c98fd182afa10a2f24f"
+    },
+    "WCHUCKR.BIN": {
+      "bytes": 2048,
+      "sha256": "66091144c43794fc00a4b6c3a1431dce73c89651cfbe8b606e05f7882eb02c9d"
     },
     "WDRONE.BIN": {
       "bytes": 1152,

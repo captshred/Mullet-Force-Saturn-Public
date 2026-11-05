@@ -6,7 +6,7 @@ R=Path(__file__).resolve().parents[1]
 def stage(enabled,root):
     root=Path(root);root.mkdir(parents=True,exist_ok=True)
     names=json.loads((R/'assets/wingsuit/manifest.json').read_text())['files']
-    assert len(names)==9 and all(Path(n).name==n and n.endswith('.BIN') for n in names)
+    assert len(names)==13 and all(Path(n).name==n and n.endswith('.BIN') for n in names)
     for name in names:(root/name).unlink(missing_ok=True)
     dest=root/'ALEVEL2'
     if dest.exists():shutil.rmtree(dest)

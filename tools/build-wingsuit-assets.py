@@ -15,50 +15,67 @@ def sprite(name,size,paint):
  return im
 previews=[]
 for actor in range(2):
- def player(d,a=actor):
-  # Pixel-authored at the native 32x32 footprint; light comes from upper left.
-  ink=(7,13,23);seam=(37,52,72)
-  shade=(78,103,131) if not a else (20,30,45)
-  mid=(154,177,201) if not a else (39,56,78)
-  light=(218,232,238) if not a else (78,107,135)
-  shine=(250,250,234) if not a else (153,187,205)
-  trim=(203,67,59) if not a else (64,175,194)
-  if not a:
-   outer=[(13,7),(19,7),(23,10),(30,14),(31,19),(25,19),(22,18),(22,24),(20,29),(17,29),(16,24),(15,29),(11,29),(9,23),(9,18),(4,20),(0,19),(1,15),(8,11)]
-   wing=[(11,10),(7,13),(2,16),(2,18),(9,16),(11,21),(14,23),(18,23),(21,20),(22,15),(29,18),(29,16),(22,12),(20,9)]
-  else:
-   outer=[(13,7),(19,7),(22,11),(27,14),(29,18),(26,20),(21,17),(21,24),(20,29),(18,29),(16,24),(14,29),(11,29),(10,23),(10,18),(6,20),(3,18),(5,14),(10,11)]
-   wing=[(12,10),(8,14),(5,17),(6,18),(11,15),(12,22),(15,23),(18,22),(20,15),(26,18),(27,17),(21,12),(19,9)]
-  d.polygon(outer,fill=ink);d.polygon(wing,fill=mid)
-  d.polygon([(3+a*2,17),(10,14),(12,17),(13,22),(10,19),(9,17),(5,19)],fill=shade)
-  d.polygon([(20,12),(25-a,15),(29-a*2,18),(25,17),(22,17),(21,21),(18,24),(17,19)],fill=shade)
-  d.line([(3+a*2,16),(10,12),(13,10)],fill=shine)
-  d.line([(20,10),(24,13),(28-a*2,16)],fill=light)
-  d.line([(6+a,17),(11,14),(14,21)],fill=light)
-  d.line([(19,20),(21,14),(26-a,17)],fill=seam)
-  d.polygon([(11,10),(13,11),(15,22),(13,22)],fill=light)
-  d.line([(12,10),(14,20)],fill=seam)
-  d.line([(20,10),(18,23)],fill=ink)
-  d.rectangle((12,22,19,24),fill=seam);d.line((12,22,19,22),fill=shine)
-  d.rectangle((14,22,17,23),fill=(177,156,104))
-  d.line((11,25,12,28),fill=shade);d.line((19,25,19,28),fill=shade)
-  d.point((11,25),fill=light);d.point((19,25),fill=light)
-  d.line((5+a,15,7+a,14),fill=trim);d.line((24-a,14,26-a,15),fill=trim)
-  # Exposed head, temple/visor glint, and three distinct trailing hair locks.
-  d.rectangle((12,3,20,7),fill=ink);d.rectangle((13,2,19,8),fill=(72,35,30))
-  d.rectangle((13,4,19,7),fill=(182,108,75));d.line((13,4,18,4),fill=(247,194,136))
-  d.point((12,6),fill=(211,139,92));d.point((20,6),fill=(211,139,92))
-  d.line((14,5,18,5),fill=(29,53,73));d.point((14,5),fill=(133,221,225))
-  hair_dark=(83,39,28) if not a else (68,42,29)
-  hair_mid=(154,75,33) if not a else (128,80,37)
-  hair_light=(232,148,65) if not a else (207,158,76)
-  d.polygon([(13,7),(19,7),(20,11),(18,14),(20,18),(19,23),(17,20),(16,27),(14,24),(14,18),(11,23),(12,17),(12,12)],fill=hair_dark)
-  d.polygon([(13,8),(15,9),(14,14),(13,18),(12,20),(13,14)],fill=hair_mid)
-  d.polygon([(16,8),(18,9),(17,15),(18,19),(16,24),(15,21),(16,16)],fill=hair_mid)
-  d.line([(14,8),(14,11),(13,16)],fill=hair_light)
-  d.line([(17,9),(17,12),(16,17),(17,20)],fill=hair_light)
-  d.point((19,19),fill=hair_mid);d.point((15,24),fill=hair_light)
- previews.append(sprite('WBUCK.BIN' if actor==0 else 'WCHUCK.BIN',(32,32),player))
+ for bank,suffix in [(0,''),(-1,'L'),(1,'R')]:
+  def player(d,a=actor,b=bank):
+   # Pose-specific anatomy: lowered near wing, narrowed raised wing and a
+   # curved spine. Skin/head, chest, hips and two legs remain separate.
+   ink=(7,14,24);dark=(43,63,83) if not a else (16,25,37)
+   mid=(145,171,195) if not a else (37,53,73)
+   light=(214,231,238) if not a else (83,115,139)
+   glint=(250,247,220) if not a else (161,192,205)
+   accent=(205,64,54) if not a else (52,170,187)
+   def poly(points,color):d.polygon(points,fill=color)
+   # Downward tilt on the banking side, torso leans into the turn. Right/left
+   # use different folds and lighting, rather than flipping a rendered bitmap.
+   cx=16+b;head=16+b;left_y=14+(3 if b<0 else -1 if b>0 else 0)
+   right_y=14+(3 if b>0 else -1 if b<0 else 0)
+   lx=(1 if not a else 3)+(2 if b>0 else 0)
+   rx=(30 if not a else 28)-(2 if b<0 else 0)
+   poly([(cx-5,8),(cx+4,8),(rx,right_y),(rx-1,right_y+4),(cx+5,17),
+         (cx+4,23),(cx+1,26),(cx-4,24),(cx-6,17),(lx+1,left_y+4),(lx,left_y)],ink)
+   poly([(cx-4,9),(cx-7,12),(lx+1,left_y+1),(lx+2,left_y+3),(cx-5,15),(cx-3,20)],mid)
+   poly([(cx+3,9),(cx+7,12),(rx-1,right_y+1),(rx-2,right_y+3),(cx+4,15),(cx+2,20)],dark if b<0 else mid)
+   d.line([(cx-4,9),(lx+2,left_y+1)],fill=glint)
+   d.line([(cx+3,9),(rx-2,right_y+1)],fill=light)
+   d.line([(cx-6,12),(cx-4,17)],fill=dark)
+   d.line([(cx+6,12),(cx+3,17)],fill=light if b>0 else ink)
+   # Exposed hands make the arm ends human rather than aircraft wing tips.
+   d.rectangle((lx,left_y,lx+1,left_y+1),fill=(225,164,111))
+   d.rectangle((rx-1,right_y,rx,right_y+1),fill=(184,113,76))
+   poly([(cx-3,9),(cx+2,9),(cx+3,17),(cx+1,21),(cx-3,20),(cx-4,15)],mid)
+   d.line((cx-3,10,cx-2,17),fill=glint)
+   d.line((cx+2,10,cx+2,18),fill=dark)
+   d.line((cx-3,13,cx+2,16),fill=dark)
+   d.point((cx-2,12),fill=accent);d.point((cx+1,12),fill=accent)
+   d.line((cx-3,20,cx+2,20),fill=glint)
+   d.rectangle((cx-1,20,cx,21),fill=(177,145,79))
+   # Separate hips, thighs and boots with a transparent gap, no long hair
+   # column covering the chest or lower body.
+   poly([(cx-3,21),(cx-1,22),(cx-2-b,27),(cx-4-b,29),(cx-5-b,28)],ink)
+   d.line((cx-3,22,cx-3-b,26),fill=light)
+   poly([(cx+1,21),(cx+3,22),(cx+4-b,28),(cx+2-b,29),(cx-b,26)],ink)
+   d.line((cx+2,22,cx+2-b,26),fill=mid)
+   # Small bare head/ears above the shoulders. Keep warm face pixels distinct
+   # from the short crown and two wind-swept mullet locks behind the neck.
+   d.rectangle((head-3,2,head+2,7),fill=ink)
+   d.rectangle((head-2,3,head+1,6),fill=(211,147,101))
+   d.line((head-2,3,head+1,3),fill=(251,206,154))
+   d.point((head-3,5),fill=(225,163,110));d.point((head+2,5),fill=(182,114,80))
+   d.line((head-1,4,head+1,4),fill=(93,55,36))
+   hair=(141,72,34) if not a else (116,77,37)
+   hair_hi=(224,143,59) if not a else (207,162,80)
+   hair_dark=(71,36,26)
+   d.line((head-2,2,head+1,2),fill=hair_dark)
+   poly([(head-2,6),(head+1,6),(head+2,9),(head+2-b*2,12),
+         (head-b*2,16),(head-1-b*2,12),(head-3-b*2,14),(head-2,9)],hair_dark)
+   d.line([(head-2,7),(head-2,10),(head-3-b*2,13)],fill=hair)
+   d.line([(head,7),(head+1,10),(head-b*2,14)],fill=hair)
+   d.line([(head-1,7),(head,10),(head-1-b*2,12)],fill=hair_hi)
+   # Red/cyan wing seams remain side-specific in all poses.
+   d.line((lx+3,left_y+1,lx+4,left_y+1),fill=accent)
+   d.point((rx-4,right_y+2),fill=accent)
+  im=sprite(('WBUCK' if actor==0 else 'WCHUCK')+suffix+'.BIN',(32,32),player)
+  previews.append(im)
 def drone(d):
  ink=(6,15,25);dark=(28,43,58);steel=(85,111,129);lit=(158,189,201)
  # Four rotor pods, chamfered plating, struts and a corporate red sensor.
@@ -121,12 +138,12 @@ for ty in range(64):
   mapping.append(0x1000+lookup[t]*2)
 save('WCELL.BIN',b''.join(tiles));save('WMAP.BIN',struct.pack('>4096H',*mapping));save('WPAL.BIN',b''.join(struct.pack('>H',rgb(c)) for c in colors))
 assert len(tiles)*64<=16384
-manifest={'textures':6,'vdp1_bytes':7552,'tiles':len(tiles),'vdp2_payload_bytes':len(tiles)*64+8192,'cram_bytes':32,'max_sprite_commands':2+32+16+8,'files':files}
+manifest={'textures':10,'vdp1_bytes':15744,'tiles':len(tiles),'vdp2_payload_bytes':len(tiles)*64+8192,'cram_bytes':32,'max_sprite_commands':2+32+16+8,'files':files}
 (O/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
 # Review exports stay outside committed runtime assets.
 w=R/'work';w.mkdir(exist_ok=True)
 world.convert('RGB').resize((512,1024)).save(w/'wingsuit-city.png')
-sheet=Image.new('RGBA',(128,32));x=0
+sheet=Image.new('RGBA',(256,32));x=0
 for im in previews:sheet.paste(im,(x,0));x+=32
-sheet.resize((768,192),Image.Resampling.NEAREST).save(w/'wingsuit-sprites.png')
+sheet.resize((1536,192),Image.Resampling.NEAREST).save(w/'wingsuit-sprites.png')
 print(json.dumps({k:v for k,v in manifest.items() if k!='files'}))

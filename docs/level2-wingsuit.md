@@ -1,5 +1,8 @@
 # Level 2 — Wingsuit Assault prototype
 
+The subsequent [player sprite pass 2](level2-player-sprite-pass2.md) adds human
+center/banking poses and fixes the restart HUD text artifact.
+
 The confirmed playable baseline and subsequent [combat/sprite pass 1](level2-combat-pass1.md)
 have separate validation status, tuning, resource accounting and build instructions.
 

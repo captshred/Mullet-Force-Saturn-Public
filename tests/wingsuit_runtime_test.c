@@ -34,6 +34,7 @@ void test_sprite_priority(int slot,int priority){
 static int in_stage,cds,missing_dir,register_fail;
 static const char *missing_asset,*short_asset;
 static char diagnostic[1024];
+static char screen[30][40];
 int GFS_NameToId(Sint8 *raw)
 {
     const char *name=(const char *)raw;
@@ -60,7 +61,7 @@ char *jo_fs_read_file(const char *name,int *size)
 }
 void jo_free(void *p){++frees;free(p);}
 void jo_dma_copy(const void *a,void *b,unsigned n){memcpy(b,a,n);}
-int jo_sprite_add(const jo_img *im){if(register_fail)return -1;assert(last<5);slots+=im->width*im->height*2;return ++last;}
+int jo_sprite_add(const jo_img *im){if(register_fail)return -1;assert(last<9);slots+=im->width*im->height*2;return ++last;}
 void jo_sprite_free_all(void){++resets;last=-1;slots=0;}
 int jo_get_last_sprite_id(void){return last;}
 void slSoundOffWait(void){++off;}
@@ -96,10 +97,14 @@ void jo_sprite_draw3D2(int id,int x,int y,int z){
     for(i=0;i<8;i++)assert(spr_priority[i]==4);
     rendered_types|=1u<<id;++draws;
 }
-void jo_clear_screen(void){diagnostic[0]=0;}
-void jo_print(int x,int y,const char *s){(void)s;assert(x>=0 && x<40 && y>=0 && y<30);}
+void jo_clear_screen(void){diagnostic[0]=0;memset(screen,' ',sizeof(screen));}
+void jo_print(int x,int y,const char *s){
+    assert(x>=0 && x<40 && y>=0 && y<30);
+    while(*s && x<40)screen[y][x++]=*s++;
+}
 void jo_printf(int x,int y,const char *s,...){
     assert(x>=0 && x<40 && y>=0 && y<30);
+    {char text[128];va_list ap;va_start(ap,s);vsnprintf(text,sizeof(text),s,ap);va_end(ap);jo_print(x,y,text);}
     if(x==3){size_t n=strlen(diagnostic);va_list ap;va_start(ap,s);vsnprintf(diagnostic+n,sizeof(diagnostic)-n,s,ap);va_end(ap);}
 }
 static void frame(mf_input in[2],unsigned p[2]){mf_ws_runtime_frame(in,p,++now);}
@@ -113,9 +118,9 @@ int main(void)
     /* Repeated callbacks without a new VBlank cannot release resources. */
     for(i=0;i<10;i++)mf_ws_runtime_frame(in,p,now);
     assert(!resets && !reads);frame(in,p);frame(in,p);assert(!resets);
-    frame(in,p);assert(resets==1 && off==1 && last==5 && slots==7552);
+    frame(in,p);assert(resets==1 && off==1 && last==9 && slots==15744);
     assert(ws_ptmr==2 && cds==2 && !in_stage);
-    assert(reads==9 && frees==9 && !draws && !p[0] && !p[1]);
+    assert(reads==13 && frees==13 && !draws && !p[0] && !p[1]);
     assert(ws_vdp1[0]==0x5555 && ws_vdp1[0x10000/2]==0 && ws_vdp1[0x7fef8/2]==0x5555);
     assert(ws_a0[106496/2]==0x5555 && ws_b0[65536/2]==0x5555);
     assert(cram[0]==0x5555 && cram[255]==0x5555 && cram[2047]==0);
@@ -133,6 +138,30 @@ int main(void)
     shooter.shots[0]=(mf_ws_shot){1,100*256,80*256,0,60,0};
     shooter.hostile[0]=(mf_ws_shot){1,150*256,80*256,0,60,0};
     rendered_types=0;render();assert(rendered_types==63u);
+    /* The real HUD must erase the complete 19-character restart prompt. */
+    shooter.game_over=1;render();assert(screen[16][28]=='T');
+    p[0]=MF_START;mf_ws_step(&shooter,(unsigned[2]){0,0},p,3);p[0]=0;
+    assert(!shooter.game_over);render();
+    for(i=10;i<=28;i++)assert(screen[16][i]==' ');
+    shooter.paused=1;render();
+    for(i=10;i<=28;i++)assert(screen[16][i]==' ');
+    assert(!memcmp(&screen[14][12],"PAUSED",6) && !memcmp(&screen[2][0],"BUCK",4));
+    shooter.paused=0;
+    /* Runtime selection is per player, uses actual motion, and stays visual. */
+    mf_ws_init(&shooter,1);shooter.spawn=10000;phase=3;
+    in[0].held=MF_LEFT;in[1].held=MF_RIGHT;frame(in,p);
+    assert(player_bank[0]==WS_LEFT && player_bank[1]==WS_RIGHT);
+    rendered_types=0;render();assert((rendered_types&((1u<<6)|(1u<<9)))==((1u<<6)|(1u<<9)));
+    in[0].held=MF_RIGHT;in[1].held=MF_LEFT;frame(in,p);
+    assert(player_bank[0]==WS_RIGHT && player_bank[1]==WS_LEFT);
+    rendered_types=0;render();assert((rendered_types&((1u<<7)|(1u<<8)))==((1u<<7)|(1u<<8)));
+    in[0].held=MF_UP;in[1].held=MF_LEFT|MF_RIGHT;frame(in,p);
+    assert(player_bank[0]==WS_CENTER && player_bank[1]==WS_CENTER);
+    shooter.players[0].x=64*256;in[0].held=MF_LEFT;frame(in,p);assert(player_bank[0]==WS_CENTER);
+    in[0].held=MF_RIGHT|MF_UP|MF_A;frame(in,p);assert(player_bank[0]==WS_RIGHT);
+    in[0].connected=0;frame(in,p);assert(player_bank[0]==WS_CENTER);in[0].connected=1;
+    shooter.paused=1;frame(in,p);assert(player_bank[0]==WS_CENTER);shooter.paused=0;
+    puts("PASS player pass 2: actual per-player movement selects all six poses; vertical/opposed/bounds/disconnect/pause center; complete restart field clears stray T while preserving HUD");
     puts("PASS VDP1 state: stopped PTMR restarts in auto mode; SGL state restored after VDP2 scheduling; all six render paths accepted independently of gameplay");
     window_fail=1;mf_ws_runtime_begin(0,&palette,now);frame(in,p);frame(in,p);frame(in,p);frame(in,p);
     assert(ws_ptmr==0 && strstr(diagnostic,"WINDOW") && error==107);window_fail=0;
@@ -145,10 +174,10 @@ int main(void)
     assert(ws_ptmr==0 && reads==r && resets==i);
     ws_edsr=2;fail=0;
     {
-        const char *assets[]={"WCELL.BIN","WMAP.BIN","WPAL.BIN","WBUCK.BIN","WCHUCK.BIN","WDRONE.BIN","WSHOT.BIN","WHOST.BIN","WBOOM.BIN"};
-        const int sizes[]={2752,8192,32,2048,2048,1152,128,128,2048};
+        const char *assets[]={"WCELL.BIN","WMAP.BIN","WPAL.BIN","WBUCK.BIN","WCHUCK.BIN","WDRONE.BIN","WSHOT.BIN","WHOST.BIN","WBOOM.BIN","WBUCKL.BIN","WBUCKR.BIN","WCHUCKL.BIN","WCHUCKR.BIN"};
+        const int sizes[]={2752,8192,32,2048,2048,1152,128,128,2048,2048,2048,2048,2048};
         char expected[64];int mode,a;
-        for(mode=0;mode<2;mode++)for(a=0;a<9;a++){
+        for(mode=0;mode<2;mode++)for(a=0;a<13;a++){
             missing_asset=mode==0?assets[a]:NULL;short_asset=mode==1?assets[a]:NULL;
             cds=0;mf_ws_runtime_begin(0,&palette,now);frame(in,p);frame(in,p);frame(in,p);frame(in,p);
             assert(!in_stage && cds==2 && last==-1);
@@ -168,7 +197,7 @@ int main(void)
         assert(strstr(diagnostic,"ALEVEL2") && strstr(diagnostic,"DIRECTORY"));
         assert(cds==0 && reads==r && resets==i);
     }
-    puts("PASS filesystem: root table overflow reproduced; all nine assets read in ALEVEL2; parent restored; per-asset missing/length/read/registration errors");
-    puts("PASS actual Level 2 loader: real-VBlank drain, bank reset, 6 definitions/7552 bytes, arena bounds, CRAM/font isolation, SCSP release, no gameplay allocations/I/O, partial-load failure");
+    puts("PASS filesystem: root table overflow reproduced; all thirteen assets read in ALEVEL2; parent restored; per-asset missing/length/read/registration errors");
+    puts("PASS actual Level 2 loader: real-VBlank drain, bank reset, 10 definitions/15744 bytes, arena bounds, CRAM/font isolation, SCSP release, no gameplay allocations/I/O, partial-load failure");
     return 0;
 }

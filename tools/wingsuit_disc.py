@@ -34,7 +34,7 @@ def validate_disc(image,payloads):
     child=directory_records(image,entry)
     assert len(child)<=GFS_LIMIT,'Level 2 directory exceeds pinned GFS limit'
     files={n:r for n,r in child if n not in ('.','..')}
-    assert set(files)==set(payloads),'Level 2 directory must contain exactly nine assets'
+    assert set(files)==set(payloads),'Level 2 directory must contain exactly the manifest assets'
     for name,expected in payloads.items():
         r=files[name];assert not r[25]&2,(name,'asset is a directory')
         offset=struct.unpack_from('<I',r,2)[0]*SECTOR
