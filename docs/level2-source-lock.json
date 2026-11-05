@@ -4,41 +4,41 @@
     "src/main.c": {
       "sha256": {
         "before": "545b908e58098f5ae22fca89a4e292c937a561e96af96307c9173920ebbeed86",
-        "after": "a87ff486c3cce31822ea1df0f8a26230a0dc7c45372f5fe66f5fbed4a13beb0a"
+        "after": "ba86af6646fe9a0940b38a828d6a2f23b9c8d89d937d3e1ab205e3fa17b1505c"
       },
       "blob": {
         "before": "09848d8637386ea60393020aea91d46608db1e28",
-        "after": "3cb39a0dddde44a53bbfa2d157ff74a5201892cf"
+        "after": "59bde6e2e863274414ba25d0d58668eb3f03ca70"
       }
     },
     "make/saturn.mk": {
       "sha256": {
         "before": "092f7f92c5c5bad2e66bb05f67b68dfa3294b58450950598955f6de02df94afa",
-        "after": "1b6b9d9eee7dc150a2a9cf2b9dff465655cd6277702ea88e1396c3bde6ae869c"
+        "after": "6bff15909833916f57b5eb7ec553f6ea10df35a28009cfdf617269c5c4c4afd3"
       },
       "blob": {
         "before": "508e7a971857827aa66985fda43292330110636e",
-        "after": "966e3ea6fb8f2dbecd29b37c82527c69db5f2c03"
+        "after": "1a68b06f5b258425e9b47c69a7c76ed8eca287cd"
       }
     },
     "tools/build-native.sh": {
       "sha256": {
         "before": "bc691ccfb9aeebb6e090d5473bdeed86aea041f1d3c0ed779c6fd87d1cedf15f",
-        "after": "2e0a692b00640d051cea09b4a8672ddd56153714aada70e0d3b85e5e7a064548"
+        "after": "612858c98b6c5815dd969931116f5adfd0ec98c6ec5d44a69381b8e26996b6f4"
       },
       "blob": {
         "before": "8f39cb1c028061129d5ddba1b88a2a67bbf8f2ad",
-        "after": "d3c2e2bc2e55cac730062cb927a68bbde710ec73"
+        "after": "ca384f00474c9310397a142c3c7b1f3dbeee077b"
       }
     },
     "tools/build.sh": {
       "sha256": {
         "before": "8d53f8890b8af99e6c37bb7bf01eeb580135e563a3d20e9a47c290c7d461a4a6",
-        "after": "006f6c3e81d9e937d86a4221adac961222e9c0f430565da70bc5fde73012902d"
+        "after": "ceba22f582e66f126b6cf8ea4b99def208d60974957cd06dfa6e308de6cbd05e"
       },
       "blob": {
         "before": "a88271c08a6e12417630c6f2a6c1b2da39fdaa54",
-        "after": "f2b70a38b3722956db1040ef178e3960ca3a900e"
+        "after": "fc62be176722558c3f6d76d5d135791a810bdf70"
       }
     }
   }

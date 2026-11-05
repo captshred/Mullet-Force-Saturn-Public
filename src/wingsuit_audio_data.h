@@ -1,0 +1,8 @@
+#ifndef MF_WS_AUDIO_DATA_H
+#define MF_WS_AUDIO_DATA_H
+#define MF_WS_SEQ_BYTES 44
+#define MF_WS_TON_BYTES 31744
+#define MF_WS_MAP_BYTES 40
+#define MF_WS_SEQ_ADDR 148864
+#define MF_WS_TON_ADDR 148908
+#endif

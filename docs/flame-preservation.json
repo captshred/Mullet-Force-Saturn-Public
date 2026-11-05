@@ -1,0 +1,57 @@
+{
+  "base_commit": "785d2f8c0ea602c1d65f348154c107a4f1c3cd96",
+  "files": {
+    "WBUCK.BIN": {
+      "bytes": 2048,
+      "sha256": "9fa9c843be05bf9c98498462fa76d99f16048bc3e304ca502e28f81a08ca647e"
+    },
+    "WBUCKL.BIN": {
+      "bytes": 2048,
+      "sha256": "42e60af95abd2df67cf6ed10c717aa4b67a1e87e3c6af8a8c281be7152300016"
+    },
+    "WBUCKR.BIN": {
+      "bytes": 2048,
+      "sha256": "dad1a5c4bb330991a76b8831ba775fd3d93c4e70f11a946ef8425a3e5abd3249"
+    },
+    "WCHUCK.BIN": {
+      "bytes": 2048,
+      "sha256": "cbfcddef945754a4f5185e6b10a05b10c590127067dc80632419b921a256a659"
+    },
+    "WCHUCKL.BIN": {
+      "bytes": 2048,
+      "sha256": "9fc01c73ce666b083e1cbe092eab625a7d7adcfcfb246e0df4805bac1aabb713"
+    },
+    "WCHUCKR.BIN": {
+      "bytes": 2048,
+      "sha256": "326b3182f2231b99bd4665f33cfe4cdc2b649a85b9a420b083cd1864ad8e61c6"
+    },
+    "WDRONE.BIN": {
+      "bytes": 1152,
+      "sha256": "8ca9e9317dbebdac14269cd4114aaef56d370be49218b7cb0487131864a1c0d7"
+    },
+    "WSHOT.BIN": {
+      "bytes": 128,
+      "sha256": "912c344d4d05e9defaf136767f9e55ee6b35bd1d04c46ee0187c00b8fb17077d"
+    },
+    "WHOST.BIN": {
+      "bytes": 128,
+      "sha256": "7ea42936bac837f101de9879f713e2ab0e9a823269eab2fa0dcb7a6108e0fd49"
+    },
+    "WBOOM.BIN": {
+      "bytes": 2048,
+      "sha256": "5a3b1bf7fcc1433381197516def627d52ddec907eae587cc32028fe557362dfb"
+    },
+    "WCELL.BIN": {
+      "bytes": 2752,
+      "sha256": "f3bfd4f1faae13b31c2699d24d8a4fe251406948fc286857a447eb7ac419f477"
+    },
+    "WMAP.BIN": {
+      "bytes": 8192,
+      "sha256": "d22432568dc18e83f0a83b41380dc11ced413879ea2fec20e994e91a7df4c771"
+    },
+    "WPAL.BIN": {
+      "bytes": 32,
+      "sha256": "214e2441e712d7b6b716228512c279924caa9452c48609d712b23fadd548b961"
+    }
+  }
+}

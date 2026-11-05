@@ -5,6 +5,7 @@
 #include "build-info.h"
 #if MF_LEVEL2_WINGSUIT
 #include "wingsuit_runtime.h"
+#include "dev_stage_skip.h"
 static volatile int stage2_owned;
 #endif
 #include "arcade_fx.h"
@@ -561,6 +562,9 @@ static void update(void)
 #if MF_ARCADE_FX
         unsigned previous_hits[MF_PLAYERS];
         for(j=0;j<MF_PLAYERS;j++)previous_hits[j]=(unsigned)game.players[j].hit_mask;
+#endif
+#if MF_LEVEL2_WINGSUIT
+        mf_dev_stage_skip(&game,pressed);
 #endif
         mf_game_step_inputs(&game,held,pressed,(sampled_input[0].connected?1u:0u)|(sampled_input[1].connected?2u:0u));
 #if MF_ARCADE_FX

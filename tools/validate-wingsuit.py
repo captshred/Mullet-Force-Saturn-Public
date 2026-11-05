@@ -6,22 +6,22 @@ from wingsuit_disc import validate_disc
 R=Path(__file__).resolve().parents[1]
 p=argparse.ArgumentParser();p.add_argument('--disc',action='store_true');args=p.parse_args()
 m=json.loads((R/'assets/wingsuit/manifest.json').read_text())
-assert m['textures']==10 and m['vdp1_bytes']==15744 and m['tiles']==43
+assert m['textures']==14 and m['vdp1_bytes']==48512 and m['tiles']==43
 for name,f in m['files'].items():
  b=(R/'assets/wingsuit'/name).read_bytes()
  assert len(b)==f['bytes'] and hashlib.sha256(b).hexdigest()==f['sha256'],name
 # RGB555 payloads preserve zero transparency and native texture footprints.
-for name in ('WBUCK.BIN','WCHUCK.BIN','WDRONE.BIN','WSHOT.BIN','WHOST.BIN','WBOOM.BIN','WBUCKL.BIN','WBUCKR.BIN','WCHUCKL.BIN','WCHUCKR.BIN'):
+for name in ('WBUCK.BIN','WCHUCK.BIN','WDRONE.BIN','WSHOT.BIN','WHOST.BIN','WBOOM.BIN','WBUCKL.BIN','WBUCKR.BIN','WCHUCKL.BIN','WCHUCKR.BIN','WFL0.BIN','WFL1.BIN','WFL2.BIN','WFL3.BIN'):
  pixels=struct.unpack('>'+str(m['files'][name]['bytes']//2)+'H',(R/'assets/wingsuit'/name).read_bytes())
  assert all(v==0 or v&0x8000 for v in pixels),(name,'invalid RGB555 texel')
-assert sum(m['files'][n]['bytes'] for n in ('WBUCK.BIN','WCHUCK.BIN','WDRONE.BIN','WSHOT.BIN','WHOST.BIN','WBOOM.BIN','WBUCKL.BIN','WBUCKR.BIN','WCHUCKL.BIN','WCHUCKR.BIN'))==15744
+assert sum(m['files'][n]['bytes'] for n in ('WBUCK.BIN','WCHUCK.BIN','WDRONE.BIN','WSHOT.BIN','WHOST.BIN','WBOOM.BIN','WBUCKL.BIN','WBUCKR.BIN','WCHUCKL.BIN','WCHUCKR.BIN','WFL0.BIN','WFL1.BIN','WFL2.BIN','WFL3.BIN'))==48512
 assert m['files']['WCELL.BIN']['bytes']==43*64==2752
 assert m['files']['WMAP.BIN']['bytes']==8192
 for word in struct.unpack('>4096H',(R/'assets/wingsuit/WMAP.BIN').read_bytes()):
  assert word>>12==1 and not word&1 and (word&4095)//2<43
 assert m['vdp2_payload_bytes']==10944<=106496+65536
-assert m['cram_bytes']==32 and m['max_sprite_commands']==58
-assert 15744<458488 and 10<255
+assert m['cram_bytes']==32 and m['max_sprite_commands']==60
+assert 48512<458488 and 14<255
 # Every old gameplay/asset check remains active. Only four source integrations
 # may differ, each checked against an exact before/after digest.
 lock=json.loads((R/'docs/level2-source-lock.json').read_text())
@@ -40,4 +40,4 @@ if args.disc:
  print('PASS exact /ALEVEL2 ISO layout: root records %d, directory index %d, child records %d'%counts)
  assert (R/'build/wingsuit-mode.txt').read_text().strip()=='1'
  assert 'Level 2 wingsuit: 1' in (R/'build/BUILD-INFO.txt').read_text()
-print('PASS wingsuit payloads/budgets: 10 definitions, 15744 VDP1 bytes, 43 tiles, 10944 VDP2 payload bytes, 32 CRAM bytes; exact scoped integration lock')
+print('PASS wingsuit payloads/budgets: 14 definitions, 48512 VDP1 bytes, 43 tiles, 10944 VDP2 payload bytes, 32 CRAM bytes; exact scoped integration lock')

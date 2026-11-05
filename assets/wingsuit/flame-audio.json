@@ -1,0 +1,39 @@
+{
+  "canonical": "assets/cd/FX.TON voice 2 / FX.SEQ song 2 / MF_WORLD_IMPACT",
+  "pcm_sha256": "2eca5219e7a0255532d46c6c0a4835dee475781787334da46bfb451363e4fa6b",
+  "pcm_bytes": 31680,
+  "seq_addr": 148864,
+  "tone_addr": 148908,
+  "scsp_high_water": 180652,
+  "reserved_before_seq": 148864,
+  "files": {
+    "WFL0.BIN": {
+      "bytes": 8192,
+      "sha256": "c0f23f28f9648cde499fdfafd39db3d226f3803e3b447cedf048660f93b7cc11"
+    },
+    "WFL1.BIN": {
+      "bytes": 8192,
+      "sha256": "afa3d1ff9c0f79eac846b680a4360757fb00ace910f8b1edc5bc83e5b6813848"
+    },
+    "WFL2.BIN": {
+      "bytes": 8192,
+      "sha256": "a6255374eb55a13d5d72dd804c8478bcfb6a29dec543c29457d3d9618ffe9dfa"
+    },
+    "WFL3.BIN": {
+      "bytes": 8192,
+      "sha256": "cf2997dd32b1f545b5c15f977657d5d73602db59ba632e315174ba55afe209c6"
+    },
+    "WDEATH.TON": {
+      "bytes": 31744,
+      "sha256": "b3b72c2c943df626eb2d3272f3d87e0b180950838eaf99b45075cccac898a898"
+    },
+    "WDEATH.SEQ": {
+      "bytes": 44,
+      "sha256": "a0b53824659f0d02ab84fd908273e0f1f0015afde5598b55d9b7e44f1a799b18"
+    },
+    "WDEATH.MAP": {
+      "bytes": 40,
+      "sha256": "e0f2308a16149e9f9452b3e497a05cdd59deaa9ec8693211993d04ff201aa9be"
+    }
+  }
+}

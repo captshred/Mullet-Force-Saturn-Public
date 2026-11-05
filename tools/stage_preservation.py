@@ -30,6 +30,11 @@ def stage_digest(name, baseline, kind):
         actual_blob=hashlib.sha1(b'blob '+str(len(data)).encode()+b'\0'+data).hexdigest()
         assert actual_blob=='805c59bf3145e841ea272c7f4ebfd64774f152ac',(name,'unexpected README content')
         return hashlib.sha256(data).hexdigest() if kind=='sha256' else actual_blob
+    if name in {'src/input.c','src/input.h'}:
+        scoped=json.loads((R/'docs/flame-input-lock.json').read_text())
+        assert set(scoped)=={'src/input.c','src/input.h'}
+        assert scoped[name][kind]['before']==baseline,(name,'unexpected input baseline')
+        return scoped[name][kind]['after']
     if name not in ALLOWED:return baseline
     change=lock['updates'][name][kind]
     assert change['before']==baseline,(name,'unexpected source baseline')

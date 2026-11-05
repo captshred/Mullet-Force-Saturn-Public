@@ -86,7 +86,9 @@ for ty in range(64):
   mapping.append(0x1000+lookup[t]*2)
 save('WCELL.BIN',b''.join(tiles));save('WMAP.BIN',struct.pack('>4096H',*mapping));save('WPAL.BIN',b''.join(struct.pack('>H',rgb(c)) for c in colors))
 assert len(tiles)*64<=16384
-manifest={'textures':10,'vdp1_bytes':15744,'tiles':len(tiles),'vdp2_payload_bytes':len(tiles)*64+8192,'cram_bytes':32,'max_sprite_commands':2+32+16+8,'files':files}
+from flame_focus_assets import build
+files.update(build(O))
+manifest={'textures':14,'vdp1_bytes':48512,'tiles':len(tiles),'vdp2_payload_bytes':len(tiles)*64+8192,'cram_bytes':32,'max_sprite_commands':2+32+16+8+2,'files':files}
 (O/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
 # Review exports stay outside committed runtime assets.
 w=R/'work';w.mkdir(exist_ok=True)

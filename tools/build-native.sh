@@ -170,6 +170,9 @@ build_branch=${MF_BUILD_BRANCH:-source-archive}
 printf '%s\n' "$live" > build/live-city-mode.txt
 printf '#define MF_BUILD_COMMIT "%s"\n' "$build_commit" > build/build-info.h
 printf '#define MF_LEVEL1_STAGE_CLEAR %s\n' "$stage_clear" >> build/build-info.h
+dev_skip=${MF_DEV_STAGE_SKIP:-0}
+[[ $dev_skip == 0 || $dev_skip == 1 ]] || exit 1
+printf '#define MF_DEV_STAGE_SKIP %s\n' "$dev_skip" >> build/build-info.h
 wingsuit=${MF_LEVEL2_WINGSUIT:-0}
 [[ $wingsuit == 0 || $wingsuit == 1 ]] || exit 1
 if [[ $wingsuit == 1 && ( $stage_clear != 1 || $live != 1 || $arcade_fx != 1 || $gallery != 1 ) ]]; then echo "Wingsuit requires the complete stage-clear profile" >&2; exit 1; fi
@@ -355,7 +358,7 @@ if [[ $combo == 1 ]]; then
 fi
 printf 'Jab jab cross combo: %s\n' "$combo" >> build/BUILD-INFO.txt
 printf 'Player running waist seam: %s\nFast horizontal running bat: %s\n' "$waist" "$fast_bat" >> build/BUILD-INFO.txt
-printf 'Level 2 wingsuit: %s\n' "$wingsuit" >> build/BUILD-INFO.txt
+printf 'Level 2 wingsuit: %s\nDev Saturn Z stage skip: %s\n' "$wingsuit" "$dev_skip" >> build/BUILD-INFO.txt
 cp src/*.c src/*.h build/
 cp docs/native-music.md build/NATIVE-MUSIC.md
 cp docs/custom-combat-sfx.md build/CUSTOM-COMBAT-SFX.md
@@ -415,7 +418,7 @@ fi
 rm -f build/cd/EXPLODE.TGA
 if [[ $arcade_fx == 1 ]]; then cp assets/arcade-fx/EXPLODE.TGA build/cd/; fi
 python3 tools/stage-wingsuit-assets.py "$wingsuit" build/cd
-make -C build -f ../make/saturn.mk MAKEFILE=../make/saturn.mk -j2 MF_LEVEL2_WINGSUIT="$wingsuit" MF_LEVEL1_STAGE_CLEAR="$stage_clear" MF_PUNCH_COMBO="$combo" MF_FAST_RUNNING_BAT="$fast_bat" MF_JAB_COHESION="$jab" MF_ATTACK_SEQUENCE="$sequence" MF_BAT_MOMENTUM="$momentum" MF_COMBAT_ANIMATION="$combat" MF_RUNNING_BAT_VISUALS="$visual" MF_RUN_BAT="$run_bat" MF_DASH_ENABLED="$dash" MF_DASH_PRESET="$dash_num" game.iso
+make -C build -f ../make/saturn.mk MAKEFILE=../make/saturn.mk -j2 MF_DEV_STAGE_SKIP="$dev_skip" MF_LEVEL2_WINGSUIT="$wingsuit" MF_LEVEL1_STAGE_CLEAR="$stage_clear" MF_PUNCH_COMBO="$combo" MF_FAST_RUNNING_BAT="$fast_bat" MF_JAB_COHESION="$jab" MF_ATTACK_SEQUENCE="$sequence" MF_BAT_MOMENTUM="$momentum" MF_COMBAT_ANIMATION="$combat" MF_RUNNING_BAT_VISUALS="$visual" MF_RUN_BAT="$run_bat" MF_DASH_ENABLED="$dash" MF_DASH_PRESET="$dash_num" game.iso
 cp build/game.iso build/mullet-force.bin
 cat > build/mullet-force.cue <<'CUE'
 FILE "mullet-force.bin" BINARY

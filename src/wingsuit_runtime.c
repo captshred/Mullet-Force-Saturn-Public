@@ -3,9 +3,10 @@
 #include <jo/jo.h>
 #include "wingsuit_runtime.h"
 #include "wingsuit.h"
+#include "wingsuit_audio.h"
 #include <string.h>
 static mf_wingsuit shooter;
-static int ids[10]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
+static int ids[14]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
 static int player_bank[2];
 static const char restart_prompt[]="1P START TO RESTART";
 static const char restart_clear[]="                   ";
@@ -92,8 +93,9 @@ static void wipe(volatile unsigned short *p,unsigned bytes)
 static int load_resources(void)
 {
     unsigned wait;
-    int i;static const char *names[]={"WBUCK.BIN","WCHUCK.BIN","WDRONE.BIN","WSHOT.BIN","WHOST.BIN","WBOOM.BIN","WBUCKL.BIN","WBUCKR.BIN","WCHUCKL.BIN","WCHUCKR.BIN"};
-    static const int widths[]={32,32,24,8,8,32,32,32,32,32};
+    int i;static const char *names[]={"WBUCK.BIN","WCHUCK.BIN","WDRONE.BIN","WSHOT.BIN","WHOST.BIN","WBOOM.BIN","WBUCKL.BIN","WBUCKR.BIN","WCHUCKL.BIN","WCHUCKR.BIN","WFL0.BIN","WFL1.BIN","WFL2.BIN","WFL3.BIN"};
+    static const int widths[]={32,32,24,8,8,32,32,32,32,32,32,32,32,32};
+    static const int heights[]={32,32,24,8,8,32,32,32,32,32,128,128,128,128};
     /* All prior commands have passed through three core slSynch barriers.
        No sprites were submitted during them; no slave rendering is enabled. */
     if(!background_palette || background_palette->id!=1 || !background_palette->data){load_failure("CRAM","PALETTE",1,-1);return 100;}
@@ -107,7 +109,7 @@ static int load_resources(void)
     wipe((volatile unsigned short *)(JO_VDP1_VRAM+JO_VDP1_TEXTURE_DEF_BASE_ADDRESS),
          JO_VDP1_USER_AREA_END_ADDR-(JO_VDP1_VRAM+JO_VDP1_TEXTURE_DEF_BASE_ADDRESS));
     /* slSoundOffWait halts the 68000 before releasing its entire sample bank.
-       This prototype deliberately uses silent Level 2 audio. */
+       A minimal stage-local barrel bank is initialized after the wipe. */
     slSoundOffWait();wipe(MF_WS_SOUND_RAM,0x80000);
     /* Keep SDK NBG0/text and back screen intact. Clear both stage-owned arenas,
        including the retired NBG2 skyline, before installing Level 2 tiles. */
@@ -117,10 +119,11 @@ static int load_resources(void)
     if(!copy_file("WCELL.BIN",WS_CELLS,WS_CELL_BYTES) ||
        !copy_file("WMAP.BIN",WS_MAP,WS_MAP_BYTES) ||
        !copy_file("WPAL.BIN",background_palette->data,32))return 102;
-    for(i=0;i<10;i++){
-        ids[i]=texture(names[i],widths[i],widths[i]);
-        if(ids[i]!=i){if(!failed_asset)load_failure(names[i],"SPRITE ID",i,ids[i]);jo_sprite_free_all();for(i=0;i<10;i++)ids[i]=-1;return 103;}
+    for(i=0;i<14;i++){
+        ids[i]=texture(names[i],widths[i],heights[i]);
+        if(ids[i]!=i){if(!failed_asset)load_failure(names[i],"SPRITE ID",i,ids[i]);jo_sprite_free_all();for(i=0;i<14;i++)ids[i]=-1;return 103;}
     }
+    if(!mf_ws_audio_load(read_asset)){if(!failed_asset)load_failure("WDEATH BANK","AUDIO",1,0);return 108;}
     slCharNbg1(COL_TYPE_256,CHAR_SIZE_1x1);
     slPageNbg1(WS_CELLS,0,PNB_1WORD|CN_12BIT);
     slPlaneNbg1(PL_SIZE_1x1);slMapNbg1(WS_MAP,WS_MAP,WS_MAP,WS_MAP);
@@ -136,7 +139,7 @@ static int load(void)
 {
     int result;
     /* The pinned GFS table holds only 256 directory records. Resolve this
-       early root entry once, then give all nine reads a small private table. */
+       early root entry once, then give all twenty reads a small private table. */
     if(GFS_NameToId((Sint8 *)"ALEVEL2")<0){
         load_failure("ALEVEL2","DIRECTORY",0,-1);return 106;
     }
@@ -172,6 +175,8 @@ static void render(void)
     jo_sprite_disable_horizontal_flip();jo_sprite_disable_vertical_flip();
     jo_sprite_disable_half_transparency();jo_sprite_disable_dark_filter();
     jo_sprite_disable_gouraud_shading();jo_sprite_restore_sprite_scale();jo_sprite_disable_clipping();
+    for(i=0;i<2;i++)if(mf_ws_beam_active(&shooter,i))
+        draw(10+((shooter.ticks/3+i)&3),shooter.players[i].x/256-16,shooter.players[i].y/256-15-MF_WS_BEAM_LENGTH);
     for(i=0;i<MF_WS_ENEMIES;i++){
         mf_ws_enemy *e=&shooter.enemies[i];
         if(e->active)draw(2,e->x/256-12,e->y/256-12);
@@ -220,9 +225,10 @@ void mf_ws_runtime_frame(const mf_input input[2],unsigned pressed[2],unsigned no
     if(elapsed>6)elapsed=6;
     for(i=0;i<elapsed;i++){
         int j,was_game_over=shooter.game_over,old_x[2]={shooter.players[0].x,shooter.players[1].x};
-        mf_ws_step(&shooter,held,pressed,conn);pressed[0]=pressed[1]=0;
+        mf_ws_step(&shooter,held,pressed,conn);mf_ws_audio_events(shooter.deaths);pressed[0]=pressed[1]=0;
         for(j=0;j<2;j++)player_bank[j]=bank_after_step(old_x[j],&shooter.players[j],(conn&(1u<<j))?held[j]:0,was_game_over);
     }
+    mf_ws_audio_step(now);
     render();
 }
 #endif

@@ -40,7 +40,7 @@ def fixture(directory_name='ALEVEL2',root_copy=False,missing=None,corrupt=None):
     image[16*SECTOR+156:16*SECTOR+190]=record(b'\0',root_sector,len(root),2)
     return bytes(image)
 
-counts=validate_disc(fixture(),payloads);assert counts==(303,2,15),counts
+counts=validate_disc(fixture(),payloads);assert counts==(303,2,22),counts
 for kwargs in ({'directory_name':'ZLEVEL2'},{'root_copy':True},{'missing':'WPAL.BIN'},{'corrupt':'WDRONE.BIN'}):
     try:validate_disc(fixture(**kwargs),payloads)
     except AssertionError:pass
@@ -62,4 +62,4 @@ with tempfile.TemporaryDirectory(prefix='mf-wingsuit-disc-') as tmp:
         if enabled=='1':
             assert {p.name:p.read_bytes() for p in (root/'ALEVEL2').iterdir()}==payloads
         else:assert not (root/'ALEVEL2').exists()
-print('PASS ISO/staging: early ALEVEL2 in 303-record root, exact thirteen payloads; missing/corrupt/root/late-directory rejection; idempotent staging and Level 1 preservation')
+print('PASS ISO/staging: early ALEVEL2 in 303-record root, exact twenty payloads; missing/corrupt/root/late-directory rejection; idempotent staging and Level 1 preservation')

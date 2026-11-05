@@ -21,11 +21,10 @@ int main(void)
         x=g.players[0].x;step(&g,MF_A|MF_RIGHT,0);assert(g.players[0].x-x==640);
     }
     x=g.players[0].x;n=shots(&g);step(&g,MF_A|MF_RIGHT,0);
-    assert(g.players[0].shot_hold==12 && g.players[0].x-x==531 && shots(&g)==n+2);
-    assert(g.players[0].cooldown==5);
-    assert(g.shots[3].vx==0 && g.shots[4].vx==0 && g.shots[4].x-g.shots[3].x==6*S);
-    for(i=1;i<MF_WS_FOCUS_FIRE_TICKS;i++)step(&g,MF_A,0);
-    assert(shots(&g)==n+2);step(&g,MF_A,0);assert(shots(&g)==n+4);
+    assert(g.players[0].shot_hold==12 && g.players[0].x-x==416 && shots(&g)==n);
+    assert(mf_ws_beam_active(&g,0));
+    for(i=0;i<10;i++)step(&g,MF_A,0);
+    assert(shots(&g)==n); /* No focused projectile remnants exist. */
     x=g.players[0].x;step(&g,MF_RIGHT,0);
     assert(g.players[0].shot_hold==0 && g.players[0].x-x==640);
     for(i=0;i<7;i++)step(&g,0,0);
@@ -34,8 +33,8 @@ int main(void)
     setup(&g,0);x=g.players[0].x;y=g.players[0].y;step(&g,MF_UP|MF_RIGHT|MF_A,0);
     assert(g.players[0].x-x==452 && y-g.players[0].y==452);
     focus(&g);x=g.players[0].x;y=g.players[0].y;step(&g,MF_UP|MF_RIGHT|MF_A,0);
-    assert(g.players[0].x-x==375 && y-g.players[0].y==375);
-    assert(2*375*375<=531*531 && 2*375*375>=529*529);
+    assert(g.players[0].x-x==293 && y-g.players[0].y==293);
+    assert(2*293*293<=416*416 && 2*293*293>=414*414);
     /* Repeated taps use full-speed movement and do not accumulate focus. */
     setup(&g,0);
     for(i=0;i<24;i++){
@@ -45,7 +44,7 @@ int main(void)
     /* Independently held/tapped actors share pools, not movement/hold clocks. */
     setup(&g,1);focus(&g);x=g.players[0].x;y=g.players[1].x;
     step(&g,MF_A|MF_RIGHT,MF_A|MF_RIGHT);
-    assert(g.players[0].x-x==531 && g.players[1].x-y==640 && g.players[1].shot_hold==1);
+    assert(g.players[0].x-x==416 && g.players[1].x-y==640 && g.players[1].shot_hold==1);
     assert(g.players[0].shot_hold==12);
     for(i=0;i<MF_WS_SHOTS;i++)if(g.shots[i].active && g.shots[i].owner==1)break;
     assert(i<MF_WS_SHOTS && g.shots[i].vx==-S);
@@ -56,8 +55,7 @@ int main(void)
     /* A complete burst must fit: exhaustion never produces a partial stream. */
     setup(&g,0);g.players[0].shot_hold=MF_WS_FOCUS_TICKS-1;
     for(i=0;i<31;i++)g.shots[i]=(mf_ws_shot){1,160*S,100*S,1,90,0};
-    step(&g,MF_A,0);assert(shots(&g)==31 && !g.players[0].cooldown);
-    g.shots[0].active=0;step(&g,MF_A,0);assert(shots(&g)==32 && g.players[0].cooldown==5);
+    step(&g,MF_A,0);assert(shots(&g)==31 && mf_ws_beam_active(&g,0));
     setup(&g,0);for(i=0;i<30;i++)g.shots[i]=(mf_ws_shot){1,160*S,100*S,1,90,0};
     step(&g,MF_A,0);assert(shots(&g)==30 && !g.players[0].cooldown);
     /* Spread cannot drift into either HUD, and TTL cleanup still applies. */
@@ -71,6 +69,6 @@ int main(void)
     mf_ws_step(&g,h,zero,1);assert(!memcmp(&g,&snapshot,sizeof(g)));
     setup(&g,1);focus(&g);g.game_over=1;mf_ws_step(&g,zero,p,3);
     assert(!g.game_over && !g.players[0].shot_hold && !g.players[1].shot_hold && !shots(&g));
-    printf("PASS combat pass 1: exact mobile/focus speeds, 12-tick threshold, 83%% drag, normalized diagonals, 3-way taps/5-tick double stream, coop, atomic bursts, HUD/TTL cleanup and pause/restart; state %lu bytes\n",(unsigned long)sizeof(g));
+    printf("PASS combat pass 1: exact mobile/focus speeds, 12-tick threshold, 65%% drag, normalized diagonals, unchanged 3-way taps/attached flame, coop, atomic bursts, HUD/TTL cleanup and pause/restart; state %lu bytes\n",(unsigned long)sizeof(g));
     return 0;
 }

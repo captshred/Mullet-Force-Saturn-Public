@@ -1,0 +1,22 @@
+{
+  "src/input.c": {
+    "sha256": {
+      "before": "4d81c2f4659689cac0238478f049b6edb47bf48dd4fd24b44b33369b0dde28e0",
+      "after": "69fcf36066a9b18ded021468e0e8a774982342cc08b2139c8a9127df95001a87"
+    },
+    "blob": {
+      "before": "717cd0fa467a974aa84dc8c1b9a4fa4b9a6b42e0",
+      "after": "d929df155478553a18f35aeed7ee8aa8fef73be1"
+    }
+  },
+  "src/input.h": {
+    "sha256": {
+      "before": "747b843f629814f246a5cb0b94f73d2ee361f5a1b9dfbe46058a4086b921a53b",
+      "after": "a08264f4036f1bf6add8531c41490cf3a377caf01341bbe9a3f34f73ffd25fc8"
+    },
+    "blob": {
+      "before": "47e8fa699ba80c883463b7fb0b2bdb4d862c002f",
+      "after": "85603a3ede85c9f8e1844ea066e7be3a8643c797"
+    }
+  }
+}

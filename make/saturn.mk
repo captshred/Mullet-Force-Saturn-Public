@@ -3,7 +3,7 @@ COMPILER_DIR = ../.deps/joengine/Compiler
 SRCS = main.c input.c game.c music.c gallery.c street.c parallax.c animation_preview.c player_animation.c corporate_animation.c
 MF_LEVEL2_WINGSUIT ?= 0
 ifeq ($(MF_LEVEL2_WINGSUIT),1)
-SRCS += wingsuit.c wingsuit_runtime.c
+SRCS += wingsuit.c wingsuit_runtime.c wingsuit_audio.c
 endif
 JO_COMPILE_USING_SGL = 1
 JO_COMPILE_WITH_FS_MODULE = 1
@@ -42,3 +42,6 @@ MF_LEVEL1_STAGE_CLEAR ?= 0
 CCFLAGS += -DMF_LEVEL1_STAGE_CLEAR=$(MF_LEVEL1_STAGE_CLEAR)
 
 CCFLAGS += -DMF_LEVEL2_WINGSUIT=$(MF_LEVEL2_WINGSUIT)
+
+MF_DEV_STAGE_SKIP ?= 0
+CCFLAGS += -DMF_DEV_STAGE_SKIP=$(MF_DEV_STAGE_SKIP)
