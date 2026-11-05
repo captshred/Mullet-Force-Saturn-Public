@@ -14,68 +14,16 @@ def sprite(name,size,paint):
  save(name,b''.join(struct.pack('>H',rgb(pixels[i:i+3]) if pixels[i+3] else 0) for i in range(0,len(pixels),4)))
  return im
 previews=[]
-for actor in range(2):
- for bank,suffix in [(0,''),(-1,'L'),(1,'R')]:
-  def player(d,a=actor,b=bank):
-   # Pose-specific anatomy: lowered near wing, narrowed raised wing and a
-   # curved spine. Skin/head, chest, hips and two legs remain separate.
-   ink=(7,14,24);dark=(43,63,83) if not a else (16,25,37)
-   mid=(145,171,195) if not a else (37,53,73)
-   light=(214,231,238) if not a else (83,115,139)
-   glint=(250,247,220) if not a else (161,192,205)
-   accent=(205,64,54) if not a else (52,170,187)
-   def poly(points,color):d.polygon(points,fill=color)
-   # Downward tilt on the banking side, torso leans into the turn. Right/left
-   # use different folds and lighting, rather than flipping a rendered bitmap.
-   cx=16+b;head=16+b;left_y=14+(3 if b<0 else -1 if b>0 else 0)
-   right_y=14+(3 if b>0 else -1 if b<0 else 0)
-   lx=(1 if not a else 3)+(2 if b>0 else 0)
-   rx=(30 if not a else 28)-(2 if b<0 else 0)
-   poly([(cx-5,8),(cx+4,8),(rx,right_y),(rx-1,right_y+4),(cx+5,17),
-         (cx+4,23),(cx+1,26),(cx-4,24),(cx-6,17),(lx+1,left_y+4),(lx,left_y)],ink)
-   poly([(cx-4,9),(cx-7,12),(lx+1,left_y+1),(lx+2,left_y+3),(cx-5,15),(cx-3,20)],mid)
-   poly([(cx+3,9),(cx+7,12),(rx-1,right_y+1),(rx-2,right_y+3),(cx+4,15),(cx+2,20)],dark if b<0 else mid)
-   d.line([(cx-4,9),(lx+2,left_y+1)],fill=glint)
-   d.line([(cx+3,9),(rx-2,right_y+1)],fill=light)
-   d.line([(cx-6,12),(cx-4,17)],fill=dark)
-   d.line([(cx+6,12),(cx+3,17)],fill=light if b>0 else ink)
-   # Exposed hands make the arm ends human rather than aircraft wing tips.
-   d.rectangle((lx,left_y,lx+1,left_y+1),fill=(225,164,111))
-   d.rectangle((rx-1,right_y,rx,right_y+1),fill=(184,113,76))
-   poly([(cx-3,9),(cx+2,9),(cx+3,17),(cx+1,21),(cx-3,20),(cx-4,15)],mid)
-   d.line((cx-3,10,cx-2,17),fill=glint)
-   d.line((cx+2,10,cx+2,18),fill=dark)
-   d.line((cx-3,13,cx+2,16),fill=dark)
-   d.point((cx-2,12),fill=accent);d.point((cx+1,12),fill=accent)
-   d.line((cx-3,20,cx+2,20),fill=glint)
-   d.rectangle((cx-1,20,cx,21),fill=(177,145,79))
-   # Separate hips, thighs and boots with a transparent gap, no long hair
-   # column covering the chest or lower body.
-   poly([(cx-3,21),(cx-1,22),(cx-2-b,27),(cx-4-b,29),(cx-5-b,28)],ink)
-   d.line((cx-3,22,cx-3-b,26),fill=light)
-   poly([(cx+1,21),(cx+3,22),(cx+4-b,28),(cx+2-b,29),(cx-b,26)],ink)
-   d.line((cx+2,22,cx+2-b,26),fill=mid)
-   # Small bare head/ears above the shoulders. Keep warm face pixels distinct
-   # from the short crown and two wind-swept mullet locks behind the neck.
-   d.rectangle((head-3,2,head+2,7),fill=ink)
-   d.rectangle((head-2,3,head+1,6),fill=(211,147,101))
-   d.line((head-2,3,head+1,3),fill=(251,206,154))
-   d.point((head-3,5),fill=(225,163,110));d.point((head+2,5),fill=(182,114,80))
-   d.line((head-1,4,head+1,4),fill=(93,55,36))
-   hair=(141,72,34) if not a else (116,77,37)
-   hair_hi=(224,143,59) if not a else (207,162,80)
-   hair_dark=(71,36,26)
-   d.line((head-2,2,head+1,2),fill=hair_dark)
-   poly([(head-2,6),(head+1,6),(head+2,9),(head+2-b*2,12),
-         (head-b*2,16),(head-1-b*2,12),(head-3-b*2,14),(head-2,9)],hair_dark)
-   d.line([(head-2,7),(head-2,10),(head-3-b*2,13)],fill=hair)
-   d.line([(head,7),(head+1,10),(head-b*2,14)],fill=hair)
-   d.line([(head-1,7),(head,10),(head-1-b*2,12)],fill=hair_hi)
-   # Red/cyan wing seams remain side-specific in all poses.
-   d.line((lx+3,left_y+1,lx+4,left_y+1),fill=accent)
-   d.point((rx-4,right_y+2),fill=accent)
-  im=sprite(('WBUCK' if actor==0 else 'WCHUCK')+suffix+'.BIN',(32,32),player)
-  previews.append(im)
+# Canonical concept translation: six authored native pixel grids, no generated
+# high-resolution review/source image is needed by the public runtime build.
+from hero_sprite_pass3_data import HERO_RGB555
+for name,rows in HERO_RGB555.items():
+ assert len(rows)==32 and all(len(row)==128 for row in rows)
+ data=bytes.fromhex(''.join(rows));assert len(data)==2048
+ save(name,data)
+ im=Image.new('RGBA',(32,32))
+ im.putdata([((v&31)*255//31,((v>>5)&31)*255//31,((v>>10)&31)*255//31,255 if v else 0) for (v,) in struct.iter_unpack('>H',data)])
+ previews.append(im)
 def drone(d):
  ink=(6,15,25);dark=(28,43,58);steel=(85,111,129);lit=(158,189,201)
  # Four rotor pods, chamfered plating, struts and a corporate red sensor.

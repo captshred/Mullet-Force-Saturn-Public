@@ -1,5 +1,8 @@
 # Level 2 — Wingsuit Assault prototype
 
+The [hero sprite pass 3](level2-hero-sprite-pass3.md) translates the supplied
+canonical concept into the existing six hero poses without gameplay changes.
+
 The subsequent [player sprite pass 2](level2-player-sprite-pass2.md) adds human
 center/banking poses and fixes the restart HUD text artifact.
 
