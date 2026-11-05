@@ -50,11 +50,11 @@ int main(void)
     step(&g,0,0);assert(g.deaths==1);step(&g,0,0);assert(!g.deaths);
     for(i=0;i<2;i++){
         int k;setup(&g);g.players[i].invulnerable=0;
-        g.hostile[0]=(mf_ws_shot){1,g.players[i].x,g.players[i].y-3*S,0,60,0};
+        g.hostile[0]=(mf_ws_hostile_shot){1,g.players[i].x,g.players[i].y-3*S,0,60,0,768};
         step(&g,0,0);assert(g.deaths==1 && g.players[i].lives==2);
         for(k=0;k<60;k++){step(&g,0,0);assert(!g.deaths);}
         g.players[i].lives=1;g.players[i].invulnerable=0;
-        g.hostile[0]=(mf_ws_shot){1,g.players[i].x,g.players[i].y-3*S,0,60,0};
+        g.hostile[0]=(mf_ws_hostile_shot){1,g.players[i].x,g.players[i].y-3*S,0,60,0,768};
         step(&g,0,0);assert(g.deaths==1 && !g.players[i].lives && !mf_ws_beam_active(&g,i));
         for(k=0;k<10;k++){step(&g,0,0);assert(!g.deaths);}
     }

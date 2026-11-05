@@ -1,6 +1,6 @@
 {
-  "textures": 14,
-  "vdp1_bytes": 23936,
+  "textures": 18,
+  "vdp1_bytes": 28032,
   "tiles": 43,
   "vdp2_payload_bytes": 10944,
   "cram_bytes": 32,
@@ -62,17 +62,33 @@
       "bytes": 2048,
       "sha256": "28a863ca8a8a30e9fa42c55b27583f4da8beee9e8186e15ede647177bf37d425"
     },
+    "WFO0.BIN": {
+      "bytes": 1024,
+      "sha256": "0b24602365e56c734b90f918d387e487cc6ccb238b27df8467646ed5adc3c0f7"
+    },
     "WFL1.BIN": {
       "bytes": 2048,
       "sha256": "81f7cecc9c98f8f250140734a495f419746ab6e20f493f7402ed6d5a14aaa8e9"
+    },
+    "WFO1.BIN": {
+      "bytes": 1024,
+      "sha256": "bb613f92b69a005a939e79df151a44ff69c9f3796656a2f376a0de384c214a99"
     },
     "WFL2.BIN": {
       "bytes": 2048,
       "sha256": "f2b893894ce303fffed44bfa1e555910dc300527acbb50aff89c15a009cce24b"
     },
+    "WFO2.BIN": {
+      "bytes": 1024,
+      "sha256": "eb77cc13a1621b944477298c93e25b78116997086d2cb6676140a16391474d21"
+    },
     "WFL3.BIN": {
       "bytes": 2048,
       "sha256": "68b08422ae8e08a9607049200e5e4a4b466748837445e71ccab70a03c6340bde"
+    },
+    "WFO3.BIN": {
+      "bytes": 1024,
+      "sha256": "a8c52ccc8aeefb55c3ac19e97f87aff676e4295b39a831416d9fdcf20b8fa197"
     },
     "WDEATH.TON": {
       "bytes": 31744,

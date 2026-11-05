@@ -21,6 +21,20 @@ def build(out):
     r,g,bl=palette[index];v=0 if not index else 0x8000|(r>>3)|((g>>3)<<5)|((bl>>3)<<10)
     b+=struct.pack('>H',v)
   save(f'WFL{frame}.BIN',b)
+  # A stable three-pixel ignition core blooms into this exact body phase.
+  first=struct.unpack('>32H',b[:64]);radius=sum(bool(v) for v in first)//2+1
+  cap=bytearray()
+  for y in range(16):
+   if y==0:cap+=b[:64];continue
+   t=1-y/15;ease=t*t*(3-2*t)
+   width=round(2+(radius-2)*ease)
+   center=16+round(.7*math.sin(frame*math.pi/2+y*.4)*math.sin(math.pi*y/15))
+   for x in range(32):
+    d=abs(x-center)
+    index=0 if d>=width else 1 if d>max(1,width-3) else 2 if d>width*.6 else 3 if d>width*.25 else 4
+    r,g,bl=palette[index];v=0 if not index else 0x8000|(r>>3)|((g>>3)<<5)|((bl>>3)<<10)
+    cap+=struct.pack('>H',v)
+  save(f'WFO{frame}.BIN',cap)
  ton=(R/'assets/cd/FX.TON').read_bytes();off=struct.unpack_from('>H',ton,12)[0];voice=bytearray(ton[off:off+36])
  sa=((voice[7]&15)<<16)|int.from_bytes(voice[8:10],'big');pcm=ton[sa:sa+int.from_bytes(voice[12:14],'big')*2]
  voice[7]&=240;voice[8:10]=(64).to_bytes(2,'big')

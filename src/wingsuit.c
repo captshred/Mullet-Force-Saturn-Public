@@ -1,14 +1,49 @@
 #include "wingsuit.h"
 #include <string.h>
+#include <stdint.h>
 #define S MF_WS_SCALE
 static int clamp(int v,int lo,int hi){return v<lo?lo:(v>hi?hi:v);}
 static int near(int x,int y,int a,int b,int rx,int ry)
 {return x>=a-rx*S && x<=a+rx*S && y>=b-ry*S && y<=b+ry*S;}
-static int emit(mf_ws_shot *pool,int count,int x,int y,int owner)
+/* Generic constant-velocity emission keeps future static/fan patterns separate
+   from the basic drone's AIMED_SNAPSHOT targeting policy. No homing in physics. */
+static int emit_hostile(mf_wingsuit *g,int x,int y,int vx,int vy,int target)
 {
-    int i;for(i=0;i<count;i++)if(!pool[i].active){
-        pool[i]=(mf_ws_shot){1,x,y,owner,120,0};return 1;
+    int i;for(i=0;i<MF_WS_HOSTILE;i++)if(!g->hostile[i].active){
+        g->hostile[i]=(mf_ws_hostile_shot){1,x,y,target,120,vx,vy};return 1;
     }return 0;
+}
+static uint32_t integer_sqrt(uint64_t n)
+{
+    uint64_t root=0,bit=UINT64_C(1)<<62;
+    while(bit>n)bit>>=2;
+    while(bit){
+        if(n>=root+bit){n-=root+bit;root=(root>>1)+bit;}
+        else root>>=1;
+        bit>>=2;
+    }return (uint32_t)root;
+}
+static void aimed_snapshot(mf_wingsuit *g,int x,int y)
+{
+    int i,target=-1;uint64_t best=UINT64_MAX;int64_t dx=0,dy=0;
+    for(i=0;i<MF_WS_PLAYERS;i++){
+        const mf_ws_player *p=&g->players[i];int64_t tx,ty;uint64_t d;
+        if(!p->active || p->lives<=0 || p->respawn)continue;
+        tx=(int64_t)p->x-x;ty=(int64_t)p->y-y;d=(uint64_t)(tx*tx+ty*ty);
+        /* Strict comparison and ascending order give Buck exact ties. */
+        if(d<best){best=d;target=i;dx=tx;dy=ty;}
+    }
+    if(target>=0){
+        int vx=0,vy=MF_WS_HOSTILE_SPEED;
+        if(best){
+            /* Eight extra fractional length bits also normalize subpixel
+               vectors. Legal stage coordinates keep this shift below 2^51. */
+            uint32_t length=integer_sqrt(best<<16);
+            vx=(int)(dx*MF_WS_HOSTILE_SPEED*256/length);
+            vy=(int)(dy*MF_WS_HOSTILE_SPEED*256/length);
+        } /* Coincident muzzle/hero uses deterministic straight-down fallback. */
+        emit_hostile(g,x,y,vx,vy,target);
+    }
 }
 /* Allocate complete bursts atomically: no half fan, overwrite or heap fallback.
    The attached flame has no projectiles and does not consume this pool. */
@@ -78,7 +113,7 @@ void mf_ws_step(mf_wingsuit *g,const unsigned held[2],const unsigned pressed[2],
         mf_ws_enemy *e=&g->enemies[i];if(e->explosion)--e->explosion;
         if(!e->active)continue;
         e->y+=320;++e->age;
-        if(e->age==80)emit(g->hostile,MF_WS_HOSTILE,e->x,e->y+10*S,0);
+        if(e->age==80)aimed_snapshot(g,e->x,e->y+10*S);
         if(e->y>256*S)e->active=0;
     }
     for(i=0;i<2;i++)if(pulse[i])for(j=0;j<MF_WS_ENEMIES;j++){
@@ -99,8 +134,9 @@ void mf_ws_step(mf_wingsuit *g,const unsigned held[2],const unsigned pressed[2],
         }
     }
     for(i=0;i<MF_WS_HOSTILE;i++){
-        mf_ws_shot *s=&g->hostile[i];if(!s->active)continue;
-        s->y+=3*S;if(--s->ttl<=0 || s->y>248*S){s->active=0;continue;}
+        mf_ws_hostile_shot *s=&g->hostile[i];if(!s->active)continue;
+        s->x+=s->vx;s->y+=s->vy;
+        if(--s->ttl<=0 || s->x<44*S || s->x>275*S || s->y < -8*S || s->y>248*S){s->active=0;continue;}
         for(j=0;j<2;j++){
             mf_ws_player *p=&g->players[j];if(p->active && p->lives && !p->respawn && near(s->x,s->y,p->x,p->y,7,10)){
                 g->deaths+=damage(p,j);s->active=0;break;

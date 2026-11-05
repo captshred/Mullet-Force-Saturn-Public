@@ -1,5 +1,8 @@
 # Level 2 flame tuning pass 2
 
+Historical report for the confirmed tuning build. For the added ignition cap and
+snapshot aiming, see [flame origin and aimed drones](level2-aimed-drone-pass.md).
+
 Branch: `feature/level2-flame-tuning-pass2`.
 Parent: confirmed playable `5b07fe92676d4f3cc8c431be057ae6bbb6efa1fe`
 (`feature/level2-flame-focus-pass`). This document supersedes the earlier flame

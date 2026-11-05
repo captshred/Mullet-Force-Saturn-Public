@@ -4,6 +4,7 @@ import subprocess,tempfile
 R=Path(__file__).resolve().parents[1]
 with tempfile.TemporaryDirectory(prefix='mf-wingsuit-') as tmp:
  for name,sources,includes in [
+  ('aim',['tests/wingsuit_aim_test.c'],['-Isrc']),
   ('game',['tests/wingsuit_test.c','src/wingsuit.c'],['-Isrc']),
   ('flame',['tests/wingsuit_flame_test.c','src/wingsuit.c'],['-Isrc']),
   ('audio',['tests/wingsuit_audio_test.c'],['-Itests/sound_mock','-Isrc']),

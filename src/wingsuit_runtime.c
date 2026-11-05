@@ -6,7 +6,7 @@
 #include "wingsuit_audio.h"
 #include <string.h>
 static mf_wingsuit shooter;
-static int ids[14]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
+static int ids[18]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
 static int player_bank[2];
 static const char restart_prompt[]="1P START TO RESTART";
 static const char restart_clear[]="                   ";
@@ -93,9 +93,9 @@ static void wipe(volatile unsigned short *p,unsigned bytes)
 static int load_resources(void)
 {
     unsigned wait;
-    int i;static const char *names[]={"WBUCK.BIN","WCHUCK.BIN","WDRONE.BIN","WSHOT.BIN","WHOST.BIN","WBOOM.BIN","WBUCKL.BIN","WBUCKR.BIN","WCHUCKL.BIN","WCHUCKR.BIN","WFL0.BIN","WFL1.BIN","WFL2.BIN","WFL3.BIN"};
-    static const int widths[]={32,32,24,8,8,32,32,32,32,32,32,32,32,32};
-    static const int heights[]={32,32,24,8,8,32,32,32,32,32,MF_WS_BEAM_SEGMENT_HEIGHT,MF_WS_BEAM_SEGMENT_HEIGHT,MF_WS_BEAM_SEGMENT_HEIGHT,MF_WS_BEAM_SEGMENT_HEIGHT};
+    int i;static const char *names[]={"WBUCK.BIN","WCHUCK.BIN","WDRONE.BIN","WSHOT.BIN","WHOST.BIN","WBOOM.BIN","WBUCKL.BIN","WBUCKR.BIN","WCHUCKL.BIN","WCHUCKR.BIN","WFL0.BIN","WFL1.BIN","WFL2.BIN","WFL3.BIN","WFO0.BIN","WFO1.BIN","WFO2.BIN","WFO3.BIN"};
+    static const int widths[]={32,32,24,8,8,32,32,32,32,32,32,32,32,32,32,32,32,32};
+    static const int heights[]={32,32,24,8,8,32,32,32,32,32,MF_WS_BEAM_SEGMENT_HEIGHT,MF_WS_BEAM_SEGMENT_HEIGHT,MF_WS_BEAM_SEGMENT_HEIGHT,MF_WS_BEAM_SEGMENT_HEIGHT,MF_WS_BEAM_ORIGIN_HEIGHT,MF_WS_BEAM_ORIGIN_HEIGHT,MF_WS_BEAM_ORIGIN_HEIGHT,MF_WS_BEAM_ORIGIN_HEIGHT};
     /* All prior commands have passed through three core slSynch barriers.
        No sprites were submitted during them; no slave rendering is enabled. */
     if(!background_palette || background_palette->id!=1 || !background_palette->data){load_failure("CRAM","PALETTE",1,-1);return 100;}
@@ -119,9 +119,9 @@ static int load_resources(void)
     if(!copy_file("WCELL.BIN",WS_CELLS,WS_CELL_BYTES) ||
        !copy_file("WMAP.BIN",WS_MAP,WS_MAP_BYTES) ||
        !copy_file("WPAL.BIN",background_palette->data,32))return 102;
-    for(i=0;i<14;i++){
+    for(i=0;i<18;i++){
         ids[i]=texture(names[i],widths[i],heights[i]);
-        if(ids[i]!=i){if(!failed_asset)load_failure(names[i],"SPRITE ID",i,ids[i]);jo_sprite_free_all();for(i=0;i<14;i++)ids[i]=-1;return 103;}
+        if(ids[i]!=i){if(!failed_asset)load_failure(names[i],"SPRITE ID",i,ids[i]);jo_sprite_free_all();for(i=0;i<18;i++)ids[i]=-1;return 103;}
     }
     if(!mf_ws_audio_load(read_asset)){if(!failed_asset)load_failure("WDEATH BANK","AUDIO",1,0);return 108;}
     slCharNbg1(COL_TYPE_256,CHAR_SIZE_1x1);
@@ -139,7 +139,7 @@ static int load(void)
 {
     int result;
     /* The pinned GFS table holds only 256 directory records. Resolve this
-       early root entry once, then give all twenty reads a small private table. */
+       early root entry once, then give all twenty-four reads a small private table. */
     if(GFS_NameToId((Sint8 *)"ALEVEL2")<0){
         load_failure("ALEVEL2","DIRECTORY",0,-1);return 106;
     }
@@ -176,12 +176,14 @@ static void render(void)
     jo_sprite_disable_half_transparency();jo_sprite_disable_dark_filter();
     jo_sprite_disable_gouraud_shading();jo_sprite_restore_sprite_scale();jo_sprite_disable_clipping();
     for(i=0;i<2;i++)if(mf_ws_beam_active(&shooter,i)){
-        int bottom=shooter.players[i].y/256-MF_WS_BEAM_EMITTER;
+        int bottom=shooter.players[i].y/256-MF_WS_BEAM_EMITTER-MF_WS_BEAM_ORIGIN_HEIGHT;
+        int frame=(shooter.ticks/3+i)&3;
+        draw(14+frame,shooter.players[i].x/256-16,bottom);
         /* Tile one periodic body frame without gaps or a terminal tip. All
            segments share phase so the wrap remains seamless during animation.
            System clipping trims the uppermost segment at the playfield edge. */
         for(;bottom>MF_WS_BEAM_TOP;bottom-=MF_WS_BEAM_SEGMENT_HEIGHT)
-            draw(10+((shooter.ticks/3+i)&3),shooter.players[i].x/256-16,bottom-MF_WS_BEAM_SEGMENT_HEIGHT);
+            draw(10+frame,shooter.players[i].x/256-16,bottom-MF_WS_BEAM_SEGMENT_HEIGHT);
     }
     for(i=0;i<MF_WS_ENEMIES;i++){
         mf_ws_enemy *e=&shooter.enemies[i];
