@@ -269,7 +269,11 @@ void mf_ws_runtime_frame(const mf_input input[2],unsigned pressed[2],unsigned no
             break; /* Keep the first affected control readable on one line. */
         }
     }
+    if(mf_ws_audio_fault()){
+        const mf_ws_mixer_diagnostic *d=mf_ws_audio_mixer_diagnostics();
+        jo_printf(3,21,"SFX %d C%d AGE%d ON%02X FREE%d",d->lost_kind,d->lost_control,d->lost_age,d->other_note_on,d->free_at_loss);
+        jo_printf(3,20,"F%d S%d E%d T%d LOSS%d REPL%d",d->flame,d->shot,d->explosion,d->total,d->losses,d->replacements);
+    }
 #endif
-    if(mf_ws_audio_fault())jo_printf(3,21,"AUDIO P%d STATUS %02X",mf_ws_audio_fault()>>8,mf_ws_audio_fault()&255);
 }
 #endif

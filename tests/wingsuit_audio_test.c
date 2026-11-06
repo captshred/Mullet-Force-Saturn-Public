@@ -12,10 +12,12 @@ static unsigned short slot_regs[32*16];
 char sddrvstsk[MF_SOUND_DRIVER_BYTES];
 static int stopped=1,inflight,reads,frees,accept=1,initializations,commands;
 static unsigned clock_now;
-static int starts[8],stops[8],notes[2],offs[2],bank[2],program[2],live[8],status_error;
+static int starts[8],stops[8],notes[2],offs[2],bank[8],program[8],live[8];
 static const char *fail_name;
 static unsigned fail_stage,trace[32],trace_n;
 static int init_status=1,driver_frozen,command_frozen;
+static unsigned one_until[8],note_stamp;
+static int defer_note;
 static int attack_live[2],loop_live[2],loop_notes[2],attack_offs[2],loop_offs[2];
 static int submit(unsigned cmd)
 {
@@ -38,7 +40,7 @@ void slSoundOnWait(void){assert(stopped && !ram[0x4e1] && diagnostic.stage==MF_W
 void slDMACopy(void *s,void *d,unsigned n){assert(stopped && !inflight && (unsigned char *)d>=ram && (unsigned char *)d+n<=ram+sizeof(ram));memcpy(d,s,n);inflight=1;}
 void slDMAWait(void){inflight=0;}
 void slSndFlush(void){assert(diagnostic.stage==MF_WS_AUDIO_FLUSH && !ready && !stopped);}
-void slInitSound(Uint8 *p,unsigned s,Uint8 *m,unsigned n){assert(stopped && p==(Uint8 *)sddrvstsk && s==MF_SOUND_DRIVER_BYTES && m && n==MF_WS_MAP_BYTES);inflight=1;ram[0x4e1]=0x80;memcpy(ram+0xa000,m,n);memset(ram+0x700,0,128);ram[0x8838]=ram[0x8839]=0;commands=0;memset(attack_live,0,sizeof(attack_live));memset(loop_live,0,sizeof(loop_live));memset(live,0,sizeof(live));memset(bank,0,sizeof(bank));memset(program,0,sizeof(program));}
+void slInitSound(Uint8 *p,unsigned s,Uint8 *m,unsigned n){assert(stopped && p==(Uint8 *)sddrvstsk && s==MF_SOUND_DRIVER_BYTES && m && n==MF_WS_MAP_BYTES);inflight=1;ram[0x4e1]=0x80;memcpy(ram+0xa000,m,n);memset(ram+0x700,0,128);ram[0x8838]=ram[0x8839]=0;commands=0;memset(attack_live,0,sizeof(attack_live));memset(loop_live,0,sizeof(loop_live));memset(live,0,sizeof(live));memset(bank,0,sizeof(bank));memset(program,0,sizeof(program));memset(ram+0x8000,0,0x800);ram[0x67ec]=ram[0x67ed]=0;note_stamp=0;}
 void SND_Init(SndIniDt *p){assert(stopped && p->program==(Uint16 *)sddrvstsk && p->program_size==MF_SOUND_DRIVER_BYTES && p->map_size==20); /* Pinned binary doubles words; not an invented byte mock. */
     {unsigned char snapshot[44];memcpy(snapshot,p->map,sizeof(snapshot));assert(!snapshot[40] && !snapshot[41] && !snapshot[42] && !snapshot[43]);}
     assert(diagnostic.stage==MF_WS_AUDIO_SND_INIT);memset(ram+0x700,0,128);initializations++;}
@@ -49,37 +51,38 @@ int SND_SetTlVl(int v){assert(v==15 && diagnostic.stage==MF_WS_AUDIO_TOTAL_VOLUM
 static void word(unsigned a,unsigned value){ram[a]=value>>8;ram[a+1]=value;}
 static void driver_note(unsigned p,unsigned note,int alive)
 {
-    unsigned loop=note==MF_WS_FLAME_LOOP_NOTE,slot=p*2+loop,a=0x8000+slot*64;
-    unsigned pcm=loop?MF_WS_FLAME_LOOP_PCM_ADDR:MF_WS_FLAME_ATTACK_PCM_ADDR;
-    unsigned layer=loop?MF_WS_FLAME_LOOP_LAYER_ADDR:MF_WS_FLAME_ATTACK_LAYER_ADDR;
+    unsigned loop=p<2 && note==MF_WS_FLAME_LOOP_NOTE,slot=p<2?p*2+loop:p+2,a=0x8000+slot*64;
+    unsigned pcm=p<2?(loop?MF_WS_FLAME_LOOP_PCM_ADDR:MF_WS_FLAME_ATTACK_PCM_ADDR):p<4?180832:149152;
+    unsigned layer=p<2?(loop?MF_WS_FLAME_LOOP_LAYER_ADDR:MF_WS_FLAME_ATTACK_LAYER_ADDR):p<4?149046:149010;
     unsigned short *r=slot_regs+slot*16;
     word(a+2,(p<<8)|note);word(a+6,p<<9);word(a+8,layer>>16);word(a+10,layer&65535);
-    word(a+0x3a,alive?0x0a:8);
+    word(a+0x3a,alive?0x0a:8);if(alive){word(a+0x3e,++note_stamp);word(0x67ec,note_stamp);}
     r[0]=0x0800|(loop<<5)|(pcm>>16);r[1]=pcm&65535;r[2]=0;r[3]=loop?MF_WS_FLAME_LOOP_FRAMES:MF_WS_FLAME_ATTACK_FRAMES;
 }
 static void driver_flame(unsigned p,int alive){driver_note(p,loop_live[p]?MF_WS_FLAME_LOOP_NOTE:MF_WS_FLAME_ATTACK_NOTE,alive);}
 static int accepted(void){if(!accept)return 0;assert(++commands<=8);assert(!submit(9));return 1;}
 int SND_SetSeqVl(int p,int v,int f){assert(!stopped && p>=0 && p<8 && v==(p<2?MF_WS_FLAME_VOLUME:p<4?MF_WS_SHOT_VOLUME:MF_SFX_VOLUME) && !f);return accepted()?0:1;}
-int SND_StartSeq(int p,int b,int song,int pr){assert(startup_done && !stopped && p>=2 && p<8 && !b && song==(p<4?1:0) && !pr);if(!accepted())return 1;starts[p]++;live[p]=1;return 0;}
-int SND_StopSeq(int p){assert(p==2 || p==3);if(!accepted())return 1;stops[p]++;live[p]=0;return 0;}
+int SND_StartSeq(int p,int b,int song,int pr){(void)p;(void)b;(void)song;(void)pr;assert(!"No Level 2 sequence starts");return 1;}
+int SND_StopSeq(int p){(void)p;assert(!"No Level 2 sequence stops");return 1;}
 int SND_CtrlDirMidi(int p,int pr,int cmd,int channel,int a,int b)
 {
-    assert(p>=0 && p<2 && !pr && channel==p);
+    assert(p>=0 && p<8 && !pr && channel==p);
     if(!accepted())return 1;
     if(cmd==3){assert(a==32 && !b);bank[p]=1;}
-    else if(cmd==4){assert((a==MF_WS_FLAME_ATTACK_PROGRAM || a==MF_WS_FLAME_LOOP_PROGRAM) && !b && bank[p]);program[p]=a;}
+    else if(cmd==4){assert((p<2?(a==MF_WS_FLAME_ATTACK_PROGRAM || a==MF_WS_FLAME_LOOP_PROGRAM):a==(p<4?1:0)) && !b && bank[p]);program[p]=a;}
     else if(cmd==1){assert(startup_done && b==110 && bank[p]);
-        if(a==MF_WS_FLAME_ATTACK_NOTE){assert(program[p]==MF_WS_FLAME_ATTACK_PROGRAM && !attack_live[p] && !loop_live[p]);attack_live[p]=1;notes[p]++;}
+        if(p>=2){assert(a==60 && !live[p] && program[p]==(p<4?1:0));starts[p]++;one_until[p]=clock_now+(p<4?31:44);}
+        else if(a==MF_WS_FLAME_ATTACK_NOTE){assert(program[p]==MF_WS_FLAME_ATTACK_PROGRAM && !attack_live[p] && !loop_live[p]);attack_live[p]=1;notes[p]++;}
         else {assert(a==MF_WS_FLAME_LOOP_NOTE && program[p]==MF_WS_FLAME_LOOP_PROGRAM && !loop_live[p]);loop_live[p]=1;loop_notes[p]++;}
-        live[p]=1;driver_note(p,a,1);}
-    else {assert(cmd==0 && !b && live[p]);
+        live[p]=1;if(defer_note && p==2)word(0x8000+4*64+0x3a,0xa);else driver_note(p,a,1);}
+    else {assert(p<2 && cmd==0 && !b && live[p]);
         if(a==MF_WS_FLAME_LOOP_NOTE){assert(loop_live[p]);loop_live[p]=0;loop_offs[p]++;offs[p]++;}
         else {assert(a==MF_WS_FLAME_ATTACK_NOTE && attack_live[p]);attack_live[p]=0;attack_offs[p]++;if(!loop_live[p])offs[p]++;}
         live[p]=attack_live[p]||loop_live[p];driver_note(p,a,0);}
     return 0;
 }
 int slSoundRequest(const char *format,...){(void)format;assert(!"SGL command path must not be used by the repair");return 0x25a00700;}
-void SND_GetSeqStat(SndSeqStat *s,int p){assert(p>=2 && p<8);s->mode=live[p];s->stat=p==4?status_error:0;}
+void SND_GetSeqStat(SndSeqStat *s,int p){(void)s;(void)p;assert(!"No sequence-status runtime dependency");}
 static void pump(unsigned now,unsigned focus)
 {
     unsigned i;clock_now=now;commands=0;
@@ -91,11 +94,12 @@ static void pump(unsigned now,unsigned focus)
             ram[0x700+i*16]=0;
         }
     }
+    for(i=2;i<8;i++)if(live[i] && (int)(now-one_until[i])>=0){live[i]=0;driver_note(i,60,0);}
     mf_ws_audio_step(now,focus);
 }
 static void load(unsigned now)
 {
-    fail_name=NULL;accept=1;status_error=0;trace_n=0;assert(mf_ws_audio_load(read_exact,progress_event));
+    fail_name=NULL;accept=1;trace_n=0;assert(mf_ws_audio_load(read_exact,progress_event));
     assert(diagnostic.completed==0xfff && !strcmp(diagnostic.operation,"TOTAL VOLUME"));
     assert(trace_n==12);{unsigned j;for(j=0;j<12;j++)assert(trace[j]==j+1);}
     assert(!mf_ws_audio_ready());
@@ -152,17 +156,19 @@ int main(void)
     mf_ws_audio_events(1,0);pump(2004,3);assert(live[0] && live[1] && live[4] && live[5] && notes[0]==1 && notes[1]==1);
     load(2100);reset_counts();mf_ws_audio_events(1,3);pump(2103,0);
     assert(live[2] && live[3] && live[4] && starts[2]==1 && starts[3]==1);
-    mf_ws_audio_events(0,1);pump(2104,0);assert(stops[2]==1 && !stops[3] && live[4]);
-    pump(2104,0);assert(starts[2]==1);pump(2105,0);assert(starts[2]==2 && live[3] && live[4]);
+    mf_ws_audio_events(0,1);pump(2104,0);assert(!stops[2] && !stops[3] && live[2] && live[4]);
+    pump(2104,0);assert(starts[2]==1);pump(2105,0);assert(starts[2]==1 && live[3] && live[4]);
+    pump(2136,0);assert(starts[2]==1);pump(2137,0);assert(starts[2]==2 && !stops[2]);
     load(2200);reset_counts();mf_ws_audio_events(10,0);pump(2203,3);
-    /* Two flame NOTE ON commands leave room for three explosion starts. */
+    /* Direct MIDI: two Flame starts + four Explosion starts fit one batch. */
+    assert(mixer.flame==2 && mixer.explosion==4 && mixer.total==6 && mixer.dropped_explosions==2);
     for(i=2204;i<=2303;i++)pump((unsigned)i,3);
-    assert(starts[4]+starts[5]+starts[6]+starts[7]==10 && !pending_explosions);
+    assert(starts[4]+starts[5]+starts[6]+starts[7]==8 && !pending_explosions);
     assert(notes[0]==1 && notes[1]==1 && !offs[0] && !offs[1]);
     load(3000);reset_counts();accept=0;mf_ws_audio_events(1,1);pump(3003,1);
     assert(!notes[0] && !starts[4] && !starts[2]);accept=1;pump(3004,1);assert(notes[0]==1 && starts[4]==1 && starts[2]==1);
     accept=0;pump(3005,0);assert(live[0]);accept=1;pump(3006,1);assert(!live[0] && offs[0]==1);
-    pump(3007,1);assert(notes[0]==2);status_error=0x81;pump(3008,1);assert(mf_ws_audio_fault()==0x481);
+    pump(3007,1);assert(notes[0]==2);pump(3008,1);assert(!mf_ws_audio_fault());
     for(i=0;i<3;i++){
         fail_name=names[i];trace_n=0;assert(!mf_ws_audio_load(read_exact,progress_event));assert(!ready);
         n=starts[4];mf_ws_audio_events(1,3);pump(3100,3);assert(starts[4]==n);
@@ -235,6 +241,42 @@ int main(void)
     load(~0u-3);reset_counts();mf_ws_audio_events(1,0);pump(~0u,1);
     pump(0,1);assert(notes[0]==1 && starts[4]==1);pump(48,1);assert(notes[0]==1);
     mf_ws_audio_events(1,0);pump(49,1);assert(starts[4]==2);
-    puts("PASS split Flame: exact 38-tick one-time handoff, separate keys with tiny overlap, ten-second mixed-SFX hold without retriggers, independent release/reactivation, startup-consumer watchdog; live diagnostics: requested/attack/estimated sustain, cached-EG grace, unexpected stop, actual LPCTL mismatch, no restart and independent ownership");
-    puts("PASS E108 repair: pinned word-count/padded MAP, twelve ordered stage markers, all four SND init-status failures preserved, no SGL request path; Level 2 audio: real single-shot events; 19/20-tick ignition, indefinite sustain/no retrigger, release/pause/death and independent flames; three required polyphony mixes; explosion burst, shot-only oldest stealing, SDK rejection/release guard/clock wrap, DMA bank once and runtime status diagnostics");
+    /* Ten seconds of mixed playback: both flames receive one Attack/Loop.
+       Retiring finite Attack keys is allowed; no persistent Loop Note Off. */
+    load(7000);reset_counts();pump(7003,3);
+    for(i=7004;i<=7603;i++){
+        if(i%12==0)mf_ws_audio_events(1,3);
+        pump(i,3);
+        assert(mixer.total<=10 && !mixer.losses && !mixer.replacements);
+    }
+    assert(notes[0]==1 && notes[1]==1 && loop_notes[0]==1 && loop_notes[1]==1);
+    assert(attack_offs[0]==1 && attack_offs[1]==1 && !loop_offs[0] && !loop_offs[1]);
+    for(i=2;i<8;i++)assert(starts[i]>0 && !stops[i]);
+    /* Exactly ten principal physical voices during both handoffs. */
+    load(8000);reset_counts();pump(8003,3);pump(8004,3);mf_ws_audio_events(4,3);pump(8041,3);
+    assert(mixer.flame==4 && mixer.shot==2 && mixer.explosion==4 && mixer.total==10);
+    for(i=0;i<10;i++)assert(mixer.owner[i]==(unsigned)(i<4?i/2:i-2));
+    for(i=8042;i<8072;i++)pump(i,3);
+    assert(live[2] && live[3] && live[4] && !mixer.losses);
+    pump(8072,3);assert(!live[2] && live[4]); /* LEA, no Note Off. */
+    pump(8085,3);assert(!live[4] && !mixer.losses);
+    /* Read-only diagnostics capture premature inactivity after cache grace. */
+    load(9000);reset_counts();mf_ws_audio_events(1,1);pump(9003,1);
+    driver_note(4,60,0);pump(9004,1);pump(9016,1);
+    assert(mixer.losses==1 && !mixer.replacements && mixer.lost_kind==MF_WS_SFX_EXPLOSION && mixer.lost_control==4);
+    assert(mixer.lost_age==1 && mixer.free_at_loss==29 && mf_ws_audio_fault());
+    /* A different owner in a previously live physical slot is replacement
+       evidence; record the concurrent Note On mask without repairing/restarting. */
+    load(10000);reset_counts();pump(10003,1);
+    word(0x8006,4<<9);mf_ws_audio_events(1,0);pump(10004,1);
+    assert(mixer.losses==1 && mixer.replacements==1 && mixer.lost_control==0 && mixer.other_note_on==(1u<<4));
+    assert(notes[0]==1 && !offs[0]);
+    /* Asynchronous Note On acceptance with stale EG from the previous
+       naturally ended note must not produce a false replacement alarm. */
+    load(11000);reset_counts();mf_ws_audio_events(0,1);pump(11003,0);
+    assert(watch[4].seen);mf_ws_audio_events(0,1);defer_note=1;pump(11037,0);
+    assert(!watch[4].seen && !mixer.losses);defer_note=0;driver_note(2,60,1);pump(11038,0);
+    assert(watch[4].seen && !mixer.losses && starts[2]==2);
+    puts("PASS direct-MIDI one-shots: 4 independent explosions, 2 shots, preserved gains/programs/channels, natural LEA, bounded overflow without stealing, rejection retries, 600-VBlank mixed hold, maximum 10 physical cached-live slots; fault-only ownership/loss diagnostics");
+    puts("PASS split Flame and E108: exact handoff, independent release/pause/death, no Loop restarts/offs during mixes, loader DMA once, readiness/consumer watchdog and clock-wrap regressions");
 }

@@ -1,6 +1,7 @@
 """Exact additive exceptions for the authorized split Flame bank and transport."""
 from pathlib import Path
 import json
+from level2_polyphony_scope import poly_source
 R=Path(__file__).resolve().parents[1]
 def lock():
     x=json.loads((R/'docs/level2-split-flame-lock.json').read_text())
@@ -13,7 +14,7 @@ def split_source(name,before):
     x=lock()
     if name not in x['sources']:return before
     c=x['sources'][name];assert c['before']==before,(name,'unexpected split source baseline')
-    return c['after']
+    return poly_source(name,c['after'])
 
 def split_file(name,before):
     x=lock()

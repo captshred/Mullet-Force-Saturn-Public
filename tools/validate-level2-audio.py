@@ -5,6 +5,7 @@ import json,hashlib,struct,re
 import seq
 from level2_audio_scope import audio_source,audio_asset
 from level2_sustain_scope import sustain_source
+from level2_polyphony_scope import poly_source,lock as poly_lock
 from level2_split_scope import split_source,split_file,lock as split_lock
 R=Path(__file__).resolve().parents[1];A=R/'assets/wingsuit';r=json.loads((A/'audio.json').read_text())
 sha=lambda b:hashlib.sha256(b).hexdigest()
@@ -62,7 +63,7 @@ source=(R/'src/wingsuit.c').read_text();a=source.index('static uint32_t integer_
 assert sha(source[a:b].encode())==pres['aiming_sha256']
 transport=(R/'src/wingsuit_audio.c').read_text()
 assert 'slSoundRequest(' not in transport
-assert 'SND_ChgMap(0)' in transport and 'SND_CtrlDirMidi(' in transport and 'SND_StartSeq(' in transport
+assert 'SND_ChgMap(0)' in transport and 'SND_CtrlDirMidi(' in transport and all(call not in transport for call in ['SND_StartSeq(', 'SND_StopSeq('])
 assert 'SND_INI_ARA_SZ(init)=MF_WS_MAP_BYTES/sizeof(Uint16)' in transport
 repair=json.loads((R/'docs/level2-audio-e108-source-lock.json').read_text())
 for name,c in repair['sources'].items():assert sha((R/name).read_bytes())==split_source(name,sustain_source(name,c['after'])),name
@@ -77,15 +78,25 @@ for name,info in repair_preserved['files'].items():
 sustain=json.loads((R/'docs/level2-flame-sustain-source-lock.json').read_text())
 for name,c in sustain['sources'].items():assert sha((R/name).read_bytes())==split_source(name,c['after']),name
 split=split_lock()
-for name,c in split['sources'].items():assert sha((R/name).read_bytes())==c['after'],name
+for name,c in split['sources'].items():assert sha((R/name).read_bytes())==poly_source(name,c['after']),name
 for name,c in split['files'].items():
  b=(R/name).read_bytes();assert len(b)==c['after']['bytes'] and sha(b)==c['after']['sha256'],name
 frozen=json.loads((R/'docs/level2-split-flame-preservation.json').read_text());assert frozen['base_commit']==split['base_commit']
 for name,info in frozen['files'].items():
  b=(R/name).read_bytes();assert len(b)==info['bytes'] and sha(b)==info['sha256'],name
-# Original initializer call order and one-shot SND pool are exact, not exempted.
+# Initializer remains exact. Only the explicitly authorized one-shot transport
+# is replaced; additive source hashes and immutable assets remain exhaustive.
 a=transport.index('    stage(MF_WS_AUDIO_MAP_READ)');b=transport.index('    /* Submission success',a)
 assert sha(transport[a:b].encode())==split['load_sequence_sha256'],'E108 loading sequence changed'
-a=transport.index('static int midi(');b=transport.index('/* Read-only diagnostics',a)
-assert sha(transport[a:b].encode())==split['one_shot_transport_sha256'],'Shot/explosion requests or pool changed'
-print('PASS split Flame native bank: exact Shot/explosion PCM/parameters and sequences; Attack27975/Loop12832 frames, seam -5/slope5, whole-sample normal loop; 307260 high-water/217028 free; exact additive source/asset locks and preserved E108 call sequence')
+poly=poly_lock()
+for name,c in poly['sources'].items():assert sha((R/name).read_bytes())==c['after'],name
+for name,info in poly['frozen'].items():
+ b=(R/name).read_bytes();assert len(b)==info['bytes'] and sha(b)==info['sha256'],name
+for name,begin,end in [
+ ('flame_scheduler','    /* Release is latched','    /* SND_SetSeqVl is the'),
+ ('flame_observer','static void observe_flame','/* Read only the driver'),
+ ('startup_handshake','static void startup(unsigned','int mf_ws_audio_ready')]:
+ a=transport.index(begin);b=transport.index(end,a)
+ assert sha(transport[a:b].encode())==poly['preserved_sections'][name],name
+assert 'midi(first_port+i,1,60,110)' in transport
+print('PASS polyphony source-only lock: all Level 1/2 assets unchanged; exact split Flame scheduler/observer, E108 initialization/readiness; no Level 2 sequence start/stop; full approved source chain preserved')

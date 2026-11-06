@@ -31,5 +31,15 @@ typedef struct {
     unsigned control,sa,lsa,lea,eg;
 } mf_ws_flame_diagnostic;
 const mf_ws_flame_diagnostic *mf_ws_audio_flame_diagnostics(unsigned player);
+enum { MF_WS_SFX_FLAME=1,MF_WS_SFX_SHOT,MF_WS_SFX_EXPLOSION };
+/* Cached physical EG activity. owner[slot]=0..7, or 255 if not a live SFX.
+   free_slots counts globally reusable allocator entries; held ended keys may
+   be inactive without being globally reusable. No private driver writes. */
+typedef struct {
+    unsigned flame,shot,explosion,total,free_slots,owner[32];
+    unsigned losses,replacements,lost_kind,lost_control,lost_age,other_note_on,free_at_loss;
+    unsigned dropped_shots,dropped_explosions,snapshot;
+} mf_ws_mixer_diagnostic;
+const mf_ws_mixer_diagnostic *mf_ws_audio_mixer_diagnostics(void);
 unsigned mf_ws_audio_fault(void);
 #endif

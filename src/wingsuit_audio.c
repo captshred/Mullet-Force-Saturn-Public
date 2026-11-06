@@ -13,13 +13,17 @@
 extern char sddrvstsk[];
 /* Pinned driver 2.10: eight control numbers 0..7, 32 physical SCSP slots.
    Two persistent flames, two shot controls, four explosion controls. */
-enum { FREE,VOLUME,START,PLAYING,RELEASE };
-typedef struct { unsigned started,until,stopped;int state; } one_shot;
+enum { FREE,PLAYING };
+typedef struct { unsigned started,until;int state; } one_shot;
 typedef struct { unsigned stopped,started,loop_started,missing_since;int prep,attack,loop,program,guard,stop,missing; } flame_state;
 static one_shot shot[2],explosion[4];
 static flame_state flame[2];
 static mf_ws_flame_diagnostic flame_diagnostic[2];
-static unsigned pending_shots,pending_explosions,last_now,fault;
+static unsigned pending_shots,pending_explosions,last_now,fault,note_on_mask;
+static unsigned one_prep[6],note_baseline[8];
+static mf_ws_mixer_diagnostic mixer;
+typedef struct { unsigned owner,key,stamp,started,missing_since,other_on,free;int seen,missing; } slot_watch;
+static slot_watch watch[32];
 static int ready,clock_set,budget,startup_done,startup_failed,boot_clock;
 static unsigned boot,boot_since,boot_counter;
 enum { BOOT_CPU=1,BOOT_MAP,BOOT_MAP_ACK,BOOT_DSP,BOOT_DSP_ACK,
@@ -29,7 +33,7 @@ static mf_ws_audio_progress progress;
 static const char *const operation[]={"IDLE","MAP READ","SOUND OFF","SND INIT",
     "MAP CHANGE","SGL INIT","SEQ UPLOAD","TON UPLOAD","CPU RESTART",
     "FLUSH/HANDSHAKE","DSP STOP","CDDA LEVEL","TOTAL VOLUME",
-    "DRIVER READY","MAP READY","FLAME READY"};
+    "DRIVER READY","MAP READY","SFX READY"};
 static void stage(unsigned n)
 {
     diagnostic.stage=n;diagnostic.operation=operation[n];
@@ -70,6 +74,7 @@ int mf_ws_audio_load(mf_ws_audio_reader read,mf_ws_audio_progress notify)
     ready=clock_set=startup_done=startup_failed=boot_clock=0;boot=0;pending_shots=pending_explosions=fault=0;
     memset(shot,0,sizeof(shot));memset(explosion,0,sizeof(explosion));memset(flame,0,sizeof(flame));
     memset(flame_diagnostic,0,sizeof(flame_diagnostic));
+    memset(note_baseline,0,sizeof(note_baseline));memset(one_prep,0,sizeof(one_prep));memset(&mixer,0,sizeof(mixer));memset(watch,0,sizeof(watch));
     memset(&diagnostic,0,sizeof(diagnostic));progress=notify;
     stage(MF_WS_AUDIO_MAP_READ);map=read("WDEATH.MAP",MF_WS_MAP_BYTES);
     if(!map){diagnostic.has_status=1;diagnostic.expected=MF_WS_MAP_BYTES;diagnostic.actual=-1;return 0;}
@@ -101,32 +106,40 @@ int mf_ws_audio_load(mf_ws_audio_reader read,mf_ws_audio_progress notify)
        readiness handshake during existing title VBlanks before accepting play. */
     boot_counter=sound_word(0x8838);boot=BOOT_CPU;return 1;
 }
+/* Bounded overflow preserves every sounding PCM; only NEW excess is dropped.
+   At most one extra batch waits (2 shots / 4 explosions) when all controls run. */
+static void enqueue(unsigned *pending,unsigned add,one_shot *pool,unsigned n,unsigned *dropped)
+{
+    unsigned i,limit=n;
+    for(i=0;i<n;i++)if(pool[i].state==FREE)++limit;
+    if(add>limit-*pending){*dropped+=add-(limit-*pending);*pending=limit;}
+    else *pending+=add;
+}
 void mf_ws_audio_events(int count,unsigned shots)
 {
     if(!startup_done)return;
-    if(count>0)pending_explosions+=(unsigned)count;
-    pending_shots+=!!(shots&1u)+!!(shots&2u);
+    if(count>0)enqueue(&pending_explosions,(unsigned)count,explosion,4,&mixer.dropped_explosions);
+    enqueue(&pending_shots,!!(shots&1u)+!!(shots&2u),shot,2,&mixer.dropped_shots);
 }
 static int midi(int port,int command,int data1,int data2)
 {
+    unsigned counter=sound_word(0x67ec);
     if(!budget)return 0;
+    /* Driver context = (control<<9)+(channel<<5); use a unique pair for 0..7.
+       Priority bits are discarded by the pinned direct-MIDI dispatcher. */
     if(SND_CtrlDirMidi(port,0,command,port,data1,data2)!=SND_RET_SET)return 0;
+    if(command==1){note_on_mask|=1u<<port;note_baseline[port]=counter;}
     --budget;return 1;
 }
-static void advance(one_shot *pool,int n,unsigned *pending,int first_port,int song,int volume,unsigned duration,unsigned now)
+static void advance(one_shot *pool,int n,unsigned *pending,int first_port,unsigned duration,unsigned now)
 {
     int i;for(i=0;i<n;i++){
-        one_shot *p=&pool[i];int port=first_port+i;
+        one_shot *p=&pool[i];
+        /* Conservative leases exceed natural PCM duration at the existing pitch.
+           No Note Off, sequence stop, program reset or oldest-voice stealing. */
         if(p->state==PLAYING && (int)(now-p->until)>=0)p->state=FREE;
-        if(p->state==RELEASE && now!=p->stopped)p->state=FREE;
-        if(p->state==FREE && *pending){--*pending;p->state=VOLUME;}
-        if(p->state==VOLUME && budget && SND_SetSeqVl(port,volume,0)==SND_RET_SET){--budget;p->state=START;}
-        if(p->state==START && budget && SND_StartSeq(port,0,song,0)==SND_RET_SET){
-            --budget;p->state=PLAYING;p->started=now;p->until=now+duration;
-        }
-        if(p->state==PLAYING){
-            SndSeqStat status;SND_GetSeqStat(&status,port);
-            if(status.stat && !fault)fault=((unsigned)port<<8)|status.stat;
+        if(p->state==FREE && *pending && midi(first_port+i,1,60,110)){
+            --*pending;p->state=PLAYING;p->started=now;p->until=now+duration;
         }
     }
 }
@@ -173,6 +186,81 @@ static void observe_flame(unsigned player,unsigned now,unsigned focused)
 }
 const mf_ws_flame_diagnostic *mf_ws_audio_flame_diagnostics(unsigned player)
 {return player<2?&flame_diagnostic[player]:0;}
+/* Read only the driver's cached EG and ownership records, never its shared
+   hardware monitor or private allocator flags. EG is sampled over ~9 VBlanks:
+   these are observed cached-live slots, not a waveform/audibility measurement. */
+static int expected_voice(unsigned owner,unsigned key,unsigned now,unsigned *started,unsigned *kind)
+{
+    unsigned p=owner>>9,note=key&255,age;
+    if(owner!=(p<<9) || p>=8 || (key>>8)!=p)return 0;
+    if(p<2){
+        flame_state *f=&flame[p];*kind=MF_WS_SFX_FLAME;
+        if(note==MF_WS_FLAME_LOOP_NOTE && f->loop){*started=f->loop_started;return 1;}
+        if(note!=MF_WS_FLAME_ATTACK_NOTE || !f->attack)return 0;
+        *started=f->started;return now-*started<37;
+    }
+    if(note!=60)return 0;
+    {one_shot *v=p<4?&shot[p-2]:&explosion[p-4];
+     *kind=p<4?MF_WS_SFX_SHOT:MF_WS_SFX_EXPLOSION;*started=v->started;
+     age=now-*started;
+     /* Exclude the natural LEA boundary, independent of the longer reuse lease. */
+     return v->state==PLAYING && age<(p<4?30u:43u);}
+}
+static void lost_voice(slot_watch *w,unsigned now,unsigned kind,int replaced)
+{
+    if(!mixer.losses){
+        mixer.lost_kind=kind;mixer.lost_control=w->owner>>9;
+        mixer.lost_age=(replaced?now:w->missing_since)-w->started;
+        mixer.other_note_on=replaced?(note_on_mask&~(1u<<mixer.lost_control)):w->other_on;
+        mixer.free_at_loss=replaced?mixer.free_slots:w->free;
+        fault=(kind<<8)|mixer.lost_control;
+    }
+    ++mixer.losses;if(replaced)++mixer.replacements;
+}
+static void observe_mixer(unsigned now)
+{
+    unsigned s;
+    mixer.flame=mixer.shot=mixer.explosion=mixer.total=mixer.free_slots=0;
+    for(s=0;s<32;s++){
+        unsigned a=0x8000+s*64,eg=sound_word(a+0x3a),owner=sound_word(a+6),key=sound_word(a+2);
+        unsigned p=owner>>9,stamp=sound_word(a+0x3e),start=0,kind=0;
+        slot_watch *w=&watch[s];
+        mixer.owner[s]=255;
+        if(!eg || !(eg&0xffcc))++mixer.free_slots;
+        if(eg&6){
+            ++mixer.total;
+            if(p<8 && owner==(p<<9) && (key>>8)==p){
+                mixer.owner[s]=p;
+                if(p<2)++mixer.flame;else if(p<4)++mixer.shot;else ++mixer.explosion;
+            }
+        }
+        /* A concurrent 68K update is not evidence of voice loss. */
+        if(eg!=sound_word(a+0x3a) || owner!=sound_word(a+6) || key!=sound_word(a+2) || stamp!=sound_word(a+0x3e))continue;
+        if(w->seen){
+            if(!expected_voice(w->owner,w->key,now,&start,&kind) || start!=w->started)w->seen=0;
+            else if(owner!=w->owner || key!=w->key || stamp!=w->stamp){
+                lost_voice(w,now,kind,1);w->seen=0;
+            }else if(!(eg&6)){
+                if(!w->missing){w->missing=1;w->missing_since=now;w->other_on=note_on_mask&~(1u<<(w->owner>>9));}
+                if(now-w->missing_since>=12){lost_voice(w,now,kind,0);w->seen=0;}
+            }else w->missing=0;
+        }
+        /* Submission precedes 68K consumption. An old cached-live ended key
+           must not be attributed to a newly leased control. Native Note On
+           increments 0x67ec before assigning its timestamp at slot+0x3e. */
+        if(!w->seen && (eg&6) && p<8 && (short)(stamp-note_baseline[p])>0 &&
+           expected_voice(owner,key,now,&start,&kind)){
+            w->owner=owner;w->key=key;w->stamp=stamp;w->started=start;w->seen=1;w->missing=0;
+        }
+    }
+    /* Loss snapshots use a complete count, independent of slot scan order. */
+    if(mixer.losses && !mixer.snapshot){
+        if(mixer.replacements)mixer.free_at_loss=mixer.free_slots;
+        mixer.snapshot=1;
+    }
+    for(s=0;s<32;s++)if(watch[s].missing && watch[s].missing_since==now)watch[s].free=mixer.free_slots;
+}
+const mf_ws_mixer_diagnostic *mf_ws_audio_mixer_diagnostics(void){return &mixer;}
 /* Pinned 2.10 timer increments word 0x8838; its eight 16-byte request
    blocks at 0x700 are cleared by the command consumer, not by SND submission. */
 static int commands_empty(void)
@@ -205,8 +293,10 @@ static void startup_timeout(void)
         }
     }
     if(!boot){
-        if(queued)diagnostic.operation="FLAME ACK";
-        else {diagnostic.operation="FLAME READY";diagnostic.expected=3;diagnostic.actual=flame[0].prep<flame[1].prep?flame[0].prep:flame[1].prep;}
+        if(queued)diagnostic.operation="SFX ACK";
+        else {unsigned prep=flame[0].prep<flame[1].prep?flame[0].prep:flame[1].prep;
+            for(i=0;i<6;i++)if(one_prep[i]<prep)prep=one_prep[i];
+            diagnostic.operation="SFX READY";diagnostic.expected=3;diagnostic.actual=prep;}
     }
     startup_failed=1;
 }
@@ -249,9 +339,9 @@ static void startup(unsigned now)
 int mf_ws_audio_ready(void){return startup_failed?-1:startup_done;}
 void mf_ws_audio_step(unsigned now,unsigned focused)
 {
-    int i,oldest=-1;
+    int i,all_prepared=1;
     if((!ready && !boot) || startup_failed || (clock_set && now==last_now))return;
-    last_now=now;clock_set=1;budget=8;
+    last_now=now;clock_set=1;budget=8;note_on_mask=0;
     if(boot){startup(now);return;}
     if(!startup_done && boot_clock && now-boot_since>=120){startup_timeout();return;}
     /* Release is latched across SDK rejection; stop only this player's keys.
@@ -292,21 +382,24 @@ void mf_ws_audio_step(unsigned now,unsigned focused)
            Retire its held key on the next real VBlank, preserving the overlap. */
         if(f->attack && f->loop && now!=f->loop_started && midi(i,0,MF_WS_FLAME_ATTACK_NOTE,0))f->attack=0;
     }
-    if(!startup_done && flame[0].prep==3 && flame[1].prep==3 && commands_empty()){
+    /* SND_SetSeqVl is the driver's shared per-control gain command (also used
+       by direct MIDI), configured ONCE before gameplay, never per one-shot. */
+    if(!startup_done && commands_empty())for(i=0;i<6;i++){
+        unsigned p=(unsigned)i+2;int accepted=0;
+        if(!one_prep[i] && budget && SND_SetSeqVl(p,p<4?MF_WS_SHOT_VOLUME:MF_SFX_VOLUME,0)==SND_RET_SET){--budget;accepted=1;}
+        else if(one_prep[i]==1)accepted=midi(p,3,32,0);
+        else if(one_prep[i]==2)accepted=midi(p,4,p<4?1:0,0);
+        if(accepted)++one_prep[i];
+    }
+    for(i=0;i<6;i++)if(one_prep[i]!=3)all_prepared=0;
+    if(!startup_done && all_prepared && flame[0].prep==3 && flame[1].prep==3 && commands_empty()){
         startup_done=1;completed();
     }
-    advance(explosion,4,&pending_explosions,4,0,MF_SFX_VOLUME,MF_WS_EXP_TICKS,now);
-    advance(shot,2,&pending_shots,2,1,MF_WS_SHOT_VOLUME,MF_WS_SHOT_TICKS,now);
-    if(pending_shots){
-        int waiting=0;
-        for(i=0;i<2;i++){
-            if(shot[i].state!=PLAYING)waiting=1;
-            else if(oldest<0 || (unsigned)(now-shot[i].started)>(unsigned)(now-shot[oldest].started))oldest=i;
-        }
-        if(!waiting && oldest>=0 && budget && SND_StopSeq(oldest+2)==SND_RET_SET){
-            --budget;shot[oldest].state=RELEASE;shot[oldest].stopped=now;
-        }
+    if(startup_done){
+        advance(explosion,4,&pending_explosions,4,MF_WS_EXP_TICKS,now);
+        advance(shot,2,&pending_shots,2,MF_WS_SHOT_TICKS,now);
     }
+    observe_mixer(now);
     for(i=0;i<2;i++)observe_flame((unsigned)i,now,focused);
 }
 unsigned mf_ws_audio_fault(void){return fault;}

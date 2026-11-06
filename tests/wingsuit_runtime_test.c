@@ -75,7 +75,9 @@ int mf_ws_audio_load(mf_ws_audio_reader read,mf_ws_audio_progress progress){
 static int audio_events,audio_pumps;
 void mf_ws_audio_events(int n,unsigned shots){(void)shots;audio_events+=n;}
 void mf_ws_audio_step(unsigned n,unsigned focus){(void)n;(void)focus;audio_pumps++;}
-unsigned mf_ws_audio_fault(void){return 0;}
+static mf_ws_mixer_diagnostic mixer_status;
+const mf_ws_mixer_diagnostic *mf_ws_audio_mixer_diagnostics(void){return &mixer_status;}
+unsigned mf_ws_audio_fault(void){return mixer_status.losses;}
 void jo_free(void *p){++frees;free(p);}
 void jo_dma_copy(const void *a,void *b,unsigned n){memcpy(b,a,n);}
 int jo_sprite_add(const jo_img *im){if(register_fail)return -1;assert(last<17);slots+=im->width*im->height*2;return ++last;}
@@ -171,6 +173,15 @@ int main(void)
     flame_status[0].state=MF_WS_FLAME_OFF;frame(in,p);
     for(i=3;i<38;i++)assert(screen[22][i]==' ');
 #endif
+    mixer_status=(mf_ws_mixer_diagnostic){.losses=1,.lost_kind=3,.lost_control=4,.lost_age=1,.other_note_on=4,.free_at_loss=29,.flame=1,.shot=1,.explosion=1,.total=3};
+    frame(in,p);
+#if MF_DEV_STAGE_SKIP
+    assert(!memcmp(&screen[21][3],"SFX 3 C4 AGE1 ON04 FREE29",23));
+    assert(!memcmp(&screen[20][3],"F1 S1 E1 T3 LOSS1 REPL0",22));
+#else
+    assert(!strstr(diagnostic,"SFX 3 C4"));
+#endif
+    mixer_status.losses=0;
     /* Independently of gameplay stepping, each of the six real object paths
        must submit through the initialized renderer with unchanged sort Z. */
     mf_ws_init(&shooter,1);
