@@ -4,6 +4,8 @@
 #include <string.h>
 #include <stdarg.h>
 static unsigned char ram[524288];
+static unsigned short slot_regs[32*16];
+#define MF_WS_SLOT_REGS slot_regs
 #define MF_WS_SOUND_BASE ram
 #include "../src/wingsuit_audio.c"
 #include "../src/wingsuit.c"
@@ -38,6 +40,16 @@ int SND_ChgMap(int n){assert(!n && diagnostic.stage==MF_WS_AUDIO_MAP_CHANGE);ret
 int SND_StopDsp(void){assert(diagnostic.stage==MF_WS_AUDIO_DSP_STOP && !stopped);return fail_stage==MF_WS_AUDIO_DSP_STOP?init_status:SND_RET_SET;}
 int SND_SetCdDaLev(int l,int r){assert(!l && !r && diagnostic.stage==MF_WS_AUDIO_CDDA_LEVEL);return fail_stage==MF_WS_AUDIO_CDDA_LEVEL?init_status:SND_RET_SET;}
 int SND_SetTlVl(int v){assert(v==15 && diagnostic.stage==MF_WS_AUDIO_TOTAL_VOLUME);return fail_stage==MF_WS_AUDIO_TOTAL_VOLUME?init_status:SND_RET_SET;}
+static void word(unsigned a,unsigned value){ram[a]=value>>8;ram[a+1]=value;}
+static void driver_flame(unsigned p,int alive)
+{
+    unsigned a=0x8000+p*64;unsigned short *r=slot_regs+p*16;
+    word(a+2,(p<<8)|60);word(a+6,p<<9);
+    word(a+8,0);word(a+10,MF_WS_TON_ADDR+132); /* actual 20-bit layer pointer below */
+    word(a+8,(MF_WS_TON_ADDR+132)>>16);
+    word(a+0x3a,alive?0x0a:8);
+    r[0]=0x0800|0x20|(225600>>16);r[1]=225600&65535;r[2]=27981;r[3]=41239;
+}
 static int accepted(void){if(!accept)return 0;assert(++commands<=8);return 1;}
 int SND_SetSeqVl(int p,int v,int f){assert(!stopped && p>=0 && p<8 && v==(p<2?MF_WS_FLAME_VOLUME:p<4?MF_WS_SHOT_VOLUME:MF_SFX_VOLUME) && !f);return accepted()?0:1;}
 int SND_StartSeq(int p,int b,int song,int pr){assert(!stopped && p>=2 && p<8 && !b && song==(p<4?1:0) && !pr);if(!accepted())return 1;starts[p]++;live[p]=1;return 0;}
@@ -48,8 +60,8 @@ int SND_CtrlDirMidi(int p,int pr,int cmd,int channel,int a,int b)
     if(!accepted())return 1;
     if(cmd==3){assert(a==32 && !b);bank[p]=1;}
     else if(cmd==4){assert(a==2 && !b && bank[p]);program[p]=1;}
-    else if(cmd==1){assert(a==60 && b==110 && bank[p] && program[p] && !live[p]);live[p]=1;notes[p]++;}
-    else {assert(cmd==0 && a==60 && !b && live[p]);live[p]=0;offs[p]++;}
+    else if(cmd==1){assert(a==60 && b==110 && bank[p] && program[p] && !live[p]);live[p]=1;notes[p]++;driver_flame(p,1);}
+    else {assert(cmd==0 && a==60 && !b && live[p]);live[p]=0;offs[p]++;driver_flame(p,0);}
     return 0;
 }
 int slSoundRequest(const char *format,...){(void)format;assert(!"SGL command path must not be used by the repair");return 0x25a00700;}
@@ -137,8 +149,29 @@ int main(void)
      }
     }
     fail_stage=0;
+    load(4000);reset_counts();pump(4003,3);
+    assert(mf_ws_audio_flame_diagnostics(0)->state==MF_WS_FLAME_REQUESTED);
+    assert(mf_ws_audio_flame_diagnostics(1)->state==MF_WS_FLAME_REQUESTED);
+    pump(4015,3);assert(mf_ws_audio_flame_diagnostics(0)->state==MF_WS_FLAME_ATTACK);
+    pump(4042,3);assert(mf_ws_audio_flame_diagnostics(0)->state==MF_WS_FLAME_SUSTAIN);
+    pump(4603,3);assert(notes[0]==1 && notes[1]==1);
+    assert(mf_ws_audio_flame_diagnostics(0)->active_slots==1);
+    assert(mf_ws_audio_flame_diagnostics(1)->active_slots==2);
+    /* Simulate real driver EG becoming inactive, with note intent still on. */
+    driver_flame(0,0);pump(4604,3);pump(4615,3);
+    assert(mf_ws_audio_flame_diagnostics(0)->state==MF_WS_FLAME_REQUESTED);
+    pump(4616,3);assert(mf_ws_audio_flame_diagnostics(0)->state==MF_WS_FLAME_STOPPED);
+    assert(mf_ws_audio_flame_diagnostics(1)->state==MF_WS_FLAME_SUSTAIN);
+    assert(notes[0]==1 && notes[1]==1); /* No speculative automatic retrigger. */
+    driver_flame(0,1);slot_regs[0]&=~0x60;pump(4617,3);
+    assert(mf_ws_audio_flame_diagnostics(0)->state==MF_WS_FLAME_MISMATCH);
+    driver_flame(0,1);pump(4618,3);
+    assert(mf_ws_audio_flame_diagnostics(0)->state==MF_WS_FLAME_SUSTAIN);
+    pump(4619,2);assert(mf_ws_audio_flame_diagnostics(0)->state==MF_WS_FLAME_OFF);
+    assert(mf_ws_audio_flame_diagnostics(1)->state==MF_WS_FLAME_SUSTAIN && !mf_ws_audio_flame_diagnostics(2));
     load(~0u-3);reset_counts();mf_ws_audio_events(1,0);pump(~0u,1);
     pump(0,1);assert(notes[0]==1 && starts[4]==1);pump(48,1);assert(notes[0]==1);
     mf_ws_audio_events(1,0);pump(49,1);assert(starts[4]==2);
+    puts("PASS live flame diagnostics: requested/attack/estimated sustain, cached-EG grace, unexpected stop, actual LPCTL mismatch, no restart and independent ownership");
     puts("PASS E108 repair: pinned word-count/padded MAP, twelve ordered stage markers, all four SND init-status failures preserved, no SGL request path; Level 2 audio: real single-shot events; 19/20-tick ignition, indefinite sustain/no retrigger, release/pause/death and independent flames; three required polyphony mixes; explosion burst, shot-only oldest stealing, SDK rejection/release guard/clock wrap, DMA bank once and runtime status diagnostics");
 }

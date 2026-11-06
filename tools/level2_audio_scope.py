@@ -1,6 +1,7 @@
 """Exact before/after exceptions for the authorized three-file Level 2 audio bank."""
 from pathlib import Path
 import json
+from level2_sustain_scope import sustain_source
 R=Path(__file__).resolve().parents[1]
 def audio_asset(name,before):
  lock=json.loads((R/'docs/level2-audio-bank-lock.json').read_text())
@@ -21,4 +22,4 @@ def audio_source(name,before):
  assert set(repair['sources'])=={'src/wingsuit_audio.c','src/wingsuit_audio.h','src/wingsuit_runtime.c'}
  if name in repair['sources']:
   c=repair['sources'][name];assert c['before']==value,(name,'unexpected repair baseline');value=c['after']
- return value
+ return sustain_source(name,value)

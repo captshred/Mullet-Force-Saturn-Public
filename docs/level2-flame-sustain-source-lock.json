@@ -1,0 +1,20 @@
+{
+  "base_commit": "2cae6ea6e496be85ecaa3253081a251e0a6ac9cc",
+  "sources": {
+    "src/wingsuit_audio.c": {
+      "before": "a568e60c804f67806d9b1543551b2a7df778366212d8910005815f5f9b2a8777",
+      "after": "cdb5fe4ac1344043e841fbebdc91302016772c5e27bca503caa80a75bf794768"
+    },
+    "src/wingsuit_audio.h": {
+      "before": "81a1b7d90652326d6a7e67e3c4615de4c28193ce62a3fb34cdc2bc124556d615",
+      "after": "9534ee44d8e1b32b1f16c079160afde0bcb59cdfb94c6f0de76081f6e465e59b"
+    },
+    "src/wingsuit_runtime.c": {
+      "before": "f74ad57e4693fd95e82eb8ae8715f46cffae4733bf2614a17c000c6f1fe6b47d",
+      "after": "4a0338fd8c10c185769bc05a34dabf8d1e67ec1fccd75865677ead411bb6a263"
+    }
+  },
+  "initialization_sha256": "df1d43e92392bd8199b052492712e26d3cf7656d6d3284dfa7eec4c677fe7185",
+  "playback_requests_sha256": "7157aa0189d056720946a4d7ab89bf52885b50cb3fbd1021574734b87f91d047",
+  "flame_scheduler_sha256": "81b50f5fc99f2491d2706e604f4d65ceeb527e540e09828a1fd2403bd0083b21"
+}

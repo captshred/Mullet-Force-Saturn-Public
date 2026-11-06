@@ -253,6 +253,18 @@ void mf_ws_runtime_frame(const mf_input input[2],unsigned pressed[2],unsigned no
         mf_ws_audio_step(now,focus);
     }
     render();
+#if MF_DEV_STAGE_SKIP
+    /* A compact fault-only line; normal gameplay has no flame debug overlay. */
+    jo_print(3,22,"                                   ");
+    for(i=0;i<2;i++){
+        const mf_ws_flame_diagnostic *d=mf_ws_audio_flame_diagnostics(i);
+        if(d->state==MF_WS_FLAME_STOPPED || d->state==MF_WS_FLAME_MISMATCH){
+            jo_printf(3,22,"FLAME P%d %s LP%d EG%02X",i+1,
+                d->state==MF_WS_FLAME_STOPPED?"STOP":"TONE",(d->control>>5)&3,d->eg&255);
+            break; /* Keep the first affected control readable on one line. */
+        }
+    }
+#endif
     if(mf_ws_audio_fault())jo_printf(3,21,"AUDIO P%d STATUS %02X",mf_ws_audio_fault()>>8,mf_ws_audio_fault()&255);
 }
 #endif

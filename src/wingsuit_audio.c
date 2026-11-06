@@ -7,14 +7,18 @@
 #ifndef MF_WS_SOUND_BASE
 #define MF_WS_SOUND_BASE ((unsigned char *)0x25a00000)
 #endif
+#ifndef MF_WS_SLOT_REGS
+#define MF_WS_SLOT_REGS ((volatile unsigned short *)0x25b00000)
+#endif
 extern char sddrvstsk[];
 /* Pinned driver 2.10: eight control numbers 0..7, 32 physical SCSP slots.
    Two persistent flames, two shot controls, four explosion controls. */
 enum { FREE,VOLUME,START,PLAYING,RELEASE };
 typedef struct { unsigned started,until,stopped;int state; } one_shot;
-typedef struct { unsigned stopped;int prep,on,guard,stop; } flame_state;
+typedef struct { unsigned stopped,started,missing_since;int prep,on,guard,stop,missing; } flame_state;
 static one_shot shot[2],explosion[4];
 static flame_state flame[2];
+static mf_ws_flame_diagnostic flame_diagnostic[2];
 static unsigned pending_shots,pending_explosions,last_now,fault;
 static int ready,clock_set,budget;
 static mf_ws_audio_diagnostic diagnostic;
@@ -54,6 +58,7 @@ int mf_ws_audio_load(mf_ws_audio_reader read,mf_ws_audio_progress notify)
     unsigned int map_storage[(MF_WS_MAP_BYTES+4)/4]={0};
     ready=clock_set=0;pending_shots=pending_explosions=fault=0;
     memset(shot,0,sizeof(shot));memset(explosion,0,sizeof(explosion));memset(flame,0,sizeof(flame));
+    memset(flame_diagnostic,0,sizeof(flame_diagnostic));
     memset(&diagnostic,0,sizeof(diagnostic));progress=notify;
     stage(MF_WS_AUDIO_MAP_READ);map=read("WDEATH.MAP",MF_WS_MAP_BYTES);
     if(!map){diagnostic.has_status=1;diagnostic.expected=MF_WS_MAP_BYTES;diagnostic.actual=-1;return 0;}
@@ -112,6 +117,60 @@ static void advance(one_shot *pool,int n,unsigned *pending,int first_port,int so
         }
     }
 }
+/* Read-only diagnostics for pinned driver 2.10. Its timer caches SCSP EG
+   activity in slot work at 0x8000 + 0x40*slot, word 0x3a (mask 6).
+   Do not select/read the shared SCSP monitor: that would race its 68K owner. */
+static unsigned sound_word(unsigned addr)
+{
+    volatile unsigned char *p=MF_WS_SOUND_BASE+addr;
+    return ((unsigned)p[0]<<8)|p[1];
+}
+static unsigned sound_pointer(unsigned addr)
+{return (sound_word(addr)<<16)|sound_word(addr+2);}
+static void observe_flame(unsigned player,unsigned now,unsigned focused)
+{
+    flame_state *f=&flame[player];mf_ws_flame_diagnostic *d=&flame_diagnostic[player];
+    unsigned slot,found=0,active=0,layer=MF_WS_TON_ADDR+132;
+    unsigned age=now-f->started;
+    memset(d,0,sizeof(*d));d->requested=!!(focused&(1u<<player));
+    if(!f->on){d->state=d->requested?MF_WS_FLAME_REQUESTED:MF_WS_FLAME_OFF;return;}
+    d->age=age;
+    for(slot=0;slot<32;slot++){
+        unsigned addr=0x8000+slot*0x40,owner=sound_word(addr+6),eg=sound_word(addr+0x3a);
+        volatile unsigned short *reg=MF_WS_SLOT_REGS+slot*16;
+        unsigned control,sa,lsa,lea;
+        if(owner!=(player<<9) || sound_word(addr+2)!=((player<<8)|60) ||
+           sound_pointer(addr+8)!=layer)continue;
+        control=reg[0];sa=((control&15)<<16)|reg[1];lsa=reg[2];lea=reg[3];
+        /* The 68K can update this record while the SH-2 reads it. Ignore a
+           changing record and allow its full 32-slot monitor refresh below. */
+        if(owner!=sound_word(addr+6) || eg!=sound_word(addr+0x3a))continue;
+        found|=1u<<slot;if(eg&6)active|=1u<<slot;
+        if(!d->slots || (eg&6)){
+            d->control=control;d->sa=sa;d->lsa=lsa;d->lea=lea;d->eg=eg;
+            /* SA/PCM format mismatches are retained as a separate state. */
+            d->state=(sa!=225600 || (control&0x790) ||
+               ((control>>5)&3)!=1 || lsa!=27981 || lea!=41239)?MF_WS_FLAME_MISMATCH:0;
+        }
+        d->slots=found;
+    }
+    d->active_slots=active;
+    if(!d->requested){d->state=MF_WS_FLAME_RELEASING;return;}
+    if(active){
+        f->missing=0;
+        if(age<12)d->state=MF_WS_FLAME_REQUESTED;
+        else if(d->state!=MF_WS_FLAME_MISMATCH)
+            d->state=age<39?MF_WS_FLAME_ATTACK:MF_WS_FLAME_SUSTAIN;
+    }else{
+        if(!f->missing){f->missing=1;f->missing_since=now;}
+        /* Driver polls one slot per 192-sample interrupt (~139ms per 32).
+           A 12-VBlank grace avoids treating cached startup state as a stop. */
+        if(now-f->missing_since>=12 && age>=12)d->state=MF_WS_FLAME_STOPPED;
+        else if(d->state!=MF_WS_FLAME_MISMATCH)d->state=MF_WS_FLAME_REQUESTED;
+    }
+}
+const mf_ws_flame_diagnostic *mf_ws_audio_flame_diagnostics(unsigned player)
+{return player<2?&flame_diagnostic[player]:0;}
 void mf_ws_audio_step(unsigned now,unsigned focused)
 {
     int i,oldest=-1;
@@ -136,7 +195,7 @@ void mf_ws_audio_step(unsigned now,unsigned focused)
             continue;
         }
         if(f->guard && now!=f->stopped)f->guard=0;
-        if((focused&(1u<<i)) && !f->on && !f->guard && !f->stop && midi(i,1,60,110))f->on=1;
+        if((focused&(1u<<i)) && !f->on && !f->guard && !f->stop && midi(i,1,60,110)){f->on=1;f->started=now;f->missing=0;}
     }
     advance(explosion,4,&pending_explosions,4,0,MF_SFX_VOLUME,MF_WS_EXP_TICKS,now);
     advance(shot,2,&pending_shots,2,1,MF_WS_SHOT_VOLUME,MF_WS_SHOT_TICKS,now);
@@ -152,5 +211,6 @@ void mf_ws_audio_step(unsigned now,unsigned focused)
             --budget;shot[oldest].state=RELEASE;shot[oldest].stopped=now;
         }
     }
+    for(i=0;i<2;i++)observe_flame((unsigned)i,now,focused);
 }
 unsigned mf_ws_audio_fault(void){return fault;}

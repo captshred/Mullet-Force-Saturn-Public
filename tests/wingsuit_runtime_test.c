@@ -62,6 +62,8 @@ char *jo_fs_read_file(const char *name,int *size)
 }
 static mf_ws_audio_diagnostic audio_diagnostic;
 static int fail_audio_init;
+static mf_ws_flame_diagnostic flame_status[2];
+const mf_ws_flame_diagnostic *mf_ws_audio_flame_diagnostics(unsigned p){return &flame_status[p];}
 const mf_ws_audio_diagnostic *mf_ws_audio_diagnostics(void){return &audio_diagnostic;}
 int mf_ws_audio_load(mf_ws_audio_reader read,mf_ws_audio_progress progress){
     const char *n[]={"WDEATH.MAP","WDEATH.SEQ","WDEATH.TON"};int i;static const int size[]={MF_WS_MAP_BYTES,MF_WS_SEQ_BYTES,MF_WS_TON_BYTES};
@@ -162,6 +164,12 @@ int main(void)
     assert(!draws);
     r=reads;for(i=0;i<1000;i++)frame(in,p);
     assert(draws && reads==r && resets==1); /* no per-frame I/O/texture registrations */
+#if MF_DEV_STAGE_SKIP
+    flame_status[0]=(mf_ws_flame_diagnostic){.state=MF_WS_FLAME_STOPPED,.control=0x23,.eg=8};
+    frame(in,p);assert(!memcmp(&screen[22][3],"FLAME P1 STOP LP1 EG08",21));
+    flame_status[0].state=MF_WS_FLAME_OFF;frame(in,p);
+    for(i=3;i<38;i++)assert(screen[22][i]==' ');
+#endif
     /* Independently of gameplay stepping, each of the six real object paths
        must submit through the initialized renderer with unchanged sort Z. */
     mf_ws_init(&shooter,1);

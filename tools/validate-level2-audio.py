@@ -4,6 +4,7 @@ from pathlib import Path
 import json,hashlib,struct,re
 import seq
 from level2_audio_scope import audio_source
+from level2_sustain_scope import sustain_source
 R=Path(__file__).resolve().parents[1];A=R/'assets/wingsuit';r=json.loads((A/'audio.json').read_text())
 sha=lambda b:hashlib.sha256(b).hexdigest()
 lock=json.loads((R/'docs/level2-audio-bank-lock.json').read_text())
@@ -55,7 +56,7 @@ assert 'slSoundRequest(' not in transport
 assert 'SND_ChgMap(0)' in transport and 'SND_CtrlDirMidi(' in transport and 'SND_StartSeq(' in transport
 assert 'SND_INI_ARA_SZ(init)=MF_WS_MAP_BYTES/sizeof(Uint16)' in transport
 repair=json.loads((R/'docs/level2-audio-e108-source-lock.json').read_text())
-for name,c in repair['sources'].items():assert sha((R/name).read_bytes())==c['after'],name
+for name,c in repair['sources'].items():assert sha((R/name).read_bytes())==sustain_source(name,c['after']),name
 print('PASS Level 2 audio: full canonical tables/voice/PCM, approved stereo downmix hashes, 44.1k mono weapons, exact 27981..41239 loop/128-frame seam, aligned nonoverlapping banks, 308080 high-water/216208 free; exact scoped audio changes')
 
 # E108 repair cannot silently rewrite the approved bank, gameplay or baseline locks.
@@ -65,3 +66,16 @@ assert len([p for p in repair_preserved['files'] if p.startswith('assets/wingsui
 for name,info in repair_preserved['files'].items():
  b=(R/name).read_bytes();assert len(b)==info['bytes'] and sha(b)==info['sha256'],name
 print('PASS E108 preservation: all 24 runtime payloads, exact bank/manifest metadata, gameplay, Level 1 source, workflow and original bank locks unchanged')
+
+sustain=json.loads((R/'docs/level2-flame-sustain-source-lock.json').read_text())
+for name,c in sustain['sources'].items():assert sha((R/name).read_bytes())==c['after'],name
+transport=(R/'src/wingsuit_audio.c').read_text()
+a=transport.index('int mf_ws_audio_load(');b=transport.index('void mf_ws_audio_events(')
+initializer=transport[a:b].replace('    memset(flame_diagnostic,0,sizeof(flame_diagnostic));\n','')
+assert sha(initializer.encode())==sustain['initialization_sha256'],'E108 initialization changed'
+a=transport.index('static int midi(');b=transport.index('/* Read-only diagnostics',a)
+assert sha(transport[a:b].encode())==sustain['playback_requests_sha256'],'SND requests/pool allocation changed'
+a=transport.index('void mf_ws_audio_step(');b=transport.index('unsigned mf_ws_audio_fault(')
+scheduler=transport[a:b].replace('    for(i=0;i<2;i++)observe_flame((unsigned)i,now,focused);\n','')
+scheduler=scheduler.replace('&& midi(i,1,60,110)){f->on=1;f->started=now;f->missing=0;}','&& midi(i,1,60,110))f->on=1;')
+assert sha(scheduler.encode())==sustain['flame_scheduler_sha256'],'held-note command behavior changed'
