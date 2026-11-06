@@ -3,6 +3,7 @@
 from pathlib import Path
 import hashlib,json,struct,subprocess,tempfile
 import seq
+from level2_wide_scope import change
 from level2_audio_scope import audio_asset,audio_source
 R=Path(__file__).resolve().parents[1]
 A=R/'assets/wingsuit'
@@ -11,7 +12,7 @@ m=json.loads((A/'manifest.json').read_text())
 lock=json.loads((R/'docs/flame-preservation.json').read_text())
 assert lock['base_commit']=='785d2f8c0ea602c1d65f348154c107a4f1c3cd96'
 assert len(lock['files'])==13
-for n,f in lock['files'].items():assert m['files'][n]==f,(n,'approved asset changed')
+for n,f in lock['files'].items():assert m['files'][n]==change('assets/wingsuit/'+n,f),(n,'approved asset changed')
 new={f'WFL{i}.BIN' for i in range(4)}|{f'WFO{i}.BIN' for i in range(4)}|{'WDEATH.MAP','WDEATH.SEQ','WDEATH.TON'}
 assert set(m['files'])==set(lock['files'])|new
 assert sum(f['bytes'] for f in m['files'].values())==197444
@@ -41,7 +42,7 @@ old_width=tuning['old_flame_body_width'];assert old_width['width_sum']/old_width
 ratio=(sum(widths)/len(widths))/old_width['mean_pixels'];assert .82<=ratio<=.88
 for i,b in enumerate(frames):
  offset=i*8*64;assert b==frames[0][offset:]+frames[0][:offset], 'upward-flowing cyclic animation'
-assert m['max_sprite_commands']==72 < tuning['sdk']['max_polygons']==1761
+assert m['max_sprite_commands']==73 < tuning['sdk']['max_polygons']==1761
 assert tuning['sdk']['sgl_x']==64 and tuning['sdk']['sgl_z']==16
 s=(R/'src/input.c').read_text();assert 'READ_BUTTON(MF_X, JO_KEY_X)' in s and 'JO_KEY_Z' not in s
 print('PASS flame geometry/art: 27.40625 -> 23 mean body pixels (16.08% narrower); 21..25 solid pixels on every row, exact tile seams and four upward-flowing phases; sixteen stage payloads/protected sources match exact scoped locks')
@@ -65,8 +66,8 @@ for phase,b in enumerate(caps):
   assert occupied==list(range(occupied[0],occupied[-1]+1)) and row[16]
  assert [x for x,v in enumerate(rows[-1]) if v]==[15,16,17], 'stable centered emitter in all phases'
  assert rows[-1][16]==struct.unpack_from('>H',frames[0],32)[0], 'hot core retained'
-assert m['textures']==18 and m['vdp1_bytes']==28032 and m['max_sprite_commands']==72
-print('PASS flame origin: four native 32x16 phases, stable three-pixel hot emitter, smooth 21..25-pixel bloom, exact body/cap seams; all parent non-audio payloads and beam collision byte-for-byte unchanged')
+assert m['textures']==18 and m['vdp1_bytes']==28032 and m['max_sprite_commands']==73
+print('PASS flame origin: four native 32x16 phases, stable three-pixel hot emitter, smooth 21..25-pixel bloom, exact body/cap seams; parent non-audio payloads except scoped wide WMAP and beam collision byte-for-byte unchanged')
 # Exact integration ordering remains guarded, not a second transition path.
 s=(R/'src/main.c').read_text()
 assert s.index('mf_dev_stage_skip(&game,pressed);')<s.index('mf_game_step_inputs(&game,held,pressed,')
@@ -93,4 +94,4 @@ with tempfile.TemporaryDirectory(prefix='mf-flame-') as tmp:
   ('audio',['tests/wingsuit_audio_test.c'],['-Itests/wingsuit_audio_mock','-Itests/sound_mock','-Isrc']),
   ('runtime',['tests/wingsuit_runtime_test.c','src/wingsuit.c'],['-Itests/wingsuit_mock','-Isrc'])]:
   run(name,sources,includes,['-fsanitize=undefined','-fno-sanitize-recover=all'])
-print('PASS flame preservation: thirteen approved payloads unchanged; exact canonical explosion/Shot and split Flame tones with full tables/map; 24 files/197444 bytes; dev/release Saturn X; simulation/audio/runtime UBSan')
+print('PASS flame preservation: approved payloads preserved except scoped wide WMAP; exact canonical explosion/Shot and split Flame tones with full tables/map; 24 files/197444 bytes; dev/release Saturn X; simulation/audio/runtime UBSan')

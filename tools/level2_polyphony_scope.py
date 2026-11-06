@@ -1,4 +1,5 @@
 """Exact additive source-only authorization from a5e524d; no asset exceptions."""
+from level2_wide_scope import wide_source
 from pathlib import Path
 import json
 R=Path(__file__).resolve().parents[1]
@@ -16,4 +17,4 @@ def lock():
 def poly_source(name,before):
  if name not in BEFORE:return before
  c=lock()['sources'][name];assert c['before']==before,(name,'unexpected polyphony baseline')
- return c['after']
+ return wide_source(name,c['after'])

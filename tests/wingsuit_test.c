@@ -15,9 +15,9 @@ int main(void)
     mf_ws_step(&g,h,zero,1);assert(g.players[0].x-x==452 && y-g.players[0].y==452);
     assert(2*452*452<=640*640 && 2*452*452>638*638);
     h[0]=MF_UP|MF_LEFT;for(i=0;i<200;i++)mf_ws_step(&g,h,zero,1);
-    assert(g.players[0].x==64*S && g.players[0].y==16*S);
-    h[0]=MF_DOWN|MF_RIGHT;for(i=0;i<200;i++)mf_ws_step(&g,h,zero,1);
-    assert(g.players[0].x==255*S && g.players[0].y==223*S);
+    assert(g.players[0].x==MF_WS_PLAYER_MIN && g.players[0].y==16*S);
+    h[0]=MF_DOWN|MF_RIGHT;for(i=0;i<300;i++)mf_ws_step(&g,h,zero,1);
+    assert(g.players[0].x==MF_WS_PLAYER_MAX && g.players[0].y==223*S);
     p[1]=MF_START;mf_ws_step(&g,zero,p,2);assert(g.players[1].active);p[1]=0;
     x=g.players[1].x;h[0]=MF_LEFT;h[1]=MF_RIGHT;mf_ws_step(&g,h,zero,3);
     assert(g.players[1].x==x+640);x=g.players[0].x;
@@ -66,7 +66,7 @@ int main(void)
         if(g.game_over)mf_ws_init(&g,1);
         h[0]=MF_A|((i&64)?MF_LEFT:MF_RIGHT);h[1]=MF_A|((i&64)?MF_UP:MF_DOWN);
         mf_ws_step(&g,h,zero,3);
-        assert(g.players[0].x>=64*S && g.players[0].x<=255*S);
+        assert(g.players[0].x>=MF_WS_PLAYER_MIN && g.players[0].x<=MF_WS_PLAYER_MAX);
         assert(g.players[1].y>=16*S && g.players[1].y<=223*S);
     }
     printf("PASS wingsuit: movement/bounds, coop/disconnect, pools, scoring, spawns, damage, respawn, pause, restart, 100000-tick stress; state %lu bytes\n",(unsigned long)sizeof(g));

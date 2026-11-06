@@ -83,3 +83,6 @@ void jo_clear_screen(void);
 void jo_print(int,int,const char *);
 void jo_printf(int,int,const char *,...);
 #endif
+
+void jo_sprite_enable_clipping(int);
+void jo_sprite_set_clipping_area(unsigned,unsigned,unsigned,unsigned,int);

@@ -90,7 +90,8 @@ void slPageNbg1(void *a,void *b,int c){assert(a==ws_a0 && !b && c==(PNB_1WORD|CN
 void slPlaneNbg1(int a){assert(a==PL_SIZE_1x1);}
 void slMapNbg1(void *a,void *b,void *c,void *d){assert(a==ws_b0 && a==b && b==c && c==d);}
 void slZoomNbg1(int a,int b){assert(a==65536 && b==65536);}
-void slScrPosNbg1(int a,int b){assert(a==0 && b<=0 && b>=-511*65536);}
+static int scroll_x,scroll_y;
+void slScrPosNbg1(int a,int b){scroll_x=a;scroll_y=b;assert(a>=-48*65536 && a<=240*65536 && b<=0 && b>=-511*65536);}
 void slScrWindow0(unsigned short a,unsigned short b,unsigned short c,unsigned short d){assert(a==48 && !b && c==271 && d==239);}
 void slScrWindowModeNbg1(unsigned short a){assert(a==win0_IN);}
 void slPriorityNbg1(int a){assert(a==1);next_state(18);}
@@ -114,19 +115,25 @@ static void check_beam_coverage(int actor)
         assert(covered==1); /* No gaps and no overlapping alpha seams. */
     }
 }
-void jo_sprite_disable_horizontal_flip(void){beam_draws=beam_n[0]=beam_n[1]=0;}
+static int clipping,clip_commands;
+void jo_sprite_disable_horizontal_flip(void){beam_draws=beam_n[0]=beam_n[1]=clip_commands=0;}
 void jo_sprite_disable_vertical_flip(void){}
 void jo_sprite_disable_half_transparency(void){}
 void jo_sprite_disable_dark_filter(void){}
 void jo_sprite_disable_gouraud_shading(void){}
 void jo_sprite_restore_sprite_scale(void){}
-void jo_sprite_disable_clipping(void){}
+void jo_sprite_disable_clipping(void){clipping=0;}
+void jo_sprite_enable_clipping(int outside){assert(!outside);clipping=1;}
+void jo_sprite_set_clipping_area(unsigned x,unsigned y,unsigned w,unsigned h,int z)
+{assert(x==48 && y==0 && w==223 && h==239 && z==101);++clip_commands;}
+static int drawn_x[18],drawn_y[18];
 void jo_sprite_draw3D2(int id,int x,int y,int z){
+    assert(clipping && clip_commands==1);drawn_x[id]=x;drawn_y[id]=y;
     int i;
     if(id>=10){
         int actor=-1,j;
         for(j=0;j<2;j++)if(mf_ws_beam_active(&shooter,j) && id==(id<14?10:14)+(int)((shooter.ticks/3+j)&3))actor=j;
-        assert(actor>=0 && x==shooter.players[actor].x/256-16 && beam_n[actor]<7);
+        assert(actor>=0 && x==mf_ws_screen_x(&shooter,shooter.players[actor].x)/256-16 && beam_n[actor]<7);
         beam_h[actor][beam_n[actor]]=id<14?32:16;beam_y[actor][beam_n[actor]++]=y;++beam_draws;
     }
     assert(id>=0 && id<=last && z==100 && state_step==19 && ws_ptmr==2);
@@ -191,6 +198,24 @@ int main(void)
     shooter.shots[0]=(mf_ws_shot){1,100*256,80*256,0,60,0};
     shooter.hostile[0]=(mf_ws_hostile_shot){1,150*256,80*256,0,60,0,768};
     rendered_types=0;render();assert(rendered_types==63u);
+    {
+        int before_x[18],before_y[18],k;
+        memcpy(before_x,drawn_x,sizeof(drawn_x));memcpy(before_y,drawn_y,sizeof(drawn_y));
+        shooter.camera_x+=8*256;render();
+        for(k=0;k<6;k++){assert(drawn_x[k]==before_x[k]-8);assert(drawn_y[k]==before_y[k]);}
+        shooter.camera_x-=8*256;
+        shooter.players[0].shot_hold=20;render();
+        memcpy(before_x,drawn_x,sizeof(drawn_x));shooter.camera_x+=8*256;render();
+        assert(drawn_x[10+(shooter.ticks/3&3)]==before_x[10+(shooter.ticks/3&3)]-8);
+        assert(drawn_x[14+(shooter.ticks/3&3)]==before_x[14+(shooter.ticks/3&3)]-8);
+        shooter.players[0].shot_hold=0;shooter.camera_x-=8*256;
+    }
+    {
+        int old=shooter.camera_x;shooter.scroll=123;
+        shooter.camera_x=0;render();assert(scroll_x==-48*65536 && scroll_y==-123*65536);
+        shooter.camera_x=MF_WS_CAMERA_MAX;render();assert(scroll_x==240*65536 && scroll_y==-123*65536);
+        shooter.camera_x=old;
+    }
     /* The real HUD must erase the complete 19-character restart prompt. */
     shooter.game_over=1;render();assert(screen[16][28]=='T');
     p[0]=MF_START;mf_ws_step(&shooter,(unsigned[2]){0,0},p,3);p[0]=0;
@@ -210,7 +235,7 @@ int main(void)
     rendered_types=0;render();assert((rendered_types&((1u<<7)|(1u<<8)))==((1u<<7)|(1u<<8)));
     in[0].held=MF_UP;in[1].held=MF_LEFT|MF_RIGHT;frame(in,p);
     assert(player_bank[0]==WS_CENTER && player_bank[1]==WS_CENTER);
-    shooter.players[0].x=64*256;in[0].held=MF_LEFT;frame(in,p);assert(player_bank[0]==WS_CENTER);
+    shooter.players[0].x=MF_WS_PLAYER_MIN;in[0].held=MF_LEFT;frame(in,p);assert(player_bank[0]==WS_CENTER);
     in[0].held=MF_RIGHT|MF_UP|MF_A;frame(in,p);assert(player_bank[0]==WS_RIGHT);
     in[0].connected=0;frame(in,p);assert(player_bank[0]==WS_CENTER);in[0].connected=1;
     shooter.paused=1;frame(in,p);assert(player_bank[0]==WS_CENTER);shooter.paused=0;
@@ -241,9 +266,9 @@ int main(void)
         for(n=0;n<MF_WS_ENEMIES;n++)shooter.enemies[n]=(mf_ws_enemy){1,100*256,60*256,0,0};
         for(n=0;n<MF_WS_SHOTS;n++)shooter.shots[n]=(mf_ws_shot){1,100*256,80*256,0,60,0};
         for(n=0;n<MF_WS_HOSTILE;n++)shooter.hostile[n]=(mf_ws_hostile_shot){1,150*256,80*256,0,60,0,768};
-        r=draws;render();assert(beam_draws==14 && draws-r==72);
+        r=draws;render();assert(beam_draws==14 && draws-r==72 && clip_commands==1 && !clipping);
     }
-    puts("PASS full-height renderer: seven player heights and all animation phases, contiguous row coverage, clean offscreen top, attached emitters; simultaneous two-player/all-pools maximum 72 commands");
+    puts("PASS full-height renderer: seven player heights and all animation phases, contiguous row coverage, clean offscreen top, attached emitters; simultaneous two-player/all-pools maximum 72 sprites plus 1 user clip / 73 commands");
     puts("PASS render integration: two attached animated beam draws through restored SGL; release removes draws; simulation deaths queued once, rendering never re-triggers audio");
     fail_audio_init=1;mf_ws_runtime_begin(0,&palette,now);frame(in,p);frame(in,p);frame(in,p);frame(in,p);
     assert(error==108 && strstr(diagnostic,"WDEATH BANK") && strstr(diagnostic,"MAP CHANGE") && strstr(diagnostic,"EXPECT 0 GOT 1"));

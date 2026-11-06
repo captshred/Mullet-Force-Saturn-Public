@@ -2,12 +2,14 @@
 from pathlib import Path
 import subprocess,tempfile
 R=Path(__file__).resolve().parents[1]
+subprocess.run(['python3','tools/validate-level2-wide.py'],cwd=R,check=True)
 subprocess.run(['python3','tools/audit-level2-audio-sdk.py'],cwd=R,check=True)
 subprocess.run(['python3','tools/audit-level2-polyphony.py'],cwd=R,check=True)
 subprocess.run(['python3','tools/validate-flame-tone.py'],cwd=R,check=True)
 with tempfile.TemporaryDirectory(prefix='mf-wingsuit-') as tmp:
  for name,sources,includes in [
-  ('aim',['tests/wingsuit_aim_test.c'],['-Isrc']),
+  ('camera',['tests/wingsuit_camera_test.c','src/wingsuit.c'],['-Isrc','-fsanitize=undefined','-fno-sanitize-recover=all']),
+ ('aim',['tests/wingsuit_aim_test.c'],['-Isrc']),
   ('game',['tests/wingsuit_test.c','src/wingsuit.c'],['-Isrc']),
   ('flame',['tests/wingsuit_flame_test.c','src/wingsuit.c'],['-Isrc']),
   ('audio',['tests/wingsuit_audio_test.c'],['-Itests/wingsuit_audio_mock','-Itests/sound_mock','-Isrc']),

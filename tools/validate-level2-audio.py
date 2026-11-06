@@ -3,6 +3,7 @@
 from pathlib import Path
 import json,hashlib,struct,re
 import seq
+from level2_wide_scope import change,wide_source
 from level2_audio_scope import audio_source,audio_asset
 from level2_sustain_scope import sustain_source
 from level2_polyphony_scope import poly_source,lock as poly_lock
@@ -57,7 +58,7 @@ for x in r['sources'].values():assert (x['rate'],x['bits'],x['channels'])==(4410
 h=(R/'src/wingsuit_audio_data.h').read_text()
 for name,value in [('SEQ_BYTES',84),('TON_BYTES',158312),('MAP_BYTES',40),('SEQ_ADDR',148864),('TON_ADDR',148948),('FLAME_HANDOFF_TICKS',38),('FLAME_ATTACK_PROGRAM',2),('FLAME_ATTACK_LAYER_ADDR',149082),('FLAME_ATTACK_PCM_ADDR',225640),('FLAME_ATTACK_FRAMES',27975),('FLAME_ATTACK_NOTE',60),('FLAME_LOOP_PROGRAM',3),('FLAME_LOOP_LAYER_ADDR',149118),('FLAME_LOOP_PCM_ADDR',281592),('FLAME_LOOP_FRAMES',12832),('FLAME_LOOP_NOTE',61)]:assert int(re.search(r'#define MF_WS_'+name+r' (\d+)',h)[1])==value
 pres=json.loads((R/'docs/level2-audio-preservation.json').read_text());assert pres['base_commit']==lock['base_commit'] and len(pres['files'])==21
-for name,info in pres['files'].items():assert sha((A/name).read_bytes())==info['sha256'] and len((A/name).read_bytes())==info['bytes'],name
+for name,info in pres['files'].items():assert sha((A/name).read_bytes())==change('assets/wingsuit/'+name,info)['sha256'] and len((A/name).read_bytes())==change('assets/wingsuit/'+name,info)['bytes'],name
 for name,digest in pres['sources_sha256'].items():assert sha((R/name).read_bytes())==digest,name
 source=(R/'src/wingsuit.c').read_text();a=source.index('static uint32_t integer_sqrt');b=source.index('/* One successful tap',a)
 assert sha(source[a:b].encode())==pres['aiming_sha256']
@@ -80,18 +81,18 @@ for name,c in sustain['sources'].items():assert sha((R/name).read_bytes())==spli
 split=split_lock()
 for name,c in split['sources'].items():assert sha((R/name).read_bytes())==poly_source(name,c['after']),name
 for name,c in split['files'].items():
- b=(R/name).read_bytes();assert len(b)==c['after']['bytes'] and sha(b)==c['after']['sha256'],name
+ b=(R/name).read_bytes();assert len(b)==change(name,c['after'])['bytes'] and sha(b)==change(name,c['after'])['sha256'],name
 frozen=json.loads((R/'docs/level2-split-flame-preservation.json').read_text());assert frozen['base_commit']==split['base_commit']
 for name,info in frozen['files'].items():
- b=(R/name).read_bytes();assert len(b)==info['bytes'] and sha(b)==info['sha256'],name
+ b=(R/name).read_bytes();assert len(b)==change(name,info)['bytes'] and sha(b)==change(name,info)['sha256'],name
 # Initializer remains exact. Only the explicitly authorized one-shot transport
 # is replaced; additive source hashes and immutable assets remain exhaustive.
 a=transport.index('    stage(MF_WS_AUDIO_MAP_READ)');b=transport.index('    /* Submission success',a)
 assert sha(transport[a:b].encode())==split['load_sequence_sha256'],'E108 loading sequence changed'
 poly=poly_lock()
-for name,c in poly['sources'].items():assert sha((R/name).read_bytes())==c['after'],name
+for name,c in poly['sources'].items():assert sha((R/name).read_bytes())==wide_source(name,c['after']),name
 for name,info in poly['frozen'].items():
- b=(R/name).read_bytes();assert len(b)==info['bytes'] and sha(b)==info['sha256'],name
+ b=(R/name).read_bytes();assert len(b)==change(name,info)['bytes'] and sha(b)==change(name,info)['sha256'],name
 for name,begin,end in [
  ('flame_scheduler','    /* Release is latched','    /* SND_SetSeqVl is the'),
  ('flame_observer','static void observe_flame','/* Read only the driver'),
@@ -99,4 +100,4 @@ for name,begin,end in [
  a=transport.index(begin);b=transport.index(end,a)
  assert sha(transport[a:b].encode())==poly['preserved_sections'][name],name
 assert 'midi(first_port+i,1,60,110)' in transport
-print('PASS polyphony source-only lock: all Level 1/2 assets unchanged; exact split Flame scheduler/observer, E108 initialization/readiness; no Level 2 sequence start/stop; full approved source chain preserved')
+print('PASS polyphony source-only lock: all Level 1/2 audio/hero assets unchanged; exact authorized wide WMAP/manifest exception; exact split Flame scheduler/observer, E108 initialization/readiness; no Level 2 sequence start/stop; full approved source chain preserved')

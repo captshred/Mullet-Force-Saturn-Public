@@ -169,7 +169,12 @@ void mf_ws_runtime_begin(int coop,jo_palette *background,unsigned now)
     slScrDisp(NBG1OFF|NBG2OFF);jo_clear_screen();
 }
 static void draw(int id,int x,int y)
-{jo_sprite_draw3D2(ids[id],x,y,WS_SPRITE_Z);}
+{
+    static const int widths[]={32,32,24,8,8,32,32,32,32,32,32,32,32,32,32,32,32,32};
+    /* Cull fully off-camera objects; the VDP1 user clip trims partial edges. */
+    if(x+widths[id]<=MF_WS_VIEW_LEFT || x>=MF_WS_VIEW_LEFT+MF_WS_VIEW_WIDTH)return;
+    jo_sprite_draw3D2(ids[id],x,y,WS_SPRITE_Z);
+}
 static int bank_after_step(int old_x,const mf_ws_player *p,unsigned held,int was_game_over)
 {
     int dx=!!(held&MF_RIGHT)-!!(held&MF_LEFT);
@@ -180,33 +185,35 @@ static int bank_after_step(int old_x,const mf_ws_player *p,unsigned held,int was
 }
 static void render(void)
 {
-    int i;slScrPosNbg1(0,-shooter.scroll*65536);
+    int i;slScrPosNbg1((shooter.camera_x-MF_WS_VIEW_LEFT*MF_WS_SCALE)*256,-shooter.scroll*65536);
     /* New bank uses raw RGB555, with a fresh default sprite attribute state. */
     jo_sprite_disable_horizontal_flip();jo_sprite_disable_vertical_flip();
     jo_sprite_disable_half_transparency();jo_sprite_disable_dark_filter();
-    jo_sprite_disable_gouraud_shading();jo_sprite_restore_sprite_scale();jo_sprite_disable_clipping();
+    jo_sprite_disable_gouraud_shading();jo_sprite_restore_sprite_scale();
+    jo_sprite_set_clipping_area(MF_WS_VIEW_LEFT,0,MF_WS_VIEW_WIDTH-1,239,WS_SPRITE_Z+1);
+    jo_sprite_enable_clipping(0);
     for(i=0;i<2;i++)if(mf_ws_beam_active(&shooter,i)){
         int bottom=shooter.players[i].y/256-MF_WS_BEAM_EMITTER-MF_WS_BEAM_ORIGIN_HEIGHT;
         int frame=(shooter.ticks/3+i)&3;
-        draw(14+frame,shooter.players[i].x/256-16,bottom);
+        draw(14+frame,mf_ws_screen_x(&shooter,shooter.players[i].x)/256-16,bottom);
         /* Tile one periodic body frame without gaps or a terminal tip. All
            segments share phase so the wrap remains seamless during animation.
            System clipping trims the uppermost segment at the playfield edge. */
         for(;bottom>MF_WS_BEAM_TOP;bottom-=MF_WS_BEAM_SEGMENT_HEIGHT)
-            draw(10+frame,shooter.players[i].x/256-16,bottom-MF_WS_BEAM_SEGMENT_HEIGHT);
+            draw(10+frame,mf_ws_screen_x(&shooter,shooter.players[i].x)/256-16,bottom-MF_WS_BEAM_SEGMENT_HEIGHT);
     }
     for(i=0;i<MF_WS_ENEMIES;i++){
         mf_ws_enemy *e=&shooter.enemies[i];
-        if(e->active)draw(2,e->x/256-12,e->y/256-12);
-        else if(e->explosion)draw(5,e->x/256-16,e->y/256-16);
+        if(e->active)draw(2,mf_ws_screen_x(&shooter,e->x)/256-12,e->y/256-12);
+        else if(e->explosion)draw(5,mf_ws_screen_x(&shooter,e->x)/256-16,e->y/256-16);
     }
-    for(i=0;i<MF_WS_SHOTS;i++)if(shooter.shots[i].active)draw(3,shooter.shots[i].x/256-4,shooter.shots[i].y/256-4);
-    for(i=0;i<MF_WS_HOSTILE;i++)if(shooter.hostile[i].active)draw(4,shooter.hostile[i].x/256-4,shooter.hostile[i].y/256-4);
+    for(i=0;i<MF_WS_SHOTS;i++)if(shooter.shots[i].active)draw(3,mf_ws_screen_x(&shooter,shooter.shots[i].x)/256-4,shooter.shots[i].y/256-4);
+    for(i=0;i<MF_WS_HOSTILE;i++)if(shooter.hostile[i].active)draw(4,mf_ws_screen_x(&shooter,shooter.hostile[i].x)/256-4,shooter.hostile[i].y/256-4);
     for(i=0;i<2;i++){
         mf_ws_player *p=&shooter.players[i];int col=i?34:0;
         if(p->active && p->lives && !p->respawn && (!p->invulnerable || !(shooter.ticks&4))){
             static const int pose[2][3]={{0,6,7},{1,8,9}};
-            draw(pose[i][player_bank[i]],p->x/256-16,p->y/256-16);
+            draw(pose[i][player_bank[i]],mf_ws_screen_x(&shooter,p->x)/256-16,p->y/256-16);
         }
         jo_print(col,2,i?"CHUCK":"BUCK");jo_print(col,3,i?"2P":"1P");
         jo_printf(col,6,"%05d",p->score%100000);jo_print(col,8,"LIVES");jo_printf(col,9,"%d",p->lives);
@@ -214,6 +221,7 @@ static void render(void)
         if(i && !p->active){jo_print(col,16,"START");jo_print(col,17,"JOIN");}
         else {jo_print(col,16,"     ");jo_print(col,17,"    ");}
     }
+    jo_sprite_disable_clipping();
     jo_print(12,14,shooter.game_over?"GAME OVER       ":(shooter.paused?"PAUSED          ":"                "));
     jo_print(10,16,shooter.game_over?restart_prompt:restart_clear);
 }

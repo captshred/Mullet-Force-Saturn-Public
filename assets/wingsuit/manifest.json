@@ -4,7 +4,7 @@
   "tiles": 43,
   "vdp2_payload_bytes": 10944,
   "cram_bytes": 32,
-  "max_sprite_commands": 72,
+  "max_sprite_commands": 73,
   "files": {
     "WBUCK.BIN": {
       "bytes": 2048,
@@ -52,7 +52,7 @@
     },
     "WMAP.BIN": {
       "bytes": 8192,
-      "sha256": "d22432568dc18e83f0a83b41380dc11ced413879ea2fec20e994e91a7df4c771"
+      "sha256": "46a95d0a1d6272bfb363153512108d9e288375ba5485959827e3ad8944be8eb1"
     },
     "WPAL.BIN": {
       "bytes": 32,

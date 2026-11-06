@@ -21,7 +21,18 @@
 #define MF_WS_SPAWN_TICKS 45
 #define MF_WS_INVULNERABLE 120
 #define MF_WS_SCALE 256
-/* Coordinates are centers in 24.8 screen pixels; active area x=48..271. */
+/* X is world space; Y retains the existing vertically scrolling stage model.
+   Camera/dead-zone values are 24.8 except named pixel dimensions below. */
+#define MF_WS_STAGE_WIDTH 512
+#define MF_WS_VIEW_LEFT 48
+#define MF_WS_VIEW_WIDTH 224
+#define MF_WS_PLAYER_MARGIN 16
+#define MF_WS_CAMERA_LEFT 50
+#define MF_WS_CAMERA_RIGHT 174
+#define MF_WS_CAMERA_SPEED (3*MF_WS_SCALE)
+#define MF_WS_CAMERA_MAX ((MF_WS_STAGE_WIDTH-MF_WS_VIEW_WIDTH)*MF_WS_SCALE)
+#define MF_WS_PLAYER_MIN (MF_WS_PLAYER_MARGIN*MF_WS_SCALE)
+#define MF_WS_PLAYER_MAX ((MF_WS_STAGE_WIDTH-MF_WS_PLAYER_MARGIN)*MF_WS_SCALE)
 typedef struct { int active,x,y,lives,invulnerable,respawn,cooldown,score,shot_hold; } mf_ws_player;
 typedef struct { int active,x,y,owner,ttl,vx; } mf_ws_shot;
 /* Hostile physics is a generic fixed velocity; only the drone emitter aims. */
@@ -35,7 +46,10 @@ typedef struct {
     int beam_wait[2],deaths;
     unsigned shots_fired;
     unsigned ticks,wave; int spawn,paused,game_over,scroll;
+    int camera_x; /* Only horizontal camera state; no per-object screen copies. */
 } mf_wingsuit;
+int mf_ws_screen_x(const mf_wingsuit *,int world_x);
+void mf_ws_camera_step(mf_wingsuit *);
 int mf_ws_beam_active(const mf_wingsuit *,int);
 void mf_ws_init(mf_wingsuit *,int coop);
 void mf_ws_step(mf_wingsuit *,const unsigned held[2],const unsigned pressed[2],unsigned connected);

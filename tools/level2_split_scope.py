@@ -1,4 +1,5 @@
 """Exact additive exceptions for the authorized split Flame bank and transport."""
+from level2_wide_scope import change
 from pathlib import Path
 import json
 from level2_polyphony_scope import poly_source
@@ -18,6 +19,6 @@ def split_source(name,before):
 
 def split_file(name,before):
     x=lock()
-    if name not in x['files']:return before
+    if name not in x['files']:return change(name,before)
     c=x['files'][name];assert c['before']==before,(name,'unexpected split asset baseline')
-    return c['after']
+    return change(name,c['after'])

@@ -3,6 +3,58 @@
 #include <stdint.h>
 #define S MF_WS_SCALE
 static int clamp(int v,int lo,int hi){return v<lo?lo:(v>hi?hi:v);}
+int mf_ws_screen_x(const mf_wingsuit *g,int world_x)
+{return world_x-g->camera_x+MF_WS_VIEW_LEFT*S;}
+static int living(const mf_ws_player *p)
+{return p->active && p->lives>0 && !p->respawn;}
+/* Equal treatment at maximum separation: project the proposed pair onto the
+   largest visible center span. Neither player can push the other offscreen. */
+static void contain_players(mf_wingsuit *g,const int old_x[2])
+{
+    mf_ws_player *a=&g->players[0],*b=&g->players[1];
+    int span=(MF_WS_VIEW_WIDTH-2*MF_WS_PLAYER_MARGIN)*S;
+    if(living(a) && living(b)){
+        int lo=a->x<b->x?a->x:b->x,hi=a->x>b->x?a->x:b->x;
+        if(hi-lo>span){
+            int left=a->x<b->x?0:1,right=1-left;
+            int excess=hi-lo-span;
+            int dl=old_x[left]-g->players[left].x;
+            int dr=g->players[right].x-old_x[right];
+            /* Consume outward movement only. A stationary partner is never
+               dragged by the other player's attempt to exceed the span. */
+            if(dl<0)dl=0;
+            if(dr<0)dr=0;
+            if(dl+dr>=excess){
+                int undo_left=dl*excess/(dl+dr);
+                g->players[left].x+=undo_left;
+                g->players[right].x-=excess-undo_left;
+            }else {
+                /* Repair only externally invalid/restored state. */
+                int start=clamp((lo+hi-span)/2,MF_WS_PLAYER_MIN,MF_WS_PLAYER_MAX-span);
+                g->players[left].x=start;g->players[right].x=start+span;
+            }
+        }
+    }
+}
+void mf_ws_camera_step(mf_wingsuit *g)
+{
+    int i,lo=MF_WS_STAGE_WIDTH*S,hi=0,n=0,target,lower,upper;
+    g->camera_x=clamp(g->camera_x,0,MF_WS_CAMERA_MAX);
+    for(i=0;i<2;i++)if(living(&g->players[i])){
+        int x=g->players[i].x;if(x<lo)lo=x;if(x>hi)hi=x;++n;
+    }
+    if(!n)return;
+    /* Nearest camera satisfying both dead-zone edges; when the pair is wider
+       than the dead zone, follow its midpoint instead. */
+    lower=hi-MF_WS_CAMERA_RIGHT*S;upper=lo-MF_WS_CAMERA_LEFT*S;
+    target=lower<=upper?clamp(g->camera_x,lower,upper):(lo+hi-MF_WS_VIEW_WIDTH*S)/2;
+    /* Visibility overrides the normal dead zone. Valid simulation movement
+       keeps this feasible with the 3px camera speed (heroes move <=2.5px). */
+    lower=hi-(MF_WS_VIEW_WIDTH-MF_WS_PLAYER_MARGIN)*S;
+    upper=lo-MF_WS_PLAYER_MARGIN*S;
+    target=clamp(clamp(target,lower,upper),0,MF_WS_CAMERA_MAX);
+    g->camera_x+=clamp(target-g->camera_x,-MF_WS_CAMERA_SPEED,MF_WS_CAMERA_SPEED);
+}
 static int near(int x,int y,int a,int b,int rx,int ry)
 {return x>=a-rx*S && x<=a+rx*S && y>=b-ry*S && y<=b+ry*S;}
 /* Generic constant-velocity emission keeps future static/fan patterns separate
@@ -56,12 +108,12 @@ static int player_fire(mf_wingsuit *g,const mf_ws_player *p,int owner)
 static void join(mf_ws_player *p,int i)
 {*p=(mf_ws_player){1,(i?190:130)*S,200*S,3,MF_WS_INVULNERABLE,0,0,0,0};}
 void mf_ws_init(mf_wingsuit *g,int coop)
-{memset(g,0,sizeof(*g));join(&g->players[0],0);if(coop)join(&g->players[1],1);g->spawn=60;}
+{memset(g,0,sizeof(*g));join(&g->players[0],0);if(coop)join(&g->players[1],1);g->spawn=60;g->camera_x=MF_WS_VIEW_LEFT*S;}
 static int damage(mf_ws_player *p,int i)
 {
     if(p->invulnerable || p->respawn || p->lives<=0)return 0;
     --p->lives;p->invulnerable=MF_WS_INVULNERABLE;p->respawn=p->lives?60:0;
-    p->x=(i?190:130)*S;p->y=200*S;p->cooldown=p->shot_hold=0;return 1;
+    (void)i;p->y=200*S;p->cooldown=p->shot_hold=0;return 1;
 }
 int mf_ws_beam_active(const mf_wingsuit *g,int i)
 {
@@ -70,37 +122,50 @@ int mf_ws_beam_active(const mf_wingsuit *g,int i)
 }
 void mf_ws_step(mf_wingsuit *g,const unsigned held[2],const unsigned pressed[2],unsigned connected)
 {
-    int i,j,alive=0,pulse[2]={0,0};
+    unsigned ready=0;
+    int i,j,alive=0,pulse[2]={0,0},old_x[2]={g->players[0].x,g->players[1].x};
     g->deaths=0;g->shots_fired=0;
     if(g->game_over){if((connected&1) && (pressed[0]&MF_START))mf_ws_init(g,g->players[1].active && (connected&2));return;}
-    if((connected&2) && !g->players[1].active && (pressed[1]&MF_START))join(&g->players[1],1);
+    if((connected&2) && !g->players[1].active && (pressed[1]&MF_START)){
+        join(&g->players[1],1);g->players[1].x=g->camera_x+(190-MF_WS_VIEW_LEFT)*S;
+    }
     if((connected&1) && (pressed[0]&MF_START))g->paused=!g->paused;
     if(g->paused)return;
     ++g->ticks;g->scroll=(g->scroll+1)&511;
     for(i=0;i<2;i++){
-        mf_ws_player *p=&g->players[i];int dx,dy,speed,focused,tapped;
+        mf_ws_player *p=&g->players[i];int dx,dy,speed,focused;
         unsigned h=(connected&(1u<<i))?held[i]:0;
-        unsigned edge=(connected&(1u<<i))?pressed[i]:0;
         if(!p->active || p->lives<=0)continue;
-        if(p->respawn){--p->respawn;continue;}
+        if(p->respawn){
+            if(!--p->respawn)p->x=g->camera_x+((i?190:130)-MF_WS_VIEW_LEFT)*S;
+            continue;
+        }
+        ready|=1u<<i;
         if(p->invulnerable)--p->invulnerable;
         if(p->cooldown)--p->cooldown;
         if(h&MF_A){if(p->shot_hold<MF_WS_FOCUS_TICKS)++p->shot_hold;}
         else p->shot_hold=0;
         focused=p->shot_hold==MF_WS_FOCUS_TICKS;
-        tapped=p->shot_hold==1 || (edge&MF_A);
         dx=!!(h&MF_RIGHT)-!!(h&MF_LEFT);dy=!!(h&MF_DOWN)-!!(h&MF_UP);
         speed=(dx && dy)?MF_WS_DIAGONAL_SPEED:MF_WS_MOVE_SPEED;
         if(focused)speed=speed*MF_WS_FOCUS_PERCENT/100;
-        p->x=clamp(p->x+dx*speed,64*S,255*S);p->y=clamp(p->y+dy*speed,16*S,223*S);
-        if(focused){
+        p->x=clamp(p->x+dx*speed,MF_WS_PLAYER_MIN,MF_WS_PLAYER_MAX);p->y=clamp(p->y+dy*speed,16*S,223*S);
+    }
+    contain_players(g,old_x);
+    mf_ws_camera_step(g);
+    /* Fire only after containment, from the final world-space emitter. */
+    for(i=0;i<2;i++){
+        mf_ws_player *p=&g->players[i];
+        unsigned edge=(connected&(1u<<i))?pressed[i]:0;
+        if(!(ready&(1u<<i)))continue;
+        if(p->shot_hold==MF_WS_FOCUS_TICKS){
             if(g->beam_wait[i])--g->beam_wait[i];
             if(!g->beam_wait[i]){pulse[i]=1;g->beam_wait[i]=MF_WS_BEAM_TICKS;}
-        }else {g->beam_wait[i]=0;if(tapped && !p->cooldown && player_fire(g,p,i))p->cooldown=MF_WS_FIRE_TICKS;}
+        }else {g->beam_wait[i]=0;if((p->shot_hold==1 || (edge&MF_A)) && !p->cooldown && player_fire(g,p,i))p->cooldown=MF_WS_FIRE_TICKS;}
     }
     if(--g->spawn<=0){
         for(i=0;i<MF_WS_ENEMIES;i++)if(!g->enemies[i].active && !g->enemies[i].explosion){
-            g->enemies[i]=(mf_ws_enemy){1,(72+(int)(g->wave*47u%176u))*S,-12*S,0,0};++g->wave;break;
+            g->enemies[i]=(mf_ws_enemy){1,(24+(int)(g->wave*47u%(MF_WS_STAGE_WIDTH-48)))*S,-12*S,0,0};++g->wave;break;
         }g->spawn=MF_WS_SPAWN_TICKS;
     }
     for(i=0;i<MF_WS_ENEMIES;i++){
@@ -120,7 +185,7 @@ void mf_ws_step(mf_wingsuit *g,const unsigned held[2],const unsigned pressed[2],
     for(i=0;i<MF_WS_SHOTS;i++){
         mf_ws_shot *s=&g->shots[i];if(!s->active)continue;
         s->x+=s->vx;s->y-=6*S;
-        if(--s->ttl<=0 || s->y < -8*S || s->x<52*S || s->x>267*S){s->active=0;continue;}
+        if(--s->ttl<=0 || s->y < -8*S || s->x<4*S || s->x>(MF_WS_STAGE_WIDTH-4)*S){s->active=0;continue;}
         for(j=0;j<MF_WS_ENEMIES;j++){
             mf_ws_enemy *e=&g->enemies[j];if(e->active && near(s->x,s->y,e->x,e->y,12,13)){
                 e->active=0;e->explosion=12;++g->deaths;s->active=0;g->players[s->owner].score+=100;break;
@@ -130,7 +195,7 @@ void mf_ws_step(mf_wingsuit *g,const unsigned held[2],const unsigned pressed[2],
     for(i=0;i<MF_WS_HOSTILE;i++){
         mf_ws_hostile_shot *s=&g->hostile[i];if(!s->active)continue;
         s->x+=s->vx;s->y+=s->vy;
-        if(--s->ttl<=0 || s->x<44*S || s->x>275*S || s->y < -8*S || s->y>248*S){s->active=0;continue;}
+        if(--s->ttl<=0 || s->x< -4*S || s->x>(MF_WS_STAGE_WIDTH+4)*S || s->y < -8*S || s->y>248*S){s->active=0;continue;}
         for(j=0;j<2;j++){
             mf_ws_player *p=&g->players[j];if(p->active && p->lives && !p->respawn && near(s->x,s->y,p->x,p->y,7,10)){
                 g->deaths+=damage(p,j);s->active=0;break;

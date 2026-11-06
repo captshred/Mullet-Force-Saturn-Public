@@ -73,8 +73,8 @@ int main(void)
     assert(g.hostile[0].x==100*S+512 && g.hostile[0].y==80*S);
     for(i=0;i<5;i++){
         setup(&g);g.hostile[0]=(mf_ws_hostile_shot){1,160*S,100*S,0,120,0,0};
-        if(i==0){g.hostile[0].x=44*S;g.hostile[0].vx=-543;g.hostile[0].vy=543;}
-        if(i==1){g.hostile[0].x=275*S;g.hostile[0].vx=543;g.hostile[0].vy=543;}
+        if(i==0){g.hostile[0].x=-4*S;g.hostile[0].vx=-543;g.hostile[0].vy=543;}
+        if(i==1){g.hostile[0].x=(MF_WS_STAGE_WIDTH+4)*S;g.hostile[0].vx=543;g.hostile[0].vy=543;}
         if(i==2){g.hostile[0].y=-8*S;g.hostile[0].vx=543;g.hostile[0].vy=-543;}
         if(i==3){g.hostile[0].y=248*S;g.hostile[0].vx=-543;g.hostile[0].vy=543;}
         if(i==4)g.hostile[0].ttl=1;
@@ -85,6 +85,6 @@ int main(void)
         for(j=0;j<MF_WS_HOSTILE;j++)live+=g.hostile[j].active;
         assert(live<=MF_WS_HOSTILE);
     }
-    assert(sizeof(mf_ws_shot)==24 && sizeof(mf_ws_hostile_shot)==28 && sizeof(g)==1488);
-    puts("PASS aimed drones: age-80 muzzle, nearest living/active/nonrespawning hero, exact Buck ties and subpixel distances; all octants/zero vector normalized; snapshot-only/no homing; fixed pool, generic velocity emission and four-edge/TTL cleanup; state 1488 bytes");
+    assert(sizeof(mf_ws_shot)==24 && sizeof(mf_ws_hostile_shot)==28 && sizeof(g)==1492);
+    puts("PASS aimed drones: age-80 muzzle, nearest living/active/nonrespawning hero, exact Buck ties and subpixel distances; all octants/zero vector normalized; snapshot-only/no homing; fixed pool, generic velocity emission and four-edge/TTL cleanup; state 1492 bytes");
 }

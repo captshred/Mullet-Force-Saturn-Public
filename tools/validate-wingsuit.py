@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Exact runtime payloads, hardware-format budgets, and scoped Level 1 source lock."""
 from pathlib import Path
-import argparse,hashlib,json,struct
+import argparse,hashlib,json,struct,subprocess
 from wingsuit_disc import validate_disc
 R=Path(__file__).resolve().parents[1]
+subprocess.run(['python3',str(R/'tools/validate-level2-wide.py')],check=True)
 p=argparse.ArgumentParser();p.add_argument('--disc',action='store_true');args=p.parse_args()
 m=json.loads((R/'assets/wingsuit/manifest.json').read_text())
 assert m['textures']==18 and m['vdp1_bytes']==28032 and m['tiles']==43
@@ -20,7 +21,7 @@ assert m['files']['WMAP.BIN']['bytes']==8192
 for word in struct.unpack('>4096H',(R/'assets/wingsuit/WMAP.BIN').read_bytes()):
  assert word>>12==1 and not word&1 and (word&4095)//2<43
 assert m['vdp2_payload_bytes']==10944<=106496+65536
-assert m['cram_bytes']==32 and m['max_sprite_commands']==72
+assert m['cram_bytes']==32 and m['max_sprite_commands']==73
 assert 28032<458488 and 18<255
 # Every old gameplay/asset check remains active. Only four source integrations
 # may differ, each checked against an exact before/after digest.

@@ -1,4 +1,5 @@
 """Exact before/after exceptions for the authorized three-file Level 2 audio bank."""
+from level2_wide_scope import change as wide_file
 from pathlib import Path
 import json
 from level2_sustain_scope import sustain_source
@@ -8,7 +9,7 @@ def audio_asset(name,before):
  lock=json.loads((R/'docs/level2-audio-bank-lock.json').read_text())
  assert lock['base_commit']=='c721fa189043e66ee6292398ef3fcddbb692063a'
  assert set(lock['files'])=={'WDEATH.MAP','WDEATH.SEQ','WDEATH.TON'}
- if name not in lock['files']:return before
+ if name not in lock['files']:return wide_file('assets/wingsuit/'+name,before)
  change=lock['files'][name];assert change['before']==before,(name,'unexpected audio baseline')
  return split_file('assets/wingsuit/'+name,change['after'])
 def audio_source(name,before):

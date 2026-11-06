@@ -61,9 +61,9 @@ int main(void)
     setup(&g,0);for(i=0;i<31;i++)g.shots[i]=(mf_ws_shot){1,160*S,100*S,1,90,0};
     step(&g,MF_A,0);assert(shots(&g)==32 && g.shots_fired==1 && g.players[0].cooldown==7);
     step(&g,MF_A,0);assert(!g.shots_fired);
-    /* Shots cannot drift into either HUD, and TTL cleanup still applies. */
-    setup(&g,0);g.shots[0]=(mf_ws_shot){1,52*S,100*S,0,60,-S};
-    g.shots[1]=(mf_ws_shot){1,267*S,100*S,0,60,S};
+    /* Shots expire at logical world edges (rendering clips HUD), and TTL cleanup still applies. */
+    setup(&g,0);g.shots[0]=(mf_ws_shot){1,4*S,100*S,0,60,-S};
+    g.shots[1]=(mf_ws_shot){1,(MF_WS_STAGE_WIDTH-4)*S,100*S,0,60,S};
     g.shots[2]=(mf_ws_shot){1,160*S,100*S,0,1,S};step(&g,0,0);assert(!shots(&g));
     step(&g,MF_A,0);assert(g.shots[0].vx==0 && g.shots[0].owner==0);
     /* Disconnect cancels focus; pause freezes cadence and restart clears modes. */
