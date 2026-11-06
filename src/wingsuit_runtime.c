@@ -225,6 +225,7 @@ void mf_ws_runtime_frame(const mf_input input[2],unsigned pressed[2],unsigned no
         jo_print(3,17,"DISC /ALEVEL2");return;
     }
     if(phase==2){
+        mf_ws_audio_step(now,0); /* Preconfigure persistent flame controls during title. */
         jo_print(15,11,"LEVEL 2");jo_print(11,13,"WINGSUIT ASSAULT");
         pressed[0]=pressed[1]=0;
         title-=elapsed>6?6:(int)elapsed;
@@ -233,10 +234,15 @@ void mf_ws_runtime_frame(const mf_input input[2],unsigned pressed[2],unsigned no
     if(elapsed>6)elapsed=6;
     for(i=0;i<elapsed;i++){
         int j,was_game_over=shooter.game_over,old_x[2]={shooter.players[0].x,shooter.players[1].x};
-        mf_ws_step(&shooter,held,pressed,conn);mf_ws_audio_events(shooter.deaths);pressed[0]=pressed[1]=0;
+        mf_ws_step(&shooter,held,pressed,conn);mf_ws_audio_events(shooter.deaths,shooter.shots_fired);pressed[0]=pressed[1]=0;
         for(j=0;j<2;j++)player_bank[j]=bank_after_step(old_x[j],&shooter.players[j],(conn&(1u<<j))?held[j]:0,was_game_over);
     }
-    mf_ws_audio_step(now);
+    {
+        unsigned focus=0;
+        if(!shooter.paused)for(i=0;i<2;i++)if(mf_ws_beam_active(&shooter,i))focus|=1u<<i;
+        mf_ws_audio_step(now,focus);
+    }
     render();
+    if(mf_ws_audio_fault())jo_printf(3,21,"AUDIO P%d STATUS %02X",mf_ws_audio_fault()>>8,mf_ws_audio_fault()&255);
 }
 #endif

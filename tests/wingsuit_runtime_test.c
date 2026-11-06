@@ -65,8 +65,9 @@ int mf_ws_audio_load(mf_ws_audio_reader read){
     for(i=0;i<3;i++){char *p=read(n[i],size[i]);if(!p)return 0;jo_free(p);}return 1;
 }
 static int audio_events,audio_pumps;
-void mf_ws_audio_events(int n){audio_events+=n;}
-void mf_ws_audio_step(unsigned n){(void)n;audio_pumps++;}
+void mf_ws_audio_events(int n,unsigned shots){(void)shots;audio_events+=n;}
+void mf_ws_audio_step(unsigned n,unsigned focus){(void)n;(void)focus;audio_pumps++;}
+unsigned mf_ws_audio_fault(void){return 0;}
 void jo_free(void *p){++frees;free(p);}
 void jo_dma_copy(const void *a,void *b,unsigned n){memcpy(b,a,n);}
 int jo_sprite_add(const jo_img *im){if(register_fail)return -1;assert(last<17);slots+=im->width*im->height*2;return ++last;}

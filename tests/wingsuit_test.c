@@ -23,8 +23,8 @@ int main(void)
     assert(g.players[1].x==x+640);x=g.players[0].x;
     mf_ws_step(&g,h,zero,2);assert(g.players[0].x==x); /* disconnected port cannot steer */
     mf_ws_init(&g,1);h[0]=h[1]=MF_A;
-    mf_ws_step(&g,h,zero,3);assert(count(g.shots,MF_WS_SHOTS)==6);
-    assert(g.shots[0].owner==0 && g.shots[3].owner==1);
+    mf_ws_step(&g,h,zero,3);assert(count(g.shots,MF_WS_SHOTS)==2);
+    assert(g.shots[0].owner==0 && g.shots[1].owner==1);
     for(i=0;i<MF_WS_SHOTS;i++)g.shots[i]=(mf_ws_shot){1,64*S,100*S,i&1,60,0};
     g.players[0].cooldown=g.players[1].cooldown=0;mf_ws_step(&g,h,zero,3);
     assert(count(g.shots,MF_WS_SHOTS)==MF_WS_SHOTS); /* exhausted pool drops fire safely */

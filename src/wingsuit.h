@@ -6,7 +6,7 @@
 #define MF_WS_HOSTILE 16
 #define MF_WS_HOSTILE_SPEED 768 /* 3 pixels/tick in 24.8. */
 #define MF_WS_ENEMIES 8
-#define MF_WS_FIRE_TICKS 7 /* Mobile fan minimum repeat interval. */
+#define MF_WS_FIRE_TICKS 7 /* Tap minimum repeat interval. */
 #define MF_WS_FOCUS_TICKS 20 /* 0.33 s at 60 Hz; taps remain mobile. */
 #define MF_WS_MOVE_SPEED 640
 #define MF_WS_DIAGONAL_SPEED 452
@@ -33,6 +33,7 @@ typedef struct {
     mf_ws_hostile_shot hostile[MF_WS_HOSTILE];
     mf_ws_enemy enemies[MF_WS_ENEMIES];
     int beam_wait[2],deaths;
+    unsigned shots_fired;
     unsigned ticks,wave; int spawn,paused,game_over,scroll;
 } mf_wingsuit;
 int mf_ws_beam_active(const mf_wingsuit *,int);

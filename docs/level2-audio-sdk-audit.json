@@ -1,0 +1,53 @@
+{
+  "sdk_revision": "556d081146211b6a1cfa6591d70f9487d406758b",
+  "artifacts": {
+    "SEGA_SND.H": {
+      "git_blob": "4746b759b5bd63f652acdc1616f0d4ccf64c087c",
+      "sha256": "103cfb55e1f8d6ab6feebba2158a835a8c4235555f16ea2d7590fd81b19d2cdd"
+    },
+    "SL_DEF.H": {
+      "git_blob": "d4ba5f294317dbb02834d1cc1cd77b4b15bbd59a",
+      "sha256": "a546f3395d002c89b0e6778c0ec45da30dd13bb3e16d5b470e345d7b8b46ac50"
+    },
+    "LIBSGL.A": {
+      "git_blob": "b0be8d1423dce25c5d7b51d15ee96a0ad73b30f8",
+      "sha256": "f5b51eed404ecc75de22d427b673f1a3343b4372128597028d19292b3ddf8f9e"
+    },
+    "LIBSND.A": {
+      "git_blob": "7c26aee7c9e6dad7d04affc90ad0088df701a5cc",
+      "sha256": "476bfae746c73948bc9b703d1d8b0228cdfd947a7f956f2073f9cc03eaf90515"
+    },
+    "SDDRVS.TSK": {
+      "git_blob": "cd8322b253e71971b44a42a0657f4e71062a3917",
+      "sha256": "68890ee4a49fd0c341bc3f0a48643e4db4b175df0b0d7dacfeb88306340052b6"
+    }
+  },
+  "controls": {
+    "flame": [
+      0,
+      1
+    ],
+    "shot": [
+      2,
+      3
+    ],
+    "explosion": [
+      4,
+      5,
+      6,
+      7
+    ],
+    "physical_scsp_slots": 32
+  },
+  "findings": [
+    "SGL sglG00.o slInitSound writes 0x80 to mode byte at 0x25a004e1; old Level 2 forcibly reset it and issued SND commands outside SGL queue.",
+    "New Level 2 uses supported SGL slSoundRequest formats and slSndFlush exclusively for command submission; SND_Init/GetSeqStat retained only for initialization/status reads.",
+    "Old TON omitted velocity/PEG/PLFO tables and pointed their offsets at zero; rebuilt complete original shared tables."
+  ],
+  "references": [
+    "https://www.infochunk.com/saturn/segahtml_en/sndt/prog/drve/sndcmd0.htm",
+    "https://www.infochunk.com/saturn/segahtml_en/sndt/prog/drve/sndcmd_.htm",
+    "https://docs.exodusemulator.com/Archives/SSDDV1R1E/refe/func6/func175.htm",
+    "https://docs.exodusemulator.com/Archives/SSDDV25/segahtml/sndt/tool/tone/hon/p12_10.htm"
+  ]
+}

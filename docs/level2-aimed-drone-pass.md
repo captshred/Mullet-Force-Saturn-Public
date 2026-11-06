@@ -1,5 +1,9 @@
 # Level 2 flame origin and snapshot-aimed drone fire
 
+Historical report. For current single-shot and weapon-audio behavior, see
+[Level 2 audio pass 1](level2-audio-pass1.md). Manual Actions runs use the workflow
+from `main` with the exact desired source commit SHA.
+
 Branch: `feature/level2-aimed-drone-pass`.
 Parent: confirmed playable `f94c7721ef0d846ee618d44b006040477d063328`
 (`feature/level2-flame-tuning-pass2`).
@@ -172,7 +176,7 @@ is for the parent. ISO tests here use structural fixtures, not a new compiled di
 
 Open **Manual Saturn playtest build** (`.github/workflows/build.yml`):
 
-- **Use workflow from:** `feature/level2-aimed-drone-pass`
+- **Use workflow from:** `main`
 - **profile:** `stage-default`
 - **source_ref:** full new commit SHA provided with delivery. The branch name also
   resolves to it until further commits.

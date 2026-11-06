@@ -3,6 +3,7 @@
 from pathlib import Path
 import hashlib,json,struct,subprocess,tempfile
 import seq
+from level2_audio_scope import audio_asset,audio_source
 R=Path(__file__).resolve().parents[1]
 A=R/'assets/wingsuit'
 def sha(b):return hashlib.sha256(b).hexdigest()
@@ -13,23 +14,8 @@ assert len(lock['files'])==13
 for n,f in lock['files'].items():assert m['files'][n]==f,(n,'approved asset changed')
 new={f'WFL{i}.BIN' for i in range(4)}|{f'WFO{i}.BIN' for i in range(4)}|{'WDEATH.MAP','WDEATH.SEQ','WDEATH.TON'}
 assert set(m['files'])==set(lock['files'])|new
-assert sum(f['bytes'] for f in m['files'].values())==70836
-old=(R/'assets/cd/FX.TON').read_bytes();newton=(A/'WDEATH.TON').read_bytes()
-def voice(data,index):
- off=struct.unpack_from('>H',data,8+2*index)[0];v=bytearray(data[off:off+36])
- addr=((v[7]&15)<<16)|int.from_bytes(v[8:10],'big');n=int.from_bytes(v[12:14],'big')*2
- pcm=data[addr:addr+n];v[7]&=240;v[8:10]=bytes(2);return v,pcm
-v,pcm=voice(old,2);assert voice(newton,0)==(v,pcm)
-assert len(pcm)==31680 and sha(pcm)=='2eca5219e7a0255532d46c6c0a4835dee475781787334da46bfb451363e4fa6b'
-assert struct.unpack_from('>5H',newton)==(10,0,0,0,28) and newton[10:28]==bytes(18)
-original=seq.decode((R/'assets/cd/FX.SEQ').read_bytes(),2);compact=seq.decode((A/'WDEATH.SEQ').read_bytes())
-assert original['programs']==[(0,0,2)];original['programs']=[(0,0,0)];assert compact==original
-assert not compact['loops'] and len(compact['notes'])==1
-mp=(A/'WDEATH.MAP').read_bytes();assert mp[:16]==(R/'assets/cd/CUSTOM.MAP').read_bytes()[:16] and mp[-8:]==b'\xff'*8
-for offset,typ,addr,n in [(16,1,148864,44),(24,0,148908,31744)]:
- assert mp[offset]==typ<<4 and int.from_bytes(mp[offset+1:offset+4],'big')==addr
- assert mp[offset+4]==128 and int.from_bytes(mp[offset+5:offset+8],'big')==n
-assert len(mp)==40 and 148908+31744==180652<524288
+assert sum(f['bytes'] for f in m['files'].values())==198264
+subprocess.run(['python3','tools/validate-level2-audio.py'],cwd=R,check=True)
 frames=[(A/f'WFL{i}.BIN').read_bytes() for i in range(4)]
 assert len(set(frames))==4 and all(len(b)==2048 for b in frames)
 for b in frames:
@@ -39,8 +25,8 @@ tuning=json.loads((R/'docs/flame-tuning-preservation.json').read_text())
 assert tuning['base_commit']=='5b07fe92676d4f3cc8c431be057ae6bbb6efa1fe'
 assert len(tuning['files'])==16
 for name,info in tuning['files'].items():
- assert m['files'][name]==info and sha((A/name).read_bytes())==info['sha256'],name
-for name,digest in tuning['sources_sha256'].items():assert sha((R/name).read_bytes())==digest,name
+ assert m['files'][name]==audio_asset(name,info) and sha((A/name).read_bytes())==audio_asset(name,info)['sha256'],name
+for name,digest in tuning['sources_sha256'].items():assert sha((R/name).read_bytes())==audio_source(name,digest),name
 widths=[]
 for b in frames:
  rows=[struct.unpack('>32H',b[y*64:(y+1)*64]) for y in range(32)]
@@ -58,12 +44,12 @@ for i,b in enumerate(frames):
 assert m['max_sprite_commands']==72 < tuning['sdk']['max_polygons']==1761
 assert tuning['sdk']['sgl_x']==64 and tuning['sdk']['sgl_z']==16
 s=(R/'src/input.c').read_text();assert 'READ_BUTTON(MF_X, JO_KEY_X)' in s and 'JO_KEY_Z' not in s
-print('PASS flame geometry/art: 27.40625 -> 23 mean body pixels (16.08% narrower); 21..25 solid pixels on every row, exact tile seams and four upward-flowing phases; sixteen stage payloads/audio and protected sources unchanged')
+print('PASS flame geometry/art: 27.40625 -> 23 mean body pixels (16.08% narrower); 21..25 solid pixels on every row, exact tile seams and four upward-flowing phases; sixteen stage payloads/protected sources match exact scoped locks')
 # Origin-only art additions preserve every parent stage payload and beam hitbox.
 origin=json.loads((R/'docs/aimed-drone-preservation.json').read_text())
 assert origin['base_commit']=='f94c7721ef0d846ee618d44b006040477d063328' and len(origin['files'])==20
-for name,info in origin['files'].items():assert m['files'][name]==info and sha((A/name).read_bytes())==info['sha256'],name
-for name,digest in origin['sources_sha256'].items():assert sha((R/name).read_bytes())==digest,name
+for name,info in origin['files'].items():assert m['files'][name]==audio_asset(name,info) and sha((A/name).read_bytes())==audio_asset(name,info)['sha256'],name
+for name,digest in origin['sources_sha256'].items():assert sha((R/name).read_bytes())==audio_source(name,digest),name
 s=(R/'src/wingsuit.c').read_text();a=s.index('    for(i=0;i<2;i++)if(pulse[i])');b=s.index('    for(i=0;i<MF_WS_SHOTS;i++)',a)
 assert sha(s[a:b].encode())==origin['beam_collision_sha256']
 caps=[(A/f'WFO{i}.BIN').read_bytes() for i in range(4)]
@@ -80,13 +66,13 @@ for phase,b in enumerate(caps):
  assert [x for x,v in enumerate(rows[-1]) if v]==[15,16,17], 'stable centered emitter in all phases'
  assert rows[-1][16]==struct.unpack_from('>H',frames[0],32)[0], 'hot core retained'
 assert m['textures']==18 and m['vdp1_bytes']==28032 and m['max_sprite_commands']==72
-print('PASS flame origin: four native 32x16 phases, stable three-pixel hot emitter, smooth 21..25-pixel bloom, exact body/cap seams; all twenty parent payloads and beam collision byte-for-byte unchanged')
+print('PASS flame origin: four native 32x16 phases, stable three-pixel hot emitter, smooth 21..25-pixel bloom, exact body/cap seams; all parent non-audio payloads and beam collision byte-for-byte unchanged')
 # Exact integration ordering remains guarded, not a second transition path.
 s=(R/'src/main.c').read_text()
 assert s.index('mf_dev_stage_skip(&game,pressed);')<s.index('mf_game_step_inputs(&game,held,pressed,')
 assert s.count('mf_ws_runtime_begin(')==1
 s=(R/'src/wingsuit_runtime.c').read_text()
-assert s.index('mf_ws_step(&shooter,held,pressed,conn);mf_ws_audio_events(shooter.deaths)')<s.index('mf_ws_audio_step(now)')
+assert s.index('mf_ws_step(&shooter,held,pressed,conn);mf_ws_audio_events(shooter.deaths,shooter.shots_fired)')<s.index('mf_ws_audio_step(now,focus)')
 assert s.index('slSoundOffWait();wipe(MF_WS_SOUND_RAM,0x80000)')<s.index('mf_ws_audio_load(read_asset)')<s.index('restore_sprite_state())')
 flags=json.loads((R/'assets/full-gameplay-sfx2/preservation.json').read_text())['profile_flags']
 defines=[f'-D{k}={17 if v=="B" else v}' for k,v in flags.items()]
@@ -104,7 +90,7 @@ with tempfile.TemporaryDirectory(prefix='mf-flame-') as tmp:
   ('sim',['tests/wingsuit_test.c','src/wingsuit.c'],['-Isrc']),
   ('weapon',['tests/wingsuit_weapon_test.c','src/wingsuit.c'],['-Isrc']),
   ('flame',['tests/wingsuit_flame_test.c','src/wingsuit.c'],['-Isrc']),
-  ('audio',['tests/wingsuit_audio_test.c'],['-Itests/sound_mock','-Isrc']),
+  ('audio',['tests/wingsuit_audio_test.c'],['-Itests/wingsuit_audio_mock','-Itests/sound_mock','-Isrc']),
   ('runtime',['tests/wingsuit_runtime_test.c','src/wingsuit.c'],['-Itests/wingsuit_mock','-Isrc'])]:
   run(name,sources,includes,['-fsanitize=undefined','-fno-sanitize-recover=all'])
-print('PASS flame preservation: thirteen approved payloads unchanged; exact canonical voice/PCM/song/mixer/map; 24 files/70836 bytes; dev/release Saturn X; simulation/audio/runtime UBSan')
+print('PASS flame preservation: thirteen approved payloads unchanged; exact canonical explosion/approved weapons and full tables/map; 24 files/198264 bytes; dev/release Saturn X; simulation/audio/runtime UBSan')

@@ -7,7 +7,7 @@ with tempfile.TemporaryDirectory(prefix='mf-wingsuit-') as tmp:
   ('aim',['tests/wingsuit_aim_test.c'],['-Isrc']),
   ('game',['tests/wingsuit_test.c','src/wingsuit.c'],['-Isrc']),
   ('flame',['tests/wingsuit_flame_test.c','src/wingsuit.c'],['-Isrc']),
-  ('audio',['tests/wingsuit_audio_test.c'],['-Itests/sound_mock','-Isrc']),
+  ('audio',['tests/wingsuit_audio_test.c'],['-Itests/wingsuit_audio_mock','-Itests/sound_mock','-Isrc']),
   ('weapons',['tests/wingsuit_weapon_test.c','src/wingsuit.c'],['-Isrc']),
   ('runtime',['tests/wingsuit_runtime_test.c','src/wingsuit.c'],['-Itests/wingsuit_mock','-Isrc'])]:
   exe=str(Path(tmp)/name)

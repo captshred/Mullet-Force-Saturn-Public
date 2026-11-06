@@ -45,7 +45,7 @@ int main(void)
     setup(&g);g.players[1].x=g.players[0].x;g.players[0].shot_hold=g.players[1].shot_hold=MF_WS_FOCUS_TICKS-1;
     drone(&g,g.players[0].x,100*S);step(&g,MF_A,MF_A);assert(g.deaths==1);
     total=g.deaths;for(i=0;i<20;i++){step(&g,MF_A,MF_A);total+=g.deaths;}assert(total==1);
-    /* Spread deaths use the very same one-shot event count. */
+    /* Single-shot deaths use the very same one-shot event count. */
     setup(&g);drone(&g,100*S,100*S);g.shots[0]=(mf_ws_shot){1,100*S,107*S,0,60,0};
     step(&g,0,0);assert(g.deaths==1);step(&g,0,0);assert(!g.deaths);
     for(i=0;i<2;i++){
@@ -72,5 +72,5 @@ int main(void)
         }
     }
     puts("PASS flame tuning: P1/P2 nineteen ticks inactive, twentieth active; repeated sub-threshold taps; top/emitter collision bounds across six player heights");
-    puts("PASS flame: activation/release, attached movement, six-tick pulses, area/top bounds, coop single kill, spread death, Buck/Chuck life-loss and final-death events exactly once");
+    puts("PASS flame: activation/release, attached movement, six-tick pulses, area/top bounds, coop single kill, single-shot death, Buck/Chuck life-loss and final-death events exactly once");
 }

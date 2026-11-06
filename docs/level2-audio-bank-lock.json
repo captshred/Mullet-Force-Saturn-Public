@@ -1,0 +1,49 @@
+{
+  "base_commit": "c721fa189043e66ee6292398ef3fcddbb692063a",
+  "files": {
+    "WDEATH.MAP": {
+      "before": {
+        "bytes": 40,
+        "sha256": "e0f2308a16149e9f9452b3e497a05cdd59deaa9ec8693211993d04ff201aa9be"
+      },
+      "after": {
+        "bytes": 40,
+        "sha256": "208082d43d0f85e7dc468966e1cb1fae17522ae63ff574bcb7a7906d07f99ddb"
+      }
+    },
+    "WDEATH.SEQ": {
+      "before": {
+        "bytes": 44,
+        "sha256": "a0b53824659f0d02ab84fd908273e0f1f0015afde5598b55d9b7e44f1a799b18"
+      },
+      "after": {
+        "bytes": 84,
+        "sha256": "3672e4b1aa681bbe1dec774086fc4f6b8488e6e3be9bec352f869c94246e7c63"
+      }
+    },
+    "WDEATH.TON": {
+      "before": {
+        "bytes": 31744,
+        "sha256": "b3b72c2c943df626eb2d3272f3d87e0b180950838eaf99b45075cccac898a898"
+      },
+      "after": {
+        "bytes": 159132,
+        "sha256": "dbc44bc321ec1555b34d19e0f48e394f2430fdedd73848defc887cc7354d8eac"
+      }
+    }
+  },
+  "sources": {
+    "src/wingsuit_audio.c": {
+      "before": "f619dcc9085635ee2575300bd9592b909b155bf86c21dfb78fda61f8de67edab",
+      "after": "7f3c6cdb2140d5d822fcc6410c357970466a8de82746ebedbd70c5b78d8cba08"
+    },
+    "src/wingsuit_audio.h": {
+      "before": "fa1694ee8d5fdecc034e7e62f99aebebf98149c9fb4c2511c47f9004a54528e9",
+      "after": "c9ae49aca25d4731dd2142a57882325c850683aecd5cb311aec6e23b5f650d78"
+    },
+    "src/wingsuit_audio_data.h": {
+      "before": "728110791834e505cc01039eb550effb34f521f21fd59e79938a46136bcaf0d2",
+      "after": "32ceec587adb1fe4544b53713406a2f4d68ab9f7e62cbc58a6cc411e3639a484"
+    }
+  }
+}

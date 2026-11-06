@@ -45,19 +45,13 @@ static void aimed_snapshot(mf_wingsuit *g,int x,int y)
         emit_hostile(g,x,y,vx,vy,target);
     }
 }
-/* Allocate complete bursts atomically: no half fan, overwrite or heap fallback.
-   The attached flame has no projectiles and does not consume this pool. */
+/* One successful tap consumes one existing slot and emits one audio event. */
 static int player_fire(mf_wingsuit *g,const mf_ws_player *p,int owner)
 {
-    int i,n=0,needed=3,slots[3];
-    for(i=0;i<MF_WS_SHOTS && n<needed;i++)if(!g->shots[i].active)slots[n++]=i;
-    if(n!=needed)return 0;
-    for(i=0;i<needed;i++){
-        int offset=(i-1)*4;
-        int vx=(i-1)*S;
-        g->shots[slots[i]]=(mf_ws_shot){1,p->x+offset*S,p->y-15*S,owner,120,vx};
-    }
-    return 1;
+    int i;for(i=0;i<MF_WS_SHOTS;i++)if(!g->shots[i].active){
+        g->shots[i]=(mf_ws_shot){1,p->x,p->y-15*S,owner,120,0};
+        g->shots_fired|=1u<<owner;return 1;
+    }return 0;
 }
 static void join(mf_ws_player *p,int i)
 {*p=(mf_ws_player){1,(i?190:130)*S,200*S,3,MF_WS_INVULNERABLE,0,0,0,0};}
@@ -77,7 +71,7 @@ int mf_ws_beam_active(const mf_wingsuit *g,int i)
 void mf_ws_step(mf_wingsuit *g,const unsigned held[2],const unsigned pressed[2],unsigned connected)
 {
     int i,j,alive=0,pulse[2]={0,0};
-    g->deaths=0;
+    g->deaths=0;g->shots_fired=0;
     if(g->game_over){if((connected&1) && (pressed[0]&MF_START))mf_ws_init(g,g->players[1].active && (connected&2));return;}
     if((connected&2) && !g->players[1].active && (pressed[1]&MF_START))join(&g->players[1],1);
     if((connected&1) && (pressed[0]&MF_START))g->paused=!g->paused;

@@ -35,19 +35,8 @@ def build(out):
     r,g,bl=palette[index];v=0 if not index else 0x8000|(r>>3)|((g>>3)<<5)|((bl>>3)<<10)
     cap+=struct.pack('>H',v)
   save(f'WFO{frame}.BIN',cap)
- ton=(R/'assets/cd/FX.TON').read_bytes();off=struct.unpack_from('>H',ton,12)[0];voice=bytearray(ton[off:off+36])
- sa=((voice[7]&15)<<16)|int.from_bytes(voice[8:10],'big');pcm=ton[sa:sa+int.from_bytes(voice[12:14],'big')*2]
- voice[7]&=240;voice[8:10]=(64).to_bytes(2,'big')
- compact=struct.pack('>4H',10,0,0,0)+struct.pack('>H',28)+ton[int.from_bytes(ton[:2],'big'):int.from_bytes(ton[:2],'big')+18]+voice+pcm
- compact+=bytes((-len(compact))%4);save('WDEATH.TON',compact)
- seq=(R/'assets/cd/FX.SEQ').read_bytes();a,b=struct.unpack_from('>II',seq,10)
- song=seq[a:b].replace(b'\xc0\x02\x00',b'\xc0\x00\x00');seq=struct.pack('>HI',1,6)+song;seq+=bytes((-len(seq))%4);save('WDEATH.SEQ',seq)
- seqaddr=0x24580;toneaddr=seqaddr+len(seq)
- def entry(t,addr,n):return bytes([t<<4])+addr.to_bytes(3,'big')+b'\x80'+n.to_bytes(3,'big')
- mp=(R/'assets/cd/CUSTOM.MAP').read_bytes()[:16]+entry(1,seqaddr,len(seq))+entry(0,toneaddr,len(compact))+b'\xff'*8;save('WDEATH.MAP',mp)
- report={'canonical':'assets/cd/FX.TON voice 2 / FX.SEQ song 2 / MF_WORLD_IMPACT','pcm_sha256':hashlib.sha256(pcm).hexdigest(),'pcm_bytes':len(pcm),'seq_addr':seqaddr,'tone_addr':toneaddr,'scsp_high_water':toneaddr+len(compact),'reserved_before_seq':seqaddr,'files':files}
+ for name in ('WDEATH.MAP','WDEATH.SEQ','WDEATH.TON'):
+  save(name,(out/name).read_bytes())
+ report=json.loads((out/'audio.json').read_text());report['files']=files
  (out/'flame-audio.json').write_text(json.dumps(report,indent=2)+'\n')
- header='#ifndef MF_WS_AUDIO_DATA_H\n#define MF_WS_AUDIO_DATA_H\n'
- for n,v in [('SEQ_BYTES',len(seq)),('TON_BYTES',len(compact)),('MAP_BYTES',len(mp)),('SEQ_ADDR',seqaddr),('TON_ADDR',toneaddr)]:header+=f'#define MF_WS_{n} {v}\n'
- (R/'src/wingsuit_audio_data.h').write_text(header+'#endif\n')
  return files

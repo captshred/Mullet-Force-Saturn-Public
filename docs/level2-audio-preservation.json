@@ -1,0 +1,101 @@
+{
+  "base_commit": "c721fa189043e66ee6292398ef3fcddbb692063a",
+  "files": {
+    "WBUCK.BIN": {
+      "bytes": 2048,
+      "sha256": "9fa9c843be05bf9c98498462fa76d99f16048bc3e304ca502e28f81a08ca647e"
+    },
+    "WBUCKL.BIN": {
+      "bytes": 2048,
+      "sha256": "42e60af95abd2df67cf6ed10c717aa4b67a1e87e3c6af8a8c281be7152300016"
+    },
+    "WBUCKR.BIN": {
+      "bytes": 2048,
+      "sha256": "dad1a5c4bb330991a76b8831ba775fd3d93c4e70f11a946ef8425a3e5abd3249"
+    },
+    "WCHUCK.BIN": {
+      "bytes": 2048,
+      "sha256": "cbfcddef945754a4f5185e6b10a05b10c590127067dc80632419b921a256a659"
+    },
+    "WCHUCKL.BIN": {
+      "bytes": 2048,
+      "sha256": "9fc01c73ce666b083e1cbe092eab625a7d7adcfcfb246e0df4805bac1aabb713"
+    },
+    "WCHUCKR.BIN": {
+      "bytes": 2048,
+      "sha256": "326b3182f2231b99bd4665f33cfe4cdc2b649a85b9a420b083cd1864ad8e61c6"
+    },
+    "WDRONE.BIN": {
+      "bytes": 1152,
+      "sha256": "8ca9e9317dbebdac14269cd4114aaef56d370be49218b7cb0487131864a1c0d7"
+    },
+    "WSHOT.BIN": {
+      "bytes": 128,
+      "sha256": "912c344d4d05e9defaf136767f9e55ee6b35bd1d04c46ee0187c00b8fb17077d"
+    },
+    "WHOST.BIN": {
+      "bytes": 128,
+      "sha256": "7ea42936bac837f101de9879f713e2ab0e9a823269eab2fa0dcb7a6108e0fd49"
+    },
+    "WBOOM.BIN": {
+      "bytes": 2048,
+      "sha256": "5a3b1bf7fcc1433381197516def627d52ddec907eae587cc32028fe557362dfb"
+    },
+    "WCELL.BIN": {
+      "bytes": 2752,
+      "sha256": "f3bfd4f1faae13b31c2699d24d8a4fe251406948fc286857a447eb7ac419f477"
+    },
+    "WMAP.BIN": {
+      "bytes": 8192,
+      "sha256": "d22432568dc18e83f0a83b41380dc11ced413879ea2fec20e994e91a7df4c771"
+    },
+    "WPAL.BIN": {
+      "bytes": 32,
+      "sha256": "214e2441e712d7b6b716228512c279924caa9452c48609d712b23fadd548b961"
+    },
+    "WFL0.BIN": {
+      "bytes": 2048,
+      "sha256": "28a863ca8a8a30e9fa42c55b27583f4da8beee9e8186e15ede647177bf37d425"
+    },
+    "WFO0.BIN": {
+      "bytes": 1024,
+      "sha256": "0b24602365e56c734b90f918d387e487cc6ccb238b27df8467646ed5adc3c0f7"
+    },
+    "WFL1.BIN": {
+      "bytes": 2048,
+      "sha256": "81f7cecc9c98f8f250140734a495f419746ab6e20f493f7402ed6d5a14aaa8e9"
+    },
+    "WFO1.BIN": {
+      "bytes": 1024,
+      "sha256": "bb613f92b69a005a939e79df151a44ff69c9f3796656a2f376a0de384c214a99"
+    },
+    "WFL2.BIN": {
+      "bytes": 2048,
+      "sha256": "f2b893894ce303fffed44bfa1e555910dc300527acbb50aff89c15a009cce24b"
+    },
+    "WFO2.BIN": {
+      "bytes": 1024,
+      "sha256": "eb77cc13a1621b944477298c93e25b78116997086d2cb6676140a16391474d21"
+    },
+    "WFL3.BIN": {
+      "bytes": 2048,
+      "sha256": "68b08422ae8e08a9607049200e5e4a4b466748837445e71ccab70a03c6340bde"
+    },
+    "WFO3.BIN": {
+      "bytes": 1024,
+      "sha256": "a8c52ccc8aeefb55c3ac19e97f87aff676e4295b39a831416d9fdcf20b8fa197"
+    }
+  },
+  "sources_sha256": {
+    "src/main.c": "ba86af6646fe9a0940b38a828d6a2f23b9c8d89d937d3e1ab205e3fa17b1505c",
+    "src/game.c": "5dc25170e02bf5cfb664db9822633a0e8f15651770074c0a1c266206e360cd02",
+    "src/game.h": "92e75058e40cbd8076ab3d07afb231d6e0fb73856282cbbec3809fef75e4309d",
+    "src/input.c": "2b7b8d25d57684a8b355094cec233a6e70f5a5a4f69f5b98642e2f9b5b866849",
+    "src/input.h": "2193c93bfe09049e0389f2912cc6ef22119866d35e5957d971714d0c0dddca44",
+    "src/dev_stage_skip.h": "b35a38ad9b15e55392d5e90a5cc680d79fa4b90def82af512a43574ea12503fa",
+    "src/music.c": "da9531e09b7bf0b84f1b420e3855b6343e03138b9fef09be0e01ee6b011d554c",
+    "src/music_data.h": "9fa8298721d1d97770c032ff3ebccf215d7b77474a875344b537aa58bac5ae15",
+    ".github/workflows/build.yml": "671737d635700a4b2445e1749c307e2b02ceaf6a04b18446830b555dce80274d"
+  },
+  "aiming_sha256": "8fffe95a7d803d245042a7fde512807dacb5eba393026ac873f8a9475d3a4edd"
+}
