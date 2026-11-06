@@ -1,5 +1,8 @@
 # Level 2 audio runtime E108 repair
 
+Historical report. The Flame architecture and resource figures are superseded by
+[level2-split-flame-audio.md](level2-split-flame-audio.md).
+
 Branch: `fix/level2-audio-runtime-e108`.
 Parent: `feature/level2-audio-pass1` at
 `4a42eea5ad2f3ee6aa768256e0d31988903f9570`.

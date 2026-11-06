@@ -1,0 +1,75 @@
+{
+  "base_commit": "b0bd392faec051785c33d794a15efb49805da6e7",
+  "sources": {
+    "src/wingsuit_audio.c": {
+      "before": "cdb5fe4ac1344043e841fbebdc91302016772c5e27bca503caa80a75bf794768",
+      "after": "979537d985238335f46b7fba58444ec977635eb2c81d88f84a98216c21fce6d2"
+    },
+    "src/wingsuit_audio.h": {
+      "before": "9534ee44d8e1b32b1f16c079160afde0bcb59cdfb94c6f0de76081f6e465e59b",
+      "after": "819bda78e1cc7c891f90e4fbb1bdd3c9d032d887baa101e74c8a66e1f376a5fc"
+    },
+    "src/wingsuit_audio_data.h": {
+      "before": "32ceec587adb1fe4544b53713406a2f4d68ab9f7e62cbc58a6cc411e3639a484",
+      "after": "fdbecf0d2385f1078fa4607fd779068eec57a45a49b710465c9e8759dc6a294b"
+    },
+    "src/wingsuit_runtime.c": {
+      "before": "4a0338fd8c10c185769bc05a34dabf8d1e67ec1fccd75865677ead411bb6a263",
+      "after": "b2f02febc0ccd8562bb59f4d0bbd3c4e0be1d55597da4082fc8899cde9d9e65f"
+    }
+  },
+  "files": {
+    "assets/wingsuit/WDEATH.MAP": {
+      "before": {
+        "bytes": 40,
+        "sha256": "208082d43d0f85e7dc468966e1cb1fae17522ae63ff574bcb7a7906d07f99ddb"
+      },
+      "after": {
+        "bytes": 40,
+        "sha256": "0aeb0517ccfd8040c86ce4af160cd550cc057afbde53a3835da86148f946bef1"
+      }
+    },
+    "assets/wingsuit/WDEATH.TON": {
+      "before": {
+        "bytes": 159132,
+        "sha256": "dbc44bc321ec1555b34d19e0f48e394f2430fdedd73848defc887cc7354d8eac"
+      },
+      "after": {
+        "bytes": 158312,
+        "sha256": "6f4c4e42e1606e503f343c59e843f255139931957bd11a49ed6ff9d80c3e1ee8"
+      }
+    },
+    "assets/wingsuit/audio.json": {
+      "before": {
+        "bytes": 3089,
+        "sha256": "abfb91417761687b6649b4afb262a0e220449ed500d29c7b30df905e6a7aecb4"
+      },
+      "after": {
+        "bytes": 5650,
+        "sha256": "0ee243c0b27cb18d73b1a7f5bb97741f737ac627307bae0380f395f2a79f1bbe"
+      }
+    },
+    "assets/wingsuit/flame-audio.json": {
+      "before": {
+        "bytes": 4121,
+        "sha256": "a6811144c986e6d75304a7b35500382d812a4565e43e0f8106db039a4c5135dc"
+      },
+      "after": {
+        "bytes": 6682,
+        "sha256": "e82ca08260ace7170b250a0f565d953f1e01146cd520a7ac958a3f2b541e9527"
+      }
+    },
+    "assets/wingsuit/manifest.json": {
+      "before": {
+        "bytes": 3271,
+        "sha256": "e1e795ccbda01375d7589b05b21dbc91bca087e2eee7c46142ad24a0d472576c"
+      },
+      "after": {
+        "bytes": 3271,
+        "sha256": "0bfbdd9734399bf7f05073694e9520bdcc1dfc277759a794111c71bf7bd3a1aa"
+      }
+    }
+  },
+  "load_sequence_sha256": "20ceabc28a00df00abf168f1fdee6a02970144adfe231d4542fbfed1ed3bb4b2",
+  "one_shot_transport_sha256": "7157aa0189d056720946a4d7ab89bf52885b50cb3fbd1021574734b87f91d047"
+}

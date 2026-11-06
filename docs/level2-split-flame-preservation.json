@@ -1,0 +1,381 @@
+{
+  "base_commit": "b0bd392faec051785c33d794a15efb49805da6e7",
+  "files": {
+    ".github/workflows/build.yml": {
+      "bytes": 5669,
+      "sha256": "671737d635700a4b2445e1749c307e2b02ceaf6a04b18446830b555dce80274d"
+    },
+    "assets/cd/FX.SEQ": {
+      "bytes": 328,
+      "sha256": "99a5a133d3db53a31aa0950bdaf5853f65effa81301914e44c2c61d3cc14bee6"
+    },
+    "assets/cd/FX.TON": {
+      "bytes": 182912,
+      "sha256": "d86a4664b4c9de8e9a1d31489a10b48cb8924f474f7c8b6fbcb0b2cc91d002e2"
+    },
+    "assets/wingsuit/WBOOM.BIN": {
+      "bytes": 2048,
+      "sha256": "5a3b1bf7fcc1433381197516def627d52ddec907eae587cc32028fe557362dfb"
+    },
+    "assets/wingsuit/WBUCK.BIN": {
+      "bytes": 2048,
+      "sha256": "9fa9c843be05bf9c98498462fa76d99f16048bc3e304ca502e28f81a08ca647e"
+    },
+    "assets/wingsuit/WBUCKL.BIN": {
+      "bytes": 2048,
+      "sha256": "42e60af95abd2df67cf6ed10c717aa4b67a1e87e3c6af8a8c281be7152300016"
+    },
+    "assets/wingsuit/WBUCKR.BIN": {
+      "bytes": 2048,
+      "sha256": "dad1a5c4bb330991a76b8831ba775fd3d93c4e70f11a946ef8425a3e5abd3249"
+    },
+    "assets/wingsuit/WCELL.BIN": {
+      "bytes": 2752,
+      "sha256": "f3bfd4f1faae13b31c2699d24d8a4fe251406948fc286857a447eb7ac419f477"
+    },
+    "assets/wingsuit/WCHUCK.BIN": {
+      "bytes": 2048,
+      "sha256": "cbfcddef945754a4f5185e6b10a05b10c590127067dc80632419b921a256a659"
+    },
+    "assets/wingsuit/WCHUCKL.BIN": {
+      "bytes": 2048,
+      "sha256": "9fc01c73ce666b083e1cbe092eab625a7d7adcfcfb246e0df4805bac1aabb713"
+    },
+    "assets/wingsuit/WCHUCKR.BIN": {
+      "bytes": 2048,
+      "sha256": "326b3182f2231b99bd4665f33cfe4cdc2b649a85b9a420b083cd1864ad8e61c6"
+    },
+    "assets/wingsuit/WDEATH.SEQ": {
+      "bytes": 84,
+      "sha256": "3672e4b1aa681bbe1dec774086fc4f6b8488e6e3be9bec352f869c94246e7c63"
+    },
+    "assets/wingsuit/WDRONE.BIN": {
+      "bytes": 1152,
+      "sha256": "8ca9e9317dbebdac14269cd4114aaef56d370be49218b7cb0487131864a1c0d7"
+    },
+    "assets/wingsuit/WFL0.BIN": {
+      "bytes": 2048,
+      "sha256": "28a863ca8a8a30e9fa42c55b27583f4da8beee9e8186e15ede647177bf37d425"
+    },
+    "assets/wingsuit/WFL1.BIN": {
+      "bytes": 2048,
+      "sha256": "81f7cecc9c98f8f250140734a495f419746ab6e20f493f7402ed6d5a14aaa8e9"
+    },
+    "assets/wingsuit/WFL2.BIN": {
+      "bytes": 2048,
+      "sha256": "f2b893894ce303fffed44bfa1e555910dc300527acbb50aff89c15a009cce24b"
+    },
+    "assets/wingsuit/WFL3.BIN": {
+      "bytes": 2048,
+      "sha256": "68b08422ae8e08a9607049200e5e4a4b466748837445e71ccab70a03c6340bde"
+    },
+    "assets/wingsuit/WFO0.BIN": {
+      "bytes": 1024,
+      "sha256": "0b24602365e56c734b90f918d387e487cc6ccb238b27df8467646ed5adc3c0f7"
+    },
+    "assets/wingsuit/WFO1.BIN": {
+      "bytes": 1024,
+      "sha256": "bb613f92b69a005a939e79df151a44ff69c9f3796656a2f376a0de384c214a99"
+    },
+    "assets/wingsuit/WFO2.BIN": {
+      "bytes": 1024,
+      "sha256": "eb77cc13a1621b944477298c93e25b78116997086d2cb6676140a16391474d21"
+    },
+    "assets/wingsuit/WFO3.BIN": {
+      "bytes": 1024,
+      "sha256": "a8c52ccc8aeefb55c3ac19e97f87aff676e4295b39a831416d9fdcf20b8fa197"
+    },
+    "assets/wingsuit/WHOST.BIN": {
+      "bytes": 128,
+      "sha256": "7ea42936bac837f101de9879f713e2ab0e9a823269eab2fa0dcb7a6108e0fd49"
+    },
+    "assets/wingsuit/WMAP.BIN": {
+      "bytes": 8192,
+      "sha256": "d22432568dc18e83f0a83b41380dc11ced413879ea2fec20e994e91a7df4c771"
+    },
+    "assets/wingsuit/WPAL.BIN": {
+      "bytes": 32,
+      "sha256": "214e2441e712d7b6b716228512c279924caa9452c48609d712b23fadd548b961"
+    },
+    "assets/wingsuit/WSHOT.BIN": {
+      "bytes": 128,
+      "sha256": "912c344d4d05e9defaf136767f9e55ee6b35bd1d04c46ee0187c00b8fb17077d"
+    },
+    "docs/level2-audio-bank-lock.json": {
+      "bytes": 1594,
+      "sha256": "7cc4bfd2e5b000060ff6e9e9c5977e59a0c59b53c2bcb4c25fd137cd58e25a88"
+    },
+    "docs/level2-audio-e108-source-lock.json": {
+      "bytes": 694,
+      "sha256": "8479964c1babfab4d410069ea78374815d88aa989e0c374e4359501745ba0f46"
+    },
+    "docs/level2-flame-sustain-source-lock.json": {
+      "bytes": 983,
+      "sha256": "448240a8a334bed23a957d445fc03f609b1170da263a1de7df849944d03bd988"
+    },
+    "make/saturn.mk": {
+      "bytes": 1982,
+      "sha256": "6bff15909833916f57b5eb7ec553f6ea10df35a28009cfdf617269c5c4c4afd3"
+    },
+    "src/animation_data.h": {
+      "bytes": 1382,
+      "sha256": "2a63bf1319c3f28dd1cec8244e34c947364a24cac347e9ad3b5981241de9ec00"
+    },
+    "src/animation_polish_data.h": {
+      "bytes": 2779,
+      "sha256": "d765307544cee8091d9dde08aa09d56d05c39fc6b9dd9390aaa99966f1917197"
+    },
+    "src/animation_preview.c": {
+      "bytes": 34557,
+      "sha256": "27ff5a1ce6a21f0ae3a29b9cb8afa3c4175ff94459192989fef5f5f48573171a"
+    },
+    "src/animation_preview.h": {
+      "bytes": 1519,
+      "sha256": "c3410c9a45a8202c7ec21ef054c352543bd3c3e526a1b259f29eb7621ba666f6"
+    },
+    "src/arcade_fx.h": {
+      "bytes": 1741,
+      "sha256": "d4cf0a6f7a6e3b4b51b6f3cc5b0b90cd9a46deac1a885678a3eb9467fe7d02dd"
+    },
+    "src/arcade_fx_config.h": {
+      "bytes": 654,
+      "sha256": "c3f1755ca29ef32f30ac614d8a6e26da0fc355ecc4f1509284d90b81bb2a711d"
+    },
+    "src/art_data.h": {
+      "bytes": 1523,
+      "sha256": "d98bee3e4ca646d61e3023f4502a2147bfccd2b3c5994a7c87e38518502209f7"
+    },
+    "src/attack_sequence_config.h": {
+      "bytes": 770,
+      "sha256": "05af28caade7f3fa9cee3bc29db09696f0807db06afb5ed34303e23e60cb97f9"
+    },
+    "src/attack_sequence_data.h": {
+      "bytes": 3150,
+      "sha256": "4d7f8fb389df08c341cfa3b9f750c13e38a4bfbc461a4cb8878018426022418a"
+    },
+    "src/bat_momentum_config.h": {
+      "bytes": 590,
+      "sha256": "baede65050c7d2961be1a34a32e3e15541a46d7bcd66c03b5cab4c6a3cc2bce9"
+    },
+    "src/bat_momentum_data.h": {
+      "bytes": 1831,
+      "sha256": "d10396a4bafab5b126d8604fc4569a34ef0dad40f46e55b9f1a4f24fb7e35ef0"
+    },
+    "src/city_cleanup_data.h": {
+      "bytes": 107,
+      "sha256": "8d0ea7f43de76d7eb024211fb80309cdb7cb1b4623cd2bbcf2d5df8197faf345"
+    },
+    "src/city_neon.h": {
+      "bytes": 796,
+      "sha256": "0dc523ff3b93d7c7625611e409beef4ecad89d9b2ee390466cc73206f4cb8775"
+    },
+    "src/city_neon_data.h": {
+      "bytes": 203,
+      "sha256": "947a38a7d9d8974d2b08b581409d21aa827e4d10a2f6265af5f103e66c2de8dc"
+    },
+    "src/combat_animation_config.h": {
+      "bytes": 320,
+      "sha256": "ab7d1970ae2d7fa5cd349fb7983c5ad7eefbae0b9eed88269406110b9221d840"
+    },
+    "src/combat_animation_data.h": {
+      "bytes": 2804,
+      "sha256": "3bccd135c9e63a25d11df3bb59c7f2fbdced5341588ad4bcf180305b6e129f21"
+    },
+    "src/combat_config.h": {
+      "bytes": 1321,
+      "sha256": "1565208b11b19226bf3a542269fc19eff09dc7a24f9447db740a70a9c58c3d87"
+    },
+    "src/corporate_animation.c": {
+      "bytes": 3342,
+      "sha256": "13f0c2361e98be2f22b80a8903b35e21caaea034b0b84437293d47639554e217"
+    },
+    "src/corporate_animation.h": {
+      "bytes": 401,
+      "sha256": "614e71986d9f7bbbf3c81a5a300b5b669146baf2e258ed4eb1751d329f33f3bd"
+    },
+    "src/corporate_bank.h": {
+      "bytes": 245,
+      "sha256": "639ac0ec144e4d065062306113f282fef39ac1d95d70c949852815be09d8567d"
+    },
+    "src/corporate_data.h": {
+      "bytes": 849,
+      "sha256": "ab523415fc8fe1a455c1709dbc1f6ef4882e0bf4521e9d910bc04b3f946a5b21"
+    },
+    "src/corporate_hq_data.h": {
+      "bytes": 516,
+      "sha256": "94c463f6ff2ff472f2902a86b6b206413a95dd0531d86f9c6f635676a1e2db8a"
+    },
+    "src/corporate_refined_data.h": {
+      "bytes": 984,
+      "sha256": "3c816566fa002403cbe51c11fc34df86282f9a5472699e00ddc690dbeebb4767"
+    },
+    "src/dash_config.h": {
+      "bytes": 892,
+      "sha256": "7c1adc1126041079d3b0e5e137f4d59a0dbe4dec2d195bb2c74683be719df8c8"
+    },
+    "src/dev_stage_skip.h": {
+      "bytes": 482,
+      "sha256": "b35a38ad9b15e55392d5e90a5cc680d79fa4b90def82af512a43574ea12503fa"
+    },
+    "src/gallery.c": {
+      "bytes": 3349,
+      "sha256": "ee25b3237dbe9f66a4c7562af50d7a20e0ce9c8b3b7c5ade7ed9157e9d6c1c3c"
+    },
+    "src/gallery.h": {
+      "bytes": 304,
+      "sha256": "e9cbec3c62028816c1ca30b682ca67ef564abb104ce57e5f78b59d436fd81844"
+    },
+    "src/gallery_data.h": {
+      "bytes": 484,
+      "sha256": "cc6f98541363115188f38bfcde524f0dd476f2dfa80403856319245406620b05"
+    },
+    "src/game.c": {
+      "bytes": 33187,
+      "sha256": "5dc25170e02bf5cfb664db9822633a0e8f15651770074c0a1c266206e360cd02"
+    },
+    "src/game.h": {
+      "bytes": 3867,
+      "sha256": "92e75058e40cbd8076ab3d07afb231d6e0fb73856282cbbec3809fef75e4309d"
+    },
+    "src/hq_jump_config.h": {
+      "bytes": 750,
+      "sha256": "ce1f91d807f80f7593247e0d028e28ba8730410763683a4f24a25a930e8003b9"
+    },
+    "src/hq_jump_data.h": {
+      "bytes": 1031,
+      "sha256": "828d852501ca21562254968a25812e5a7e339ab589205fdf62c37c8772bccaeb"
+    },
+    "src/hq_torch_config.h": {
+      "bytes": 165,
+      "sha256": "1a3aaecdf66effc9986e30e9c3b154e85ff4ae241b37415b27e10975a733ff9e"
+    },
+    "src/hq_torch_data.h": {
+      "bytes": 784,
+      "sha256": "7bf8a4e6f570d5bbad8be73dc61fe0e36dbef9017991b3e50276442e407c5aa6"
+    },
+    "src/input.c": {
+      "bytes": 1528,
+      "sha256": "2b7b8d25d57684a8b355094cec233a6e70f5a5a4f69f5b98642e2f9b5b866849"
+    },
+    "src/input.h": {
+      "bytes": 492,
+      "sha256": "2193c93bfe09049e0389f2912cc6ef22119866d35e5957d971714d0c0dddca44"
+    },
+    "src/jab_config.h": {
+      "bytes": 797,
+      "sha256": "12517739a49459ab5139432252943f6c1946166c605ab9729d85ef086100452e"
+    },
+    "src/jab_repeat.h": {
+      "bytes": 1433,
+      "sha256": "631682c747dadd9b182b1b5c1ba39296a7b218385fc70812ef56ae5c97152270"
+    },
+    "src/jab_visual.h": {
+      "bytes": 457,
+      "sha256": "fa536e200f651ebed2566bc04a649c53968197718372a853a37b2e03204bffdd"
+    },
+    "src/live_city_data.h": {
+      "bytes": 33,
+      "sha256": "0fedb5b1ac733873f38de08311dcd17444e76768b26c33a08fb784f15266a884"
+    },
+    "src/main.c": {
+      "bytes": 24094,
+      "sha256": "ba86af6646fe9a0940b38a828d6a2f23b9c8d89d937d3e1ab205e3fa17b1505c"
+    },
+    "src/music.c": {
+      "bytes": 6948,
+      "sha256": "da9531e09b7bf0b84f1b420e3855b6343e03138b9fef09be0e01ee6b011d554c"
+    },
+    "src/music.h": {
+      "bytes": 173,
+      "sha256": "a95a3564ee1113d97677b62dae97dd4c200770292534418c2d6409bb2c9ca053"
+    },
+    "src/music_data.h": {
+      "bytes": 576,
+      "sha256": "9fa8298721d1d97770c032ff3ebccf215d7b77474a875344b537aa58bac5ae15"
+    },
+    "src/original_three_data.h": {
+      "bytes": 815,
+      "sha256": "8296841c0f3764df275dc9da1c5f5b74f91374079af49dce01ea7eede2011d84"
+    },
+    "src/original_three_timing.h": {
+      "bytes": 374,
+      "sha256": "f8724c263685598d51275d24bfba83ef75ba2a38ab769caf5df89a62e6c38a96"
+    },
+    "src/parallax.c": {
+      "bytes": 7749,
+      "sha256": "dc25b482cb420fd6bd2d9ae8d47d09757a55ebca21c093a233d292abc8a72a4c"
+    },
+    "src/parallax.h": {
+      "bytes": 436,
+      "sha256": "6936d69c785cd7428ed269417b98d2f4d007f0aed016c7fa01c95a6e7d58974c"
+    },
+    "src/player_animation.c": {
+      "bytes": 3145,
+      "sha256": "041e32639e25f21da46e45e8ec60894f8e04e89401afbbaddf3d82df04776823"
+    },
+    "src/player_animation.h": {
+      "bytes": 427,
+      "sha256": "a52c9c48a3ff6599403565e7318ef614991663ed9f66d0bd4a9b3005009b37d8"
+    },
+    "src/player_death_data.h": {
+      "bytes": 335,
+      "sha256": "38415fb42ac137d7eaa0ae611d5fa6b8ef85417f61161224d365e6699a2ad542"
+    },
+    "src/player_hurt_data.h": {
+      "bytes": 731,
+      "sha256": "c66fc150592ea7448b1970663b9483f28a11908bf9420d3a526daddc21edd410"
+    },
+    "src/punch_combo.h": {
+      "bytes": 667,
+      "sha256": "74e3b6decbe16d89a91e77eb44e02ac7b90e8c45108a0ad19e79b4bb124033be"
+    },
+    "src/run_bat_config.h": {
+      "bytes": 768,
+      "sha256": "58804b1eec6f46a2942087790e3eb65b75531b6e692cdcf4cc908c6a5797c6f5"
+    },
+    "src/running_bat_visual_config.h": {
+      "bytes": 156,
+      "sha256": "9dc22c4bd30e2aa1153fdbb05aca6fb308d7ab42b81598f9be063ce3b5e8f02b"
+    },
+    "src/running_bat_visual_data.h": {
+      "bytes": 831,
+      "sha256": "efbf4828760501ff54b076727ec2733c5b088e4d4b682006f762697046f0cbd5"
+    },
+    "src/running_data.h": {
+      "bytes": 1341,
+      "sha256": "41e96adfec650aec00649ffeb79f96ad7ac0d464fa66edde8fd1a0d331b3e7c4"
+    },
+    "src/stage_config.h": {
+      "bytes": 310,
+      "sha256": "7affadff8feb238aecbab666cb3c780a5a8dd37fd8eabfbe7e4c7a080cda2d4d"
+    },
+    "src/street.c": {
+      "bytes": 7330,
+      "sha256": "838604f8f19dbc0568662eab01eb2e8f47ab3ca7777bad70869c8154f70c84f9"
+    },
+    "src/street.h": {
+      "bytes": 518,
+      "sha256": "3654d65178d0d259d37c9b229bd9a2e114010b69ce6d6708b03f8f34d58e309e"
+    },
+    "src/swagger_data.h": {
+      "bytes": 1212,
+      "sha256": "dcf8b9a1f33d9503ff3b02c8e1a1784f77d4c88933b56a844199432585610df8"
+    },
+    "src/swagger_timing.h": {
+      "bytes": 217,
+      "sha256": "58c68457a2da9723bdfd450f905ac44693a3eec113840a112fda6d6e1d2305ab"
+    },
+    "src/wingsuit.c": {
+      "bytes": 6804,
+      "sha256": "8cfa73fa5855dd0754f2f003f9feaf24a7fb6ec07b528b1df207341aaeb13b8b"
+    },
+    "src/wingsuit.h": {
+      "bytes": 1709,
+      "sha256": "96ad31469846abe71cbac77f22088e5e5062c0cd9d0984599529be51f80eaf68"
+    },
+    "src/wingsuit_runtime.h": {
+      "bytes": 343,
+      "sha256": "649fef382782438b19e07eff47a950325a1593bc32128b88379e4b17e13628ce"
+    }
+  }
+}

@@ -92,15 +92,15 @@
     },
     "WDEATH.MAP": {
       "bytes": 40,
-      "sha256": "208082d43d0f85e7dc468966e1cb1fae17522ae63ff574bcb7a7906d07f99ddb"
+      "sha256": "0aeb0517ccfd8040c86ce4af160cd550cc057afbde53a3835da86148f946bef1"
     },
     "WDEATH.SEQ": {
       "bytes": 84,
       "sha256": "3672e4b1aa681bbe1dec774086fc4f6b8488e6e3be9bec352f869c94246e7c63"
     },
     "WDEATH.TON": {
-      "bytes": 159132,
-      "sha256": "dbc44bc321ec1555b34d19e0f48e394f2430fdedd73848defc887cc7354d8eac"
+      "bytes": 158312,
+      "sha256": "6f4c4e42e1606e503f343c59e843f255139931957bd11a49ed6ff9d80c3e1ee8"
     }
   }
 }

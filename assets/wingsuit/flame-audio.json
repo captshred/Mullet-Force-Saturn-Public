@@ -1,4 +1,5 @@
 {
+  "architecture": "split Flame Attack one-shot -> dedicated whole-sample hardware loop",
   "canonical": "assets/cd/FX.TON voice 2 / FX.SEQ song 2 / MF_WORLD_IMPACT",
   "sources": {
     "Shot.wav": {
@@ -16,69 +17,156 @@
       "pcm_sha256": "dc25ce5eead8a8ed620e44c0cdc9ca47dbadb8b647cf9a5a86dc241b74232de2",
       "peak": 18898
     },
-    "Flame.wav": {
-      "source_sha256": "e8fc164ba7662e04de7cd772efacf897e8b15ae26a13f1d9e0454cd1c4f08d47",
-      "source_frames": 41239,
+    "Flame attack.wav": {
+      "source_sha256": "bfc55dc8ae2e4fed1362cf6ff60402ad42d61d018f704818010baac9c5615866",
+      "source_frames": 27975,
       "source_rate": 44100,
       "source_channels": 2,
       "rate": 44100,
       "bits": 16,
       "channels": 1,
-      "frames": 41239,
-      "pcm_bytes": 82478,
       "downmix": "nearest integer (L+R)/2, symmetric ties away from zero; no resample or gain change",
-      "before_seam_sha256": "63777c13f409110cb22c95ed36ad9619eb9756ef650c2c3d898a66ebfdfc2b0f",
-      "loop_start": 27981,
-      "loop_end": 41239,
-      "seam_samples": 128,
-      "seam_seconds": 0.0029024943310657597,
-      "seam": "tail-only linear crossfade to pre-loop boundary; attack and loop start unchanged",
-      "boundary_delta_before": 17094,
-      "boundary_delta_after": 1452,
-      "pcm_sha256": "977588e18e36c230b227f5cf6bf53d242f6ffa2a9b4427475aaefb43b28620d2",
-      "peak": 21191
+      "before_seam_sha256": "9e62074cf628c6c4611a488bb2afa0c8e4b29f034cbd2e4a093258a4e6479676",
+      "frames": 27975,
+      "pcm_bytes": 55950,
+      "pcm_sha256": "9e62074cf628c6c4611a488bb2afa0c8e4b29f034cbd2e4a093258a4e6479676",
+      "peak": 21189
+    },
+    "Flame loop.wav": {
+      "source_sha256": "222fd540adb224c11186ac07188957a086c0bc211b93e60916773283425274a5",
+      "source_frames": 13256,
+      "source_rate": 44100,
+      "source_channels": 2,
+      "rate": 44100,
+      "bits": 16,
+      "channels": 1,
+      "downmix": "nearest integer (L+R)/2, symmetric ties away from zero; no resample or gain change",
+      "before_seam_sha256": "54998cea2f0fbee16f8353c053e15f01ac4b45e26d842828efda4595a51cf8f6",
+      "seam": {
+        "trim_start": 114,
+        "trim_end": 310,
+        "frames": 12832,
+        "first": 6669,
+        "last": 6674,
+        "jump": -5,
+        "left_slope": 482,
+        "right_slope": 487,
+        "slope_difference": 5,
+        "raw": {
+          "trim_start": 0,
+          "trim_end": 0,
+          "frames": 13256,
+          "first": -2503,
+          "last": -15028,
+          "jump": 12525,
+          "left_slope": -448,
+          "right_slope": -545,
+          "slope_difference": -97
+        },
+        "search_start": [
+          0,
+          256
+        ],
+        "search_end": [
+          0,
+          512
+        ],
+        "max_endpoint_error": 8,
+        "max_slope_error": 8,
+        "candidates": 1,
+        "crossfade_frames": 0
+      },
+      "loop_start": 0,
+      "loop_end": 12832,
+      "lea_convention": "exclusive sample count; cyclic guard at LEA duplicates LSA",
+      "guard_frames": 2,
+      "frames": 12832,
+      "pcm_bytes": 25664,
+      "pcm_sha256": "effcb354cef8271d53590c298c5f32b9df29946a29e203582988941d88c0122d",
+      "peak": 20258
     }
   },
   "samples": [
     {
       "voice": 0,
-      "tone_offset": 164,
+      "role": "explosion",
+      "voice_offset": 58,
+      "layer_offset": 62,
+      "tone_offset": 204,
+      "scsp_addr": 149152,
       "bytes": 31680,
       "frames": 15840,
       "rate": 22050,
       "sha256": "2eca5219e7a0255532d46c6c0a4835dee475781787334da46bfb451363e4fa6b",
-      "scsp_addr": 149112
+      "loop": false,
+      "lsa": 0,
+      "lea": 15840,
+      "base_note": 72,
+      "guard_frames": 0
     },
     {
       "voice": 1,
-      "tone_offset": 31844,
+      "role": "shot",
+      "voice_offset": 94,
+      "layer_offset": 98,
+      "tone_offset": 31884,
+      "scsp_addr": 180832,
       "bytes": 44806,
       "frames": 22403,
       "rate": 44100,
       "sha256": "dc25ce5eead8a8ed620e44c0cdc9ca47dbadb8b647cf9a5a86dc241b74232de2",
-      "scsp_addr": 180792
+      "loop": false,
+      "lsa": 0,
+      "lea": 22403,
+      "base_note": 60,
+      "guard_frames": 0
     },
     {
       "voice": 2,
-      "tone_offset": 76652,
-      "bytes": 82478,
-      "frames": 41239,
+      "role": "flame_attack",
+      "voice_offset": 130,
+      "layer_offset": 134,
+      "tone_offset": 76692,
+      "scsp_addr": 225640,
+      "bytes": 55950,
+      "frames": 27975,
       "rate": 44100,
-      "sha256": "977588e18e36c230b227f5cf6bf53d242f6ffa2a9b4427475aaefb43b28620d2",
-      "scsp_addr": 225600
+      "sha256": "9e62074cf628c6c4611a488bb2afa0c8e4b29f034cbd2e4a093258a4e6479676",
+      "loop": false,
+      "lsa": 0,
+      "lea": 27975,
+      "base_note": 60,
+      "guard_frames": 0
+    },
+    {
+      "voice": 3,
+      "role": "flame_loop",
+      "voice_offset": 166,
+      "layer_offset": 170,
+      "tone_offset": 132644,
+      "scsp_addr": 281592,
+      "bytes": 25664,
+      "frames": 12832,
+      "rate": 44100,
+      "sha256": "effcb354cef8271d53590c298c5f32b9df29946a29e203582988941d88c0122d",
+      "loop": true,
+      "lsa": 0,
+      "lea": 12832,
+      "base_note": 61,
+      "guard_frames": 2
     }
   ],
   "tables": {
-    "mixer": 14,
-    "velocity": 32,
-    "peg": 42,
-    "plfo": 52
+    "mixer": 16,
+    "velocity": 34,
+    "peg": 44,
+    "plfo": 54
   },
   "seq_addr": 148864,
   "tone_addr": 148948,
-  "scsp_high_water": 308080,
+  "scsp_high_water": 307260,
   "reserved_before_seq": 148864,
-  "scsp_free": 216208,
+  "scsp_free": 217028,
   "files": {
     "WFL0.BIN": {
       "bytes": 2048,
@@ -114,19 +202,38 @@
     },
     "WDEATH.MAP": {
       "bytes": 40,
-      "sha256": "208082d43d0f85e7dc468966e1cb1fae17522ae63ff574bcb7a7906d07f99ddb"
+      "sha256": "0aeb0517ccfd8040c86ce4af160cd550cc057afbde53a3835da86148f946bef1"
     },
     "WDEATH.SEQ": {
       "bytes": 84,
       "sha256": "3672e4b1aa681bbe1dec774086fc4f6b8488e6e3be9bec352f869c94246e7c63"
     },
     "WDEATH.TON": {
-      "bytes": 159132,
-      "sha256": "dbc44bc321ec1555b34d19e0f48e394f2430fdedd73848defc887cc7354d8eac"
+      "bytes": 158312,
+      "sha256": "6f4c4e42e1606e503f343c59e843f255139931957bd11a49ed6ff9d80c3e1ee8"
     }
   },
   "shot_guard_ticks": 34,
   "explosion_guard_ticks": 49,
   "sdk_sequence_controls": 8,
-  "physical_slots": 32
+  "physical_slots": 32,
+  "attack_to_loop_ticks": 38,
+  "attack_note": 60,
+  "loop_note": 61,
+  "controls": {
+    "flame": [
+      0,
+      1
+    ],
+    "shot": [
+      2,
+      3
+    ],
+    "explosion": [
+      4,
+      5,
+      6,
+      7
+    ]
+  }
 }

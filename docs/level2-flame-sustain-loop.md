@@ -1,5 +1,8 @@
 # Level 2 flame sustain investigation and diagnostic build
 
+Historical report. The Flame architecture and resource figures are superseded by
+[level2-split-flame-audio.md](level2-split-flame-audio.md).
+
 Branch: `fix/level2-flame-sustain-loop`.
 Parent: confirmed WebRetro-loading audio repair
 `2cae6ea6e496be85ecaa3253081a251e0a6ac9cc`.

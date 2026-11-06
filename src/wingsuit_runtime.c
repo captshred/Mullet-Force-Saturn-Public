@@ -236,10 +236,15 @@ void mf_ws_runtime_frame(const mf_input input[2],unsigned pressed[2],unsigned no
     }
     if(phase==2){
         mf_ws_audio_step(now,0); /* Preconfigure persistent flame controls during title. */
+        if(mf_ws_audio_ready()<0){
+            const mf_ws_audio_diagnostic *d=mf_ws_audio_diagnostics();
+            load_failure("WDEATH BANK",d->operation,d->expected,d->actual);
+            error=108;phase=4;jo_clear_screen();return;
+        }
         jo_print(15,11,"LEVEL 2");jo_print(11,13,"WINGSUIT ASSAULT");
         pressed[0]=pressed[1]=0;
         title-=elapsed>6?6:(int)elapsed;
-        if(title<=0){phase=3;jo_clear_screen();}return;
+        if(title<=0 && mf_ws_audio_ready()){phase=3;jo_clear_screen();}return;
     }
     if(elapsed>6)elapsed=6;
     for(i=0;i<elapsed;i++){

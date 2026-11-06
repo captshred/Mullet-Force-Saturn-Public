@@ -1,5 +1,8 @@
 # Level 2 audio, single shot and polyphony
 
+Historical report. The Flame architecture and resource figures are superseded by
+[level2-split-flame-audio.md](level2-split-flame-audio.md).
+
 Historical audio-pass1 report. Its SGL-only transport regressed startup with E108
 in WebRetro. The transport/handshake claims below are superseded by
 [level2-audio-runtime-e108.md](level2-audio-runtime-e108.md); the sample data and

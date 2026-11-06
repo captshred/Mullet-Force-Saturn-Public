@@ -61,7 +61,8 @@ char *jo_fs_read_file(const char *name,int *size)
     assert(fread(data,1,*size,f)==(size_t)*size);fclose(f);if(short_asset && !strcmp(name,short_asset))--*size;return data;
 }
 static mf_ws_audio_diagnostic audio_diagnostic;
-static int fail_audio_init;
+static int fail_audio_init,audio_ready=1;
+int mf_ws_audio_ready(void){return audio_ready;}
 static mf_ws_flame_diagnostic flame_status[2];
 const mf_ws_flame_diagnostic *mf_ws_audio_flame_diagnostics(unsigned p){return &flame_status[p];}
 const mf_ws_audio_diagnostic *mf_ws_audio_diagnostics(void){return &audio_diagnostic;}
@@ -160,8 +161,8 @@ int main(void)
     assert(ws_a0[106496/2]==0x5555 && ws_b0[65536/2]==0x5555);
     assert(cram[0]==0x5555 && cram[255]==0x5555 && cram[2047]==0);
     for(i=0;i<262144;i++)assert(!ws_scsp[i]);
-    for(i=0;i<120;i++)frame(in,p);
-    assert(!draws);
+    audio_ready=0;for(i=0;i<120;i++)frame(in,p);
+    assert(!draws && phase==2);audio_ready=1;frame(in,p);
     r=reads;for(i=0;i<1000;i++)frame(in,p);
     assert(draws && reads==r && resets==1); /* no per-frame I/O/texture registrations */
 #if MF_DEV_STAGE_SKIP
@@ -270,6 +271,14 @@ int main(void)
         assert(strstr(diagnostic,"ALEVEL2") && strstr(diagnostic,"DIRECTORY"));
         assert(cds==0 && reads==r && resets==i);
     }
+    missing_dir=0;audio_ready=1;cds=0;
+    mf_ws_runtime_begin(0,&palette,now);frame(in,p);frame(in,p);frame(in,p);
+    assert(phase==2);
+    audio_diagnostic=(mf_ws_audio_diagnostic){MF_WS_AUDIO_DRIVER_READY,0,"DRIVER READY",1,1,0};
+    audio_ready=-1;frame(in,p);frame(in,p);
+    assert(error==108 && phase==4 && strstr(diagnostic,"DRIVER READY") && strstr(diagnostic,"EXPECT 1 GOT 0"));
+    audio_ready=1;
+    puts("PASS startup readiness: title gates gameplay until audio ready; asynchronous consumer failure retains specific E108 cause");
     puts("PASS filesystem: root table overflow reproduced; all twenty-four assets read in ALEVEL2; parent restored; per-asset missing/length/read/registration errors");
     puts("PASS actual Level 2 loader: real-VBlank drain, bank reset, 18 definitions/28032 bytes, arena bounds, CRAM/font isolation, SCSP release, no gameplay allocations/I/O, partial-load failure");
     return 0;

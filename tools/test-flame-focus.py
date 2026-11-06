@@ -14,7 +14,7 @@ assert len(lock['files'])==13
 for n,f in lock['files'].items():assert m['files'][n]==f,(n,'approved asset changed')
 new={f'WFL{i}.BIN' for i in range(4)}|{f'WFO{i}.BIN' for i in range(4)}|{'WDEATH.MAP','WDEATH.SEQ','WDEATH.TON'}
 assert set(m['files'])==set(lock['files'])|new
-assert sum(f['bytes'] for f in m['files'].values())==198264
+assert sum(f['bytes'] for f in m['files'].values())==197444
 subprocess.run(['python3','tools/validate-level2-audio.py'],cwd=R,check=True)
 frames=[(A/f'WFL{i}.BIN').read_bytes() for i in range(4)]
 assert len(set(frames))==4 and all(len(b)==2048 for b in frames)
@@ -93,4 +93,4 @@ with tempfile.TemporaryDirectory(prefix='mf-flame-') as tmp:
   ('audio',['tests/wingsuit_audio_test.c'],['-Itests/wingsuit_audio_mock','-Itests/sound_mock','-Isrc']),
   ('runtime',['tests/wingsuit_runtime_test.c','src/wingsuit.c'],['-Itests/wingsuit_mock','-Isrc'])]:
   run(name,sources,includes,['-fsanitize=undefined','-fno-sanitize-recover=all'])
-print('PASS flame preservation: thirteen approved payloads unchanged; exact canonical explosion/approved weapons and full tables/map; 24 files/198264 bytes; dev/release Saturn X; simulation/audio/runtime UBSan')
+print('PASS flame preservation: thirteen approved payloads unchanged; exact canonical explosion/Shot and split Flame tones with full tables/map; 24 files/197444 bytes; dev/release Saturn X; simulation/audio/runtime UBSan')

@@ -41,7 +41,7 @@ def fixture(directory_name='ALEVEL2',root_copy=False,missing=None,corrupt=None):
     return bytes(image)
 
 counts=validate_disc(fixture(),payloads);assert counts==(303,2,26),counts
-for kwargs in ({'directory_name':'ZLEVEL2'},{'root_copy':True},{'missing':'WPAL.BIN'},{'corrupt':'WDRONE.BIN'}):
+for kwargs in ({'directory_name':'ZLEVEL2'},{'root_copy':True},{'missing':'WPAL.BIN'},{'corrupt':'WDRONE.BIN'},{'corrupt':'WDEATH.TON'},{'missing':'WDEATH.MAP'}):
     try:validate_disc(fixture(**kwargs),payloads)
     except AssertionError:pass
     else:raise AssertionError(('invalid ISO accepted',kwargs))
