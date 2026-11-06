@@ -107,8 +107,20 @@ static int player_fire(mf_wingsuit *g,const mf_ws_player *p,int owner)
 }
 static void join(mf_ws_player *p,int i)
 {*p=(mf_ws_player){1,(i?190:130)*S,200*S,3,MF_WS_INVULNERABLE,0,0,0,0};}
+/* Home slots are symmetric about the current view: solo at center; coop
+   retains the original 60px separation. Respawn never recenters the camera. */
+static int home_x(const mf_wingsuit *g,int i)
+{
+    int partner=g->players[1-i].active && g->players[1-i].lives>0;
+    return g->camera_x+(MF_WS_VIEW_WIDTH/2+(partner?(i?30:-30):0))*S;
+}
 void mf_ws_init(mf_wingsuit *g,int coop)
-{memset(g,0,sizeof(*g));join(&g->players[0],0);if(coop)join(&g->players[1],1);g->spawn=60;g->camera_x=MF_WS_VIEW_LEFT*S;}
+{
+    memset(g,0,sizeof(*g));g->camera_x=MF_WS_CAMERA_INITIAL;
+    join(&g->players[0],0);if(coop)join(&g->players[1],1);
+    g->players[0].x=home_x(g,0);if(coop)g->players[1].x=home_x(g,1);
+    g->spawn=60;
+}
 static int damage(mf_ws_player *p,int i)
 {
     if(p->invulnerable || p->respawn || p->lives<=0)return 0;
@@ -127,7 +139,7 @@ void mf_ws_step(mf_wingsuit *g,const unsigned held[2],const unsigned pressed[2],
     g->deaths=0;g->shots_fired=0;
     if(g->game_over){if((connected&1) && (pressed[0]&MF_START))mf_ws_init(g,g->players[1].active && (connected&2));return;}
     if((connected&2) && !g->players[1].active && (pressed[1]&MF_START)){
-        join(&g->players[1],1);g->players[1].x=g->camera_x+(190-MF_WS_VIEW_LEFT)*S;
+        join(&g->players[1],1);g->players[1].x=home_x(g,1);
     }
     if((connected&1) && (pressed[0]&MF_START))g->paused=!g->paused;
     if(g->paused)return;
@@ -137,7 +149,7 @@ void mf_ws_step(mf_wingsuit *g,const unsigned held[2],const unsigned pressed[2],
         unsigned h=(connected&(1u<<i))?held[i]:0;
         if(!p->active || p->lives<=0)continue;
         if(p->respawn){
-            if(!--p->respawn)p->x=g->camera_x+((i?190:130)-MF_WS_VIEW_LEFT)*S;
+            if(!--p->respawn)p->x=home_x(g,i);
             continue;
         }
         ready|=1u<<i;

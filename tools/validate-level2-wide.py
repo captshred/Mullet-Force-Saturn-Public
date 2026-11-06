@@ -2,6 +2,7 @@
 """Exhaustive additive baseline preservation and wide-map hardware validation."""
 from pathlib import Path
 import hashlib,json,struct
+from level2_balanced_scope import balanced_change
 R=Path(__file__).resolve().parents[1]
 x=json.loads((R/'docs/level2-wide-lock.json').read_text())
 assert x['base_commit']=='78cc4dfa4fac6dcde3d8d21ac9e78ca8337ee75e'
@@ -13,7 +14,7 @@ allowed={
 assert set(x['changes'])==allowed
 for group in ['frozen','changes']:
  for n,entry in x[group].items():
-  expected=entry if group=='frozen' else entry['after'];b=(R/n).read_bytes()
+  expected=balanced_change(n,entry if group=='frozen' else entry['after']);b=(R/n).read_bytes()
   assert len(b)==expected['bytes'] and hashlib.sha256(b).hexdigest()==expected['sha256'],n
 for n in ['src/wingsuit_audio.c','src/wingsuit_audio.h','src/wingsuit_audio_data.h','assets/wingsuit/WDEATH.MAP','assets/wingsuit/WDEATH.SEQ','assets/wingsuit/WDEATH.TON','assets/wingsuit/audio.json','assets/wingsuit/flame-audio.json']:
  assert n in x['frozen'],n
@@ -38,3 +39,27 @@ assert 106496+65536+262144==434176 and 524288-434176==90112
 assert 131072-106496==24576 and 131072-65536==65536
 assert 106496-len(tiles)==103744 and 65536-8192==57344
 print('PASS wide preservation: %d frozen baseline files; exact scoped updates; complete audio sources/bank/metadata, loader and audio runtime unchanged; 512px map/nonmirrored cells/seams; VDP1 28032/18/73, VDP2 10944/434176/90112 headroom, CRAM32'%len(x['frozen']))
+
+# Refinement preservation is additive: old locks and every artwork/audio byte
+# stay fixed, with only the seven named source/test/validator updates allowed.
+r=json.loads((R/'docs/level2-balanced-lock.json').read_text())
+assert r['base_commit']=='a827c2ec82fddaade0bd8e1c627f75ec9905705c'
+assert set(r['changes'])=={'src/wingsuit.h','src/wingsuit.c','src/wingsuit_runtime.c',
+ 'tests/wingsuit_camera_test.c','tests/wingsuit_runtime_test.c',
+ 'tools/level2_wide_scope.py','tools/validate-level2-wide.py'}
+for n,e in r['changes'].items():
+ assert len((R/n).read_bytes())==e['after']['bytes']
+ assert hashlib.sha256((R/n).read_bytes()).hexdigest()==e['after']['sha256'],n
+for n,e in r['extra_frozen'].items():
+ assert len((R/n).read_bytes())==e['bytes'] and hashlib.sha256((R/n).read_bytes()).hexdigest()==e['sha256'],n
+# All source pixels displayed at any legal camera position lie in the existing
+# central map crop [96,415]. Every 8px cell resolves to initialized 8bpp data.
+assert (320-224)//2==48 and 320-224==96
+for camera in range(97):
+ left=camera+96;right=left+223
+ assert 96<=left<=right<=415<512
+ for y in range(64):
+  for tx in range(left//8,right//8+1):
+   w=words[y*64+tx];assert w>>12==1 and (w&4095)//2<len(tiles)//64
+assert r['preserved_runtime']==x['runtime_preserved']
+print('PASS balanced-scroll preservation: 320px world/224px view/96px travel/48px center; all 97 camera positions inside unchanged city crop; all artwork/audio/Level1/workflows and prior locks preserved')

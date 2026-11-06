@@ -91,7 +91,7 @@ void slPlaneNbg1(int a){assert(a==PL_SIZE_1x1);}
 void slMapNbg1(void *a,void *b,void *c,void *d){assert(a==ws_b0 && a==b && b==c && c==d);}
 void slZoomNbg1(int a,int b){assert(a==65536 && b==65536);}
 static int scroll_x,scroll_y;
-void slScrPosNbg1(int a,int b){scroll_x=a;scroll_y=b;assert(a>=-48*65536 && a<=240*65536 && b<=0 && b>=-511*65536);}
+void slScrPosNbg1(int a,int b){scroll_x=a;scroll_y=b;assert((a==0 || (a>=48*65536 && a<=144*65536)) && b<=0 && b>=-511*65536);}
 void slScrWindow0(unsigned short a,unsigned short b,unsigned short c,unsigned short d){assert(a==48 && !b && c==271 && d==239);}
 void slScrWindowModeNbg1(unsigned short a){assert(a==win0_IN);}
 void slPriorityNbg1(int a){assert(a==1);next_state(18);}
@@ -212,8 +212,8 @@ int main(void)
     }
     {
         int old=shooter.camera_x;shooter.scroll=123;
-        shooter.camera_x=0;render();assert(scroll_x==-48*65536 && scroll_y==-123*65536);
-        shooter.camera_x=MF_WS_CAMERA_MAX;render();assert(scroll_x==240*65536 && scroll_y==-123*65536);
+        shooter.camera_x=0;render();assert(scroll_x==48*65536 && scroll_y==-123*65536);
+        shooter.camera_x=MF_WS_CAMERA_MAX;render();assert(scroll_x==144*65536 && scroll_y==-123*65536);
         shooter.camera_x=old;
     }
     /* The real HUD must erase the complete 19-character restart prompt. */

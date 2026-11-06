@@ -1,0 +1,93 @@
+{
+  "base_commit": "a827c2ec82fddaade0bd8e1c627f75ec9905705c",
+  "changes": {
+    "src/wingsuit.c": {
+      "before": {
+        "bytes": 9843,
+        "sha256": "e8a6158c32d142b4a9b7120d8e459d303a12672741c646aff0595750cc21d7a5"
+      },
+      "after": {
+        "bytes": 10215,
+        "sha256": "aa3136f2dfd40b063276d162262d5e7770ad15cbd64222d249785be47a3a9f61"
+      }
+    },
+    "src/wingsuit.h": {
+      "before": {
+        "bytes": 2396,
+        "sha256": "c526be763e58e91bc0fa84c012122d4820908a5faa4122e64a698681119983ab"
+      },
+      "after": {
+        "bytes": 2618,
+        "sha256": "ed3f2094b0921e76d46eb4178999852182cc240ef9a02307e91becc4511528ea"
+      }
+    },
+    "src/wingsuit_runtime.c": {
+      "before": {
+        "bytes": 14631,
+        "sha256": "2e29382c95797ec4298dd1f0b0d6dbf1441f2015edec68634a630d0e122571d9"
+      },
+      "after": {
+        "bytes": 14652,
+        "sha256": "2e70902f922d8d16d77157a99b8fc8a54d28cfb51fb607ba498301b7096f3834"
+      }
+    },
+    "tests/wingsuit_camera_test.c": {
+      "before": {
+        "bytes": 5084,
+        "sha256": "16a2757d8645c1d40bf72d4010dbb0f4e70a0f600e9a8d6d8e4d3c7f535599d9"
+      },
+      "after": {
+        "bytes": 6105,
+        "sha256": "e4843cfe0b88e2b65492e7929809a63a8fb5ceaceafacc627af0a66ab885a0ec"
+      }
+    },
+    "tests/wingsuit_runtime_test.c": {
+      "before": {
+        "bytes": 20181,
+        "sha256": "1af508979bd1c1515eeda74a07f3dd4c9931dd2178f80769ae58bdba23073bad"
+      },
+      "after": {
+        "bytes": 20191,
+        "sha256": "3771f6639cf5f14bdd5e890b81dbf75e4251adcbebf9167f297e7032d49c1d8a"
+      }
+    },
+    "tools/level2_wide_scope.py": {
+      "before": {
+        "bytes": 740,
+        "sha256": "9db22d9cd8df6ac7248683749924a1b83523ecdfb927c65dce4fbaea2b1e5cee"
+      },
+      "after": {
+        "bytes": 894,
+        "sha256": "3f0e61a0e34d75d02ae0ac61d2375fa150b2170278aaec1814527b9ca36bd48b"
+      }
+    },
+    "tools/validate-level2-wide.py": {
+      "before": {
+        "bytes": 2964,
+        "sha256": "f4cebdd7719b06bddbc5c7fbcdfe0f47bac6d5d5e3567452669bf586bcbcd956"
+      },
+      "after": {
+        "bytes": 4523,
+        "sha256": "4880b3ed10cd731e0422855b935e534543bd4fcfe0aa3d95f6f167060d2804cd"
+      }
+    }
+  },
+  "extra_frozen": {
+    "docs/level2-wide-camera.md": {
+      "bytes": 14026,
+      "sha256": "296be8c6c4ba74dd191ce2ede537e78e5286dd65500ad32f8830685110e382eb"
+    },
+    "docs/level2-wide-lock.json": {
+      "bytes": 177900,
+      "sha256": "383ba5fac540943f01822593e7f6f3c54935b12f95a6741d339e676ca08021ec"
+    },
+    "tools/recompose-wide-city.py": {
+      "bytes": 880,
+      "sha256": "99e1d81a4f2799998b7d7a8a033ef11231b75d677b6ed27d0de6ad238df91af2"
+    }
+  },
+  "preserved_runtime": {
+    "loader": "3eb3d2c5877078c80a90d73b4848b46897a26d7305329ec936cfe44dfe2f392a",
+    "audio_runtime": "04e78ac681170ae58e06ce7f74ecd5c92e3e71fe899f6857fa0f735f4180aa90"
+  }
+}

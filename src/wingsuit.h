@@ -23,7 +23,10 @@
 #define MF_WS_SCALE 256
 /* X is world space; Y retains the existing vertically scrolling stage model.
    Camera/dead-zone values are 24.8 except named pixel dimensions below. */
-#define MF_WS_STAGE_WIDTH 512
+#define MF_WS_STAGE_WIDTH 320
+#define MF_WS_MAP_WIDTH 512
+/* Center-crop the existing map; no asset edits or additional allocation. */
+#define MF_WS_BACKGROUND_X ((MF_WS_MAP_WIDTH-MF_WS_STAGE_WIDTH)/2)
 #define MF_WS_VIEW_LEFT 48
 #define MF_WS_VIEW_WIDTH 224
 #define MF_WS_PLAYER_MARGIN 16
@@ -31,6 +34,7 @@
 #define MF_WS_CAMERA_RIGHT 174
 #define MF_WS_CAMERA_SPEED (3*MF_WS_SCALE)
 #define MF_WS_CAMERA_MAX ((MF_WS_STAGE_WIDTH-MF_WS_VIEW_WIDTH)*MF_WS_SCALE)
+#define MF_WS_CAMERA_INITIAL (MF_WS_CAMERA_MAX/2)
 #define MF_WS_PLAYER_MIN (MF_WS_PLAYER_MARGIN*MF_WS_SCALE)
 #define MF_WS_PLAYER_MAX ((MF_WS_STAGE_WIDTH-MF_WS_PLAYER_MARGIN)*MF_WS_SCALE)
 typedef struct { int active,x,y,lives,invulnerable,respawn,cooldown,score,shot_hold; } mf_ws_player;

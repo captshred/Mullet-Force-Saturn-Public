@@ -185,7 +185,7 @@ static int bank_after_step(int old_x,const mf_ws_player *p,unsigned held,int was
 }
 static void render(void)
 {
-    int i;slScrPosNbg1((shooter.camera_x-MF_WS_VIEW_LEFT*MF_WS_SCALE)*256,-shooter.scroll*65536);
+    int i;slScrPosNbg1((shooter.camera_x+(MF_WS_BACKGROUND_X-MF_WS_VIEW_LEFT)*MF_WS_SCALE)*256,-shooter.scroll*65536);
     /* New bank uses raw RGB555, with a fresh default sprite attribute state. */
     jo_sprite_disable_horizontal_flip();jo_sprite_disable_vertical_flip();
     jo_sprite_disable_half_transparency();jo_sprite_disable_dark_filter();
