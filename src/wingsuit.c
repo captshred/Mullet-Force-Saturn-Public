@@ -119,6 +119,10 @@ void mf_ws_init(mf_wingsuit *g,int coop)
     memset(g,0,sizeof(*g));g->camera_x=MF_WS_CAMERA_INITIAL;
     join(&g->players[0],0);if(coop)join(&g->players[1],1);
     g->players[0].x=home_x(g,0);if(coop)g->players[1].x=home_x(g,1);
+    {int i;for(i=0;i<MF_WS_TURRETS;i++){
+        g->turrets[i].hp=MF_WS_TURRET_HP;g->turrets[i].warmup=MF_WS_TURRET_WARMUP;
+        g->turrets[i].target=-1;
+    }}
     g->spawn=60;g->enemy_rng=0x4d465332u;g->last_pattern=-1;
 }
 static int damage(mf_ws_player *p,int i)
@@ -143,6 +147,13 @@ static int wave_sin(int phase)
 }
 static unsigned enemy_random(mf_wingsuit *g)
 {g->enemy_rng=g->enemy_rng*1664525u+1013904223u;return g->enemy_rng>>16;}
+/* Smooth fixed-point formation expansion: zero lateral acceleration jumps
+   at entry/end, bounded work and immutable per-drone lane encoded in direction. */
+static int spread_ease(int t,int duration)
+{
+    int u=clamp(t,0,duration)*S/duration;
+    return u*u*(3*S-2*u)/(S*S);
+}
 static void move_enemy(mf_ws_enemy *e)
 {
     int t=e->age, offset=0;
@@ -155,14 +166,17 @@ static void move_enemy(mf_ws_enemy *e)
         else offset=36*wave_sin(t*10);
         e->x=e->origin+e->direction*offset;
     }else {
+        int dir=e->direction<0?-1:1;
+        int lane=(e->direction<0?-e->direction:e->direction)-2;
         e->y+=320;
         switch(e->pattern){
-        case 0: offset=e->direction*clamp(t,0,170)*S/2;break;
-        case 1: offset=8*wave_sin(t*5);break;
-        case 2: offset=e->direction*clamp(t,0,150)*S;break;
-        case 3: offset=e->direction*72*(256-wave_sin(t*3+256))/2;break;
-        default: offset=e->direction*clamp(t,0,70)*S;break;
+        case 0: offset=dir*90*spread_ease(t,120);break;
+        case 1: offset=16*wave_sin(t*6);break;
+        case 2: offset=dir*128*spread_ease(t,100);break;
+        case 3: offset=dir*72*(256-wave_sin(t*4+256))/2;break;
+        default: offset=dir*70*spread_ease(t,70);break;
         }
+        offset+=lane*24*spread_ease(t,56);
         if(e->origin || e->direction)e->x=clamp(e->origin+offset,12*S,(MF_WS_STAGE_WIDTH-12)*S);
     }
 }
@@ -196,15 +210,99 @@ static void spawn_enemies(mf_wingsuit *g)
         count=3;
         for(i=0;i<count;i++){
             int d=pattern==2?(i&1?-1:1):dir;
-            int x=origin+(i-1)*24*S;
-            if(pattern==0 || pattern>=3)x=origin-d*72*S+(i-1)*16*S;
-            if(pattern==2)x=origin-d*92*S;
+            int x=origin+(i-1)*56*S;
+            if(pattern==0)x=origin-d*52*S+(i-1)*36*S;
+            if(pattern>=3)x=origin-d*40*S+(i-1)*32*S;
+            if(pattern==2)x=origin-d*78*S+(i-1)*24*S;
             g->enemies[i]=(mf_ws_enemy){.active=1,.x=x,.y=-16*S,
-                .pattern=pattern,.origin=x,.direction=d,.delay=i*14};
+                .pattern=pattern,.origin=x,.direction=d*(i+1),.delay=i*14};
         }
         g->spawn=270;
     }
     ++g->wave;
+}
+/* The native map samples (screen_y-scroll)&511, so a fixed map point
+   descends at (map_y+scroll)&511. These are open solid roof patches, not roads. */
+const mf_ws_roof_anchor mf_ws_roof_anchors[MF_WS_TURRETS]={{308,244,1},{343,392,1}};
+void mf_ws_turret_position(const mf_wingsuit *g,int anchor,int *world_x,int *screen_y)
+{
+    const mf_ws_roof_anchor *a=&mf_ws_roof_anchors[anchor];
+    int scroll16=(g->camera_x+(MF_WS_BACKGROUND_X-MF_WS_VIEW_LEFT)*S)*256;
+    if(a->plane)scroll16=96*65536+(g->camera_x-MF_WS_CAMERA_INITIAL)*288;
+    /* Quantize only after reproducing the exact 16.16 VDP2 transform. The
+       unchanged aerial world-to-screen projection then gives the same pixel. */
+    *world_x=(a->map_x*65536-scroll16)/256+g->camera_x-MF_WS_VIEW_LEFT*S;
+    *screen_y=((a->map_y+g->scroll)&511)*S;
+}
+static void turret_aim(mf_wingsuit *g,mf_ws_turret *t)
+{
+    int i,target=-1,dx=0,dy=0;unsigned best=~0u;
+    for(i=0;i<MF_WS_PLAYERS;i++)if(living(&g->players[i])){
+        int x=(g->players[i].x-t->x)/S,y=(g->players[i].y-t->y)/S;
+        unsigned distance=(unsigned)(x*x+y*y);
+        if(distance<best){best=distance;target=i;}
+    }
+    t->target=target;if(target<0)return;
+    dx=g->players[target].x-t->x;dy=g->players[target].y-t->y;
+    {unsigned ax=(unsigned)(dx<0?-dx:dx),ay=(unsigned)(dy<0?-dy:dy);
+     if(ax*1000u<ay*414u)t->aim=dy<0?4:0;
+     else if(ay*1000u<ax*414u)t->aim=dx<0?6:2;
+     else t->aim=dy<0?(dx<0?5:3):(dx<0?7:1);}
+    if(dx || dy){
+        uint64_t length2=(uint64_t)((int64_t)dx*dx+(int64_t)dy*dy);
+        uint32_t length=integer_sqrt(length2<<16);
+        t->vx=(int)((int64_t)dx*MF_WS_TURRET_SPEED*256/length);
+        t->vy=(int)((int64_t)dy*MF_WS_TURRET_SPEED*256/length);
+    }else {t->vx=0;t->vy=MF_WS_TURRET_SPEED;t->aim=0;}
+}
+static void step_turrets(mf_wingsuit *g)
+{
+    int i,j;
+    for(i=0;i<MF_WS_TURRETS;i++){
+        mf_ws_turret *t=&g->turrets[i];int x,y,screen;
+        mf_ws_turret_position(g,i,&x,&y);
+        /* One reset per physical 512-row map instance, independent of camera.
+           Destruction remains latched throughout every off-camera interval. */
+        if(y==0)*t=(mf_ws_turret){.hp=MF_WS_TURRET_HP,.warmup=MF_WS_TURRET_WARMUP,.target=-1};
+        t->x=x;t->y=y;screen=mf_ws_screen_x(g,x);
+        t->visible=y<=252*S && screen>=(MF_WS_VIEW_LEFT-12)*S && screen<=(MF_WS_VIEW_LEFT+MF_WS_VIEW_WIDTH+12)*S;
+        if(t->explosion)--t->explosion;
+        if(!t->hp)continue;
+        if(!t->visible || y<12*S || y>228*S || screen<(MF_WS_VIEW_LEFT+12)*S || screen>(MF_WS_VIEW_LEFT+MF_WS_VIEW_WIDTH-12)*S){
+            t->warmup=MF_WS_TURRET_WARMUP;t->aim_wait=0;continue;
+        }
+        if(!t->aim_wait){turret_aim(g,t);t->aim_wait=8;}
+        --t->aim_wait;
+        if(t->warmup){--t->warmup;continue;}
+        if(t->cooldown)--t->cooldown;
+        if(t->cooldown)continue;
+        /* Fresh snapshot at the instant of firing. Independent fixed pool;
+           exhaustion drops this shot without borrowing aerial bullet slots. */
+        turret_aim(g,t);t->cooldown=MF_WS_TURRET_INTERVAL;
+        if(t->target<0)continue;
+        for(j=0;j<MF_WS_TURRET_SHOTS;j++)if(!g->turret_shots[j].active){
+            g->turret_shots[j]=(mf_ws_hostile_shot){1,x,y,i,120,t->vx,t->vy};break;
+        }
+    }
+}
+static void hit_turret(mf_wingsuit *g,mf_ws_turret *t,int owner)
+{
+    if(t->hp>0 && !--t->hp){t->explosion=12;g->players[owner].score+=100;++g->deaths;}
+}
+static void step_turret_shots(mf_wingsuit *g)
+{
+    int i,j;
+    for(i=0;i<MF_WS_TURRET_SHOTS;i++){
+        mf_ws_hostile_shot *s=&g->turret_shots[i];if(!s->active)continue;
+        s->x+=s->vx;s->y+=s->vy;
+        if(--s->ttl<=0 || s->x< -4*S || s->x>(MF_WS_STAGE_WIDTH+4)*S || s->y< -8*S || s->y>248*S){s->active=0;continue;}
+        for(j=0;j<MF_WS_PLAYERS;j++){
+            mf_ws_player *p=&g->players[j];
+            if(living(p) && near(s->x,s->y,p->x,p->y,7,10)){
+                g->deaths+=damage(p,j);s->active=0;break;
+            }
+        }
+    }
 }
 void mf_ws_step(mf_wingsuit *g,const unsigned held[2],const unsigned pressed[2],unsigned connected)
 {
@@ -259,12 +357,18 @@ void mf_ws_step(mf_wingsuit *g,const unsigned held[2],const unsigned pressed[2],
         if(e->kind==MF_WS_DRONE && e->age==80)aimed_snapshot(g,e->x,e->y+10*S);
         if(e->y>256*S)e->active=0;
     }
+    step_turrets(g);
     for(i=0;i<2;i++)if(pulse[i])for(j=0;j<MF_WS_ENEMIES;j++){
         mf_ws_player *p=&g->players[i];mf_ws_enemy *e=&g->enemies[j];
         if(e->active && !e->delay && e->x>=p->x-(MF_WS_BEAM_HALF_WIDTH+(e->kind==MF_WS_CHROME_EYE?6:10))*S && e->x<=p->x+(MF_WS_BEAM_HALF_WIDTH+(e->kind==MF_WS_CHROME_EYE?6:10))*S &&
            e->y+10*S>=MF_WS_BEAM_TOP*S && e->y-10*S<=p->y-MF_WS_BEAM_EMITTER*S){
             e->active=0;e->explosion=12;p->score+=100;++g->deaths;
         }
+    }
+    for(i=0;i<2;i++)if(pulse[i])for(j=0;j<MF_WS_TURRETS;j++){
+        mf_ws_player *p=&g->players[i];mf_ws_turret *t=&g->turrets[j];
+        if(t->visible && t->hp && t->x>=p->x-(MF_WS_BEAM_HALF_WIDTH+10)*S && t->x<=p->x+(MF_WS_BEAM_HALF_WIDTH+10)*S &&
+           t->y+10*S>=MF_WS_BEAM_TOP*S && t->y-10*S<=p->y-MF_WS_BEAM_EMITTER*S)hit_turret(g,t,i);
     }
     for(i=0;i<MF_WS_SHOTS;i++){
         mf_ws_shot *s=&g->shots[i];if(!s->active)continue;
@@ -274,6 +378,13 @@ void mf_ws_step(mf_wingsuit *g,const unsigned held[2],const unsigned pressed[2],
             mf_ws_enemy *e=&g->enemies[j];if(e->active && near(s->x,s->y,e->x,e->y,e->kind==MF_WS_CHROME_EYE?7:12,e->kind==MF_WS_CHROME_EYE?7:13)){
                 e->active=0;e->explosion=12;++g->deaths;s->active=0;g->players[s->owner].score+=100;break;
             }
+        }
+    }
+    /* A consumed aerial hit cannot also damage a rooftop emplacement. */
+    for(i=0;i<MF_WS_SHOTS;i++)if(g->shots[i].active)for(j=0;j<MF_WS_TURRETS;j++){
+        mf_ws_shot *s=&g->shots[i];mf_ws_turret *t=&g->turrets[j];
+        if(t->visible && t->hp && near(s->x,s->y,t->x,t->y,12,12)){
+            hit_turret(g,t,s->owner);s->active=0;break;
         }
     }
     for(i=0;i<MF_WS_HOSTILE;i++){
@@ -286,6 +397,7 @@ void mf_ws_step(mf_wingsuit *g,const unsigned held[2],const unsigned pressed[2],
             }
         }
     }
+    step_turret_shots(g);
     for(i=0;i<2;i++){
         mf_ws_player *p=&g->players[i];if(!p->active || p->lives<=0)continue;
         alive=1;if(p->respawn)continue;

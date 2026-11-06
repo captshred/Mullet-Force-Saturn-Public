@@ -13,7 +13,7 @@ allowed={'assets/wingsuit/WCELL.BIN','assets/wingsuit/WMAP.BIN','assets/wingsuit
 assert set(lock['changes'])==allowed
 for n,c in lock['changes'].items():assert info((R/n).read_bytes())==night_change(n,c['after']),n
 for n,c in {**lock['extra_frozen'],**lock['gameplay_frozen']}.items():assert info((R/n).read_bytes())==night_change(n,c),n
-assert (m['vdp1_bytes'],m['textures'],m['max_sprite_commands'],m['cram_bytes'])==(28544,19,73,32)
+assert (m['vdp1_bytes'],m['textures'],m['max_sprite_commands'],m['cram_bytes'])==(33792,28,81,32)
 assert len(m['files'])==26 and {'WROOF.BIN','WRMAP.BIN'}<=set(m['files'])
 assert not {'WSKY.BIN','WSMAP.BIN'}&set(m['files'])
 for n,e in m['files'].items():assert info((A/n).read_bytes())==e,n

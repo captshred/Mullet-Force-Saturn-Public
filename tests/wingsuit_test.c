@@ -10,7 +10,7 @@ static int count_hostile(const mf_ws_hostile_shot *s,int n){int i,c=0;for(i=0;i<
 int main(void)
 {
     mf_wingsuit g;unsigned h[2]={0,0},p[2]={0,0};int i,x,y;
-    mf_ws_init(&g,0);g.spawn=10000;assert(g.players[0].active && !g.players[1].active);
+    mf_ws_init(&g,0);g.spawn=10000;g.players[0].invulnerable=10000;assert(g.players[0].active && !g.players[1].active);
     x=g.players[0].x;y=g.players[0].y;h[0]=MF_UP|MF_RIGHT;
     mf_ws_step(&g,h,zero,1);assert(g.players[0].x-x==452 && y-g.players[0].y==452);
     assert(2*452*452<=640*640 && 2*452*452>638*638);

@@ -124,6 +124,7 @@ int main(void)
         char *b=read_exact(name,size);assert(!memcmp(b,ram+(i?MF_WS_TON_ADDR:MF_WS_SEQ_ADDR),size));jo_free(b);
     }
     r=reads;reset_counts();mf_ws_init(&g,1);g.spawn=10000;
+    g.players[0].invulnerable=g.players[1].invulnerable=10000; /* Isolate sustained transport from new ground fire. */
     sim(&g,MF_A,0,0);assert(g.shots_fired==1 && starts[2]==1 && !notes[0]);
     for(i=2;i<=19;i++){sim(&g,MF_A,0,0);assert(!notes[0]);}
     sim(&g,MF_A,0,0);assert(g.players[0].shot_hold==20 && notes[0]==1 && live[0]);

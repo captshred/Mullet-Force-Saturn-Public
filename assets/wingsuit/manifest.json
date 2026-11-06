@@ -1,10 +1,10 @@
 {
-  "textures": 19,
-  "vdp1_bytes": 28544,
+  "textures": 28,
+  "vdp1_bytes": 33792,
   "tiles": 578,
   "vdp2_payload_bytes": 65792,
   "cram_bytes": 32,
-  "max_sprite_commands": 73,
+  "max_sprite_commands": 81,
   "files": {
     "WBUCK.BIN": {
       "bytes": 2048,
@@ -368,6 +368,18 @@
       "height": 16,
       "frames": 1,
       "bytes": 512
+    },
+    "rooftop_turret": {
+      "base": [
+        24,
+        24
+      ],
+      "gun": [
+        16,
+        16
+      ],
+      "gun_directions": 8,
+      "bytes": 5248
     }
   }
 }

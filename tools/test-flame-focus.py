@@ -42,7 +42,7 @@ old_width=tuning['old_flame_body_width'];assert old_width['width_sum']/old_width
 ratio=(sum(widths)/len(widths))/old_width['mean_pixels'];assert .82<=ratio<=.88
 for i,b in enumerate(frames):
  offset=i*8*64;assert b==frames[0][offset:]+frames[0][:offset], 'upward-flowing cyclic animation'
-assert m['max_sprite_commands']==73 < tuning['sdk']['max_polygons']==1761
+assert m['max_sprite_commands']==81 < tuning['sdk']['max_polygons']==1761
 assert tuning['sdk']['sgl_x']==64 and tuning['sdk']['sgl_z']==16
 s=(R/'src/input.c').read_text();assert 'READ_BUTTON(MF_X, JO_KEY_X)' in s and 'JO_KEY_Z' not in s
 print('PASS flame geometry/art: 27.40625 -> 23 mean body pixels (16.08% narrower); 21..25 solid pixels on every row, exact tile seams and four upward-flowing phases; sixteen stage payloads/protected sources match exact scoped locks')
@@ -67,7 +67,7 @@ for phase,b in enumerate(caps):
   assert occupied==list(range(occupied[0],occupied[-1]+1)) and row[16]
  assert [x for x,v in enumerate(rows[-1]) if v]==[15,16,17], 'stable centered emitter in all phases'
  assert rows[-1][16]==struct.unpack_from('>H',frames[0],32)[0], 'hot core retained'
-assert m['textures']==19 and m['vdp1_bytes']==28544 and m['max_sprite_commands']==73
+assert m['textures']==28 and m['vdp1_bytes']==33792 and m['max_sprite_commands']==81
 print('PASS flame origin: four native 32x16 phases, stable three-pixel hot emitter, smooth 21..25-pixel bloom, exact body/cap seams; parent non-audio payloads except scoped aerial backgrounds and beam collision byte-for-byte unchanged')
 # Exact integration ordering remains guarded, not a second transition path.
 s=(R/'src/main.c').read_text()

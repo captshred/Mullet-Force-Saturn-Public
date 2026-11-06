@@ -6,6 +6,12 @@
 #define MF_WS_HOSTILE 16
 #define MF_WS_HOSTILE_SPEED 768 /* 3 pixels/tick in 24.8. */
 #define MF_WS_ENEMIES 8
+#define MF_WS_TURRETS 2
+#define MF_WS_TURRET_SHOTS 4
+#define MF_WS_TURRET_HP 4
+#define MF_WS_TURRET_INTERVAL 40
+#define MF_WS_TURRET_WARMUP 45
+#define MF_WS_TURRET_SPEED 640
 #define MF_WS_FIRE_TICKS 7 /* Tap minimum repeat interval. */
 #define MF_WS_FOCUS_TICKS 20 /* 0.33 s at 60 Hz; taps remain mobile. */
 #define MF_WS_MOVE_SPEED 640
@@ -43,6 +49,10 @@ typedef struct { int active,x,y,owner,ttl,vx; } mf_ws_shot;
 typedef struct { int active,x,y,owner,ttl,vx,vy; } mf_ws_hostile_shot;
 enum { MF_WS_DRONE, MF_WS_CHROME_EYE };
 typedef struct { int active,x,y,age,explosion; int kind,pattern,origin,direction,delay; } mf_ws_enemy;
+/* Fixed slot per authored roof anchor; HP survives horizontal camera culling. */
+typedef struct { int x,y,hp,visible,warmup,cooldown,aim_wait,aim,vx,vy,target,explosion; } mf_ws_turret;
+typedef struct { int map_x,map_y,plane; } mf_ws_roof_anchor;
+extern const mf_ws_roof_anchor mf_ws_roof_anchors[MF_WS_TURRETS];
 typedef struct {
     mf_ws_player players[MF_WS_PLAYERS];
     mf_ws_shot shots[MF_WS_SHOTS];
@@ -52,8 +62,11 @@ typedef struct {
     unsigned shots_fired;
     unsigned ticks,wave; int spawn,paused,game_over,scroll;
     unsigned enemy_rng, pattern_bag; int last_pattern, formation, diagonal_direction;
+    mf_ws_turret turrets[MF_WS_TURRETS];
+    mf_ws_hostile_shot turret_shots[MF_WS_TURRET_SHOTS];
     int camera_x; /* Only horizontal camera state; no per-object screen copies. */
 } mf_wingsuit;
+void mf_ws_turret_position(const mf_wingsuit *,int anchor,int *world_x,int *screen_y);
 int mf_ws_screen_x(const mf_wingsuit *,int world_x);
 void mf_ws_camera_step(mf_wingsuit *);
 int mf_ws_beam_active(const mf_wingsuit *,int);

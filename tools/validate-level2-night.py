@@ -54,5 +54,5 @@ for key,begin,end in [('render','static void render(', 'void mf_ws_runtime_frame
 sdk=R/'.deps/joengine/jo_engine/vdp2_malloc.c'
 if sdk.exists():
  text=sdk.read_text();assert 'CRAM_PALETTE_SIZE      (256)' in text and '+ CRAM_PALETTE_SIZE + 1;' in text
-assert (m['textures'],m['vdp1_bytes'],m['cram_bytes'],m['max_sprite_commands'])==(19,28544,32,73)
+assert (m['textures'],m['vdp1_bytes'],m['cram_bytes'],m['max_sprite_commands'])==(28,33792,32,81)
 print('PASS night palette: real257 SDK/256 native bank mismatch reproduces parent pink index12; aligned colors/shadows10 < alleys1 < asphalt12 < paving14 < steel/concrete; zero pink RGB entries, exact native geometry after material-only reindex, full render/parallax/frame/audio preserved; font and CRAM guards safe')

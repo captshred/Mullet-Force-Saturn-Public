@@ -7,7 +7,7 @@ R=Path(__file__).resolve().parents[1]
 subprocess.run(['python3',str(R/'tools/validate-level2-wide.py')],check=True)
 p=argparse.ArgumentParser();p.add_argument('--disc',action='store_true');args=p.parse_args()
 m=json.loads((R/'assets/wingsuit/manifest.json').read_text())
-assert m['textures']==19 and m['vdp1_bytes']==28544 and m['tiles']==m['files']['WCELL.BIN']['bytes']//64
+assert m['textures']==28 and m['vdp1_bytes']==33792 and m['tiles']==m['files']['WCELL.BIN']['bytes']//64
 for name,f in m['files'].items():
  b=(R/'assets/wingsuit'/name).read_bytes()
  assert len(b)==f['bytes'] and hashlib.sha256(b).hexdigest()==f['sha256'],name
@@ -15,14 +15,14 @@ for name,f in m['files'].items():
 for name in ('WBUCK.BIN','WCHUCK.BIN','WDRONE.BIN','WSHOT.BIN','WHOST.BIN','WBOOM.BIN','WBUCKL.BIN','WBUCKR.BIN','WCHUCKL.BIN','WCHUCKR.BIN','WFL0.BIN','WFL1.BIN','WFL2.BIN','WFL3.BIN','WFO0.BIN','WFO1.BIN','WFO2.BIN','WFO3.BIN'):
  pixels=struct.unpack('>'+str(m['files'][name]['bytes']//2)+'H',(R/'assets/wingsuit'/name).read_bytes())
  assert all(v==0 or v&0x8000 for v in pixels),(name,'invalid RGB555 texel')
-assert sum(m['files'][n]['bytes'] for n in ('WBUCK.BIN','WCHUCK.BIN','WDRONE.BIN','WSHOT.BIN','WHOST.BIN','WBOOM.BIN','WBUCKL.BIN','WBUCKR.BIN','WCHUCKL.BIN','WCHUCKR.BIN','WFL0.BIN','WFL1.BIN','WFL2.BIN','WFL3.BIN','WFO0.BIN','WFO1.BIN','WFO2.BIN','WFO3.BIN'))+512==28544
+assert sum(m['files'][n]['bytes'] for n in ('WBUCK.BIN','WCHUCK.BIN','WDRONE.BIN','WSHOT.BIN','WHOST.BIN','WBOOM.BIN','WBUCKL.BIN','WBUCKR.BIN','WCHUCKL.BIN','WCHUCKR.BIN','WFL0.BIN','WFL1.BIN','WFL2.BIN','WFL3.BIN','WFO0.BIN','WFO1.BIN','WFO2.BIN','WFO3.BIN'))+512+5248==33792
 assert m['files']['WCELL.BIN']['bytes']==m['tiles']*64
 assert m['files']['WMAP.BIN']['bytes']==8192
 for word in struct.unpack('>4096H',(R/'assets/wingsuit/WMAP.BIN').read_bytes()):
  assert word>>12==1 and not word&1 and (word&4095)//2<m['tiles']
 assert m['vdp2_payload_bytes']<=106496+65536
-assert m['cram_bytes']==32 and m['max_sprite_commands']==73
-assert 28544<458488 and 19<255
+assert m['cram_bytes']==32 and m['max_sprite_commands']==81
+assert 33792<458488 and 28<255
 # Every old gameplay/asset check remains active. Only four source integrations
 # may differ, each checked against an exact before/after digest.
 lock=json.loads((R/'docs/level2-source-lock.json').read_text())
@@ -41,4 +41,4 @@ if args.disc:
  print('PASS exact /ALEVEL2 ISO layout: root records %d, directory index %d, child records %d'%counts)
  assert (R/'build/wingsuit-mode.txt').read_text().strip()=='1'
  assert 'Level 2 wingsuit: 1' in (R/'build/BUILD-INFO.txt').read_text()
-print('PASS wingsuit payloads/budgets: 19 definitions, 28544 VDP1 bytes, top-down ground/complete elevated buildings inside transferred VDP2 arenas, 32 CRAM bytes; exact scoped integration lock')
+print('PASS wingsuit payloads/budgets: 28 definitions, 33792 VDP1 bytes, top-down ground/complete elevated buildings inside transferred VDP2 arenas, 32 CRAM bytes; exact scoped integration lock')

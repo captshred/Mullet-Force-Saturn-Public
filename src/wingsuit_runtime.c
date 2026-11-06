@@ -4,11 +4,12 @@
 #include "wingsuit_runtime.h"
 #include "wingsuit.h"
 #include "chrome_eye_data.h"
+#include "rooftop_turret_data.h"
 #include "wingsuit_aerial_data.h"
 #include "wingsuit_audio.h"
 #include <string.h>
 static mf_wingsuit shooter;
-static int ids[19]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
+static int ids[28];
 static int player_bank[2];
 static const char restart_prompt[]="1P START TO RESTART";
 static const char restart_clear[]="                   ";
@@ -141,6 +142,14 @@ static int load_resources(void)
     {jo_img eye;eye.width=16;eye.height=16;eye.data=(jo_color *)chrome_eye_pixels;
      ids[18]=jo_sprite_add(&eye);
      if(ids[18]!=18){load_failure("CHROME EYE","REGISTER",18,ids[18]);jo_sprite_free_all();return 103;}}
+    {jo_img image;image.width=image.height=24;image.data=(jo_color *)turret_base_pixels;
+     ids[19]=jo_sprite_add(&image);
+     if(ids[19]!=19){load_failure("TURRET BASE","REGISTER",19,ids[19]);jo_sprite_free_all();return 103;}
+     for(i=0;i<8;i++){
+         image.width=image.height=16;image.data=(jo_color *)turret_gun_pixels[i];
+         ids[20+i]=jo_sprite_add(&image);
+         if(ids[20+i]!=20+i){load_failure("TURRET GUN","REGISTER",20+i,ids[20+i]);jo_sprite_free_all();return 103;}
+     }}
     if(!mf_ws_audio_load(read_asset,audio_progress)){
         const mf_ws_audio_diagnostic *d=mf_ws_audio_diagnostics();
         if(!failed_asset)load_failure("WDEATH BANK",d->operation,d->expected,d->actual);
@@ -186,10 +195,11 @@ void mf_ws_runtime_begin(int coop,jo_palette *background,unsigned now)
 }
 static void draw(int id,int x,int y)
 {
-    static const int widths[]={32,32,24,8,8,32,32,32,32,32,32,32,32,32,32,32,32,32,16};
+    static const int widths[]={32,32,24,8,8,32,32,32,32,32,32,32,32,32,32,32,32,32,16,24,16,16,16,16,16,16,16,16};
     /* Cull fully off-camera objects; the VDP1 user clip trims partial edges. */
     if(x+widths[id]<=MF_WS_VIEW_LEFT || x>=MF_WS_VIEW_LEFT+MF_WS_VIEW_WIDTH)return;
-    jo_sprite_draw3D2(ids[id],x,y,WS_SPRITE_Z);
+    /* Explicit depth keeps base below gun and both below aerial actors. */
+    jo_sprite_draw3D2(ids[id],x,y,WS_SPRITE_Z+(id==19?2:(id>=20?1:0)));
 }
 static int bank_after_step(int old_x,const mf_ws_player *p,unsigned held,int was_game_over)
 {
@@ -212,8 +222,14 @@ static void render(void)
     jo_sprite_disable_horizontal_flip();jo_sprite_disable_vertical_flip();
     jo_sprite_disable_half_transparency();jo_sprite_disable_dark_filter();
     jo_sprite_disable_gouraud_shading();jo_sprite_restore_sprite_scale();
-    jo_sprite_set_clipping_area(MF_WS_VIEW_LEFT,0,MF_WS_VIEW_WIDTH-1,239,WS_SPRITE_Z+1);
+    jo_sprite_set_clipping_area(MF_WS_VIEW_LEFT,0,MF_WS_VIEW_WIDTH-1,239,WS_SPRITE_Z+3);
     jo_sprite_enable_clipping(0);
+    for(i=0;i<MF_WS_TURRETS;i++){
+        mf_ws_turret *t=&shooter.turrets[i];int x=mf_ws_screen_x(&shooter,t->x)/256,y=t->y/256;
+        if(!t->visible)continue;
+        if(t->hp){draw(19,x-12,y-12);draw(20+t->aim,x-8,y-8);}
+        else if(t->explosion)draw(5,x-16,y-16);
+    }
     for(i=0;i<2;i++)if(mf_ws_beam_active(&shooter,i)){
         int bottom=shooter.players[i].y/256-MF_WS_BEAM_EMITTER-MF_WS_BEAM_ORIGIN_HEIGHT;
         int frame=(shooter.ticks/3+i)&3;
@@ -232,6 +248,8 @@ static void render(void)
     }
     for(i=0;i<MF_WS_SHOTS;i++)if(shooter.shots[i].active)draw(3,mf_ws_screen_x(&shooter,shooter.shots[i].x)/256-4,shooter.shots[i].y/256-4);
     for(i=0;i<MF_WS_HOSTILE;i++)if(shooter.hostile[i].active)draw(4,mf_ws_screen_x(&shooter,shooter.hostile[i].x)/256-4,shooter.hostile[i].y/256-4);
+    for(i=0;i<MF_WS_TURRET_SHOTS;i++)if(shooter.turret_shots[i].active)
+        draw(4,mf_ws_screen_x(&shooter,shooter.turret_shots[i].x)/256-4,shooter.turret_shots[i].y/256-4);
     for(i=0;i<2;i++){
         mf_ws_player *p=&shooter.players[i];int col=i?34:0;
         if(p->active && p->lives && !p->respawn && (!p->invulnerable || !(shooter.ticks&4))){

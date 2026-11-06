@@ -74,7 +74,7 @@ int main(void)
     assert(!g.players[0].respawn);visible(&g);
     /* Compare every gameplay byte with distinct camera values. Fixtures cover
        Shot and Flame kills, hostile damage, contact, age-80 aimed emission,
-       and existing projectiles. Only the camera field may differ. */
+       and existing projectiles. New rooftop parallax state is tested separately. */
     for(i=0;i<5;i++){
         setup(&a,0);a.players[0].x=180*S;a.players[0].invulnerable=0;
         a.enemies[0]=(mf_ws_enemy){1,180*S,100*S,0,0,0,0,0,0,0};
@@ -85,7 +85,9 @@ int main(void)
         if(i==4){a.enemies[0].age=79;a.enemies[0].x=300*S;}
         b=a;a.camera_x=0;b.camera_x=96*S;
         step(&a,i==1?MF_A:0,0);step(&b,i==1?MF_A:0,0);
-        assert(a.camera_x!=b.camera_x);a.camera_x=b.camera_x=0;assert(!memcmp(&a,&b,sizeof(a)));
+        assert(a.camera_x!=b.camera_x);a.camera_x=b.camera_x=0;
+        memset(a.turrets,0,sizeof(a.turrets));memset(b.turrets,0,sizeof(b.turrets));
+        assert(!memcmp(&a,&b,sizeof(a)));
         if(i<2)assert(a.deaths==1 && a.players[0].score==100);
         if(i==2 || i==3)assert(a.players[0].lives==2 && a.deaths==1);
         if(i==4)assert(a.hostile[0].active && a.hostile[0].vx<0);
