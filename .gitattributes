@@ -1,0 +1,2 @@
+# Native indexed cells can contain CR/LF color bytes without any NUL byte.
+assets/wingsuit/WCELL.BIN binary

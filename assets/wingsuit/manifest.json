@@ -1,8 +1,8 @@
 {
   "textures": 18,
   "vdp1_bytes": 28032,
-  "tiles": 576,
-  "vdp2_payload_bytes": 65664,
+  "tiles": 578,
+  "vdp2_payload_bytes": 65792,
   "cram_bytes": 32,
   "max_sprite_commands": 73,
   "files": {
@@ -47,16 +47,16 @@
       "sha256": "5a3b1bf7fcc1433381197516def627d52ddec907eae587cc32028fe557362dfb"
     },
     "WCELL.BIN": {
-      "bytes": 36864,
-      "sha256": "305e5f324708f1a88b3f40ab9188c9726ee109ff3761f03e44feaf32632063c6"
+      "bytes": 36992,
+      "sha256": "2c191f5c53b15eb212161159df958ff959fcc0c735bb9535b73269eb31120c49"
     },
     "WMAP.BIN": {
       "bytes": 8192,
-      "sha256": "b72f5c90ae2960553e1c331192948009441846fcf015be8c458641b14d52606b"
+      "sha256": "2d656ca7eede116c78e59cf885f31ede0eaf0581111e5142279ce5b3c2aafb6e"
     },
     "WPAL.BIN": {
       "bytes": 32,
-      "sha256": "214e2441e712d7b6b716228512c279924caa9452c48609d712b23fadd548b961"
+      "sha256": "0ce9879ed7e1b92f0d21fdc0f2188f1ba29c2766e0dfdafd2dfbd22e1de6dd30"
     },
     "WFL0.BIN": {
       "bytes": 2048,
@@ -104,7 +104,7 @@
     },
     "WROOF.BIN": {
       "bytes": 12416,
-      "sha256": "f6cfdfb091cc4e814cee1a98cab00c74b42f1047b64e923da00bf772ec0a4206"
+      "sha256": "e0360915a83a99679e7d3246426e7911908eb5d01bed8f863dba347fe8478277"
     },
     "WRMAP.BIN": {
       "bytes": 8192,

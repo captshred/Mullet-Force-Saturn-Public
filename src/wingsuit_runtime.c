@@ -39,6 +39,9 @@ static jo_palette *background_palette;
 #endif
 #define WS_CELLS ((void *)VDP2_VRAM_A0)
 #define WS_MAP ((void *)VDP2_VRAM_B0)
+/* Native pattern names select bank1 at entry256. Jo palette.data starts257
+   because its API skips transparent color0; WPAL contains that color too. */
+#define WS_CRAM_BASE ((jo_color *)JO_VDP2_CRAM+256)
 #define WS_CELL_BYTES MF_WS_GROUND_BYTES
 #define WS_ROOF_CELLS ((void *)(VDP2_VRAM_A0+MF_WS_ROOF_OFFSET))
 #define WS_ROOF_MAP ((void *)(VDP2_VRAM_B0+MF_WS_ROOF_MAP_OFFSET))
@@ -107,7 +110,7 @@ static int load_resources(void)
     static const int heights[]={32,32,24,8,8,32,32,32,32,32,MF_WS_BEAM_SEGMENT_HEIGHT,MF_WS_BEAM_SEGMENT_HEIGHT,MF_WS_BEAM_SEGMENT_HEIGHT,MF_WS_BEAM_SEGMENT_HEIGHT,MF_WS_BEAM_ORIGIN_HEIGHT,MF_WS_BEAM_ORIGIN_HEIGHT,MF_WS_BEAM_ORIGIN_HEIGHT,MF_WS_BEAM_ORIGIN_HEIGHT};
     /* All prior commands have passed through three core slSynch barriers.
        No sprites were submitted during them; no slave rendering is enabled. */
-    if(!background_palette || background_palette->id!=1 || !background_palette->data){load_failure("CRAM","PALETTE",1,-1);return 100;}
+    if(!background_palette || background_palette->id!=1 || background_palette->data!=WS_CRAM_BASE+1){load_failure("CRAM","PALETTE",1,-1);return 100;}
     /* Stop automatic VDP1 restarts, then require the current command list to
        finish. A timeout leaves VDP1 stopped and displays a text-only error. */
     JO_VDP1_PTMR=0;
@@ -124,12 +127,12 @@ static int load_resources(void)
        including the retired NBG2 skyline, before installing Level 2 tiles. */
     wipe((volatile unsigned short *)WS_CELLS,106496);
     wipe((volatile unsigned short *)WS_MAP,65536);
-    wipe(background_palette->data,7*512);
+    wipe(WS_CRAM_BASE,7*512);
     if(!copy_file("WCELL.BIN",WS_CELLS,WS_CELL_BYTES) ||
        !copy_file("WMAP.BIN",WS_MAP,WS_MAP_BYTES) ||
        !copy_file("WROOF.BIN",WS_ROOF_CELLS,MF_WS_ROOF_BYTES) ||
        !copy_file("WRMAP.BIN",WS_ROOF_MAP,WS_MAP_BYTES) ||
-       !copy_file("WPAL.BIN",background_palette->data,32))return 102;
+       !copy_file("WPAL.BIN",WS_CRAM_BASE,32))return 102;
     for(i=0;i<18;i++){
         ids[i]=texture(names[i],widths[i],heights[i]);
         if(ids[i]!=i){if(!failed_asset)load_failure(names[i],"SPRITE ID",i,ids[i]);jo_sprite_free_all();for(i=0;i<18;i++)ids[i]=-1;return 103;}

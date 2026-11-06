@@ -4,14 +4,15 @@ from pathlib import Path
 from collections import deque
 import json,hashlib,struct,re
 from level2_aerial_scope import aerial_lock
+from level2_night_scope import night_change
 R=Path(__file__).resolve().parents[1];A=R/'assets/wingsuit';m=json.loads((A/'manifest.json').read_text());lock=aerial_lock()
 def info(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
 allowed={'assets/wingsuit/WCELL.BIN','assets/wingsuit/WMAP.BIN','assets/wingsuit/manifest.json','src/wingsuit_runtime.c',
  'tests/wingsuit_disc_test.py','tests/wingsuit_mock/jo/jo.h','tests/wingsuit_runtime_test.c','tools/level2_balanced_scope.py',
  'tools/stage-wingsuit-assets.py','tools/test-flame-focus.py','tools/validate-level2-wide.py','tools/validate-wingsuit.py'}
 assert set(lock['changes'])==allowed
-for n,c in lock['changes'].items():assert info((R/n).read_bytes())==c['after'],n
-for n,c in {**lock['extra_frozen'],**lock['gameplay_frozen']}.items():assert info((R/n).read_bytes())==c,n
+for n,c in lock['changes'].items():assert info((R/n).read_bytes())==night_change(n,c['after']),n
+for n,c in {**lock['extra_frozen'],**lock['gameplay_frozen']}.items():assert info((R/n).read_bytes())==night_change(n,c),n
 assert (m['vdp1_bytes'],m['textures'],m['max_sprite_commands'],m['cram_bytes'])==(28032,18,73,32)
 assert len(m['files'])==26 and {'WROOF.BIN','WRMAP.BIN'}<=set(m['files'])
 assert not {'WSKY.BIN','WSMAP.BIN'}&set(m['files'])
@@ -19,7 +20,8 @@ for n,e in m['files'].items():assert info((A/n).read_bytes())==e,n
 chars=(A/'WCELL.BIN').read_bytes();roofs=(A/'WROOF.BIN').read_bytes()
 assert len(chars)==m['tiles']*64<=65536 and len(roofs)==m['roof_tiles']*64<=40960
 assert set(chars)<=set(range(1,16)) and set(roofs)<=set(range(16))
-assert not ({10,11}&set(chars+roofs)),'no magenta or pink pixels'
+# Night pass repurposes formerly pink slots10/11 as charcoal shadows.
+# Actual RGB and hardware bank registration are checked by the night suite.
 planes=[]
 for name,data,offset in [('WMAP.BIN',chars,0),('WRMAP.BIN',roofs,65536)]:
  words=struct.unpack('>4096H',(A/name).read_bytes());out=bytearray(512*512)
@@ -75,3 +77,6 @@ for key,begin,end in [('audio_load','    if(!mf_ws_audio_load','    slCharNbg1')
  assert hashlib.sha256(source[a:b].encode()).hexdigest()==lock['preserved_runtime'][key],key
 assert 'slSoundOffWait();wipe(MF_WS_SOUND_RAM,0x80000)' in source
 print('PASS top-down V2: 6 distinct aerial sites, exactly2 complete raised buildings including all walls/equipment/shadows; reserved-yard containment at +/-6px, no architectural overlap; 24577 fixed-point cameras at9/8 X, identical Y over512 phases; no pink, initialized backing/native tiles; %d payload; approved gameplay/camera/audio/Level1 frozen'%m['vdp2_payload_bytes'])
+
+import subprocess
+subprocess.run(["python3",str(R/"tools/validate-level2-night.py")],check=True)

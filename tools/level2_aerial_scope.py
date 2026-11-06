@@ -1,4 +1,5 @@
 """Exact top-down art exceptions from the approved camera, not the rejected art."""
+from level2_night_scope import night_change,night_source
 from pathlib import Path
 import json
 R=Path(__file__).resolve().parents[1]
@@ -8,11 +9,11 @@ def aerial_lock():
  return x
 def aerial_change(name,before):
  x=aerial_lock()
- if name not in x['changes']:return before
+ if name not in x['changes']:return night_change(name,before)
  c=x['changes'][name];assert c['before']==before,(name,'unexpected aerial-art baseline')
- return c['after']
+ return night_change(name,c['after'])
 def aerial_source(name,before):
  x=aerial_lock()
- if name not in x['changes']:return before
+ if name not in x['changes']:return night_source(name,before)
  c=x['changes'][name];assert c['before']['sha256']==before,(name,'unexpected aerial-art source baseline')
- return c['after']['sha256']
+ return night_source(name,c['after']['sha256'])

@@ -1,0 +1,413 @@
+{
+  "base_commit": "ad83025f3558fd11d934367bb74416e70814339c",
+  "changes": {
+    "assets/wingsuit/WCELL.BIN": {
+      "before": {
+        "bytes": 36864,
+        "sha256": "305e5f324708f1a88b3f40ab9188c9726ee109ff3761f03e44feaf32632063c6"
+      },
+      "after": {
+        "bytes": 36992,
+        "sha256": "2c191f5c53b15eb212161159df958ff959fcc0c735bb9535b73269eb31120c49"
+      }
+    },
+    "assets/wingsuit/WMAP.BIN": {
+      "before": {
+        "bytes": 8192,
+        "sha256": "b72f5c90ae2960553e1c331192948009441846fcf015be8c458641b14d52606b"
+      },
+      "after": {
+        "bytes": 8192,
+        "sha256": "2d656ca7eede116c78e59cf885f31ede0eaf0581111e5142279ce5b3c2aafb6e"
+      }
+    },
+    "assets/wingsuit/WPAL.BIN": {
+      "before": {
+        "bytes": 32,
+        "sha256": "214e2441e712d7b6b716228512c279924caa9452c48609d712b23fadd548b961"
+      },
+      "after": {
+        "bytes": 32,
+        "sha256": "0ce9879ed7e1b92f0d21fdc0f2188f1ba29c2766e0dfdafd2dfbd22e1de6dd30"
+      }
+    },
+    "assets/wingsuit/WROOF.BIN": {
+      "before": {
+        "bytes": 12416,
+        "sha256": "f6cfdfb091cc4e814cee1a98cab00c74b42f1047b64e923da00bf772ec0a4206"
+      },
+      "after": {
+        "bytes": 12416,
+        "sha256": "e0360915a83a99679e7d3246426e7911908eb5d01bed8f863dba347fe8478277"
+      }
+    },
+    "assets/wingsuit/manifest.json": {
+      "before": {
+        "bytes": 7482,
+        "sha256": "99bfd495466a89d306539829501b9636586c7af9136c40a22f9f9e65a64606e6"
+      },
+      "after": {
+        "bytes": 7482,
+        "sha256": "63bcece31be30a935cd1b2817a83c13b9a19963be98023431f44547568121d73"
+      }
+    },
+    "src/wingsuit_aerial_data.h": {
+      "before": {
+        "bytes": 309,
+        "sha256": "9728ad93e9d02e8c040cc43000d3ddea603343f813249d5e1dfbcd21724d9dd7"
+      },
+      "after": {
+        "bytes": 309,
+        "sha256": "44edce0baeeba5b1f33f6e3b5ae8c47f5bc065fd38f359064f38adc3a846e2c7"
+      }
+    },
+    "src/wingsuit_runtime.c": {
+      "before": {
+        "bytes": 15676,
+        "sha256": "eaf0f5bb767e6cb10210d99a1ebc567a49b1d5813ec7fff939480b4b32951f55"
+      },
+      "after": {
+        "bytes": 15873,
+        "sha256": "40a44a5453fe85cbb087a9bf70ca235160cfde6a738d826992d390e4ac7a6104"
+      }
+    },
+    "tests/wingsuit_mock/jo/jo.h": {
+      "before": {
+        "bytes": 3358,
+        "sha256": "ee3a0d0693f64fc1a8f4fb1ba08bdfb57361388198203ea48b87f4cdeabccb3a"
+      },
+      "after": {
+        "bytes": 3437,
+        "sha256": "35175a3ff3b55c4b4e4bbb02c8d1da96b83b86f96ff83e303a72c745837ee803"
+      }
+    },
+    "tests/wingsuit_runtime_test.c": {
+      "before": {
+        "bytes": 21654,
+        "sha256": "4a26ee9fc12a32657d6d6e01df0a9bbb0905deb69bdd97c833a70d599aba0505"
+      },
+      "after": {
+        "bytes": 22384,
+        "sha256": "cf4a9b193da104f1c2234f654f17fadcade002d418d39f6052cfe6d744a1ba35"
+      }
+    },
+    "tools/build-topdown-city-v2.py": {
+      "before": {
+        "bytes": 10864,
+        "sha256": "f8a76d3bb627347d98fe8647b3b17e4c2f122c954484fa5ac78f452398cad792"
+      },
+      "after": {
+        "bytes": 11337,
+        "sha256": "9eaab6408f2c47269b509794cbeed620b09653ab73ffc2a5389ab2bb5799bfa4"
+      }
+    },
+    "tools/level2_aerial_scope.py": {
+      "before": {
+        "bytes": 750,
+        "sha256": "5813e2b3fa5a26edddd87c20c9be595ef27189e1f446dbf813f5599caadd9bde"
+      },
+      "after": {
+        "bytes": 883,
+        "sha256": "c9c7776b4e73f3fc9c4754ac457e5fe5bd061edde67f001ad7090896d50abe0c"
+      }
+    },
+    "tools/validate-level2-wide.py": {
+      "before": {
+        "bytes": 4444,
+        "sha256": "6a06f0db45c1a284ed09eecdab07442c325d9e1b035afd628f90cdc27bd1b737"
+      },
+      "after": {
+        "bytes": 4485,
+        "sha256": "c1c189aaffd305436cff8b299b72cf49475ab75d294bdbf9a5f4f4c853711044"
+      }
+    },
+    "tools/validate-topdown-city-v2.py": {
+      "before": {
+        "bytes": 5491,
+        "sha256": "f67018ce04754c2f9883e0d9ff4ca7567e3b7a7719a6108c99ab10b2a2d4bb7f"
+      },
+      "after": {
+        "bytes": 5745,
+        "sha256": "f88365639dbfaebfe99d23a9f03b6277d672611bdeb3c1a9c0d0a46e8d183c2b"
+      }
+    }
+  },
+  "extra_frozen": {
+    "docs/level2-topdown-v2-lock.json": {
+      "bytes": 5941,
+      "sha256": "5d73f6b60255ae2b68127d4687aca14083b68d9aed86481d3ebcbc4a90a9caef"
+    },
+    "docs/level2-topdown-city-v2.md": {
+      "bytes": 14156,
+      "sha256": "c6bea3f4db3df45f7572f495dd7b35a4189c1d54aa555aa7c039070b2aeb239d"
+    }
+  },
+  "geometry": {
+    "ground": {
+      "bytes": 262144,
+      "sha256": "8c31c1a24df8d72954eb0b93e3117a717871df6ad5d6979440ca664e1e0b3fd3"
+    },
+    "raised": {
+      "bytes": 262144,
+      "sha256": "0f9927e938bf99b90ed7731e6cc45f194d541a51c1d91af396e65a2df06be369"
+    }
+  },
+  "runtime_preserved": {
+    "render": "9de166573ed6c302ce5c888e3bbb6c655b24ede4335f219010115ad7f5fa3ea7",
+    "frame": "04e78ac681170ae58e06ce7f74ecd5c92e3e71fe899f6857fa0f735f4180aa90",
+    "sprite_state": "a587a8a760878e1f4d20e67b6eb462fc3e569af3444d35cfb0e7a046c21c5d4b",
+    "audio_load": "14cae329fbdeef4f6e9d52f088bef8075bad10c27731905a5c6deaef44bb9f91"
+  },
+  "aerial_city": {
+    "width": 512,
+    "height": 512,
+    "crop_x": 96,
+    "roof_rate": [
+      9,
+      8
+    ],
+    "sites": [
+      {
+        "name": "Dockworks: bevelled broad warehouse",
+        "plane": 0,
+        "footprint": [
+          [
+            156,
+            16
+          ],
+          [
+            258,
+            16
+          ],
+          [
+            258,
+            58
+          ],
+          [
+            270,
+            58
+          ],
+          [
+            270,
+            126
+          ],
+          [
+            146,
+            126
+          ],
+          [
+            146,
+            30
+          ]
+        ],
+        "wall_height": 4,
+        "yard": null
+      },
+      {
+        "name": "Collapsed pump annex",
+        "plane": 0,
+        "footprint": [
+          [
+            294,
+            28
+          ],
+          [
+            360,
+            28
+          ],
+          [
+            360,
+            60
+          ],
+          [
+            344,
+            60
+          ],
+          [
+            344,
+            116
+          ],
+          [
+            294,
+            116
+          ]
+        ],
+        "wall_height": 3,
+        "yard": null
+      },
+      {
+        "name": "Rail machine shop: L footprint",
+        "plane": 0,
+        "footprint": [
+          [
+            146,
+            178
+          ],
+          [
+            202,
+            178
+          ],
+          [
+            202,
+            214
+          ],
+          [
+            240,
+            214
+          ],
+          [
+            240,
+            302
+          ],
+          [
+            146,
+            302
+          ]
+        ],
+        "wall_height": 5,
+        "yard": null
+      },
+      {
+        "name": "Raised navigation roof: stepped landing works",
+        "plane": 1,
+        "footprint": [
+          [
+            266,
+            180
+          ],
+          [
+            322,
+            180
+          ],
+          [
+            322,
+            174
+          ],
+          [
+            350,
+            174
+          ],
+          [
+            350,
+            206
+          ],
+          [
+            356,
+            206
+          ],
+          [
+            356,
+            270
+          ],
+          [
+            342,
+            270
+          ],
+          [
+            342,
+            296
+          ],
+          [
+            266,
+            296
+          ]
+        ],
+        "wall_height": 8,
+        "yard": [
+          252,
+          168,
+          374,
+          316
+        ]
+      },
+      {
+        "name": "Courtyard assembly works: U footprint",
+        "plane": 0,
+        "footprint": [
+          [
+            146,
+            350
+          ],
+          [
+            268,
+            350
+          ],
+          [
+            268,
+            472
+          ],
+          [
+            232,
+            472
+          ],
+          [
+            232,
+            398
+          ],
+          [
+            186,
+            398
+          ],
+          [
+            186,
+            472
+          ],
+          [
+            146,
+            472
+          ]
+        ],
+        "wall_height": 4,
+        "yard": null
+      },
+      {
+        "name": "Raised tank mill: staggered perimeter",
+        "plane": 1,
+        "footprint": [
+          [
+            284,
+            356
+          ],
+          [
+            338,
+            356
+          ],
+          [
+            338,
+            368
+          ],
+          [
+            358,
+            368
+          ],
+          [
+            358,
+            446
+          ],
+          [
+            344,
+            446
+          ],
+          [
+            344,
+            464
+          ],
+          [
+            284,
+            464
+          ]
+        ],
+        "wall_height": 6,
+        "yard": [
+          274,
+          344,
+          374,
+          484
+        ]
+      }
+    ],
+    "max_roof_offset": 6
+  },
+  "old_palette_hex": "8c2194629ca4a4e5b148c1cbce50a6dabda4daa6bcd6d1de90419883b168ef54",
+  "loader_after_sha256": "22392ca8edab6b6d741909002f694e0656232630615c6917778ce5c418a3ba7e"
+}

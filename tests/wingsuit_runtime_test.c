@@ -10,7 +10,8 @@
 #include "../src/wingsuit_runtime.c"
 unsigned short ws_vdp1[262144],ws_a0[65536],ws_b0[65536],ws_scsp[262144];
 unsigned short ws_ptmr=0,ws_edsr=2;
-static unsigned short cram[2048];
+unsigned short ws_cram[2050];
+#define cram ws_cram
 static int last=254,reads,frees,resets,off,draws,fail,slots,fail_texture=-1;
 static unsigned now;
 static int vdp2_scheduled,state_step,spr_priority[8],rgb_mode,spr_window,pixel_window;
@@ -163,7 +164,7 @@ void jo_printf(int x,int y,const char *s,...){
 static void frame(mf_input in[2],unsigned p[2]){mf_ws_runtime_frame(in,p,++now);}
 int main(void)
 {
-    mf_input in[2]={{0}};unsigned p[2]={MF_START,MF_START};jo_palette palette={1,cram+256};int i,r;
+    mf_input in[2]={{0}};unsigned p[2]={MF_START,MF_START};jo_palette palette={1,cram+257};int i,r;
     memset(ws_vdp1,0x55,sizeof(ws_vdp1));memset(ws_a0,0x55,sizeof(ws_a0));memset(ws_b0,0x55,sizeof(ws_b0));memset(ws_scsp,0x55,sizeof(ws_scsp));memset(cram,0x55,sizeof(cram));
     in[0].connected=in[1].connected=1;in[0].held=in[1].held=MF_A;
     assert(GFS_NameToId((Sint8 *)"WCELL.BIN")==-1);
@@ -177,6 +178,14 @@ int main(void)
     assert(ws_vdp1[0]==0x5555 && ws_vdp1[0x10000/2]==0 && ws_vdp1[0x7fef8/2]==0x5555);
     assert(ws_a0[106496/2]==0x5555 && ws_b0[65536/2]==0x5555);
     assert(cram[0]==0x5555 && cram[255]==0x5555 && cram[2047]==0);
+    {
+        unsigned char pal[32];FILE *f=fopen("assets/wingsuit/WPAL.BIN","rb");assert(f);
+        assert(fread(pal,1,32,f)==32);fclose(f);
+        assert(!memcmp((unsigned char *)&cram[256],pal,32));
+        assert(cram[2048]==0x5555 && cram[2049]==0x5555);
+        assert(cram[272]==0 && cram[511]==0);
+        puts("PASS real Jo CRAM contract: palette.data=entry257, full WPAL uploaded at bank1/entry256; road12 and shadow10 resolve exactly; font bank0 and post-CRAM sentinels unchanged");
+    }
     for(i=0;i<262144;i++)assert(!ws_scsp[i]);
     audio_ready=0;for(i=0;i<120;i++)frame(in,p);
     assert(!draws && phase==2);audio_ready=1;frame(in,p);
@@ -338,5 +347,8 @@ int main(void)
     puts("PASS startup readiness: title gates gameplay until audio ready; asynchronous consumer failure retains specific E108 cause");
     puts("PASS filesystem: root table overflow reproduced; all twenty-six assets read in ALEVEL2; parent restored; per-asset missing/length/read/registration errors");
     puts("PASS actual Level 2 loader: real-VBlank drain, bank reset, 18 definitions/28032 bytes, arena bounds, CRAM/font isolation, SCSP release, no gameplay allocations/I/O, partial-load failure");
+    palette.data=cram+256;r=reads;i=resets;
+    mf_ws_runtime_begin(0,&palette,now);frame(in,p);frame(in,p);frame(in,p);frame(in,p);
+    assert(error==100 && reads==r && resets==i && strstr(diagnostic,"CRAM"));
     return 0;
 }

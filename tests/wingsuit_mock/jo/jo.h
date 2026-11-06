@@ -4,6 +4,8 @@
 #include <stdint.h>
 extern unsigned short ws_vdp1[262144],ws_a0[65536],ws_b0[65536],ws_scsp[262144];
 extern unsigned short ws_ptmr,ws_edsr;
+extern unsigned short ws_cram[2050];
+#define JO_VDP2_CRAM ((uintptr_t)ws_cram)
 #define JO_VDP1_PTMR ws_ptmr
 #define JO_VDP1_EDSR ws_edsr
 #define JO_VDP1_VRAM ((uintptr_t)ws_vdp1)
