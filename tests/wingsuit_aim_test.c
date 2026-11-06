@@ -17,7 +17,7 @@ int main(void)
     assert(integer_sqrt(0)==0 && integer_sqrt(1)==1 && integer_sqrt(UINT64_MAX)==UINT32_MAX);
     /* Real age-80 muzzle, after the existing drone motion; then one physics step. */
     setup(&g);g.players[0].x=160*S;g.players[0].y=200*S;g.players[1].x=240*S;
-    g.enemies[0]=(mf_ws_enemy){1,160*S,60*S-320,79,0};
+    g.enemies[0]=(mf_ws_enemy){1,160*S,60*S-320,79,0,0,0,0,0,0};
     mf_ws_step(&g,zero,zero,3);assert(g.enemies[0].y==60*S && g.enemies[0].age==80);
     shot=g.hostile[0];assert(shot.active && shot.owner==0 && !shot.vx && shot.vy==768);
     assert(shot.x==160*S && shot.y==73*S);speed(&shot);
@@ -50,7 +50,7 @@ int main(void)
     setup(&g);g.players[0].respawn=4;g.players[1].lives=0;
     aimed_snapshot(&g,160*S,30*S);assert(!g.hostile[0].active);
     setup(&g);g.players[0].x=160*S;g.players[1].x=240*S;
-    g.enemies[0]=(mf_ws_enemy){1,160*S,60*S-320,79,0};
+    g.enemies[0]=(mf_ws_enemy){1,160*S,60*S-320,79,0,0,0,0,0,0};
     mf_ws_step(&g,zero,zero,0);assert(g.hostile[0].active && g.hostile[0].owner==0);
     /* A disconnected hero remains present/visible in the existing simulation. */
     /* All octants, subpixel vectors and the zero-distance fallback. */
@@ -85,6 +85,6 @@ int main(void)
         for(j=0;j<MF_WS_HOSTILE;j++)live+=g.hostile[j].active;
         assert(live<=MF_WS_HOSTILE);
     }
-    assert(sizeof(mf_ws_shot)==24 && sizeof(mf_ws_hostile_shot)==28 && sizeof(g)==1492);
-    puts("PASS aimed drones: age-80 muzzle, nearest living/active/nonrespawning hero, exact Buck ties and subpixel distances; all octants/zero vector normalized; snapshot-only/no homing; fixed pool, generic velocity emission and four-edge/TTL cleanup; state 1492 bytes");
+    assert(sizeof(mf_ws_shot)==24 && sizeof(mf_ws_hostile_shot)==28 && sizeof(g)==1672);
+    puts("PASS aimed drones: age-80 muzzle, nearest living/active/nonrespawning hero, exact Buck ties and subpixel distances; all octants/zero vector normalized; snapshot-only/no homing; fixed pool, generic velocity emission and four-edge/TTL cleanup; state 1672 bytes");
 }

@@ -31,15 +31,15 @@ int main(void)
     for(i=0;i<MF_WS_SHOTS;i++)g.shots[i].ttl=1;
     tick(&g);assert(count(g.shots,MF_WS_SHOTS)==0);
     for(i=0;i<MF_WS_HOSTILE;i++)g.hostile[i]=(mf_ws_hostile_shot){1,64*S,100*S,0,90,0,768};
-    g.enemies[0]=(mf_ws_enemy){1,200*S,50*S,79,0};tick(&g);
+    g.enemies[0]=(mf_ws_enemy){1,200*S,50*S,79,0,0,0,0,0,0};tick(&g);
     assert(count_hostile(g.hostile,MF_WS_HOSTILE)==MF_WS_HOSTILE);
     for(i=0;i<MF_WS_HOSTILE;i++){assert(g.hostile[i].x==64*S);g.hostile[i].ttl=1;}
     tick(&g);assert(count_hostile(g.hostile,MF_WS_HOSTILE)==0);
     mf_ws_init(&g,0);g.spawn=1;tick(&g);assert(g.enemies[0].active);
     g.enemies[0].y=257*S;tick(&g);assert(!g.enemies[0].active);
-    for(i=0;i<MF_WS_ENEMIES;i++)g.enemies[i]=(mf_ws_enemy){1,70*S,0,0,0};
+    for(i=0;i<MF_WS_ENEMIES;i++)g.enemies[i]=(mf_ws_enemy){1,70*S,0,0,0,0,0,0,0,0};
     g.spawn=1;tick(&g);for(i=0;i<MF_WS_ENEMIES;i++)assert(g.enemies[i].age==1);
-    mf_ws_init(&g,1);g.enemies[0]=(mf_ws_enemy){1,130*S,100*S,0,0};
+    mf_ws_init(&g,1);g.enemies[0]=(mf_ws_enemy){1,130*S,100*S,0,0,0,0,0,0,0};
     g.shots[0]=(mf_ws_shot){1,130*S,106*S,1,60,0};g.shots[1]=g.shots[0];tick(&g);
     assert(g.players[1].score==100 && g.players[0].score==0 && g.enemies[0].explosion==12);
     for(i=0;i<12;i++)tick(&g);
@@ -49,7 +49,7 @@ int main(void)
     assert(g.players[0].lives==2 && g.players[0].respawn==60 && g.players[0].invulnerable==120);
     for(i=0;i<60;i++)tick(&g);
     assert(!g.players[0].respawn && g.players[0].invulnerable==120);
-    g.enemies[0]=(mf_ws_enemy){1,g.players[0].x,g.players[0].y-320,0,0};tick(&g);assert(g.players[0].lives==2);
+    g.enemies[0]=(mf_ws_enemy){1,g.players[0].x,g.players[0].y-320,0,0,0,0,0,0,0};tick(&g);assert(g.players[0].lives==2);
     g.players[0].invulnerable=0;g.players[0].lives=1;
     g.hostile[0]=(mf_ws_hostile_shot){1,g.players[0].x,g.players[0].y-3*S,0,30,0,768};tick(&g);assert(g.game_over);
     p[0]=MF_START;mf_ws_step(&g,zero,p,1);assert(!g.game_over && g.players[0].lives==3 && !g.players[1].active);

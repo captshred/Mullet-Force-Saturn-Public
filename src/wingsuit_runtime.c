@@ -3,11 +3,12 @@
 #include <jo/jo.h>
 #include "wingsuit_runtime.h"
 #include "wingsuit.h"
+#include "chrome_eye_data.h"
 #include "wingsuit_aerial_data.h"
 #include "wingsuit_audio.h"
 #include <string.h>
 static mf_wingsuit shooter;
-static int ids[18]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
+static int ids[19]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
 static int player_bank[2];
 static const char restart_prompt[]="1P START TO RESTART";
 static const char restart_clear[]="                   ";
@@ -137,6 +138,9 @@ static int load_resources(void)
         ids[i]=texture(names[i],widths[i],heights[i]);
         if(ids[i]!=i){if(!failed_asset)load_failure(names[i],"SPRITE ID",i,ids[i]);jo_sprite_free_all();for(i=0;i<18;i++)ids[i]=-1;return 103;}
     }
+    {jo_img eye;eye.width=16;eye.height=16;eye.data=(jo_color *)chrome_eye_pixels;
+     ids[18]=jo_sprite_add(&eye);
+     if(ids[18]!=18){load_failure("CHROME EYE","REGISTER",18,ids[18]);jo_sprite_free_all();return 103;}}
     if(!mf_ws_audio_load(read_asset,audio_progress)){
         const mf_ws_audio_diagnostic *d=mf_ws_audio_diagnostics();
         if(!failed_asset)load_failure("WDEATH BANK",d->operation,d->expected,d->actual);
@@ -182,7 +186,7 @@ void mf_ws_runtime_begin(int coop,jo_palette *background,unsigned now)
 }
 static void draw(int id,int x,int y)
 {
-    static const int widths[]={32,32,24,8,8,32,32,32,32,32,32,32,32,32,32,32,32,32};
+    static const int widths[]={32,32,24,8,8,32,32,32,32,32,32,32,32,32,32,32,32,32,16};
     /* Cull fully off-camera objects; the VDP1 user clip trims partial edges. */
     if(x+widths[id]<=MF_WS_VIEW_LEFT || x>=MF_WS_VIEW_LEFT+MF_WS_VIEW_WIDTH)return;
     jo_sprite_draw3D2(ids[id],x,y,WS_SPRITE_Z);
@@ -222,7 +226,8 @@ static void render(void)
     }
     for(i=0;i<MF_WS_ENEMIES;i++){
         mf_ws_enemy *e=&shooter.enemies[i];
-        if(e->active)draw(2,mf_ws_screen_x(&shooter,e->x)/256-12,e->y/256-12);
+        if(e->active && !e->delay){int eye=e->kind==MF_WS_CHROME_EYE;
+            draw(eye?18:2,mf_ws_screen_x(&shooter,e->x)/256-(eye?8:12),e->y/256-(eye?8:12));}
         else if(e->explosion)draw(5,mf_ws_screen_x(&shooter,e->x)/256-16,e->y/256-16);
     }
     for(i=0;i<MF_WS_SHOTS;i++)if(shooter.shots[i].active)draw(3,mf_ws_screen_x(&shooter,shooter.shots[i].x)/256-4,shooter.shots[i].y/256-4);

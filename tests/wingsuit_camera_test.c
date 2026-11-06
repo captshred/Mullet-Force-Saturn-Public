@@ -77,7 +77,7 @@ int main(void)
        and existing projectiles. Only the camera field may differ. */
     for(i=0;i<5;i++){
         setup(&a,0);a.players[0].x=180*S;a.players[0].invulnerable=0;
-        a.enemies[0]=(mf_ws_enemy){1,180*S,100*S,0,0};
+        a.enemies[0]=(mf_ws_enemy){1,180*S,100*S,0,0,0,0,0,0,0};
         if(i==0)a.shots[0]=(mf_ws_shot){1,180*S,106*S,0,60,0};
         if(i==1)a.players[0].shot_hold=19;
         if(i==2)a.hostile[0]=(mf_ws_hostile_shot){1,180*S,197*S,0,60,0,768};
@@ -92,13 +92,13 @@ int main(void)
     }
     setup(&g,1);g.camera_x=0;g.players[0].x=16*S;g.players[1].x=208*S;
     step(&g,0,MF_RIGHT);assert(g.players[0].x==16*S && g.players[1].x==208*S);visible(&g);
-    /* All spawn lanes are stage-relative, including both expanded districts. */
+    /* Formation origins follow the view; world bounds cover both districts. */
     setup(&g,0);
     for(i=0;i<MF_WS_STAGE_WIDTH-48;i++){
         int k;g.spawn=1;for(k=0;k<MF_WS_ENEMIES;k++)g.enemies[k]=(mf_ws_enemy){0};
         g.camera_x=(i&1)?0:MF_WS_CAMERA_MAX;step(&g,0,0);
-        assert(g.enemies[0].x==(24+(i*47)%(MF_WS_STAGE_WIDTH-48))*S);
-        assert(g.enemies[0].x>=24*S && g.enemies[0].x<(MF_WS_STAGE_WIDTH-24)*S);
+        assert(g.enemies[0].active);
+        assert(g.enemies[0].x>=0 && g.enemies[0].x<=MF_WS_STAGE_WIDTH*S);
     }
     /* Long opposed/collective/reverse motion, death, respawn and connectivity. */
     setup(&g,1);

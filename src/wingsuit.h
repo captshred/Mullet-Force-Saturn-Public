@@ -41,7 +41,8 @@ typedef struct { int active,x,y,lives,invulnerable,respawn,cooldown,score,shot_h
 typedef struct { int active,x,y,owner,ttl,vx; } mf_ws_shot;
 /* Hostile physics is a generic fixed velocity; only the drone emitter aims. */
 typedef struct { int active,x,y,owner,ttl,vx,vy; } mf_ws_hostile_shot;
-typedef struct { int active,x,y,age,explosion; } mf_ws_enemy;
+enum { MF_WS_DRONE, MF_WS_CHROME_EYE };
+typedef struct { int active,x,y,age,explosion; int kind,pattern,origin,direction,delay; } mf_ws_enemy;
 typedef struct {
     mf_ws_player players[MF_WS_PLAYERS];
     mf_ws_shot shots[MF_WS_SHOTS];
@@ -50,6 +51,7 @@ typedef struct {
     int beam_wait[2],deaths;
     unsigned shots_fired;
     unsigned ticks,wave; int spawn,paused,game_over,scroll;
+    unsigned enemy_rng, pattern_bag; int last_pattern, formation, diagonal_direction;
     int camera_x; /* Only horizontal camera state; no per-object screen copies. */
 } mf_wingsuit;
 int mf_ws_screen_x(const mf_wingsuit *,int world_x);

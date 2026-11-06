@@ -4,6 +4,7 @@ from pathlib import Path
 import hashlib,json,struct,subprocess
 from level2_aerial_scope import aerial_change,aerial_lock
 from level2_night_scope import night_lock
+from level2_enemy_scope import enemy_lock
 from level2_balanced_scope import balanced_change
 R=Path(__file__).resolve().parents[1]
 x=json.loads((R/'docs/level2-wide-lock.json').read_text())
@@ -23,15 +24,15 @@ for n in ['src/wingsuit_audio.c','src/wingsuit_audio.h','src/wingsuit_audio_data
 s=(R/'src/wingsuit_runtime.c').read_text()
 for key,begin,end in [('loader','', 'static void draw('),('audio_runtime','void mf_ws_runtime_frame(',None)]:
  a=s.index(begin) if begin else 0;b=s.index(end,a) if end else len(s)
- assert hashlib.sha256(s[a:b].encode()).hexdigest()==(night_lock()['loader_after_sha256'] if key=='loader' else x['runtime_preserved'][key]),key
-m=json.loads((R/'assets/wingsuit/manifest.json').read_text());assert (m['vdp1_bytes'],m['textures'],m['max_sprite_commands'])==(28032,18,73)
+ assert hashlib.sha256(s[a:b].encode()).hexdigest()==(enemy_lock()['runtime_sections']['loader'] if key=='loader' else x['runtime_preserved'][key]),key
+m=json.loads((R/'assets/wingsuit/manifest.json').read_text());assert (m['vdp1_bytes'],m['textures'],m['max_sprite_commands'])==(28544,19,73)
 a=R/'assets/wingsuit';words=struct.unpack('>4096H',(a/'WMAP.BIN').read_bytes());tiles=(a/'WCELL.BIN').read_bytes()
 assert m['vdp2_payload_bytes']==sum(m['files'][n]['bytes'] for n in ['WCELL.BIN','WMAP.BIN','WROOF.BIN','WRMAP.BIN'])
 assert m['cram_bytes']==32 and len(tiles)<=65536
 assert 106496+65536+262144==434176 and 524288-434176==90112
 assert 131072-106496==24576 and 131072-65536==65536
 assert 106496-len(tiles)-m["files"]["WROOF.BIN"]["bytes"]>=0 and 65536-2*8192==49152
-print('PASS wide preservation: %d frozen baseline files; exact scoped updates; complete audio sources/bank/metadata and audio runtime unchanged; aerial graphics loader scoped; 512px map/nonmirrored cells/seams; VDP1 28032/18/73, VDP2 reservation434176/headroom90112, CRAM32'%len(x['frozen']))
+print('PASS wide preservation: %d frozen baseline files; exact scoped updates; complete audio sources/bank/metadata and audio runtime unchanged; aerial graphics loader scoped; 512px map/nonmirrored cells/seams; VDP1 28544/19/73, VDP2 reservation434176/headroom90112, CRAM32'%len(x['frozen']))
 
 # Refinement preservation is additive: old locks and every artwork/audio byte
 # stay fixed, with only the seven named source/test/validator updates allowed.

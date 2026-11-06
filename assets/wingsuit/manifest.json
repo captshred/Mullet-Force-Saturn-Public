@@ -1,6 +1,6 @@
 {
-  "textures": 18,
-  "vdp1_bytes": 28032,
+  "textures": 19,
+  "vdp1_bytes": 28544,
   "tiles": 578,
   "vdp2_payload_bytes": 65792,
   "cram_bytes": 32,
@@ -361,5 +361,13 @@
       }
     ],
     "max_roof_offset": 6
+  },
+  "embedded_textures": {
+    "chrome_eye": {
+      "width": 16,
+      "height": 16,
+      "frames": 1,
+      "bytes": 512
+    }
   }
 }

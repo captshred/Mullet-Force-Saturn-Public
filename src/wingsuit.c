@@ -119,7 +119,7 @@ void mf_ws_init(mf_wingsuit *g,int coop)
     memset(g,0,sizeof(*g));g->camera_x=MF_WS_CAMERA_INITIAL;
     join(&g->players[0],0);if(coop)join(&g->players[1],1);
     g->players[0].x=home_x(g,0);if(coop)g->players[1].x=home_x(g,1);
-    g->spawn=60;
+    g->spawn=60;g->enemy_rng=0x4d465332u;g->last_pattern=-1;
 }
 static int damage(mf_ws_player *p,int i)
 {
@@ -131,6 +131,80 @@ int mf_ws_beam_active(const mf_wingsuit *g,int i)
 {
     const mf_ws_player *p=&g->players[i];
     return p->active && p->lives>0 && !p->respawn && p->shot_hold==MF_WS_FOCUS_TICKS && !g->game_over;
+}
+/* Quarter-wave table, interpolated in 24.8. No floats or path histories. */
+static int wave_sin(int phase)
+{
+    static const short q[]={0,25,50,74,98,121,142,162,181,198,213,226,237,245,251,255,256};
+    unsigned p=(unsigned)phase&1023u, quadrant=p>>8, t=p&255u;int v;
+    if(quadrant&1)t=256-t;
+    v=t==256?256:q[t>>4]+(q[(t>>4)+1]-q[t>>4])*(int)(t&15)/16;
+    return quadrant>=2?-v:v;
+}
+static unsigned enemy_random(mf_wingsuit *g)
+{g->enemy_rng=g->enemy_rng*1664525u+1013904223u;return g->enemy_rng>>16;}
+static void move_enemy(mf_ws_enemy *e)
+{
+    int t=e->age, offset=0;
+    if(e->kind==MF_WS_CHROME_EYE){
+        /* Negative local time queues the tail above the screen. Every member
+           samples exactly the same immutable path at an 18-tick offset. */
+        e->y=(-16*S)+t*352;
+        if(e->pattern==0)offset=66*wave_sin(t*5);
+        else if(e->pattern==1)offset=86*wave_sin(t*3-256);
+        else offset=36*wave_sin(t*10);
+        e->x=e->origin+e->direction*offset;
+    }else {
+        e->y+=320;
+        switch(e->pattern){
+        case 0: offset=e->direction*clamp(t,0,170)*S/2;break;
+        case 1: offset=8*wave_sin(t*5);break;
+        case 2: offset=e->direction*clamp(t,0,150)*S;break;
+        case 3: offset=e->direction*72*(256-wave_sin(t*3+256))/2;break;
+        default: offset=e->direction*clamp(t,0,70)*S;break;
+        }
+        if(e->origin || e->direction)e->x=clamp(e->origin+offset,12*S,(MF_WS_STAGE_WIDTH-12)*S);
+    }
+}
+static void spawn_enemies(mf_wingsuit *g)
+{
+    int i,n=0,pattern,dir,origin,count;
+    if(--g->spawn>0)return;
+    /* Do not recycle a live formation or its death effects. No capacity growth. */
+    for(i=0;i<MF_WS_ENEMIES;i++)if(g->enemies[i].active || g->enemies[i].explosion)++n;
+    if(n){g->spawn=15;return;}
+    dir=(enemy_random(g)&1)?1:-1;
+    origin=g->camera_x+112*S;
+    if(g->wave%4==3){
+        pattern=(g->formation+1+(int)(enemy_random(g)%2))%3;
+        g->formation=pattern;count=6+(int)(enemy_random(g)%3);
+        for(i=0;i<count;i++){
+            mf_ws_enemy *e=&g->enemies[i];
+            *e=(mf_ws_enemy){.active=1,.kind=MF_WS_CHROME_EYE,.pattern=pattern,
+                .origin=origin,.direction=dir,.age=-i*18};
+            move_enemy(e);
+        }
+        g->spawn=340;
+    }else {
+        /* Shuffle bag: each of five patterns once, no boundary repeat. */
+        if(!g->pattern_bag)g->pattern_bag=31;
+        {int choices[5],available=0;
+         for(i=0;i<5;i++)if((g->pattern_bag&(1u<<i)) && i!=g->last_pattern)choices[available++]=i;
+         pattern=choices[enemy_random(g)%(unsigned)available];}
+        g->pattern_bag&=~(1u<<pattern);g->last_pattern=pattern;
+        if(pattern==0){g->diagonal_direction^=1;dir=g->diagonal_direction?1:-1;}
+        count=3;
+        for(i=0;i<count;i++){
+            int d=pattern==2?(i&1?-1:1):dir;
+            int x=origin+(i-1)*24*S;
+            if(pattern==0 || pattern>=3)x=origin-d*72*S+(i-1)*16*S;
+            if(pattern==2)x=origin-d*92*S;
+            g->enemies[i]=(mf_ws_enemy){.active=1,.x=x,.y=-16*S,
+                .pattern=pattern,.origin=x,.direction=d,.delay=i*14};
+        }
+        g->spawn=270;
+    }
+    ++g->wave;
 }
 void mf_ws_step(mf_wingsuit *g,const unsigned held[2],const unsigned pressed[2],unsigned connected)
 {
@@ -175,21 +249,19 @@ void mf_ws_step(mf_wingsuit *g,const unsigned held[2],const unsigned pressed[2],
             if(!g->beam_wait[i]){pulse[i]=1;g->beam_wait[i]=MF_WS_BEAM_TICKS;}
         }else {g->beam_wait[i]=0;if((p->shot_hold==1 || (edge&MF_A)) && !p->cooldown && player_fire(g,p,i))p->cooldown=MF_WS_FIRE_TICKS;}
     }
-    if(--g->spawn<=0){
-        for(i=0;i<MF_WS_ENEMIES;i++)if(!g->enemies[i].active && !g->enemies[i].explosion){
-            g->enemies[i]=(mf_ws_enemy){1,(24+(int)(g->wave*47u%(MF_WS_STAGE_WIDTH-48)))*S,-12*S,0,0};++g->wave;break;
-        }g->spawn=MF_WS_SPAWN_TICKS;
-    }
+    spawn_enemies(g);
     for(i=0;i<MF_WS_ENEMIES;i++){
         mf_ws_enemy *e=&g->enemies[i];if(e->explosion)--e->explosion;
         if(!e->active)continue;
-        e->y+=320;++e->age;
-        if(e->age==80)aimed_snapshot(g,e->x,e->y+10*S);
+        if(e->delay){--e->delay;continue;}
+        ++e->age;
+        move_enemy(e);
+        if(e->kind==MF_WS_DRONE && e->age==80)aimed_snapshot(g,e->x,e->y+10*S);
         if(e->y>256*S)e->active=0;
     }
     for(i=0;i<2;i++)if(pulse[i])for(j=0;j<MF_WS_ENEMIES;j++){
         mf_ws_player *p=&g->players[i];mf_ws_enemy *e=&g->enemies[j];
-        if(e->active && e->x>=p->x-(MF_WS_BEAM_HALF_WIDTH+10)*S && e->x<=p->x+(MF_WS_BEAM_HALF_WIDTH+10)*S &&
+        if(e->active && !e->delay && e->x>=p->x-(MF_WS_BEAM_HALF_WIDTH+(e->kind==MF_WS_CHROME_EYE?6:10))*S && e->x<=p->x+(MF_WS_BEAM_HALF_WIDTH+(e->kind==MF_WS_CHROME_EYE?6:10))*S &&
            e->y+10*S>=MF_WS_BEAM_TOP*S && e->y-10*S<=p->y-MF_WS_BEAM_EMITTER*S){
             e->active=0;e->explosion=12;p->score+=100;++g->deaths;
         }
@@ -199,7 +271,7 @@ void mf_ws_step(mf_wingsuit *g,const unsigned held[2],const unsigned pressed[2],
         s->x+=s->vx;s->y-=6*S;
         if(--s->ttl<=0 || s->y < -8*S || s->x<4*S || s->x>(MF_WS_STAGE_WIDTH-4)*S){s->active=0;continue;}
         for(j=0;j<MF_WS_ENEMIES;j++){
-            mf_ws_enemy *e=&g->enemies[j];if(e->active && near(s->x,s->y,e->x,e->y,12,13)){
+            mf_ws_enemy *e=&g->enemies[j];if(e->active && near(s->x,s->y,e->x,e->y,e->kind==MF_WS_CHROME_EYE?7:12,e->kind==MF_WS_CHROME_EYE?7:13)){
                 e->active=0;e->explosion=12;++g->deaths;s->active=0;g->players[s->owner].score+=100;break;
             }
         }
@@ -217,7 +289,7 @@ void mf_ws_step(mf_wingsuit *g,const unsigned held[2],const unsigned pressed[2],
     for(i=0;i<2;i++){
         mf_ws_player *p=&g->players[i];if(!p->active || p->lives<=0)continue;
         alive=1;if(p->respawn)continue;
-        for(j=0;j<MF_WS_ENEMIES;j++)if(g->enemies[j].active && near(p->x,p->y,g->enemies[j].x,g->enemies[j].y,15,18))g->deaths+=damage(p,i);
+        for(j=0;j<MF_WS_ENEMIES;j++)if(g->enemies[j].active && near(p->x,p->y,g->enemies[j].x,g->enemies[j].y,g->enemies[j].kind==MF_WS_CHROME_EYE?10:15,g->enemies[j].kind==MF_WS_CHROME_EYE?13:18))g->deaths+=damage(p,i);
     }
     g->game_over=!alive;
 }

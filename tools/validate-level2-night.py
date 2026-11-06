@@ -3,14 +3,15 @@
 from pathlib import Path
 import json,hashlib,struct
 from level2_night_scope import night_lock
+from level2_enemy_scope import enemy_change,enemy_lock
 R=Path(__file__).resolve().parents[1];A=R/'assets/wingsuit';m=json.loads((A/'manifest.json').read_text());lock=night_lock()
 def info(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
 allowed={'assets/wingsuit/WCELL.BIN','assets/wingsuit/WMAP.BIN','assets/wingsuit/WPAL.BIN','assets/wingsuit/WROOF.BIN','assets/wingsuit/manifest.json',
  'src/wingsuit_aerial_data.h','src/wingsuit_runtime.c','tests/wingsuit_mock/jo/jo.h','tests/wingsuit_runtime_test.c',
  'tools/build-topdown-city-v2.py','tools/level2_aerial_scope.py','tools/validate-topdown-city-v2.py','tools/validate-level2-wide.py'}
 assert set(lock['changes'])==allowed
-for n,e in lock['changes'].items():assert info((R/n).read_bytes())==e['after'],n
-for n,e in lock['extra_frozen'].items():assert info((R/n).read_bytes())==e,n
+for n,e in lock['changes'].items():assert info((R/n).read_bytes())==enemy_change(n,e['after']),n
+for n,e in lock['extra_frozen'].items():assert info((R/n).read_bytes())==enemy_change(n,e),n
 assert m['aerial_city']==lock['aerial_city']
 # Exact native pixel positions and silhouettes, with only the three newly
 # separated material classes mapped back to their parent index assignments.
@@ -49,9 +50,9 @@ assert 'background_palette->data!=WS_CRAM_BASE+1' in source
 assert 'wipe(WS_CRAM_BASE,7*512)' in source and 'copy_file("WPAL.BIN",WS_CRAM_BASE,32)' in source
 for key,begin,end in [('render','static void render(', 'void mf_ws_runtime_frame('),('frame','void mf_ws_runtime_frame(',None),('sprite_state','static int restore_sprite_state','static int copy_file'),('audio_load','    if(!mf_ws_audio_load','    slCharNbg1')]:
  a=source.index(begin);b=source.index(end,a) if end else len(source)
- assert hashlib.sha256(source[a:b].encode()).hexdigest()==lock['runtime_preserved'][key],key
+ assert hashlib.sha256(source[a:b].encode()).hexdigest()==(enemy_lock()['runtime_sections']['render'] if key=='render' else lock['runtime_preserved'][key]),key
 sdk=R/'.deps/joengine/jo_engine/vdp2_malloc.c'
 if sdk.exists():
  text=sdk.read_text();assert 'CRAM_PALETTE_SIZE      (256)' in text and '+ CRAM_PALETTE_SIZE + 1;' in text
-assert (m['textures'],m['vdp1_bytes'],m['cram_bytes'],m['max_sprite_commands'])==(18,28032,32,73)
+assert (m['textures'],m['vdp1_bytes'],m['cram_bytes'],m['max_sprite_commands'])==(19,28544,32,73)
 print('PASS night palette: real257 SDK/256 native bank mismatch reproduces parent pink index12; aligned colors/shadows10 < alleys1 < asphalt12 < paving14 < steel/concrete; zero pink RGB entries, exact native geometry after material-only reindex, full render/parallax/frame/audio preserved; font and CRAM guards safe')

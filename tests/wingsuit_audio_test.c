@@ -141,7 +141,7 @@ int main(void)
     for(i=0;i<20;i++)sim(&g,0,MF_A,0);
     assert(starts[4]+starts[5]+starts[6]+starts[7]==n && !live[1]);assert(reads==r);
     load(1700);reset_counts();mf_ws_init(&g,1);g.spawn=10000;
-    g.players[0].shot_hold=19;g.enemies[0]=(mf_ws_enemy){1,130*256,100*256,0,0};
+    g.players[0].shot_hold=19;g.enemies[0]=(mf_ws_enemy){1,130*256,100*256,0,0,0,0,0,0,0};
     sim(&g,MF_A,0,0);assert(g.deaths==1 && starts[4]==1);
     for(i=0;i<20;i++)sim(&g,MF_A,0,0);
     assert(starts[4]+starts[5]+starts[6]+starts[7]==1 && notes[0]==1);

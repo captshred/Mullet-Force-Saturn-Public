@@ -6,7 +6,7 @@
 static const unsigned zero[2]={0,0};
 static void setup(mf_wingsuit *g){mf_ws_init(g,1);g->spawn=10000;}
 static void step(mf_wingsuit *g,unsigned a,unsigned b){unsigned held[2]={a,b};mf_ws_step(g,held,zero,3);}
-static void drone(mf_wingsuit *g,int x,int y){g->enemies[0]=(mf_ws_enemy){1,x,y,0,0};}
+static void drone(mf_wingsuit *g,int x,int y){g->enemies[0]=(mf_ws_enemy){1,x,y,0,0,0,0,0,0,0};}
 int main(void)
 {
     mf_wingsuit g;int i,x,total;

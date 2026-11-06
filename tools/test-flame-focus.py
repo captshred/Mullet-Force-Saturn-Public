@@ -52,7 +52,8 @@ assert origin['base_commit']=='f94c7721ef0d846ee618d44b006040477d063328' and len
 for name,info in origin['files'].items():assert m['files'][name]==audio_asset(name,info) and sha((A/name).read_bytes())==audio_asset(name,info)['sha256'],name
 for name,digest in origin['sources_sha256'].items():assert sha((R/name).read_bytes())==audio_source(name,digest),name
 s=(R/'src/wingsuit.c').read_text();a=s.index('    for(i=0;i<2;i++)if(pulse[i])');b=s.index('    for(i=0;i<MF_WS_SHOTS;i++)',a)
-assert sha(s[a:b].encode())==origin['beam_collision_sha256']
+from level2_enemy_scope import enemy_lock
+assert sha(s[a:b].encode())==enemy_lock()['runtime_sections']['beam_collision']
 caps=[(A/f'WFO{i}.BIN').read_bytes() for i in range(4)]
 assert len(set(caps))==4 and all(len(b)==1024 for b in caps)
 for phase,b in enumerate(caps):
@@ -66,7 +67,7 @@ for phase,b in enumerate(caps):
   assert occupied==list(range(occupied[0],occupied[-1]+1)) and row[16]
  assert [x for x,v in enumerate(rows[-1]) if v]==[15,16,17], 'stable centered emitter in all phases'
  assert rows[-1][16]==struct.unpack_from('>H',frames[0],32)[0], 'hot core retained'
-assert m['textures']==18 and m['vdp1_bytes']==28032 and m['max_sprite_commands']==73
+assert m['textures']==19 and m['vdp1_bytes']==28544 and m['max_sprite_commands']==73
 print('PASS flame origin: four native 32x16 phases, stable three-pixel hot emitter, smooth 21..25-pixel bloom, exact body/cap seams; parent non-audio payloads except scoped aerial backgrounds and beam collision byte-for-byte unchanged')
 # Exact integration ordering remains guarded, not a second transition path.
 s=(R/'src/main.c').read_text()

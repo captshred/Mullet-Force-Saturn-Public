@@ -81,7 +81,7 @@ const mf_ws_mixer_diagnostic *mf_ws_audio_mixer_diagnostics(void){return &mixer_
 unsigned mf_ws_audio_fault(void){return mixer_status.losses;}
 void jo_free(void *p){++frees;free(p);}
 void jo_dma_copy(const void *a,void *b,unsigned n){memcpy(b,a,n);}
-int jo_sprite_add(const jo_img *im){if(register_fail)return -1;assert(last<17);slots+=im->width*im->height*2;return ++last;}
+int jo_sprite_add(const jo_img *im){if(register_fail)return -1;assert(last<18);slots+=im->width*im->height*2;return ++last;}
 void jo_sprite_free_all(void){++resets;last=-1;slots=0;}
 int jo_get_last_sprite_id(void){return last;}
 void slSoundOffWait(void){++off;}
@@ -135,11 +135,11 @@ void jo_sprite_disable_clipping(void){clipping=0;}
 void jo_sprite_enable_clipping(int outside){assert(!outside);clipping=1;}
 void jo_sprite_set_clipping_area(unsigned x,unsigned y,unsigned w,unsigned h,int z)
 {assert(x==48 && y==0 && w==223 && h==239 && z==101);++clip_commands;}
-static int drawn_x[18],drawn_y[18];
+static int drawn_x[19],drawn_y[19];
 void jo_sprite_draw3D2(int id,int x,int y,int z){
     assert(clipping && clip_commands==1);drawn_x[id]=x;drawn_y[id]=y;
     int i;
-    if(id>=10){
+    if(id>=10 && id<18){
         int actor=-1,j;
         for(j=0;j<2;j++)if(mf_ws_beam_active(&shooter,j) && id==(id<14?10:14)+(int)((shooter.ticks/3+j)&3))actor=j;
         assert(actor>=0 && x==mf_ws_screen_x(&shooter,shooter.players[actor].x)/256-16 && beam_n[actor]<7);
@@ -172,7 +172,11 @@ int main(void)
     /* Repeated callbacks without a new VBlank cannot release resources. */
     for(i=0;i<10;i++)mf_ws_runtime_frame(in,p,now);
     assert(!resets && !reads);frame(in,p);frame(in,p);assert(!resets);
-    frame(in,p);assert(resets==1 && off==1 && last==17 && slots==28032);
+    frame(in,p);assert(resets==1 && off==1 && last==18 && slots==28544);
+    {mf_wingsuit saved=shooter;
+     shooter.enemies[0]=(mf_ws_enemy){.active=1,.kind=MF_WS_CHROME_EYE,.x=160*256,.y=80*256};
+     rendered_types=0;render();assert(rendered_types&(1u<<18));
+     assert(drawn_x[18]==152 && drawn_y[18]==72);shooter=saved;draws=0;}
     assert(ws_ptmr==2 && cds==2 && !in_stage);
     assert(reads==26 && frees==26 && !draws && !p[0] && !p[1]);
     assert(ws_vdp1[0]==0x5555 && ws_vdp1[0x10000/2]==0 && ws_vdp1[0x7fef8/2]==0x5555);
@@ -210,13 +214,13 @@ int main(void)
        must submit through the initialized renderer with unchanged sort Z. */
     mf_ws_init(&shooter,1);
     shooter.players[0].invulnerable=shooter.players[1].invulnerable=0;
-    shooter.enemies[0]=(mf_ws_enemy){1,100*256,60*256,0,0};
-    shooter.enemies[1]=(mf_ws_enemy){0,150*256,60*256,0,12};
+    shooter.enemies[0]=(mf_ws_enemy){1,100*256,60*256,0,0,0,0,0,0,0};
+    shooter.enemies[1]=(mf_ws_enemy){0,150*256,60*256,0,12,0,0,0,0,0};
     shooter.shots[0]=(mf_ws_shot){1,100*256,80*256,0,60,0};
     shooter.hostile[0]=(mf_ws_hostile_shot){1,150*256,80*256,0,60,0,768};
     rendered_types=0;render();assert(rendered_types==63u);
     {
-        int before_x[18],before_y[18],k;
+        int before_x[19],before_y[19],k;
         memcpy(before_x,drawn_x,sizeof(drawn_x));memcpy(before_y,drawn_y,sizeof(drawn_y));
         shooter.camera_x+=8*256;render();
         for(k=0;k<6;k++){assert(drawn_x[k]==before_x[k]-8);assert(drawn_y[k]==before_y[k]);}
@@ -273,7 +277,7 @@ int main(void)
     puts("PASS VDP1 state: stopped PTMR restarts in auto mode; SGL state restored after VDP2 scheduling; all six render paths accepted independently of gameplay");
     mf_ws_init(&shooter,1);shooter.spawn=10000;
     shooter.players[0].shot_hold=shooter.players[1].shot_hold=MF_WS_FOCUS_TICKS-1;
-    shooter.enemies[0]=(mf_ws_enemy){1,130*256,100*256,0,0};
+    shooter.enemies[0]=(mf_ws_enemy){1,130*256,100*256,0,0,0,0,0,0,0};
     in[0].held=MF_A|MF_RIGHT;in[1].held=MF_A|MF_LEFT;phase=3;
     audio_events=audio_pumps=0;rendered_types=0;frame(in,p);
     check_beam_coverage(0);check_beam_coverage(1);
@@ -293,7 +297,7 @@ int main(void)
         mf_ws_init(&shooter,1);shooter.players[0].y=shooter.players[1].y=223*256;
         shooter.players[0].invulnerable=shooter.players[1].invulnerable=0;
         shooter.players[0].shot_hold=shooter.players[1].shot_hold=20;
-        for(n=0;n<MF_WS_ENEMIES;n++)shooter.enemies[n]=(mf_ws_enemy){1,100*256,60*256,0,0};
+        for(n=0;n<MF_WS_ENEMIES;n++)shooter.enemies[n]=(mf_ws_enemy){1,100*256,60*256,0,0,0,0,0,0,0};
         for(n=0;n<MF_WS_SHOTS;n++)shooter.shots[n]=(mf_ws_shot){1,100*256,80*256,0,60,0};
         for(n=0;n<MF_WS_HOSTILE;n++)shooter.hostile[n]=(mf_ws_hostile_shot){1,150*256,80*256,0,60,0,768};
         r=draws;render();assert(beam_draws==14 && draws-r==72 && clip_commands==1 && !clipping);
@@ -346,7 +350,7 @@ int main(void)
     audio_ready=1;
     puts("PASS startup readiness: title gates gameplay until audio ready; asynchronous consumer failure retains specific E108 cause");
     puts("PASS filesystem: root table overflow reproduced; all twenty-six assets read in ALEVEL2; parent restored; per-asset missing/length/read/registration errors");
-    puts("PASS actual Level 2 loader: real-VBlank drain, bank reset, 18 definitions/28032 bytes, arena bounds, CRAM/font isolation, SCSP release, no gameplay allocations/I/O, partial-load failure");
+    puts("PASS actual Level 2 loader: real-VBlank drain, bank reset, 19 definitions/28544 bytes, arena bounds, CRAM/font isolation, SCSP release, no gameplay allocations/I/O, partial-load failure");
     palette.data=cram+256;r=reads;i=resets;
     mf_ws_runtime_begin(0,&palette,now);frame(in,p);frame(in,p);frame(in,p);frame(in,p);
     assert(error==100 && reads==r && resets==i && strstr(diagnostic,"CRAM"));
