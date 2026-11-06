@@ -1,0 +1,17 @@
+{
+  "base_commit": "4a42eea5ad2f3ee6aa768256e0d31988903f9570",
+  "sources": {
+    "src/wingsuit_audio.c": {
+      "before": "7f3c6cdb2140d5d822fcc6410c357970466a8de82746ebedbd70c5b78d8cba08",
+      "after": "a568e60c804f67806d9b1543551b2a7df778366212d8910005815f5f9b2a8777"
+    },
+    "src/wingsuit_audio.h": {
+      "before": "c9ae49aca25d4731dd2142a57882325c850683aecd5cb311aec6e23b5f650d78",
+      "after": "81a1b7d90652326d6a7e67e3c4615de4c28193ce62a3fb34cdc2bc124556d615"
+    },
+    "src/wingsuit_runtime.c": {
+      "before": "e6ea4c1851b734be91e02c7b260a655dee57cfd1b6b44012a7ee1d6effc756f2",
+      "after": "f74ad57e4693fd95e82eb8ae8715f46cffae4733bf2614a17c000c6f1fe6b47d"
+    }
+  }
+}

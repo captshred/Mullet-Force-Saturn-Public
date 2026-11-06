@@ -12,6 +12,9 @@ static int stopped=1,inflight,reads,frees,accept=1,initializations,commands;
 static unsigned clock_now;
 static int starts[8],stops[8],notes[2],offs[2],bank[2],program[2],live[8],status_error;
 static const char *fail_name;
+static unsigned fail_stage,trace[32],trace_n;
+static int init_status=1;
+static void progress_event(const mf_ws_audio_diagnostic *d){assert(trace_n<32);trace[trace_n++]=d->stage;assert(!d->has_status);}
 char *jo_fs_read_file(const char *n,int *size){(void)n;(void)size;assert(0);return NULL;}
 static char *read_exact(const char *name,int expected)
 {
@@ -23,21 +26,23 @@ static char *read_exact(const char *name,int expected)
 }
 void jo_free(void *p){assert(!inflight);frees++;free(p);}
 void slSoundOffWait(void){stopped=1;}
-void slSoundOnWait(void){assert(stopped && ram[0x4e1]==0x80);stopped=0;}
+void slSoundOnWait(void){assert(stopped && !ram[0x4e1] && diagnostic.stage==MF_WS_AUDIO_CPU_RESTART);stopped=0;}
 void slDMACopy(void *s,void *d,unsigned n){assert(stopped && !inflight && (unsigned char *)d>=ram && (unsigned char *)d+n<=ram+sizeof(ram));memcpy(d,s,n);inflight=1;}
 void slDMAWait(void){inflight=0;}
-void slSndFlush(void){}
+void slSndFlush(void){assert(diagnostic.stage==MF_WS_AUDIO_FLUSH && !ready && !stopped);}
 void slInitSound(Uint8 *p,unsigned s,Uint8 *m,unsigned n){assert(stopped && p==(Uint8 *)sddrvstsk && s==MF_SOUND_DRIVER_BYTES && m && n==MF_WS_MAP_BYTES);inflight=1;ram[0x4e1]=0x80;commands=0;memset(live,0,sizeof(live));memset(bank,0,sizeof(bank));memset(program,0,sizeof(program));}
-void SND_Init(SndIniDt *p){assert(stopped && p->program==(Uint16 *)sddrvstsk && p->program_size==MF_SOUND_DRIVER_BYTES && p->map_size==MF_WS_MAP_BYTES/2);initializations++;}
-int SND_ChgMap(int n){assert(!n);return 0;}
-int SND_StopDsp(void){return 0;}
-int SND_SetCdDaLev(int l,int r){assert(!l && !r);return 0;}
-int SND_SetTlVl(int v){assert(v==15);return 0;}
+void SND_Init(SndIniDt *p){assert(stopped && p->program==(Uint16 *)sddrvstsk && p->program_size==MF_SOUND_DRIVER_BYTES && p->map_size==20); /* Pinned binary doubles words; not an invented byte mock. */
+    {unsigned char snapshot[44];memcpy(snapshot,p->map,sizeof(snapshot));assert(!snapshot[40] && !snapshot[41] && !snapshot[42] && !snapshot[43]);}
+    assert(diagnostic.stage==MF_WS_AUDIO_SND_INIT);initializations++;}
+int SND_ChgMap(int n){assert(!n && diagnostic.stage==MF_WS_AUDIO_MAP_CHANGE);return fail_stage==MF_WS_AUDIO_MAP_CHANGE?init_status:SND_RET_SET;}
+int SND_StopDsp(void){assert(diagnostic.stage==MF_WS_AUDIO_DSP_STOP && !stopped);return fail_stage==MF_WS_AUDIO_DSP_STOP?init_status:SND_RET_SET;}
+int SND_SetCdDaLev(int l,int r){assert(!l && !r && diagnostic.stage==MF_WS_AUDIO_CDDA_LEVEL);return fail_stage==MF_WS_AUDIO_CDDA_LEVEL?init_status:SND_RET_SET;}
+int SND_SetTlVl(int v){assert(v==15 && diagnostic.stage==MF_WS_AUDIO_TOTAL_VOLUME);return fail_stage==MF_WS_AUDIO_TOTAL_VOLUME?init_status:SND_RET_SET;}
 static int accepted(void){if(!accept)return 0;assert(++commands<=8);return 1;}
-static int check_volume(int p,int v,int f){assert(!stopped && p>=0 && p<8 && v==(p<2?MF_WS_FLAME_VOLUME:p<4?MF_WS_SHOT_VOLUME:MF_SFX_VOLUME) && !f);return accepted()?0:1;}
-static int check_start(int p,int b,int song,int pr){assert(!stopped && p>=2 && p<8 && !b && song==(p<4?1:0) && !pr);if(!accepted())return 1;starts[p]++;live[p]=1;return 0;}
-static int check_stop(int p){assert(p==2 || p==3);if(!accepted())return 1;stops[p]++;live[p]=0;return 0;}
-static int check_midi(int p,int pr,int cmd,int channel,int a,int b)
+int SND_SetSeqVl(int p,int v,int f){assert(!stopped && p>=0 && p<8 && v==(p<2?MF_WS_FLAME_VOLUME:p<4?MF_WS_SHOT_VOLUME:MF_SFX_VOLUME) && !f);return accepted()?0:1;}
+int SND_StartSeq(int p,int b,int song,int pr){assert(!stopped && p>=2 && p<8 && !b && song==(p<4?1:0) && !pr);if(!accepted())return 1;starts[p]++;live[p]=1;return 0;}
+int SND_StopSeq(int p){assert(p==2 || p==3);if(!accepted())return 1;stops[p]++;live[p]=0;return 0;}
+int SND_CtrlDirMidi(int p,int pr,int cmd,int channel,int a,int b)
 {
     assert(p>=0 && p<2 && !pr && channel==p);
     if(!accepted())return 1;
@@ -47,31 +52,14 @@ static int check_midi(int p,int pr,int cmd,int channel,int a,int b)
     else {assert(cmd==0 && a==60 && !b && live[p]);live[p]=0;offs[p]++;}
     return 0;
 }
-int slSoundRequest(const char *format,...)
-{
-    va_list ap;int cmd,a=0,b=0,c=0,d=0,result=0;
-    assert(ram[0x4e1]==0x80);va_start(ap,format);cmd=va_arg(ap,int);
-    if(strlen(format)>0)a=va_arg(ap,int);
-    if(strlen(format)>1)b=va_arg(ap,int);
-    if(strlen(format)>2)c=va_arg(ap,int);
-    if(strlen(format)>3)d=va_arg(ap,int);
-    va_end(ap);
-    if(cmd==SND_SEQ_VOL){assert(!strcmp(format,"bbb"));result=check_volume(a,b,c);}
-    else if(cmd==SND_SEQ_START){assert(!strcmp(format,"bbbb"));result=check_start(a,b,c,d);}
-    else if(cmd==SND_SEQ_STOP){assert(!strcmp(format,"b"));result=check_stop(a);}
-    else if(cmd==SND_MIDI_CTRL_DIR){assert(!strcmp(format,"bbbb"));result=check_midi(b>>5,0,a,b&31,c,d);}
-    else {
-        assert(cmd==SND_MAP_CHG || cmd==SND_DSP_STOP || cmd==SND_CDDA_LEV || cmd==SND_TTL_VOL);
-        if(cmd==SND_TTL_VOL)assert(a==15);
-        else assert(!a && !b);
-    }
-    return result?-1:0;
-}
+int slSoundRequest(const char *format,...){(void)format;assert(!"SGL command path must not be used by the repair");return 0x25a00700;}
 void SND_GetSeqStat(SndSeqStat *s,int p){assert(p>=2 && p<8);s->mode=live[p];s->stat=p==4?status_error:0;}
 static void pump(unsigned now,unsigned focus){clock_now=now;commands=0;mf_ws_audio_step(now,focus);}
 static void load(unsigned now)
 {
-    fail_name=NULL;accept=1;status_error=0;assert(mf_ws_audio_load(read_exact));
+    fail_name=NULL;accept=1;status_error=0;trace_n=0;assert(mf_ws_audio_load(read_exact,progress_event));
+    assert(diagnostic.completed==0xfff && !strcmp(diagnostic.operation,"TOTAL VOLUME"));
+    assert(trace_n==12);{unsigned j;for(j=0;j<12;j++)assert(trace[j]==j+1);}
     pump(now,0);pump(now+1,0);pump(now+2,0);assert(flame[0].prep==3 && flame[1].prep==3);
 }
 static void reset_counts(void){memset(starts,0,sizeof(starts));memset(stops,0,sizeof(stops));memset(notes,0,sizeof(notes));memset(offs,0,sizeof(offs));}
@@ -136,11 +124,21 @@ int main(void)
     accept=0;pump(3005,0);assert(live[0]);accept=1;pump(3006,1);assert(!live[0] && offs[0]==1);
     pump(3007,1);assert(notes[0]==2);status_error=0x81;pump(3008,1);assert(mf_ws_audio_fault()==0x481);
     for(i=0;i<3;i++){
-        fail_name=names[i];assert(!mf_ws_audio_load(read_exact));assert(!ready);
+        fail_name=names[i];trace_n=0;assert(!mf_ws_audio_load(read_exact,progress_event));assert(!ready);
         n=starts[4];mf_ws_audio_events(1,3);pump(3100,3);assert(starts[4]==n);
     }
+    fail_name=NULL;
+    {static const unsigned failures[]={MF_WS_AUDIO_MAP_CHANGE,MF_WS_AUDIO_DSP_STOP,MF_WS_AUDIO_CDDA_LEVEL,MF_WS_AUDIO_TOTAL_VOLUME};unsigned k;
+     for(init_status=1;init_status<=7;init_status+=6)for(k=0;k<4;k++){
+        fail_stage=failures[k];trace_n=0;assert(!mf_ws_audio_load(read_exact,progress_event));
+        assert(!ready && diagnostic.stage==fail_stage && diagnostic.has_status && diagnostic.expected==SND_RET_SET && diagnostic.actual==init_status);
+        assert(!(diagnostic.completed&(1u<<(fail_stage-1))));
+        assert(trace[trace_n-1]==fail_stage);
+     }
+    }
+    fail_stage=0;
     load(~0u-3);reset_counts();mf_ws_audio_events(1,0);pump(~0u,1);
     pump(0,1);assert(notes[0]==1 && starts[4]==1);pump(48,1);assert(notes[0]==1);
     mf_ws_audio_events(1,0);pump(49,1);assert(starts[4]==2);
-    puts("PASS Level 2 audio: real single-shot events; 19/20-tick ignition, indefinite sustain/no retrigger, release/pause/death and independent flames; three required polyphony mixes; explosion burst, shot-only oldest stealing, SDK rejection/release guard/clock wrap, DMA bank once and runtime status diagnostics");
+    puts("PASS E108 repair: pinned word-count/padded MAP, twelve ordered stage markers, all four SND init-status failures preserved, no SGL request path; Level 2 audio: real single-shot events; 19/20-tick ignition, indefinite sustain/no retrigger, release/pause/death and independent flames; three required polyphony mixes; explosion burst, shot-only oldest stealing, SDK rejection/release guard/clock wrap, DMA bank once and runtime status diagnostics");
 }

@@ -15,4 +15,10 @@ def audio_source(name,before):
  assert set(lock['sources'])=={'src/wingsuit_audio.c','src/wingsuit_audio.h','src/wingsuit_audio_data.h'}
  if name not in lock['sources']:return before
  change=lock['sources'][name];assert change['before']==before,(name,'unexpected audio source baseline')
- return change['after']
+ value=change['after']
+ repair=json.loads((R/'docs/level2-audio-e108-source-lock.json').read_text())
+ assert repair['base_commit']=='4a42eea5ad2f3ee6aa768256e0d31988903f9570'
+ assert set(repair['sources'])=={'src/wingsuit_audio.c','src/wingsuit_audio.h','src/wingsuit_runtime.c'}
+ if name in repair['sources']:
+  c=repair['sources'][name];assert c['before']==value,(name,'unexpected repair baseline');value=c['after']
+ return value

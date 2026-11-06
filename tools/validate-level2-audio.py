@@ -3,6 +3,7 @@
 from pathlib import Path
 import json,hashlib,struct,re
 import seq
+from level2_audio_scope import audio_source
 R=Path(__file__).resolve().parents[1];A=R/'assets/wingsuit';r=json.loads((A/'audio.json').read_text())
 sha=lambda b:hashlib.sha256(b).hexdigest()
 lock=json.loads((R/'docs/level2-audio-bank-lock.json').read_text())
@@ -10,7 +11,7 @@ assert lock['base_commit']=='c721fa189043e66ee6292398ef3fcddbb692063a'
 for name,c in lock['files'].items():
  b=(A/name).read_bytes();assert len(b)==c['after']['bytes'] and sha(b)==c['after']['sha256']
  assert r['files'][name]==c['after']
-for name,c in lock['sources'].items():assert sha((R/name).read_bytes())==c['after'],name
+for name,c in lock['sources'].items():assert sha((R/name).read_bytes())==audio_source(name,c['before']),name
 old=(R/'assets/cd/FX.TON').read_bytes();ton=(A/'WDEATH.TON').read_bytes()
 assert struct.unpack_from('>7H',ton)==(14,32,42,52,56,92,128)
 assert ton[14:56]==old[24:66], 'complete original mixer/velocity/PEG/PLFO tables'
@@ -50,6 +51,17 @@ for name,digest in pres['sources_sha256'].items():assert sha((R/name).read_bytes
 source=(R/'src/wingsuit.c').read_text();a=source.index('static uint32_t integer_sqrt');b=source.index('/* One successful tap',a)
 assert sha(source[a:b].encode())==pres['aiming_sha256']
 transport=(R/'src/wingsuit_audio.c').read_text()
-assert 'slSoundRequest("bbbb",SND_MIDI_CTRL_DIR' in transport and 'slSndFlush()' in transport
-assert all(call not in transport for call in ['SND_StartSeq(', 'SND_SetSeqVl(', 'SND_CtrlDirMidi(', 'SND_StopSeq(', 'MF_WS_SOUND_BASE[0x4e1]=0'])
+assert 'slSoundRequest(' not in transport
+assert 'SND_ChgMap(0)' in transport and 'SND_CtrlDirMidi(' in transport and 'SND_StartSeq(' in transport
+assert 'SND_INI_ARA_SZ(init)=MF_WS_MAP_BYTES/sizeof(Uint16)' in transport
+repair=json.loads((R/'docs/level2-audio-e108-source-lock.json').read_text())
+for name,c in repair['sources'].items():assert sha((R/name).read_bytes())==c['after'],name
 print('PASS Level 2 audio: full canonical tables/voice/PCM, approved stereo downmix hashes, 44.1k mono weapons, exact 27981..41239 loop/128-frame seam, aligned nonoverlapping banks, 308080 high-water/216208 free; exact scoped audio changes')
+
+# E108 repair cannot silently rewrite the approved bank, gameplay or baseline locks.
+repair_preserved=json.loads((R/'docs/level2-audio-e108-preservation.json').read_text())
+assert repair_preserved['base_commit']=='4a42eea5ad2f3ee6aa768256e0d31988903f9570'
+assert len([p for p in repair_preserved['files'] if p.startswith('assets/wingsuit/')])==26
+for name,info in repair_preserved['files'].items():
+ b=(R/name).read_bytes();assert len(b)==info['bytes'] and sha(b)==info['sha256'],name
+print('PASS E108 preservation: all 24 runtime payloads, exact bank/manifest metadata, gameplay, Level 1 source, workflow and original bank locks unchanged')

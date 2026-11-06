@@ -60,9 +60,14 @@ char *jo_fs_read_file(const char *name,int *size)
     fseek(f,0,SEEK_END);*size=(int)ftell(f);rewind(f);data=malloc(*size);assert(data);
     assert(fread(data,1,*size,f)==(size_t)*size);fclose(f);if(short_asset && !strcmp(name,short_asset))--*size;return data;
 }
-int mf_ws_audio_load(mf_ws_audio_reader read){
+static mf_ws_audio_diagnostic audio_diagnostic;
+static int fail_audio_init;
+const mf_ws_audio_diagnostic *mf_ws_audio_diagnostics(void){return &audio_diagnostic;}
+int mf_ws_audio_load(mf_ws_audio_reader read,mf_ws_audio_progress progress){
     const char *n[]={"WDEATH.MAP","WDEATH.SEQ","WDEATH.TON"};int i;static const int size[]={MF_WS_MAP_BYTES,MF_WS_SEQ_BYTES,MF_WS_TON_BYTES};
-    for(i=0;i<3;i++){char *p=read(n[i],size[i]);if(!p)return 0;jo_free(p);}return 1;
+    for(i=0;i<3;i++){char *p=read(n[i],size[i]);if(!p)return 0;jo_free(p);}
+    if(fail_audio_init){audio_diagnostic=(mf_ws_audio_diagnostic){MF_WS_AUDIO_MAP_CHANGE,7,"MAP CHANGE",1,0,1};progress(&audio_diagnostic);return 0;}
+    return 1;
 }
 static int audio_events,audio_pumps;
 void mf_ws_audio_events(int n,unsigned shots){(void)shots;audio_events+=n;}
@@ -220,10 +225,13 @@ int main(void)
     }
     puts("PASS full-height renderer: seven player heights and all animation phases, contiguous row coverage, clean offscreen top, attached emitters; simultaneous two-player/all-pools maximum 72 commands");
     puts("PASS render integration: two attached animated beam draws through restored SGL; release removes draws; simulation deaths queued once, rendering never re-triggers audio");
+    fail_audio_init=1;mf_ws_runtime_begin(0,&palette,now);frame(in,p);frame(in,p);frame(in,p);frame(in,p);
+    assert(error==108 && strstr(diagnostic,"WDEATH BANK") && strstr(diagnostic,"MAP CHANGE") && strstr(diagnostic,"EXPECT 0 GOT 1"));
+    fail_audio_init=0;
     window_fail=1;mf_ws_runtime_begin(0,&palette,now);frame(in,p);frame(in,p);frame(in,p);frame(in,p);
     assert(ws_ptmr==0 && strstr(diagnostic,"WINDOW") && error==107);window_fail=0;
     fail_texture=0;mf_ws_runtime_begin(0,&palette,now);frame(in,p);frame(in,p);frame(in,p);
-    assert(last==-1 && resets==4);r=reads;i=draws;frame(in,p);assert(reads==r && draws==i);
+    assert(last==-1 && resets==5);r=reads;i=draws;frame(in,p);assert(reads==r && draws==i);
     fail_texture=-1;fail=1;mf_ws_runtime_begin(0,&palette,now);frame(in,p);frame(in,p);frame(in,p);
     assert(last==-1);r=reads;frame(in,p);assert(reads==r);
     fail=0;ws_edsr=0;ws_ptmr=2;r=reads;i=resets;

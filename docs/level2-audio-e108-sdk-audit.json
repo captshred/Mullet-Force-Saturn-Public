@@ -1,0 +1,18 @@
+{
+  "sdk_revision": "556d081146211b6a1cfa6591d70f9487d406758b",
+  "slSoundRequest_raw_success": {
+    "map_change": "0x25a00700",
+    "dsp_stop": "0x25a00700",
+    "cdda": "0x25a00700",
+    "volume": "0x25a00700"
+  },
+  "slSoundRequest_invalid_format_raw": "0xfffffffe",
+  "snd_map_size_unit": "16-bit words",
+  "map_bytes": 40,
+  "map_words": 20,
+  "snd_map_copy_bytes": 44,
+  "padded_map_buffer_bytes": 44,
+  "passing_40_as_word_count_copy_bytes": 84,
+  "slSoundRequest_section_sha256": "45665b6d607fe3ee475573536e7f0d5a6336d9847c9c27cdd26f1add61d611a3",
+  "snd_main_text_sha256": "cd46b3cfc67b0ccf5afc7fba3e5329c57537a766ab60e6bbbd11b3f2939b91a3"
+}

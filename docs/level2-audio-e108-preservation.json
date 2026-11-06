@@ -1,0 +1,161 @@
+{
+  "base_commit": "4a42eea5ad2f3ee6aa768256e0d31988903f9570",
+  "files": {
+    ".github/workflows/build.yml": {
+      "bytes": 5669,
+      "sha256": "671737d635700a4b2445e1749c307e2b02ceaf6a04b18446830b555dce80274d"
+    },
+    "assets/wingsuit/WBOOM.BIN": {
+      "bytes": 2048,
+      "sha256": "5a3b1bf7fcc1433381197516def627d52ddec907eae587cc32028fe557362dfb"
+    },
+    "assets/wingsuit/WBUCK.BIN": {
+      "bytes": 2048,
+      "sha256": "9fa9c843be05bf9c98498462fa76d99f16048bc3e304ca502e28f81a08ca647e"
+    },
+    "assets/wingsuit/WBUCKL.BIN": {
+      "bytes": 2048,
+      "sha256": "42e60af95abd2df67cf6ed10c717aa4b67a1e87e3c6af8a8c281be7152300016"
+    },
+    "assets/wingsuit/WBUCKR.BIN": {
+      "bytes": 2048,
+      "sha256": "dad1a5c4bb330991a76b8831ba775fd3d93c4e70f11a946ef8425a3e5abd3249"
+    },
+    "assets/wingsuit/WCELL.BIN": {
+      "bytes": 2752,
+      "sha256": "f3bfd4f1faae13b31c2699d24d8a4fe251406948fc286857a447eb7ac419f477"
+    },
+    "assets/wingsuit/WCHUCK.BIN": {
+      "bytes": 2048,
+      "sha256": "cbfcddef945754a4f5185e6b10a05b10c590127067dc80632419b921a256a659"
+    },
+    "assets/wingsuit/WCHUCKL.BIN": {
+      "bytes": 2048,
+      "sha256": "9fc01c73ce666b083e1cbe092eab625a7d7adcfcfb246e0df4805bac1aabb713"
+    },
+    "assets/wingsuit/WCHUCKR.BIN": {
+      "bytes": 2048,
+      "sha256": "326b3182f2231b99bd4665f33cfe4cdc2b649a85b9a420b083cd1864ad8e61c6"
+    },
+    "assets/wingsuit/WDEATH.MAP": {
+      "bytes": 40,
+      "sha256": "208082d43d0f85e7dc468966e1cb1fae17522ae63ff574bcb7a7906d07f99ddb"
+    },
+    "assets/wingsuit/WDEATH.SEQ": {
+      "bytes": 84,
+      "sha256": "3672e4b1aa681bbe1dec774086fc4f6b8488e6e3be9bec352f869c94246e7c63"
+    },
+    "assets/wingsuit/WDEATH.TON": {
+      "bytes": 159132,
+      "sha256": "dbc44bc321ec1555b34d19e0f48e394f2430fdedd73848defc887cc7354d8eac"
+    },
+    "assets/wingsuit/WDRONE.BIN": {
+      "bytes": 1152,
+      "sha256": "8ca9e9317dbebdac14269cd4114aaef56d370be49218b7cb0487131864a1c0d7"
+    },
+    "assets/wingsuit/WFL0.BIN": {
+      "bytes": 2048,
+      "sha256": "28a863ca8a8a30e9fa42c55b27583f4da8beee9e8186e15ede647177bf37d425"
+    },
+    "assets/wingsuit/WFL1.BIN": {
+      "bytes": 2048,
+      "sha256": "81f7cecc9c98f8f250140734a495f419746ab6e20f493f7402ed6d5a14aaa8e9"
+    },
+    "assets/wingsuit/WFL2.BIN": {
+      "bytes": 2048,
+      "sha256": "f2b893894ce303fffed44bfa1e555910dc300527acbb50aff89c15a009cce24b"
+    },
+    "assets/wingsuit/WFL3.BIN": {
+      "bytes": 2048,
+      "sha256": "68b08422ae8e08a9607049200e5e4a4b466748837445e71ccab70a03c6340bde"
+    },
+    "assets/wingsuit/WFO0.BIN": {
+      "bytes": 1024,
+      "sha256": "0b24602365e56c734b90f918d387e487cc6ccb238b27df8467646ed5adc3c0f7"
+    },
+    "assets/wingsuit/WFO1.BIN": {
+      "bytes": 1024,
+      "sha256": "bb613f92b69a005a939e79df151a44ff69c9f3796656a2f376a0de384c214a99"
+    },
+    "assets/wingsuit/WFO2.BIN": {
+      "bytes": 1024,
+      "sha256": "eb77cc13a1621b944477298c93e25b78116997086d2cb6676140a16391474d21"
+    },
+    "assets/wingsuit/WFO3.BIN": {
+      "bytes": 1024,
+      "sha256": "a8c52ccc8aeefb55c3ac19e97f87aff676e4295b39a831416d9fdcf20b8fa197"
+    },
+    "assets/wingsuit/WHOST.BIN": {
+      "bytes": 128,
+      "sha256": "7ea42936bac837f101de9879f713e2ab0e9a823269eab2fa0dcb7a6108e0fd49"
+    },
+    "assets/wingsuit/WMAP.BIN": {
+      "bytes": 8192,
+      "sha256": "d22432568dc18e83f0a83b41380dc11ced413879ea2fec20e994e91a7df4c771"
+    },
+    "assets/wingsuit/WPAL.BIN": {
+      "bytes": 32,
+      "sha256": "214e2441e712d7b6b716228512c279924caa9452c48609d712b23fadd548b961"
+    },
+    "assets/wingsuit/WSHOT.BIN": {
+      "bytes": 128,
+      "sha256": "912c344d4d05e9defaf136767f9e55ee6b35bd1d04c46ee0187c00b8fb17077d"
+    },
+    "assets/wingsuit/audio.json": {
+      "bytes": 3089,
+      "sha256": "abfb91417761687b6649b4afb262a0e220449ed500d29c7b30df905e6a7aecb4"
+    },
+    "assets/wingsuit/manifest.json": {
+      "bytes": 3271,
+      "sha256": "e1e795ccbda01375d7589b05b21dbc91bca087e2eee7c46142ad24a0d472576c"
+    },
+    "docs/level2-audio-bank-lock.json": {
+      "bytes": 1594,
+      "sha256": "7cc4bfd2e5b000060ff6e9e9c5977e59a0c59b53c2bcb4c25fd137cd58e25a88"
+    },
+    "src/dev_stage_skip.h": {
+      "bytes": 482,
+      "sha256": "b35a38ad9b15e55392d5e90a5cc680d79fa4b90def82af512a43574ea12503fa"
+    },
+    "src/game.c": {
+      "bytes": 33187,
+      "sha256": "5dc25170e02bf5cfb664db9822633a0e8f15651770074c0a1c266206e360cd02"
+    },
+    "src/game.h": {
+      "bytes": 3867,
+      "sha256": "92e75058e40cbd8076ab3d07afb231d6e0fb73856282cbbec3809fef75e4309d"
+    },
+    "src/input.c": {
+      "bytes": 1528,
+      "sha256": "2b7b8d25d57684a8b355094cec233a6e70f5a5a4f69f5b98642e2f9b5b866849"
+    },
+    "src/input.h": {
+      "bytes": 492,
+      "sha256": "2193c93bfe09049e0389f2912cc6ef22119866d35e5957d971714d0c0dddca44"
+    },
+    "src/main.c": {
+      "bytes": 24094,
+      "sha256": "ba86af6646fe9a0940b38a828d6a2f23b9c8d89d937d3e1ab205e3fa17b1505c"
+    },
+    "src/music.c": {
+      "bytes": 6948,
+      "sha256": "da9531e09b7bf0b84f1b420e3855b6343e03138b9fef09be0e01ee6b011d554c"
+    },
+    "src/music_data.h": {
+      "bytes": 576,
+      "sha256": "9fa8298721d1d97770c032ff3ebccf215d7b77474a875344b537aa58bac5ae15"
+    },
+    "src/wingsuit.c": {
+      "bytes": 6804,
+      "sha256": "8cfa73fa5855dd0754f2f003f9feaf24a7fb6ec07b528b1df207341aaeb13b8b"
+    },
+    "src/wingsuit.h": {
+      "bytes": 1709,
+      "sha256": "96ad31469846abe71cbac77f22088e5e5062c0cd9d0984599529be51f80eaf68"
+    },
+    "src/wingsuit_audio_data.h": {
+      "bytes": 320,
+      "sha256": "32ceec587adb1fe4544b53713406a2f4d68ab9f7e62cbc58a6cc411e3639a484"
+    }
+  }
+}

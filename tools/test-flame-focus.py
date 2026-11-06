@@ -73,7 +73,7 @@ assert s.index('mf_dev_stage_skip(&game,pressed);')<s.index('mf_game_step_inputs
 assert s.count('mf_ws_runtime_begin(')==1
 s=(R/'src/wingsuit_runtime.c').read_text()
 assert s.index('mf_ws_step(&shooter,held,pressed,conn);mf_ws_audio_events(shooter.deaths,shooter.shots_fired)')<s.index('mf_ws_audio_step(now,focus)')
-assert s.index('slSoundOffWait();wipe(MF_WS_SOUND_RAM,0x80000)')<s.index('mf_ws_audio_load(read_asset)')<s.index('restore_sprite_state())')
+assert s.index('slSoundOffWait();wipe(MF_WS_SOUND_RAM,0x80000)')<s.index('mf_ws_audio_load(read_asset,audio_progress)')<s.index('restore_sprite_state())')
 flags=json.loads((R/'assets/full-gameplay-sfx2/preservation.json').read_text())['profile_flags']
 defines=[f'-D{k}={17 if v=="B" else v}' for k,v in flags.items()]
 with tempfile.TemporaryDirectory(prefix='mf-flame-') as tmp:

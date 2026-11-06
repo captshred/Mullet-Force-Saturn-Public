@@ -2,6 +2,7 @@
 from pathlib import Path
 import subprocess,tempfile
 R=Path(__file__).resolve().parents[1]
+subprocess.run(['python3','tools/audit-level2-audio-sdk.py'],cwd=R,check=True)
 with tempfile.TemporaryDirectory(prefix='mf-wingsuit-') as tmp:
  for name,sources,includes in [
   ('aim',['tests/wingsuit_aim_test.c'],['-Isrc']),

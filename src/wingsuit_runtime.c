@@ -90,6 +90,12 @@ static int texture(const char *name,int w,int h)
 }
 static void wipe(volatile unsigned short *p,unsigned bytes)
 {unsigned i;for(i=0;i<bytes/2;i++)p[i]=0;}
+static void audio_progress(const mf_ws_audio_diagnostic *d)
+{
+    /* Text VRAM updates identify a void SDK call even if it never returns. */
+    jo_print(3,22,"                                   ");
+    jo_printf(3,22,"AUDIO %02d %s",d->stage,d->operation);
+}
 static int load_resources(void)
 {
     unsigned wait;
@@ -123,7 +129,11 @@ static int load_resources(void)
         ids[i]=texture(names[i],widths[i],heights[i]);
         if(ids[i]!=i){if(!failed_asset)load_failure(names[i],"SPRITE ID",i,ids[i]);jo_sprite_free_all();for(i=0;i<18;i++)ids[i]=-1;return 103;}
     }
-    if(!mf_ws_audio_load(read_asset)){if(!failed_asset)load_failure("WDEATH BANK","AUDIO",1,0);return 108;}
+    if(!mf_ws_audio_load(read_asset,audio_progress)){
+        const mf_ws_audio_diagnostic *d=mf_ws_audio_diagnostics();
+        if(!failed_asset)load_failure("WDEATH BANK",d->operation,d->expected,d->actual);
+        return 108;
+    }
     slCharNbg1(COL_TYPE_256,CHAR_SIZE_1x1);
     slPageNbg1(WS_CELLS,0,PNB_1WORD|CN_12BIT);
     slPlaneNbg1(PL_SIZE_1x1);slMapNbg1(WS_MAP,WS_MAP,WS_MAP,WS_MAP);

@@ -1,5 +1,10 @@
 # Level 2 audio, single shot and polyphony
 
+Historical audio-pass1 report. Its SGL-only transport regressed startup with E108
+in WebRetro. The transport/handshake claims below are superseded by
+[level2-audio-runtime-e108.md](level2-audio-runtime-e108.md); the sample data and
+eight-control allocation remain unchanged.
+
 Branch: `feature/level2-audio-pass1`.
 Parent: confirmed playable `c721fa189043e66ee6292398ef3fcddbb692063a`
 (`feature/level2-aimed-drone-pass`). Runtime banks are committed; the original
