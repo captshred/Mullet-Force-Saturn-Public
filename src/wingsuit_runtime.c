@@ -3,6 +3,7 @@
 #include <jo/jo.h>
 #include "wingsuit_runtime.h"
 #include "wingsuit.h"
+#include "wingsuit_city_data.h"
 #include "wingsuit_audio.h"
 #include <string.h>
 static mf_wingsuit shooter;
@@ -38,7 +39,9 @@ static jo_palette *background_palette;
 #endif
 #define WS_CELLS ((void *)VDP2_VRAM_A0)
 #define WS_MAP ((void *)VDP2_VRAM_B0)
-#define WS_CELL_BYTES 2752
+#define WS_CELL_BYTES MF_WS_CITY_CELL_BYTES
+#define WS_SKY_CELLS ((void *)(VDP2_VRAM_A0+MF_WS_SKY_CELL_OFFSET))
+#define WS_SKY_MAP ((void *)(VDP2_VRAM_B0+MF_WS_SKY_MAP_OFFSET))
 #define WS_MAP_BYTES 8192
 #define WS_SPRITE_Z 100
 #define WS_SCREEN_DISTANCE 160
@@ -66,7 +69,7 @@ static int restore_sprite_state(void)
     slScrWindowModeSPR(0);
     slPrioritySpr0(4);slPrioritySpr1(4);slPrioritySpr2(4);slPrioritySpr3(4);
     slPrioritySpr4(4);slPrioritySpr5(4);slPrioritySpr6(4);slPrioritySpr7(4);
-    slPriorityNbg1(1);slPriorityNbg0(7);
+    slPriorityNbg2(2);slPriorityNbg1(1);slPriorityNbg0(7);
     /* slInitSprite in pinned LIBSGL.A installs PTMR=2 (automatic frame-change
        drawing). A sampled PTMR can be stopped/one-shot and is not a restart
        policy. SGL's normal core slSynch submits the fresh command list. */
@@ -124,6 +127,8 @@ static int load_resources(void)
     wipe(background_palette->data,7*512);
     if(!copy_file("WCELL.BIN",WS_CELLS,WS_CELL_BYTES) ||
        !copy_file("WMAP.BIN",WS_MAP,WS_MAP_BYTES) ||
+       !copy_file("WSKY.BIN",WS_SKY_CELLS,MF_WS_SKY_CELL_BYTES) ||
+       !copy_file("WSMAP.BIN",WS_SKY_MAP,WS_MAP_BYTES) ||
        !copy_file("WPAL.BIN",background_palette->data,32))return 102;
     for(i=0;i<18;i++){
         ids[i]=texture(names[i],widths[i],heights[i]);
@@ -138,8 +143,12 @@ static int load_resources(void)
     slPageNbg1(WS_CELLS,0,PNB_1WORD|CN_12BIT);
     slPlaneNbg1(PL_SIZE_1x1);slMapNbg1(WS_MAP,WS_MAP,WS_MAP,WS_MAP);
     slZoomNbg1(65536,65536);slScrPosNbg1(0,0);
-    slScrWindow0(48,0,271,239);slScrWindowModeNbg1(win0_IN);
-    if(slScrAutoDisp(NBG0ON|NBG1ON|SPRON)<0){load_failure("VDP2","SCHEDULE",0,-1);return 104;}
+    slCharNbg2(COL_TYPE_256,CHAR_SIZE_1x1);
+    slPageNbg2(WS_SKY_CELLS,0,PNB_1WORD|CN_12BIT);
+    slPlaneNbg2(PL_SIZE_1x1);slMapNbg2(WS_SKY_MAP,WS_SKY_MAP,WS_SKY_MAP,WS_SKY_MAP);
+    slScrPosNbg2(96*65536,0);
+    slScrWindow0(48,0,271,239);slScrWindowModeNbg1(win0_IN);slScrWindowModeNbg2(win0_IN);
+    if(slScrAutoDisp(NBG0ON|NBG1ON|NBG2ON|SPRON)<0){load_failure("VDP2","SCHEDULE",0,-1);return 104;}
     /* Establish sprite priority/RGB/window state after VDP2 scheduling, so it
        never depends on an inherited Level 1 configuration or an auto helper. */
     if(!restore_sprite_state())return 107;
@@ -149,7 +158,7 @@ static int load(void)
 {
     int result;
     /* The pinned GFS table holds only 256 directory records. Resolve this
-       early root entry once, then give all twenty-four reads a small private table. */
+       early root entry once, then give all twenty-six reads a small private table. */
     if(GFS_NameToId((Sint8 *)"ALEVEL2")<0){
         load_failure("ALEVEL2","DIRECTORY",0,-1);return 106;
     }
@@ -186,6 +195,10 @@ static int bank_after_step(int old_x,const mf_ws_player *p,unsigned held,int was
 static void render(void)
 {
     int i;slScrPosNbg1((shooter.camera_x+(MF_WS_BACKGROUND_X-MF_WS_VIEW_LEFT)*MF_WS_SCALE)*256,-shooter.scroll*65536);
+    /* Half-rate 16.16 camera delta preserves subpixels; skyline has no
+       attachment to street facades. Fixed Y reads as distant city above it. */
+    slScrPosNbg2((MF_WS_BACKGROUND_X+MF_WS_CAMERA_INITIAL/MF_WS_SCALE-MF_WS_VIEW_LEFT)*65536+
+        (shooter.camera_x-MF_WS_CAMERA_INITIAL)*(256/MF_WS_SKY_RATE_DIVISOR),0);
     /* New bank uses raw RGB555, with a fresh default sprite attribute state. */
     jo_sprite_disable_horizontal_flip();jo_sprite_disable_vertical_flip();
     jo_sprite_disable_half_transparency();jo_sprite_disable_dark_filter();

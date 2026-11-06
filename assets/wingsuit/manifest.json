@@ -1,8 +1,8 @@
 {
   "textures": 18,
   "vdp1_bytes": 28032,
-  "tiles": 43,
-  "vdp2_payload_bytes": 10944,
+  "tiles": 863,
+  "vdp2_payload_bytes": 87040,
   "cram_bytes": 32,
   "max_sprite_commands": 73,
   "files": {
@@ -47,12 +47,12 @@
       "sha256": "5a3b1bf7fcc1433381197516def627d52ddec907eae587cc32028fe557362dfb"
     },
     "WCELL.BIN": {
-      "bytes": 2752,
-      "sha256": "f3bfd4f1faae13b31c2699d24d8a4fe251406948fc286857a447eb7ac419f477"
+      "bytes": 55232,
+      "sha256": "898fb5c952a7b6d3f8eacd9b213a6a0fa4e74db72ecaca810712bf970537ac71"
     },
     "WMAP.BIN": {
       "bytes": 8192,
-      "sha256": "46a95d0a1d6272bfb363153512108d9e288375ba5485959827e3ad8944be8eb1"
+      "sha256": "341dec87681c569c0fc3fafdf6a951f0e9bf86e75d45a61d798b222a3f987cc8"
     },
     "WPAL.BIN": {
       "bytes": 32,
@@ -101,6 +101,105 @@
     "WDEATH.TON": {
       "bytes": 158312,
       "sha256": "6f4c4e42e1606e503f343c59e843f255139931957bd11a49ed6ff9d80c3e1ee8"
+    },
+    "WSKY.BIN": {
+      "bytes": 15424,
+      "sha256": "c6ea09cbfa30366b7b045b07419834eef26230677dcf0315f319f70e8b932dd8"
+    },
+    "WSMAP.BIN": {
+      "bytes": 8192,
+      "sha256": "d5bbf167449b6b03729eb64815ee26d460ad96809020312116a2b18161fd63ef"
     }
+  },
+  "sky_tiles": 241,
+  "city": {
+    "width": 512,
+    "height": 512,
+    "crop_x": 96,
+    "sky_visible_height": 104,
+    "sky_rate_denominator": 2,
+    "segments": [
+      {
+        "name": "Rivet mill",
+        "bounds": [
+          144,
+          18,
+          98,
+          94
+        ],
+        "style": "mill"
+      },
+      {
+        "name": "Sawtooth foundry",
+        "bounds": [
+          258,
+          10,
+          104,
+          106
+        ],
+        "style": "sawtooth"
+      },
+      {
+        "name": "Boiler house",
+        "bounds": [
+          148,
+          157,
+          78,
+          82
+        ],
+        "style": "boiler"
+      },
+      {
+        "name": "Broken rail depot",
+        "bounds": [
+          244,
+          153,
+          120,
+          88
+        ],
+        "style": "ruin"
+      },
+      {
+        "name": "Water tower works",
+        "bounds": [
+          144,
+          284,
+          96,
+          81
+        ],
+        "style": "water"
+      },
+      {
+        "name": "Power substation",
+        "bounds": [
+          256,
+          279,
+          108,
+          91
+        ],
+        "style": "power"
+      },
+      {
+        "name": "Narrow brick loft",
+        "bounds": [
+          148,
+          411,
+          62,
+          65
+        ],
+        "style": "loft"
+      },
+      {
+        "name": "Freight loading hall",
+        "bounds": [
+          228,
+          415,
+          134,
+          61
+        ],
+        "style": "loading"
+      }
+    ],
+    "sky_segments": 7
   }
 }

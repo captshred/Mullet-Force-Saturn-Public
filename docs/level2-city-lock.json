@@ -1,0 +1,141 @@
+{
+  "base_commit": "8504ddf8c9c04363862cb1e2cd3e068c0199d39e",
+  "changes": {
+    "assets/wingsuit/WCELL.BIN": {
+      "before": {
+        "bytes": 2752,
+        "sha256": "f3bfd4f1faae13b31c2699d24d8a4fe251406948fc286857a447eb7ac419f477"
+      },
+      "after": {
+        "bytes": 55232,
+        "sha256": "898fb5c952a7b6d3f8eacd9b213a6a0fa4e74db72ecaca810712bf970537ac71"
+      }
+    },
+    "assets/wingsuit/WMAP.BIN": {
+      "before": {
+        "bytes": 8192,
+        "sha256": "46a95d0a1d6272bfb363153512108d9e288375ba5485959827e3ad8944be8eb1"
+      },
+      "after": {
+        "bytes": 8192,
+        "sha256": "341dec87681c569c0fc3fafdf6a951f0e9bf86e75d45a61d798b222a3f987cc8"
+      }
+    },
+    "assets/wingsuit/manifest.json": {
+      "before": {
+        "bytes": 3271,
+        "sha256": "13434ad08d15b4cce672a0e57d15d1aa88c4622f8d67fec0508738e2d742ac2b"
+      },
+      "after": {
+        "bytes": 5064,
+        "sha256": "75689adf84877b07301edf1fd3bae1aae01346a3fa35d8d70e9d0c4088ba5952"
+      }
+    },
+    "src/wingsuit_runtime.c": {
+      "before": {
+        "bytes": 14652,
+        "sha256": "2e70902f922d8d16d77157a99b8fc8a54d28cfb51fb607ba498301b7096f3834"
+      },
+      "after": {
+        "bytes": 15549,
+        "sha256": "031b1d5731806b05107f94e339b30683c30560b7d65d1f5ae466ffe6ff5fa402"
+      }
+    },
+    "tests/wingsuit_disc_test.py": {
+      "before": {
+        "bytes": 3928,
+        "sha256": "f2661d7034f76c71eb32619fab7347a7e733178e48f5a7690872b09a38928b2c"
+      },
+      "after": {
+        "bytes": 3974,
+        "sha256": "ade658bb1259995009e87633ef840645b658609de2bd224608059fed4b804768"
+      }
+    },
+    "tests/wingsuit_mock/jo/jo.h": {
+      "before": {
+        "bytes": 3114,
+        "sha256": "8d4e14676f8c19c34d533d08559a71aa8e26f103fa04536b1b678137f74dd616"
+      },
+      "after": {
+        "bytes": 3358,
+        "sha256": "ee3a0d0693f64fc1a8f4fb1ba08bdfb57361388198203ea48b87f4cdeabccb3a"
+      }
+    },
+    "tests/wingsuit_runtime_test.c": {
+      "before": {
+        "bytes": 20191,
+        "sha256": "3771f6639cf5f14bdd5e890b81dbf75e4251adcbebf9167f297e7032d49c1d8a"
+      },
+      "after": {
+        "bytes": 21583,
+        "sha256": "8ca47f68e290b8c686df3bc637b7e40b17f4ddbf862eb62d60e49dc72b6c0b02"
+      }
+    },
+    "tools/level2_balanced_scope.py": {
+      "before": {
+        "bytes": 759,
+        "sha256": "74a56b8f19a4174536ee31c461b2d959cf42bc773cb2fbcdc596ae149d13d757"
+      },
+      "after": {
+        "bytes": 885,
+        "sha256": "11b6ae8a8b31f01f9fb79a724ba06df498011855d71d7ef7ac91160af4e1178a"
+      }
+    },
+    "tools/stage-wingsuit-assets.py": {
+      "before": {
+        "bytes": 838,
+        "sha256": "76e994a61d285ad16a2785ba9ec0098c47ebadaa9da297dcbc98e3371968e1d0"
+      },
+      "after": {
+        "bytes": 838,
+        "sha256": "f413236b4af97746e211463f2cf927af2a875e47056713be8c4db50bdd7bb092"
+      }
+    },
+    "tools/test-flame-focus.py": {
+      "before": {
+        "bytes": 7113,
+        "sha256": "330d8b2b08f6ecb3b35fe9358792d2802f0264b6c7d40a9ceb26aefdaba2299a"
+      },
+      "after": {
+        "bytes": 7190,
+        "sha256": "22a7ce2eda63ede8e0fa306e42f1aa02e3799d272ca39c1d8913b96da5692def"
+      }
+    },
+    "tools/validate-level2-wide.py": {
+      "before": {
+        "bytes": 4523,
+        "sha256": "4880b3ed10cd731e0422855b935e534543bd4fcfe0aa3d95f6f167060d2804cd"
+      },
+      "after": {
+        "bytes": 4432,
+        "sha256": "9119eed4df252075c30dc8adfab4182bf52f0595cd74764bd3ac9e224d3c71d3"
+      }
+    },
+    "tools/validate-wingsuit.py": {
+      "before": {
+        "bytes": 3344,
+        "sha256": "c525d02b2cbf71701b483344b044db70ab8d93c1fd6dc7a8b63a192c098aa9d1"
+      },
+      "after": {
+        "bytes": 3390,
+        "sha256": "5a451dc5c03d3233a6dbbd26622d0f55443dca8bae901e9b80190973ff2acac3"
+      }
+    }
+  },
+  "extra_frozen": {
+    "docs/level2-balanced-lock.json": {
+      "bytes": 2912,
+      "sha256": "df6011337f4693ad4042acee97a94f0607df2468e07e0e2450f6f9a745845f00"
+    },
+    "docs/level2-balanced-scroll.md": {
+      "bytes": 7194,
+      "sha256": "523e11aae9de03db70803c0b4bc4c7a1eed7f20588cc3da90f8e49e562332962"
+    }
+  },
+  "preserved_runtime": {
+    "audio_load": "14cae329fbdeef4f6e9d52f088bef8075bad10c27731905a5c6deaef44bb9f91",
+    "audio_runtime": "04e78ac681170ae58e06ce7f74ecd5c92e3e71fe899f6857fa0f735f4180aa90",
+    "audio_progress": "8f3367116acfa65ca6f9b08355c1c8b88319c5c2517d76a4724392237df53e1c"
+  },
+  "loader_after_sha256": "5ee9582cec7717d7bdaa5d464ee81739dac1c7233ca93f707148ca12bff2595f"
+}
