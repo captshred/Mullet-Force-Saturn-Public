@@ -24,6 +24,7 @@ extern unsigned short ws_ptmr,ws_edsr;
 #define SPRON (1<<6)
 #define NBG0ON 1
 #define NBG1ON 2
+#define NBG2ON 4
 #define NBG1OFF 0x200
 #define NBG2OFF 0x400
 #define win0_IN 3
@@ -86,3 +87,11 @@ void jo_printf(int,int,const char *,...);
 
 void jo_sprite_enable_clipping(int);
 void jo_sprite_set_clipping_area(unsigned,unsigned,unsigned,unsigned,int);
+
+void slCharNbg2(int,int);
+void slPageNbg2(void *,void *,int);
+void slPlaneNbg2(int);
+void slMapNbg2(void *,void *,void *,void *);
+void slScrPosNbg2(int,int);
+void slScrWindowModeNbg2(unsigned short);
+void slPriorityNbg2(int);

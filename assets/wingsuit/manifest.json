@@ -1,8 +1,8 @@
 {
   "textures": 18,
   "vdp1_bytes": 28032,
-  "tiles": 43,
-  "vdp2_payload_bytes": 10944,
+  "tiles": 576,
+  "vdp2_payload_bytes": 65664,
   "cram_bytes": 32,
   "max_sprite_commands": 73,
   "files": {
@@ -47,12 +47,12 @@
       "sha256": "5a3b1bf7fcc1433381197516def627d52ddec907eae587cc32028fe557362dfb"
     },
     "WCELL.BIN": {
-      "bytes": 2752,
-      "sha256": "f3bfd4f1faae13b31c2699d24d8a4fe251406948fc286857a447eb7ac419f477"
+      "bytes": 36864,
+      "sha256": "305e5f324708f1a88b3f40ab9188c9726ee109ff3761f03e44feaf32632063c6"
     },
     "WMAP.BIN": {
       "bytes": 8192,
-      "sha256": "46a95d0a1d6272bfb363153512108d9e288375ba5485959827e3ad8944be8eb1"
+      "sha256": "b72f5c90ae2960553e1c331192948009441846fcf015be8c458641b14d52606b"
     },
     "WPAL.BIN": {
       "bytes": 32,
@@ -101,6 +101,265 @@
     "WDEATH.TON": {
       "bytes": 158312,
       "sha256": "6f4c4e42e1606e503f343c59e843f255139931957bd11a49ed6ff9d80c3e1ee8"
+    },
+    "WROOF.BIN": {
+      "bytes": 12416,
+      "sha256": "f6cfdfb091cc4e814cee1a98cab00c74b42f1047b64e923da00bf772ec0a4206"
+    },
+    "WRMAP.BIN": {
+      "bytes": 8192,
+      "sha256": "6a1bf3d2470f812c092fc57cc4d325ff71a853054082ed30134681ea71f69af0"
     }
+  },
+  "roof_tiles": 194,
+  "aerial_city": {
+    "width": 512,
+    "height": 512,
+    "crop_x": 96,
+    "roof_rate": [
+      9,
+      8
+    ],
+    "sites": [
+      {
+        "name": "Dockworks: bevelled broad warehouse",
+        "plane": 0,
+        "footprint": [
+          [
+            156,
+            16
+          ],
+          [
+            258,
+            16
+          ],
+          [
+            258,
+            58
+          ],
+          [
+            270,
+            58
+          ],
+          [
+            270,
+            126
+          ],
+          [
+            146,
+            126
+          ],
+          [
+            146,
+            30
+          ]
+        ],
+        "wall_height": 4,
+        "yard": null
+      },
+      {
+        "name": "Collapsed pump annex",
+        "plane": 0,
+        "footprint": [
+          [
+            294,
+            28
+          ],
+          [
+            360,
+            28
+          ],
+          [
+            360,
+            60
+          ],
+          [
+            344,
+            60
+          ],
+          [
+            344,
+            116
+          ],
+          [
+            294,
+            116
+          ]
+        ],
+        "wall_height": 3,
+        "yard": null
+      },
+      {
+        "name": "Rail machine shop: L footprint",
+        "plane": 0,
+        "footprint": [
+          [
+            146,
+            178
+          ],
+          [
+            202,
+            178
+          ],
+          [
+            202,
+            214
+          ],
+          [
+            240,
+            214
+          ],
+          [
+            240,
+            302
+          ],
+          [
+            146,
+            302
+          ]
+        ],
+        "wall_height": 5,
+        "yard": null
+      },
+      {
+        "name": "Raised navigation roof: stepped landing works",
+        "plane": 1,
+        "footprint": [
+          [
+            266,
+            180
+          ],
+          [
+            322,
+            180
+          ],
+          [
+            322,
+            174
+          ],
+          [
+            350,
+            174
+          ],
+          [
+            350,
+            206
+          ],
+          [
+            356,
+            206
+          ],
+          [
+            356,
+            270
+          ],
+          [
+            342,
+            270
+          ],
+          [
+            342,
+            296
+          ],
+          [
+            266,
+            296
+          ]
+        ],
+        "wall_height": 8,
+        "yard": [
+          252,
+          168,
+          374,
+          316
+        ]
+      },
+      {
+        "name": "Courtyard assembly works: U footprint",
+        "plane": 0,
+        "footprint": [
+          [
+            146,
+            350
+          ],
+          [
+            268,
+            350
+          ],
+          [
+            268,
+            472
+          ],
+          [
+            232,
+            472
+          ],
+          [
+            232,
+            398
+          ],
+          [
+            186,
+            398
+          ],
+          [
+            186,
+            472
+          ],
+          [
+            146,
+            472
+          ]
+        ],
+        "wall_height": 4,
+        "yard": null
+      },
+      {
+        "name": "Raised tank mill: staggered perimeter",
+        "plane": 1,
+        "footprint": [
+          [
+            284,
+            356
+          ],
+          [
+            338,
+            356
+          ],
+          [
+            338,
+            368
+          ],
+          [
+            358,
+            368
+          ],
+          [
+            358,
+            446
+          ],
+          [
+            344,
+            446
+          ],
+          [
+            344,
+            464
+          ],
+          [
+            284,
+            464
+          ]
+        ],
+        "wall_height": 6,
+        "yard": [
+          274,
+          344,
+          374,
+          484
+        ]
+      }
+    ],
+    "max_roof_offset": 6
   }
 }

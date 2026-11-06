@@ -13,9 +13,9 @@ lock=json.loads((R/'docs/flame-preservation.json').read_text())
 assert lock['base_commit']=='785d2f8c0ea602c1d65f348154c107a4f1c3cd96'
 assert len(lock['files'])==13
 for n,f in lock['files'].items():assert m['files'][n]==change('assets/wingsuit/'+n,f),(n,'approved asset changed')
-new={f'WFL{i}.BIN' for i in range(4)}|{f'WFO{i}.BIN' for i in range(4)}|{'WDEATH.MAP','WDEATH.SEQ','WDEATH.TON'}
+new={f'WFL{i}.BIN' for i in range(4)}|{f'WFO{i}.BIN' for i in range(4)}|{'WDEATH.MAP','WDEATH.SEQ','WDEATH.TON','WROOF.BIN','WRMAP.BIN'}
 assert set(m['files'])==set(lock['files'])|new
-assert sum(f['bytes'] for f in m['files'].values())==197444
+assert sum(f['bytes'] for f in m['files'].values())==197444-10944+m['vdp2_payload_bytes']
 subprocess.run(['python3','tools/validate-level2-audio.py'],cwd=R,check=True)
 frames=[(A/f'WFL{i}.BIN').read_bytes() for i in range(4)]
 assert len(set(frames))==4 and all(len(b)==2048 for b in frames)
@@ -67,7 +67,7 @@ for phase,b in enumerate(caps):
  assert [x for x,v in enumerate(rows[-1]) if v]==[15,16,17], 'stable centered emitter in all phases'
  assert rows[-1][16]==struct.unpack_from('>H',frames[0],32)[0], 'hot core retained'
 assert m['textures']==18 and m['vdp1_bytes']==28032 and m['max_sprite_commands']==73
-print('PASS flame origin: four native 32x16 phases, stable three-pixel hot emitter, smooth 21..25-pixel bloom, exact body/cap seams; parent non-audio payloads except scoped wide WMAP and beam collision byte-for-byte unchanged')
+print('PASS flame origin: four native 32x16 phases, stable three-pixel hot emitter, smooth 21..25-pixel bloom, exact body/cap seams; parent non-audio payloads except scoped aerial backgrounds and beam collision byte-for-byte unchanged')
 # Exact integration ordering remains guarded, not a second transition path.
 s=(R/'src/main.c').read_text()
 assert s.index('mf_dev_stage_skip(&game,pressed);')<s.index('mf_game_step_inputs(&game,held,pressed,')
@@ -94,4 +94,4 @@ with tempfile.TemporaryDirectory(prefix='mf-flame-') as tmp:
   ('audio',['tests/wingsuit_audio_test.c'],['-Itests/wingsuit_audio_mock','-Itests/sound_mock','-Isrc']),
   ('runtime',['tests/wingsuit_runtime_test.c','src/wingsuit.c'],['-Itests/wingsuit_mock','-Isrc'])]:
   run(name,sources,includes,['-fsanitize=undefined','-fno-sanitize-recover=all'])
-print('PASS flame preservation: approved payloads preserved except scoped wide WMAP; exact canonical explosion/Shot and split Flame tones with full tables/map; 24 files/197444 bytes; dev/release Saturn X; simulation/audio/runtime UBSan')
+print('PASS flame preservation: approved payloads preserved except scoped aerial backgrounds; exact canonical explosion/Shot and split Flame tones with full tables/map; 26 files; background-only payload change; dev/release Saturn X; simulation/audio/runtime UBSan')

@@ -1,0 +1,183 @@
+{
+  "base_commit": "8504ddf8c9c04363862cb1e2cd3e068c0199d39e",
+  "changes": {
+    "assets/wingsuit/WCELL.BIN": {
+      "before": {
+        "bytes": 2752,
+        "sha256": "f3bfd4f1faae13b31c2699d24d8a4fe251406948fc286857a447eb7ac419f477"
+      },
+      "after": {
+        "bytes": 36864,
+        "sha256": "305e5f324708f1a88b3f40ab9188c9726ee109ff3761f03e44feaf32632063c6"
+      }
+    },
+    "assets/wingsuit/WMAP.BIN": {
+      "before": {
+        "bytes": 8192,
+        "sha256": "46a95d0a1d6272bfb363153512108d9e288375ba5485959827e3ad8944be8eb1"
+      },
+      "after": {
+        "bytes": 8192,
+        "sha256": "b72f5c90ae2960553e1c331192948009441846fcf015be8c458641b14d52606b"
+      }
+    },
+    "assets/wingsuit/manifest.json": {
+      "before": {
+        "bytes": 3271,
+        "sha256": "13434ad08d15b4cce672a0e57d15d1aa88c4622f8d67fec0508738e2d742ac2b"
+      },
+      "after": {
+        "bytes": 7482,
+        "sha256": "99bfd495466a89d306539829501b9636586c7af9136c40a22f9f9e65a64606e6"
+      }
+    },
+    "src/wingsuit_runtime.c": {
+      "before": {
+        "bytes": 14652,
+        "sha256": "2e70902f922d8d16d77157a99b8fc8a54d28cfb51fb607ba498301b7096f3834"
+      },
+      "after": {
+        "bytes": 15676,
+        "sha256": "eaf0f5bb767e6cb10210d99a1ebc567a49b1d5813ec7fff939480b4b32951f55"
+      }
+    },
+    "tests/wingsuit_disc_test.py": {
+      "before": {
+        "bytes": 3928,
+        "sha256": "f2661d7034f76c71eb32619fab7347a7e733178e48f5a7690872b09a38928b2c"
+      },
+      "after": {
+        "bytes": 3975,
+        "sha256": "9d770333bcdb50661e4091951706c87d0914a398f2bbd6a96e7359707da4e908"
+      }
+    },
+    "tests/wingsuit_mock/jo/jo.h": {
+      "before": {
+        "bytes": 3114,
+        "sha256": "8d4e14676f8c19c34d533d08559a71aa8e26f103fa04536b1b678137f74dd616"
+      },
+      "after": {
+        "bytes": 3358,
+        "sha256": "ee3a0d0693f64fc1a8f4fb1ba08bdfb57361388198203ea48b87f4cdeabccb3a"
+      }
+    },
+    "tests/wingsuit_runtime_test.c": {
+      "before": {
+        "bytes": 20191,
+        "sha256": "3771f6639cf5f14bdd5e890b81dbf75e4251adcbebf9167f297e7032d49c1d8a"
+      },
+      "after": {
+        "bytes": 21654,
+        "sha256": "4a26ee9fc12a32657d6d6e01df0a9bbb0905deb69bdd97c833a70d599aba0505"
+      }
+    },
+    "tools/level2_balanced_scope.py": {
+      "before": {
+        "bytes": 759,
+        "sha256": "74a56b8f19a4174536ee31c461b2d959cf42bc773cb2fbcdc596ae149d13d757"
+      },
+      "after": {
+        "bytes": 899,
+        "sha256": "e34deaef802513928c203684b18715716778bf3f77f120cf44ba3d25259d9028"
+      }
+    },
+    "tools/stage-wingsuit-assets.py": {
+      "before": {
+        "bytes": 838,
+        "sha256": "76e994a61d285ad16a2785ba9ec0098c47ebadaa9da297dcbc98e3371968e1d0"
+      },
+      "after": {
+        "bytes": 838,
+        "sha256": "f413236b4af97746e211463f2cf927af2a875e47056713be8c4db50bdd7bb092"
+      }
+    },
+    "tools/test-flame-focus.py": {
+      "before": {
+        "bytes": 7113,
+        "sha256": "330d8b2b08f6ecb3b35fe9358792d2802f0264b6c7d40a9ceb26aefdaba2299a"
+      },
+      "after": {
+        "bytes": 7204,
+        "sha256": "0b8be241b9528f6fe46070dd12eaabff0ed5386f3ce297c3a0788ec3a3509a65"
+      }
+    },
+    "tools/validate-level2-wide.py": {
+      "before": {
+        "bytes": 4523,
+        "sha256": "4880b3ed10cd731e0422855b935e534543bd4fcfe0aa3d95f6f167060d2804cd"
+      },
+      "after": {
+        "bytes": 4444,
+        "sha256": "6a06f0db45c1a284ed09eecdab07442c325d9e1b035afd628f90cdc27bd1b737"
+      }
+    },
+    "tools/validate-wingsuit.py": {
+      "before": {
+        "bytes": 3344,
+        "sha256": "c525d02b2cbf71701b483344b044db70ab8d93c1fd6dc7a8b63a192c098aa9d1"
+      },
+      "after": {
+        "bytes": 3421,
+        "sha256": "87b80269ed4166cf8ba9741576f7681bef699fb23308e4814666a2757331742c"
+      }
+    }
+  },
+  "extra_frozen": {
+    "docs/level2-balanced-lock.json": {
+      "bytes": 2912,
+      "sha256": "df6011337f4693ad4042acee97a94f0607df2468e07e0e2450f6f9a745845f00"
+    },
+    "docs/level2-balanced-scroll.md": {
+      "bytes": 7194,
+      "sha256": "523e11aae9de03db70803c0b4bc4c7a1eed7f20588cc3da90f8e49e562332962"
+    }
+  },
+  "gameplay_frozen": {
+    "src/wingsuit.c": {
+      "bytes": 10215,
+      "sha256": "aa3136f2dfd40b063276d162262d5e7770ad15cbd64222d249785be47a3a9f61"
+    },
+    "src/wingsuit.h": {
+      "bytes": 2618,
+      "sha256": "ed3f2094b0921e76d46eb4178999852182cc240ef9a02307e91becc4511528ea"
+    },
+    "src/main.c": {
+      "bytes": 24094,
+      "sha256": "ba86af6646fe9a0940b38a828d6a2f23b9c8d89d937d3e1ab205e3fa17b1505c"
+    },
+    "src/game.c": {
+      "bytes": 33187,
+      "sha256": "5dc25170e02bf5cfb664db9822633a0e8f15651770074c0a1c266206e360cd02"
+    },
+    "src/game.h": {
+      "bytes": 3867,
+      "sha256": "92e75058e40cbd8076ab3d07afb231d6e0fb73856282cbbec3809fef75e4309d"
+    },
+    "src/music.c": {
+      "bytes": 6948,
+      "sha256": "da9531e09b7bf0b84f1b420e3855b6343e03138b9fef09be0e01ee6b011d554c"
+    },
+    "src/wingsuit_audio.c": {
+      "bytes": 20370,
+      "sha256": "a00d60f1a97e21f91c68da25d2b5517acf156a49564bba1ca1ccc2a4e22c4f0d"
+    },
+    "src/wingsuit_audio.h": {
+      "bytes": 2192,
+      "sha256": "64db14d01784dbec049ed0a4b998474839f4184a53d0bb1e7c968e5e68ddde64"
+    },
+    "src/wingsuit_audio_data.h": {
+      "bytes": 747,
+      "sha256": "fdbecf0d2385f1078fa4607fd779068eec57a45a49b710465c9e8759dc6a294b"
+    },
+    ".github/workflows/build.yml": {
+      "bytes": 5669,
+      "sha256": "671737d635700a4b2445e1749c307e2b02ceaf6a04b18446830b555dce80274d"
+    }
+  },
+  "preserved_runtime": {
+    "audio_load": "14cae329fbdeef4f6e9d52f088bef8075bad10c27731905a5c6deaef44bb9f91",
+    "audio_runtime": "04e78ac681170ae58e06ce7f74ecd5c92e3e71fe899f6857fa0f735f4180aa90",
+    "audio_progress": "8f3367116acfa65ca6f9b08355c1c8b88319c5c2517d76a4724392237df53e1c"
+  },
+  "loader_after_sha256": "bf72b918fa04bcf0d83173754f46bbbbf9ca85dab6337aff8404f9fb4b06d518"
+}
