@@ -2,6 +2,8 @@
 from pathlib import Path
 import subprocess,tempfile
 R=Path(__file__).resolve().parents[1]
+subprocess.run(['python3','tools/test-level2-driver-ready.py'],cwd=R,check=True)
+subprocess.run(['python3','tools/validate-level2-ready.py'],cwd=R,check=True)
 subprocess.run(['python3','tools/validate-rooftop-turrets.py'],cwd=R,check=True)
 subprocess.run(['python3','tools/validate-level2-enemies.py'],cwd=R,check=True)
 subprocess.run(['python3','tools/validate-level2-wide.py'],cwd=R,check=True)

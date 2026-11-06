@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Independent split PCM/native bank layout, preservation and SND validation."""
 from pathlib import Path
+from level2_ready_scope import ready_hash
 import json,hashlib,struct,re
 import seq
 from level2_wide_scope import change,wide_source
@@ -88,7 +89,7 @@ for name,info in frozen['files'].items():
 # Initializer remains exact. Only the explicitly authorized one-shot transport
 # is replaced; additive source hashes and immutable assets remain exhaustive.
 a=transport.index('    stage(MF_WS_AUDIO_MAP_READ)');b=transport.index('    /* Submission success',a)
-assert sha(transport[a:b].encode())==split['load_sequence_sha256'],'E108 loading sequence changed'
+assert sha(transport[a:b].encode())==ready_hash(split['load_sequence_sha256']),'E108 loading sequence changed'
 poly=poly_lock()
 for name,c in poly['sources'].items():assert sha((R/name).read_bytes())==wide_source(name,c['after']),name
 for name,info in poly['frozen'].items():
@@ -98,6 +99,6 @@ for name,begin,end in [
  ('flame_observer','static void observe_flame','/* Read only the driver'),
  ('startup_handshake','static void startup(unsigned','int mf_ws_audio_ready')]:
  a=transport.index(begin);b=transport.index(end,a)
- assert sha(transport[a:b].encode())==poly['preserved_sections'][name],name
+ assert sha(transport[a:b].encode())==ready_hash(poly['preserved_sections'][name]),name
 assert 'midi(first_port+i,1,60,110)' in transport
 print('PASS polyphony source-only lock: all Level 1/2 audio/hero assets unchanged; exact authorized wide WMAP/manifest exception; exact split Flame scheduler/observer, E108 initialization/readiness; no Level 2 sequence start/stop; full approved source chain preserved')

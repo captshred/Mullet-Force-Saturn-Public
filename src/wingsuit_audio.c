@@ -99,12 +99,16 @@ int mf_ws_audio_load(mf_ws_audio_reader read,mf_ws_audio_progress notify)
     MF_WS_SOUND_BASE[0x4e1]=0;
     stage(MF_WS_AUDIO_CPU_RESTART);slSoundOnWait();completed();
     stage(MF_WS_AUDIO_FLUSH);slSndFlush();slDMAWait();completed();
+    /* Pinned 2.10 dispatch at 0x1bd4..0x1be4 advances history cursor
+       (exported word 0x041a) and RESETS interval timer 0x8838 per command.
+       Capture before submission: commands may finish before load returns. */
+    boot_counter=sound_word(0x41a);
     stage(MF_WS_AUDIO_DSP_STOP);if(!result(SND_StopDsp()))return 0;
     stage(MF_WS_AUDIO_CDDA_LEVEL);if(!result(SND_SetCdDaLev(0,0)))return 0;
     stage(MF_WS_AUDIO_TOTAL_VOLUME);if(!result(SND_SetTlVl(15)))return 0;
     /* Submission success is not driver consumption. Finish a bounded, live
        readiness handshake during existing title VBlanks before accepting play. */
-    boot_counter=sound_word(0x8838);boot=BOOT_CPU;return 1;
+    boot=BOOT_CPU;return 1;
 }
 /* Bounded overflow preserves every sounding PCM; only NEW excess is dropped.
    At most one extra batch waits (2 shots / 4 explosions) when all controls run. */
@@ -261,7 +265,7 @@ static void observe_mixer(unsigned now)
     for(s=0;s<32;s++)if(watch[s].missing && watch[s].missing_since==now)watch[s].free=mixer.free_slots;
 }
 const mf_ws_mixer_diagnostic *mf_ws_audio_mixer_diagnostics(void){return &mixer;}
-/* Pinned 2.10 timer increments word 0x8838; its eight 16-byte request
+/* Pinned 2.10 exports consumed-command cursor at 0x041a; its eight 16-byte request
    blocks at 0x700 are cleared by the command consumer, not by SND submission. */
 static int commands_empty(void)
 {
@@ -308,7 +312,7 @@ static void startup(unsigned now)
     }
     switch(boot){
     case BOOT_CPU:
-        if(sound_word(0x8838)==boot_counter || !commands_empty())return;
+        if(sound_word(0x41a)==boot_counter || !commands_empty())return;
         completed();stage(MF_WS_AUDIO_MAP_READY);boot=BOOT_MAP;break;
     case BOOT_MAP:{
         int status=SND_ChgMap(0);

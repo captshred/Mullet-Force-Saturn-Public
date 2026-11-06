@@ -17,11 +17,17 @@ static const char *fail_name;
 static unsigned fail_stage,trace[32],trace_n;
 static int init_status=1,driver_frozen,command_frozen;
 static unsigned one_until[8],note_stamp;
-static int defer_note;
+static int defer_note,consume_on_submit;
+static void word(unsigned,unsigned);
 static int attack_live[2],loop_live[2],loop_notes[2],attack_offs[2],loop_offs[2];
 static int submit(unsigned cmd)
 {
-    unsigned i;for(i=0;i<8;i++)if(!ram[0x700+i*16]){ram[0x700+i*16]=cmd;return 0;}
+    unsigned i;
+    if(consume_on_submit && !stopped){
+        if(cmd==8)memcpy(ram+0x500,ram+0xa000,40);
+        word(0x41a,(sound_word(0x41a)&0x7f0)+16);word(0x8838,0);return 0;
+    }
+    for(i=0;i<8;i++)if(!ram[0x700+i*16]){ram[0x700+i*16]=cmd;return 0;}
     return 1;
 }
 static void progress_event(const mf_ws_audio_diagnostic *d){assert(trace_n<32);trace[trace_n++]=d->stage;assert(!d->has_status);}
@@ -40,7 +46,7 @@ void slSoundOnWait(void){assert(stopped && !ram[0x4e1] && diagnostic.stage==MF_W
 void slDMACopy(void *s,void *d,unsigned n){assert(stopped && !inflight && (unsigned char *)d>=ram && (unsigned char *)d+n<=ram+sizeof(ram));memcpy(d,s,n);inflight=1;}
 void slDMAWait(void){inflight=0;}
 void slSndFlush(void){assert(diagnostic.stage==MF_WS_AUDIO_FLUSH && !ready && !stopped);}
-void slInitSound(Uint8 *p,unsigned s,Uint8 *m,unsigned n){assert(stopped && p==(Uint8 *)sddrvstsk && s==MF_SOUND_DRIVER_BYTES && m && n==MF_WS_MAP_BYTES);inflight=1;ram[0x4e1]=0x80;memcpy(ram+0xa000,m,n);memset(ram+0x700,0,128);ram[0x8838]=ram[0x8839]=0;commands=0;memset(attack_live,0,sizeof(attack_live));memset(loop_live,0,sizeof(loop_live));memset(live,0,sizeof(live));memset(bank,0,sizeof(bank));memset(program,0,sizeof(program));memset(ram+0x8000,0,0x800);ram[0x67ec]=ram[0x67ed]=0;note_stamp=0;}
+void slInitSound(Uint8 *p,unsigned s,Uint8 *m,unsigned n){assert(stopped && p==(Uint8 *)sddrvstsk && s==MF_SOUND_DRIVER_BYTES && m && n==MF_WS_MAP_BYTES);inflight=1;ram[0x4e1]=0x80;memcpy(ram+0xa000,m,n);memset(ram+0x700,0,128);ram[0x8838]=ram[0x8839]=0;ram[0x41a]=ram[0x41b]=0;commands=0;memset(attack_live,0,sizeof(attack_live));memset(loop_live,0,sizeof(loop_live));memset(live,0,sizeof(live));memset(bank,0,sizeof(bank));memset(program,0,sizeof(program));memset(ram+0x8000,0,0x800);ram[0x67ec]=ram[0x67ed]=0;note_stamp=0;}
 void SND_Init(SndIniDt *p){assert(stopped && p->program==(Uint16 *)sddrvstsk && p->program_size==MF_SOUND_DRIVER_BYTES && p->map_size==20); /* Pinned binary doubles words; not an invented byte mock. */
     {unsigned char snapshot[44];memcpy(snapshot,p->map,sizeof(snapshot));assert(!snapshot[40] && !snapshot[41] && !snapshot[42] && !snapshot[43]);}
     assert(diagnostic.stage==MF_WS_AUDIO_SND_INIT);memset(ram+0x700,0,128);initializations++;}
@@ -90,6 +96,7 @@ static void pump(unsigned now,unsigned focus)
         word(0x8838,sound_word(0x8838)+1);
         for(i=0;i<8;i++){
             if(command_frozen)continue;
+            if(ram[0x700+i*16]){word(0x41a,(sound_word(0x41a)&0x7f0)+16);word(0x8838,0);}
             if(ram[0x700+i*16]==8)memcpy(ram+0x500,ram+0xa000,40);
             ram[0x700+i*16]=0;
         }
@@ -280,4 +287,5 @@ int main(void)
     assert(watch[4].seen && !mixer.losses && starts[2]==2);
     puts("PASS direct-MIDI one-shots: 4 independent explosions, 2 shots, preserved gains/programs/channels, natural LEA, bounded overflow without stealing, rejection retries, 600-VBlank mixed hold, maximum 10 physical cached-live slots; fault-only ownership/loss diagnostics");
     puts("PASS split Flame and E108: exact handoff, independent release/pause/death, no Loop restarts/offs during mixes, loader DMA once, readiness/consumer watchdog and clock-wrap regressions");
+    return 0;
 }

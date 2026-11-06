@@ -4,11 +4,13 @@ from pathlib import Path
 import hashlib,json,re,struct
 from PIL import Image,ImageDraw
 from level2_turret_scope import turret_lock
+from level2_ready_scope import ready_change
 R=Path(__file__).resolve().parents[1];lock=turret_lock()
 assert lock['base_commit']=='812ecb6a8a22bc0de8ab698e6da4e8158a4d803e'
 for group in ['frozen','changes','added']:
  for n,e in lock[group].items():
   if group=='changes':e=e['after']
+  e=ready_change(n,e)
   b=(R/n).read_bytes();assert {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}==e,n
 for e in lock['preserved_sections']:
  s=(R/e['file']).read_text();a=s.index(e['begin']);b=s.index(e['end'],a)
