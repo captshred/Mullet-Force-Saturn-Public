@@ -1,0 +1,20 @@
+{
+  "source_sha256": "601f85a59b5284cb4cb09fc37be29396ec573b1b9bb194201962d55e1b584b4d",
+  "rate": 44100,
+  "source_channels": 2,
+  "bits": 16,
+  "frames": 18798,
+  "runtime_channels": 1,
+  "runtime_endian": "big",
+  "conversion": "mean L/R, symmetric ties away from zero; no gain/resample/trim",
+  "pcm_bytes": 37596,
+  "pcm_sha256": "29eb24692ee0294d04a04cf0c522b31a9fadf1ff375fcac0795c716cb7860cea",
+  "tone_sha256": "21d1940d95656438778564f01ee976e134f34a652769cb51d176828c6606e132",
+  "pcm_offset": 31884,
+  "pcm_address": 180832,
+  "old_pcm_bytes": 44806,
+  "zero_tail_bytes": 7210,
+  "bank_bytes": 158312,
+  "scsp_high_water": 485812,
+  "scsp_free": 38476
+}

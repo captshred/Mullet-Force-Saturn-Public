@@ -10,6 +10,15 @@ def payloads(b):
  root=dict(directory_records(b,b[16*2048+156:16*2048+190]));records=dict(directory_records(b,root['ALEVEL2']))
  return {n:b[struct.unpack_from('<I',r,2)[0]*2048:struct.unpack_from('<I',r,2)[0]*2048+struct.unpack_from('<I',r,10)[0]] for n,r in records.items() if n not in ('.','..')}
 def validate(disc=False):
+ new=json.loads((R/'docs/new-hit-lock.json').read_text())
+ assert new['base_commit']=='f27333b1422c0a24cb5fe0f52f9557649b820941'
+ for n,e in new['frozen'].items():assert info((R/n).read_bytes())==e,n
+ for n,e in new['changes'].items():assert info((R/n).read_bytes())==e['after'],n
+ def prior(n):
+  actual=info((R/n).read_bytes());c=new['changes'].get(n)
+  if c is None:return actual
+  assert actual==c['after'],n
+  return c['before']
  x=json.loads((R/'docs/source-recovery-lock.json').read_text())
  assert x['base_commit']=='5ca590d774cc91d0ac1bb4ce6b325aa647b3dd59'
  repair=json.loads((R/'docs/fire-hit-startup-lock.json').read_text())
@@ -19,8 +28,8 @@ def validate(disc=False):
   if c is None:return e
   assert c['before']==e,(n,'unexpected startup-repair baseline')
   return c['after']
- for n,e in repair['frozen'].items():assert info((R/n).read_bytes())==e,n
- for n,e in repair['changes'].items():assert info((R/n).read_bytes())==e['after'],n
+ for n,e in repair['frozen'].items():assert prior(n)==e,n
+ for n,e in repair['changes'].items():assert prior(n)==e['after'],n
  swap=json.loads((R/'docs/fire-hit-lock.json').read_text())
  assert swap['base_commit']=='6e5c8d9eb9b83e4cf3ebb278939b02b8787a0b1e'
  def swapped(n,e):
@@ -28,8 +37,8 @@ def validate(disc=False):
   if c is None:return repaired(n,e)
   assert c['before']==e,(n,'unexpected Fire/Hit baseline')
   return repaired(n,c['after'])
- for n,e in swap['frozen'].items():assert info((R/n).read_bytes())==repaired(n,e),n
- for n,e in swap['changes'].items():assert info((R/n).read_bytes())==repaired(n,e['after']),n
+ for n,e in swap['frozen'].items():assert prior(n)==repaired(n,e),n
+ for n,e in swap['changes'].items():assert prior(n)==repaired(n,e['after']),n
  feature=json.loads((R/'docs/sfx-scheduling-lock.json').read_text())
  assert feature['base_commit']=='6596c96d30569bdfc0fdaa0b72e6da4bab0a32e0'
  def expected(n,e):
@@ -37,11 +46,11 @@ def validate(disc=False):
   if c is None:return swapped(n,e)
   assert c['before']==e,(n,'unexpected SFX baseline')
   return swapped(n,c['after'])
- for n,e in feature['frozen'].items():assert info((R/n).read_bytes())==swapped(n,e),n
- for n,e in feature['changes'].items():assert info((R/n).read_bytes())==swapped(n,e['after']),n
- for n,e in x['frozen'].items():assert info((R/n).read_bytes())==expected(n,e),n
- for n,e in x.get('added',{}).items():assert info((R/n).read_bytes())==expected(n,e),n
- for n,e in x['changes'].items():assert info((R/n).read_bytes())==expected(n,e['after']),n
+ for n,e in feature['frozen'].items():assert prior(n)==swapped(n,e),n
+ for n,e in feature['changes'].items():assert prior(n)==swapped(n,e['after']),n
+ for n,e in x['frozen'].items():assert prior(n)==expected(n,e),n
+ for n,e in x.get('added',{}).items():assert prior(n)==expected(n,e),n
+ for n,e in x['changes'].items():assert prior(n)==expected(n,e['after']),n
  s=(R/'src/wingsuit_audio.c').read_text()
  assert 'boot_counter=sound_word(0x41a);' in s and 'if(sound_word(0x41a)==boot_counter || !commands_empty())return;' in s
  assert s.index('boot_counter=sound_word(0x41a);')<s.index('stage(MF_WS_AUDIO_DSP_STOP);if(!result(SND_StopDsp()))')
@@ -51,6 +60,9 @@ def validate(disc=False):
  with zipfile.ZipFile(R/'downloads/mullet-force-level2-audio-engine-review.zip') as z:b=z.read('mullet-force.bin')
  assert sha(b)=='a3e3a75834a28a1b6c9e562f54fd5f6ca29e95a6664940f50c34603cbfe0121e'
  expected=payloads(b)
+ from importlib.machinery import SourceFileLoader
+ hit=SourceFileLoader('hit_sample',str(R/'tools/validate-new-hit.py')).load_module()
+ expected['WDEATH.TON']=hit.validate_hit(expected['WDEATH.TON'])
  for n in expected:
   asset=R/'assets/wingsuit'/n
   assert asset.exists() and asset.read_bytes()==expected[n],n

@@ -32,4 +32,4 @@ slots += [(2,0x83c,0xa,29)]+[(0,0,0,0)]*3
 for port,key in [(2,0x83c),(2,0x23c),(3,0x33c)]:
  chosen,fallback=native.allocator(driver,slots,port,key);assert chosen==29 and not fallback
 assert len(slots)==32 and r['scsp_high_water']==485812 and r['scsp_free']==38476
-print('PASS Fire/Hit resources: exact mono import, immutable old Shot/Flame/music/Explosion bank, frozen Fire/Explosion schedulers and readiness; native allocator selects free records for channel8 Hit separately from Fire, 29-principal/32 physical budget')
+print('PASS Fire/Hit resources: exact mono import, preserved Fire/Flame/music/Explosion parameters and isolated Hit allocation, frozen Fire/Explosion schedulers and readiness; native allocator selects free records for channel8 Hit separately from Fire, 29-principal/32 physical budget')
