@@ -38,3 +38,14 @@ with tempfile.TemporaryDirectory() as d:
   exe=str(Path(d)/name)
   subprocess.run(['cc','-std=c99','-Wall','-Wextra','-Werror','-fsanitize=undefined','-fno-sanitize-recover=all',*inc,*sources,'-o',exe],cwd=R,check=True)
   subprocess.run([exe],cwd=R,check=True)
+
+# Current Level1 logic: exercise approved fast-bat and unaffected legacy attacks.
+with tempfile.TemporaryDirectory() as d:
+ for name,flags in [
+  ('bat_command_buffer',['-DMF_PUNCH_COMBO=1','-DMF_FAST_RUNNING_BAT=1','-DMF_JAB_COHESION=1','-DMF_RUN_BAT=1','-DMF_DASH_ENABLED=1']),
+  ('punch_combo',['-DMF_PUNCH_COMBO=1','-DMF_FAST_RUNNING_BAT=1','-DMF_JAB_COHESION=1','-DMF_RUN_BAT=1','-DMF_DASH_ENABLED=1']),
+  ('jab_repeat',['-DMF_JAB_COHESION=1','-DMF_RUN_BAT=1','-DMF_DASH_ENABLED=1']),
+  ('dash',['-DMF_DASH_ENABLED=1']),('game',[]),('combat',[]),('coop',[]),('bat',[]),('air_bat',[]),('torch',[])]:
+  exe=str(Path(d)/name)
+  subprocess.run(['cc','-std=c99','-Wall','-Wextra','-Werror','-fsanitize=undefined','-fno-sanitize-recover=all',*flags,'-Isrc','tests/'+name+'_test.c','src/game.c','-o',exe],cwd=R,check=True)
+  subprocess.run([exe],cwd=R,check=True)

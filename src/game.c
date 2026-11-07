@@ -17,22 +17,29 @@ static void dash_clear(mf_dash_state *d)
 static void dash_input(mf_game *g,int index,unsigned held,unsigned pressed,int live,int connected)
 {
     mf_player *p=&g->players[index];mf_dash_state *d=&g->dash[index];
+    int punching=MF_FAST_RUNNING_BAT && p->attack && !p->bat && !p->attack_air;
     unsigned h=held&(MF_LEFT|MF_RIGHT),edge=(pressed&h)&~d->previous;
     int dir=h==MF_RIGHT?1:h==MF_LEFT?-1:0;
     d->previous=h;
-    if(!live || !connected || !p->active || !p->health || p->hurt || p->attack ||
-       p->height || p->vz || p->landing || p->torch || p->charge ||
-       ((pressed|p->buffered)&(MF_A|MF_B)) || h==(MF_LEFT|MF_RIGHT)) {
+    if(!live || !connected || !p->active || !p->health || p->hurt || (p->attack && !punching) ||
+       p->height || p->vz || p->landing || p->torch || (p->charge && !punching) ||
+       ((pressed|p->buffered)&(punching?MF_B:(MF_A|MF_B))) || h==(MF_LEFT|MF_RIGHT)) {
         dash_clear(d);return;
     }
-    /* Hit-stop freezes an already held dash, but never buffers a new dash. */
-    if(g->hitstop) {
+    /* Hit-stop freezes an established dash. Punch command recognition may
+       continue without starting dash movement or advancing the attack. */
+    if(g->hitstop && !punching) {
         if(d->dir && d->dir==dir)return;
         dash_clear(d);return;
     }
     /* Require fresh horizontal neutral after menus, combat, landing or recovery.
        Edges arriving on the transition itself cannot arm a stale first tap. */
     if(!d->ready) {if(!h)d->ready=1;return;}
+    /* released==2 is a completed FF held during a punch, not movement dash. */
+    if(d->released==2){
+        if(dir==d->tap_dir){if(!punching){d->dir=dir;d->tap_dir=d->released=0;d->anim=-MF_DASH_ANIM_NUM;}return;}
+        dash_clear(d);if(!h)d->ready=1;return;
+    }
     if(d->window)--d->window;
     if(d->dir) {
         if(d->dir==dir)return;
@@ -41,6 +48,7 @@ static void dash_input(mf_game *g,int index,unsigned held,unsigned pressed,int l
     if(!h) {if(d->window)d->released=1;return;}
     if(!edge)return;
     if(d->tap_dir==dir && d->window && d->released) {
+        if(punching){d->released=2;d->window=0;return;}
         d->dir=dir;d->tap_dir=d->window=d->released=0;
 #if MF_RUN_BAT
         d->anim=-MF_DASH_ANIM_NUM;
@@ -432,6 +440,17 @@ static void player_step(mf_game *g,int index,unsigned held,unsigned pressed)
     mf_player *p=&g->players[index];int dx=0,dy=0,speed;
     if(!p->active)return;
     pressed|=p->buffered;p->buffered=0;
+#if MF_FAST_RUNNING_BAT
+    if(g->running_bat[index].pending){
+        int transition=MF_JAB_REPEAT_COUNTER;
+#if MF_PUNCH_COMBO
+        if(g->combo[index].phase==2)transition+=MF_CROSS_RECOVERY_EXTRA;
+#endif
+        if(!p->attack || (!p->bat && !p->attack_air && p->attack>=transition)){
+            p->attack=0;pressed|=MF_A;
+        }
+    }
+#endif
 /* JAB BEGIN */
 #if MF_JAB_COHESION
     if(pressed&MF_B)g->jab[index].buffer=0;
@@ -674,10 +693,10 @@ void mf_game_step_inputs(mf_game *g,const unsigned held[2],const unsigned presse
             /* The selected fast profile includes a dash armed on this tick.
                Hit-stop may buffer an already established dash/A classification. */
             if(was_live && (connected&(1u<<i)) && p->active && p->health && !p->hurt &&
-               !p->attack && !p->height && !p->vz && !p->landing && !p->torch &&
-               g->dash[i].dir && (pressed[i]&MF_A) && !(pressed[i]&MF_B) &&
-               (held[i]&(MF_LEFT|MF_RIGHT))==(g->dash[i].dir>0?MF_RIGHT:MF_LEFT)) {
-                rb->pending=1;rb->dir=g->dash[i].dir;
+               (!p->attack || (!p->bat && !p->attack_air)) && !p->height && !p->vz && !p->landing && !p->torch &&
+               (g->dash[i].dir || (g->dash[i].released==2 && g->dash[i].tap_dir)) && (pressed[i]&MF_A) && !(pressed[i]&MF_B) &&
+               (held[i]&(MF_LEFT|MF_RIGHT))==((g->dash[i].dir?g->dash[i].dir:g->dash[i].tap_dir)>0?MF_RIGHT:MF_LEFT)) {
+                rb->pending=1;rb->dir=g->dash[i].dir?g->dash[i].dir:g->dash[i].tap_dir;
 #if MF_FAST_RUNNING_BAT
                 /* Capture pose without changing the gameplay ABI or depending
                    on a previous render callback (immediate/catch-up inputs). */
@@ -731,7 +750,7 @@ void mf_game_step_inputs(mf_game *g,const unsigned held[2],const unsigned presse
         if(p->bat && p->attack==MF_BAT_ACTIVE_FIRST)g->events|=MF_SWOOSH;
         if(p->attack && ++p->attack>(p->bat?MF_BAT_TOTAL_TICKS:24))p->attack=p->bat=0;
 #endif
-        if(!p->attack)g->running_bat[i]=(mf_running_bat){0};
+        if(!p->attack && !g->running_bat[i].pending)g->running_bat[i]=(mf_running_bat){0};
     }
     torch_events(g);
     if(living(&g->players[1]))g->camera=clamp((living(&g->players[0])?(g->players[0].x+g->players[1].x)/512:g->players[1].x/256)-160,0,320);

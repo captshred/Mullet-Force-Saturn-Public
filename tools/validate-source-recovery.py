@@ -10,12 +10,21 @@ def payloads(b):
  root=dict(directory_records(b,b[16*2048+156:16*2048+190]));records=dict(directory_records(b,root['ALEVEL2']))
  return {n:b[struct.unpack_from('<I',r,2)[0]*2048:struct.unpack_from('<I',r,2)[0]*2048+struct.unpack_from('<I',r,10)[0]] for n,r in records.items() if n not in ('.','..')}
 def validate(disc=False):
+ bat=json.loads((R/'docs/bat-command-lock.json').read_text())
+ assert bat['base_commit']=='1e7077616f7da57436500b3d9cddda2e61e6a727'
+ for n,e in bat['frozen'].items():assert info((R/n).read_bytes())==e,n
+ for n,e in bat['changes'].items():assert info((R/n).read_bytes())==e['after'],n
+ def observed(n):
+  value=info((R/n).read_bytes());c=bat['changes'].get(n)
+  if c is None:return value
+  assert value==c['after'],n
+  return c['before']
  new=json.loads((R/'docs/new-hit-lock.json').read_text())
  assert new['base_commit']=='f27333b1422c0a24cb5fe0f52f9557649b820941'
- for n,e in new['frozen'].items():assert info((R/n).read_bytes())==e,n
- for n,e in new['changes'].items():assert info((R/n).read_bytes())==e['after'],n
+ for n,e in new['frozen'].items():assert observed(n)==e,n
+ for n,e in new['changes'].items():assert observed(n)==e['after'],n
  def prior(n):
-  actual=info((R/n).read_bytes());c=new['changes'].get(n)
+  actual=observed(n);c=new['changes'].get(n)
   if c is None:return actual
   assert actual==c['after'],n
   return c['before']
