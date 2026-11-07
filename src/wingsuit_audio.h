@@ -1,5 +1,7 @@
 #ifndef MF_WS_AUDIO_H
 #define MF_WS_AUDIO_H
+#define MF_WS_EXPLOSION_MIN_SPACING 5u
+#define MF_WS_EXPLOSION_PENDING_MAX 8u
 typedef char *(*mf_ws_audio_reader)(const char *,int);
 enum {
     MF_WS_AUDIO_MAP_READ=1,MF_WS_AUDIO_SOUND_OFF,MF_WS_AUDIO_SND_INIT,

@@ -12,9 +12,18 @@ def payloads(b):
 def validate(disc=False):
  x=json.loads((R/'docs/source-recovery-lock.json').read_text())
  assert x['base_commit']=='5ca590d774cc91d0ac1bb4ce6b325aa647b3dd59'
- for n,e in x['frozen'].items():assert info((R/n).read_bytes())==e,n
- for n,e in x.get('added',{}).items():assert info((R/n).read_bytes())==e,n
- for n,e in x['changes'].items():assert info((R/n).read_bytes())==e['after'],n
+ feature=json.loads((R/'docs/sfx-scheduling-lock.json').read_text())
+ assert feature['base_commit']=='6596c96d30569bdfc0fdaa0b72e6da4bab0a32e0'
+ def expected(n,e):
+  c=feature['changes'].get(n)
+  if c is None:return e
+  assert c['before']==e,(n,'unexpected SFX baseline')
+  return c['after']
+ for n,e in feature['frozen'].items():assert info((R/n).read_bytes())==e,n
+ for n,e in feature['changes'].items():assert info((R/n).read_bytes())==e['after'],n
+ for n,e in x['frozen'].items():assert info((R/n).read_bytes())==expected(n,e),n
+ for n,e in x.get('added',{}).items():assert info((R/n).read_bytes())==expected(n,e),n
+ for n,e in x['changes'].items():assert info((R/n).read_bytes())==expected(n,e['after']),n
  s=(R/'src/wingsuit_audio.c').read_text()
  assert 'boot_counter=sound_word(0x41a);' in s and 'if(sound_word(0x41a)==boot_counter || !commands_empty())return;' in s
  assert s.index('boot_counter=sound_word(0x41a);')<s.index('stage(MF_WS_AUDIO_DSP_STOP);if(!result(SND_StopDsp()))')

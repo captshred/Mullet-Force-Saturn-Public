@@ -1,3 +1,24 @@
+# Canonical source-complete development baseline
+
+Canonical tag: `the-one-v3-source-complete`.
+Canonical source SHA: `6596c96d30569bdfc0fdaa0b72e6da4bab0a32e0`.
+The owner manually tested this exact source build and confirmed gameplay, audio
+and neon Level 2 work. Future feature branches MUST descend from this baseline.
+The tag stays at that exact SHA regardless of later documentation commits.
+
+Owner-tested artifact: manual workflow from main, profile stage-default, source
+ref the canonical SHA above; SDK 556d081146211b6a1cfa6591d70f9487d406758b / SH GCC
+8.2.0; matching MODE1/2048 BIN/CUE. Successful Actions run/artifact IDs and the
+owner-tested BIN hash are unavailable in this session (Actions API access was
+denied), and must not be inferred from a different local build.
+
+Preserved executables are validation references only, never substitutes for
+missing source. No future THE ONE may be approved without a clean-checkout
+source rebuild and exact source/artifact SHA provenance. Historical recovery
+notes below describe the earlier candidate's verification limits; owner testing
+has since approved the canonical source SHA above. SFX feature approval remains
+separate and pending.
+
 # Development baseline and source preservation
 
 Owner-approved playable THE ONE v3: `5ca590d774cc91d0ac1bb4ce6b325aa647b3dd59`.
