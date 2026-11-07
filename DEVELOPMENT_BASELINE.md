@@ -1,145 +1,87 @@
-# Canonical source-complete development baseline
+# Canonical development baseline — THE ONE v4
 
-Canonical tag: `the-one-v3-source-complete`.
-Canonical source SHA: `6596c96d30569bdfc0fdaa0b72e6da4bab0a32e0`.
-The owner manually tested this exact source build and confirmed gameplay, audio
-and neon Level 2 work. Future feature branches MUST descend from this baseline.
-The tag stays at that exact SHA regardless of later documentation commits.
+Canonical development tag: **`the-one-v4-source-complete`**.
 
-Owner-tested artifact: manual workflow from main, profile stage-default, source
-ref the canonical SHA above; SDK 556d081146211b6a1cfa6591d70f9487d406758b / SH GCC
-8.2.0; matching MODE1/2048 BIN/CUE. Successful Actions run/artifact IDs and the
-owner-tested BIN hash are unavailable in this session (Actions API access was
-denied), and must not be inferred from a different local build.
+Canonical development source SHA:
+`1e7077616f7da57436500b3d9cddda2e61e6a727`
 
-Preserved executables are validation references only, never substitutes for
-missing source. No future THE ONE may be approved without a clean-checkout
-source rebuild and exact source/artifact SHA provenance. Historical recovery
-notes below describe the earlier candidate's verification limits; owner testing
-has since approved the canonical source SHA above. SFX feature approval remains
-separate and pending.
+Owner-approved BIN SHA256:
+`e2d89a26aa5a27f8994a5425078e5329ca3818047739312d68a5c21606b2d554`
 
-# Development baseline and source preservation
+**Owner WebRetro result: PASS / APPROVED.** The owner tested this exact build
+and confirmed Level 2 entry without E108, repaired startup ordering and 0x041a
+readiness, approved Fire on every successful tap-A projectile, approved new
+non-lethal Hit and surviving-hit routing, lethal-hit Explosion behavior,
+five-VBlank Explosion spacing, Music, independent Flame sustain, gameplay,
+balanced camera and neon artwork.
 
-Owner-approved playable THE ONE v3: `5ca590d774cc91d0ac1bb4ce6b325aa647b3dd59`.
-Its tag remains unchanged. This recovery is a **source-complete candidate**, not a
-new THE ONE or an assertion of owner approval.
+This source is complete and clean-checkout reproducible. The preservation tag
+must always point to the approved source SHA above, never to a subsequent
+documentation commit. Matching BIN/CUE use MODE1/2048. SDK/toolchain remain
+Jo Engine `556d081146211b6a1cfa6591d70f9487d406758b` and SH GCC 8.2.0.
+Successful Actions run/artifact IDs were not supplied; do not infer them.
 
-The source-complete recovery root is the exact commit that first adds this file:
-`git log --diff-filter=A --format=%H -- DEVELOPMENT_BASELINE.md`.
-Every release must identify the exact source SHA in BUILD-INFO and the delivery
-report. No new canonical source-complete release is approved yet. The candidate
-branch is `recovery/the-one-v3-source-complete`, directly descended from v3.
+## Mandatory development and promotion rules
 
-Golden v3 BIN SHA256:
-`e910f17e49dde518457e7538f2ddcef630652d1fd4db5de2007760048b3ea367`.
-Golden audio-fixed BIN SHA256:
-`a3e3a75834a28a1b6c9e562f54fd5f6ca29e95a6664940f50c34603cbfe0121e`.
-The former replaces only WCELL/WROOF/WPAL extents of the latter. The delivered
-ZIP and old image-patching recipe remain immutable **validation references**.
+Future feature branches MUST start from `the-one-v4-source-complete` or exactly
+`1e7077616f7da57436500b3d9cddda2e61e6a727`, unless the owner explicitly instructs
+otherwise. Preserved executables are validation references only, never
+substitutes for missing source.
 
-## Recovered source and assets
+No future THE ONE may be promoted unless all five conditions hold:
 
-`src/wingsuit_audio.c` loads the exact delivered WMUSIC map/sequence/tone bank,
-retains WDEATH resources, assigns control 0/gain 127 to music, control 1/channels
-0 and 1/gain 80 to independent Flames, and controls/channels 2..7 to one-shots.
-Shots retain gain 96; Explosions use the delivery's gain 100. Conservative 34/49
-VBlank leases precede control-local Note Off retirement, including rejected-command
-retry. No Shot stealing or Explosion spacing feature has been introduced.
+1. All executable-affecting source, assets and configuration are committed.
+2. A clean checkout can rebuild the game without private or hidden dependencies.
+3. Verification passes.
+4. Exact source SHA -> BIN SHA256 provenance is recorded.
+5. The owner tests and approves the resulting playable build.
 
-Readiness captures consumed-command cursor 0x041a BEFORE initial commands and
-retains command-drain, map-acknowledgment and watchdog checks. No delay or bypass
-replaces those checks. Music starts at gameplay entry; the runtime sends an empty
-event notification when the title completes. Gameplay simulation is unchanged.
+Preserve older THE ONE tags as historical recovery points; never move or replace
+them. In particular, `the-one-v3` remains at
+`5ca590d774cc91d0ac1bb4ce6b325aa647b3dd59`, and
+`the-one-v3-source-complete` remains at
+`6596c96d30569bdfc0fdaa0b72e6da4bab0a32e0`.
 
-`src/wingsuit_audio_data.h` records the recovered music extents. The three
-`assets/wingsuit/WMUSIC.*` files and WBOOM are exact runtime exports of the golden
-audio image. They are committed game assets, not authoring masters. The golden
-Explosion texture restores the delivered art rather than introducing new art.
-`recovered-audio.json` records their digests. All WDEATH bytes remain unchanged.
-`tools/stage-wingsuit-assets.py` stages these plus the unchanged approved neon
-WCELL/WROOF/WPAL from `assets/level2-neon-city/`.
+## Reproduction and artifact provenance
 
-The reconstruction uses delivery reports, map decoding, actual native register
-levels, driver slot assignments and golden playback. It is not a claim to have
-recovered the private source text or generated byte-identical executable code.
-See `docs/recovery/emulator-comparison.json` for observed differences and limits.
-
-## Clean source build and provenance
-
-Use x86-64 Linux and README host prerequisites. Run `bash tools/setup.sh` for the
-unchanged pinned compiler/SDK. genisoimage, GCC, Python/Pillow and the documented
-host libraries must be installed. No private source, original Codex directory or
-preexisting build output is needed.
-
-From a clean committed checkout:
+Use x86-64 Linux and the README's host prerequisites, including genisoimage,
+GCC, Python/Pillow and documented host libraries. From a clean committed checkout:
 
 ```sh
 bash tools/verify-canonical-build.sh
 ```
 
-This checks ancestry and clean status, cleans build products, fetches the pinned
-SDK, invokes `tools/build-source-complete.sh`, runs tests and preservation checks,
-and writes exact source SHA, source-file checksums and BIN/CUE hashes. It never
-extracts or copies a preserved executable into the candidate image. The native
-compile/link/objcopy outputs produce the candidate `/0.BIN`.
+The gate installs the pinned SDK, cleans build products, builds from committed
+source, runs the recovery/current audio/gameplay/UBSan/preservation regressions,
+and records the source SHA and source-file checksums with matching BIN/CUE
+checksums. Inspect `build/BUILD-INFO.txt` and `build/CANONICAL-SHA256SUMS.txt`.
+ISO timestamps can vary between local rebuilds; retain each actual artifact's
+hash and its exact source SHA. The hash above identifies the approved artifact.
 
-`make check` validates the complete v3 frozen-file/delta lock, source rules,
-golden resource identity, new SCSP extents and actual ISO staging. `make test`
-runs the historical reference suite unchanged on its last source-complete
-readiness commit, then current recovered audio/UBSan/readiness mutation tests and
-current gameplay/camera/runtime UBSan tests. Historical reference tests are
-explicitly labeled; they do not establish the recovered transport's behavior.
-Old exact-source locks remain untouched, rather than being rewritten to pretend
-that their pre-delivery audio expectations describe the approved executable.
-The old aggregate recipes remain available as `legacy-test`/`legacy-check` for
-historical use; their old source hashes and disc expectations do not describe
-this recovered build. Current validation replaces them with a complete exact
-v3 delta lock and the golden 29-resource check.
+The native path is `tools/build-source-complete.sh`; it compiles and links game
+source. Runtime audio and neon assets are committed. Authoring WAVs may remain
+private because no external WAV is needed for a build. Historical delivered
+executables and the old background-patching recipe are references only.
 
-Optional native playback comparison, after the source build:
+For a future owner-requested manual Actions build: workflow from `main`, profile
+`stage-default`, Source ref the exact intended source SHA. Do not use historical
+binary-review packaging profiles for source development. Do not dispatch Actions
+without owner instruction.
 
-```sh
-bash tools/run-recovery-emulator.sh
-```
+## Approved implementation and history
 
-This builds the pinned official Yabause core with read-only observation exports,
-runs identical controller input against the golden neon image and candidate,
-and checks native sustain, phase wraps, effective levels and sampled music
-identity. The core is a test dependency, never a source of game executable code.
-No emulated RAM or instructions are patched. Longer whole-song/stress playback,
-physical hardware testing and owner WebRetro visual/audible review remain open.
+Fire remains on controls/channels 2/2 and 3/3; Hit is control2/channel8. Music and
+independent Flames retain their approved ownership and gains. The initial
+56-byte bootstrap/28-word initialization/60-byte backing completes before the
+Fire tone and later 64-byte map publication; 0x041a consumption, queue and map
+acknowledgments remain mandatory. No obsolete 0x8838 readiness fallback.
 
-Recorded smoke: 2,200 frames per image; both images reach Level2; both independent
-loops sustain over the same 81-frame sampled window with five wraps each; all
-controls 0..7 sound; effective attenuation sets match exactly. Music onset differs
-by one frame, sampled note prefix matches 108 entries, and PCM/gameplay captures
-are not byte-identical. Frame-level slot reads can observe mid-update fields;
-this is not a whole-score receipt or complete equivalence proof. Later player
-hits/restarts also occur a few frames apart. These differences require review,
-not an approval label. A separate 6,000-tick mocked transport stress passes.
+Implementation, resource accounting and historical verification details:
 
-## Resource accounting
+- `docs/fire-hit-startup-repair.md`
+- `docs/source-complete-sfx-timing.md`
+- `docs/level2-shot-hit-swap.md`
+- `docs/level2-new-hit-sample.md`
 
-Compared with the approved delivered game, SCSP high-water/free remain
-447,588/76,700 bytes. Music sequence 307,260..376,911; music tone data
-376,912..447,587; original WDEATH extents remain fixed. VDP1 remains 33,792
-texture bytes, 28 definitions, maximum 81 commands. VDP2 remains 65,792 background
-bytes, reservation 434,176/free 90,112; CRAM remains 32 bytes. No PCM copies or
-VRAM allocations are added relative to the golden image. Two unsigned words
-track reconstructed music preparation/request state (8 bytes relative to the old
-public source); exact private-engine mutable-state size is unknown.
-
-## Permanent approval rule
-
-A future THE ONE requires BOTH a preserved, hashed playable BIN/CUE and a clean
-source commit containing all executable-affecting source/assets/configuration.
-Preserved executables may serve as references; they must never substitute for
-missing development source. All source changes must be tracked and committed.
-Only owner approval may establish a new canonical tag. Never replace v3 during
-reconstruction or automatically dispatch Actions.
-
-For a later owner-requested candidate build: workflow source **main**, profile
-**stage-default**, source_ref **the exact recovery candidate SHA**. The selected
-source's build-stage wrapper invokes the source-complete build. Do not choose
-legacy audio-review or neon-image packaging profiles for this candidate.
+Their historical pending-approval statements describe earlier development
+stages; the exact v4 source and artifact identified above are now owner-approved.

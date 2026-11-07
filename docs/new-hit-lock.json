@@ -30,6 +30,16 @@
         "bytes": 5689,
         "sha256": "3332659d161252ea6d7625a08bc9b0c580952f790a0cde3e2595b4a1f037c27d"
       }
+    },
+    "DEVELOPMENT_BASELINE.md": {
+      "before": {
+        "bytes": 8197,
+        "sha256": "ec64c950be5a318827d34d7b8b45a6241ba9c3d7dd989e798f078c15b9d556b3"
+      },
+      "after": {
+        "bytes": 4119,
+        "sha256": "c30f2203da68f918da728f84e2a8f3e2f5e39b15dd60e609f1bfb2ebe77b918b"
+      }
     }
   },
   "frozen": {
@@ -64,10 +74,6 @@
     "CONTRIBUTING.md": {
       "bytes": 5891,
       "sha256": "5640dec742c0b1a0d72d5f387329e9a569a4514981f551741d345d3035189a34"
-    },
-    "DEVELOPMENT_BASELINE.md": {
-      "bytes": 8197,
-      "sha256": "ec64c950be5a318827d34d7b8b45a6241ba9c3d7dd989e798f078c15b9d556b3"
     },
     "LEVEL2-AUDIO-REVIEW.md": {
       "bytes": 5167,
