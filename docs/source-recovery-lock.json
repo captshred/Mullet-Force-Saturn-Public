@@ -4964,8 +4964,8 @@
       "sha256": "865a15961949b0db57a566f837f8dff49e8d35128103ee520b8e10e6d914cc57"
     },
     "tools/recovery-regressions.py": {
-      "bytes": 2048,
-      "sha256": "5c076497898e75509fb1b7887223ca0ea6e1faea0a182ef6e5c3408dc0106513"
+      "bytes": 2529,
+      "sha256": "6003a7c113c72138637ca9870215373d1b42c5e701783c057e653b9edc91a244"
     },
     "tools/run-recovery-emulator.sh": {
       "bytes": 1499,

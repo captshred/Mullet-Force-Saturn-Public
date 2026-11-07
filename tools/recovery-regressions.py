@@ -9,8 +9,14 @@ from pathlib import Path
 import subprocess,tempfile,tarfile,io,os
 R=Path(__file__).resolve().parents[1]
 subprocess.run(['python3','tools/validate-source-recovery.py'],cwd=R,check=True)
+# actions/checkout defaults to depth 1. Fetch only the fixed public reference
+# when absent; never interpolate the user-supplied source_ref into a shell.
+reference='506d5f1762d1f70bbf8975b36c616c0fa5f54472'
+if subprocess.run(['git','cat-file','-e',reference+'^{commit}'],cwd=R,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL).returncode:
+ subprocess.run(['git','fetch','--no-tags','--depth=1','origin',reference],cwd=R,check=True)
+subprocess.run(['git','cat-file','-e',reference+'^{commit}'],cwd=R,check=True)
 with tempfile.TemporaryDirectory(prefix='mf-reference-') as d:
- data=subprocess.check_output(['git','archive','506d5f1762d1f70bbf8975b36c616c0fa5f54472'],cwd=R)
+ data=subprocess.check_output(['git','archive',reference],cwd=R)
  with tarfile.open(fileobj=io.BytesIO(data)) as t:t.extractall(d,filter='data')
  # SDK audit reads the same SHA-pinned SDK installed by setup.sh.
  (Path(d)/'.deps').symlink_to(R/'.deps',target_is_directory=True)
