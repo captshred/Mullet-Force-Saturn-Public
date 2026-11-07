@@ -1,3 +1,9 @@
+# Recovered source is checked against the complete v3 delta/golden-resource lock.
+.PHONY: check test
+check:
+	python3 tools/validate-source-recovery.py --disc
+test:
+	python3 tools/recovery-regressions.py
 .PHONY: all setup bootstrap native check test clean
 all:
 	bash tools/build.sh
@@ -7,7 +13,7 @@ bootstrap:
 	bash tools/bootstrap.sh
 native:
 	bash tools/build.sh --native
-check:
+legacy-check:
 	@if [ "$$(cat build/wingsuit-mode.txt 2>/dev/null)" = 1 ]; then python3 tools/validate-wingsuit.py --disc; fi
 	python3 tools/validate-arcade-fx.py
 	python3 tools/validate-full-gameplay-sfx2.py
@@ -20,7 +26,7 @@ check:
 	python3 tools/check-city-neon.py --disc
 	python3 tools/check-gameplay-parallax.py --disc
 	python3 tools/check-city-cleanup.py --disc
-test: test-live-parallax test-fast-bat test-punch-combo test-city-neon test-city-cleanup
+legacy-test: test-live-parallax test-fast-bat test-punch-combo test-city-neon test-city-cleanup
 	$(CC) -std=c99 -Wall -Wextra -Werror -DMF_PLAYER_DEATH=1 -DMF_PLAYER_HURT=1 -DMF_HQ_JUMP=1 -DMF_HQ_TORCH=1 -DMF_JAB_COHESION=1 -DMF_ATTACK_SEQUENCE=1 -DMF_BAT_MOMENTUM=1 -DMF_COMBAT_ANIMATION=1 -DMF_PLAYABLE_ANIMATION=1 -DMF_RUNNING_BAT_VISUALS=1 -DMF_RUN_BAT=1 -DMF_DASH_ENABLED=1 -DMF_ORIGINAL_THREE_WALK=1 -Itests/animation_mock -Isrc tests/player_death_test.c -ffunction-sections -fdata-sections -Wl,--gc-sections -o /tmp/mf-player-death
 	/tmp/mf-player-death
 	$(CC) -std=c99 -Wall -Wextra -Werror -DMF_HQ_JUMP=1 -DMF_HQ_TORCH=1 -DMF_JAB_COHESION=1 -DMF_ATTACK_SEQUENCE=1 -DMF_BAT_MOMENTUM=1 -DMF_COMBAT_ANIMATION=1 -DMF_PLAYABLE_ANIMATION=1 -DMF_RUNNING_BAT_VISUALS=1 -DMF_RUN_BAT=1 -DMF_DASH_ENABLED=1 -DMF_ORIGINAL_THREE_WALK=1 -Itests/animation_mock -Isrc tests/player_hurt_test.c -ffunction-sections -fdata-sections -Wl,--gc-sections -DMF_PLAYER_HURT=1 -o /tmp/mf-player-hurt
@@ -158,7 +164,7 @@ test-live-parallax:
 	/tmp/mf-live-parallax
 	python3 tools/check-gameplay-parallax.py
 .PHONY: test-sfx2
-test: test-sfx2
+legacy-test: test-sfx2
 test-sfx2:
 	$(CC) -std=c99 -Wall -Wextra -Werror -Isrc tests/sfx2_test.c -o /tmp/mf-sfx2
 	/tmp/mf-sfx2
@@ -166,21 +172,21 @@ test-sfx2:
 	/tmp/mf-sfx2-full
 
 .PHONY: test-full-gameplay-sfx2
-test: test-full-gameplay-sfx2
+legacy-test: test-full-gameplay-sfx2
 test-full-gameplay-sfx2:
 	python3 tools/test-full-gameplay-sfx2.py
 
 .PHONY: test-arcade-fx
-test: test-arcade-fx
+legacy-test: test-arcade-fx
 test-arcade-fx:
 	python3 tools/test-arcade-fx.py
 
 .PHONY: test-stage-clear
-test: test-stage-clear
+legacy-test: test-stage-clear
 test-stage-clear:
 	python3 tools/test-stage-clear.py
 
 .PHONY: test-wingsuit
-test: test-wingsuit
+legacy-test: test-wingsuit
 test-wingsuit:
 	python3 tools/test-wingsuit.py

@@ -1,0 +1,121 @@
+{
+  "core_commit": "8926b0c6c347f8c5c755911ddb0ac695420ffbf8",
+  "frames_per_image": 2200,
+  "method": "Identical controller input; read-only driver receipt and native legacy SCSP mixer-state observation. No emulated RAM/instruction changes.",
+  "golden": {
+    "music_receipt_count": 476,
+    "first_music_frame": 1144,
+    "sounding_controls": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "dual_flame_native_sustain_frames": [
+      81,
+      81
+    ],
+    "dual_flame_phase_wraps": {
+      "0": 5,
+      "1": 5
+    },
+    "pcm_peak": 9003,
+    "pcm_rms": 976.89264143092,
+    "pcm_sha256": "c7de484d5aceea808dc420451efd0d629f38c9fdcee140fca28f15bb650f625b",
+    "levels": {
+      "0": [
+        5,
+        7,
+        8,
+        12
+      ],
+      "2": [
+        189
+      ],
+      "3": [
+        189
+      ],
+      "1": [
+        95
+      ],
+      "4": [
+        225
+      ],
+      "5": [
+        225
+      ],
+      "6": [
+        225
+      ],
+      "7": [
+        225
+      ]
+    }
+  },
+  "candidate": {
+    "music_receipt_count": 473,
+    "first_music_frame": 1145,
+    "sounding_controls": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "dual_flame_native_sustain_frames": [
+      81,
+      81
+    ],
+    "dual_flame_phase_wraps": {
+      "0": 5,
+      "1": 5
+    },
+    "pcm_peak": 9442,
+    "pcm_rms": 981.5907031073166,
+    "pcm_sha256": "ca7d99e196fbd7c94324b29f5f07ac651a77d0ef0ceb2a1fcd783eb0829ec744",
+    "levels": {
+      "0": [
+        5,
+        7,
+        8,
+        12
+      ],
+      "2": [
+        189
+      ],
+      "3": [
+        189
+      ],
+      "1": [
+        95
+      ],
+      "4": [
+        225
+      ],
+      "5": [
+        225
+      ],
+      "6": [
+        225
+      ],
+      "7": [
+        225
+      ]
+    }
+  },
+  "common_music_note_prefix": 108,
+  "limitations": [
+    "Short gameplay smoke, not whole-score or long-duration emulator stress.",
+    "Executables and PCM are not byte-identical; exact private source reconstruction is not claimed.",
+    "Frame-sampled slot assignments can observe driver updates mid-write; later sampled note identities are not a whole-score receipt proof.",
+    "Original gameplay/Flame STOP diagnostic uses cached EG, which is unreliable in this HLE core; native decay-sustain/phase proves the sampled hold.",
+    "Owner WebRetro approval remains required."
+  ]
+}

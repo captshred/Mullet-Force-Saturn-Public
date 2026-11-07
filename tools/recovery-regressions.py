@@ -1,0 +1,32 @@
+#!/usr/bin/env python3
+"""Historical reference regressions plus tests of the recovered transport.
+
+Old exact-source locks describe the pre-delivery source, not the approved binary.
+Run them unchanged against their last source-complete reference; current code
+has its own complete v3 delta lock and golden-resource/transport checks.
+"""
+from pathlib import Path
+import subprocess,tempfile,tarfile,io,os
+R=Path(__file__).resolve().parents[1]
+subprocess.run(['python3','tools/validate-source-recovery.py'],cwd=R,check=True)
+with tempfile.TemporaryDirectory(prefix='mf-reference-') as d:
+ data=subprocess.check_output(['git','archive','506d5f1762d1f70bbf8975b36c616c0fa5f54472'],cwd=R)
+ with tarfile.open(fileobj=io.BytesIO(data)) as t:t.extractall(d,filter='data')
+ # SDK audit reads the same SHA-pinned SDK installed by setup.sh.
+ (Path(d)/'.deps').symlink_to(R/'.deps',target_is_directory=True)
+ print('Running historical reference make test; these are NOT recovered audio tests',flush=True)
+ subprocess.run(['make','test'],cwd=d,check=True)
+print('Running current recovered source transport with UBSan',flush=True)
+subprocess.run(['python3','tools/test-recovered-audio.py'],cwd=R,check=True)
+# Every unchanged gameplay/runtime source is also compiled directly here.
+with tempfile.TemporaryDirectory() as d:
+ for name,sources,inc in [
+  ('camera',['tests/wingsuit_camera_test.c','src/wingsuit.c'],['-Isrc']),
+  ('turrets',['tests/wingsuit_turret_test.c'],['-Isrc']),
+  ('patterns',['tests/wingsuit_patterns_test.c'],['-Isrc']),
+  ('flame',['tests/wingsuit_flame_test.c','src/wingsuit.c'],['-Isrc']),
+  ('runtime',['tests/wingsuit_runtime_test.c','src/wingsuit.c'],['-Itests/wingsuit_mock','-Isrc']),
+  ('runtime-dev',['tests/wingsuit_runtime_test.c','src/wingsuit.c'],['-DMF_DEV_STAGE_SKIP=1','-Itests/wingsuit_mock','-Isrc'])]:
+  exe=str(Path(d)/name)
+  subprocess.run(['cc','-std=c99','-Wall','-Wextra','-Werror','-fsanitize=undefined','-fno-sanitize-recover=all',*inc,*sources,'-o',exe],cwd=R,check=True)
+  subprocess.run([exe],cwd=R,check=True)

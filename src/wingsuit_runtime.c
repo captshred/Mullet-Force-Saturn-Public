@@ -293,7 +293,7 @@ void mf_ws_runtime_frame(const mf_input input[2],unsigned pressed[2],unsigned no
         jo_print(15,11,"LEVEL 2");jo_print(11,13,"WINGSUIT ASSAULT");
         pressed[0]=pressed[1]=0;
         title-=elapsed>6?6:(int)elapsed;
-        if(title<=0 && mf_ws_audio_ready()){phase=3;jo_clear_screen();}return;
+        if(title<=0 && mf_ws_audio_ready()){mf_ws_audio_events(0,0);phase=3;jo_clear_screen();}return;
     }
     if(elapsed>6)elapsed=6;
     for(i=0;i<elapsed;i++){

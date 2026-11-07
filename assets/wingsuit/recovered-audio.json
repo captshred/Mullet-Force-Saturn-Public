@@ -1,0 +1,21 @@
+{
+  "golden_bin_sha256": "a3e3a75834a28a1b6c9e562f54fd5f6ca29e95a6664940f50c34603cbfe0121e",
+  "files": {
+    "WMUSIC.MAP": {
+      "bytes": 56,
+      "sha256": "e02ce8ff581719cdea7b34e8887bcdbba3e4d04d323954594497160105efa28d"
+    },
+    "WMUSIC.SEQ": {
+      "bytes": 69652,
+      "sha256": "43e5f01a7f740b0e4d823bd152dada90f5094658bc17cde99daa79a905e761e7"
+    },
+    "WMUSIC.TON": {
+      "bytes": 70676,
+      "sha256": "35b0552bde242eef8e49fbd16ae2fff991aa4058d34490d0de32eb77258f25b8"
+    },
+    "WBOOM.BIN": {
+      "bytes": 2048,
+      "sha256": "7e95f4f93162fb7bd4497604f53b521a045ede0fc5946e74e3b005c1871a7bee"
+    }
+  }
+}
