@@ -1,0 +1,24 @@
+{
+  "parent": "a914faedaced626297e424a65a29d675b449488b",
+  "files": {
+    "WCELL.BIN": {
+      "bytes": 36992,
+      "sha256": "622bc753b36b8960f0a4863e6cc12adfa6a9b6d002d10636a432e5105ecec838"
+    },
+    "WROOF.BIN": {
+      "bytes": 12416,
+      "sha256": "15b5afdbd9bd92eba63d53faffd65fbc2e3276c0e1f3b37b9336bb0a4e17cda3"
+    },
+    "WPAL.BIN": {
+      "bytes": 32,
+      "sha256": "b0fa74bc571e59176638214748b3569f684a109e515b5e2f38f74193dcc55d18"
+    }
+  },
+  "maps": "Unchanged assets/wingsuit/WMAP.BIN and WRMAP.BIN",
+  "ground_tiles": 578,
+  "raised_tiles": 194,
+  "vram_delta": 0,
+  "palette_entries": 16,
+  "cram_bytes": 32,
+  "palette_banks_added": 0
+}

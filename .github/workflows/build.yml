@@ -1,9 +1,9 @@
 name: Manual Saturn playtest build
-run-name: Saturn | ${{ inputs.profile || 'level2-audio-engine-review' }} | ${{ inputs.source_ref || github.ref_name }}
+run-name: Saturn | ${{ inputs.profile || github.ref_name }} | ${{ inputs.source_ref || github.ref_name }}
 
 on:
   push:
-    branches: [delivery/level2-audio-engine]
+    branches: [delivery/level2-audio-engine, art/level2-neon-city]
   workflow_dispatch:
     inputs:
       profile:
@@ -12,6 +12,7 @@ on:
         required: true
         default: arcade-impact-fx
         options:
+          - level2-neon-city
           - level2-audio-engine-review
           - arcade-impact-fx
           - level1-stage-clear
@@ -37,7 +38,7 @@ env:
 
 jobs:
   playable:
-    if: github.event_name != 'push' && inputs.profile != 'level2-audio-engine-review'
+    if: github.event_name != 'push' && inputs.profile != 'level2-audio-engine-review' && inputs.profile != 'level2-neon-city'
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
@@ -130,7 +131,7 @@ jobs:
           if-no-files-found: error
 
   audio_review:
-    if: github.event_name == 'push' || inputs.profile == 'level2-audio-engine-review'
+    if: (github.event_name == 'push' && github.ref_name == 'delivery/level2-audio-engine') || inputs.profile == 'level2-audio-engine-review'
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
@@ -173,6 +174,32 @@ jobs:
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: mullet-force-level2-audio-engine-review
+          path: build/download/
+          retention-days: 1
+          if-no-files-found: error
+
+  neon_review:
+    if: (github.event_name == 'push' && github.ref_name == 'art/level2-neon-city') || inputs.profile == 'level2-neon-city'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Check out neon candidate
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ github.event_name == 'push' && github.sha || inputs.source_ref }}
+          persist-credentials: false
+      - name: Build from exact audio-fixed delivery and validate preservation
+        run: |
+          python3 tools/build-level2-neon-city.py --out build/download
+          python3 tests/level2_neon_test.py
+          git rev-parse HEAD > build/download/CANDIDATE-COMMIT.txt
+          cd build/download
+          sha256sum CANDIDATE-COMMIT.txt >> SHA256SUMS.txt
+          sha256sum --check SHA256SUMS.txt
+      - name: Upload playable BIN/CUE artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: mullet-force-level2-neon-city-${{ github.sha }}
           path: build/download/
           retention-days: 1
           if-no-files-found: error

@@ -1,0 +1,52 @@
+{
+  "core": "libretro Yabause 0.9.15",
+  "core_commit": "8926b0c",
+  "core_sha256": "11fcb25e1581a7742168850b2d475edecfafbd277c3dd14784c5791583d3b13d",
+  "frames_per_image": 1650,
+  "input": "controller only: Start, X stage skip, movement, held A; no game memory writes",
+  "pcm_identical": true,
+  "pcm_bytes_per_image": 4851000,
+  "pcm_sha256": "4182ca5206faf96309d3c83b601be39788ca15da3e3d244c54e3b63f530a7098",
+  "captures": [
+    {
+      "frame": 350,
+      "hud_sidebars_identical": true,
+      "all_pixels_identical": true
+    },
+    {
+      "frame": 480,
+      "hud_sidebars_identical": true,
+      "all_pixels_identical": true
+    },
+    {
+      "frame": 600,
+      "hud_sidebars_identical": true,
+      "all_pixels_identical": true
+    },
+    {
+      "frame": 780,
+      "hud_sidebars_identical": true,
+      "all_pixels_identical": true
+    },
+    {
+      "frame": 1000,
+      "hud_sidebars_identical": true,
+      "all_pixels_identical": false
+    },
+    {
+      "frame": 1300,
+      "hud_sidebars_identical": true,
+      "all_pixels_identical": false
+    },
+    {
+      "frame": 1600,
+      "hud_sidebars_identical": true,
+      "all_pixels_identical": false
+    }
+  ],
+  "hardware_tested": false,
+  "baseline_bin_sha256": "a3e3a75834a28a1b6c9e562f54fd5f6ca29e95a6664940f50c34603cbfe0121e",
+  "candidate_bin_sha256": "e910f17e49dde518457e7538f2ddcef630652d1fd4db5de2007760048b3ea367",
+  "bios": "HLE",
+  "limitation": "Short matched smoke capture; not a whole-song or long-duration stress test. Source-level public audio tests describe older public source; delivered executable is preserved exactly."
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "a914faedaced626297e424a65a29d675b449488b",
+  "reference": "assets/city-cleanup/CIPAL.BIN",
+  "reference_sha256": "aae6b49de7513851fbb886c9fdeef951a23065e9ea064dd1b4b679714458ee1d",
+  "level1_palette_entries_1_based": [225, 212, 155, 118, 70, 26, 9, 3, 7, 18, 213, 230, 162, 153, 111, 2],
+  "roles": ["transparent", "navy alley", "violet structure", "indigo steel", "purple concrete", "blue machinery", "cyan trim", "amber markings", "cyan windows", "magenta trim", "deep shadow", "collapsed void", "navy asphalt", "violet tar roof", "purple paving", "warm window"],
+  "detailing": "Only existing trim index6 and window index8 may change material. Horizontal trim runs in the bottom half of an existing tile become magenta; selected existing window strips become amber. No new pixel positions or tile definitions."
+}
