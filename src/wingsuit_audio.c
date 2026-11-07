@@ -28,9 +28,11 @@ static mf_ws_mixer_diagnostic mixer;
 typedef struct { unsigned owner,key,stamp,started,missing_since,other_on,free;int seen,missing; } slot_watch;
 static slot_watch watch[32];
 static int ready,clock_set,budget,startup_done,startup_failed,boot_clock;
-static unsigned boot,boot_since,boot_counter,music_prep,music_requested;
+static unsigned boot,boot_since,boot_counter,music_prep,music_requested,map_ack_bytes;
+static mf_ws_audio_reader bank_reader;
 enum { BOOT_CPU=1,BOOT_MAP,BOOT_MAP_ACK,BOOT_DSP,BOOT_DSP_ACK,
-       BOOT_CDDA,BOOT_CDDA_ACK,BOOT_VOLUME,BOOT_VOLUME_ACK };
+       BOOT_CDDA,BOOT_CDDA_ACK,BOOT_VOLUME,BOOT_VOLUME_ACK,
+       BOOT_FIRE_UPLOAD,BOOT_FIRE_MAP,BOOT_FIRE_ACK };
 static mf_ws_audio_diagnostic diagnostic;
 static mf_ws_audio_progress progress;
 static const char *const operation[]={"IDLE","MAP READ","SOUND OFF","SND INIT",
@@ -74,12 +76,13 @@ int mf_ws_audio_load(mf_ws_audio_reader read,mf_ws_audio_progress notify)
     /* Pinned SND_Init takes words and copies floor(bytes/4)*4+4. Supply its
        four-byte lookahead explicitly rather than reading past the MAP file. */
     unsigned int map_storage[(MF_WS_MUSIC_MAP_BYTES+4)/4]={0};
+    bank_reader=read;map_ack_bytes=MF_WS_MUSIC_MAP_BYTES;
     memset(&hit,0,sizeof(hit));hit_prep=pending_hits=0;music_prep=music_requested=0;ready=clock_set=startup_done=startup_failed=boot_clock=0;boot=0;pending_shots=pending_explosions=fault=0;
     memset(shot,0,sizeof(shot));memset(explosion,0,sizeof(explosion));memset(flame,0,sizeof(flame));
     memset(flame_diagnostic,0,sizeof(flame_diagnostic));
     memset(note_baseline,0,sizeof(note_baseline));memset(one_prep,0,sizeof(one_prep));memset(&mixer,0,sizeof(mixer));memset(watch,0,sizeof(watch));
     memset(&diagnostic,0,sizeof(diagnostic));progress=notify;
-    stage(MF_WS_AUDIO_MAP_READ);map=read("WFIRE.MAP",MF_WS_MUSIC_MAP_BYTES);
+    stage(MF_WS_AUDIO_MAP_READ);map=read("WMUSIC.MAP",MF_WS_MUSIC_MAP_BYTES);
     if(!map){diagnostic.has_status=1;diagnostic.expected=MF_WS_MUSIC_MAP_BYTES;diagnostic.actual=-1;return 0;}
     memcpy(map_storage,map,MF_WS_MUSIC_MAP_BYTES);completed();
     stage(MF_WS_AUDIO_SOUND_OFF);slSoundOffWait();completed();
@@ -99,7 +102,6 @@ int mf_ws_audio_load(mf_ws_audio_reader read,mf_ws_audio_progress notify)
     stage(MF_WS_AUDIO_TON_UPLOAD);if(!upload(read,"WDEATH.TON",MF_WS_TON_BYTES,MF_WS_TON_ADDR))return 0;
     if(!upload(read,"WMUSIC.SEQ",MF_WS_MUSIC_SEQ_BYTES,MF_WS_MUSIC_SEQ_ADDR))return 0;
     if(!upload(read,"WMUSIC.TON",MF_WS_MUSIC_TON_BYTES,MF_WS_MUSIC_TON_ADDR))return 0;
-    if(!upload(read,"WFIRE.TON",MF_WS_FIRE_TON_BYTES,MF_WS_FIRE_TON_ADDR))return 0;
     /* Follow src/music.c's working SND/SGL initialization pairing, restart,
        flush and SND-only command submission. No slSoundRequest return checks. */
     MF_WS_SOUND_BASE[0x4e1]=0;
@@ -330,7 +332,7 @@ static int commands_empty(void)
 static int map_ready(void)
 {
     unsigned i;volatile unsigned char *sound_ram=MF_WS_SOUND_BASE;
-    for(i=16;i<MF_WS_MUSIC_MAP_BYTES-8;i++)if(sound_ram[0x500+i]!=sound_ram[0xa000+i])return 0;
+    for(i=16;i<map_ack_bytes-8;i++)if(sound_ram[0x500+i]!=sound_ram[0xa000+i])return 0;
     return 1;
 }
 static void pending(const char *name)
@@ -342,22 +344,20 @@ static void startup_timeout(void)
     unsigned i,queued=0;volatile unsigned char *sound_ram=MF_WS_SOUND_BASE;
     if(diagnostic.has_status && diagnostic.actual!=SND_RET_SET){startup_failed=1;return;}
     diagnostic.has_status=1;diagnostic.expected=1;diagnostic.actual=0;
-    for(i=0;boot!=BOOT_CPU && i<8;i++)if(sound_ram[0x700+i*16]){
+    /* Include BOOT_CPU: report the first blocked command ID, not a
+       misleading generic zero when requests remain unconsumed. */
+    for(i=0;i<8;i++)if(sound_ram[0x700+i*16]){
         queued=sound_ram[0x700+i*16];diagnostic.expected=0;diagnostic.actual=queued;break;
     }
-    if((boot==BOOT_MAP_ACK || boot==BOOT_VOLUME_ACK) && commands_empty() && !map_ready()){
-        for(i=16;i<MF_WS_MUSIC_MAP_BYTES-8;i++)if(sound_ram[0x500+i]!=sound_ram[0xa000+i]){
+    if((boot==BOOT_MAP_ACK || boot==BOOT_VOLUME_ACK || boot==BOOT_FIRE_ACK) && commands_empty() && !map_ready()){
+        for(i=16;i<map_ack_bytes-8;i++)if(sound_ram[0x500+i]!=sound_ram[0xa000+i]){
             diagnostic.operation="MAP BYTE";diagnostic.expected=sound_ram[0xa000+i];diagnostic.actual=sound_ram[0x500+i];break;
         }
     }
     if(!boot){
         if(queued)diagnostic.operation="SFX ACK";
         else {unsigned prep=flame[0].prep<flame[1].prep?flame[0].prep:flame[1].prep;
-            if(!startup_done && commands_empty()){
-        if(hit_prep==0 && hit_midi(3,32,0))hit_prep=1;
-        else if(hit_prep==1 && hit_midi(4,1,0))hit_prep=2;
-    }
-    for(i=0;i<6;i++)if(one_prep[i]<prep)prep=one_prep[i];
+            for(i=0;i<6;i++)if(one_prep[i]<prep)prep=one_prep[i];
             diagnostic.operation="SFX READY";diagnostic.expected=3;diagnostic.actual=prep;}
     }
     startup_failed=1;
@@ -394,6 +394,30 @@ static void startup(unsigned now)
         if(result(SND_SetTlVl(15))){pending("VOLUME ACK");boot=BOOT_VOLUME_ACK;}break;
     case BOOT_VOLUME_ACK:
         if(!commands_empty() || !map_ready())return;
+        /* The owner-tested parent is fully acknowledged before any new
+           bank is exposed to the running driver. */
+        boot=BOOT_FIRE_UPLOAD;pending("FIRE UPLOAD");break;
+    case BOOT_FIRE_UPLOAD:{
+        char *map;
+        if(!commands_empty())return;
+        /* Upload tone FIRST. slInitSound internally starts the 68K and marks
+           mapped areas transferred, so no uninitialized Fire mapping at boot. */
+        if(!upload(bank_reader,"WFIRE.TON",MF_WS_FIRE_TON_BYTES,MF_WS_FIRE_TON_ADDR)){startup_failed=1;return;}
+        map=bank_reader("WFIRE.MAP",MF_WS_FIRE_MAP_BYTES);
+        if(!map){diagnostic.has_status=1;diagnostic.expected=MF_WS_FIRE_MAP_BYTES;diagnostic.actual=-1;startup_failed=1;return;}
+        slDMACopy(map,MF_WS_SOUND_BASE+0xa000,MF_WS_FIRE_MAP_BYTES);slDMAWait();jo_free(map);
+        map_ack_bytes=MF_WS_FIRE_MAP_BYTES;boot=BOOT_FIRE_MAP;pending("FIRE MAP");break;
+    }
+    case BOOT_FIRE_MAP:{
+        int status;
+        if(!commands_empty())return;
+        boot_counter=sound_word(0x41a); /* Capture BEFORE synchronous consumption. */
+        status=SND_ChgMap(0);
+        diagnostic.has_status=1;diagnostic.expected=SND_RET_SET;diagnostic.actual=status;
+        if(status==SND_RET_SET){boot=BOOT_FIRE_ACK;pending("FIRE MAP ACK");}break;
+    }
+    case BOOT_FIRE_ACK:
+        if(sound_word(0x41a)==boot_counter || !commands_empty() || !map_ready())return;
         ready=1;boot=0;stage(MF_WS_AUDIO_FLAME_READY);break;
     default:break;
     }

@@ -19,7 +19,7 @@ base='6e5c8d9eb9b83e4cf3ebb278939b02b8787a0b1e'
 # when needed; the lock records section hashes so this check is history-free.
 x=json.loads((R/'docs/fire-hit-lock.json').read_text());s=(R/'src/wingsuit_audio.c').read_text()
 for name,e in x['sections'].items():
- a=s.index(e['begin']);b=s.index(e['end'],a);assert hashlib.sha256(s[a:b].encode()).hexdigest()==e['sha256'],name
+ a=s.index(e['begin']);b=s.index(e['end'],a);expected=e['sha256'] if name!='readiness' else json.loads((R/'docs/fire-hit-startup-lock.json').read_text())['startup_sha256'];assert hashlib.sha256(s[a:b].encode()).hexdigest()==expected,name
 spec=importlib.util.spec_from_file_location('native',R/'tools/audit-level2-polyphony.py');native=importlib.util.module_from_spec(spec);spec.loader.exec_module(native)
 driver=(R/'.deps/joengine/Compiler/COMMON/SGL_302j/INC/SDDRVS.TSK').read_bytes();assert hashlib.sha256(driver).hexdigest()==native.PIN
 # 29 principal slots (18 music + 4 Flame handoff + 2 Fire + 4 Explosion + Hit)

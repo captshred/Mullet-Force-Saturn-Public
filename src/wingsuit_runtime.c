@@ -33,6 +33,15 @@ static char *read_asset(const char *name,int expected)
     if(size!=expected){load_failure(name,"LENGTH",expected,size);jo_free(data);return 0;}
     return data;
 }
+/* Bootstrap runs inside ALEVEL2; deferred bank installation runs during the
+   title after load() restored the parent directory. Scope each later read. */
+static char *read_audio_asset(const char *name,int expected)
+{
+    char *data;
+    if(phase!=2)return read_asset(name,expected);
+    jo_fs_cd("ALEVEL2");data=read_asset(name,expected);
+    jo_fs_cd(JO_PARENT_DIR);return data;
+}
 static jo_palette *background_palette;
 /* These arenas are allocated once by the approved Level 1 profile. Ownership
    transfers here; no VDP2 allocator cursor or live pointer is invalidated. */
@@ -150,7 +159,7 @@ static int load_resources(void)
          ids[20+i]=jo_sprite_add(&image);
          if(ids[20+i]!=20+i){load_failure("TURRET GUN","REGISTER",20+i,ids[20+i]);jo_sprite_free_all();return 103;}
      }}
-    if(!mf_ws_audio_load(read_asset,audio_progress)){
+    if(!mf_ws_audio_load(read_audio_asset,audio_progress)){
         const mf_ws_audio_diagnostic *d=mf_ws_audio_diagnostics();
         if(!failed_asset)load_failure("WDEATH BANK",d->operation,d->expected,d->actual);
         return 108;

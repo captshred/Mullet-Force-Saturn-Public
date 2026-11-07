@@ -12,15 +12,24 @@ def payloads(b):
 def validate(disc=False):
  x=json.loads((R/'docs/source-recovery-lock.json').read_text())
  assert x['base_commit']=='5ca590d774cc91d0ac1bb4ce6b325aa647b3dd59'
+ repair=json.loads((R/'docs/fire-hit-startup-lock.json').read_text())
+ assert repair['base_commit']=='0f0ef24873a3e3c91b573d32fd26f725328c4353'
+ def repaired(n,e):
+  c=repair['changes'].get(n)
+  if c is None:return e
+  assert c['before']==e,(n,'unexpected startup-repair baseline')
+  return c['after']
+ for n,e in repair['frozen'].items():assert info((R/n).read_bytes())==e,n
+ for n,e in repair['changes'].items():assert info((R/n).read_bytes())==e['after'],n
  swap=json.loads((R/'docs/fire-hit-lock.json').read_text())
  assert swap['base_commit']=='6e5c8d9eb9b83e4cf3ebb278939b02b8787a0b1e'
  def swapped(n,e):
   c=swap['changes'].get(n)
-  if c is None:return e
+  if c is None:return repaired(n,e)
   assert c['before']==e,(n,'unexpected Fire/Hit baseline')
-  return c['after']
- for n,e in swap['frozen'].items():assert info((R/n).read_bytes())==e,n
- for n,e in swap['changes'].items():assert info((R/n).read_bytes())==e['after'],n
+  return repaired(n,c['after'])
+ for n,e in swap['frozen'].items():assert info((R/n).read_bytes())==repaired(n,e),n
+ for n,e in swap['changes'].items():assert info((R/n).read_bytes())==repaired(n,e['after']),n
  feature=json.loads((R/'docs/sfx-scheduling-lock.json').read_text())
  assert feature['base_commit']=='6596c96d30569bdfc0fdaa0b72e6da4bab0a32e0'
  def expected(n,e):

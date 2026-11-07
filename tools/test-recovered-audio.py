@@ -10,7 +10,7 @@ s=s.replace('static unsigned clock_now;','static int reject_shot_on;static unsig
 s=s.replace('    if(!accepted())return 1;','    if(p>=2 && p<4 && cmd==1 && reject_shot_on){--reject_shot_on;return 1;}\n    if(!accepted())return 1;')
 s=s.replace('starts[p]++;','assert(attack_n<20000);attack_tick[attack_n]=clock_now;attack_port[attack_n++]=p;starts[p]++;')
 s=s.replace('MF_WS_MAP_BYTES','MF_WS_MUSIC_MAP_BYTES')
-s=s.replace('map_size==20','map_size==32').replace('unsigned char snapshot[44]','unsigned char snapshot[68]').replace('!snapshot[40] && !snapshot[41] && !snapshot[42] && !snapshot[43]','!snapshot[64] && !snapshot[65] && !snapshot[66] && !snapshot[67]').replace('memcpy(ram+0x500,ram+0xa000,40)','memcpy(ram+0x500,ram+0xa000,64)')
+s=s.replace('map_size==20','map_size==28').replace('unsigned char snapshot[44]','unsigned char snapshot[60]').replace('!snapshot[40] && !snapshot[41] && !snapshot[42] && !snapshot[43]','!snapshot[56] && !snapshot[57] && !snapshot[58] && !snapshot[59]').replace('memcpy(ram+0x500,ram+0xa000,40)','memcpy(ram+0x500,ram+0xa000,64)')
 s=s.replace('word(a+6,p<<9)','word(a+6,(p<2?1:p)<<9)')
 s=s.replace('v==(p<2?MF_WS_FLAME_VOLUME:p<4?MF_WS_SHOT_VOLUME:MF_SFX_VOLUME)','v==(p==0?127:p==1?MF_WS_FLAME_VOLUME:p<4?MF_WS_SHOT_VOLUME:100)')
 a=s.index('int SND_StartSeq(');b=s.index('int SND_StopSeq(',a)
@@ -28,6 +28,14 @@ s=s.replace('a==(p<4?1:0)','a==(p==8?1:0)').replace('program[p]==(p<4?1:0)','pro
 s=s.replace('word(a+6,(p<2?1:p)<<9)','word(a+6,(p<2?1:p==8?2:p)<<9)')
 s=s.replace('if(p>=4)assert((int)(clock_now-one_until[p])>=0);','if(p>=4 && p<8)assert((int)(clock_now-one_until[p])>=0);')
 s=s.replace('(p<4?31:44)','(p==8?31:p<4?27:44)')
+# Startup map must be the owner's 56-byte parent, never the expanded Fire map.
+s=s.replace('assert(stopped && !inflight && (unsigned char *)d>=ram', 'assert((stopped || boot==BOOT_FIRE_UPLOAD) && !inflight && (unsigned char *)d>=ram')
+s=s.replace('diagnostic.stage==MF_WS_AUDIO_MAP_READY)', 'diagnostic.stage==MF_WS_AUDIO_MAP_READY || boot==BOOT_FIRE_MAP)')
+s=s.replace('memcpy(ram+0xa000,m,n);','assert(n==56 && !memcmp(m,"\\x30\\x00\\xc0\\x00",4));memcpy(ram+0xa000,m,n);')
+# Before publication of the combined map, the entire new bank must be resident.
+s=s.replace('memcpy(d,s,n);inflight=1;', 'if(d==ram+0xa000){assert(boot==BOOT_FIRE_UPLOAD && n==64 && sound_word(MF_WS_FIRE_TON_ADDR)==10);assert(map_ack_bytes==56);}memcpy(d,s,n);inflight=1;')
+s=s.replace('static unsigned clock_now,', 'static unsigned cold_log,boot_n,boot_commands[128];static unsigned clock_now,')
+s=s.replace('    if(consume_on_submit && !stopped){', '    if(cold_log){assert(boot_n<128);boot_commands[boot_n++]=cmd;}\n    if(consume_on_submit && !stopped){')
 s=s.replace('int main(void)','int legacy_main(void)')
 s+='''
 int main(void){
@@ -121,13 +129,28 @@ int main(void){
  }
  assert(starts[8]>500 && stops[8]>500 && notes[0]==1 && notes[1]==1 && loop_notes[0]==1 && loop_notes[1]==1 && !loop_offs[0] && !loop_offs[1] && music_starts==music_before+1);
  }
+ /* Fire cannot enter the initial DRIVER READY boundary. Its later map
+    request has an independent cursor+queue+map acknowledgment gate. */
+ {unsigned now=20000,j;cold_log=1;boot_n=0;trace_n=0;memset(ram+MF_WS_FIRE_TON_ADDR,0,MF_WS_FIRE_TON_BYTES);assert(mf_ws_audio_load(read_exact,progress_event));
+  assert(map_ack_bytes==56 && sound_word(MF_WS_FIRE_TON_ADDR)==0); /* reset below */
+  for(j=0;j<80 && boot!=BOOT_FIRE_MAP;j++)pump(now++,0);
+  assert(boot==BOOT_FIRE_MAP && !ready && map_ack_bytes==64 && sound_word(MF_WS_FIRE_TON_ADDR)==10);
+  command_frozen=1;pump(now++,0);assert(boot==BOOT_FIRE_ACK);
+  for(j=0;j<5;j++){pump(now++,0);assert(!ready && boot==BOOT_FIRE_ACK);}
+  command_frozen=0;
+  for(j=0;j<40 && !startup_done;j++)pump(now++,0);
+  assert(startup_done && !startup_failed);
+  {unsigned expected[]={8,12,128,130,8,12,128,130,8};assert(boot_n>=9 && !memcmp(expected,boot_commands,sizeof(expected)));}
+  cold_log=0;
+ }
+ puts("PASS staged startup: 56-byte/28-word WDEATH+music first, Fire tone uploaded before 64-byte map publication; independent 041a consumption/queue/map gate rejects stalled Fire acknowledgment");
  puts("PASS Fire/Hit: bank2 new Fire on controls2/3; old Shot bank0/program1 on control2/channel8; surviving projectile damage only; lethal/miss/dead silence; mixed isolation and fresh Hit retriggers");
  puts("PASS SFX timing: allocation/attack equality, free-first/oldest rotation, 100/105/110 and 100/106, overlapping tails, eight-event drop-newest bound, retirement, dual-Flame/music/Shot stress and clock wrap");
  return 0;
 }
 '''
 source=(R/'src/wingsuit_audio.c').read_text()
-mutants=[('fixed',source),
+mutants=[('fixed',source),('early-combined-map',source.replace('MF_WS_MUSIC_MAP_BYTES','MF_WS_FIRE_MAP_BYTES').replace('read("WMUSIC.MAP"','read("WFIRE.MAP"')),
  ('timer-alias',source.replace('boot_counter=sound_word(0x41a);','boot_counter=sound_word(0x8838);').replace('if(sound_word(0x41a)==boot_counter','if(sound_word(0x8838)==boot_counter')),
  ('late-snapshot',source.replace('    boot_counter=sound_word(0x41a);','').replace('    boot=BOOT_CPU;return 1;','    boot_counter=sound_word(0x41a);boot=BOOT_CPU;return 1;'))]
 import resource
