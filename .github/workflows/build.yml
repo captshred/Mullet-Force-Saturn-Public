@@ -1,7 +1,9 @@
 name: Manual Saturn playtest build
-run-name: Saturn | ${{ inputs.profile }} | ${{ inputs.source_ref }}
+run-name: Saturn | ${{ inputs.profile || 'level2-audio-engine-review' }} | ${{ inputs.source_ref || github.ref_name }}
 
 on:
+  push:
+    branches: [delivery/level2-audio-engine]
   workflow_dispatch:
     inputs:
       profile:
@@ -10,6 +12,7 @@ on:
         required: true
         default: arcade-impact-fx
         options:
+          - level2-audio-engine-review
           - arcade-impact-fx
           - level1-stage-clear
           - stage-default
@@ -34,6 +37,7 @@ env:
 
 jobs:
   playable:
+    if: github.event_name != 'push' && inputs.profile != 'level2-audio-engine-review'
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
@@ -121,6 +125,54 @@ jobs:
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: mullet-force-${{ inputs.profile }}-${{ steps.source.outputs.sha }}
+          path: build/download/
+          retention-days: 1
+          if-no-files-found: error
+
+  audio_review:
+    if: github.event_name == 'push' || inputs.profile == 'level2-audio-engine-review'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Check out review delivery
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Verify privately built playable image
+        shell: python
+        run: |
+          from pathlib import Path
+          import hashlib, zipfile
+          archive = Path('downloads/mullet-force-level2-audio-engine-review.zip')
+          assert hashlib.sha256(archive.read_bytes()).hexdigest() == '997bb4b47131a8c4c74c714cd6472eb1dacb9c5f3e6060d85e3041c56facaf6a'
+          allowed = {'mullet-force.bin', 'mullet-force.cue', 'BUILD-INFO.txt', 'JO-ENGINE-LICENSE.txt', 'MID2SEQ-LICENSE.txt', 'AUDIO-REVIEW.md', 'AUDIO-PLAYBACK-RESULTS.json', 'AUDIO-NATIVE-RESULTS.json', 'SHA256SUMS.txt'}
+          with zipfile.ZipFile(archive) as z:
+              assert set(z.namelist()) == allowed and len(z.namelist()) == len(allowed)
+              assert z.testzip() is None
+              data = {name: z.read(name) for name in allowed}
+          for line in data['SHA256SUMS.txt'].decode().splitlines():
+              digest, name = line.split('  ', 1)
+              assert name in allowed and name != 'SHA256SUMS.txt'
+              assert hashlib.sha256(data[name]).hexdigest() == digest
+          assert 'Private source identity is retained outside this public package.' in data['BUILD-INFO.txt'].decode()
+          assert hashlib.sha256(data['mullet-force.bin']).hexdigest() == 'a3e3a75834a28a1b6c9e562f54fd5f6ca29e95a6664940f50c34603cbfe0121e'
+          assert 'Level 2 wingsuit: 1' in data['BUILD-INFO.txt'].decode()
+          assert data['mullet-force.cue'] == b'FILE "mullet-force.bin" BINARY\n  TRACK 01 MODE1/2048\n    INDEX 01 00:00:00\n    POSTGAP 00:02:00\n'
+          disc = data['mullet-force.bin']
+          assert len(disc) % 2048 == 0
+          assert disc[:16] == b'SEGA SEGASATURN '
+          assert disc[16*2048+1:16*2048+6] == b'CD001'
+          dest = Path('build/download')
+          dest.mkdir(parents=True, exist_ok=True)
+          for name, content in data.items():
+              (dest/name).write_bytes(content)
+          with open(__import__('os').environ['GITHUB_STEP_SUMMARY'], 'a') as summary:
+              summary.write('Privately compiled and regression-tested candidate. Actions verified ZIP, runtime checksums, BIN/CUE and ISO structure, then packaged the review artifact. Visual/audible approval pending. No baseline merge.\n')
+      - name: Upload playable BIN/CUE artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: mullet-force-level2-audio-engine-review
           path: build/download/
           retention-days: 1
           if-no-files-found: error
