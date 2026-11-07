@@ -99,5 +99,7 @@ for name,begin,end in [
  ('startup_handshake','static void startup(unsigned','int mf_ws_audio_ready')]:
  a=transport.index(begin);b=transport.index(end,a)
  assert sha(transport[a:b].encode())==poly['preserved_sections'][name],name
-assert 'midi(first_port+i,1,60,110)' in transport
+assert 'midi(4+i,1,60,110)' in transport
+assert 'midi(2+selected,0,60,0)' in transport
+assert 'midi(2+selected,1,60,110)' in transport
 print('PASS polyphony source-only lock: all Level 1/2 audio/hero assets unchanged; exact authorized wide WMAP/manifest exception; exact split Flame scheduler/observer, E108 initialization/readiness; no Level 2 sequence start/stop; full approved source chain preserved')

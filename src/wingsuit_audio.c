@@ -13,10 +13,11 @@
 extern char sddrvstsk[];
 /* Pinned driver 2.10: eight control numbers 0..7, 32 physical SCSP slots.
    Two persistent flames, two shot controls, four explosion controls. */
-enum { FREE,PLAYING };
+enum { FREE,PLAYING,RESTARTING };
 typedef struct { unsigned started,until;int state; } one_shot;
 typedef struct { unsigned stopped,started,loop_started,missing_since;int prep,attack,loop,program,guard,stop,missing; } flame_state;
 static one_shot shot[2],explosion[4];
+static unsigned shot_next,explosion_next;
 static flame_state flame[2];
 static mf_ws_flame_diagnostic flame_diagnostic[2];
 static unsigned pending_shots,pending_explosions,last_now,fault,note_on_mask;
@@ -106,20 +107,19 @@ int mf_ws_audio_load(mf_ws_audio_reader read,mf_ws_audio_progress notify)
        readiness handshake during existing title VBlanks before accepting play. */
     boot_counter=sound_word(0x8838);boot=BOOT_CPU;return 1;
 }
-/* Bounded overflow preserves every sounding PCM; only NEW excess is dropped.
-   At most one extra batch waits (2 shots / 4 explosions) when all controls run. */
-static void enqueue(unsigned *pending,unsigned add,one_shot *pool,unsigned n,unsigned *dropped)
+/* Fixed capacities: two Shot batches, or eight pending Explosion attacks.
+   Drop newest excess; never alter a sounding voice to make queue room. */
+static void enqueue(unsigned *pending,unsigned add,unsigned limit,unsigned *dropped)
 {
-    unsigned i,limit=n;
-    for(i=0;i<n;i++)if(pool[i].state==FREE)++limit;
-    if(add>limit-*pending){*dropped+=add-(limit-*pending);*pending=limit;}
+    unsigned room=limit-*pending;
+    if(add>room){*dropped+=add-room;*pending=limit;}
     else *pending+=add;
 }
 void mf_ws_audio_events(int count,unsigned shots)
 {
     if(!startup_done)return;
-    if(count>0)enqueue(&pending_explosions,(unsigned)count,explosion,4,&mixer.dropped_explosions);
-    enqueue(&pending_shots,!!(shots&1u)+!!(shots&2u),shot,2,&mixer.dropped_shots);
+    if(count>0)enqueue(&pending_explosions,(unsigned)count,MF_WS_EXPLOSION_PENDING_MAX,&mixer.dropped_explosions);
+    enqueue(&pending_shots,!!(shots&1u)+!!(shots&2u),4,&mixer.dropped_shots);
 }
 static int midi(int port,int command,int data1,int data2)
 {
@@ -131,16 +131,42 @@ static int midi(int port,int command,int data1,int data2)
     if(command==1){note_on_mask|=1u<<port;note_baseline[port]=counter;}
     --budget;return 1;
 }
-static void advance(one_shot *pool,int n,unsigned *pending,int first_port,unsigned duration,unsigned now)
+static void advance_explosions(unsigned now)
 {
-    int i;for(i=0;i<n;i++){
-        one_shot *p=&pool[i];
-        /* Conservative leases exceed natural PCM duration at the existing pitch.
-           No Note Off, sequence stop, program reset or oldest-voice stealing. */
+    int i;
+    for(i=0;i<4;i++){
+        one_shot *p=&explosion[i];
+        /* Preserve natural completion and the conservative reuse lease. */
         if(p->state==PLAYING && (int)(now-p->until)>=0)p->state=FREE;
-        if(p->state==FREE && *pending && midi(first_port+i,1,60,110)){
-            --*pending;p->state=PLAYING;p->started=now;p->until=now+duration;
+        if(p->state==FREE && pending_explosions && (int)(now-explosion_next)>=0 && midi(4+i,1,60,110)){
+            --pending_explosions;p->state=PLAYING;p->started=now;p->until=now+MF_WS_EXP_TICKS;
+            explosion_next=now+MF_WS_EXPLOSION_MIN_SPACING;
         }
+    }
+}
+static void advance_shots(unsigned now)
+{
+    unsigned i;
+    for(i=0;i<2;i++)if(shot[i].state==PLAYING && (int)(now-shot[i].until)>=0)shot[i].state=FREE;
+    while(pending_shots && budget){
+        unsigned selected=shot_next;
+        one_shot *p;
+        /* Finish an accepted Note Off before selecting any other control. */
+        for(i=0;i<2;i++)if(shot[i].state==RESTARTING){selected=i;break;}
+        if(i==2){
+            for(i=0;i<2;i++)if(shot[(shot_next+i)%2].state==FREE){selected=(shot_next+i)%2;break;}
+            if(i==2 && now-shot[1-selected].started>now-shot[selected].started)selected=1-selected;
+        }
+        p=&shot[selected];
+        if(p->state==PLAYING){
+            /* Control-local Note Off, channel=control, key=60; Shot ONLY.
+               Keep this selection across SDK rejection of the new Note On. */
+            if(!midi(2+selected,0,60,0))break;
+            p->state=RESTARTING;
+        }
+        if(!midi(2+selected,1,60,110))break;
+        --pending_shots;p->state=PLAYING;p->started=now;p->until=now+MF_WS_SHOT_TICKS;
+        shot_next=1-selected;
     }
 }
 /* Read-only diagnostics for pinned driver 2.10. Its timer caches SCSP EG
@@ -341,6 +367,7 @@ void mf_ws_audio_step(unsigned now,unsigned focused)
 {
     int i,all_prepared=1;
     if((!ready && !boot) || startup_failed || (clock_set && now==last_now))return;
+    if(!clock_set){shot_next=0;explosion_next=now;}
     last_now=now;clock_set=1;budget=8;note_on_mask=0;
     if(boot){startup(now);return;}
     if(!startup_done && boot_clock && now-boot_since>=120){startup_timeout();return;}
@@ -396,8 +423,8 @@ void mf_ws_audio_step(unsigned now,unsigned focused)
         startup_done=1;completed();
     }
     if(startup_done){
-        advance(explosion,4,&pending_explosions,4,MF_WS_EXP_TICKS,now);
-        advance(shot,2,&pending_shots,2,MF_WS_SHOT_TICKS,now);
+        advance_explosions(now);
+        advance_shots(now);
     }
     observe_mixer(now);
     for(i=0;i<2;i++)observe_flame((unsigned)i,now,focused);

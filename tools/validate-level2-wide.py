@@ -3,6 +3,7 @@
 from pathlib import Path
 import hashlib,json,struct
 from level2_balanced_scope import balanced_change
+from level2_timing_scope import timing_change
 R=Path(__file__).resolve().parents[1]
 x=json.loads((R/'docs/level2-wide-lock.json').read_text())
 assert x['base_commit']=='78cc4dfa4fac6dcde3d8d21ac9e78ca8337ee75e'
@@ -48,10 +49,10 @@ assert set(r['changes'])=={'src/wingsuit.h','src/wingsuit.c','src/wingsuit_runti
  'tests/wingsuit_camera_test.c','tests/wingsuit_runtime_test.c',
  'tools/level2_wide_scope.py','tools/validate-level2-wide.py'}
 for n,e in r['changes'].items():
- assert len((R/n).read_bytes())==e['after']['bytes']
- assert hashlib.sha256((R/n).read_bytes()).hexdigest()==e['after']['sha256'],n
+ assert len((R/n).read_bytes())==timing_change(n,e['after'])['bytes']
+ assert hashlib.sha256((R/n).read_bytes()).hexdigest()==timing_change(n,e['after'])['sha256'],n
 for n,e in r['extra_frozen'].items():
- assert len((R/n).read_bytes())==e['bytes'] and hashlib.sha256((R/n).read_bytes()).hexdigest()==e['sha256'],n
+ assert len((R/n).read_bytes())==timing_change(n,e)['bytes'] and hashlib.sha256((R/n).read_bytes()).hexdigest()==timing_change(n,e)['sha256'],n
 # All source pixels displayed at any legal camera position lie in the existing
 # central map crop [96,415]. Every 8px cell resolves to initialized 8bpp data.
 assert (320-224)//2==48 and 320-224==96
@@ -63,3 +64,7 @@ for camera in range(97):
    w=words[y*64+tx];assert w>>12==1 and (w&4095)//2<len(tiles)//64
 assert r['preserved_runtime']==x['runtime_preserved']
 print('PASS balanced-scroll preservation: 320px world/224px view/96px travel/48px center; all 97 camera positions inside unchanged city crop; all artwork/audio/Level1/workflows and prior locks preserved')
+
+# Scheduling exceptions are exact; all other balanced baseline bytes stay fixed.
+from validate_level2_timing import validate
+validate()

@@ -17,7 +17,8 @@ static const char *fail_name;
 static unsigned fail_stage,trace[32],trace_n;
 static int init_status=1,driver_frozen,command_frozen;
 static unsigned one_until[8],note_stamp;
-static int defer_note;
+static int defer_note,reject_shot_on;
+static unsigned attack_tick[4096],attack_port[4096],attack_n;
 static int attack_live[2],loop_live[2],loop_notes[2],attack_offs[2],loop_offs[2];
 static int submit(unsigned cmd)
 {
@@ -67,15 +68,17 @@ int SND_StopSeq(int p){(void)p;assert(!"No Level 2 sequence stops");return 1;}
 int SND_CtrlDirMidi(int p,int pr,int cmd,int channel,int a,int b)
 {
     assert(p>=0 && p<8 && !pr && channel==p);
+    if(p>=2 && p<4 && cmd==1 && reject_shot_on){--reject_shot_on;return 1;}
     if(!accepted())return 1;
     if(cmd==3){assert(a==32 && !b);bank[p]=1;}
     else if(cmd==4){assert((p<2?(a==MF_WS_FLAME_ATTACK_PROGRAM || a==MF_WS_FLAME_LOOP_PROGRAM):a==(p<4?1:0)) && !b && bank[p]);program[p]=a;}
     else if(cmd==1){assert(startup_done && b==110 && bank[p]);
-        if(p>=2){assert(a==60 && !live[p] && program[p]==(p<4?1:0));starts[p]++;one_until[p]=clock_now+(p<4?31:44);}
+        if(p>=2){assert(attack_n<4096);attack_tick[attack_n]=clock_now;attack_port[attack_n++]=p;assert(a==60 && !live[p] && program[p]==(p<4?1:0));starts[p]++;one_until[p]=clock_now+(p<4?31:44);}
         else if(a==MF_WS_FLAME_ATTACK_NOTE){assert(program[p]==MF_WS_FLAME_ATTACK_PROGRAM && !attack_live[p] && !loop_live[p]);attack_live[p]=1;notes[p]++;}
         else {assert(a==MF_WS_FLAME_LOOP_NOTE && program[p]==MF_WS_FLAME_LOOP_PROGRAM && !loop_live[p]);loop_live[p]=1;loop_notes[p]++;}
         live[p]=1;if(defer_note && p==2)word(0x8000+4*64+0x3a,0xa);else driver_note(p,a,1);}
-    else {assert(p<2 && cmd==0 && !b && live[p]);
+    else if(p>=2){assert(p<4 && cmd==0 && a==60 && !b);stops[p]++;live[p]=0;driver_note(p,a,0);}
+    else {assert(cmd==0 && !b && live[p]);
         if(a==MF_WS_FLAME_LOOP_NOTE){assert(loop_live[p]);loop_live[p]=0;loop_offs[p]++;offs[p]++;}
         else {assert(a==MF_WS_FLAME_ATTACK_NOTE && attack_live[p]);attack_live[p]=0;attack_offs[p]++;if(!loop_live[p])offs[p]++;}
         live[p]=attack_live[p]||loop_live[p];driver_note(p,a,0);}
@@ -106,13 +109,71 @@ static void load(unsigned now)
     {unsigned j;for(j=0;j<32;j++)pump(now-32+j,0);}
     pump(now,0);pump(now+1,0);pump(now+2,0);assert(mf_ws_audio_ready()==1 && diagnostic.completed==0x7fff && flame[0].prep==3 && flame[1].prep==3);
 }
-static void reset_counts(void){memset(starts,0,sizeof(starts));memset(stops,0,sizeof(stops));memset(notes,0,sizeof(notes));memset(offs,0,sizeof(offs));memset(loop_notes,0,sizeof(loop_notes));memset(attack_offs,0,sizeof(attack_offs));memset(loop_offs,0,sizeof(loop_offs));}
+static void reset_counts(void){attack_n=0;memset(starts,0,sizeof(starts));memset(stops,0,sizeof(stops));memset(notes,0,sizeof(notes));memset(offs,0,sizeof(offs));memset(loop_notes,0,sizeof(loop_notes));memset(attack_offs,0,sizeof(attack_offs));memset(loop_offs,0,sizeof(loop_offs));}
 static void sim(mf_wingsuit *g,unsigned a,unsigned b,unsigned press)
 {
     unsigned held[2]={a,b},edge[2]={press,0},focus=0;int i;
     mf_ws_step(g,held,edge,3);mf_ws_audio_events(g->deaths,g->shots_fired);
     if(!g->paused)for(i=0;i<2;i++)if(mf_ws_beam_active(g,i))focus|=1u<<i;
     pump(clock_now+1,focus);
+}
+static void timing_regressions(void)
+{
+    unsigned t,j,spawned=0,requested=0;mf_wingsuit g;
+    load(90);reset_counts();attack_n=0;
+    mf_ws_audio_events(3,0);
+    for(t=100;t<=110;t++)pump(t,0);
+    assert(attack_n==3 && attack_tick[0]==100 && attack_tick[1]==105 && attack_tick[2]==110);
+    assert(live[4] && live[5] && live[6]); /* tails overlap */
+    load(90);reset_counts();attack_n=0;mf_ws_audio_events(1,0);pump(100,0);
+    mf_ws_audio_events(1,0);pump(106,0);assert(attack_n==2 && attack_tick[1]==106);
+    /* Both players tap faster than the 34-tick Shot lease. Count actual
+       allocated bullets, including an exhausted pool and a recovered slot. */
+    load(12000);reset_counts();mf_ws_init(&g,1);g.spawn=10000;
+    for(t=0;t<300;t++){
+        unsigned held[2]={t%2?0:MF_A,t%2?0:MF_A},edge[2]={0,0};
+        if(t==100)for(j=0;j<MF_WS_SHOTS;j++)g.shots[j]=(mf_ws_shot){1,160*256,180*256,0,120,0};
+        if(t==102){g.players[0].cooldown=g.players[1].cooldown=0;}
+        mf_ws_step(&g,held,edge,3);
+        spawned+=!!(g.shots_fired&1)+!!(g.shots_fired&2);
+        mf_ws_audio_events(g.deaths,g.shots_fired);requested+=pending_shots;
+        pump(12003+t,0);
+        assert((unsigned)(starts[2]+starts[3])==spawned && !pending_shots && !mixer.dropped_shots);
+    }
+    assert(spawned>20 && requested==spawned && stops[2]>0 && stops[3]>0);
+    /* Equal-tick attacks rotate deterministically; rejection retains events. */
+    load(13000);reset_counts();attack_n=0;
+    mf_ws_audio_events(0,3);pump(13003,0);mf_ws_audio_events(0,3);pump(13004,0);
+    assert(attack_n==4 && attack_port[0]==2 && attack_port[1]==3 && attack_port[2]==2 && attack_port[3]==3);
+    accept=0;mf_ws_audio_events(0,1);pump(13005,0);assert(pending_shots==1 && stops[2]==1);
+    accept=1;pump(13006,0);assert(!pending_shots && starts[2]==3);
+    reject_shot_on=1;mf_ws_audio_events(0,1);pump(13007,0);
+    assert(shot[1].state==RESTARTING && pending_shots==1 && stops[3]==2 && starts[3]==2);
+    pump(13008,0);assert(shot[1].state==PLAYING && !pending_shots && stops[3]==2 && starts[3]==3);
+    /* Full Explosion pool retains work until conservative natural reuse.
+       Fixed queue capacity cannot underflow as earlier pending starts fill it. */
+    load(14000);reset_counts();attack_n=0;mf_ws_audio_events(100,0);
+    for(t=14003;t<14030;t++)pump(t,0);
+    assert(attack_n==4 && pending_explosions==4 && mixer.dropped_explosions==92);
+    mf_ws_audio_events(100,0);assert(pending_explosions==8 && mixer.dropped_explosions==188);
+    for(t=14030;t<14200;t++)pump(t,0);
+    assert(attack_n==12 && !pending_explosions);
+    for(j=1;j<attack_n;j++)assert(attack_tick[j]-attack_tick[j-1]>=5);
+    for(j=4;j<8;j++)assert(!stops[j]);
+    /* Dense mixed stress: both flames persist while both Shot controls
+       restart and every Explosion start observes the global interval. */
+    load(15000);reset_counts();attack_n=0;
+    for(t=15003;t<15603;t++){
+        mf_ws_audio_events(2,3);pump(t,3);
+        assert(starts[2]+starts[3]==(int)(2*(t-15002)) && !pending_shots && !mixer.losses);
+    }
+    assert(notes[0]==1 && notes[1]==1 && loop_notes[0]==1 && loop_notes[1]==1 && !loop_offs[0] && !loop_offs[1]);
+    {unsigned last=0,seen=0;for(j=0;j<attack_n;j++)if(attack_port[j]>=4){if(seen)assert(attack_tick[j]-last>=5);last=attack_tick[j];seen++;}assert(seen>20);}
+    for(j=4;j<8;j++)assert(!stops[j]);
+    /* Spacing wraps with the VBlank clock. */
+    load(~0u-12);reset_counts();attack_n=0;mf_ws_audio_events(3,0);
+    pump(~0u-2,0);pump(1,0);assert(attack_n==1);pump(2,0);assert(attack_n==2);pump(7,0);assert(attack_n==3);
+    puts("PASS SFX timing: successful allocations == Shot attacks; 2/3/2/3 rotation; isolated stops; simultaneous 100/105/110 and 100/106; overlapping tails, occupied-pool retention, 8-event drop-newest bound, clock wrap, SDK rejection and 600-tick dual-Flame/dual-Shot/Explosion stress");
 }
 int main(void)
 {
@@ -153,15 +214,14 @@ int main(void)
     assert(g.shots[5].x==g.players[0].x && !g.shots[5].vx);
     load(2000);reset_counts();mf_ws_audio_events(1,2);pump(2003,1);
     assert(live[0] && live[2] && live[4] && notes[0]==1);
-    mf_ws_audio_events(1,0);pump(2004,3);assert(live[0] && live[1] && live[4] && live[5] && notes[0]==1 && notes[1]==1);
+    mf_ws_audio_events(1,0);pump(2008,3);assert(live[0] && live[1] && live[4] && live[5] && notes[0]==1 && notes[1]==1);
     load(2100);reset_counts();mf_ws_audio_events(1,3);pump(2103,0);
     assert(live[2] && live[3] && live[4] && starts[2]==1 && starts[3]==1);
-    mf_ws_audio_events(0,1);pump(2104,0);assert(!stops[2] && !stops[3] && live[2] && live[4]);
-    pump(2104,0);assert(starts[2]==1);pump(2105,0);assert(starts[2]==1 && live[3] && live[4]);
-    pump(2136,0);assert(starts[2]==1);pump(2137,0);assert(starts[2]==2 && !stops[2]);
+    mf_ws_audio_events(0,1);pump(2104,0);assert(stops[2]==1 && !stops[3] && starts[2]==2 && live[4]);
+    pump(2104,0);assert(starts[2]==2);mf_ws_audio_events(0,2);pump(2105,0);
+    assert(starts[3]==2 && stops[3]==1 && live[2] && live[4]);
     load(2200);reset_counts();mf_ws_audio_events(10,0);pump(2203,3);
-    /* Direct MIDI: two Flame starts + four Explosion starts fit one batch. */
-    assert(mixer.flame==2 && mixer.explosion==4 && mixer.total==6 && mixer.dropped_explosions==2);
+    assert(mixer.flame==2 && mixer.explosion==1 && mixer.total==3 && mixer.dropped_explosions==2);
     for(i=2204;i<=2303;i++)pump((unsigned)i,3);
     assert(starts[4]+starts[5]+starts[6]+starts[7]==8 && !pending_explosions);
     assert(notes[0]==1 && notes[1]==1 && !offs[0] && !offs[1]);
@@ -251,15 +311,15 @@ int main(void)
     }
     assert(notes[0]==1 && notes[1]==1 && loop_notes[0]==1 && loop_notes[1]==1);
     assert(attack_offs[0]==1 && attack_offs[1]==1 && !loop_offs[0] && !loop_offs[1]);
-    for(i=2;i<8;i++)assert(starts[i]>0 && !stops[i]);
-    /* Exactly ten principal physical voices during both handoffs. */
-    load(8000);reset_counts();pump(8003,3);pump(8004,3);mf_ws_audio_events(4,3);pump(8041,3);
+    for(i=2;i<8;i++)assert(starts[i]>0 && (i<4 || !stops[i]));
+    /* Staggered tails overlap during the unchanged two-player handoff. */
+    load(8000);reset_counts();pump(8003,3);pump(8004,3);mf_ws_audio_events(4,3);
+    for(i=8026;i<=8041;i++)pump(i,3);
     assert(mixer.flame==4 && mixer.shot==2 && mixer.explosion==4 && mixer.total==10);
     for(i=0;i<10;i++)assert(mixer.owner[i]==(unsigned)(i<4?i/2:i-2));
-    for(i=8042;i<8072;i++)pump(i,3);
-    assert(live[2] && live[3] && live[4] && !mixer.losses);
-    pump(8072,3);assert(!live[2] && live[4]); /* LEA, no Note Off. */
-    pump(8085,3);assert(!live[4] && !mixer.losses);
+    for(i=8042;i<=8057;i++)pump(i,3);
+    assert(!live[2] && live[4] && !mixer.losses);
+    pump(8070,3);assert(!live[4] && !mixer.losses);
     /* Read-only diagnostics capture premature inactivity after cache grace. */
     load(9000);reset_counts();mf_ws_audio_events(1,1);pump(9003,1);
     driver_note(4,60,0);pump(9004,1);pump(9016,1);
@@ -274,9 +334,10 @@ int main(void)
     /* Asynchronous Note On acceptance with stale EG from the previous
        naturally ended note must not produce a false replacement alarm. */
     load(11000);reset_counts();mf_ws_audio_events(0,1);pump(11003,0);
-    assert(watch[4].seen);mf_ws_audio_events(0,1);defer_note=1;pump(11037,0);
+    assert(watch[4].seen);mf_ws_audio_events(0,1);pump(11004,0);mf_ws_audio_events(0,1);defer_note=1;pump(11037,0);
     assert(!watch[4].seen && !mixer.losses);defer_note=0;driver_note(2,60,1);pump(11038,0);
     assert(watch[4].seen && !mixer.losses && starts[2]==2);
-    puts("PASS direct-MIDI one-shots: 4 independent explosions, 2 shots, preserved gains/programs/channels, natural LEA, bounded overflow without stealing, rejection retries, 600-VBlank mixed hold, maximum 10 physical cached-live slots; fault-only ownership/loss diagnostics");
+    timing_regressions();
+    puts("PASS direct-MIDI one-shots: 4 independent explosions, 2 shots, preserved gains/programs/channels, natural Explosion LEA, bounded overflow, Shot-only oldest retrigger, rejection retries, 600-VBlank mixed hold, maximum 10 physical cached-live slots; fault-only ownership/loss diagnostics");
     puts("PASS split Flame and E108: exact handoff, independent release/pause/death, no Loop restarts/offs during mixes, loader DMA once, readiness/consumer watchdog and clock-wrap regressions");
 }
