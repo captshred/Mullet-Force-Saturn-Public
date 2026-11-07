@@ -24,6 +24,7 @@ with tempfile.TemporaryDirectory(prefix='mf-reference-') as d:
  subprocess.run(['make','test'],cwd=d,check=True)
 print('Running current recovered source transport with UBSan',flush=True)
 subprocess.run(['python3','tools/test-recovered-audio.py'],cwd=R,check=True)
+subprocess.run(['python3','tools/validate-fire-hit.py'],cwd=R,check=True)
 # Every unchanged gameplay/runtime source is also compiled directly here.
 with tempfile.TemporaryDirectory() as d:
  for name,sources,inc in [

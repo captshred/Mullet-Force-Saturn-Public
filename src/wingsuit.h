@@ -59,7 +59,7 @@ typedef struct {
     mf_ws_hostile_shot hostile[MF_WS_HOSTILE];
     mf_ws_enemy enemies[MF_WS_ENEMIES];
     int beam_wait[2],deaths;
-    unsigned shots_fired;
+    unsigned shots_fired,hits;
     unsigned ticks,wave; int spawn,paused,game_over,scroll;
     unsigned enemy_rng, pattern_bag; int last_pattern, formation, diagonal_direction;
     mf_ws_turret turrets[MF_WS_TURRETS];

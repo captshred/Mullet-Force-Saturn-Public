@@ -73,6 +73,7 @@ int mf_ws_audio_load(mf_ws_audio_reader read,mf_ws_audio_progress progress){
     if(fail_audio_init){audio_diagnostic=(mf_ws_audio_diagnostic){MF_WS_AUDIO_MAP_CHANGE,7,"MAP CHANGE",1,0,1};progress(&audio_diagnostic);return 0;}
     return 1;
 }
+void mf_ws_audio_hits(unsigned n){(void)n;}
 static int audio_events,audio_pumps;
 void mf_ws_audio_events(int n,unsigned shots){(void)shots;audio_events+=n;}
 void mf_ws_audio_step(unsigned n,unsigned focus){(void)n;(void)focus;audio_pumps++;}

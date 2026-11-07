@@ -1,0 +1,31 @@
+{
+  "source": {
+    "name": "New Shot.wav",
+    "sha256": "1abc11ab39191e031c38b5ec1c27a919a01b2e667d53d4a44c549b0f87bcfe35",
+    "rate": 44100,
+    "channels": 2,
+    "bits": 16,
+    "frames": 19066
+  },
+  "conversion": "nearest integer (L+R)/2; symmetric ties away from zero; mono signed big-endian PCM16; no resample/gain/trim/compression",
+  "pcm_bytes": 38132,
+  "pcm_sha256": "009fc112250aebe204b6ee905eb618b17ae57408a9a8b60f5ff147edbab58baf",
+  "pcm_frames": 19066,
+  "pcm_rate": 44100,
+  "pcm_channels": 1,
+  "peak": 16807,
+  "tone_addr": 447588,
+  "pcm_addr": 447676,
+  "scsp_high_water": 485812,
+  "scsp_free": 38476,
+  "files": {
+    "WFIRE.TON": {
+      "bytes": 38224,
+      "sha256": "460a67f3744d9f07fd20fc7bc3cbcf0a78e10ac97e49f4b744a272ea51b8f19e"
+    },
+    "WFIRE.MAP": {
+      "bytes": 64,
+      "sha256": "08a299a7ed2345756dd9359d97ffd05d790614c82127d7bc3da130f559fb444e"
+    }
+  }
+}

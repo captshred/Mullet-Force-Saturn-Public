@@ -18,6 +18,8 @@ typedef struct { unsigned started,until;int state; } one_shot;
 typedef struct { unsigned stopped,started,loop_started,missing_since;int prep,attack,loop,program,guard,stop,missing; } flame_state;
 static one_shot shot[2],explosion[4];
 static unsigned shot_next,explosion_next;
+static one_shot hit;
+static unsigned hit_prep,pending_hits;
 static flame_state flame[2];
 static mf_ws_flame_diagnostic flame_diagnostic[2];
 static unsigned pending_shots,pending_explosions,last_now,fault,note_on_mask;
@@ -72,12 +74,12 @@ int mf_ws_audio_load(mf_ws_audio_reader read,mf_ws_audio_progress notify)
     /* Pinned SND_Init takes words and copies floor(bytes/4)*4+4. Supply its
        four-byte lookahead explicitly rather than reading past the MAP file. */
     unsigned int map_storage[(MF_WS_MUSIC_MAP_BYTES+4)/4]={0};
-    music_prep=music_requested=0;ready=clock_set=startup_done=startup_failed=boot_clock=0;boot=0;pending_shots=pending_explosions=fault=0;
+    memset(&hit,0,sizeof(hit));hit_prep=pending_hits=0;music_prep=music_requested=0;ready=clock_set=startup_done=startup_failed=boot_clock=0;boot=0;pending_shots=pending_explosions=fault=0;
     memset(shot,0,sizeof(shot));memset(explosion,0,sizeof(explosion));memset(flame,0,sizeof(flame));
     memset(flame_diagnostic,0,sizeof(flame_diagnostic));
     memset(note_baseline,0,sizeof(note_baseline));memset(one_prep,0,sizeof(one_prep));memset(&mixer,0,sizeof(mixer));memset(watch,0,sizeof(watch));
     memset(&diagnostic,0,sizeof(diagnostic));progress=notify;
-    stage(MF_WS_AUDIO_MAP_READ);map=read("WMUSIC.MAP",MF_WS_MUSIC_MAP_BYTES);
+    stage(MF_WS_AUDIO_MAP_READ);map=read("WFIRE.MAP",MF_WS_MUSIC_MAP_BYTES);
     if(!map){diagnostic.has_status=1;diagnostic.expected=MF_WS_MUSIC_MAP_BYTES;diagnostic.actual=-1;return 0;}
     memcpy(map_storage,map,MF_WS_MUSIC_MAP_BYTES);completed();
     stage(MF_WS_AUDIO_SOUND_OFF);slSoundOffWait();completed();
@@ -97,6 +99,7 @@ int mf_ws_audio_load(mf_ws_audio_reader read,mf_ws_audio_progress notify)
     stage(MF_WS_AUDIO_TON_UPLOAD);if(!upload(read,"WDEATH.TON",MF_WS_TON_BYTES,MF_WS_TON_ADDR))return 0;
     if(!upload(read,"WMUSIC.SEQ",MF_WS_MUSIC_SEQ_BYTES,MF_WS_MUSIC_SEQ_ADDR))return 0;
     if(!upload(read,"WMUSIC.TON",MF_WS_MUSIC_TON_BYTES,MF_WS_MUSIC_TON_ADDR))return 0;
+    if(!upload(read,"WFIRE.TON",MF_WS_FIRE_TON_BYTES,MF_WS_FIRE_TON_ADDR))return 0;
     /* Follow src/music.c's working SND/SGL initialization pairing, restart,
        flush and SND-only command submission. No slSoundRequest return checks. */
     MF_WS_SOUND_BASE[0x4e1]=0;
@@ -138,6 +141,28 @@ static int midi(int port,int command,int data1,int data2)
     if(SND_CtrlDirMidi(port<2?1:port,0,command,port,data1,data2)!=SND_RET_SET)return 0;
     if(command==1){note_on_mask|=1u<<port;note_baseline[port]=counter;}
     --budget;return 1;
+}
+/* All driver controls are assigned. Hit shares gain96 on control2 but has
+   its own channel8 bank/program/key context; no control-wide stop is used. */
+void mf_ws_audio_hits(unsigned count)
+{
+    if(startup_done){unsigned room=8-pending_hits;pending_hits+=count>room?room:count;}
+}
+static int hit_midi(int cmd,int a,int b)
+{
+    if(!budget || SND_CtrlDirMidi(2,0,cmd,8,a,b)!=SND_RET_SET)return 0;
+    --budget;return 1;
+}
+static void advance_hit(unsigned now)
+{
+    if(hit.state==PLAYING && (int)(now-hit.until)>=0 && hit_midi(0,60,0))hit.state=FREE;
+    /* At most one Hit attack per VBlank bounds release overlap; queued
+       simultaneous impacts drain deterministically on following VBlanks. */
+    if(pending_hits && budget){
+        if(hit.state==PLAYING){if(!hit_midi(0,60,0))return;hit.state=RESTARTING;}
+        if(!hit_midi(1,60,110))return;
+        --pending_hits;hit.state=PLAYING;hit.started=now;hit.until=now+MF_WS_HIT_TICKS;
+    }
 }
 static void advance_explosions(unsigned now)
 {
@@ -328,7 +353,11 @@ static void startup_timeout(void)
     if(!boot){
         if(queued)diagnostic.operation="SFX ACK";
         else {unsigned prep=flame[0].prep<flame[1].prep?flame[0].prep:flame[1].prep;
-            for(i=0;i<6;i++)if(one_prep[i]<prep)prep=one_prep[i];
+            if(!startup_done && commands_empty()){
+        if(hit_prep==0 && hit_midi(3,32,0))hit_prep=1;
+        else if(hit_prep==1 && hit_midi(4,1,0))hit_prep=2;
+    }
+    for(i=0;i<6;i++)if(one_prep[i]<prep)prep=one_prep[i];
             diagnostic.operation="SFX READY";diagnostic.expected=3;diagnostic.actual=prep;}
     }
     startup_failed=1;
@@ -421,12 +450,16 @@ void mf_ws_audio_step(unsigned now,unsigned focused)
     if(!startup_done && commands_empty())for(i=0;i<6;i++){
         unsigned p=(unsigned)i+2;int accepted=0;
         if(!one_prep[i] && budget && SND_SetSeqVl(p,p<4?MF_WS_SHOT_VOLUME:100,0)==SND_RET_SET){--budget;accepted=1;}
-        else if(one_prep[i]==1)accepted=midi(p,3,32,0);
-        else if(one_prep[i]==2)accepted=midi(p,4,p<4?1:0,0);
+        else if(one_prep[i]==1)accepted=midi(p,3,32,p<4?2:0);
+        else if(one_prep[i]==2)accepted=midi(p,4,0,0);
         if(accepted)++one_prep[i];
     }
+    if(!startup_done && commands_empty()){
+        if(hit_prep==0 && hit_midi(3,32,0))hit_prep=1;
+        else if(hit_prep==1 && hit_midi(4,1,0))hit_prep=2;
+    }
     for(i=0;i<6;i++)if(one_prep[i]!=3)all_prepared=0;
-    if(!startup_done && all_prepared && flame[0].prep==3 && flame[1].prep==3 && commands_empty()){
+    if(!startup_done && hit_prep==2 && all_prepared && flame[0].prep==3 && flame[1].prep==3 && commands_empty()){
         /* Preserve native score on control 0. SFX preparation must never
            attenuate its gain; Flames share control 1, separate MIDI channels. */
         if(music_prep==0 && budget && SND_SetSeqVl(0,127,0)==SND_RET_SET){--budget;music_prep=1;}
@@ -436,6 +469,7 @@ void mf_ws_audio_step(unsigned now,unsigned focused)
         if(music_requested && music_prep==1 && budget && SND_StartSeq(0,1,0,0)==SND_RET_SET){--budget;music_prep=2;}
         advance_explosions(now);
         advance_shots(now);
+        advance_hit(now);
     }
     observe_mixer(now);
     for(i=0;i<2;i++)observe_flame((unsigned)i,now,focused);

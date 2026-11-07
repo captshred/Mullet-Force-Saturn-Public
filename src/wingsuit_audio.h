@@ -19,6 +19,7 @@ typedef void (*mf_ws_audio_progress)(const mf_ws_audio_diagnostic *);
 int mf_ws_audio_load(mf_ws_audio_reader,mf_ws_audio_progress);
 const mf_ws_audio_diagnostic *mf_ws_audio_diagnostics(void);
 int mf_ws_audio_ready(void); /* -1: startup failure, 0: pending, 1: play may begin. */
+void mf_ws_audio_hits(unsigned count);
 void mf_ws_audio_events(int explosions,unsigned shots);
 void mf_ws_audio_step(unsigned now,unsigned focused);
 enum {

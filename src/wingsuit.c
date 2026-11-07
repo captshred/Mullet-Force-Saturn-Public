@@ -308,7 +308,7 @@ void mf_ws_step(mf_wingsuit *g,const unsigned held[2],const unsigned pressed[2],
 {
     unsigned ready=0;
     int i,j,alive=0,pulse[2]={0,0},old_x[2]={g->players[0].x,g->players[1].x};
-    g->deaths=0;g->shots_fired=0;
+    g->deaths=0;g->shots_fired=0;g->hits=0;
     if(g->game_over){if((connected&1) && (pressed[0]&MF_START))mf_ws_init(g,g->players[1].active && (connected&2));return;}
     if((connected&2) && !g->players[1].active && (pressed[1]&MF_START)){
         join(&g->players[1],1);g->players[1].x=home_x(g,1);
@@ -384,7 +384,7 @@ void mf_ws_step(mf_wingsuit *g,const unsigned held[2],const unsigned pressed[2],
     for(i=0;i<MF_WS_SHOTS;i++)if(g->shots[i].active)for(j=0;j<MF_WS_TURRETS;j++){
         mf_ws_shot *s=&g->shots[i];mf_ws_turret *t=&g->turrets[j];
         if(t->visible && t->hp && near(s->x,s->y,t->x,t->y,12,12)){
-            hit_turret(g,t,s->owner);s->active=0;break;
+            hit_turret(g,t,s->owner);if(t->hp>0)++g->hits;s->active=0;break;
         }
     }
     for(i=0;i<MF_WS_HOSTILE;i++){

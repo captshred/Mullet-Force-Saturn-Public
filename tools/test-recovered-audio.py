@@ -10,7 +10,7 @@ s=s.replace('static unsigned clock_now;','static int reject_shot_on;static unsig
 s=s.replace('    if(!accepted())return 1;','    if(p>=2 && p<4 && cmd==1 && reject_shot_on){--reject_shot_on;return 1;}\n    if(!accepted())return 1;')
 s=s.replace('starts[p]++;','assert(attack_n<20000);attack_tick[attack_n]=clock_now;attack_port[attack_n++]=p;starts[p]++;')
 s=s.replace('MF_WS_MAP_BYTES','MF_WS_MUSIC_MAP_BYTES')
-s=s.replace('map_size==20','map_size==28').replace('unsigned char snapshot[44]','unsigned char snapshot[60]').replace('!snapshot[40] && !snapshot[41] && !snapshot[42] && !snapshot[43]','!snapshot[56] && !snapshot[57] && !snapshot[58] && !snapshot[59]').replace('memcpy(ram+0x500,ram+0xa000,40)','memcpy(ram+0x500,ram+0xa000,56)')
+s=s.replace('map_size==20','map_size==32').replace('unsigned char snapshot[44]','unsigned char snapshot[68]').replace('!snapshot[40] && !snapshot[41] && !snapshot[42] && !snapshot[43]','!snapshot[64] && !snapshot[65] && !snapshot[66] && !snapshot[67]').replace('memcpy(ram+0x500,ram+0xa000,40)','memcpy(ram+0x500,ram+0xa000,64)')
 s=s.replace('word(a+6,p<<9)','word(a+6,(p<2?1:p)<<9)')
 s=s.replace('v==(p<2?MF_WS_FLAME_VOLUME:p<4?MF_WS_SHOT_VOLUME:MF_SFX_VOLUME)','v==(p==0?127:p==1?MF_WS_FLAME_VOLUME:p<4?MF_WS_SHOT_VOLUME:100)')
 a=s.index('int SND_StartSeq(');b=s.index('int SND_StopSeq(',a)
@@ -19,6 +19,15 @@ int SND_StartSeq(int p,int b,int song,int pr){assert(p==0 && b==1 && song==0 && 
 '''+s[b:]
 s=s.replace('assert(p>=0 && p<8 && !pr && channel==p);','assert(p>=1 && p<8 && !pr && channel==(p==1?channel:p));if(p==1){assert(channel<2);p=channel;}')
 s=s.replace('    else {assert(p<2 && cmd==0 && !b && live[p]);','    else if(p>=2){assert(cmd==0 && a==60 && !b);if(p>=4)assert((int)(clock_now-one_until[p])>=0);stops[p]++;live[p]=0;driver_note(p,a,0);}\n    else {assert(cmd==0 && !b && live[p]);')
+# Model a separate channel context for Hit even though its gain control is2.
+s=s.replace('[8]','[9]').replace('for(i=2;i<8;i++)','for(i=2;i<9;i++)')
+s=s.replace('channel==(p==1?channel:p)','(p==1?channel<2:(p==2?channel==2 || channel==8:channel==p))')
+s=s.replace('if(p==1){assert(channel<2);p=channel;}','if(p==1){assert(channel<2);p=channel;}else if(channel==8)p=8;')
+s=s.replace('assert(a==32 && !b);bank[p]=1;','assert(a==32 && b==(p==2 || p==3?2:0));bank[p]=b+1;')
+s=s.replace('a==(p<4?1:0)','a==(p==8?1:0)').replace('program[p]==(p<4?1:0)','program[p]==(p==8?1:0)')
+s=s.replace('word(a+6,(p<2?1:p)<<9)','word(a+6,(p<2?1:p==8?2:p)<<9)')
+s=s.replace('if(p>=4)assert((int)(clock_now-one_until[p])>=0);','if(p>=4 && p<8)assert((int)(clock_now-one_until[p])>=0);')
+s=s.replace('(p<4?31:44)','(p==8?31:p<4?27:44)')
 s=s.replace('int main(void)','int legacy_main(void)')
 s+='''
 int main(void){
@@ -91,6 +100,28 @@ int main(void){
  reject_shot_on=1;mf_ws_audio_events(0,1);pump(15004,0);
  assert(shot[0].state==RESTARTING && pending_shots==1 && stops[2]==1);
  pump(15005,0);assert(shot[0].state==PLAYING && !pending_shots && stops[2]==1 && starts[2]==2);
+ /* Hit follows actual surviving projectile damage, never Flame/death/miss. */
+ {mf_wingsuit g;unsigned hold[2]={0,0},edge[2]={0,0};int j;
+ mf_ws_init(&g,1);g.spawn=10000;g.scroll=300;step_turrets(&g);
+ for(j=0;j<4;j++){
+  mf_ws_turret *a=&g.turrets[0];g.shots[0]=(mf_ws_shot){1,a->x,a->y+7*256,0,40,0};
+  mf_ws_step(&g,hold,edge,3);assert(g.hits==(unsigned)(j<3) && g.deaths==(j==3));
+ }
+ mf_ws_step(&g,hold,edge,3);assert(!g.hits);
+ g.shots[0]=(mf_ws_shot){1,g.turrets[0].x,g.turrets[0].y+7*256,0,40,0};
+ mf_ws_step(&g,hold,edge,3);assert(!g.hits && !g.deaths);
+ mf_ws_init(&g,1);g.spawn=10000;g.scroll=300;g.shots[0]=(mf_ws_shot){1,16*256,200*256,0,40,0};
+ mf_ws_step(&g,hold,edge,3);assert(!g.hits && !g.deaths && g.shots[0].active);
+ }
+ load(16000);reset_counts();attack_n=0;
+ {unsigned music_before=music_starts;
+ for(t=16003;t<16603;t++){
+  mf_ws_audio_events(2,3);mf_ws_audio_hits(1);pump(t,3);
+  assert(starts[2]+starts[3]==(int)(2*(t-16002)) && !mixer.losses);
+ }
+ assert(starts[8]>500 && stops[8]>500 && notes[0]==1 && notes[1]==1 && loop_notes[0]==1 && loop_notes[1]==1 && !loop_offs[0] && !loop_offs[1] && music_starts==music_before+1);
+ }
+ puts("PASS Fire/Hit: bank2 new Fire on controls2/3; old Shot bank0/program1 on control2/channel8; surviving projectile damage only; lethal/miss/dead silence; mixed isolation and fresh Hit retriggers");
  puts("PASS SFX timing: allocation/attack equality, free-first/oldest rotation, 100/105/110 and 100/106, overlapping tails, eight-event drop-newest bound, retirement, dual-Flame/music/Shot stress and clock wrap");
  return 0;
 }

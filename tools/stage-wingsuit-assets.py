@@ -9,6 +9,7 @@ def stage(enabled,root):
     assert len(names)==26 and all(Path(n).name==n and Path(n).suffix in ('.BIN','.SEQ','.TON','.MAP') for n in names)
     names=dict(names)
     names.update(json.loads((R/'assets/wingsuit/recovered-audio.json').read_text())['files'])
+    names.update(json.loads((R/'assets/wingsuit/fire-hit.json').read_text())['files'])
     for name in names:(root/name).unlink(missing_ok=True)
     dest=root/'ALEVEL2'
     if dest.exists():shutil.rmtree(dest)

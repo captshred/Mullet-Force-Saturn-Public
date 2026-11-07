@@ -12,15 +12,24 @@ def payloads(b):
 def validate(disc=False):
  x=json.loads((R/'docs/source-recovery-lock.json').read_text())
  assert x['base_commit']=='5ca590d774cc91d0ac1bb4ce6b325aa647b3dd59'
+ swap=json.loads((R/'docs/fire-hit-lock.json').read_text())
+ assert swap['base_commit']=='6e5c8d9eb9b83e4cf3ebb278939b02b8787a0b1e'
+ def swapped(n,e):
+  c=swap['changes'].get(n)
+  if c is None:return e
+  assert c['before']==e,(n,'unexpected Fire/Hit baseline')
+  return c['after']
+ for n,e in swap['frozen'].items():assert info((R/n).read_bytes())==e,n
+ for n,e in swap['changes'].items():assert info((R/n).read_bytes())==e['after'],n
  feature=json.loads((R/'docs/sfx-scheduling-lock.json').read_text())
  assert feature['base_commit']=='6596c96d30569bdfc0fdaa0b72e6da4bab0a32e0'
  def expected(n,e):
   c=feature['changes'].get(n)
-  if c is None:return e
+  if c is None:return swapped(n,e)
   assert c['before']==e,(n,'unexpected SFX baseline')
-  return c['after']
- for n,e in feature['frozen'].items():assert info((R/n).read_bytes())==e,n
- for n,e in feature['changes'].items():assert info((R/n).read_bytes())==e['after'],n
+  return swapped(n,c['after'])
+ for n,e in feature['frozen'].items():assert info((R/n).read_bytes())==swapped(n,e),n
+ for n,e in feature['changes'].items():assert info((R/n).read_bytes())==swapped(n,e['after']),n
  for n,e in x['frozen'].items():assert info((R/n).read_bytes())==expected(n,e),n
  for n,e in x.get('added',{}).items():assert info((R/n).read_bytes())==expected(n,e),n
  for n,e in x['changes'].items():assert info((R/n).read_bytes())==expected(n,e['after']),n
@@ -46,11 +55,16 @@ def validate(disc=False):
  path=(R/'tools/build-source-complete.sh').read_text()
  assert 'bash tools/build.sh --native' in path and 'zip' not in path and 'neon-city.py' not in path
  if disc:
+  fire=json.loads((R/'assets/wingsuit/fire-hit.json').read_text())
+  for n,e in fire['files'].items():
+   b=(R/'assets/wingsuit'/n).read_bytes();assert info(b)==e;expected[n]=b
+  assert len(expected['WFIRE.TON'])==38224 and len(expected['WFIRE.MAP'])==64
+  assert expected['WFIRE.MAP'][:-16]==expected['WMUSIC.MAP'][:-8]
   image=(R/'build/mullet-force.bin').read_bytes();validate_disc(image,expected)
   root=dict(directory_records(image,image[16*2048+156:16*2048+190]));r=root['0.BIN'];o=struct.unpack_from('<I',r,2)[0]*2048;n=struct.unpack_from('<I',r,10)[0]
   assert image[o:o+n]==(R/'build/cd/0.bin').read_bytes()
   assert (R/'build/game.elf').exists()
-  print('PASS recovered source ISO: newly compiled executable; all 29 Level2 resources equal golden, with exactly approved three neon replacements; SCSP447588/free76700')
+  print('PASS recovered source ISO: newly compiled executable; 29 preserved Level2 resources plus isolated bank2 Fire resources; SCSP485812/free38476')
  print('PASS v3 recovery preservation: %d original files frozen, %d exact changes; current gameplay/camera/Level1/maps/music PCM/Flame parameters preserved'%(len(x['frozen']),len(x['changes'])))
 if __name__=='__main__':
  p=argparse.ArgumentParser();p.add_argument('--disc',action='store_true');validate(p.parse_args().disc)
