@@ -1,5 +1,5 @@
 name: Manual Saturn playtest build
-run-name: Saturn | ${{ inputs.profile || github.ref_name }} | ${{ inputs.source_ref || github.ref_name }}
+run-name: Saturn | ${{ inputs.profile || github.ref_name }} | ${{ inputs.profile == 'source-complete' && '852df2b5897a5f930fde0bd5c9d46de457dbb55a' || inputs.source_ref || github.ref_name }}
 
 on:
   push:
@@ -12,6 +12,7 @@ on:
         required: true
         default: arcade-impact-fx
         options:
+          - source-complete
           - level2-neon-city
           - level2-audio-engine-review
           - arcade-impact-fx
@@ -23,7 +24,7 @@ on:
           - neon-stage
           - bat-fix
       source_ref:
-        description: Source branch, tag, or full commit SHA
+        description: Source branch, tag, or full commit SHA (source-complete pins 852df2b)
         type: string
         required: true
         default: '8d79a36f97dfd0b02de7d1b6b58e85b16fdc0b96'
@@ -33,7 +34,8 @@ permissions:
 
 env:
   BUILD_PROFILE: ${{ inputs.profile }}
-  REQUESTED_REF: ${{ inputs.source_ref }}
+  # The complete profile builds the exact approved duplicate-shot candidate.
+  REQUESTED_REF: ${{ inputs.profile == 'source-complete' && '852df2b5897a5f930fde0bd5c9d46de457dbb55a' || inputs.source_ref }}
   MF_PRESERVE_AUDIO: '1'
 
 jobs:
@@ -46,7 +48,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           repository: captshred/Mullet-Force-Saturn-Public
-          ref: ${{ inputs.source_ref }}
+          ref: ${{ inputs.profile == 'source-complete' && '852df2b5897a5f930fde0bd5c9d46de457dbb55a' || inputs.source_ref }}
           persist-credentials: false
       - name: Resolve and record exact source SHA
         id: source
@@ -68,6 +70,7 @@ jobs:
         run: |
           export MF_BUILD_BRANCH="$REQUESTED_REF"
           case "$BUILD_PROFILE" in
+            source-complete) bash tools/build-source-complete.sh ;;
             arcade-impact-fx) bash tools/build-arcade-impact-fx.sh --native ;;
             level1-stage-clear) bash tools/build-level1-stage-clear.sh --native ;;
             stage-default) bash tools/build-stage.sh --native ;;
