@@ -17,7 +17,7 @@ enum { FREE,PLAYING,RESTARTING };
 typedef struct { unsigned started,until;int state; } one_shot;
 typedef struct { unsigned stopped,started,loop_started,missing_since;int prep,attack,loop,program,guard,stop,missing; } flame_state;
 static one_shot shot[2],explosion[4];
-static unsigned shot_next,explosion_next;
+static unsigned shot_next,explosion_next,shot_recent,shot_started;
 static one_shot hit;
 static unsigned hit_prep,pending_hits;
 static flame_state flame[2];
@@ -78,6 +78,7 @@ int mf_ws_audio_load(mf_ws_audio_reader read,mf_ws_audio_progress notify)
     unsigned int map_storage[(MF_WS_MUSIC_MAP_BYTES+4)/4]={0};
     bank_reader=read;map_ack_bytes=MF_WS_MUSIC_MAP_BYTES;
     memset(&hit,0,sizeof(hit));hit_prep=pending_hits=0;music_prep=music_requested=0;ready=clock_set=startup_done=startup_failed=boot_clock=0;boot=0;pending_shots=pending_explosions=fault=0;
+    shot_recent=0;shot_started=0;
     memset(shot,0,sizeof(shot));memset(explosion,0,sizeof(explosion));memset(flame,0,sizeof(flame));
     memset(flame_diagnostic,0,sizeof(flame_diagnostic));
     memset(note_baseline,0,sizeof(note_baseline));memset(one_prep,0,sizeof(one_prep));memset(&mixer,0,sizeof(mixer));memset(watch,0,sizeof(watch));
@@ -131,7 +132,9 @@ void mf_ws_audio_events(int count,unsigned shots)
     if(!startup_done)return;
     music_requested=1;
     if(count>0)enqueue(&pending_explosions,(unsigned)count,MF_WS_EXPLOSION_PENDING_MAX,&mixer.dropped_explosions);
-    enqueue(&pending_shots,!!(shots&1u)+!!(shots&2u),4,&mixer.dropped_shots);
+    /* One sound identity, independent of player. Coalesce duplicate requests,
+       including while the SDK or both naturally playing voices are busy. */
+    if(shots&3u)pending_shots=1;
 }
 static int midi(int port,int command,int data1,int data2)
 {
@@ -183,22 +186,21 @@ static void advance_explosions(unsigned now)
 static void advance_shots(unsigned now)
 {
     unsigned i;
+    /* Reuse Explosion's proven VBlank spacing, but discard repeated Shot
+       audio instead of queueing it. Only successful Note On opens a window;
+       unsigned elapsed time handles wrap. Gameplay events remain untouched. */
+    if(shot_recent && now-shot_started<MF_WS_EXPLOSION_MIN_SPACING)pending_shots=0;
     for(i=0;i<2;i++)if(shot[i].state==PLAYING && (int)(now-shot[i].until)>=0 && midi(2+i,0,60,0))shot[i].state=FREE;
-    while(pending_shots && budget){
+    if(pending_shots && budget){
         unsigned selected=shot_next;one_shot *p;
-        /* Finish a previously accepted stop before selecting another voice. */
-        for(i=0;i<2;i++)if(shot[i].state==RESTARTING){selected=i;break;}
-        if(i==2){
-            for(i=0;i<2;i++)if(shot[(shot_next+i)%2].state==FREE){selected=(shot_next+i)%2;break;}
-            if(i==2 && now-shot[1-selected].started>now-shot[selected].started)selected=1-selected;
-        }
+        /* Preserve active PCM tails. Wait for a naturally retired control;
+           never stop/restart an already playing sample to service a shot. */
+        for(i=0;i<2;i++)if(shot[(shot_next+i)%2].state==FREE){selected=(shot_next+i)%2;break;}
+        if(i==2)return;
         p=&shot[selected];
-        if(p->state==PLAYING){
-            if(!midi(2+selected,0,60,0))break;
-            p->state=RESTARTING;
-        }
-        if(!midi(2+selected,1,60,110))break;
-        --pending_shots;p->state=PLAYING;p->started=now;p->until=now+MF_WS_SHOT_TICKS;
+        if(!midi(2+selected,1,60,110))return;
+        --pending_shots;shot_recent=1;shot_started=now;
+        p->state=PLAYING;p->started=now;p->until=now+MF_WS_SHOT_TICKS;
         shot_next=1-selected;
     }
 }

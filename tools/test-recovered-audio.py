@@ -26,7 +26,7 @@ s=s.replace('if(p==1){assert(channel<2);p=channel;}','if(p==1){assert(channel<2)
 s=s.replace('assert(a==32 && !b);bank[p]=1;','assert(a==32 && b==(p==2 || p==3?2:0));bank[p]=b+1;')
 s=s.replace('a==(p<4?1:0)','a==(p==8?1:0)').replace('program[p]==(p<4?1:0)','program[p]==(p==8?1:0)')
 s=s.replace('word(a+6,(p<2?1:p)<<9)','word(a+6,(p<2?1:p==8?2:p)<<9)')
-s=s.replace('if(p>=4)assert((int)(clock_now-one_until[p])>=0);','if(p>=4 && p<8)assert((int)(clock_now-one_until[p])>=0);')
+s=s.replace('if(p>=4)assert((int)(clock_now-one_until[p])>=0);','if(p<8)assert((int)(clock_now-one_until[p])>=0);if(p==2 || p==3)assert(clock_now-shot[p-2].started>=MF_WS_SHOT_TICKS);')
 s=s.replace('(p<4?31:44)','(p==8?31:p<4?27:44)')
 # Startup map must be the owner's 56-byte parent, never the expanded Fire map.
 s=s.replace('assert(stopped && !inflight && (unsigned char *)d>=ram', 'assert((stopped || boot==BOOT_FIRE_UPLOAD) && !inflight && (unsigned char *)d>=ram')
@@ -73,20 +73,30 @@ int main(void){
  assert(live[4] && live[5] && live[6] && !stops[4] && !stops[5] && !stops[6]);
  load(90);reset_counts();attack_n=0;mf_ws_audio_events(1,0);pump(100,0);mf_ws_audio_events(1,0);pump(106,0);
  assert(attack_n==2 && attack_tick[1]==106);
- load(11000);reset_counts();attack_n=0;mf_ws_audio_events(0,1);pump(11003,0);mf_ws_audio_events(0,1);pump(11004,0);
- mf_ws_audio_events(0,1);pump(11005,0);mf_ws_audio_events(0,1);pump(11006,0);
- assert(attack_n==4 && attack_port[0]==2 && attack_port[1]==3 && attack_port[2]==2 && attack_port[3]==3);
- /* A free younger Shot wins over stealing the older active Shot. */
- shot[1].until=11007;one_until[3]=11007;mf_ws_audio_events(0,1);pump(11007,0);assert(attack_port[4]==3 && stops[2]==1);
- /* Actual successful allocation count equals attacks; a full pool is silent. */
- {mf_wingsuit g;unsigned n=0;load(12000);reset_counts();mf_ws_init(&g,1);g.spawn=10000;
+ /* Player identity is irrelevant: simultaneous shots coalesce, inside-window
+    repeats disappear, and the exact five-VBlank boundary admits a new sound. */
+ load(11000);reset_counts();attack_n=0;mf_ws_audio_events(0,1);mf_ws_audio_events(0,2);pump(11003,0);
+ assert(attack_n==1 && attack_port[0]==2 && !pending_shots);
+ for(t=11004;t<=11007;t++){mf_ws_audio_events(0,t&1?1:2);pump(t,0);assert(attack_n==1 && !pending_shots);}
+ mf_ws_audio_events(0,2);pump(11008,0);assert(attack_n==2 && attack_port[1]==3);
+ /* Both voices are occupied: queue one attack without interrupting either.
+    Duplicates under SDK pressure cannot make a later catch-up burst. */
+ for(t=11009;t<=11036;t++){mf_ws_audio_events(0,3);pump(t,0);assert(attack_n==2 && !stops[2] && !stops[3] && pending_shots<=1);}
+ pump(11037,0);assert(attack_n==3 && stops[2]==1 && !stops[3]);
+ /* P1 and P2 alone, alternating at normal cadence, preserve all projectiles. */
+ {mf_wingsuit g;unsigned n=0;load(12000);reset_counts();mf_ws_init(&g,1);g.spawn=10000;g.players[0].invulnerable=g.players[1].invulnerable=10000;
  for(t=0;t<300;t++){
-  unsigned held[2]={t%2?0:MF_A,t%2?0:MF_A},edge[2]={0,0};
-  if(t==100)for(p=0;p<MF_WS_SHOTS;p++)g.shots[p]=(mf_ws_shot){1,160*256,180*256,0,120,0};
+  unsigned held[2]={t%40==0?MF_A:0,t%40==20?MF_A:0},edge[2]={0,0};
   mf_ws_step(&g,held,edge,3);n+=!!(g.shots_fired&1)+!!(g.shots_fired&2);
   mf_ws_audio_events(g.deaths,g.shots_fired);pump(12003+t,0);
   assert((unsigned)(starts[2]+starts[3])==n && !pending_shots && !mixer.dropped_shots);
- }assert(n>20);}
+ }assert(n==15);}
+ /* Co-op still allocates BOTH projectiles while playing only one sound. */
+ {mf_wingsuit g;unsigned held[2]={MF_A,MF_A},edge[2]={0,0};
+ load(12500);reset_counts();mf_ws_init(&g,1);g.spawn=10000;
+ mf_ws_step(&g,held,edge,3);assert(g.shots_fired==3 && g.shots[0].active && g.shots[1].active);
+ mf_ws_audio_events(1,g.shots_fired);pump(12503,0);
+ assert(starts[2]==1 && !starts[3] && starts[4]==1);}
  load(13000);reset_counts();attack_n=0;mf_ws_audio_events(100,0);
  assert(pending_explosions==8 && mixer.dropped_explosions==92);
  for(t=13003;t<13203;t++)pump(t,0);
@@ -97,17 +107,22 @@ int main(void){
  load(14000);reset_counts();attack_n=0;
  {unsigned before=music_starts,last=0;
  for(t=14003;t<14603;t++){
-  mf_ws_audio_events(2,3);pump(t,3);assert(starts[2]+starts[3]==(int)(2*(t-14002)) && !mixer.losses);
+  mf_ws_audio_events(2,3);pump(t,3);assert(pending_shots<=1 && !mixer.losses);
  }
  assert(music_starts==before+1 && notes[0]==1 && notes[1]==1 && loop_notes[0]==1 && loop_notes[1]==1 && !loop_offs[0] && !loop_offs[1]);
  for(p=0;p<attack_n;p++)if(attack_port[p]>=4){if(last)assert(attack_tick[p]-last>=5);last=attack_tick[p];}
  }
  load(~0u-12);reset_counts();attack_n=0;mf_ws_audio_events(3,0);
  pump(~0u-2,0);pump(1,0);assert(attack_n==1);pump(2,0);pump(7,0);assert(attack_n==3);
- load(15000);reset_counts();mf_ws_audio_events(0,3);pump(15003,0);
- reject_shot_on=1;mf_ws_audio_events(0,1);pump(15004,0);
- assert(shot[0].state==RESTARTING && pending_shots==1 && stops[2]==1);
- pump(15005,0);assert(shot[0].state==PLAYING && !pending_shots && stops[2]==1 && starts[2]==2);
+ /* Unsigned timing survives wrap; reload clears history. SDK rejection
+    retries exactly one attack without consuming its voice or duplicating it. */
+ load(~0u-5);reset_counts();attack_n=0;mf_ws_audio_events(0,3);pump(~0u-2,0);
+ mf_ws_audio_events(0,2);pump(1,0);assert(attack_n==1);
+ mf_ws_audio_events(0,1);pump(2,0);assert(attack_n==2);
+ load(15000);reset_counts();attack_n=0;
+ reject_shot_on=1;mf_ws_audio_events(0,3);pump(15003,0);
+ assert(shot[0].state==FREE && pending_shots==1 && !stops[2] && !attack_n);
+ mf_ws_audio_events(0,3);pump(15004,0);assert(shot[0].state==PLAYING && !pending_shots && !stops[2] && starts[2]==1);
  /* Hit follows actual surviving projectile damage, never Flame/death/miss. */
  {mf_wingsuit g;unsigned hold[2]={0,0},edge[2]={0,0};int j;
  mf_ws_init(&g,1);g.spawn=10000;g.scroll=300;step_turrets(&g);
@@ -125,7 +140,7 @@ int main(void){
  {unsigned music_before=music_starts;
  for(t=16003;t<16603;t++){
   mf_ws_audio_events(2,3);mf_ws_audio_hits(1);pump(t,3);
-  assert(starts[2]+starts[3]==(int)(2*(t-16002)) && !mixer.losses);
+  assert(pending_shots<=1 && !mixer.losses);
  }
  assert(starts[8]>500 && stops[8]>500 && notes[0]==1 && notes[1]==1 && loop_notes[0]==1 && loop_notes[1]==1 && !loop_offs[0] && !loop_offs[1] && music_starts==music_before+1);
  }
@@ -145,12 +160,16 @@ int main(void){
  }
  puts("PASS staged startup: 56-byte/28-word WDEATH+music first, Fire tone uploaded before 64-byte map publication; independent 041a consumption/queue/map gate rejects stalled Fire acknowledgment");
  puts("PASS Fire/Hit: bank2 new Fire on controls2/3; old Shot bank0/program1 on control2/channel8; surviving projectile damage only; lethal/miss/dead silence; mixed isolation and fresh Hit retriggers");
- puts("PASS SFX timing: allocation/attack equality, free-first/oldest rotation, 100/105/110 and 100/106, overlapping tails, eight-event drop-newest bound, retirement, dual-Flame/music/Shot stress and clock wrap");
+ puts("PASS SFX timing: per-SFX Shot coalescing, five-VBlank boundary, natural-tail/free-first rotation, 100/105/110 and 100/106, overlapping tails, eight-event drop-newest bound, retirement, dual-Flame/music/Shot stress and clock wrap");
  return 0;
 }
 '''
 source=(R/'src/wingsuit_audio.c').read_text()
-mutants=[('fixed',source),('early-combined-map',source.replace('MF_WS_MUSIC_MAP_BYTES','MF_WS_FIRE_MAP_BYTES').replace('read("WMUSIC.MAP"','read("WFIRE.MAP"')),
+mutants=[('fixed',source),
+ ('shot-no-window',source.replace('now-shot_started<MF_WS_EXPLOSION_MIN_SPACING','0')),
+ ('shot-window-too-short',source.replace('now-shot_started<MF_WS_EXPLOSION_MIN_SPACING','now-shot_started<4u')),
+ ('shot-window-too-long',source.replace('now-shot_started<MF_WS_EXPLOSION_MIN_SPACING','now-shot_started<6u')),
+ ('shot-duplicates-queued',source.replace('if(shots&3u)pending_shots=1;','pending_shots+=!!(shots&1u)+!!(shots&2u);')),('early-combined-map',source.replace('MF_WS_MUSIC_MAP_BYTES','MF_WS_FIRE_MAP_BYTES').replace('read("WMUSIC.MAP"','read("WFIRE.MAP"')),
  ('timer-alias',source.replace('boot_counter=sound_word(0x41a);','boot_counter=sound_word(0x8838);').replace('if(sound_word(0x41a)==boot_counter','if(sound_word(0x8838)==boot_counter')),
  ('late-snapshot',source.replace('    boot_counter=sound_word(0x41a);','').replace('    boot=BOOT_CPU;return 1;','    boot_counter=sound_word(0x41a);boot=BOOT_CPU;return 1;'))]
 import resource
@@ -166,4 +185,4 @@ with tempfile.TemporaryDirectory() as d:
    print(result.stdout,end='')
   else:
    assert result.returncode!=0 and 'Assertion' in result.stderr,(name,result.stdout,result.stderr)
-   print('PASS recovered readiness mutation rejected:',name)
+   print('PASS recovered audio mutation rejected:',name)

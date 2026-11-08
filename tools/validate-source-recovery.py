@@ -10,12 +10,20 @@ def payloads(b):
  root=dict(directory_records(b,b[16*2048+156:16*2048+190]));records=dict(directory_records(b,root['ALEVEL2']))
  return {n:b[struct.unpack_from('<I',r,2)[0]*2048:struct.unpack_from('<I',r,2)[0]*2048+struct.unpack_from('<I',r,10)[0]] for n,r in records.items() if n not in ('.','..')}
 def validate(disc=False):
+ audio=json.loads((R/'docs/duplicate-shot-lock.json').read_text())
+ assert audio['base_commit']=='bb7b6b61af79ccddd9994a9623456d3f10ad6613'
+ def approved(n):
+  actual=info((R/n).read_bytes());c=audio['changes'].get(n)
+  if c is None:return actual
+  assert actual==c['after'],(n,'unexpected duplicate-shot change')
+  return c['before']
+ for n in audio['changes']:approved(n)
  bat=json.loads((R/'docs/bat-command-lock.json').read_text())
  assert bat['base_commit']=='1e7077616f7da57436500b3d9cddda2e61e6a727'
- for n,e in bat['frozen'].items():assert info((R/n).read_bytes())==e,n
- for n,e in bat['changes'].items():assert info((R/n).read_bytes())==e['after'],n
+ for n,e in bat['frozen'].items():assert approved(n)==e,n
+ for n,e in bat['changes'].items():assert approved(n)==e['after'],n
  def observed(n):
-  value=info((R/n).read_bytes());c=bat['changes'].get(n)
+  value=approved(n);c=bat['changes'].get(n)
   if c is None:return value
   assert value==c['after'],n
   return c['before']

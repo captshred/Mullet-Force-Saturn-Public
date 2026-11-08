@@ -1,0 +1,47 @@
+{
+  "base_commit": "bb7b6b61af79ccddd9994a9623456d3f10ad6613",
+  "scope": "Level 2 Shot audio only; original Explosion five-VBlank spacing and every asset preserved",
+  "changes": {
+    "src/wingsuit_audio.c": {
+      "before": {
+        "bytes": 25455,
+        "sha256": "36b35c052e1e05790847650f7eca7697541369bb9894c159c811fe67eec441f1"
+      },
+      "after": {
+        "bytes": 25750,
+        "sha256": "315e9eaf8f1e6e1bc98a6347f536508c995dd6dc7bc64916c5defe6a99c2cd51"
+      }
+    },
+    "tools/test-recovered-audio.py": {
+      "before": {
+        "bytes": 12918,
+        "sha256": "3d99421a101459230ddfa25c47d8b0818adf2f037b8fd325835592e08b7007be"
+      },
+      "after": {
+        "bytes": 14470,
+        "sha256": "e4dd0c840f6e6e3c08e2729dab454af2a56d100a1d45b83af3b3082cf8beeabe"
+      }
+    },
+    "tools/validate-source-recovery.py": {
+      "before": {
+        "bytes": 6088,
+        "sha256": "1ab0c086b7a6cee725f620b793df72f2ffa63b94e4743c21bab0434651d63795"
+      },
+      "after": {
+        "bytes": 6423,
+        "sha256": "1ff5de510a1acf2b70f72d1cf78ba230e7a3393a99a77967ff2e9bd2ace0a72f"
+      }
+    },
+    "tools/validate-fire-hit.py": {
+      "before": {
+        "bytes": 2784,
+        "sha256": "34f9dd37dd9976f280173685958bb06beceab197b893fa734962466de27dab5a"
+      },
+      "after": {
+        "bytes": 2920,
+        "sha256": "7d9f503951384f17728755d66abd2e9fafa81fa2610905394096055fa75592e5"
+      }
+    }
+  },
+  "shot_scheduler_sha256": "cd6cdc314338c15721b9a7beac40d39d138ed97ef7eb78ba7dc901ecfd42e908"
+}
