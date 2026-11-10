@@ -39,13 +39,33 @@ static const char *const operation[]={"IDLE","MAP READ","SOUND OFF","SND INIT",
     "MAP CHANGE","SGL INIT","SEQ UPLOAD","TON UPLOAD","CPU RESTART",
     "FLUSH/HANDSHAKE","DSP STOP","CDDA LEVEL","TOTAL VOLUME",
     "DRIVER READY","MAP READY","SFX READY"};
+/* Bounded read-only sampling. Sequential reads are not an atomic 68K snapshot.
+   Events: 1 stage entry, 2 stage completion, 3 wait label, 4 boot transition,
+   5 timeout, 6 ready. Capture is retained until the next Level 2 load. */
+mf_ws_startup_trace mf_ws_startup_capture __attribute__((used,externally_visible));
+static const volatile unsigned *trace_clock;
+static unsigned sound_word(unsigned);
+void mf_ws_audio_trace_clock(const volatile unsigned *clock){trace_clock=clock;}
+static void trace_sample(unsigned event)
+{
+    unsigned i;mf_ws_startup_sample *s;
+    volatile unsigned char *trace_ram=MF_WS_SOUND_BASE;
+    if(mf_ws_startup_capture.frozen)return;
+    s=&mf_ws_startup_capture.samples[mf_ws_startup_capture.count++ & (MF_WS_TRACE_CAPACITY-1)];
+    s->tick=trace_clock?*trace_clock:last_now;s->stage=diagnostic.stage;s->boot=boot;s->event=event;
+    s->cursor=sound_word(0x41a);s->flags=sound_word(0x4e0);
+    s->volume=sound_word(0x7f6);s->timer=sound_word(0x8838);s->history=sound_word(0x883a);
+    s->gate=sound_word(0x10da);
+    for(i=0;i<8;i++)s->queue[i]=trace_ram[0x700+i*16];
+}
 static void stage(unsigned n)
 {
     diagnostic.stage=n;diagnostic.operation=operation[n];
     diagnostic.has_status=0;diagnostic.expected=diagnostic.actual=0;
+    trace_sample(1);
     if(progress)progress(&diagnostic);
 }
-static void completed(void){diagnostic.completed|=1u<<(diagnostic.stage-1);}
+static void completed(void){diagnostic.completed|=1u<<(diagnostic.stage-1);trace_sample(2);}
 static int result(int status)
 {
     diagnostic.has_status=1;diagnostic.expected=SND_RET_SET;diagnostic.actual=status;
@@ -76,6 +96,7 @@ int mf_ws_audio_load(mf_ws_audio_reader read,mf_ws_audio_progress notify)
     /* Pinned SND_Init takes words and copies floor(bytes/4)*4+4. Supply its
        four-byte lookahead explicitly rather than reading past the MAP file. */
     unsigned int map_storage[(MF_WS_MUSIC_MAP_BYTES+4)/4]={0};
+    memset(&mf_ws_startup_capture,0,sizeof(mf_ws_startup_capture));
     bank_reader=read;map_ack_bytes=MF_WS_MUSIC_MAP_BYTES;
     memset(&hit,0,sizeof(hit));hit_prep=pending_hits=0;music_prep=music_requested=0;ready=clock_set=startup_done=startup_failed=boot_clock=0;boot=0;pending_shots=pending_explosions=fault=0;
     memset(shot,0,sizeof(shot));memset(explosion,0,sizeof(explosion));memset(flame,0,sizeof(flame));
@@ -338,10 +359,14 @@ static int map_ready(void)
 static void pending(const char *name)
 {
     diagnostic.operation=name;diagnostic.has_status=0;diagnostic.expected=0;diagnostic.actual=0;
+    trace_sample(3);
 }
 static void startup_timeout(void)
 {
     unsigned i,queued=0;volatile unsigned char *sound_ram=MF_WS_SOUND_BASE;
+    trace_sample(5);
+    for(i=0;i<128;i++)mf_ws_startup_capture.failure_queue[i]=sound_ram[0x700+i];
+    mf_ws_startup_capture.frozen=1;
     if(diagnostic.has_status && diagnostic.actual!=SND_RET_SET){startup_failed=1;return;}
     diagnostic.has_status=1;diagnostic.expected=1;diagnostic.actual=0;
     /* Include BOOT_CPU: report the first blocked command ID, not a
@@ -429,7 +454,7 @@ void mf_ws_audio_step(unsigned now,unsigned focused)
     if((!ready && !boot) || startup_failed || (clock_set && now==last_now))return;
     if(!clock_set){shot_next=0;explosion_next=now;}
     last_now=now;clock_set=1;budget=8;note_on_mask=0;
-    if(boot){startup(now);return;}
+    if(boot){unsigned before=boot;startup(now);if(boot!=before)trace_sample(4);return;}
     if(!startup_done && boot_clock && now-boot_since>=120){startup_timeout();return;}
     /* Release is latched across SDK rejection; stop only this player's keys.
        Loop Note Off takes priority over the already finite Attack tone. */
@@ -487,7 +512,7 @@ void mf_ws_audio_step(unsigned now,unsigned focused)
         /* Preserve native score on control 0. SFX preparation must never
            attenuate its gain; Flames share control 1, separate MIDI channels. */
         if(music_prep==0 && budget && SND_SetSeqVl(0,127,0)==SND_RET_SET){--budget;music_prep=1;}
-        else if(music_prep==1){startup_done=1;completed();}
+        else if(music_prep==1){startup_done=1;completed();trace_sample(6);mf_ws_startup_capture.frozen=1;}
     }
     if(startup_done){
         if(music_requested && music_prep==1 && budget && SND_StartSeq(0,1,0,0)==SND_RET_SET){--budget;music_prep=2;}

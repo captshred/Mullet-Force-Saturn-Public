@@ -1,3 +1,4 @@
+#include "wingsuit_audio.h"
 #include <jo/jo.h>
 #include "game.h"
 #include "music.h"
@@ -596,6 +597,9 @@ void jo_main(void)
     mf_game_init(&game);
     jo_core_add_vblank_callback(clock_tick);
     last_vblank=vblanks;
+#if MF_LEVEL2_WINGSUIT
+    mf_ws_audio_trace_clock(&vblanks);
+#endif
     jo_core_add_callback(update);
     jo_core_run();
 }

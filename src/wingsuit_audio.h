@@ -1,5 +1,20 @@
 #ifndef MF_WS_AUDIO_H
 #define MF_WS_AUDIO_H
+/* Diagnostic branch only: SH-2 RAM; no sound RAM writes. */
+#define MF_WS_TRACE_CAPACITY 128u
+typedef struct {
+ unsigned tick,stage,boot,event;
+ unsigned short cursor,flags,volume,timer,history,gate;
+ unsigned char queue[8];
+} mf_ws_startup_sample;
+typedef struct {
+ unsigned count,frozen;
+ mf_ws_startup_sample samples[MF_WS_TRACE_CAPACITY];
+ unsigned char failure_queue[128];
+} mf_ws_startup_trace;
+extern mf_ws_startup_trace mf_ws_startup_capture;
+void mf_ws_audio_trace_clock(const volatile unsigned *clock);
+void mf_ws_audio_trace_display(unsigned page);
 #define MF_WS_EXPLOSION_MIN_SPACING 5u
 #define MF_WS_EXPLOSION_PENDING_MAX 8u
 typedef char *(*mf_ws_audio_reader)(const char *,int);

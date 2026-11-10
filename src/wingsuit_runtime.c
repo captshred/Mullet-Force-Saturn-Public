@@ -275,6 +275,27 @@ static void render(void)
     jo_print(12,14,shooter.game_over?"GAME OVER       ":(shooter.paused?"PAUSED          ":"                "));
     jo_print(10,16,shooter.game_over?restart_prompt:restart_clear);
 }
+void mf_ws_audio_trace_display(unsigned page)
+{
+    unsigned i,j,n=mf_ws_startup_capture.count;
+    const mf_ws_startup_sample *s;
+    if(!n)return;
+    s=&mf_ws_startup_capture.samples[(n-1)&(MF_WS_TRACE_CAPACITY-1)];
+    jo_printf(1,18,"DIAG E108 T%u B%u N%u",s->tick,s->boot,n);
+    jo_printf(1,19,"C%04X F%04X V%04X",s->cursor,s->flags,s->volume);
+    jo_printf(1,20,"T%04X H%04X G%04X",s->timer,s->history,s->gate);
+    for(i=0,j=0;i<8;i++)if(s->queue[i]==12)j=1;
+    jo_printf(1,21,"Q %02X%02X%02X%02X%02X%02X%02X%02X D12%u",
+        s->queue[0],s->queue[1],s->queue[2],s->queue[3],s->queue[4],s->queue[5],s->queue[6],s->queue[7],j);
+    jo_printf(1,22,"A TRACE PAGE %u / PC DEBUGGER",page);
+    for(i=0;i<4;i++){
+        j=page*4+i;
+        if(j<n && j<MF_WS_TRACE_CAPACITY){
+            s=&mf_ws_startup_capture.samples[(n-1-j)&(MF_WS_TRACE_CAPACITY-1)];
+            jo_printf(1,23+i,"%03u T%u S%u B%u E%u    ",n-1-j,s->tick,s->stage,s->boot,s->event);
+        }else jo_print(1,23+i,"                              ");
+    }
+}
 void mf_ws_runtime_frame(const mf_input input[2],unsigned pressed[2],unsigned now)
 {
     unsigned elapsed=now-previous,held[2]={input[0].held,input[1].held};unsigned conn=(input[0].connected?1u:0u)|(input[1].connected?2u:0u),i;
@@ -286,6 +307,9 @@ void mf_ws_runtime_frame(const mf_input input[2],unsigned pressed[2],unsigned no
         return;
     }
     if(phase==4){
+        static unsigned trace_page;
+        if(pressed[0]&MF_A)trace_page=(trace_page+1)%32;
+        mf_ws_audio_trace_display(trace_page);
         jo_printf(3,10,"LEVEL 2 LOAD FAILED E%d",error);
         jo_printf(3,12,"ASSET %s",failed_asset?failed_asset:"UNKNOWN");
         jo_printf(3,13,"CAUSE %s",failed_reason?failed_reason:"UNKNOWN");
