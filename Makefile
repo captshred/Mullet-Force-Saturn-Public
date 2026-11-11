@@ -1,9 +1,9 @@
 # Recovered source is checked against the complete v3 delta/golden-resource lock.
 .PHONY: check test
 check:
-	python3 tools/validate-punk-ai.py --disc
+	python3 tools/validate-e108-request.py --disc
 test:
-	python3 tools/validate-punk-ai.py --test
+	python3 tools/validate-e108-request.py --test
 .PHONY: all setup bootstrap native check test clean
 all:
 	bash tools/build.sh

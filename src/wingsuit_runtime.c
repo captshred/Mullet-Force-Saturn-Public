@@ -275,19 +275,40 @@ static void render(void)
     jo_print(12,14,shooter.game_over?"GAME OVER       ":(shooter.paused?"PAUSED          ":"                "));
     jo_print(10,16,shooter.game_over?restart_prompt:restart_clear);
 }
+/* Evidence labels intentionally do not infer a stopped CPU from a still timer. */
+static const char *startup_evidence(void)
+{
+    unsigned i,n=mf_ws_startup_capture.count,queued=0;
+    const mf_ws_startup_sample *last,*first;
+    if(!n)return "NO CAPTURE";
+    last=&mf_ws_startup_capture.samples[(n-1)&(MF_WS_TRACE_CAPACITY-1)];first=last;
+    for(i=0;i<8;i++)queued|=last->queue[i];
+    if(mf_ws_startup_capture.signature!=0x53454741u)return "CHECK DRIVER IMAGE";
+    if(queued && last->gate==0x1038 && !(last->flags&0x8000))return "REQUEST FLAG CLEAR";
+    for(i=0;i<n && i<MF_WS_TRACE_CAPACITY;i++){
+        const mf_ws_startup_sample *p=&mf_ws_startup_capture.samples[(n-1-i)&(MF_WS_TRACE_CAPACITY-1)];
+        if(p->stage==MF_WS_AUDIO_DRIVER_READY && p->boot==1)first=p;
+    }
+    if(first->cursor!=last->cursor || first->history!=last->history)return "COMMANDS PROGRESSED";
+    if(first->timer!=last->timer)return "TIMER ALIVE NO ACK";
+    return "NO PROGRESS EVIDENCE";
+}
 void mf_ws_audio_trace_display(unsigned page)
 {
     unsigned i,j,n=mf_ws_startup_capture.count;
     const mf_ws_startup_sample *s;
     if(!n)return;
     s=&mf_ws_startup_capture.samples[(n-1)&(MF_WS_TRACE_CAPACITY-1)];
-    jo_printf(1,18,"DIAG E108 T%u B%u N%u",s->tick,s->boot,n);
+    jo_printf(1,11,"WAIT %s",startup_evidence());
+    jo_printf(1,18,"DIAG E108 T%u B%u N%u W%u",s->tick,s->boot,n,mf_ws_startup_capture.notifications);
     jo_printf(1,19,"C%04X F%04X V%04X",s->cursor,s->flags,s->volume);
     jo_printf(1,20,"T%04X H%04X G%04X",s->timer,s->history,s->gate);
     for(i=0,j=0;i<8;i++)if(s->queue[i]==12)j=1;
     jo_printf(1,21,"Q %02X%02X%02X%02X%02X%02X%02X%02X D12%u",
         s->queue[0],s->queue[1],s->queue[2],s->queue[3],s->queue[4],s->queue[5],s->queue[6],s->queue[7],j);
     jo_printf(1,22,"A TRACE PAGE %u / PC DEBUGGER",page);
+    jo_printf(1,27,"ERR%04X ST%04X SIG%08X",mf_ws_startup_capture.error,
+        mf_ws_startup_capture.status,mf_ws_startup_capture.signature);
     for(i=0;i<4;i++){
         j=page*4+i;
         if(j<n && j<MF_WS_TRACE_CAPACITY){

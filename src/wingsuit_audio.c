@@ -41,10 +41,12 @@ static const char *const operation[]={"IDLE","MAP READ","SOUND OFF","SND INIT",
     "DRIVER READY","MAP READY","SFX READY"};
 /* Bounded read-only sampling. Sequential reads are not an atomic 68K snapshot.
    Events: 1 stage entry, 2 stage completion, 3 wait label, 4 boot transition,
-   5 timeout, 6 ready. Capture is retained until the next Level 2 load. */
+   5 timeout, 6 ready, 7 periodic wait, 8 request notification. Capture is retained until the next Level 2 load. */
 mf_ws_startup_trace mf_ws_startup_capture __attribute__((used,externally_visible));
 static const volatile unsigned *trace_clock;
 static unsigned sound_word(unsigned);
+static void notify_commands(void);
+static unsigned trace_poll_tick;
 void mf_ws_audio_trace_clock(const volatile unsigned *clock){trace_clock=clock;}
 static void trace_sample(unsigned event)
 {
@@ -56,6 +58,9 @@ static void trace_sample(unsigned event)
     s->cursor=sound_word(0x41a);s->flags=sound_word(0x4e0);
     s->volume=sound_word(0x7f6);s->timer=sound_word(0x8838);s->history=sound_word(0x883a);
     s->gate=sound_word(0x10da);
+    mf_ws_startup_capture.error=sound_word(0x416);
+    mf_ws_startup_capture.status=sound_word(0x420);
+    mf_ws_startup_capture.signature=(sound_word(0x67ee)<<16)|sound_word(0x67f0);
     for(i=0;i<8;i++)s->queue[i]=trace_ram[0x700+i*16];
 }
 static void stage(unsigned n)
@@ -97,6 +102,7 @@ int mf_ws_audio_load(mf_ws_audio_reader read,mf_ws_audio_progress notify)
        four-byte lookahead explicitly rather than reading past the MAP file. */
     unsigned int map_storage[(MF_WS_MUSIC_MAP_BYTES+4)/4]={0};
     memset(&mf_ws_startup_capture,0,sizeof(mf_ws_startup_capture));
+    trace_poll_tick=0;
     bank_reader=read;map_ack_bytes=MF_WS_MUSIC_MAP_BYTES;
     memset(&hit,0,sizeof(hit));hit_prep=pending_hits=0;music_prep=music_requested=0;ready=clock_set=startup_done=startup_failed=boot_clock=0;boot=0;pending_shots=pending_explosions=fault=0;
     memset(shot,0,sizeof(shot));memset(explosion,0,sizeof(explosion));memset(flame,0,sizeof(flame));
@@ -137,6 +143,7 @@ int mf_ws_audio_load(mf_ws_audio_reader read,mf_ws_audio_progress notify)
     stage(MF_WS_AUDIO_TOTAL_VOLUME);if(!result(SND_SetTlVl(15)))return 0;
     /* Submission success is not driver consumption. Finish a bounded, live
        readiness handshake during existing title VBlanks before accepting play. */
+    notify_commands();
     boot=BOOT_CPU;return 1;
 }
 /* Fixed capacities avoid room underflow as pending attacks occupy controls.
@@ -350,6 +357,20 @@ static int commands_empty(void)
     for(i=0;i<8;i++)if(sound_ram[0x700+i*16])return 0;
     return 1;
 }
+/* SGL's pinned initializer may retain the driver's request gate at 0x10da.
+   SND_* publishes queue entries but does not set that gate's host flag. The
+   one earlier slSndFlush is not a notification for later publications.
+   Signal only nonempty queues. Repeat at each existing service point because
+   the 68K may clear bit7 after passing a newly published earlier queue slot.
+   This changes neither command contents/order nor the consumption checks. */
+static void notify_commands(void)
+{
+    volatile unsigned char *request_ram=MF_WS_SOUND_BASE;
+    if(!startup_failed && !commands_empty() && !(request_ram[0x4e0]&0x80)){
+        if(!mf_ws_startup_capture.frozen){++mf_ws_startup_capture.notifications;trace_sample(8);}
+        request_ram[0x4e0]|=0x80;
+    }
+}
 static int map_ready(void)
 {
     unsigned i;volatile unsigned char *sound_ram=MF_WS_SOUND_BASE;
@@ -448,7 +469,7 @@ static void startup(unsigned now)
     }
 }
 int mf_ws_audio_ready(void){return startup_failed?-1:startup_done;}
-void mf_ws_audio_step(unsigned now,unsigned focused)
+static void audio_step(unsigned now,unsigned focused)
 {
     int i,all_prepared=1;
     if((!ready && !boot) || startup_failed || (clock_set && now==last_now))return;
@@ -524,3 +545,15 @@ void mf_ws_audio_step(unsigned now,unsigned focused)
     for(i=0;i<2;i++)observe_flame((unsigned)i,now,focused);
 }
 unsigned mf_ws_audio_fault(void){return fault;}
+
+/* Keep every approved scheduler decision in audio_step unchanged. Publishing
+   the host request bit is separate from acknowledgement/readiness. */
+void mf_ws_audio_step(unsigned now,unsigned focused)
+{
+    notify_commands();
+    audio_step(now,focused);
+    if(!mf_ws_startup_capture.frozen && now-trace_poll_tick>=8){
+        trace_poll_tick=now;trace_sample(7);
+    }
+    notify_commands();
+}

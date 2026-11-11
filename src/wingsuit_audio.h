@@ -1,6 +1,6 @@
 #ifndef MF_WS_AUDIO_H
 #define MF_WS_AUDIO_H
-/* Diagnostic branch only: SH-2 RAM; no sound RAM writes. */
+/* Startup evidence is retained in SH-2 RAM; sampling does not alter the driver. */
 #define MF_WS_TRACE_CAPACITY 128u
 typedef struct {
  unsigned tick,stage,boot,event;
@@ -8,7 +8,8 @@ typedef struct {
  unsigned char queue[8];
 } mf_ws_startup_sample;
 typedef struct {
- unsigned count,frozen;
+ unsigned count,frozen,notifications,signature;
+ unsigned short error,status;
  mf_ws_startup_sample samples[MF_WS_TRACE_CAPACITY];
  unsigned char failure_queue[128];
 } mf_ws_startup_trace;
