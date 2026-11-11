@@ -96,9 +96,9 @@ int main(void)
     isolate(&g);place_players(&g);g.players[1].active=0;
     enemy(&g,0,244,200);enemy(&g,1,244,200);g.enemies[0].grace=g.enemies[1].grace=0;
     tick(&g,0,0,0,0);
-    assert(g.enemies[0].state==MF_ENEMY_WINDUP && g.enemies[1].state==MF_ENEMY_RECOVER);
+    assert(g.enemies[0].state==MF_ENEMY_WINDUP && g.enemies[1].state==MF_ENEMY_WINDUP);
     assert(g.enemies[0].target==0 && g.enemies[1].target==0);
-    puts("PASS two enemies target Buck in single-player, shared-target telegraphs stagger");
+    puts("PASS two enemies target Buck in single-player, independent shared-target telegraphs");
 
     isolate(&g);place_players(&g);g.players[1].health=0;g.players[1].defeated=1;
     g.players[0].health=61;g.players[0].attack=12;g.players[0].height=8*256;g.players[0].vz=100;

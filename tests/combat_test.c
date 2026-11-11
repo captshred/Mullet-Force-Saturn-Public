@@ -19,7 +19,7 @@ int main(void)
     puts("PASS single enemy approaches both axes with initial grace");
     start(&g);close_enemy(&g);g.enemies[0].grace=0;
     mf_game_step(&g,0,0);assert(g.enemies[0].state==MF_ENEMY_WINDUP);
-    step(&g,MF_ENEMY_WINDUP_TICKS-1);assert(g.players[0].health==100);
+    step(&g,MF_PUNK_WINDUP_TICKS-1);assert(g.players[0].health==100);
     mf_game_step(&g,0,0);assert(g.players[0].health==100-MF_ENEMY_DAMAGE && g.hitstop==MF_HIT_STOP_TICKS);
     hp=g.players[0].health;step(&g,20);assert(g.players[0].health==hp && g.players[0].invulnerable>0);
     puts("PASS telegraph, punch, single-hit latch, invulnerability and recovery");

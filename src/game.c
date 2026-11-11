@@ -156,6 +156,7 @@ static void enemy_spawn(mf_game *g,int index,int initial)
         left=bx;right=by;
     }
 #endif
+    g->punk[index].punches=g->punk[index].expiry=0;
     g->enemy_class[index]=MF_ENEMY_CORPORATE_PUNK;
     *e=(mf_enemy){0};e->x=(initial?(index?530:390):(right>=left?614:26))*256;
     e->y=(index?218:y)*256;e->hp=MF_ENEMY_MAX_HP;e->facing=g->players[0].x<e->x?-1:1;
@@ -273,6 +274,11 @@ static void enemy_step(mf_game *g,int index)
 #if MF_LEVEL1_STAGE_CLEAR
     if(g->stage!=MF_STAGE_LEVEL1 && e->state!=MF_ENEMY_DYING)return;
 #endif
+    /* Count simulation ticks, including hurt/recovery, but excluding hit-stop.
+       Disengagement cannot bank a counter indefinitely. */
+    if(g->punk[index].expiry && --g->punk[index].expiry==0)g->punk[index].punches=0;
+    if(e->state==MF_ENEMY_ABSENT || e->state==MF_ENEMY_DYING)
+        g->punk[index].punches=g->punk[index].expiry=0;
     if(e->fire_flash)--e->fire_flash;
     if(e->burn && e->hp>0){
         --e->burn;if(e->burn_clock>0 && --e->burn_clock==0){fire_damage(g,e,0,g->burn_owner[index]);e->burn_clock=MF_BURN_DAMAGE_TICKS;}
@@ -292,7 +298,9 @@ static void enemy_step(mf_game *g,int index)
     if(e->grace)--e->grace;
     if(e->state==MF_ENEMY_HURT){
         e->x=clamp(e->x+e->vx,26*256,614*256);e->vx=e->vx*7/8;
-        if(--e->timer<=0){e->state=MF_ENEMY_RECOVER;e->timer=24;}return;
+        if(--e->timer<=0){e->state=MF_ENEMY_RECOVER;e->timer=g->enemy_class[index]==MF_ENEMY_CORPORATE_PUNK?
+            (g->punk[index].punches>=MF_PUNK_COUNTER_THRESHOLD?MF_PUNK_COUNTER_RECOVERY:
+             g->punk[index].punches>=MF_PUNK_PRESSURE_BUILD?MF_PUNK_PRESSURE_RECOVERY:24):24;}return;
     }
     if(e->state==MF_ENEMY_WINDUP && --e->timer<=0){e->state=MF_ENEMY_ACTIVE;e->timer=MF_ENEMY_ACTIVE_TICKS;g->events|=MF_SWOOSH;}
     if(e->state==MF_ENEMY_ACTIVE){
@@ -323,11 +331,14 @@ static void enemy_step(mf_game *g,int index)
     p=&g->players[e->target];dx=p->x-e->x;dy=p->y-e->y;
     if(dx)e->facing=sign(dx);
     if(abs_i(dx)<=44*256 && abs_i(dy)<=9*256){
-        mf_enemy *other=&g->enemies[1-index];e->state=MF_ENEMY_IDLE;
+        e->state=MF_ENEMY_IDLE;
+        /* Both existing slots may commit independently. Shared per-player
+           invulnerability still resolves simultaneous contact only once. */
         if(!e->grace){
-            if(other->target==e->target && (other->state==MF_ENEMY_WINDUP || other->state==MF_ENEMY_ACTIVE)){
-                e->state=MF_ENEMY_RECOVER;e->timer=18;
-            }else{e->state=MF_ENEMY_WINDUP;e->timer=MF_ENEMY_WINDUP_TICKS;e->hit_done=0;}
+            e->state=MF_ENEMY_WINDUP;
+            e->timer=g->enemy_class[index]==MF_ENEMY_CORPORATE_PUNK?
+                (g->punk[index].punches>=MF_PUNK_COUNTER_THRESHOLD?MF_PUNK_COUNTER_WINDUP_TICKS:MF_PUNK_WINDUP_TICKS):MF_ENEMY_WINDUP_TICKS;
+            e->hit_done=0;
         }
     }else{
         e->state=MF_ENEMY_WALK;++e->walk;
@@ -592,13 +603,23 @@ static void player_hits(mf_game *g,mf_player *p)
         if(e->hp>0 && e->state!=MF_ENEMY_ABSENT && !(p->hit_mask&bit) && (e->x-p->x)*p->facing>0 &&
            mf_boxes_overlap(mf_player_attackbox(p),mf_enemy_hurtbox(e))){
             p->hit_mask|=bit;
+            if(g->enemy_class[i]==MF_ENEMY_CORPORATE_PUNK){
+                if(p->bat || p->attack_air)g->punk[i].punches=g->punk[i].expiry=0;
+                else {
+                    if(g->punk[i].punches<MF_PUNK_COUNTER_THRESHOLD)++g->punk[i].punches;
+                    g->punk[i].expiry=MF_PUNK_PRESSURE_EXPIRY;
+                }
+            }
 #if MF_RUN_BAT
             if(g->running_bat[p-g->players].active && p->bat && g->enemy_class[i]==MF_ENEMY_CORPORATE_PUNK)e->hp=0;
             else
 #endif
             e->hp=clamp(e->hp-(p->bat?MF_BAT_DAMAGE:(p->attack_air?2:1)),0,MF_ENEMY_MAX_HP);
             hit_sound(g,(int)(p-g->players),e->hp,0);
-            e->state=e->hp?MF_ENEMY_HURT:MF_ENEMY_DYING;e->timer=e->hp?18:30;e->vx=p->facing*(p->bat?MF_BAT_KNOCKBACK:850);e->flash=10;
+            e->state=e->hp?MF_ENEMY_HURT:MF_ENEMY_DYING;e->timer=e->hp?
+                (g->enemy_class[i]==MF_ENEMY_CORPORATE_PUNK?
+                 (g->punk[i].punches>=MF_PUNK_COUNTER_THRESHOLD?MF_PUNK_COUNTER_HURT:
+                  g->punk[i].punches>=MF_PUNK_PRESSURE_BUILD?MF_PUNK_PRESSURE_HURT:18):18):30;e->vx=p->facing*(p->bat?MF_BAT_KNOCKBACK:850);e->flash=10;
             impact(g,e->x/256,e->y/256,p->bat?contact_height(p,84):48);if(!e->hp){
                 g->score+=MF_ENEMY_DEFEAT_SCORE;
 #if MF_LEVEL1_STAGE_CLEAR

@@ -71,6 +71,8 @@ typedef struct {
     mf_jab_repeat_state jab[MF_PLAYERS];
 #endif
 /* JAB END */
+    /* Per-slot pressure; no changes to approved enemy/player render ABI. */
+    struct { int punches,expiry; } punk[MF_ENEMIES];
     int burn_owner[MF_ENEMIES]; /* Sound attribution only; no damage/state changes. */
 #if MF_PUNCH_COMBO
     mf_punch_combo combo[MF_PLAYERS];
