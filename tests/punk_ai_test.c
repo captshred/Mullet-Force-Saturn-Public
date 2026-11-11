@@ -31,16 +31,15 @@ int main(void)
     for(actor=0;actor<2;actor++)for(f=-1;f<=1;f+=2){
         setup(&g,actor,f);g.players[actor].attack=1;
         enemy_step(&g,0);assert(g.enemies[0].state==MF_ENEMY_WINDUP);
-        assert(g.enemies[0].timer==18); /* Active player, no idle gate. */
+        assert(g.enemies[0].timer==14); /* Active player, no idle gate. */
         for(i=1;i<=5;i++){
             punch(&g,actor);assert(g.punk[0].punches==i);
             player_hits(&g,&g.players[actor]);assert(g.punk[0].punches==i);
-            assert(g.enemies[0].timer==(i<3?18:i<5?12:6));
+            assert(g.enemies[0].timer==(i<3?12:i<5?8:6));
             g.enemies[0].vx=0;
-            for(n=0;n<(i<3?42:i<5?20:8);n++)enemy_step(&g,0);
-            assert(g.enemies[0].state==MF_ENEMY_IDLE);
-            enemy_step(&g,0);assert(g.enemies[0].state==MF_ENEMY_WINDUP);
-            assert(g.enemies[0].timer==(i<5?18:10));
+            for(n=0;n<(i<3?20:i<5?12:8);n++)enemy_step(&g,0);
+            assert(g.enemies[0].state==MF_ENEMY_WINDUP);
+            assert(g.enemies[0].timer==(i<5?14:10));
         }
         /* Counter is an opportunity, not damage or armor. Next jab interrupts. */
         assert(g.players[actor].health==100);
@@ -60,7 +59,7 @@ int main(void)
             assert(!g.punk[0].punches && !g.punk[0].expiry && g.punk[1].punches==4);
         }
         setup(&g,actor,f);g.punk[0].punches=5;g.punk[0].expiry=1;
-        enemy_step(&g,0);assert(!g.punk[0].punches && g.enemies[0].timer==18);
+        enemy_step(&g,0);assert(!g.punk[0].punches && g.enemies[0].timer==14);
         setup(&g,actor,f);g.punk[0].punches=5;g.punk[0].expiry=180;
         g.enemies[0].state=MF_ENEMY_RECOVER;g.enemies[0].timer=5;
         enemy_step(&g,0);assert(g.enemies[0].state==MF_ENEMY_RECOVER);
@@ -73,7 +72,7 @@ int main(void)
         g.punk[0].punches=5;g.punk[0].expiry=180;
         enemy_step(&g,0);enemy_step(&g,1);
         assert(g.enemies[0].state==MF_ENEMY_WINDUP && g.enemies[1].state==MF_ENEMY_WINDUP);
-        assert(g.enemies[0].timer==10 && g.enemies[1].timer==18);
+        assert(g.enemies[0].timer==10 && g.enemies[1].timer==14);
         g.players[actor].attack=8;g.players[actor].bat=1;g.running_bat[actor].pending=1;
         for(i=0;i<18;i++){enemy_step(&g,0);enemy_step(&g,1);}
         assert(g.players[actor].health==88 && g.players[actor].hurt==12);

@@ -48,6 +48,13 @@ typedef struct {
     unsigned previous;
 } mf_dash_state;
 enum { MF_ENEMY_CORPORATE_PUNK, MF_ENEMY_SPECIAL };
+enum { MF_PUNK_BRAWLER, MF_PUNK_FLANKER, MF_PUNK_AMBUSHER, MF_PUNK_OPPORTUNIST };
+enum { MF_PUNK_APPROACH, MF_PUNK_PREP, MF_PUNK_RUSH, MF_PUNK_CLOSE };
+typedef struct {
+    int punches,expiry;
+    unsigned rng; /* Separate stream: never consumes the approved spawn RNG. */
+    int behavior,lane,phase,age,clock,side,burst_x,burst_y;
+} mf_punk_ai;
 /* Fast profile: active/pending are zero or 1 + the captured run pose (0..3). */
 typedef struct { int active,carry,dir,pending; } mf_running_bat;
 #if MF_PUNCH_COMBO
@@ -72,7 +79,7 @@ typedef struct {
 #endif
 /* JAB END */
     /* Per-slot pressure; no changes to approved enemy/player render ABI. */
-    struct { int punches,expiry; } punk[MF_ENEMIES];
+    mf_punk_ai punk[MF_ENEMIES];
     int burn_owner[MF_ENEMIES]; /* Sound attribution only; no damage/state changes. */
 #if MF_PUNCH_COMBO
     mf_punch_combo combo[MF_PLAYERS];

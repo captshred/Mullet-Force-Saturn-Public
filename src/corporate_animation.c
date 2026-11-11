@@ -56,7 +56,11 @@ int mf_corporate_pose(const mf_game *g,int actor)
 #if MF_CP_HQ_COMBAT
     if(e->state==MF_ENEMY_WINDUP)return e->timer>16?0:6;
     if(e->state==MF_ENEMY_ACTIVE)return 7;
-    if(e->state==MF_ENEMY_RECOVER)return e->timer==MF_ENEMY_RECOVERY_TICKS+actor*12?7:e->timer>28?6:0;
+    if(e->state==MF_ENEMY_RECOVER){
+        if(g->enemy_class[actor]==MF_ENEMY_CORPORATE_PUNK)
+            return e->timer==MF_PUNK_ATTACK_RECOVERY+actor*6?7:e->timer>12?6:0;
+        return e->timer==MF_ENEMY_RECOVERY_TICKS+actor*12?7:e->timer>28?6:0;
+    }
     if(e->state==MF_ENEMY_HURT)return 8;
     if(e->state==MF_ENEMY_DYING)return e->timer>25?8:e->timer>12?9:10;
 #endif

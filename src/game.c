@@ -118,6 +118,10 @@ static void drum_reset(mf_drum *d,int i)
     *d=(mf_drum){0};d->x=xs[i]*256;d->y=ys[i]*256;d->hp=3;
 }
 static int living(const mf_player *p) {return p->active && p->health>0;}
+static unsigned punk_roll(mf_punk_ai *a)
+{
+    a->rng=a->rng*1664525u+1013904223u;return a->rng;
+}
 static void enemy_spawn(mf_game *g,int index,int initial)
 {
     mf_enemy *e=&g->enemies[index];int i,left=10000,right=10000,y=178;
@@ -156,7 +160,16 @@ static void enemy_spawn(mf_game *g,int index,int initial)
         left=bx;right=by;
     }
 #endif
-    g->punk[index].punches=g->punk[index].expiry=0;
+    {
+        mf_punk_ai *a=&g->punk[index],*other=&g->punk[1-index];
+        unsigned seed=a->rng?a->rng:(0x50554e4bu^(unsigned)(index*7919));
+        *a=(mf_punk_ai){0};a->rng=seed;
+        a->behavior=(int)((punk_roll(a)>>16)&3u);
+        if(g->enemies[1-index].state!=MF_ENEMY_ABSENT && a->behavior==other->behavior)
+            a->behavior=(a->behavior+1)&3;
+        a->lane=(a->rng&256u)?1:-1;
+        if(g->enemies[1-index].state!=MF_ENEMY_ABSENT && other->lane)a->lane=-other->lane;
+    }
     g->enemy_class[index]=MF_ENEMY_CORPORATE_PUNK;
     *e=(mf_enemy){0};e->x=(initial?(index?530:390):(right>=left?614:26))*256;
     e->y=(index?218:y)*256;e->hp=MF_ENEMY_MAX_HP;e->facing=g->players[0].x<e->x?-1:1;
@@ -268,6 +281,83 @@ static void fire_damage(mf_game *g,mf_enemy *e,int ignite,int owner)
     }
     /* No recurring HURT state: a living enemy can escape or interrupt fire. */
 }
+/* One legal attack gate for every approach, rush and counter. */
+static int punk_attack(mf_game *g,int index)
+{
+    mf_enemy *e=&g->enemies[index];mf_punk_ai *a=&g->punk[index];
+    mf_player *p=&g->players[e->target];int dx=p->x-e->x,dy=p->y-e->y;
+    if(dx)e->facing=sign(dx);
+    if(e->grace || !dx || abs_i(dx)>44*256 || abs_i(dy)>9*256)return 0;
+    e->state=MF_ENEMY_WINDUP;e->timer=a->punches>=MF_PUNK_COUNTER_THRESHOLD?
+        MF_PUNK_COUNTER_WINDUP_TICKS:MF_PUNK_WINDUP_TICKS;e->hit_done=0;
+    a->phase=MF_PUNK_CLOSE;a->clock=0;return 1;
+}
+static void punk_pursue(mf_game *g,int index)
+{
+    mf_enemy *e=&g->enemies[index],*other=&g->enemies[1-index];
+    mf_player *p=&g->players[e->target];mf_punk_ai *a=&g->punk[index];
+    int dx=p->x-e->x,dy=p->y-e->y,tx=p->x,ty=p->y,sx=MF_PUNK_WALK_X,sy=MF_PUNK_WALK_Y;
+    int lane=a->lane?a->lane:(index?1:-1),engaged=p->attack ||
+        (other->target==e->target && (other->state==MF_ENEMY_WINDUP || other->state==MF_ENEMY_ACTIVE));
+    if(a->phase==MF_PUNK_RUSH){
+        /* Fixed direction captured after preparation: dodgeable, not homing. */
+        e->x+=a->burst_x*(sx*MF_PUNK_RUSH_NUM/MF_PUNK_RUSH_DEN);
+        e->y+=a->burst_y*(sy*MF_PUNK_RUSH_NUM/MF_PUNK_RUSH_DEN);
+        if(--a->clock<=0)a->phase=MF_PUNK_CLOSE;
+    }else{
+        if(++a->age>=MF_PUNK_APPROACH_LIMIT)a->phase=MF_PUNK_CLOSE;
+        /* A moving target cannot trap an enemy in an offset orbit forever. */
+        if(abs_i(dx)>160*256 && a->age==40+(int)((a->rng>>8)%25u))a->lane=lane=-lane;
+        if(clamp(p->y/256+lane*MF_PUNK_LANE,168,229)-p->y/256<12 && lane>0)lane=-1;
+        if(p->y/256-clamp(p->y/256+lane*MF_PUNK_LANE,168,229)<12 && lane<0)lane=1;
+        a->lane=lane;
+        if(a->phase==MF_PUNK_APPROACH){
+            if(a->behavior==MF_PUNK_OPPORTUNIST){
+                if(!a->side)a->side=-p->facing;
+                if((e->x-p->x)*a->side>=(engaged?24:40)*256)a->phase=MF_PUNK_CLOSE;
+                else tx=clamp(p->x+a->side*(engaged?56:72)*256,26*256,614*256);
+            }
+            if(a->behavior!=MF_PUNK_BRAWLER && a->phase!=MF_PUNK_CLOSE)
+                ty=clamp(p->y+lane*MF_PUNK_LANE*256,168*256,229*256);
+            if(a->behavior==MF_PUNK_FLANKER && abs_i(dx)<=76*256)a->phase=MF_PUNK_CLOSE;
+            if(a->behavior==MF_PUNK_AMBUSHER && abs_i(dx)<=120*256)a->phase=MF_PUNK_CLOSE;
+            if(a->phase==MF_PUNK_CLOSE){
+                tx=p->x;ty=p->y;
+                if(abs_i(dx)>12*256 && abs_i(dy)>9*256 && !e->grace){
+                    unsigned pick=punk_roll(a);
+                    a->phase=MF_PUNK_PREP;e->state=MF_ENEMY_WINDUP;
+                    e->timer=a->behavior==MF_PUNK_AMBUSHER?8+(int)((pick>>16)%3u):6;
+                    return; /* Existing ready pose; this state cannot damage. */
+                }
+                a->phase=MF_PUNK_CLOSE;
+            }
+        }
+        if(a->phase==MF_PUNK_CLOSE){tx=p->x;ty=p->y;}
+        /* Small opposite depth aims reduce stacking without body collision.
+           Legal attacks are checked before this optional pursuit steering. */
+        if(abs_i(e->x-other->x)<18*256 && abs_i(e->y-other->y)<10*256 &&
+           other->state!=MF_ENEMY_ABSENT && other->state!=MF_ENEMY_DYING)
+            ty=clamp(ty+lane*6*256,168*256,229*256);
+        dx=tx-e->x;dy=ty-e->y;
+        /* Separate coincident roots so facing/contact cannot deadlock. */
+        if(!dx){
+            int side=p->x<56*256?1:p->x>584*256?-1:(index?1:-1);
+            e->x+=side*sx;
+        }
+        if(abs_i(dx)>30*256)e->x+=sign(dx)*sx;
+        else if(a->behavior==MF_PUNK_OPPORTUNIST && a->phase==MF_PUNK_APPROACH && abs_i(dx)>2*256)
+            e->x+=sign(dx)*sx;
+        /* Scale depth velocity to the approach vector instead of settling Y
+           long before X. All arithmetic is bounded by the 588px playfield. */
+        if(abs_i(dy)>3*256){
+            int divisor=abs_i(dx)>abs_i(dy)?abs_i(dx):abs_i(dy);
+            int step=clamp(dy*sx/divisor,-sy,sy);
+            e->y+=step;
+        }
+    }
+    e->state=MF_ENEMY_WALK;++e->walk;
+    e->x=clamp(e->x,26*256,614*256);e->y=clamp(e->y,168*256,229*256);
+}
 static void enemy_step(mf_game *g,int index)
 {
     mf_enemy *e=&g->enemies[index];mf_player *p;int dx,dy,i;
@@ -297,10 +387,23 @@ static void enemy_step(mf_game *g,int index)
     }
     if(e->grace)--e->grace;
     if(e->state==MF_ENEMY_HURT){
+        g->punk[index].phase=MF_PUNK_CLOSE;g->punk[index].clock=0;
         e->x=clamp(e->x+e->vx,26*256,614*256);e->vx=e->vx*7/8;
         if(--e->timer<=0){e->state=MF_ENEMY_RECOVER;e->timer=g->enemy_class[index]==MF_ENEMY_CORPORATE_PUNK?
             (g->punk[index].punches>=MF_PUNK_COUNTER_THRESHOLD?MF_PUNK_COUNTER_RECOVERY:
-             g->punk[index].punches>=MF_PUNK_PRESSURE_BUILD?MF_PUNK_PRESSURE_RECOVERY:24):24;}return;
+             g->punk[index].punches>=MF_PUNK_PRESSURE_BUILD?MF_PUNK_PRESSURE_RECOVERY:MF_PUNK_NORMAL_RECOVERY):24;}return;
+    }
+    if(e->state==MF_ENEMY_WINDUP && g->punk[index].phase==MF_PUNK_PREP){
+        choose_target(g,e,index);
+        if(e->target<0){e->state=MF_ENEMY_IDLE;g->punk[index].phase=MF_PUNK_APPROACH;return;}
+        if(punk_attack(g,index))return; /* Legal opening overrides movement prep. */
+        if(--e->timer<=0){
+            p=&g->players[e->target];
+            g->punk[index].phase=MF_PUNK_RUSH;g->punk[index].clock=10+(int)((punk_roll(&g->punk[index])>>16)%9u);
+            g->punk[index].burst_x=sign(p->x-e->x);g->punk[index].burst_y=sign(p->y-e->y);
+            e->state=MF_ENEMY_WALK;
+        }
+        return;
     }
     if(e->state==MF_ENEMY_WINDUP && --e->timer<=0){e->state=MF_ENEMY_ACTIVE;e->timer=MF_ENEMY_ACTIVE_TICKS;g->events|=MF_SWOOSH;}
     if(e->state==MF_ENEMY_ACTIVE){
@@ -323,13 +426,24 @@ static void enemy_step(mf_game *g,int index)
                 if(!p->health)p->defeated=MF_BUCK_RECOVERY_TICKS;
             }
         }
-        if(--e->timer<=0){e->state=MF_ENEMY_RECOVER;e->timer=MF_ENEMY_RECOVERY_TICKS+index*12;}return;
+        if(--e->timer<=0){e->state=MF_ENEMY_RECOVER;
+            e->timer=g->enemy_class[index]==MF_ENEMY_CORPORATE_PUNK?MF_PUNK_ATTACK_RECOVERY+index*6:MF_ENEMY_RECOVERY_TICKS+index*12;
+            g->punk[index].phase=MF_PUNK_APPROACH;g->punk[index].age=0;g->punk[index].side=0;
+            g->punk[index].lane=(punk_roll(&g->punk[index])&256u)?1:-1;
+        }return;
     }
     if(e->state==MF_ENEMY_WINDUP)return;
-    if(e->state==MF_ENEMY_RECOVER){if(--e->timer<=0)e->state=MF_ENEMY_IDLE;return;}
+    if(e->state==MF_ENEMY_RECOVER){if(--e->timer>0)return;e->state=MF_ENEMY_IDLE;
+        if(g->enemy_class[index]!=MF_ENEMY_CORPORATE_PUNK)return;
+    }
     choose_target(g,e,index);if(e->target<0){e->state=MF_ENEMY_IDLE;return;}
     p=&g->players[e->target];dx=p->x-e->x;dy=p->y-e->y;
     if(dx)e->facing=sign(dx);
+    if(g->enemy_class[index]==MF_ENEMY_CORPORATE_PUNK){
+        if(punk_attack(g,index))return;
+        if(e->grace && dx && abs_i(dx)<=44*256 && abs_i(dy)<=9*256){e->state=MF_ENEMY_IDLE;return;}
+        punk_pursue(g,index);return;
+    }
     if(abs_i(dx)<=44*256 && abs_i(dy)<=9*256){
         e->state=MF_ENEMY_IDLE;
         /* Both existing slots may commit independently. Shared per-player
@@ -619,7 +733,7 @@ static void player_hits(mf_game *g,mf_player *p)
             e->state=e->hp?MF_ENEMY_HURT:MF_ENEMY_DYING;e->timer=e->hp?
                 (g->enemy_class[i]==MF_ENEMY_CORPORATE_PUNK?
                  (g->punk[i].punches>=MF_PUNK_COUNTER_THRESHOLD?MF_PUNK_COUNTER_HURT:
-                  g->punk[i].punches>=MF_PUNK_PRESSURE_BUILD?MF_PUNK_PRESSURE_HURT:18):18):30;e->vx=p->facing*(p->bat?MF_BAT_KNOCKBACK:850);e->flash=10;
+                  g->punk[i].punches>=MF_PUNK_PRESSURE_BUILD?MF_PUNK_PRESSURE_HURT:MF_PUNK_NORMAL_HURT):18):30;e->vx=p->facing*(p->bat?MF_BAT_KNOCKBACK:850);e->flash=10;
             impact(g,e->x/256,e->y/256,p->bat?contact_height(p,84):48);if(!e->hp){
                 g->score+=MF_ENEMY_DEFEAT_SCORE;
 #if MF_LEVEL1_STAGE_CLEAR

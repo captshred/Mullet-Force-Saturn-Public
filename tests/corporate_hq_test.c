@@ -20,7 +20,7 @@ int main(void){mf_game g={0},before;jo_palette pal={4};int a,s,t,face;
   assert(!memcmp(&g,&before,sizeof(g)) && loads==14);
  }
  for(t=1;t<=6;t++){g.enemies[0].state=MF_ENEMY_ACTIVE;g.enemies[0].timer=t;assert(mf_corporate_pose(&g,0)==7);}
- for(a=0;a<2;a++){g.enemies[a].state=MF_ENEMY_RECOVER;g.enemies[a].timer=MF_ENEMY_RECOVERY_TICKS+a*12;assert(mf_corporate_pose(&g,a)==7);}
+ for(a=0;a<2;a++){g.enemies[a].state=MF_ENEMY_RECOVER;g.enemies[a].timer=MF_PUNK_ATTACK_RECOVERY+a*6;assert(mf_corporate_pose(&g,a)==7);}
  for(t=1;t<=30;t++){g.enemies[0].state=MF_ENEMY_DYING;g.enemies[0].timer=t;assert(mf_corporate_pose(&g,0)==(t>25?8:t>12?9:10));}
  g.enemies[0].state=MF_ENEMY_ABSENT;assert(mf_corporate_pose(&g,0)==-1);assert(mf_corporate_pose(&g,2)==-1);
  puts("PASS HQ enemy: all existing states/timers/both actors/facings; shared 14 uploads, no simulation mutations, exact active and 30-tick defeat mapping");return 0;}
