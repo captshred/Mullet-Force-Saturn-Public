@@ -1,0 +1,26 @@
+{
+  "baseline": "279e33d2f60645b12cf479ba3b096954565a0173",
+  "flag": "MF_HUD_PANEL_MEMORY",
+  "resource": "generated:panel",
+  "format": "RGB555",
+  "before": {
+    "definitions": 152,
+    "texture_bytes": 276864,
+    "free_bytes": 181624,
+    "width": 256,
+    "height": 40,
+    "panel_bytes": 20480
+  },
+  "after": {
+    "definitions": 152,
+    "texture_bytes": 257024,
+    "free_bytes": 201464,
+    "width": 8,
+    "height": 40,
+    "panel_bytes": 640
+  },
+  "saved": {
+    "definitions": 0,
+    "texture_bytes": 19840
+  }
+}

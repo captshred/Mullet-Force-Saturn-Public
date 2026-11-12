@@ -2,6 +2,7 @@
 # Source build of the recovered v3 profile; never reads a delivered executable.
 set -euo pipefail
 cd "$(dirname "$0")/.."
+export MF_HUD_PANEL_MEMORY=1
 export MF_DUPLICATE_TEXTURE_CLEANUP=1
 export MF_LEGACY_SPRITE_CLEANUP=1 MF_LEGACY_SPRITE_PHASE2=1
 export MF_DEV_STAGE_SKIP=1 MF_LEVEL2_WINGSUIT=1 MF_LEVEL1_STAGE_CLEAR=1

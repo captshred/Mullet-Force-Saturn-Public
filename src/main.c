@@ -259,8 +259,8 @@ static void load_assets(void)
     for(i=0;i<80*8;i++) pixels[i]=(i/80==0 || i/80==7 || i%80==0 || i%80==79)?JO_COLOR_RGB(164,201,195):JO_COLOR_RGB(64,187,155);
     bar=jo_sprite_add(&img);
     if(bar<0)asset_failure(620,"HUD BAR",0);
-    img.width=256; img.height=40;
-    for(i=0;i<256*40;i++) pixels[i]=(i/256==0 || i/256==39)?JO_COLOR_RGB(124,66,112):JO_COLOR_RGB(12,18,34);
+    img.width=MF_HUD_PANEL_WIDTH; img.height=40;
+    for(i=0;i<MF_HUD_PANEL_WIDTH*40;i++) pixels[i]=(i/MF_HUD_PANEL_WIDTH==0 || i/MF_HUD_PANEL_WIDTH==39)?JO_COLOR_RGB(124,66,112):JO_COLOR_RGB(12,18,34);
     panel=jo_sprite_add(&img);
     if(panel<0)asset_failure(621,"HUD PANEL",0);
     jo_free(pixels);
@@ -307,7 +307,7 @@ static void draw_shadow(int x,int ground,int height)
 static void health_bar(int x,int y,int width,int value,int maximum)
 {
     int fill=width*value/maximum;
-    jo_sprite_change_sprite_scale_xy_fixed(width*65536/256,8*65536/40);
+    jo_sprite_change_sprite_scale_xy_fixed(width*65536/MF_HUD_PANEL_WIDTH,8*65536/40);
     jo_sprite_draw3D(panel,x+width/2-160,y+4-120,185);
     if(fill>0) {
         jo_sprite_change_sprite_scale_xy_fixed(fill*65536/80,65536);
@@ -460,7 +460,20 @@ static void draw_game(void)
 #if MF_LEVEL1_STAGE_CLEAR
     if(!mode && game.stage>=MF_STAGE_CLEAR)mode=game.stage==MF_STAGE_CLEAR?3:4;
 #endif
-    if(mode)jo_sprite_draw3D2(panel,32,164,180);
+    if(mode) {
+#if MF_HUD_PANEL_MEMORY
+        /* Original SGL center-zoom uses size-1 and truncates the half-size:
+           CMDCTRL=0xa01, A=(0,64), B=(255,39) -> x33..288, y165..204.
+           Match those inclusive edges without the HV angle workaround. */
+        static const jo_pos2D_fixed corners[4]={
+            {-127*65536,45*65536},{128*65536,45*65536},
+            {128*65536,84*65536},{-127*65536,84*65536}
+        };
+        jo_sprite_draw_4p_fixed(panel,corners,180*65536,true);
+#else
+        jo_sprite_draw3D2(panel,32,164,180);
+#endif
+    }
     if(mode!=overlay) {
         jo_clear_screen_line(21);jo_clear_screen_line(23);
         if(mode==1) {jo_print(10,21,"MULLET FORCE");jo_print(9,23,"PRESS START TO PLAY");}
