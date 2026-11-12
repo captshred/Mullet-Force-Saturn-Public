@@ -2,6 +2,8 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 mkdir -p build/cd
+duplicate_cleanup=${MF_DUPLICATE_TEXTURE_CLEANUP:-0}
+[[ $duplicate_cleanup == 0 || $duplicate_cleanup == 1 ]] || exit 1
 legacy_phase2=${MF_LEGACY_SPRITE_PHASE2:-0}
 [[ $legacy_phase2 == 0 || $legacy_phase2 == 1 ]] || exit 1
 legacy_cleanup=${MF_LEGACY_SPRITE_CLEANUP:-0}
@@ -14,6 +16,10 @@ if [[ $legacy_phase2 == 1 && $legacy_cleanup != 1 ]]; then
     echo 'Phase 2 requires Phase 1 cleanup.' >&2; exit 1
 fi
 printf '%s\n' "$legacy_phase2" > build/legacy-sprite-phase2-mode.txt
+if [[ $duplicate_cleanup == 1 && $legacy_phase2 != 1 ]]; then
+    echo 'Duplicate cleanup requires Phase 2.' >&2; exit 1
+fi
+printf '%s\n' "$duplicate_cleanup" > build/duplicate-texture-mode.txt
 stage_clear=${MF_LEVEL1_STAGE_CLEAR:-0}
 [[ $stage_clear == 0 || $stage_clear == 1 ]] || exit 1
 if [[ $stage_clear == 1 && ${MF_ARCADE_FX:-0} != 1 ]]; then echo 'Stage clear requires THE ONE arcade FX profile.' >&2; exit 1; fi
@@ -190,6 +196,7 @@ wingsuit=${MF_LEVEL2_WINGSUIT:-0}
 if [[ $wingsuit == 1 && ( $stage_clear != 1 || $live != 1 || $arcade_fx != 1 || $gallery != 1 ) ]]; then echo "Wingsuit requires the complete stage-clear profile" >&2; exit 1; fi
 printf '#define MF_LEVEL2_WINGSUIT %s\n' "$wingsuit" >> build/build-info.h
 printf '%s\n' "$wingsuit" > build/wingsuit-mode.txt
+printf '#define MF_DUPLICATE_TEXTURE_CLEANUP %s\n' "$duplicate_cleanup" >> build/build-info.h
 printf '#define MF_LEGACY_SPRITE_PHASE2 %s\n' "$legacy_phase2" >> build/build-info.h
 printf '#define MF_LEGACY_SPRITE_CLEANUP %s\n' "$legacy_cleanup" >> build/build-info.h
 printf '#define MF_ARCADE_FX %s\n' "$arcade_fx" >> build/build-info.h
@@ -275,6 +282,7 @@ sha256sum build/city-cleanup-mode.txt >> build/SOURCE-SHA256SUMS.txt
 if [[ $cleanup == 1 ]]; then sha256sum assets/city-cleanup/* tools/build-city-cleanup.py >> build/SOURCE-SHA256SUMS.txt; fi
 sha256sum build/live-city-mode.txt >> build/SOURCE-SHA256SUMS.txt
 if [[ $live == 1 ]]; then sha256sum assets/city-gameplay-parallax/* >> build/SOURCE-SHA256SUMS.txt; fi
+sha256sum build/duplicate-texture-mode.txt assets/duplicate-texture-cleanup.json >> build/SOURCE-SHA256SUMS.txt
 sha256sum build/legacy-sprite-phase2-mode.txt assets/legacy-sprite-phase2.json >> build/SOURCE-SHA256SUMS.txt
 sha256sum build/legacy-sprite-cleanup-mode.txt assets/legacy-sprite-cleanup.json >> build/SOURCE-SHA256SUMS.txt
 sha256sum build/arcade-fx-mode.txt assets/arcade-fx/* >> build/SOURCE-SHA256SUMS.txt
@@ -286,6 +294,7 @@ printf 'Game: MULLET FORCE\nScene: Neon District playable prototype\nCommit: %s\
 printf 'Source SHA256: %s\n' "$source_hash" >> build/BUILD-INFO.txt
 printf 'Level 1 stage clear: %s\n' "$stage_clear" >> build/BUILD-INFO.txt
 printf 'Arcade dual FX: %s\n' "$arcade_fx" >> build/BUILD-INFO.txt
+printf 'Duplicate texture cleanup: %s\n' "$duplicate_cleanup" >> build/BUILD-INFO.txt
 printf 'Legacy sprite phase2: %s\n' "$legacy_phase2" >> build/BUILD-INFO.txt
 printf 'Legacy sprite cleanup: %s\n' "$legacy_cleanup" >> build/BUILD-INFO.txt
 printf 'City neon candidate: %s\n' "$city" >> build/BUILD-INFO.txt

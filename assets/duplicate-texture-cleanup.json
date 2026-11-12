@@ -1,0 +1,48 @@
+{
+  "baseline": "8d4292ae63893f9b6593f3992aefddf60de0e155",
+  "flag": "MF_DUPLICATE_TEXTURE_CLEANUP",
+  "removed": [
+    "COMBAT/CA02.TGA",
+    "COMBAT/CA30.TGA"
+  ],
+  "before": {
+    "definitions": 154,
+    "texture_bytes": 278880,
+    "free_bytes": 179608
+  },
+  "after": {
+    "definitions": 152,
+    "texture_bytes": 276864,
+    "free_bytes": 181624
+  },
+  "saved": {
+    "definitions": 2,
+    "texture_bytes": 2016
+  },
+  "pairs": [
+    {
+      "duplicate": "COMBAT/CA02.TGA",
+      "canonical": "GB2.TGA",
+      "width": 80,
+      "height": 12,
+      "format": "indexed8",
+      "palette_bank": 7,
+      "transparent_loader_index": 1,
+      "saved_bytes": 960,
+      "file_sha256": "9837a97ab8f9a2bbec7077ca66226e2e06db673ffb306442456bd6b7dbc15abb",
+      "decoded_sha256": "c6ec9f45d49dc960aaae4acd3eb6ae9c024bbfd808f87e286e86b90e38301131"
+    },
+    {
+      "duplicate": "COMBAT/CA30.TGA",
+      "canonical": "GC2.TGA",
+      "width": 88,
+      "height": 12,
+      "format": "indexed8",
+      "palette_bank": 7,
+      "transparent_loader_index": 1,
+      "saved_bytes": 1056,
+      "file_sha256": "cc30c029b5c8ea1ee42461dbdd2cc5ddb145e8a52ebc01fd8c053ee82ee4b3f2",
+      "decoded_sha256": "51a5e3a50ced4093b2449c5493a9355d74ee2ad2d47a8843e90ff58aafe27306"
+    }
+  ]
+}

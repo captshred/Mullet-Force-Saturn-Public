@@ -8,6 +8,7 @@ import argparse, csv, subprocess, tempfile, sys
 parser=argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--without-combo',action='store_true',help='compare identical profile with the two cross textures disabled')
 parser.add_argument('--legacy-fx',action='store_true',help='retain BU01 upload to compare the original allocation')
+parser.add_argument('--phase2',action='store_true',help='restore both duplicate registrations for Phase 2 comparison')
 parser.add_argument('--phase1',action='store_true',help='restore the 83 Phase 2 registrations')
 parser.add_argument('--legacy-bat',action='store_true',help='retain the 18 historical registrations for a counterfactual comparison')
 args=parser.parse_args()
@@ -20,9 +21,12 @@ with tempfile.TemporaryDirectory(prefix='mf-sprite-audit-') as temp:
         info=info.replace('#define MF_LEGACY_SPRITE_CLEANUP 1','#define MF_LEGACY_SPRITE_CLEANUP 0')
     if args.phase1 or args.legacy_bat or args.legacy_fx:
         info=info.replace('#define MF_LEGACY_SPRITE_PHASE2 1','#define MF_LEGACY_SPRITE_PHASE2 0')
+    if args.phase2 or args.phase1 or args.legacy_bat or args.legacy_fx:
+        info=info.replace('#define MF_DUPLICATE_TEXTURE_CLEANUP 1','#define MF_DUPLICATE_TEXTURE_CLEANUP 0')
+    duplicate='#define MF_DUPLICATE_TEXTURE_CLEANUP 1' in info
     phase2='#define MF_LEGACY_SPRITE_PHASE2 1' in info
     cleanup='#define MF_LEGACY_SPRITE_CLEANUP 1' in info
-    removed=(18 if cleanup else 0)+(83 if phase2 else 0);saved=(65952 if cleanup else 0)+(107968 if phase2 else 0)
+    removed=(18 if cleanup else 0)+(83 if phase2 else 0)+(2 if duplicate else 0);saved=(65952 if cleanup else 0)+(107968 if phase2 else 0)+(2016 if duplicate else 0)
     if args.legacy_fx:info=info.replace('#define MF_ARCADE_FX 1','#define MF_ARCADE_FX 0')
     if args.without_combo and dual:raise SystemExit('Disable dual FX with --legacy-fx before disabling the required combo profile')
     if args.without_combo:
@@ -52,7 +56,10 @@ with tempfile.TemporaryDirectory(prefix='mf-sprite-audit-') as temp:
         import json
         manifest=json.loads((root/'assets/legacy-sprite-phase2.json').read_text())
         assert not (set(manifest['removed']) & {r['path'] for r in rows})
-        assert {'RBV00.TGA',*[f'COMBAT/CA{i:02}.TGA' for i in (*range(8),*range(28,36))]} <= {r['path'] for r in rows}
+        assert {'RBV00.TGA',*[f'COMBAT/CA{i:02}.TGA' for i in (*range(8),*range(28,36)) if not (duplicate and i in (2,30))]} <= {r['path'] for r in rows}
+    if duplicate:
+        assert not ({'COMBAT/CA02.TGA','COMBAT/CA30.TGA'} & {r['path'] for r in rows})
+        assert {'GB2.TGA','GC2.TGA'} <= {r['path'] for r in rows}
     def usage(row):
         name=row['path']
         if name=='alias':return 'stable row/tail view: HQ torch or jump; shares existing payload'

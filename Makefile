@@ -1,9 +1,9 @@
 # Recovered source is checked against the complete v3 delta/golden-resource lock.
 .PHONY: check test
 check:
-	python3 tools/validate-legacy-sprite-phase2.py --disc
+	python3 tools/validate-duplicate-texture-cleanup.py --disc
 test:
-	python3 tools/validate-legacy-sprite-phase2.py --test
+	python3 tools/validate-duplicate-texture-cleanup.py --test
 .PHONY: all setup bootstrap native check test clean
 all:
 	bash tools/build.sh

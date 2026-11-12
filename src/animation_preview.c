@@ -158,7 +158,7 @@ static int load_bank(int full)
 #if MF_RUNNING_BAT_VISUALS
     needed+=MF_RBV_BYTES-MF_LEGACY_RBV_SAVED_BYTES;
 #if MF_COMBAT_ANIMATION
-    needed+=MF_CA_BYTES-MF_LEGACY_CA_SAVED_BYTES;
+    needed+=MF_CA_BYTES-MF_LEGACY_CA_SAVED_BYTES-MF_DUPLICATE_SAVED_BYTES;
 #endif
 #endif
     /* Entire optional expansion is preflighted before the first CD read/upload. */
@@ -218,6 +218,17 @@ int mf_animation_load(jo_palette *palette,const int idle_ids[2][3])
         /* Live jab/cross lower and horizontal fast-bat contact only. */
         if(!((rid>=0 && rid<=7) || (rid>=28 && rid<=35))){ca_ids[rid]=-1;continue;}
 #endif
+#if MF_DUPLICATE_TEXTURE_CLEANUP
+        if(rid==2 || rid==30) {
+            /* Gallery GB2/GC2 are byte-identical indexed feet on this palette.
+               Reuse the handle, not a new definition. Do not rewind the
+               allocator's last_resource to an earlier canonical allocation. */
+            int id=idle_ids[rid==30][2];
+            if(id<0 || jo_sprite_get_width(id)!=ca_resources[rid].width ||
+               jo_sprite_get_height(id)!=ca_resources[rid].height)return 0;
+            ca_ids[rid]=id;continue;
+        }
+#endif
         const mf_polish_resource *p=&ca_resources[rid];
 /* PLAYERHURT BEGIN */
 #if MF_PLAYER_HURT
@@ -241,7 +252,7 @@ int mf_animation_load(jo_palette *palette,const int idle_ids[2][3])
     }
     jo_set_tga_default_palette(JO_NULL);
     texture_bytes=end_of(last_resource)-0x10000u;
-    if(texture_bytes!=MF_CP_EXTRA-MF_FX_SAVED_BYTES-MF_LEGACY_SAVED_BYTES-MF_LEGACY_PLAYER_SAVED_BYTES-MF_PH_REMOVED+MF_PH_EXTRA-MF_PD_REMOVED+MF_PD_EXTRA+MF_ORIGINAL_THREE_BOOT_BYTES+MF_RUN_BYTES+MF_RBV_BYTES-MF_LEGACY_RBV_SAVED_BYTES+MF_CA_BYTES-MF_LEGACY_CA_SAVED_BYTES-MF_HT_REPLACED-MF_HJ_REPLACED)return 0;
+    if(texture_bytes!=MF_CP_EXTRA-MF_FX_SAVED_BYTES-MF_LEGACY_SAVED_BYTES-MF_LEGACY_PLAYER_SAVED_BYTES-MF_PH_REMOVED+MF_PH_EXTRA-MF_PD_REMOVED+MF_PD_EXTRA+MF_ORIGINAL_THREE_BOOT_BYTES+MF_RUN_BYTES+MF_RBV_BYTES-MF_LEGACY_RBV_SAVED_BYTES+MF_CA_BYTES-MF_LEGACY_CA_SAVED_BYTES-MF_DUPLICATE_SAVED_BYTES-MF_HT_REPLACED-MF_HJ_REPLACED)return 0;
 #endif
     return 1;
 }
@@ -623,7 +634,7 @@ int mf_hq_torch_load(int enemy_palette)
         if(ht_lower[a][f]<0)return 0;
     }
     if(ht_alias(last_resource,0,jo_sprite_get_height(last_resource))<0)return 0;
-    return texture_bytes==MF_CP_EXTRA-MF_FX_SAVED_BYTES-MF_LEGACY_SAVED_BYTES-MF_LEGACY_PLAYER_SAVED_BYTES-MF_PH_REMOVED+MF_PH_EXTRA-MF_PD_REMOVED+MF_PD_EXTRA+MF_ORIGINAL_THREE_BOOT_BYTES+MF_RUN_BYTES+MF_RBV_BYTES-MF_LEGACY_RBV_SAVED_BYTES+MF_CA_BYTES-MF_LEGACY_CA_SAVED_BYTES-MF_HT_REPLACED-MF_HJ_REPLACED+MF_HT_BYTES;
+    return texture_bytes==MF_CP_EXTRA-MF_FX_SAVED_BYTES-MF_LEGACY_SAVED_BYTES-MF_LEGACY_PLAYER_SAVED_BYTES-MF_PH_REMOVED+MF_PH_EXTRA-MF_PD_REMOVED+MF_PD_EXTRA+MF_ORIGINAL_THREE_BOOT_BYTES+MF_RUN_BYTES+MF_RBV_BYTES-MF_LEGACY_RBV_SAVED_BYTES+MF_CA_BYTES-MF_LEGACY_CA_SAVED_BYTES-MF_DUPLICATE_SAVED_BYTES-MF_HT_REPLACED-MF_HJ_REPLACED+MF_HT_BYTES;
 }
 int mf_hq_torch_draw(const mf_game *g,int actor,int center,int ground,int depth)
 {
@@ -677,7 +688,7 @@ int mf_hq_jump_load(void)
         if(hj_upper[a]<0 || hj_compress_lower[a]<0)return 0;
     }
     if(ht_alias(last_resource,0,jo_sprite_get_height(last_resource))<0)return 0;
-    return texture_bytes==MF_CP_EXTRA-MF_FX_SAVED_BYTES-MF_LEGACY_SAVED_BYTES-MF_LEGACY_PLAYER_SAVED_BYTES-MF_PH_REMOVED+MF_PH_EXTRA-MF_PD_REMOVED+MF_PD_EXTRA+MF_ORIGINAL_THREE_BOOT_BYTES+MF_RUN_BYTES+MF_RBV_BYTES-MF_LEGACY_RBV_SAVED_BYTES+MF_CA_BYTES-MF_LEGACY_CA_SAVED_BYTES-MF_HT_REPLACED-MF_HJ_REPLACED+MF_HT_BYTES+MF_HJ_BYTES;
+    return texture_bytes==MF_CP_EXTRA-MF_FX_SAVED_BYTES-MF_LEGACY_SAVED_BYTES-MF_LEGACY_PLAYER_SAVED_BYTES-MF_PH_REMOVED+MF_PH_EXTRA-MF_PD_REMOVED+MF_PD_EXTRA+MF_ORIGINAL_THREE_BOOT_BYTES+MF_RUN_BYTES+MF_RBV_BYTES-MF_LEGACY_RBV_SAVED_BYTES+MF_CA_BYTES-MF_LEGACY_CA_SAVED_BYTES-MF_DUPLICATE_SAVED_BYTES-MF_HT_REPLACED-MF_HJ_REPLACED+MF_HT_BYTES+MF_HJ_BYTES;
 }
 static void hj_piece(int id,const mf_polish_piece *q,int center,int ground,int facing,int depth,int dy)
 {
