@@ -129,8 +129,13 @@ static void load_assets(void)
             continue;
         }
 #endif
+#if MF_LEGACY_SPRITE_PHASE2
+        buck[i]=-1; /* All fallback pieces are superseded; EXPLODE above stays. */
+#else
         if(MF_HQ_JUMP && (i==11 || i==12 || i==14))buck[i]=-1;
         else buck[i]=load_indexed(bu[i],i);
+#endif
+        (void)bu;
 
     }
 #if MF_LEGACY_SPRITE_CLEANUP
@@ -150,6 +155,9 @@ static void load_assets(void)
     }
 #endif
     for(i=0;i<MF_NORMAL_LOWERS;i++) {
+#if MF_LEGACY_SPRITE_PHASE2
+        normal_lower[i]=-1;continue;
+#endif
         char name[12]="NL00.TGA";name[2]='0'+i/10;name[3]='0'+i%10;
 /* PLAYERDEATH BEGIN */
 #if MF_PLAYER_DEATH
@@ -169,7 +177,11 @@ static void load_assets(void)
     asset_stage=310;
     jo_set_tga_default_palette(&chuck_palette);
     for(i=0;i<MF_BUCK_FRAMES;i++) {
-        char name[12]="CH00.TGA";name[2]='0'+i/10;name[3]='0'+i%10;
+        char name[12]="CH00.TGA";
+#if MF_LEGACY_SPRITE_PHASE2
+        chuck[i]=-1;continue;
+#endif
+        name[2]='0'+i/10;name[3]='0'+i%10;
 /* PLAYERHURT BEGIN */
         #if MF_PLAYER_HURT
         if(i==8){chuck[i]=-1;continue;}

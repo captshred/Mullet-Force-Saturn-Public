@@ -156,9 +156,9 @@ static int load_bank(int full)
         resource_info(rid,&name,&w,&h,&bytes);needed+=bytes;
     }
 #if MF_RUNNING_BAT_VISUALS
-    needed+=MF_RBV_BYTES;
+    needed+=MF_RBV_BYTES-MF_LEGACY_RBV_SAVED_BYTES;
 #if MF_COMBAT_ANIMATION
-    needed+=MF_CA_BYTES;
+    needed+=MF_CA_BYTES-MF_LEGACY_CA_SAVED_BYTES;
 #endif
 #endif
     /* Entire optional expansion is preflighted before the first CD read/upload. */
@@ -182,11 +182,11 @@ static int load_bank(int full)
     if(needed)jo_set_tga_default_palette(JO_NULL);
     texture_bytes=end_of(last_resource)-0x10000u;
 #if MF_ORIGINAL_THREE_WALK
-    return texture_bytes==MF_CP_EXTRA-MF_FX_SAVED_BYTES-MF_LEGACY_SAVED_BYTES-MF_PH_REMOVED+MF_PH_EXTRA-MF_PD_REMOVED+MF_PD_EXTRA+MF_RUN_BYTES+(full?MF_ORIGINAL_THREE_FULL_BYTES:MF_ORIGINAL_THREE_BOOT_BYTES)-MF_HT_REPLACED-MF_HJ_REPLACED;
+    return texture_bytes==MF_CP_EXTRA-MF_FX_SAVED_BYTES-MF_LEGACY_SAVED_BYTES-MF_LEGACY_PLAYER_SAVED_BYTES-MF_PH_REMOVED+MF_PH_EXTRA-MF_PD_REMOVED+MF_PD_EXTRA+MF_RUN_BYTES+(full?MF_ORIGINAL_THREE_FULL_BYTES:MF_ORIGINAL_THREE_BOOT_BYTES)-MF_HT_REPLACED-MF_HJ_REPLACED;
 #elif MF_SWAGGER_WALK
-    return texture_bytes==MF_CP_EXTRA-MF_FX_SAVED_BYTES-MF_LEGACY_SAVED_BYTES-MF_PH_REMOVED+MF_PH_EXTRA-MF_PD_REMOVED+MF_PD_EXTRA+MF_RUN_BYTES+(full?MF_SWAGGER_FULL_BYTES:MF_SWAGGER_BOOT_BYTES);
+    return texture_bytes==MF_CP_EXTRA-MF_FX_SAVED_BYTES-MF_LEGACY_SAVED_BYTES-MF_LEGACY_PLAYER_SAVED_BYTES-MF_PH_REMOVED+MF_PH_EXTRA-MF_PD_REMOVED+MF_PD_EXTRA+MF_RUN_BYTES+(full?MF_SWAGGER_FULL_BYTES:MF_SWAGGER_BOOT_BYTES);
 #else
-    return texture_bytes==MF_CP_EXTRA-MF_FX_SAVED_BYTES-MF_LEGACY_SAVED_BYTES-MF_PH_REMOVED+MF_PH_EXTRA-MF_PD_REMOVED+MF_PD_EXTRA+302336u+MF_ANIMATION_BYTES+MF_POLISH_BYTES;
+    return texture_bytes==MF_CP_EXTRA-MF_FX_SAVED_BYTES-MF_LEGACY_SAVED_BYTES-MF_LEGACY_PLAYER_SAVED_BYTES-MF_PH_REMOVED+MF_PH_EXTRA-MF_PD_REMOVED+MF_PD_EXTRA+302336u+MF_ANIMATION_BYTES+MF_POLISH_BYTES;
 #endif
 }
 int mf_animation_load(jo_palette *palette,const int idle_ids[2][3])
@@ -199,6 +199,9 @@ int mf_animation_load(jo_palette *palette,const int idle_ids[2][3])
 #if MF_RUNNING_BAT_VISUALS
     jo_set_tga_default_palette(resource_palette);
     for(rid=0;rid<MF_RBV_NEW;rid++) {
+#if MF_LEGACY_SPRITE_PHASE2
+        if(rid!=0){rbv_ids[rid]=-1;continue;} /* RBV00 is the live carry. */
+#endif
         const mf_polish_resource *p=&rbv_resources[rid];
         int id=jo_sprite_add_tga(JO_ROOT_DIR,p->name,1);
         if(id<0 || jo_sprite_get_width(id)!=p->width || jo_sprite_get_height(id)!=p->height || end_of(id)>0x7fef8u){jo_set_tga_default_palette(JO_NULL);return 0;}
@@ -206,11 +209,15 @@ int mf_animation_load(jo_palette *palette,const int idle_ids[2][3])
     }
     jo_set_tga_default_palette(JO_NULL);
     texture_bytes=end_of(last_resource)-0x10000u;
-    if(texture_bytes!=MF_CP_EXTRA-MF_FX_SAVED_BYTES-MF_LEGACY_SAVED_BYTES-MF_PH_REMOVED+MF_PH_EXTRA-MF_PD_REMOVED+MF_PD_EXTRA+MF_ORIGINAL_THREE_BOOT_BYTES+MF_RUN_BYTES+MF_RBV_BYTES-MF_HT_REPLACED-MF_HJ_REPLACED)return 0;
+    if(texture_bytes!=MF_CP_EXTRA-MF_FX_SAVED_BYTES-MF_LEGACY_SAVED_BYTES-MF_LEGACY_PLAYER_SAVED_BYTES-MF_PH_REMOVED+MF_PH_EXTRA-MF_PD_REMOVED+MF_PD_EXTRA+MF_ORIGINAL_THREE_BOOT_BYTES+MF_RUN_BYTES+MF_RBV_BYTES-MF_LEGACY_RBV_SAVED_BYTES-MF_HT_REPLACED-MF_HJ_REPLACED)return 0;
 #endif
 #if MF_COMBAT_ANIMATION
     jo_set_tga_default_palette(resource_palette);
     for(rid=0;rid<MF_CA_NEW;rid++) {
+#if MF_LEGACY_SPRITE_PHASE2
+        /* Live jab/cross lower and horizontal fast-bat contact only. */
+        if(!((rid>=0 && rid<=7) || (rid>=28 && rid<=35))){ca_ids[rid]=-1;continue;}
+#endif
         const mf_polish_resource *p=&ca_resources[rid];
 /* PLAYERHURT BEGIN */
 #if MF_PLAYER_HURT
@@ -234,7 +241,7 @@ int mf_animation_load(jo_palette *palette,const int idle_ids[2][3])
     }
     jo_set_tga_default_palette(JO_NULL);
     texture_bytes=end_of(last_resource)-0x10000u;
-    if(texture_bytes!=MF_CP_EXTRA-MF_FX_SAVED_BYTES-MF_LEGACY_SAVED_BYTES-MF_PH_REMOVED+MF_PH_EXTRA-MF_PD_REMOVED+MF_PD_EXTRA+MF_ORIGINAL_THREE_BOOT_BYTES+MF_RUN_BYTES+MF_RBV_BYTES+MF_CA_BYTES-MF_HT_REPLACED-MF_HJ_REPLACED)return 0;
+    if(texture_bytes!=MF_CP_EXTRA-MF_FX_SAVED_BYTES-MF_LEGACY_SAVED_BYTES-MF_LEGACY_PLAYER_SAVED_BYTES-MF_PH_REMOVED+MF_PH_EXTRA-MF_PD_REMOVED+MF_PD_EXTRA+MF_ORIGINAL_THREE_BOOT_BYTES+MF_RUN_BYTES+MF_RBV_BYTES-MF_LEGACY_RBV_SAVED_BYTES+MF_CA_BYTES-MF_LEGACY_CA_SAVED_BYTES-MF_HT_REPLACED-MF_HJ_REPLACED)return 0;
 #endif
     return 1;
 }
@@ -616,7 +623,7 @@ int mf_hq_torch_load(int enemy_palette)
         if(ht_lower[a][f]<0)return 0;
     }
     if(ht_alias(last_resource,0,jo_sprite_get_height(last_resource))<0)return 0;
-    return texture_bytes==MF_CP_EXTRA-MF_FX_SAVED_BYTES-MF_LEGACY_SAVED_BYTES-MF_PH_REMOVED+MF_PH_EXTRA-MF_PD_REMOVED+MF_PD_EXTRA+MF_ORIGINAL_THREE_BOOT_BYTES+MF_RUN_BYTES+MF_RBV_BYTES+MF_CA_BYTES-MF_HT_REPLACED-MF_HJ_REPLACED+MF_HT_BYTES;
+    return texture_bytes==MF_CP_EXTRA-MF_FX_SAVED_BYTES-MF_LEGACY_SAVED_BYTES-MF_LEGACY_PLAYER_SAVED_BYTES-MF_PH_REMOVED+MF_PH_EXTRA-MF_PD_REMOVED+MF_PD_EXTRA+MF_ORIGINAL_THREE_BOOT_BYTES+MF_RUN_BYTES+MF_RBV_BYTES-MF_LEGACY_RBV_SAVED_BYTES+MF_CA_BYTES-MF_LEGACY_CA_SAVED_BYTES-MF_HT_REPLACED-MF_HJ_REPLACED+MF_HT_BYTES;
 }
 int mf_hq_torch_draw(const mf_game *g,int actor,int center,int ground,int depth)
 {
@@ -670,7 +677,7 @@ int mf_hq_jump_load(void)
         if(hj_upper[a]<0 || hj_compress_lower[a]<0)return 0;
     }
     if(ht_alias(last_resource,0,jo_sprite_get_height(last_resource))<0)return 0;
-    return texture_bytes==MF_CP_EXTRA-MF_FX_SAVED_BYTES-MF_LEGACY_SAVED_BYTES-MF_PH_REMOVED+MF_PH_EXTRA-MF_PD_REMOVED+MF_PD_EXTRA+MF_ORIGINAL_THREE_BOOT_BYTES+MF_RUN_BYTES+MF_RBV_BYTES+MF_CA_BYTES-MF_HT_REPLACED-MF_HJ_REPLACED+MF_HT_BYTES+MF_HJ_BYTES;
+    return texture_bytes==MF_CP_EXTRA-MF_FX_SAVED_BYTES-MF_LEGACY_SAVED_BYTES-MF_LEGACY_PLAYER_SAVED_BYTES-MF_PH_REMOVED+MF_PH_EXTRA-MF_PD_REMOVED+MF_PD_EXTRA+MF_ORIGINAL_THREE_BOOT_BYTES+MF_RUN_BYTES+MF_RBV_BYTES-MF_LEGACY_RBV_SAVED_BYTES+MF_CA_BYTES-MF_LEGACY_CA_SAVED_BYTES-MF_HT_REPLACED-MF_HJ_REPLACED+MF_HT_BYTES+MF_HJ_BYTES;
 }
 static void hj_piece(int id,const mf_polish_piece *q,int center,int ground,int facing,int depth,int dy)
 {
