@@ -1,0 +1,36 @@
+{
+  "baseline": "1dfe2197828890d9aae9131c95ede2ad9aaece6f",
+  "flag": "MF_ENEMY_SPRITE_BANKS",
+  "prefix": {
+    "definitions": 138,
+    "bytes": 224000
+  },
+  "corporate": {
+    "definitions": 14,
+    "bytes": 33024,
+    "resources": [
+      "CP00.TGA",
+      "CP01.TGA",
+      "CP02.TGA",
+      "CP03.TGA",
+      "CP04.TGA",
+      "CP05.TGA",
+      "CP06.TGA",
+      "CP07.TGA",
+      "CP08.TGA",
+      "CP09.TGA",
+      "CQ00.TGA",
+      "CQ01.TGA",
+      "CQ02.TGA",
+      "CQ03.TGA"
+    ]
+  },
+  "total": {
+    "definitions": 152,
+    "bytes": 257024,
+    "free": 201464
+  },
+  "shared_palette": 4,
+  "burn_palette": 5,
+  "views": 14
+}

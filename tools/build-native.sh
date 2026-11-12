@@ -2,6 +2,8 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 mkdir -p build/cd
+enemy_banks=${MF_ENEMY_SPRITE_BANKS:-0}
+[[ $enemy_banks == 0 || $enemy_banks == 1 ]] || exit 1
 hud_panel=${MF_HUD_PANEL_MEMORY:-0}
 [[ $hud_panel == 0 || $hud_panel == 1 ]] || exit 1
 duplicate_cleanup=${MF_DUPLICATE_TEXTURE_CLEANUP:-0}
@@ -26,6 +28,10 @@ if [[ $hud_panel == 1 && $duplicate_cleanup != 1 ]]; then
     echo 'HUD panel optimization requires Phase 3.' >&2; exit 1
 fi
 printf '%s\n' "$hud_panel" > build/hud-panel-mode.txt
+if [[ $enemy_banks == 1 && $hud_panel != 1 ]]; then
+    echo 'Enemy suffix banks require Phase 4.' >&2; exit 1
+fi
+printf '%s\n' "$enemy_banks" > build/enemy-bank-mode.txt
 stage_clear=${MF_LEVEL1_STAGE_CLEAR:-0}
 [[ $stage_clear == 0 || $stage_clear == 1 ]] || exit 1
 if [[ $stage_clear == 1 && ${MF_ARCADE_FX:-0} != 1 ]]; then echo 'Stage clear requires THE ONE arcade FX profile.' >&2; exit 1; fi
@@ -202,6 +208,7 @@ wingsuit=${MF_LEVEL2_WINGSUIT:-0}
 if [[ $wingsuit == 1 && ( $stage_clear != 1 || $live != 1 || $arcade_fx != 1 || $gallery != 1 ) ]]; then echo "Wingsuit requires the complete stage-clear profile" >&2; exit 1; fi
 printf '#define MF_LEVEL2_WINGSUIT %s\n' "$wingsuit" >> build/build-info.h
 printf '%s\n' "$wingsuit" > build/wingsuit-mode.txt
+printf '#define MF_ENEMY_SPRITE_BANKS %s\n' "$enemy_banks" >> build/build-info.h
 printf '#define MF_HUD_PANEL_MEMORY %s\n' "$hud_panel" >> build/build-info.h
 printf '#define MF_DUPLICATE_TEXTURE_CLEANUP %s\n' "$duplicate_cleanup" >> build/build-info.h
 printf '#define MF_LEGACY_SPRITE_PHASE2 %s\n' "$legacy_phase2" >> build/build-info.h
@@ -289,6 +296,7 @@ sha256sum build/city-cleanup-mode.txt >> build/SOURCE-SHA256SUMS.txt
 if [[ $cleanup == 1 ]]; then sha256sum assets/city-cleanup/* tools/build-city-cleanup.py >> build/SOURCE-SHA256SUMS.txt; fi
 sha256sum build/live-city-mode.txt >> build/SOURCE-SHA256SUMS.txt
 if [[ $live == 1 ]]; then sha256sum assets/city-gameplay-parallax/* >> build/SOURCE-SHA256SUMS.txt; fi
+sha256sum build/enemy-bank-mode.txt assets/enemy-sprite-banks.json >> build/SOURCE-SHA256SUMS.txt
 sha256sum build/hud-panel-mode.txt assets/hud-panel-memory.json >> build/SOURCE-SHA256SUMS.txt
 sha256sum build/duplicate-texture-mode.txt assets/duplicate-texture-cleanup.json >> build/SOURCE-SHA256SUMS.txt
 sha256sum build/legacy-sprite-phase2-mode.txt assets/legacy-sprite-phase2.json >> build/SOURCE-SHA256SUMS.txt
@@ -302,6 +310,7 @@ printf 'Game: MULLET FORCE\nScene: Neon District playable prototype\nCommit: %s\
 printf 'Source SHA256: %s\n' "$source_hash" >> build/BUILD-INFO.txt
 printf 'Level 1 stage clear: %s\n' "$stage_clear" >> build/BUILD-INFO.txt
 printf 'Arcade dual FX: %s\n' "$arcade_fx" >> build/BUILD-INFO.txt
+printf 'Enemy suffix banks: %s\n' "$enemy_banks" >> build/BUILD-INFO.txt
 printf 'HUD panel memory: %s\n' "$hud_panel" >> build/BUILD-INFO.txt
 printf 'Duplicate texture cleanup: %s\n' "$duplicate_cleanup" >> build/BUILD-INFO.txt
 printf 'Legacy sprite phase2: %s\n' "$legacy_phase2" >> build/BUILD-INFO.txt

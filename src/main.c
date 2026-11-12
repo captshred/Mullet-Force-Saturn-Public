@@ -13,6 +13,7 @@ static volatile int stage2_owned;
 #include "street.h"
 #if MF_CORPORATE_PUNK
 #include "corporate_animation.h"
+#include "enemy_sprite_bank.h"
 #endif
 #if MF_ANIMATION_PREVIEW
 #include "animation_preview.h"
@@ -227,18 +228,20 @@ static void load_assets(void)
 /* CPHQ END */
 
     }
-    #if MF_CORPORATE_PUNK
+    #if MF_CORPORATE_PUNK && !MF_ENEMY_SPRITE_BANKS
     asset_stage=415;
     if(!mf_corporate_load(&enemy_palette)){asset_failure(415,"CP TEXTURES",0);return;}
     #endif
     /* Palette-only warm flashes: no duplicated enemy texture bank. */
     if(!create_palette(&burn_palette,420))return;
+#if !MF_ENEMY_SPRITE_BANKS
     for(i=0;i<255;i++) {
         unsigned c=enemy_palette.data[i];unsigned r=(c&31)+10,g=((c>>5)&31)+3,b=((c>>10)&31)/2;
         if(r>31)r=31;
         if(g>31)g=31;
         burn_palette.data[i]=0x8000|r|(g<<5)|(b<<10);
     }
+#endif
     if(!create_palette(&fire_palette,500))return;
     asset_stage=510;jo_set_tga_default_palette(&fire_palette);
     for(i=0;i<4;i++) {
@@ -286,10 +289,24 @@ static void load_assets(void)
 #if MF_PUNCH_COMBO
     if(!asset_error && !mf_cross_load())asset_failure(730,"CROSS",0);
 #if MF_ARCADE_FX
-    if(!asset_error && (jo_get_last_sprite_id()+1!=MF_FX_DEFINITIONS ||
-                       mf_animation_texture_bytes()!=MF_FX_TEXTURE_BYTES))
+    if(!asset_error && (jo_get_last_sprite_id()+1!=MF_FX_DEFINITIONS-(MF_ENEMY_SPRITE_BANKS?MF_ENEMY_CP_DEFS:0) ||
+                       mf_animation_texture_bytes()!=MF_FX_TEXTURE_BYTES-MF_ENEMY_DEFERRED_BYTES))
         asset_failure(731,"FX BUDGET",0);
 #endif
+#endif
+#if MF_ENEMY_SPRITE_BANKS
+    if(!asset_error && !mf_enemy_bank_boot(&mf_corporate_bank_spec,&enemy_palette))
+        asset_failure(732,"ENEMY BANK",mf_enemy_bank_diagnostics()->error);
+    if(!asset_error) {
+    for(i=0;i<255;i++) {
+        unsigned c=enemy_palette.data[i];unsigned r=(c&31)+10,g=((c>>5)&31)+3,b=((c>>10)&31)/2;
+        if(r>31)r=31;
+        if(g>31)g=31;
+        burn_palette.data[i]=0x8000|r|(g<<5)|(b<<10);
+    }
+        if(jo_get_last_sprite_id()+1!=MF_FX_DEFINITIONS || mf_animation_texture_bytes()!=MF_FX_TEXTURE_BYTES)
+            asset_failure(733,"BANK BUDGET",0);
+    }
 #endif
 #if MF_PARALLAX_DEMO
     if(!asset_error && !mf_parallax_load())asset_failure(800,"PARALLAX",mf_parallax_error());
@@ -522,6 +539,17 @@ static void update(void)
         }
         last_input_vblank=now;
     }
+#if MF_ENEMY_SPRITE_BANKS
+    if(!asset_error && !mf_enemy_bank_ready() && !stage2_owned) {
+        unsigned state=mf_enemy_bank_service(now);
+        now=vblanks;last_vblank=now;pending[0]=pending[1]=0;
+        mf_music_update(game.started,game.paused,0,now);
+        if(state!=MF_BANK_READY) {
+            if(state==MF_BANK_FAILED)jo_printf(3,12,"ENEMY BANK FAILED E%u",mf_enemy_bank_diagnostics()->error);
+            return; /* No sprite submissions while draining/loading/failed. */
+        }
+    }
+#endif
     #if MF_LEVEL2_WINGSUIT
     if(stage2_owned){mf_ws_runtime_frame(sampled_input,pending,now);return;}
     #endif
@@ -616,6 +644,9 @@ static void update(void)
         mf_music_update(game.started,game.paused,game.events,now);
 #if MF_LEVEL2_WINGSUIT
         if(game.stage==MF_STAGE_LEVEL2_ENTRY){
+#if MF_ENEMY_SPRITE_BANKS
+            mf_enemy_bank_retire();
+#endif
             stage2_owned=1;pending[0]=pending[1]=0;
             mf_ws_runtime_begin(game.players[1].active,&street_palette,now);return;
         }

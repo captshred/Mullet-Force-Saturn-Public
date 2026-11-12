@@ -1,6 +1,6 @@
 JO_ENGINE_SRC_DIR = ../.deps/joengine/jo_engine
 COMPILER_DIR = ../.deps/joengine/Compiler
-SRCS = main.c input.c game.c music.c gallery.c street.c parallax.c animation_preview.c player_animation.c corporate_animation.c
+SRCS = main.c input.c game.c music.c gallery.c street.c parallax.c animation_preview.c player_animation.c corporate_animation.c enemy_sprite_bank.c
 MF_LEVEL2_WINGSUIT ?= 0
 ifeq ($(MF_LEVEL2_WINGSUIT),1)
 SRCS += wingsuit.c wingsuit_runtime.c wingsuit_audio.c

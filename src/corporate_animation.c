@@ -2,6 +2,12 @@
 #if MF_CORPORATE_PUNK
 #include "corporate_animation.h"
 #include "corporate_bank.h"
+#include "enemy_sprite_bank.h"
+#if MF_ENEMY_SPRITE_BANKS
+typedef char bank_count_matches[(MF_CP_RESOURCES+MF_CPHQ_NEW==MF_ENEMY_CP_DEFS)?1:-1];
+typedef char bank_bytes_match[(MF_CP_TEXTURE_BYTES+MF_CPHQ_BYTES==MF_ENEMY_CP_BYTES)?1:-1];
+static int cp_resident;
+#endif
 static int cp_ids[MF_CP_RESOURCES];
 #if MF_CP_HQ_COMBAT
 static int cphq_ids[MF_CPHQ_NEW];
@@ -34,8 +40,34 @@ int mf_corporate_load(jo_palette *palette)
         cphq_ids[r]=id;
     }
 #endif
-    jo_set_tga_default_palette(JO_NULL);return 1;
+    jo_set_tga_default_palette(JO_NULL);
+#if MF_ENEMY_SPRITE_BANKS
+    cp_resident=1;
+#endif
+    return 1;
 }
+#if MF_ENEMY_SPRITE_BANKS
+static void invalidate(void)
+{
+    int r;cp_resident=0;
+    for(r=0;r<MF_CP_RESOURCES;r++)cp_ids[r]=-1;
+    for(r=0;r<MF_CPHQ_NEW;r++)cphq_ids[r]=-1;
+}
+static int validate(int first)
+{
+    int r,id;unsigned end=0x10000u+MF_ENEMY_PREFIX_BYTES;
+    for(r=0;r<MF_CP_RESOURCES+MF_CPHQ_NEW;r++) {
+        const mf_cp_resource *p=r<MF_CP_RESOURCES?&cp_resources[r]:&cphq_resources[r-MF_CP_RESOURCES];
+        id=r<MF_CP_RESOURCES?cp_ids[r]:cphq_ids[r-MF_CP_RESOURCES];
+        if(id!=first+r || jo_sprite_get_width(id)!=p->width || jo_sprite_get_height(id)!=p->height ||
+           __jo_sprite_pic[id].color_mode!=COL_256 ||
+           (unsigned long)jo_sprite_get_raw_data(id)-JO_VDP1_VRAM!=end)return 0;
+        end+=(p->width*p->height+31u)&~31u;
+    }
+    return cp_resident && end==0x10000u+MF_ENEMY_PREFIX_BYTES+MF_ENEMY_CP_BYTES;
+}
+const mf_enemy_bank_spec mf_corporate_bank_spec={MF_ENEMY_BANK_CORPORATE,MF_ENEMY_CP_DEFS,MF_ENEMY_CP_BYTES,mf_corporate_load,invalidate,validate};
+#endif
 void mf_corporate_step(const mf_game *g)
 {
     int a;
@@ -68,6 +100,10 @@ int mf_corporate_pose(const mf_game *g,int actor)
 }
 int mf_corporate_draw(const mf_game *g,int actor,int x,int ground,int depth)
 {
+#if MF_ENEMY_SPRITE_BANKS
+    /* Consume the path without falling back to invalid legacy enemy IDs. */
+    if(!cp_resident || !mf_enemy_bank_ready())return 1;
+#endif
     int f=mf_corporate_pose(g,actor),p;
     if(f<0)return 0;
 #if MF_CP_HQ_COMBAT

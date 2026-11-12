@@ -8,6 +8,7 @@ import argparse, csv, subprocess, tempfile, sys
 parser=argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--without-combo',action='store_true',help='compare identical profile with the two cross textures disabled')
 parser.add_argument('--legacy-fx',action='store_true',help='retain BU01 upload to compare the original allocation')
+parser.add_argument('--phase4',action='store_true',help='restore original interleaved enemy registration order')
 parser.add_argument('--phase3',action='store_true',help='restore the original 256x40 HUD panel')
 parser.add_argument('--phase2',action='store_true',help='restore both duplicate registrations for Phase 2 comparison')
 parser.add_argument('--phase1',action='store_true',help='restore the 83 Phase 2 registrations')
@@ -26,6 +27,9 @@ with tempfile.TemporaryDirectory(prefix='mf-sprite-audit-') as temp:
         info=info.replace('#define MF_DUPLICATE_TEXTURE_CLEANUP 1','#define MF_DUPLICATE_TEXTURE_CLEANUP 0')
     if args.phase3 or args.phase2 or args.phase1 or args.legacy_bat or args.legacy_fx:
         info=info.replace('#define MF_HUD_PANEL_MEMORY 1','#define MF_HUD_PANEL_MEMORY 0')
+    if args.phase4 or args.phase3 or args.phase2 or args.phase1 or args.legacy_bat or args.legacy_fx:
+        info=info.replace('#define MF_ENEMY_SPRITE_BANKS 1','#define MF_ENEMY_SPRITE_BANKS 0')
+    banked='#define MF_ENEMY_SPRITE_BANKS 1' in info
     hud_panel='#define MF_HUD_PANEL_MEMORY 1' in info
     duplicate='#define MF_DUPLICATE_TEXTURE_CLEANUP 1' in info
     phase2='#define MF_LEGACY_SPRITE_PHASE2 1' in info
@@ -42,10 +46,10 @@ with tempfile.TemporaryDirectory(prefix='mf-sprite-audit-') as temp:
     source+='\nint main(void){load_assets();assert(!asset_error);audit_finish();return 0;}\n'
     (work/'loader.c').write_text(source)
     subprocess.run(['cc','-std=c99','-ffunction-sections','-fdata-sections',
-        '-include',str(work/'build-info.h'),'-I'+str(work),'-I'+str(root/'tests/sprite_audit'),
-        '-I'+str(root/'build'),'-I'+str(root/'src'),str(work/'loader.c'),
-        *[str(root/p) for p in ['tests/sprite_audit/stubs.c','src/animation_preview.c',
-                                 'src/corporate_animation.c','src/gallery.c']],
+        '-include',str(work/'build-info.h'),'-I'+str(work),'-I'+str(root/'tests/enemy_banks'),
+        '-I'+str(root/'src'),'-I'+str(root/'build'),str(work/'loader.c'),
+        *[str(root/p) for p in ['tests/enemy_banks/audit.c','src/animation_preview.c',
+                                 'src/corporate_animation.c','src/gallery.c','src/enemy_sprite_bank.c']],
         '-Wl,--gc-sections','-o',str(work/'audit')],check=True,cwd=root)
     result=subprocess.run([str(work/'audit')],check=True,cwd=root,capture_output=True,text=True)
     rows=list(csv.DictReader(result.stdout.splitlines()))
@@ -66,7 +70,13 @@ with tempfile.TemporaryDirectory(prefix='mf-sprite-audit-') as temp:
         assert {'GB2.TGA','GC2.TGA'} <= {r['path'] for r in rows}
     panel=next(r for r in rows if r['path']=='generated:panel')
     assert (int(panel['width']),int(panel['height']),int(panel['allocated_bytes']))==((8,40,640) if hud_panel else (256,40,20480))
+    if banked:
+        assert len(rows[:138])==138 and sum(int(r['allocated_bytes']) for r in rows[:138])==224000
+        assert {r['path'] for r in rows[138:]}=={f'{p}{i:02}.TGA' for p,n in [('CP',10),('CQ',4)] for i in range(n)}
+        assert sum(int(r['allocated_bytes']) for r in rows[138:])==33024
+        assert all(r['path']!='alias' for r in rows[138:])
     def usage(row):
+        if banked and int(row['id'])>=138:return 'replaceable Corporate Punk suffix; palette4 persistent/shared'
         name=row['path']
         if name=='alias':return 'stable row/tail view: HQ torch or jump; shares existing payload'
         if name.startswith('COMBAT/'):return 'shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses'
