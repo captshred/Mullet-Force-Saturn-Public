@@ -1,0 +1,39 @@
+{
+  "baseline": "15387a314a51bffbe3e65152e45958ed5f3416c5",
+  "flag": "MF_LEGACY_SPRITE_CLEANUP",
+  "scope": "stage-default registration only; original assets retained",
+  "removed": [
+    "AL0.TGA",
+    "AL1.TGA",
+    "AL2.TGA",
+    "BT00.TGA",
+    "BT01.TGA",
+    "BT02.TGA",
+    "BT03.TGA",
+    "BT04.TGA",
+    "BT05.TGA",
+    "BT06.TGA",
+    "CT00.TGA",
+    "CT01.TGA",
+    "CT02.TGA",
+    "CT03.TGA",
+    "CT04.TGA",
+    "CT05.TGA",
+    "CT06.TGA",
+    "LEGS.TGA"
+  ],
+  "before": {
+    "definitions": 255,
+    "texture_bytes": 452800,
+    "free_bytes": 5688
+  },
+  "after": {
+    "definitions": 237,
+    "texture_bytes": 386848,
+    "free_bytes": 71640
+  },
+  "saved": {
+    "definitions": 18,
+    "texture_bytes": 65952
+  }
+}

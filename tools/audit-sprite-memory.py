@@ -8,12 +8,17 @@ import argparse, csv, subprocess, tempfile, sys
 parser=argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--without-combo',action='store_true',help='compare identical profile with the two cross textures disabled')
 parser.add_argument('--legacy-fx',action='store_true',help='retain BU01 upload to compare the original allocation')
+parser.add_argument('--legacy-bat',action='store_true',help='retain the 18 historical registrations for a counterfactual comparison')
 args=parser.parse_args()
 root=Path(__file__).resolve().parents[1]
 with tempfile.TemporaryDirectory(prefix='mf-sprite-audit-') as temp:
     work=Path(temp)
     info=(root/'build/build-info.h').read_text()
     dual='#define MF_ARCADE_FX 1' in info and not args.legacy_fx
+    if args.legacy_bat or args.legacy_fx:
+        info=info.replace('#define MF_LEGACY_SPRITE_CLEANUP 1','#define MF_LEGACY_SPRITE_CLEANUP 0')
+    cleanup='#define MF_LEGACY_SPRITE_CLEANUP 1' in info
+    removed=18 if cleanup else 0;saved=65952 if cleanup else 0
     if args.legacy_fx:info=info.replace('#define MF_ARCADE_FX 1','#define MF_ARCADE_FX 0')
     if args.without_combo and dual:raise SystemExit('Disable dual FX with --legacy-fx before disabling the required combo profile')
     if args.without_combo:
@@ -32,11 +37,13 @@ with tempfile.TemporaryDirectory(prefix='mf-sprite-audit-') as temp:
         '-Wl,--gc-sections','-o',str(work/'audit')],check=True,cwd=root)
     result=subprocess.run([str(work/'audit')],check=True,cwd=root,capture_output=True,text=True)
     rows=list(csv.DictReader(result.stdout.splitlines()))
-    assert len(rows)==(253 if args.without_combo else 255)
-    assert sum(int(r['allocated_bytes']) for r in rows)==(446304 if args.without_combo else 452800 if dual else 453344)
+    assert len(rows)==(253 if args.without_combo else 255)-removed
+    assert sum(int(r['allocated_bytes']) for r in rows)==(446304 if args.without_combo else 452800 if dual else 453344)-saved
     assert sum(r['path']=='EXPLODE.TGA' for r in rows)==int(dual)
     assert sum(r['path']=='BU01.TGA' for r in rows)==int(not dual)
     assert sum(int(r['allocated_bytes'])==0 for r in rows)==14
+    retired={'LEGS.TGA','AL0.TGA','AL1.TGA','AL2.TGA'}|{f'{a}{i:02}.TGA' for a in ('BT','CT') for i in range(7)}
+    assert not (retired & {r['path'] for r in rows}) if cleanup else retired <= {r['path'] for r in rows}
     def usage(row):
         name=row['path']
         if name=='alias':return 'stable row/tail view: HQ torch or jump; shares existing payload'

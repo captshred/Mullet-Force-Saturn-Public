@@ -133,6 +133,12 @@ static void load_assets(void)
         else buck[i]=load_indexed(bu[i],i);
 
     }
+#if MF_LEGACY_SPRITE_CLEANUP
+    /* No production input creates the old planted/aerial bat. Keep explicit
+       invalid IDs instead of accidentally treating static zero as a sprite. */
+    for(i=0;i<MF_BAT_FRAMES;i++)bat[0][i]=-1;
+    bat_legs=-1;for(i=0;i<3;i++)air_legs[i]=-1;
+#else
     for(i=0;i<MF_BAT_FRAMES;i++) {
         char name[12]="BT00.TGA";name[2]='0'+i/10;name[3]='0'+i%10;
         bat[0][i]=load_indexed(name,i);
@@ -142,6 +148,7 @@ static void load_assets(void)
         char name[12]="AL0.TGA";name[2]='0'+i;
         air_legs[i]=load_indexed(name,i);
     }
+#endif
     for(i=0;i<MF_NORMAL_LOWERS;i++) {
         char name[12]="NL00.TGA";name[2]='0'+i/10;name[3]='0'+i%10;
 /* PLAYERDEATH BEGIN */
@@ -176,10 +183,14 @@ static void load_assets(void)
         if(MF_HQ_JUMP && (i==11 || i==12 || i==14))chuck[i]=-1;
         else chuck[i]=load_indexed(name,i);
     }
+#if MF_LEGACY_SPRITE_CLEANUP
+    for(i=0;i<MF_BAT_FRAMES;i++)bat[1][i]=-1;
+#else
     for(i=0;i<MF_BAT_FRAMES;i++) {
         char name[12]="CT00.TGA";name[2]='0'+i/10;name[3]='0'+i%10;
         bat[1][i]=load_indexed(name,i);
     }
+#endif
     #if !MF_HQ_TORCH
     for(i=0;i<3;i++) {
         char name[12]="TC0.TGA";name[2]='0'+i;
