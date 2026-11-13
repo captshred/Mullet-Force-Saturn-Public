@@ -1,5 +1,7 @@
 {
   "parent": "d664f26108f9a958ad1d2ecea3fc2e59a2bba3b9",
+  "touchup_parent": "fa4a56b6df13df6eaeaf0f38676e2de448321217",
+  "touchup_mask_pixels": 1120,
   "tile_count": 1664,
   "cell_bytes": 106496,
   "vdp2_delta_bytes": 0,
@@ -13,16 +15,17 @@
     -16,
     -46
   ],
-  "mask_pixels": 5521,
+  "mask_pixels": 6431,
   "sha256": {
-    "CICELL.BIN": "16af5c0d1a4e2d63e9f7d118f3eff38a42a1458e7babd302fdb1dbd5144a66dd",
+    "CICELL.BIN": "95d575685b5f10db720b8ce0e380b4bd04baa80381f643f6f81306a6b29c3f15",
     "CIMAP.BIN": "810a643c9310838a3d5240c78eba2efb34feac7f7ac43d8b960aa8db6a655f80",
     "CICHUNK.BIN": "c78f42a2dfd223aa75872aafcb9cb5d483c768dbefd0a73d7935f58bd338ae3b",
     "CIPAL.BIN": "aae6b49de7513851fbb886c9fdeef951a23065e9ea064dd1b4b679714458ee1d",
     "CISKY.BIN": "423bcf09eb13d031f40ef6a8504a491d1eee700c890fb299174fa1fb9c79a8fe",
+    "TOUCHUPMASK.BIN": "276fdbfb6e1fd07389a153c47cc22a18eba62b5c0b8b1ac10e7d173d244af3e4",
     "CANS555.BIN": "7bfb83c398dcf049cc08898b7e44c7d1a8d287b29e16eefb1c56222ba77583d6",
-    "CIPIX.BIN": "05dde2ffdd5ee05da3229e61489c02abe5c9b5a376f7d5e810c5dcfd228cd55d",
-    "PATCHMASK.BIN": "d87a5ed20e029e321c088db5991b07c8cf05230b948138d3f5c4acdbbcac6009",
+    "CIPIX.BIN": "f6885ea049dad1188a8eb994dd2b3db8bd1d9c606b8940838c3cff3ded20245d",
+    "PATCHMASK.BIN": "bee3dd61795421e801669cda6fe9e5720b28f47a842dd88bd76da050d453c1b7",
     "DR0.TGA": "1fd820c02999e1bafb901f2d37e5975cc4a16796fd064ebf77b2ef4be3a5c7e3",
     "DR1.TGA": "7da464d5c8d33bae09290d93b7fe5d2181a8fabc5dc0155cc4b58257b7f6db91",
     "DR2.TGA": "ef8ad099e773cf288e311cc4cdba0704acac630277d719496154301debbf6c57"

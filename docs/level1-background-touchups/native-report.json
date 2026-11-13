@@ -1,0 +1,47 @@
+{
+  "captures": [
+    {
+      "frame": 1100,
+      "camera": 0,
+      "asset_error": 0,
+      "started": 1,
+      "paused": 0
+    },
+    {
+      "frame": 1445,
+      "camera": 320,
+      "asset_error": 0,
+      "started": 1,
+      "paused": 0
+    },
+    {
+      "frame": 1470,
+      "camera": 320,
+      "asset_error": 0,
+      "started": 1,
+      "paused": 1
+    },
+    {
+      "frame": 1500,
+      "camera": 320,
+      "asset_error": 0,
+      "started": 1,
+      "paused": 1
+    },
+    {
+      "frame": 1530,
+      "camera": 320,
+      "asset_error": 0,
+      "started": 1,
+      "paused": 1
+    }
+  ],
+  "verified_payloads": [
+    "assets/city-cleanup/CICELL.BIN",
+    "assets/city-cleanup/CIMAP.BIN",
+    "assets/city-gameplay-parallax/LCSKY.BIN",
+    "assets/city-gameplay-parallax/LCMAP.BIN"
+  ],
+  "neon_palette_phases": 5,
+  "scope": "production disc, physical Start/Right/Pause inputs, no RAM writes, exact VDP2 cells/maps/sky and static palette; owner visual review and hardware approval pending"
+}

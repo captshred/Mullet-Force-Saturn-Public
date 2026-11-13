@@ -1,0 +1,53 @@
+{
+  "parent": "fa4a56b6df13df6eaeaf0f38676e2de448321217",
+  "original_sha256": {
+    "CICELL.BIN": "16af5c0d1a4e2d63e9f7d118f3eff38a42a1458e7babd302fdb1dbd5144a66dd",
+    "CICHUNK.BIN": "c78f42a2dfd223aa75872aafcb9cb5d483c768dbefd0a73d7935f58bd338ae3b",
+    "CIMAP.BIN": "810a643c9310838a3d5240c78eba2efb34feac7f7ac43d8b960aa8db6a655f80",
+    "CIPAL.BIN": "aae6b49de7513851fbb886c9fdeef951a23065e9ea064dd1b4b679714458ee1d",
+    "CIPIX.BIN": "05dde2ffdd5ee05da3229e61489c02abe5c9b5a376f7d5e810c5dcfd228cd55d",
+    "CISKY.BIN": "423bcf09eb13d031f40ef6a8504a491d1eee700c890fb299174fa1fb9c79a8fe",
+    "PATCHMASK.BIN": "d87a5ed20e029e321c088db5991b07c8cf05230b948138d3f5c4acdbbcac6009",
+    "manifest.json": "8767427cc7bea02989467aa6f860e7307125c5dff08b48638ab1c17acd1f58f2"
+  },
+  "regions": [
+    {
+      "name": "ION ARCADE sign interior",
+      "box": [
+        464,
+        80,
+        502,
+        96
+      ],
+      "font_lock": [
+        402,
+        82,
+        470,
+        91
+      ]
+    },
+    {
+      "name": "VINYL upper gray-strip removal",
+      "box": [
+        520,
+        64,
+        528,
+        104
+      ],
+      "preserved_lower_post_y": 104
+    },
+    {
+      "name": "MULLET FORCE matching upper gray-strip removal",
+      "box": [
+        152,
+        64,
+        160,
+        104
+      ],
+      "preserved_lower_post_y": 104
+    }
+  ],
+  "repair_mask_sha256": "276fdbfb6e1fd07389a153c47cc22a18eba62b5c0b8b1ac10e7d173d244af3e4",
+  "indexed_source_sha256": "f6885ea049dad1188a8eb994dd2b3db8bd1d9c606b8940838c3cff3ded20245d",
+  "scope": "Three masked indexed repairs only; original font, neon indices, palette, lower posts, lamps, skyline and all pixels outside mask retained"
+}
