@@ -140,7 +140,7 @@ static void enemy_spawn(mf_game *g,int index,int initial)
     for(i=0;i<MF_PLAYERS;i++) if(living(&g->players[i])) {
         int x=g->players[i].x/256;
         if(x-26<left)left=x-26;
-        if(614-x<right)right=614-x;
+        if(MF_WORLD_RIGHT-x<right)right=MF_WORLD_RIGHT-x;
         y=g->players[i].y>200*256?178:218;
     }
 #if MF_LEVEL1_STAGE_CLEAR
@@ -154,8 +154,14 @@ static void enemy_spawn(mf_game *g,int index,int initial)
             int x,cy,quality=10000,k;
             unsigned pick=g->spawn_rng=g->spawn_rng*1664525u+1013904223u;
             cy=lanes[(pick>>16)&3];
-            if(n<8)x=clamp(g->camera+((n&1)?344:-24),26,614);
-            else {x=clamp(g->camera+48+(int)((pick>>8)%225u),26,614);cy=(n&1)?229:168;}
+#if MF_LEVEL1_WORLD_FLOW
+            x=(n&1)?g->camera+384+(int)((pick>>8)&31u):g->camera-96;
+            if(!(n&1) && x<g->camera_floor+MF_WORLD_LEFT)continue;
+            if(x<MF_ENEMY_WORLD_LEFT || x>MF_ENEMY_WORLD_RIGHT)continue;
+#else
+            if(n<8)x=clamp(g->camera+((n&1)?344:-24),MF_WORLD_LEFT,MF_WORLD_RIGHT);
+            else {x=clamp(g->camera+48+(int)((pick>>8)%225u),MF_WORLD_LEFT,MF_WORLD_RIGHT);cy=(n&1)?229:168;}
+#endif
             for(k=0;k<MF_PLAYERS;k++)if(living(&g->players[k])) {
                 int dx=abs_i(x-g->players[k].x/256),dy=abs_i(cy-g->players[k].y/256);
                 int d=dx+2*dy;
@@ -188,7 +194,7 @@ static void enemy_spawn(mf_game *g,int index,int initial)
     g->ricky_punch[index]=0;
     if((g->ricky_spawns++%8u)>=5u)g->enemy_class[index]=MF_ENEMY_RICKY;
 #endif
-    *e=(mf_enemy){0};e->x=(initial?(index?530:390):(right>=left?614:26))*256;
+    *e=(mf_enemy){0};e->x=(initial?(index?530:390):(right>=left?MF_WORLD_RIGHT:26))*256;
     e->y=(index?218:y)*256;e->hp=MF_ENEMY_MAX_HP;e->facing=g->players[0].x<e->x?-1:1;
     e->state=MF_ENEMY_IDLE;e->grace=MF_ENEMY_SPAWN_GRACE+index*30;e->target=-1;
 #if MF_LEVEL1_STAGE_CLEAR
@@ -200,9 +206,12 @@ static void recover_player(mf_game *g,int index,int joining)
 {
     mf_player *p=&g->players[index],*other=&g->players[1-index];
     int x=100+index*44,y=202;
-    if((joining || g->players[1].active) && living(other)) {x=clamp(other->x/256+(index?40:-40),26,614);y=other->y/256;}
+#if MF_LEVEL1_WORLD_FLOW
+    x+=g->camera;
+#endif
+    if((joining || g->players[1].active) && living(other)) {x=clamp(other->x/256+(index?40:-40),MF_WORLD_LEFT,MF_WORLD_RIGHT);y=other->y/256;}
     if(joining) {
-        int lo=clamp(g->camera+32,26,614),hi=clamp(g->camera+288,26,614);
+        int lo=clamp(g->camera+32,MF_WORLD_LEFT,MF_WORLD_RIGHT),hi=clamp(g->camera+288,MF_WORLD_LEFT,MF_WORLD_RIGHT);
         if(x>hi && living(other))x=other->x/256-40;
         x=clamp(x,lo,hi);
         if(living(other))y=clamp(other->y/256+(other->y>200*256?-20:20),168,229);
@@ -236,10 +245,13 @@ static void stage_defeat(mf_game *g,int index)
         && g->enemy_class[index]!=MF_ENEMY_RICKY
 #endif
         ))return;
-    if(++g->stage_kills==MF_STAGE_KILL_TARGET) {
+    ++g->stage_kills;
+#if !MF_LEVEL1_WORLD_FLOW
+    if(g->stage_kills==MF_STAGE_KILL_TARGET) {
         g->stage=MF_STAGE_SETTLING;g->stage_timer=MF_STAGE_SETTLE_TICKS;
         g->spawn_wait=g->spawn_pair=0;
     }
+#endif
 }
 static void stage_spawns(mf_game *g)
 {
@@ -336,7 +348,7 @@ static void punk_pursue(mf_game *g,int index)
             if(a->behavior==MF_PUNK_OPPORTUNIST){
                 if(!a->side)a->side=-p->facing;
                 if((e->x-p->x)*a->side>=(engaged?24:40)*256)a->phase=MF_PUNK_CLOSE;
-                else tx=clamp(p->x+a->side*(engaged?56:72)*256,26*256,614*256);
+                else tx=clamp(p->x+a->side*(engaged?56:72)*256,MF_WORLD_LEFT*256,MF_WORLD_RIGHT*256);
             }
             if(a->behavior!=MF_PUNK_BRAWLER && a->phase!=MF_PUNK_CLOSE)
                 ty=clamp(p->y+lane*MF_PUNK_LANE*256,168*256,229*256);
@@ -377,7 +389,7 @@ static void punk_pursue(mf_game *g,int index)
         }
     }
     e->state=MF_ENEMY_WALK;++e->walk;
-    e->x=clamp(e->x,26*256,614*256);e->y=clamp(e->y,168*256,229*256);
+    e->x=clamp(e->x,MF_ENEMY_WORLD_LEFT*256,MF_ENEMY_WORLD_RIGHT*256);e->y=clamp(e->y,168*256,229*256);
 }
 #if MF_RICKY_ENEMY
 /* Independent Ricky controller. Shared burn/hurt/death processing runs first.
@@ -433,7 +445,7 @@ static void ricky_step(mf_game *g,int index)
         int divisor=abs_i(dx)>abs_i(dy)?abs_i(dx):abs_i(dy);
         e->y+=clamp(dy*240/divisor,-170,170);
     }
-    e->x=clamp(e->x,26*256,614*256);e->y=clamp(e->y,168*256,229*256);
+    e->x=clamp(e->x,MF_ENEMY_WORLD_LEFT*256,MF_ENEMY_WORLD_RIGHT*256);e->y=clamp(e->y,168*256,229*256);
 }
 #endif
 static void enemy_step(mf_game *g,int index)
@@ -460,9 +472,15 @@ static void enemy_step(mf_game *g,int index)
     }
     if(e->flash)--e->flash;
     if(e->state==MF_ENEMY_DYING){
-        e->x=clamp(e->x+e->vx,26*256,614*256);e->vx=e->vx*3/4;
+        e->x=clamp(e->x+e->vx,MF_ENEMY_WORLD_LEFT*256,MF_ENEMY_WORLD_RIGHT*256);e->vx=e->vx*3/4;
         if(--e->timer<=0){e->state=MF_ENEMY_ABSENT;e->timer=MF_ENEMY_RESPAWN_TICKS;}return;
     }
+#if MF_LEVEL1_WORLD_FLOW
+    if(e->x<(g->camera-128)*256 && e->x<g->camera_floor*256) {
+        /* Offscreen retirement is not a defeat and never changes KO/score. */
+        e->state=MF_ENEMY_ABSENT;e->hp=e->burn=e->burn_clock=0;return;
+    }
+#endif
     if(e->grace)--e->grace;
     /* Contact, not the lingering burn timer or damage cadence, gates stun.
        Cancel queued attacks so release resumes AI without a delayed strike. */
@@ -477,11 +495,20 @@ static void enemy_step(mf_game *g,int index)
     }
     if(e->state==MF_ENEMY_HURT){
         g->punk[index].phase=MF_PUNK_CLOSE;g->punk[index].clock=0;
-        e->x=clamp(e->x+e->vx,26*256,614*256);e->vx=e->vx*7/8;
+        e->x=clamp(e->x+e->vx,MF_ENEMY_WORLD_LEFT*256,MF_ENEMY_WORLD_RIGHT*256);e->vx=e->vx*7/8;
         if(--e->timer<=0){e->state=MF_ENEMY_RECOVER;e->timer=g->enemy_class[index]==MF_ENEMY_CORPORATE_PUNK?
             (g->punk[index].punches>=MF_PUNK_COUNTER_THRESHOLD?MF_PUNK_COUNTER_RECOVERY:
              g->punk[index].punches>=MF_PUNK_PRESSURE_BUILD?MF_PUNK_PRESSURE_RECOVERY:MF_PUNK_NORMAL_RECOVERY):24;}return;
     }
+#if MF_LEVEL1_WORLD_FLOW
+    /* Spawn apron: walk into a visible telegraph position before handing the
+       actor to the unchanged combat controller. No clamp warp or hidden windup. */
+    if(e->target<0 && (e->state==MF_ENEMY_IDLE || e->state==MF_ENEMY_WALK) &&
+       (e->x<(g->camera+26)*256 || e->x>(g->camera+300)*256)) {
+        e->facing=e->x<(g->camera+26)*256?1:-1;
+        e->x+=e->facing*240;e->state=MF_ENEMY_WALK;++e->walk;return;
+    }
+#endif
 #if MF_RICKY_ENEMY
     if(g->enemy_class[index]==MF_ENEMY_RICKY){ricky_step(g,index);return;}
 #endif
@@ -550,7 +577,7 @@ static void enemy_step(mf_game *g,int index)
         e->state=MF_ENEMY_WALK;++e->walk;
         if(abs_i(dx)>40*256)e->x+=sign(dx)*220;
         if(abs_i(dy)>4*256)e->y+=sign(dy)*150;
-        e->x=clamp(e->x,26*256,614*256);e->y=clamp(e->y,168*256,229*256);
+        e->x=clamp(e->x,MF_ENEMY_WORLD_LEFT*256,MF_ENEMY_WORLD_RIGHT*256);e->y=clamp(e->y,168*256,229*256);
     }
 }
 static void clear_gesture(mf_player *p){p->combo_dir=p->tap_window=p->bat_window=0;}
@@ -694,7 +721,7 @@ static void player_step(mf_game *g,int index,unsigned held,unsigned pressed)
         return;
     }
     if(p->landing)--p->landing;
-    if(p->hurt){--p->hurt;p->x=clamp(p->x+p->knockback,26*256,614*256);p->knockback=p->knockback*3/4;}
+    if(p->hurt){--p->hurt;p->x=clamp(p->x+p->knockback,MF_WORLD_LEFT*256,MF_WORLD_RIGHT*256);p->knockback=p->knockback*3/4;}
     else{
         if(!p->torch){
         if((pressed&MF_B) && !p->height && !p->attack){
@@ -759,7 +786,20 @@ static void player_step(mf_game *g,int index,unsigned held,unsigned pressed)
 #endif
     if(dx && dy)speed=speed*181/256;
     if(dx && (!p->attack || p->charge) && !p->torch)p->facing=dx;
-    p->x=clamp(p->x+dx*speed,26*256,614*256);p->y=clamp(p->y+dy*speed*3/4,168*256,229*256);
+#if MF_LEVEL1_WORLD_FLOW
+    {
+        int lo=(g->camera+26)*256,hi=(g->camera+294)*256;
+        const mf_player *other=&g->players[1-index];
+        if(living(other)) {
+            if(p->x>=other->x && dx>0 && other->x+MF_WORLD_PAIR_SPAN*256<hi)hi=other->x+MF_WORLD_PAIR_SPAN*256<p->x?p->x:other->x+MF_WORLD_PAIR_SPAN*256;
+            if(p->x<other->x && dx<0 && other->x-MF_WORLD_PAIR_SPAN*256>lo)lo=other->x-MF_WORLD_PAIR_SPAN*256>p->x?p->x:other->x-MF_WORLD_PAIR_SPAN*256;
+        }
+        p->x=clamp(p->x+dx*speed,lo,hi);
+    }
+#else
+    p->x=clamp(p->x+dx*speed,MF_WORLD_LEFT*256,MF_WORLD_RIGHT*256);
+#endif
+    p->y=clamp(p->y+dy*speed*3/4,168*256,229*256);
     p->moving=dx||dy;if(p->moving)++p->walk;else p->walk=0;
 #if MF_DASH_ENABLED
     if(g->dash[index].dir)g->dash[index].anim=(g->dash[index].anim+MF_DASH_ANIM_NUM)%
@@ -950,10 +990,12 @@ void mf_game_step_inputs(mf_game *g,const unsigned held[2],const unsigned presse
     for(i=0;i<MF_PLAYERS;i++)player_step(g,i,held[i],pressed[i]);
     /* Shared camera tether, no physical body collision or friendly fire. Both
        living players remain visible and can cross each other freely. */
+#if !MF_LEVEL1_WORLD_FLOW
     if(living(&g->players[0]) && living(&g->players[1])){
         int mid=(g->players[0].x+g->players[1].x)/2;
         for(i=0;i<MF_PLAYERS;i++)g->players[i].x=clamp(g->players[i].x,mid-130*256,mid+130*256);
     }
+#endif
     for(i=0;i<MF_DRUMS;i++){
         mf_drum *d=&g->drums[i];if(d->flash)--d->flash;
         if(!d->hp){if(++d->respawn>=240)drum_reset(d,i);continue;}
@@ -982,8 +1024,25 @@ void mf_game_step_inputs(mf_game *g,const unsigned held[2],const unsigned presse
         if(!p->attack && !g->running_bat[i].pending)g->running_bat[i]=(mf_running_bat){0};
     }
     torch_events(g);
+#if MF_LEVEL1_WORLD_FLOW
+    {
+        int i,minx=MF_WORLD_RIGHT,maxx=MF_WORLD_LEFT,count=0,target,delta;
+        for(i=0;i<MF_PLAYERS;i++)if(living(&g->players[i])) {
+            int x=g->players[i].x/256;if(x<minx)minx=x;if(x>maxx)maxx=x;++count;
+        }
+        if(count) {
+            target=count==1?minx-142:(minx+maxx)/2-160;
+            if(target>minx-26)target=minx-26;
+            target=clamp(target,g->camera_floor,MF_WORLD_CAMERA_MAX);
+            delta=clamp(target-g->camera,-MF_WORLD_CAMERA_STEP,MF_WORLD_CAMERA_STEP);
+            g->camera+=delta;
+            if(mf_world_checkpoint(g->camera)>g->camera_floor)g->camera_floor=mf_world_checkpoint(g->camera);
+        }
+    }
+#else
     if(living(&g->players[1]))g->camera=clamp((living(&g->players[0])?(g->players[0].x+g->players[1].x)/512:g->players[1].x/256)-160,0,320);
     else g->camera=clamp(g->players[0].x/256-142,0,320);
+#endif
 }
 void mf_game_step_coop(mf_game *g,const unsigned held[2],const unsigned pressed[2])
 {

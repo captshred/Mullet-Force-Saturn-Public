@@ -6,6 +6,7 @@
 #include "run_bat_config.h"
 #include "stage_config.h"
 #include "ricky_config.h"
+#include "world_config.h"
 /* 24.8 ground coordinates, fixed 60 Hz NTSC simulation. */
 #define MF_SCALE 256
 #define MF_DRUMS 3
@@ -88,6 +89,9 @@ typedef struct {
 #if MF_RICKY_ENEMY
     unsigned ricky_spawns; /* Separate deterministic class schedule; no spawn RNG consumption. */
     int ricky_punch[MF_ENEMIES];
+#endif
+#if MF_LEVEL1_WORLD_FLOW
+    int camera_floor; /* Configurable progression floor; no actor warps. */
 #endif
 } mf_game;
 void mf_game_init(mf_game *g);

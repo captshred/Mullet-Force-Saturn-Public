@@ -1,10 +1,27 @@
 #include "build-info.h"
 #include "city_neon.h"
+#include "world_config.h"
 #if MF_LIVE_CITY_PARALLAX
 #include <jo/jo.h>
 #include "parallax.h"
 #include "live_city_data.h"
 static int live_ready,live_error;
+#if MF_LEVEL1_WORLD_FLOW
+static unsigned char world_chunks[4804];
+static int world_ring_left=-9999;
+static void world_map_update(int camera) {
+    int first=camera/8-1,col,y;volatile unsigned short *map=(volatile unsigned short *)VDP2_VRAM_B0;
+    if(first==world_ring_left)return;
+    for(col=first;col<=first+42;col++) {
+        int world=col<0?0:col,source=mf_world_source_column(world),physical=(col%128+128)%128;
+        for(y=0;y<30;y++) {
+            int at=((source/16*30+y)*16+source%16)*2;
+            map[physical/64*4096+y*64+physical%64]=(unsigned short)((world_chunks[at]<<8)|world_chunks[at+1]);
+        }
+    }
+    world_ring_left=first;
+}
+#endif
 static int live_copy(const char *name,void *dst,int bytes)
 {
     int length=0;char *data=jo_fs_read_file(name,&length);
@@ -24,6 +41,10 @@ int mf_parallax_load(void)
     slPriorityNbg2(1);slPriorityNbg1(2);
     slScrWindow1(1,1,319,55);slScrWindowModeNbg2(win1_IN);
     if(slScrAutoDisp(NBG0ON|NBG1ON|NBG2ON)<0)goto failed;
+#if MF_LEVEL1_WORLD_FLOW
+    if(!live_copy("PCHUNK.BIN",world_chunks,4800))goto failed;
+    world_ring_left=-9999;
+#endif
     live_ready=1;slTVOn();return 1;
 failed:
     live_error=860;slTVOn();return 0;
@@ -31,6 +52,9 @@ failed:
 void mf_parallax_game_draw(int camera)
 {
     if(!live_ready)return;
+#if MF_LEVEL1_WORLD_FLOW
+    world_map_update(camera);
+#endif
     /* Same +1 raster registration and border culling as the approved street.
        Fractional quarter-speed fixed point avoids integer-camera stepping. */
     slScrPosNbg1((camera-1)*65536,-65536);

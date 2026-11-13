@@ -485,7 +485,12 @@ static void draw_game(void)
         }
     }
 #if MF_LEVEL1_STAGE_CLEAR
+#if MF_LEVEL1_WORLD_FLOW
+    jo_printf(14,3,"KOs %04d",game.stage_kills);
+    jo_print(14,4,game.camera==MF_WORLD_CAMERA_MAX?"TEST END   ":game.camera>320?"TEMP STREET":"           ");
+#else
     jo_printf(14,3,"KOs %02d/40",game.stage_kills);
+#endif
 #endif
     mode=!game.started?1:(game.paused?2:0);
 #if MF_LEVEL1_STAGE_CLEAR
