@@ -22,7 +22,12 @@
 #endif
 #define MF_STREET_CELLS "CICELL.BIN"
 #define MF_STREET_MAP "CIMAP.BIN"
+#include "world_config.h"
+#if MF_LEVEL1_WORLD_FLOW && MF_LIVE_CITY_PARALLAX
+#define MF_STREET_PALETTE "NSPAL.BIN"
+#else
 #define MF_STREET_PALETTE "CIPAL.BIN"
+#endif
 #else
 #define MF_STREET_CELL_BYTES 90240u
 #define MF_STREET_CELLS "STCELLS.BIN"

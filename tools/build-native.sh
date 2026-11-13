@@ -299,6 +299,9 @@ sha256sum build/city-neon-mode.txt >> build/SOURCE-SHA256SUMS.txt
 if [[ $city == 1 ]]; then sha256sum assets/city-neon/*.BIN assets/city-neon/manifest.json tools/build-city-neon.py >> build/SOURCE-SHA256SUMS.txt; fi
 sha256sum build/city-cleanup-mode.txt >> build/SOURCE-SHA256SUMS.txt
 if [[ $cleanup == 1 ]]; then sha256sum assets/city-cleanup/* tools/build-city-cleanup.py >> build/SOURCE-SHA256SUMS.txt; fi
+if [[ $ricky == 1 && $stage_clear == 1 && $live == 1 ]]; then
+    sha256sum assets/level1-neon-strip/*.BIN assets/level1-neon-strip/manifest.json tools/prepare-level1-neon-strip.py >> build/SOURCE-SHA256SUMS.txt
+fi
 sha256sum build/live-city-mode.txt >> build/SOURCE-SHA256SUMS.txt
 if [[ $live == 1 ]]; then sha256sum assets/city-gameplay-parallax/* >> build/SOURCE-SHA256SUMS.txt; fi
 sha256sum build/enemy-bank-mode.txt assets/enemy-sprite-banks.json >> build/SOURCE-SHA256SUMS.txt
@@ -463,6 +466,10 @@ if [[ $cleanup == 1 ]]; then
         cp assets/city-cleanup/CICHUNK.BIN build/cd/PCHUNK.BIN
         cp assets/city-cleanup/CISKY.BIN build/cd/PSKY.BIN
     fi
+fi
+rm -f build/cd/NSCELL.BIN build/cd/NSMAP.BIN build/cd/NSPAL.BIN
+if [[ $ricky == 1 && $stage_clear == 1 && $live == 1 ]]; then
+    cp assets/level1-neon-strip/NSCELL.BIN assets/level1-neon-strip/NSMAP.BIN assets/level1-neon-strip/NSPAL.BIN build/cd/
 fi
 rm -f build/cd/LCSKY.BIN build/cd/LCMAP.BIN
 if [[ $live == 1 ]]; then cp assets/city-gameplay-parallax/*.BIN build/cd/; fi

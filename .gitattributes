@@ -3,3 +3,6 @@ assets/wingsuit/WCELL.BIN binary
 
 # Native indexed cell bytes include LF, CR and TAB palette indices.
 assets/level2-neon-city/*.BIN binary
+
+# Phase 2 indexed colors may contain CR/LF without any NUL.
+assets/level1-neon-strip/*.BIN binary

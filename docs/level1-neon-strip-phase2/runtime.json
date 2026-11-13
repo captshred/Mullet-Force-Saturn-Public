@@ -1,0 +1,42 @@
+{
+  "max_camera": 960,
+  "max_checkpoint": 640,
+  "captures": {
+    "01-opening": {
+      "frame": 1100,
+      "camera": 0,
+      "checkpoint": 0,
+      "player_x": 100,
+      "health": 100
+    },
+    "02-past-original-boundary": {
+      "frame": 1400,
+      "camera": 369,
+      "checkpoint": 320,
+      "player_x": 511,
+      "health": 88
+    },
+    "03-extended-active-enemies": {
+      "frame": 1580,
+      "camera": 644,
+      "checkpoint": 640,
+      "player_x": 786,
+      "health": 88
+    },
+    "04-temporary-endpoint": {
+      "frame": 1900,
+      "camera": 960,
+      "checkpoint": 640,
+      "player_x": 1254,
+      "health": 88
+    },
+    "05-checkpoint-backstop": {
+      "frame": 2720,
+      "camera": 640,
+      "checkpoint": 640,
+      "player_x": 666,
+      "health": 40
+    }
+  },
+  "scope": "fresh production HLE boot, physical Start/Right/Left input only; no state writes, no world-skip/debug teleport; camera endpoint/backstop and live enemies; hardware approval pending"
+}

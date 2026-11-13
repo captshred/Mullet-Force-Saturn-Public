@@ -1,9 +1,9 @@
 # Recovered source is checked against the complete v3 delta/golden-resource lock.
 .PHONY: check test
 check:
-	python3 tools/validate-ricky-jump-chain.py --disc
+	python3 tools/validate-level1-neon-strip.py --disc
 test:
-	python3 tools/validate-ricky-jump-chain.py --test
+	python3 tools/validate-level1-neon-strip.py --test
 .PHONY: all setup bootstrap native check test clean
 all:
 	bash tools/build.sh

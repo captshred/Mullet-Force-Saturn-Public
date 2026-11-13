@@ -1,0 +1,8 @@
+{
+  "baseline": "recorded production jump-chain source used for approved 0de58676e2cb703f6e68552cc46ca0ec03809110",
+  "compared_level2_ticks": 555,
+  "state_mismatches": [],
+  "compared_level2_images": 545,
+  "image_mismatches": [],
+  "scope": "Read-only comparison of existing pre-Phase2 and Phase2 production cold-start recordings, aligned by live Level2 ticks. No additional boot or state writes."
+}

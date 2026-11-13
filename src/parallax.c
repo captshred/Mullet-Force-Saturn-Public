@@ -7,17 +7,61 @@
 #include "live_city_data.h"
 static int live_ready,live_error;
 #if MF_LEVEL1_WORLD_FLOW
-static unsigned char world_chunks[4804];
+#include "neon_strip_data.h"
+/* Load-time CPU source, fixed 1664-tile A0 residency. Neither SDK-owned bank
+   nor the existing NBG2 skyline allocation is borrowed for facade graphics. */
+static unsigned char world_chunks[MF_NEON_STRIP_MAP_BYTES+4];
+static unsigned char world_cells[MF_NEON_STRIP_SOURCE_BYTES+4];
+static short world_slot[MF_NEON_STRIP_TILES];
+static unsigned short world_source[MF_NEON_STRIP_CACHE_TILES];
+static unsigned char world_needed[MF_NEON_STRIP_TILES];
+static unsigned world_victim;
 static int world_ring_left=-9999;
+static unsigned world_pattern(int column,int y) {
+    int at;
+    if(column<0)column=0;
+    if(column>159)column=159;
+    at=((column/16*30+y)*16+column%16)*2;
+    return (unsigned)(world_chunks[at]<<8)|world_chunks[at+1];
+}
+static void world_cache_reset(void) {
+    unsigned i;
+    for(i=0;i<MF_NEON_STRIP_TILES;i++)world_slot[i]=-1;
+    for(i=0;i<MF_NEON_STRIP_CACHE_TILES;i++){world_source[i]=i;world_slot[i]=(short)i;}
+    world_victim=0;world_ring_left=-9999;
+}
+static void world_mark(int first) {
+    int column,y;
+    for(column=first;column<=first+42;column++)for(y=0;y<30;y++)
+        world_needed[world_pattern(column,y)]=1;
+}
+static unsigned world_resident(unsigned source) {
+    unsigned slot,i,at;
+    volatile unsigned short *cells=(volatile unsigned short *)VDP2_VRAM_A0;
+    if(world_slot[source]>=0)return (unsigned)world_slot[source];
+    /* Current and previous visible/guard tiles are pinned before any upload.
+       At most 44*30 source tiles can be needed during a normal 2px step. */
+    while(world_needed[world_source[world_victim]])
+        world_victim=(world_victim+1)%MF_NEON_STRIP_CACHE_TILES;
+    slot=world_victim;world_slot[world_source[slot]]=-1;
+    world_source[slot]=(unsigned short)source;world_slot[source]=(short)slot;
+    at=source*64;
+    for(i=0;i<32;i++)cells[slot*32+i]=(unsigned short)((world_cells[at+2*i]<<8)|world_cells[at+2*i+1]);
+    world_victim=(slot+1)%MF_NEON_STRIP_CACHE_TILES;
+    return slot;
+}
 static void world_map_update(int camera) {
-    int first=camera/8-1,col,y;volatile unsigned short *map=(volatile unsigned short *)VDP2_VRAM_B0;
+    int first=camera/8-1,col,y;unsigned i;
+    volatile unsigned short *map=(volatile unsigned short *)VDP2_VRAM_B0;
     if(first==world_ring_left)return;
+    for(i=0;i<MF_NEON_STRIP_TILES;i++)world_needed[i]=0;
+    world_mark(first);
+    if(world_ring_left>=-1 && first-world_ring_left>=-1 && first-world_ring_left<=1)
+        world_mark(world_ring_left);
     for(col=first;col<=first+42;col++) {
-        int world=col<0?0:col,source=mf_world_source_column(world),physical=(col%128+128)%128;
-        for(y=0;y<30;y++) {
-            int at=((source/16*30+y)*16+source%16)*2;
-            map[physical/64*4096+y*64+physical%64]=(unsigned short)((world_chunks[at]<<8)|world_chunks[at+1]);
-        }
+        int physical=(col%128+128)%128;
+        for(y=0;y<30;y++)
+            map[physical/64*4096+y*64+physical%64]=(unsigned short)(0x1000u|world_resident(world_pattern(col,y))*2u);
     }
     world_ring_left=first;
 }
@@ -42,8 +86,14 @@ int mf_parallax_load(void)
     slScrWindow1(1,1,319,55);slScrWindowModeNbg2(win1_IN);
     if(slScrAutoDisp(NBG0ON|NBG1ON|NBG2ON)<0)goto failed;
 #if MF_LEVEL1_WORLD_FLOW
-    if(!live_copy("PCHUNK.BIN",world_chunks,4800))goto failed;
-    world_ring_left=-9999;
+    if(!live_copy("NSCELL.BIN",world_cells,MF_NEON_STRIP_SOURCE_BYTES) ||
+       !live_copy("NSMAP.BIN",world_chunks,MF_NEON_STRIP_MAP_BYTES))goto failed;
+    {unsigned i;
+     for(i=0;i<MF_NEON_STRIP_MAP_BYTES;i+=2)
+        if(((unsigned)(world_chunks[i]<<8)|world_chunks[i+1])>=MF_NEON_STRIP_TILES)goto failed;
+    }
+    jo_dma_copy(world_cells,(void *)VDP2_VRAM_A0,MF_NEON_STRIP_CACHE_TILES*64u);
+    world_cache_reset();
 #endif
     live_ready=1;slTVOn();return 1;
 failed:
