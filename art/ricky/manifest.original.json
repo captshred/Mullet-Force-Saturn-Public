@@ -1,0 +1,584 @@
+{
+  "source": "Ricky_HQ_Animation_Sheet.png",
+  "source_sha256": "7928d4f38fcd4a76fae9053d1ab466b10af6d8c2e966b1ecacaf903c5e62627b",
+  "frames": [
+    {
+      "name": "idle-0",
+      "source_box": [
+        352,
+        12,
+        479,
+        191
+      ],
+      "scale": 0.49,
+      "root": [
+        416,
+        188
+      ],
+      "width": 56,
+      "height": 85,
+      "anchor": [
+        27,
+        84
+      ],
+      "bytes": 4768,
+      "resource": 0,
+      "decoded_sha256": "9427bd929dc00d33bcf878f47e3894353adb6272298dbb3f0351379329ad0459"
+    },
+    {
+      "name": "idle-1",
+      "source_box": [
+        481,
+        15,
+        597,
+        191
+      ],
+      "scale": 0.49,
+      "root": [
+        538,
+        188
+      ],
+      "width": 56,
+      "height": 83,
+      "anchor": [
+        27,
+        83
+      ],
+      "bytes": 4672,
+      "resource": 1,
+      "decoded_sha256": "652a1464ddb9a608eeaac24839d42aed947b72ba81af0031a1cab6e589703b56"
+    },
+    {
+      "name": "idle-2",
+      "source_box": [
+        600,
+        13,
+        722,
+        191
+      ],
+      "scale": 0.49,
+      "root": [
+        658,
+        188
+      ],
+      "width": 56,
+      "height": 84,
+      "anchor": [
+        26,
+        84
+      ],
+      "bytes": 4704,
+      "resource": 2,
+      "decoded_sha256": "35b068c70ad4b53631461316e6526055106d24706d4617f3ece304f8db7887b7"
+    },
+    {
+      "name": "walk-0",
+      "source_box": [
+        888,
+        13,
+        987,
+        184
+      ],
+      "scale": 0.49,
+      "root": [
+        945,
+        184
+      ],
+      "width": 48,
+      "height": 84,
+      "anchor": [
+        26,
+        84
+      ],
+      "bytes": 4032,
+      "resource": 3,
+      "decoded_sha256": "7cd09347fc0c4953bc6723723ed2a12c95f70433c2265ea95cbd72f4dd60d5a8"
+    },
+    {
+      "name": "walk-1",
+      "source_box": [
+        989,
+        13,
+        1072,
+        184
+      ],
+      "scale": 0.49,
+      "root": [
+        1033,
+        184
+      ],
+      "width": 40,
+      "height": 84,
+      "anchor": [
+        19,
+        84
+      ],
+      "bytes": 3360,
+      "resource": 4,
+      "decoded_sha256": "45a946300eb1f7a455d96bc0951362042b6ca28bf5977b01a7cbeb90de20e213"
+    },
+    {
+      "name": "walk-2",
+      "source_box": [
+        1065,
+        12,
+        1163,
+        184
+      ],
+      "scale": 0.49,
+      "root": [
+        1125,
+        184
+      ],
+      "width": 48,
+      "height": 84,
+      "anchor": [
+        27,
+        84
+      ],
+      "bytes": 4032,
+      "resource": 5,
+      "decoded_sha256": "d2e2bb11cb9c7bc8321732b742da4d474cf24b2640b065fcfbd64fe4562c3874"
+    },
+    {
+      "name": "walk-3",
+      "source_box": [
+        1165,
+        12,
+        1254,
+        183
+      ],
+      "scale": 0.49,
+      "root": [
+        1212,
+        183
+      ],
+      "width": 32,
+      "height": 84,
+      "anchor": [
+        18,
+        84
+      ],
+      "bytes": 2688,
+      "resource": 6,
+      "decoded_sha256": "330536771d2d62c8ca081fac5dcc47e67a84436753243a2290f6b7ce31f479fa"
+    },
+    {
+      "name": "walk-4",
+      "source_box": [
+        1240,
+        13,
+        1337,
+        184
+      ],
+      "scale": 0.49,
+      "root": [
+        1316,
+        184
+      ],
+      "width": 48,
+      "height": 84,
+      "anchor": [
+        36,
+        84
+      ],
+      "bytes": 4032,
+      "resource": 7,
+      "decoded_sha256": "5461da6cdbe5e47868ac6845679fe12179cbec47979d4fb686ffc855b968e309"
+    },
+    {
+      "name": "walk-5",
+      "source_box": [
+        1337,
+        13,
+        1458,
+        184
+      ],
+      "scale": 0.49,
+      "root": [
+        1407,
+        184
+      ],
+      "width": 56,
+      "height": 84,
+      "anchor": [
+        33,
+        84
+      ],
+      "bytes": 4704,
+      "resource": 8,
+      "decoded_sha256": "d28f71438cf269ea8e409e65d35a09965bad6631e4af9c3f94c5e366982a7566"
+    },
+    {
+      "name": "punch-0",
+      "source_box": [
+        336,
+        248,
+        452,
+        433
+      ],
+      "scale": 0.48,
+      "root": [
+        400,
+        430
+      ],
+      "width": 56,
+      "height": 86,
+      "anchor": [
+        29,
+        86
+      ],
+      "bytes": 4832,
+      "resource": 9,
+      "decoded_sha256": "99c4356c9afbc46bd88343bdbbaf3f31660ca972fc8ce4df0e72279e1192b950"
+    },
+    {
+      "name": "punch-1",
+      "source_box": [
+        452,
+        253,
+        600,
+        433
+      ],
+      "scale": 0.48,
+      "root": [
+        511,
+        430
+      ],
+      "width": 72,
+      "height": 83,
+      "anchor": [
+        27,
+        83
+      ],
+      "bytes": 5984,
+      "resource": 10,
+      "decoded_sha256": "8b77d9fdefc8d56b7f6b7925194632396c963d23b8a631086509d7c3bacc6de8"
+    },
+    {
+      "name": "punch-2",
+      "source_box": [
+        596,
+        251,
+        721,
+        433
+      ],
+      "scale": 0.48,
+      "root": [
+        659,
+        430
+      ],
+      "width": 56,
+      "height": 84,
+      "anchor": [
+        29,
+        84
+      ],
+      "bytes": 4704,
+      "resource": 11,
+      "decoded_sha256": "62110e19cc2e4fb4fb25e4d8bd2ff6f4a353f353e5bb3ff9fab5b12aef4e44d1"
+    },
+    {
+      "name": "chain-0",
+      "source_box": [
+        885,
+        256,
+        1015,
+        431
+      ],
+      "scale": 0.48,
+      "root": [
+        949,
+        431
+      ],
+      "width": 64,
+      "height": 80,
+      "anchor": [
+        30,
+        81
+      ],
+      "bytes": 5120,
+      "resource": 12,
+      "decoded_sha256": "2f9c918913e2c32baf60b15f18bb4bd52741703d1a7643c6968f18a6a5e4eff9"
+    },
+    {
+      "name": "chain-1",
+      "source_box": [
+        1013,
+        229,
+        1165,
+        436
+      ],
+      "scale": 0.48,
+      "root": [
+        1081,
+        432
+      ],
+      "width": 72,
+      "height": 96,
+      "anchor": [
+        32,
+        96
+      ],
+      "bytes": 6912,
+      "resource": 13,
+      "decoded_sha256": "8c7767d0d2286ecc906fe6a0c969a7484bf27bb2b3d94832563557a1b83dcbe2"
+    },
+    {
+      "name": "chain-2",
+      "source_box": [
+        1134,
+        219,
+        1291,
+        436
+      ],
+      "scale": 0.48,
+      "root": [
+        1217,
+        432
+      ],
+      "width": 72,
+      "height": 100,
+      "anchor": [
+        39,
+        100
+      ],
+      "bytes": 7200,
+      "resource": 14,
+      "decoded_sha256": "b10d06a19c9f557a214a872fa40f4e1df99a43eefcf2cc3466d6bae4ec7d396a"
+    },
+    {
+      "name": "chain-3",
+      "source_box": [
+        1263,
+        254,
+        1525,
+        436
+      ],
+      "scale": 0.48,
+      "root": [
+        1341,
+        432
+      ],
+      "width": 128,
+      "height": 83,
+      "anchor": [
+        36,
+        83
+      ],
+      "bytes": 10624,
+      "resource": 15,
+      "decoded_sha256": "5f31cdc991f2f9d61b8dd55ed150eda2237d5b7f96e1dded0773bca3f38361f3"
+    },
+    {
+      "name": "jump-0",
+      "source_box": [
+        345,
+        544,
+        447,
+        673
+      ],
+      "scale": 0.49,
+      "root": [
+        395,
+        670
+      ],
+      "width": 48,
+      "height": 61,
+      "anchor": [
+        22,
+        61
+      ],
+      "bytes": 2944,
+      "resource": 16,
+      "decoded_sha256": "ecff25d60d86400a547f267e56cfd04dfbd38f50940847896c6eac2e1c37e5e9"
+    },
+    {
+      "name": "jump-1",
+      "source_box": [
+        460,
+        464,
+        582,
+        624
+      ],
+      "scale": 0.49,
+      "root": [
+        520,
+        670
+      ],
+      "width": 64,
+      "height": 76,
+      "anchor": [
+        28,
+        100
+      ],
+      "bytes": 4864,
+      "resource": 17,
+      "decoded_sha256": "08d06601da425f2b7fcb57bc509ac5b8ee2bd31f48d0f77d11495062bb896780"
+    },
+    {
+      "name": "hurt-0",
+      "source_box": [
+        731,
+        500,
+        853,
+        671
+      ],
+      "scale": 0.49,
+      "root": [
+        799,
+        668
+      ],
+      "width": 56,
+      "height": 78,
+      "anchor": [
+        32,
+        80
+      ],
+      "bytes": 4384,
+      "resource": 18,
+      "decoded_sha256": "5a393920bb978fe8156c2ba42c7dea7937a8deaac0954b7e513d37bff5f8ff96"
+    },
+    {
+      "name": "hurt-1",
+      "source_box": [
+        856,
+        541,
+        960,
+        671
+      ],
+      "scale": 0.49,
+      "root": [
+        901,
+        668
+      ],
+      "width": 48,
+      "height": 60,
+      "anchor": [
+        20,
+        61
+      ],
+      "bytes": 2880,
+      "resource": 19,
+      "decoded_sha256": "874032bdd7f53e9c2c90bccc79d6ba1420bf520fdb28752eed7ec820963ed1b2"
+    },
+    {
+      "name": "death-0",
+      "source_box": [
+        1039,
+        536,
+        1190,
+        668
+      ],
+      "scale": 0.49,
+      "root": [
+        1117,
+        668
+      ],
+      "width": 72,
+      "height": 50,
+      "anchor": [
+        36,
+        62
+      ],
+      "bytes": 3616,
+      "resource": 20,
+      "decoded_sha256": "163be6c83af8ffc7d150ac971470c2d0bd9902d87b9911415452d08aee3b5bb4"
+    },
+    {
+      "name": "death-1",
+      "source_box": [
+        1189,
+        571,
+        1354,
+        670
+      ],
+      "scale": 0.49,
+      "root": [
+        1265,
+        667
+      ],
+      "width": 80,
+      "height": 43,
+      "anchor": [
+        37,
+        46
+      ],
+      "bytes": 3456,
+      "resource": 21,
+      "decoded_sha256": "9e4c008885d9174c2067ec2c1bc1d1ab7d40f676a476f1e714219b33f321f5a4"
+    },
+    {
+      "name": "death-2",
+      "source_box": [
+        1357,
+        618,
+        1525,
+        668
+      ],
+      "scale": 0.49,
+      "root": [
+        1438,
+        668
+      ],
+      "width": 80,
+      "height": 20,
+      "anchor": [
+        36,
+        24
+      ],
+      "bytes": 1600,
+      "resource": 22,
+      "decoded_sha256": "2dea51be354b85b29be9eade5b863d7b7947365241fc7668cc54d5838315584a"
+    },
+    {
+      "name": "turn-0",
+      "source_box": [
+        373,
+        719,
+        510,
+        947
+      ],
+      "scale": 0.37,
+      "root": [
+        437,
+        947
+      ],
+      "width": 48,
+      "height": 82,
+      "anchor": [
+        18,
+        84
+      ],
+      "bytes": 3936,
+      "resource": 23,
+      "decoded_sha256": "ee3e1c152743fcde0497c9bfa6fe7f8e6b0ceab6b38f18d5e4d691fa56f4cde6"
+    },
+    {
+      "name": "turn-1",
+      "source_box": [
+        505,
+        718,
+        642,
+        947
+      ],
+      "scale": 0.37,
+      "root": [
+        572,
+        947
+      ],
+      "width": 48,
+      "height": 83,
+      "anchor": [
+        18,
+        85
+      ],
+      "bytes": 4000,
+      "resource": 24,
+      "decoded_sha256": "c44e431efd9477a519a44345d2337ed9af117feca16f33eb0df86ed9e47b11a7"
+    }
+  ],
+  "definitions": 25,
+  "texture_bytes": 114048,
+  "reserve": 49152
+}

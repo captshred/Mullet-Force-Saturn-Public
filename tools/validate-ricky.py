@@ -19,7 +19,8 @@ with tempfile.TemporaryDirectory(prefix='ricky-phase5-') as d:
  (ref/'build/build-info.h').write_text((R/'build/build-info.h').read_text().replace('#define MF_RICKY_ENEMY 1','#define MF_RICKY_ENEMY 0'))
  subprocess.run(['python3','tools/validate-enemy-sprite-banks.py',*[x for x in sys.argv[1:] if x in ('--test','--disc')]],cwd=ref,check=True)
 print('PASS Phase 5 frozen assets/audio/Level2/CP/players/input/bank manager; original suite unchanged',flush=True)
-m=json.loads((R/'assets/ricky/manifest.json').read_text());assert hashlib.sha256((R/m['source']).read_bytes()).hexdigest()==m['source_sha256']=='7928d4f38fcd4a76fae9053d1ab466b10af6d8c2e966b1ecacaf903c5e62627b'
+subprocess.run(['python3','tools/test-ricky-rose-art.py'],cwd=R,check=True)
+m=json.loads((R/'assets/ricky/manifest.json').read_text());assert hashlib.sha256((R/m['source']).read_bytes()).hexdigest()==m['source_sha256']==json.loads((R/'art/ricky/provenance.json').read_text())['source_sha256']
 assert len(m['frames'])==m['definitions']==25
 for i,f in enumerate(m['frames']):
  b=(R/f'assets/ricky/RK{i:02}.TGA').read_bytes();assert len(b)==786+f['width']*f['height']

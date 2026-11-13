@@ -1,0 +1,18 @@
+{
+  "swaps": 8,
+  "generations": 9,
+  "prefix_definitions": 138,
+  "prefix_bytes": 224000,
+  "bank_definitions": 39,
+  "bank_bytes": 147072,
+  "peak_bytes": 371072,
+  "free_bytes": 87416,
+  "prefix_pixel_hash": "d7d3e2ed49c8c2baa51462312fa3ccf939e50d97b2e950f24f71ba893fe2876f",
+  "enemy_pixel_hash": "0d6f211128313ab361c8b6a92aa660cd31dbafe0c6e3c165df9989647abcb027",
+  "palette2345_hash": "3f5af5de7932c247a38dcf67c3b00d03c439edfa63d7dd46bcf3a3945fb8c0e6",
+  "level2_last_id": 27,
+  "level2_ticks": 711,
+  "nonzero_audio_samples_during_waits": 1371774,
+  "nonzero_audio_samples_level2": 1052006,
+  "scope": "test-only native callback requests real combined suffix changes with fixture actors temporarily absent; core/VDP1/CD/SDK drain, install, failure checks unmodified; physical X triggers normal Level2 transition after swaps; no RAM writes or new art; HLE not hardware/listening proof"
+}

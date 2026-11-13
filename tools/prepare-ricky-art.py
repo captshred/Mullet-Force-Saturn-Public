@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-"""Extract only supplied sheet pixels. Reviewed crop/polygon masks, nearest scaling.
-No generated/replacement artwork. Authoritative source remains at repository root.
+"""Convert the reviewed authoritative sheet with locked masks/scales/anchors.
+Rose/shoulder edits live in source artwork; no gameplay overlay or new textures.
+Unedited runtime pixels retain their exact baseline RGB555 color and alpha.
 """
 from pathlib import Path
 from PIL import Image,ImageDraw
@@ -17,7 +18,10 @@ rows=[('idle',[(352,12,479,191,416,188),(481,15,597,191,538,188),(600,13,722,191
 ('hurt',[(731,500,853,671,799,668),(856,541,960,671,901,668)],.49),
 ('death',[(1039,536,1190,668,1117,668),(1189,571,1354,670,1265,667),(1357,618,1525,668,1438,668)],.49),
 ('turn',[(373,719,510,947,437,947),(505,718,642,947,572,947)],.37)]
-frames=[];native=[]
+reference=R/'art/ricky/runtime-original'
+baseline=json.loads((R/'art/ricky/manifest.original.json').read_text())
+edit_mask=Image.open(R/'art/ricky/rose-edit-mask.png').convert('L')
+frames=[];native=[];native_masks=[]
 for group,boxes,scale in rows:
  for index,v in enumerate(boxes):
   x0,y0,x1,y1,root,ground=v;rgb=np.array(im.crop((x0,y0,x1,y1)));bright=rgb.max(axis=2)>32
@@ -51,19 +55,43 @@ for group,boxes,scale in rows:
   box=rgba.getbbox();assert box
   q=rgba.crop(box);pw=(q.width+7)&~7;out=Image.new('RGBA',(pw,q.height));out.alpha_composite(q)
   anchor_x=round((root-x0)*scale)-box[0];anchor_y=round((ground-y0)*scale)-box[1]
-  name=f'{group}-{index}';out.save(O/(name+'.png'));native.append(out)
+  name=f'{group}-{index}';native.append(out)
+  edited=edit_mask.crop((x0,y0,x1,y1)).resize((w,h),Image.Resampling.NEAREST).crop(box)
+  padded_mask=Image.new('L',out.size);padded_mask.paste(edited,(0,0));native_masks.append(np.array(padded_mask)>0)
+  original=baseline['frames'][len(frames)]
+  assert (name,pw,q.height,[anchor_x,anchor_y])==(original['name'],original['width'],original['height'],original['anchor'])
   frames.append(dict(name=name,source_box=list(v[:4]),scale=scale,root=[root,ground],width=pw,height=q.height,anchor=[anchor_x,anchor_y],bytes=(pw*q.height+31)&~31))
-# One dedicated 255-color palette on currently-unused production bank 2.
-opaque=[q.convert('RGB') for q in native];strip=Image.new('RGB',(sum(q.width for q in opaque),max(q.height for q in opaque)),(0,0,0));x=0
-for q in opaque:strip.paste(q,(x,0));x+=q.width
-palimage=strip.quantize(colors=254,method=Image.Quantize.MEDIANCUT,dither=Image.Dither.NONE);pal=palimage.getpalette()[:765];palette=[255,0,255]+pal;palette=palette[:768];palette+=([0]*(768-len(palette)))
+# Keep the approved palette's RGB555 colors. Reclaim redundant RGB555 entries
+# for tattoo inks instead of globally requantizing clothing/chain/skin.
+bgr=(reference/'RK00.TGA').read_bytes()[18:786]
+palette=[v for i in range(0,768,3) for v in bgr[i:i+3][::-1]]
+remap=list(range(256));seen={};free=[]
+for index in range(1,255):
+ red,green,blue=palette[index*3:index*3+3]
+ word=(red>>3)|((green>>3)<<5)|((blue>>3)<<10)
+ if word in seen:remap[index]=seen[word];free.append(index)
+ else:seen[word]=index
+inks=[(80,8,24),(128,8,24),(192,24,40),(232,48,56),(248,96,96),
+      (16,56,24),(24,104,40),(48,152,64),(88,184,88),(24,16,24)]
+assert len(free)>=len(inks),'no palette capacity without degrading original colors'
+for index,color in zip(free,inks):palette[index*3:index*3+3]=color
 # Reserve raw index 0 for key. Match only entries 1..254 (Jo adds one; raw 255 would wrap to transparency), no dithering.
 p=np.array(palette,dtype=np.int32).reshape(256,3);unique={};ids=[]
-for f,q in zip(frames,native):
- a=np.array(q);data=[]
- for row in a:
-  for pixel in row:
-   data.append(0 if not pixel[3] else int(np.argmin(((p[1:255]-pixel[:3].astype('int32'))**2).sum(axis=1)))+1)
+display=[]
+for number,(f,q,edited) in enumerate(zip(frames,native,native_masks)):
+ a=np.array(q);data=[];old=(reference/f'RK{number:02}.TGA').read_bytes()[786:]
+ for y,row in enumerate(a):
+  for x,pixel in enumerate(row):
+   before=old[y*q.width+x]
+   if not before:data.append(0) # Exact original transparency/silhouette lock.
+   elif not edited[y,x]:data.append(remap[before])
+   else:data.append(int(np.argmin(((p[1:255]-pixel[:3].astype('int32'))**2).sum(axis=1)))+1)
+ # Preview the actual RGB555 runtime payload, not unquantized authoring pixels.
+ rgba=[]
+ for index in data:
+  if not index:rgba.append((0,0,0,0))
+  else:rgba.append(tuple(((c>>3)*255)//31 for c in palette[3*index:3*index+3])+(255,))
+ shown=Image.new('RGBA',q.size);shown.putdata(rgba);shown.save(O/(f['name']+'.png'));display.append(shown)
  raw=bytes(data);key=(q.width,q.height,raw)
  if key not in unique:
   ident=len(unique);unique[key]=ident
@@ -74,7 +102,7 @@ for f,q in zip(frames,native):
 manifest=dict(source=str(source.relative_to(R)),source_sha256=hashlib.sha256(source.read_bytes()).hexdigest(),frames=frames,definitions=len(unique),texture_bytes=sum((w*h+31)&~31 for w,h,raw in unique),reserve=49152)
 (O/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
 canvas=Image.new('RGB',(900,((len(native)+5)//6)*140),(35,45,48));d=ImageDraw.Draw(canvas)
-for i,(q,f) in enumerate(zip(native,frames)):
+for i,(q,f) in enumerate(zip(display,frames)):
  x=i%6*150;y=i//6*140;d.text((x+3,y+3),f['name'],fill='white');q=q.resize((q.width,q.height),Image.Resampling.NEAREST);canvas.paste(q,(x+12,y+125-f['anchor'][1]),q)
 canvas.save(O/'atlas.png');print(json.dumps({k:manifest[k] for k in ('definitions','texture_bytes')}))
 
