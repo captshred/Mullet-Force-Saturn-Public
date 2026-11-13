@@ -357,7 +357,11 @@ static void draw_game(void)
         mf_enemy *e=&game.enemies[j];int frame=mf_enemy_frame(&game,j);
         x=e->x/256-game.camera;y=e->y/256;
         if(e->state==MF_ENEMY_ABSENT || x<-100 || x>420)continue;
+#if MF_RICKY_ENEMY
+        draw_shadow(x,y,game.enemy_class[j]==MF_ENEMY_RICKY && game.ricky_jump[j].active && e->state==MF_ENEMY_ACTIVE?24+game.ricky_jump[j].height:0);
+#else
         draw_shadow(x,y,0);
+#endif
         if(e->facing<0)jo_sprite_enable_horizontal_flip();
         jo_sprite_set_palette(e->fire_flash?burn_palette.id:enemy_palette.id);i=enemy[frame];
         #if MF_RICKY_ENEMY

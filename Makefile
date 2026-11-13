@@ -1,9 +1,9 @@
 # Recovered source is checked against the complete v3 delta/golden-resource lock.
 .PHONY: check test
 check:
-	python3 tools/validate-world-flow-phase1.py --disc
+	python3 tools/validate-ricky-jump-chain.py --disc
 test:
-	python3 tools/validate-world-flow-phase1.py --test
+	python3 tools/validate-ricky-jump-chain.py --test
 .PHONY: all setup bootstrap native check test clean
 all:
 	bash tools/build.sh

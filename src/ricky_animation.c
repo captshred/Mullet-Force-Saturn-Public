@@ -59,6 +59,8 @@ const mf_enemy_bank_spec mf_ricky_bank_spec={2,MF_ENEMY_CP_DEFS+MF_RICKY_DEFS,
     MF_ENEMY_CP_BYTES+MF_RICKY_BYTES,install,invalidate,validate};
 int mf_ricky_pose(const mf_game *g,int a) {
     const mf_enemy *e=&g->enemies[a];
+    if(g->ricky_jump[a].active && (e->state==MF_ENEMY_WINDUP || e->state==MF_ENEMY_ACTIVE || e->state==MF_ENEMY_RECOVER))
+        return e->state==MF_ENEMY_ACTIVE?17:16;
     switch(e->state) {
     case MF_ENEMY_IDLE:return (unsigned)g->ticks/12%3;
     case MF_ENEMY_WALK:return 3+(unsigned)e->walk/6%6;
@@ -82,6 +84,6 @@ int mf_ricky_draw_pose(int pose,int facing,int x,int ground,int depth) {
     return draw_pose(pose,facing,x,ground,depth,2);
 }
 int mf_ricky_draw(const mf_game *g,int a,int x,int ground,int depth) {
-    return draw_pose(mf_ricky_pose(g,a),g->enemies[a].facing,x,ground,depth,g->enemies[a].fire_flash?3:2);
+    return draw_pose(mf_ricky_pose(g,a),g->enemies[a].facing,x,ground-(g->ricky_jump[a].active && g->enemies[a].state==MF_ENEMY_ACTIVE?g->ricky_jump[a].height:0),depth,g->enemies[a].fire_flash?3:2);
 }
 #endif

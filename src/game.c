@@ -191,7 +191,7 @@ static void enemy_spawn(mf_game *g,int index,int initial)
     g->enemy_class[index]=MF_ENEMY_CORPORATE_PUNK;
 #if MF_RICKY_ENEMY
     /* Two CP, mixed, then two Ricky are possible without consuming spawn_rng. */
-    g->ricky_punch[index]=0;
+    g->ricky_punch[index]=0;g->ricky_jump[index]=(mf_ricky_jump){0};
     if((g->ricky_spawns++%8u)>=5u)g->enemy_class[index]=MF_ENEMY_RICKY;
 #endif
     *e=(mf_enemy){0};e->x=(initial?(index?530:390):(right>=left?MF_WORLD_RIGHT:26))*256;
@@ -397,17 +397,41 @@ static void punk_pursue(mf_game *g,int index)
 static void ricky_step(mf_game *g,int index)
 {
     mf_enemy *e=&g->enemies[index];mf_player *p;int dx,dy,i;
+    mf_ricky_jump *jump=&g->ricky_jump[index];
+    int striking=1,damage=MF_ENEMY_DAMAGE;
     if(e->state==MF_ENEMY_WINDUP) {
         if(--e->timer>0)return;
         e->state=MF_ENEMY_ACTIVE;e->timer=g->ricky_punch[index]?3:4;
+        if(jump->active) {
+            int destination=e->x;
+            jump->start_x=e->x;jump->start_y=e->y;
+            if(e->target>=0 && living(&g->players[e->target])) {
+                p=&g->players[e->target];destination=p->x-e->facing*22*256;
+                jump->dy=clamp(p->y-e->y,-12*256,12*256);
+            } else jump->dy=0;
+            destination=clamp(destination,MF_WORLD_LEFT*256,MF_WORLD_RIGHT*256);
+            jump->dx=(destination-e->x)*e->facing>0?destination-e->x:0;
+            e->timer=MF_RICKY_JUMP_AIR;
+        }
         g->events|=MF_SWOOSH;
     }
     if(e->state==MF_ENEMY_ACTIVE) {
+        mf_hitbox strike=attackbox(e->x/256,e->y/256,0,e->facing,10,g->ricky_punch[index]?40:82,36,64);
+        if(jump->active) {
+            int t=MF_RICKY_JUMP_AIR-e->timer;
+            /* Captured endpoints; no target reads or homing in flight. */
+            e->x=jump->start_x+jump->dx*(t+1)/MF_RICKY_JUMP_AIR;
+            e->y=jump->start_y+jump->dy*(t+1)/MF_RICKY_JUMP_AIR;
+            jump->height=4*MF_RICKY_JUMP_LIFT*(t+1)*(MF_RICKY_JUMP_AIR-t-1)/(MF_RICKY_JUMP_AIR*MF_RICKY_JUMP_AIR);
+            striking=t>=MF_RICKY_JUMP_ACTIVE_FIRST && t<MF_RICKY_JUMP_ACTIVE_FIRST+MF_RICKY_JUMP_ACTIVE_TICKS;
+            damage=MF_RICKY_JUMP_DAMAGE;
+            strike=attackbox(e->x/256,e->y/256,jump->height,e->facing,18,MF_RICKY_JUMP_REACH,56,76);
+        }
         for(i=0;i<MF_PLAYERS;i++){
             p=&g->players[i];
-            if(!(e->hit_done&(1<<i)) && living(p) && !p->invulnerable && (p->x-e->x)*e->facing>0 &&
-               mf_boxes_overlap(attackbox(e->x/256,e->y/256,0,e->facing,10,g->ricky_punch[index]?40:82,36,64),mf_player_hurtbox(p))){
-                e->hit_done|=1<<i;p->health=clamp(p->health-MF_ENEMY_DAMAGE,0,100);
+            if(striking && !(e->hit_done&(1<<i)) && living(p) && !p->invulnerable && (p->x-e->x)*e->facing>0 &&
+               mf_boxes_overlap(strike,mf_player_hurtbox(p))){
+                e->hit_done|=1<<i;p->health=clamp(p->health-damage,0,100);
 #if MF_DASH_ENABLED
                 dash_clear(&g->dash[i]);
 #endif
@@ -422,21 +446,28 @@ static void ricky_step(mf_game *g,int index)
                 if(!p->health)p->defeated=MF_BUCK_RECOVERY_TICKS;
             }
         }
-        if(--e->timer<=0){e->state=MF_ENEMY_RECOVER;e->timer=24;}
+        if(--e->timer<=0){e->state=MF_ENEMY_RECOVER;e->timer=jump->active?MF_RICKY_JUMP_RECOVERY:24;jump->height=0;}
         return;
     }
-    if(e->state==MF_ENEMY_RECOVER){if(--e->timer>0)return;e->state=MF_ENEMY_IDLE;}
+    if(e->state==MF_ENEMY_RECOVER){if(--e->timer>0)return;e->state=MF_ENEMY_IDLE;jump->active=0;}
     choose_target(g,e,index);if(e->target<0){e->state=MF_ENEMY_IDLE;return;}
     p=&g->players[e->target];dx=p->x-e->x;dy=p->y-e->y;
     if(dx)e->facing=sign(dx);
-    if(dx && abs_i(dx)<=76*256 && abs_i(dy)<=9*256) {
-        e->state=MF_ENEMY_IDLE;
-        if(!e->grace) {
-            g->ricky_punch[index]=abs_i(dx)<=36*256;
-            e->state=MF_ENEMY_WINDUP;e->timer=g->ricky_punch[index]?12:22;
-            e->hit_done=0;
+    if(dx && abs_i(dy)<=MF_RICKY_ATTACK_LANE*256 && !e->grace) {
+        int range=abs_i(dx)/256;
+        int can_jump=!jump->cooldown && range>=MF_RICKY_JUMP_MIN && range<=MF_RICKY_JUMP_MAX &&
+            e->x>=MF_WORLD_LEFT*256 && e->x<=MF_WORLD_RIGHT*256;
+        if(can_jump && (jump->last!=3 || range>MF_RICKY_CHAIN_RANGE)) {
+            jump->active=1;jump->cooldown=MF_RICKY_JUMP_COOLDOWN;jump->last=3;
+            g->ricky_punch[index]=0;e->state=MF_ENEMY_WINDUP;e->timer=MF_RICKY_JUMP_WINDUP;e->hit_done=0;return;
         }
-        return;
+        if(range<=MF_RICKY_CHAIN_RANGE) {
+            /* Overlap allows a different valid move instead of a same-move loop.
+               Recovery/cooldowns and walking speed are unchanged. */
+            g->ricky_punch[index]=range<=36 && (jump->last!=1 || range<28);
+            jump->last=g->ricky_punch[index]?1:2;
+            e->state=MF_ENEMY_WINDUP;e->timer=g->ricky_punch[index]?12:22;e->hit_done=0;return;
+        }
     }
     e->state=MF_ENEMY_WALK;++e->walk;
     if(abs_i(dx)>32*256)e->x+=sign(dx)*240;
@@ -453,6 +484,14 @@ static void enemy_step(mf_game *g,int index)
     mf_enemy *e=&g->enemies[index];mf_player *p;int dx,dy,i;
 #if MF_LEVEL1_STAGE_CLEAR
     if(g->stage!=MF_STAGE_LEVEL1 && e->state!=MF_ENEMY_DYING)return;
+#endif
+#if MF_RICKY_ENEMY
+    if(g->enemy_class[index]==MF_ENEMY_RICKY) {
+        mf_ricky_jump *jump=&g->ricky_jump[index];
+        if(jump->cooldown>0)--jump->cooldown;
+        if(e->state!=MF_ENEMY_WINDUP && e->state!=MF_ENEMY_ACTIVE && e->state!=MF_ENEMY_RECOVER)
+            jump->active=jump->height=0;
+    }
 #endif
     /* Count simulation ticks, including hurt/recovery, but excluding hit-stop.
        Disengagement cannot bank a counter indefinitely. */
@@ -489,7 +528,7 @@ static void enemy_step(mf_game *g,int index)
         e->state=MF_ENEMY_IDLE;e->timer=0;e->hit_done=0;
         g->punk[index].phase=MF_PUNK_CLOSE;g->punk[index].clock=0;
 #if MF_RICKY_ENEMY
-        g->ricky_punch[index]=0;
+        g->ricky_punch[index]=0;g->ricky_jump[index].active=g->ricky_jump[index].height=0;
 #endif
         return;
     }

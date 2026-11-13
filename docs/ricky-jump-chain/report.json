@@ -1,0 +1,16 @@
+{
+  "frames": 18000,
+  "attack_commitments": {
+    "punch": 47,
+    "standing_chain": 50,
+    "jump_chain": 27
+  },
+  "preview_selection": "actual unforced footage; requested review-air-frame=10358",
+  "jump_phase_frames": {
+    "launch": 10494,
+    "airborne": 10512,
+    "landing": 10534
+  },
+  "max_kos": 39,
+  "scope": "production fresh HLE boot; normal two-player patrol/combat inputs; no RAM writes, NPC state forcing, attack forcing or debug skip; screenshots/animations from natural AI selection; hardware review pending"
+}

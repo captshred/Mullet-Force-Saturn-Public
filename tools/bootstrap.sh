@@ -12,7 +12,7 @@ if [[ $(id -u) != 0 ]]; then
 fi
 "${privilege[@]}" apt-get update
 "${privilege[@]}" apt-get install -y --no-install-recommends \
-    ca-certificates git make gcc libc6-dev python3 genisoimage libmpfr6 libmpc3 ffmpeg python3-pil
+    ca-certificates git make gcc libc6-dev python3 genisoimage libmpfr6 libmpc3 ffmpeg python3-pil python3-numpy python3-scipy
 bash tools/setup.sh
 .deps/joengine/Compiler/LINUX/bin/sh-none-elf-gcc-8.2.0 --version | head -n 1
 printf '\nSetup complete. Run: make native && make check\n'

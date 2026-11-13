@@ -1,6 +1,6 @@
 {
   "source": "Ricky_HQ_Animation_Sheet.png",
-  "source_sha256": "20ca7bb258f2981096fa1162ea2899adbbb39fc43ca57279d7754147c75e49b4",
+  "source_sha256": "bbdddaede688f7d8d65b869891543374e965c120d59596dccecf01f59dc62e04",
   "frames": [
     {
       "name": "idle-0",
@@ -391,7 +391,7 @@
       ],
       "bytes": 2944,
       "resource": 16,
-      "decoded_sha256": "5e84ffc2f2c5ce30fa77aa73c9f4511d69af4f7c39c46e083f674c164d134665"
+      "decoded_sha256": "9b10cae0410811e170b3f9a6c8b76934d149a6512f7a8a0ea2d61a84bd97a77f"
     },
     {
       "name": "jump-1",
@@ -414,7 +414,7 @@
       ],
       "bytes": 4864,
       "resource": 17,
-      "decoded_sha256": "8d332ce011687bcb25f7b105f3b1bd912ceef0d05bdb15435e8eb05486620600"
+      "decoded_sha256": "0e625b9a9f45d66ba90a89d5f2ff6adf6cf0b29e1a001da2cebf4fc39b8e43e3"
     },
     {
       "name": "hurt-0",

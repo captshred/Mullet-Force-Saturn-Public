@@ -58,6 +58,16 @@ for group,boxes,scale in rows:
   name=f'{group}-{index}';native.append(out)
   edited=edit_mask.crop((x0,y0,x1,y1)).resize((w,h),Image.Resampling.NEAREST).crop(box)
   padded_mask=Image.new('L',out.size);padded_mask.paste(edited,(0,0));native_masks.append(np.array(padded_mask)>0)
+  if group=='jump':
+   # New weapon silhouettes use fixed pre-existing allocation/registration.
+   original=baseline['frames'][len(frames)]
+   alpha=Image.open(R/'art/ricky/jump-chain/source-alpha.png').convert('L').crop((x0,y0,x1,y1))
+   authored=im.crop((x0,y0,x1,y1)).convert('RGBA');authored.putalpha(alpha)
+   authored=authored.resize((w,h),Image.Resampling.NEAREST)
+   left=round((root-x0)*scale)-original['anchor'][0];top=round((ground-y0)*scale)-original['anchor'][1]
+   out=authored.crop((left,top,left+original['width'],top+original['height']))
+   pw=out.width;q=out;anchor_x,anchor_y=original['anchor']
+   native[-1]=out;native_masks[-1]=np.ones((out.height,out.width),dtype=bool)
   original=baseline['frames'][len(frames)]
   assert (name,pw,q.height,[anchor_x,anchor_y])==(original['name'],original['width'],original['height'],original['anchor'])
   frames.append(dict(name=name,source_box=list(v[:4]),scale=scale,root=[root,ground],width=pw,height=q.height,anchor=[anchor_x,anchor_y],bytes=(pw*q.height+31)&~31))
@@ -83,7 +93,9 @@ for number,(f,q,edited) in enumerate(zip(frames,native,native_masks)):
  for y,row in enumerate(a):
   for x,pixel in enumerate(row):
    before=old[y*q.width+x]
-   if not before:data.append(0) # Exact original transparency/silhouette lock.
+   if f['name'].startswith('jump-'):
+    data.append(0 if pixel[3]<128 else int(np.argmin(((p[1:255]-pixel[:3].astype('int32'))**2).sum(axis=1)))+1)
+   elif not before:data.append(0) # Exact original transparency/silhouette lock.
    elif not edited[y,x]:data.append(remap[before])
    else:data.append(int(np.argmin(((p[1:255]-pixel[:3].astype('int32'))**2).sum(axis=1)))+1)
  # Preview the actual RGB555 runtime payload, not unquantized authoring pixels.

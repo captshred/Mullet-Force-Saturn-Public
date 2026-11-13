@@ -1,0 +1,19 @@
+{
+  "parent": "cc10880983bbb761461d7e13cb2cd06a36c55ee1",
+  "source_sha256": "bbdddaede688f7d8d65b869891543374e965c120d59596dccecf01f59dc62e04",
+  "regions": [
+    [
+      345,
+      544,
+      447,
+      673
+    ],
+    [
+      460,
+      464,
+      582,
+      624
+    ]
+  ],
+  "scope": "Only jump poses 16/17 replaced in authoritative sheet; image-generated chain redesign fitted to original native canvases; all other runtime resources/palette exact."
+}

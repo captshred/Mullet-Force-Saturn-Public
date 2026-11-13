@@ -1,0 +1,178 @@
+id,path,width,height,format,allocated_bytes,vdp1_offset,palette_at_registration,usage
+0,EXPLODE.TGA,32,32,RGB555,2048,65536,-1,world object/effect or HUD
+1,FL0.TGA,56,46,indexed8,2592,67584,6,shared torch effect
+2,FL1.TGA,56,46,indexed8,2592,70176,6,shared torch effect
+3,FL2.TGA,56,46,indexed8,2592,72768,6,shared torch effect
+4,FL3.TGA,56,46,indexed8,2592,75360,6,shared torch effect
+5,EM0.TGA,8,12,indexed8,96,77952,6,shared torch effect
+6,EM1.TGA,8,12,indexed8,96,78048,6,shared torch effect
+7,CHARGE.TGA,8,8,indexed8,64,78144,6,legacy player fallback pieces; shared lower/body consumers
+8,DR0.TGA,32,48,RGB555,3072,78208,-1,world object/effect or HUD
+9,DR1.TGA,32,48,RGB555,3072,81280,-1,world object/effect or HUD
+10,DR2.TGA,32,48,RGB555,3072,84352,-1,world object/effect or HUD
+11,SHADOW.TGA,48,12,RGB555,1152,87424,-1,world object/effect or HUD
+12,HIT.TGA,32,32,RGB555,2048,88576,-1,world object/effect or HUD
+13,generated:health-bar,80,8,RGB555,1280,90624,-1,world object/effect or HUD
+14,generated:panel,8,40,RGB555,640,91904,-1,world object/effect or HUD
+15,GB0.TGA,40,20,indexed8,800,92544,7,resident movement/gallery/review part; shared animation resource tables
+16,GB1.TGA,64,56,indexed8,3584,93344,7,resident movement/gallery/review part; shared animation resource tables
+17,GB2.TGA,80,12,indexed8,960,96928,7,resident movement/gallery/review part; shared animation resource tables
+18,GC0.TGA,40,20,indexed8,800,97888,7,resident movement/gallery/review part; shared animation resource tables
+19,GC1.TGA,64,56,indexed8,3584,98688,7,resident movement/gallery/review part; shared animation resource tables
+20,GC2.TGA,88,12,indexed8,1056,102272,7,resident movement/gallery/review part; shared animation resource tables
+21,AB10.TGA,40,20,indexed8,800,103328,7,resident movement/gallery/review part; shared animation resource tables
+22,AB11.TGA,64,56,indexed8,3584,104128,7,resident movement/gallery/review part; shared animation resource tables
+23,AB12.TGA,72,12,indexed8,864,107712,7,resident movement/gallery/review part; shared animation resource tables
+24,AB20.TGA,40,20,indexed8,800,108576,7,resident movement/gallery/review part; shared animation resource tables
+25,AB21.TGA,56,56,indexed8,3136,109376,7,resident movement/gallery/review part; shared animation resource tables
+26,AB22.TGA,56,12,indexed8,672,112512,7,resident movement/gallery/review part; shared animation resource tables
+27,AB30.TGA,40,20,indexed8,800,113184,7,resident movement/gallery/review part; shared animation resource tables
+28,AB31.TGA,48,56,indexed8,2688,113984,7,resident movement/gallery/review part; shared animation resource tables
+29,AB32.TGA,24,12,indexed8,288,116672,7,resident movement/gallery/review part; shared animation resource tables
+30,AC10.TGA,40,20,indexed8,800,116960,7,resident movement/gallery/review part; shared animation resource tables
+31,AC11.TGA,64,56,indexed8,3584,117760,7,resident movement/gallery/review part; shared animation resource tables
+32,AC12.TGA,72,12,indexed8,864,121344,7,resident movement/gallery/review part; shared animation resource tables
+33,AC20.TGA,40,20,indexed8,800,122208,7,resident movement/gallery/review part; shared animation resource tables
+34,AC21.TGA,56,56,indexed8,3136,123008,7,resident movement/gallery/review part; shared animation resource tables
+35,AC22.TGA,56,12,indexed8,672,126144,7,resident movement/gallery/review part; shared animation resource tables
+36,AC30.TGA,40,20,indexed8,800,126816,7,resident movement/gallery/review part; shared animation resource tables
+37,AC31.TGA,48,56,indexed8,2688,127616,7,resident movement/gallery/review part; shared animation resource tables
+38,AC32.TGA,24,12,indexed8,288,130304,7,resident movement/gallery/review part; shared animation resource tables
+39,P000.TGA,64,56,indexed8,3584,130592,7,resident movement/gallery/review part; shared animation resource tables
+40,P001.TGA,64,56,indexed8,3584,134176,7,resident movement/gallery/review part; shared animation resource tables
+41,P002.TGA,64,56,indexed8,3584,137760,7,resident movement/gallery/review part; shared animation resource tables
+42,P018.TGA,64,56,indexed8,3584,141344,7,resident movement/gallery/review part; shared animation resource tables
+43,P019.TGA,64,56,indexed8,3584,144928,7,resident movement/gallery/review part; shared animation resource tables
+44,P020.TGA,64,56,indexed8,3584,148512,7,resident movement/gallery/review part; shared animation resource tables
+45,RN00.TGA,56,24,indexed8,1344,152096,7,resident movement/gallery/review part; shared animation resource tables
+46,RN01.TGA,72,44,indexed8,3168,153440,7,resident movement/gallery/review part; shared animation resource tables
+47,RN02.TGA,32,20,indexed8,640,156608,7,resident movement/gallery/review part; shared animation resource tables
+48,RN03.TGA,56,24,indexed8,1344,157248,7,resident movement/gallery/review part; shared animation resource tables
+49,RN04.TGA,64,38,indexed8,2432,158592,7,resident movement/gallery/review part; shared animation resource tables
+50,RN05.TGA,40,24,indexed8,960,161024,7,resident movement/gallery/review part; shared animation resource tables
+51,RN06.TGA,48,22,indexed8,1056,161984,7,resident movement/gallery/review part; shared animation resource tables
+52,RN07.TGA,64,44,indexed8,2816,163040,7,resident movement/gallery/review part; shared animation resource tables
+53,RN08.TGA,32,20,indexed8,640,165856,7,resident movement/gallery/review part; shared animation resource tables
+54,RN09.TGA,64,24,indexed8,1536,166496,7,resident movement/gallery/review part; shared animation resource tables
+55,RN10.TGA,72,38,indexed8,2752,168032,7,resident movement/gallery/review part; shared animation resource tables
+56,RN11.TGA,48,24,indexed8,1152,170784,7,resident movement/gallery/review part; shared animation resource tables
+57,RN12.TGA,56,24,indexed8,1344,171936,7,resident movement/gallery/review part; shared animation resource tables
+58,RN13.TGA,64,44,indexed8,2816,173280,7,resident movement/gallery/review part; shared animation resource tables
+59,RN14.TGA,32,20,indexed8,640,176096,7,resident movement/gallery/review part; shared animation resource tables
+60,RN15.TGA,56,24,indexed8,1344,176736,7,resident movement/gallery/review part; shared animation resource tables
+61,RN16.TGA,64,38,indexed8,2432,178080,7,resident movement/gallery/review part; shared animation resource tables
+62,RN17.TGA,40,24,indexed8,960,180512,7,resident movement/gallery/review part; shared animation resource tables
+63,RD0.TGA,56,24,indexed8,1344,181472,7,resident movement/gallery/review part; shared animation resource tables
+64,RD1.TGA,64,44,indexed8,2816,182816,7,resident movement/gallery/review part; shared animation resource tables
+65,RN20.TGA,32,20,indexed8,640,185632,7,resident movement/gallery/review part; shared animation resource tables
+66,RN21.TGA,56,24,indexed8,1344,186272,7,resident movement/gallery/review part; shared animation resource tables
+67,RN22.TGA,64,38,indexed8,2432,187616,7,resident movement/gallery/review part; shared animation resource tables
+68,RN23.TGA,48,24,indexed8,1152,190048,7,resident movement/gallery/review part; shared animation resource tables
+69,RBV00.TGA,32,36,indexed8,1152,191200,7,resident movement/gallery/review part; shared animation resource tables
+70,COMBAT/CA00.TGA,48,16,indexed8,768,192352,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+71,COMBAT/CA01.TGA,64,16,indexed8,1024,193120,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+72,COMBAT/CA03.TGA,32,12,indexed8,384,194144,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+73,COMBAT/CA04.TGA,80,16,indexed8,1280,194528,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+74,COMBAT/CA05.TGA,72,16,indexed8,1152,195808,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+75,COMBAT/CA06.TGA,88,16,indexed8,1408,196960,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+76,COMBAT/CA07.TGA,88,16,indexed8,1408,198368,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+77,COMBAT/CA28.TGA,48,16,indexed8,768,199776,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+78,COMBAT/CA29.TGA,64,16,indexed8,1024,200544,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+79,COMBAT/CA31.TGA,32,12,indexed8,384,201568,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+80,COMBAT/CA32.TGA,80,16,indexed8,1280,201952,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+81,COMBAT/CA33.TGA,80,16,indexed8,1280,203232,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+82,COMBAT/CA34.TGA,96,16,indexed8,1536,204512,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+83,COMBAT/CA35.TGA,96,16,indexed8,1536,206048,7,shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses
+84,HQTORCH/HT00.TGA,56,30,indexed8,1696,207584,-1,HQ blowtorch
+85,HQTORCH/HT01.TGA,24,16,indexed8,384,209280,-1,HQ blowtorch
+86,HQTORCH/HT02.TGA,64,32,indexed8,2048,209664,-1,HQ blowtorch
+87,HQTORCH/HT03.TGA,16,16,indexed8,256,211712,-1,HQ blowtorch
+88,HQTORCH/HT04.TGA,56,32,indexed8,1792,211968,-1,HQ blowtorch
+89,HQTORCH/HT05.TGA,16,10,indexed8,160,213760,-1,HQ blowtorch
+90,HQTORCH/HT06.TGA,64,30,indexed8,1920,213920,-1,HQ blowtorch
+91,HQTORCH/HT07.TGA,16,16,indexed8,256,215840,-1,HQ blowtorch
+92,HQTORCH/HT08.TGA,64,32,indexed8,2048,216096,-1,HQ blowtorch
+93,HQTORCH/HT09.TGA,32,14,indexed8,448,218144,-1,HQ blowtorch
+94,HQTORCH/HT10.TGA,64,30,indexed8,1920,218592,-1,HQ blowtorch
+95,HQTORCH/HT11.TGA,16,10,indexed8,160,220512,-1,HQ blowtorch
+96,alias,64,32,indexed8,0,94880,-1,stable row/tail view: HQ torch or jump; shares existing payload
+97,alias,64,32,indexed8,0,105664,-1,stable row/tail view: HQ torch or jump; shares existing payload
+98,alias,56,32,indexed8,0,110720,-1,stable row/tail view: HQ torch or jump; shares existing payload
+99,alias,48,32,indexed8,0,115136,-1,stable row/tail view: HQ torch or jump; shares existing payload
+100,alias,64,32,indexed8,0,100224,-1,stable row/tail view: HQ torch or jump; shares existing payload
+101,alias,64,32,indexed8,0,119296,-1,stable row/tail view: HQ torch or jump; shares existing payload
+102,alias,56,32,indexed8,0,124352,-1,stable row/tail view: HQ torch or jump; shares existing payload
+103,alias,48,32,indexed8,0,128768,-1,stable row/tail view: HQ torch or jump; shares existing payload
+104,alias,16,10,indexed8,0,220512,-1,stable row/tail view: HQ torch or jump; shares existing payload
+105,HQJUMP/HJ00.TGA,56,26,indexed8,1472,220672,-1,jump and aerial kick
+106,HQJUMP/HJ01.TGA,72,46,indexed8,3328,222144,-1,jump and aerial kick
+107,HQJUMP/HJ02.TGA,72,36,indexed8,2592,225472,-1,jump and aerial kick
+108,HQJUMP/HJ03.TGA,56,34,indexed8,1920,228064,-1,jump and aerial kick
+109,HQJUMP/HJ04.TGA,88,16,indexed8,1408,229984,-1,jump and aerial kick
+110,HQJUMP/HJ05.TGA,64,26,indexed8,1664,231392,-1,jump and aerial kick
+111,HQJUMP/HJ06.TGA,72,48,indexed8,3456,233056,-1,jump and aerial kick
+112,HQJUMP/HJ07.TGA,64,36,indexed8,2304,236512,-1,jump and aerial kick
+113,HQJUMP/HJ08.TGA,56,28,indexed8,1568,238816,-1,jump and aerial kick
+114,HQJUMP/HJ09.TGA,96,14,indexed8,1344,240384,-1,jump and aerial kick
+115,HQJUMP/HJ10.TGA,80,14,indexed8,1120,241728,-1,jump and aerial kick
+116,HQJUMP/HJ11.TGA,48,26,indexed8,1248,242848,-1,jump and aerial kick
+117,HQJUMP/HJ12.TGA,80,20,indexed8,1600,244096,-1,jump and aerial kick
+118,HQJUMP/HJ13.TGA,48,26,indexed8,1248,245696,-1,jump and aerial kick
+119,alias,64,24,indexed8,0,93344,-1,stable row/tail view: HQ torch or jump; shares existing payload
+120,alias,64,30,indexed8,0,94880,-1,stable row/tail view: HQ torch or jump; shares existing payload
+121,alias,64,24,indexed8,0,98688,-1,stable row/tail view: HQ torch or jump; shares existing payload
+122,alias,64,30,indexed8,0,100224,-1,stable row/tail view: HQ torch or jump; shares existing payload
+123,alias,48,26,indexed8,0,245696,-1,stable row/tail view: HQ torch or jump; shares existing payload
+124,HQHURT/PH00.TGA,80,42,indexed8,3360,246944,7,hurt reactions
+125,HQHURT/PH01.TGA,56,42,indexed8,2368,250304,7,hurt reactions
+126,HQHURT/PH02.TGA,56,38,indexed8,2144,252672,7,hurt reactions
+127,HQHURT/PH03.TGA,80,44,indexed8,3520,254816,7,hurt reactions
+128,HQHURT/PH04.TGA,80,40,indexed8,3200,258336,7,hurt reactions
+129,HQHURT/PH05.TGA,88,46,indexed8,4064,261536,7,hurt reactions
+130,HQHURT/PH06.TGA,64,48,indexed8,3072,265600,7,hurt reactions
+131,HQHURT/PH07.TGA,56,44,indexed8,2464,268672,7,hurt reactions
+132,HQHURT/PH08.TGA,88,44,indexed8,3872,271136,7,hurt reactions
+133,HQHURT/PH09.TGA,88,40,indexed8,3520,275008,7,hurt reactions
+134,HQDEATH/PD0.TGA,72,26,indexed8,1888,278528,7,death lower pieces
+135,HQDEATH/PD1.TGA,80,26,indexed8,2080,280416,7,death lower pieces
+136,COMBO/XC0.TGA,80,44,indexed8,3520,282496,7,jab-jab-cross upper
+137,COMBO/XC1.TGA,80,44,indexed8,3520,286016,7,jab-jab-cross upper
+138,CP00.TGA,40,22,indexed8,896,289536,4,replaceable Corporate Punk suffix; palette4 persistent/shared
+139,CP01.TGA,56,30,indexed8,1696,290432,4,replaceable Corporate Punk suffix; palette4 persistent/shared
+140,CP02.TGA,48,24,indexed8,1152,292128,4,replaceable Corporate Punk suffix; palette4 persistent/shared
+141,CP03.TGA,64,16,indexed8,1024,293280,4,replaceable Corporate Punk suffix; palette4 persistent/shared
+142,CP04.TGA,56,30,indexed8,1696,294304,4,replaceable Corporate Punk suffix; palette4 persistent/shared
+143,CP05.TGA,56,30,indexed8,1696,296000,4,replaceable Corporate Punk suffix; palette4 persistent/shared
+144,CP06.TGA,40,24,indexed8,960,297696,4,replaceable Corporate Punk suffix; palette4 persistent/shared
+145,CP07.TGA,48,16,indexed8,768,298656,4,replaceable Corporate Punk suffix; palette4 persistent/shared
+146,CP08.TGA,40,24,indexed8,960,299424,4,replaceable Corporate Punk suffix; palette4 persistent/shared
+147,CP09.TGA,56,16,indexed8,896,300384,4,replaceable Corporate Punk suffix; palette4 persistent/shared
+148,CQ00.TGA,72,30,indexed8,2176,301280,4,replaceable Corporate Punk suffix; palette4 persistent/shared
+149,CQ01.TGA,72,94,indexed8,6784,303456,4,replaceable Corporate Punk suffix; palette4 persistent/shared
+150,CQ02.TGA,112,74,indexed8,8288,310240,4,replaceable Corporate Punk suffix; palette4 persistent/shared
+151,CQ03.TGA,112,36,indexed8,4032,318528,4,replaceable Corporate Punk suffix; palette4 persistent/shared
+152,RICKY/RK00.TGA,56,85,indexed8,4768,322560,-1,replaceable Corporate Punk suffix; palette4 persistent/shared
+153,RICKY/RK01.TGA,56,83,indexed8,4672,327328,-1,replaceable Corporate Punk suffix; palette4 persistent/shared
+154,RICKY/RK02.TGA,56,84,indexed8,4704,332000,-1,replaceable Corporate Punk suffix; palette4 persistent/shared
+155,RICKY/RK03.TGA,48,84,indexed8,4032,336704,-1,replaceable Corporate Punk suffix; palette4 persistent/shared
+156,RICKY/RK04.TGA,40,84,indexed8,3360,340736,-1,replaceable Corporate Punk suffix; palette4 persistent/shared
+157,RICKY/RK05.TGA,48,84,indexed8,4032,344096,-1,replaceable Corporate Punk suffix; palette4 persistent/shared
+158,RICKY/RK06.TGA,32,84,indexed8,2688,348128,-1,replaceable Corporate Punk suffix; palette4 persistent/shared
+159,RICKY/RK07.TGA,48,84,indexed8,4032,350816,-1,replaceable Corporate Punk suffix; palette4 persistent/shared
+160,RICKY/RK08.TGA,56,84,indexed8,4704,354848,-1,replaceable Corporate Punk suffix; palette4 persistent/shared
+161,RICKY/RK09.TGA,56,86,indexed8,4832,359552,-1,replaceable Corporate Punk suffix; palette4 persistent/shared
+162,RICKY/RK10.TGA,72,83,indexed8,5984,364384,-1,replaceable Corporate Punk suffix; palette4 persistent/shared
+163,RICKY/RK11.TGA,56,84,indexed8,4704,370368,-1,replaceable Corporate Punk suffix; palette4 persistent/shared
+164,RICKY/RK12.TGA,64,80,indexed8,5120,375072,-1,replaceable Corporate Punk suffix; palette4 persistent/shared
+165,RICKY/RK13.TGA,72,96,indexed8,6912,380192,-1,replaceable Corporate Punk suffix; palette4 persistent/shared
+166,RICKY/RK14.TGA,72,100,indexed8,7200,387104,-1,replaceable Corporate Punk suffix; palette4 persistent/shared
+167,RICKY/RK15.TGA,128,83,indexed8,10624,394304,-1,replaceable Corporate Punk suffix; palette4 persistent/shared
+168,RICKY/RK16.TGA,48,61,indexed8,2944,404928,-1,replaceable Corporate Punk suffix; palette4 persistent/shared
+169,RICKY/RK17.TGA,64,76,indexed8,4864,407872,-1,replaceable Corporate Punk suffix; palette4 persistent/shared
+170,RICKY/RK18.TGA,56,78,indexed8,4384,412736,-1,replaceable Corporate Punk suffix; palette4 persistent/shared
+171,RICKY/RK19.TGA,48,60,indexed8,2880,417120,-1,replaceable Corporate Punk suffix; palette4 persistent/shared
+172,RICKY/RK20.TGA,72,50,indexed8,3616,420000,-1,replaceable Corporate Punk suffix; palette4 persistent/shared
+173,RICKY/RK21.TGA,80,43,indexed8,3456,423616,-1,replaceable Corporate Punk suffix; palette4 persistent/shared
+174,RICKY/RK22.TGA,80,20,indexed8,1600,427072,-1,replaceable Corporate Punk suffix; palette4 persistent/shared
+175,RICKY/RK23.TGA,48,82,indexed8,3936,428672,-1,replaceable Corporate Punk suffix; palette4 persistent/shared
+176,RICKY/RK24.TGA,48,83,indexed8,4000,432608,-1,replaceable Corporate Punk suffix; palette4 persistent/shared

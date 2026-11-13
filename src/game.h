@@ -62,6 +62,9 @@ typedef struct { int active,carry,dir,pending; } mf_running_bat;
 #if MF_PUNCH_COMBO
 typedef struct {int next,phase,timeout;} mf_punch_combo;
 #endif
+#if MF_RICKY_ENEMY
+typedef struct {int cooldown,active,start_x,start_y,dx,dy,height,last;} mf_ricky_jump;
+#endif
 typedef struct {
     mf_player players[MF_PLAYERS];
     mf_enemy enemies[MF_ENEMIES];
@@ -92,6 +95,9 @@ typedef struct {
 #endif
 #if MF_LEVEL1_WORLD_FLOW
     int camera_floor; /* Configurable progression floor; no actor warps. */
+#endif
+#if MF_RICKY_ENEMY
+    mf_ricky_jump ricky_jump[MF_ENEMIES]; /* Appended: preserve existing ABI prefix. */
 #endif
 } mf_game;
 void mf_game_init(mf_game *g);
