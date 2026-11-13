@@ -65,6 +65,18 @@ static void torch_cancel(mf_player *p)
     p->torch=p->charge=p->torch_timer=p->torch_tick=p->torch_sound=0;
     p->a_blocked=1;p->buffered&=~MF_A;
 }
+/* A hit interrupts deployed fire, but not an A-hold charge already in progress. */
+static void torch_interrupt(mf_player *p)
+{
+    if(p->health>0 && p->charge>0 && !p->torch) {
+        p->torch_sound=0;p->buffered&=~MF_A;return;
+    }
+    torch_cancel(p);
+}
+int mf_torch_active(const mf_player *p)
+{
+    return p->active && p->health>0 && !p->height && !p->vz && p->torch==MF_TORCH_FIRE;
+}
 int mf_boxes_overlap(mf_hitbox a,mf_hitbox b)
 {
     return a.left<=b.right && a.right>=b.left && a.back<=b.front &&
@@ -394,7 +406,7 @@ static void ricky_step(mf_game *g,int index)
 #endif
 /* JAB END */
                 p->invulnerable=MF_BUCK_INVULNERABLE_TICKS;p->hurt=12;p->knockback=e->facing*650;
-                p->attack=p->bat=0;p->buffered=0;torch_cancel(p);impact(g,p->x/256,p->y/256,48+p->height/256);hit_sound(g,i,p->health,0);g->events|=MF_COMBAT_HURT(i);
+                p->attack=p->bat=0;p->buffered=0;torch_interrupt(p);impact(g,p->x/256,p->y/256,48+p->height/256);hit_sound(g,i,p->health,0);g->events|=MF_COMBAT_HURT(i);
                 if(!p->health)p->defeated=MF_BUCK_RECOVERY_TICKS;
             }
         }
@@ -502,7 +514,7 @@ static void enemy_step(mf_game *g,int index)
 #endif
 /* JAB END */
                 p->invulnerable=MF_BUCK_INVULNERABLE_TICKS;p->hurt=12;p->knockback=e->facing*650;
-                p->attack=p->bat=0;p->buffered=0;torch_cancel(p);impact(g,p->x/256,p->y/256,48+p->height/256);hit_sound(g,i,p->health,0);g->events|=MF_COMBAT_HURT(i);
+                p->attack=p->bat=0;p->buffered=0;torch_interrupt(p);impact(g,p->x/256,p->y/256,48+p->height/256);hit_sound(g,i,p->health,0);g->events|=MF_COMBAT_HURT(i);
                 if(!p->health)p->defeated=MF_BUCK_RECOVERY_TICKS;
             }
         }
@@ -571,7 +583,7 @@ static void gesture_step(mf_player *p,unsigned held,unsigned pressed)
 static void torch_input(mf_player *p,unsigned held,unsigned pressed,int connected)
 {
     p->torch_sound=0;
-    if(!connected || !p->active || !p->health || p->hurt || p->height || p->vz){
+    if(!connected || !p->active || !p->health || p->height || p->vz){
         torch_cancel(p);
         if(connected && p->active && p->health>0 && !(held&MF_A))p->a_blocked=0;
         return;
@@ -579,6 +591,11 @@ static void torch_input(mf_player *p,unsigned held,unsigned pressed,int connecte
     if(!(held&MF_A)){
         p->charge=0;p->a_blocked=0;
         if(p->torch==MF_TORCH_EQUIP || p->torch==MF_TORCH_FIRE){p->torch=MF_TORCH_AWAY;p->torch_timer=MF_TORCH_AWAY_TICKS;}
+    }
+    /* Hurt cannot start a fresh hold, but an existing hold may reach 60.
+       Fire ignited during hurt stays active until another hit or cancellation. */
+    if(p->hurt && !p->charge && p->torch!=MF_TORCH_FIRE) {
+        torch_cancel(p);if(!(held&MF_A))p->a_blocked=0;return;
     }
     if(p->torch==MF_TORCH_AWAY){
         if(((pressed&MF_A) && !p->a_blocked) || (pressed&MF_B))p->torch=0;
@@ -611,7 +628,7 @@ static void torch_events(mf_game *g)
 int mf_torch_hits(const mf_player *p,mf_hitbox b)
 {
     int x=p->x/256,y=p->y/256,near,far,lo,hi;
-    if(p->height || p->vz || p->torch!=MF_TORCH_FIRE || y+8<b.back || y-8>b.front)return 0;
+    if(!mf_torch_active(p) || y+8<b.back || y-8>b.front)return 0;
     near=p->facing>0?b.left-x:x-b.right;far=p->facing>0?b.right-x:x-b.left;
     near=clamp(near,MF_TORCH_NOZZLE_X-4,MF_TORCH_END_X+4);
     if(far<MF_TORCH_NOZZLE_X-4 || (p->facing>0?b.left-x:x-b.right)>MF_TORCH_END_X+4)return 0;
@@ -627,7 +644,7 @@ static void torch_hits(mf_game *g,mf_player *p)
 #if MF_LEVEL1_STAGE_CLEAR
     if(g->stage!=MF_STAGE_LEVEL1)return;
 #endif
-    if(p->torch!=MF_TORCH_FIRE)return;
+    if(!mf_torch_active(p))return;
     if(p->torch_tick>0)--p->torch_tick;
     if(p->torch_tick)return;
     p->torch_tick=MF_TORCH_DAMAGE_TICKS;

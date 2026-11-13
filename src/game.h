@@ -94,6 +94,7 @@ void mf_game_init(mf_game *g);
 void mf_game_step(mf_game *g,unsigned held,unsigned pressed);
 void mf_game_step_coop(mf_game *g,const unsigned held[2],const unsigned pressed[2]);
 void mf_game_step_inputs(mf_game *g,const unsigned held[2],const unsigned pressed[2],unsigned connected);
+int mf_torch_active(const mf_player *);
 int mf_torch_hits(const mf_player *p,mf_hitbox target);
 int mf_player_frame(const mf_game *g,int player);
 int mf_buck_frame(const mf_game *g);

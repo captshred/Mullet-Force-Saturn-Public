@@ -297,7 +297,7 @@ static void load_assets(void)
 #endif
 #if MF_ENEMY_SPRITE_BANKS
 #if MF_RICKY_ENEMY
-    if(!asset_error && !mf_ricky_palette(&buck_palette))asset_failure(734,"RICKY PALETTE",0);
+    if(!asset_error && !mf_ricky_palette(&buck_palette,&chuck_palette))asset_failure(734,"RICKY PALETTE",0);
     if(!asset_error && !mf_enemy_bank_boot(&mf_ricky_bank_spec,&enemy_palette))
 #else
     if(!asset_error && !mf_enemy_bank_boot(&mf_corporate_bank_spec,&enemy_palette))
@@ -432,10 +432,6 @@ static void draw_game(void)
                 jo_sprite_set_palette(j?chuck_palette.id:buck_palette.id);
                 draw_anchored(torch_art[j][pose],x,y,j?chuck_torch_anchor[pose]:buck_torch_anchor[pose],p->facing,depth_key(y,-1));
                 #endif
-                if(p->torch==MF_TORCH_FIRE){
-                    int f=(game.ticks/3+j)%4;jo_sprite_set_palette(fire_palette.id);
-                    draw_anchored(flame[f],x,y,flame_anchor[f],p->facing,depth_key(y,-2));
-                }
             }else if(p->bat && p->attack && p->health && !p->hurt) {
                 frame=mf_bat_frame(p);
                 jo_sprite_set_palette(buck_palette.id);
@@ -455,6 +451,14 @@ static void draw_game(void)
                 i=j?chuck[frame]:buck[frame];jo_sprite_set_palette(j?chuck_palette.id:buck_palette.id);
                 draw_anchored(i,x,y-p->height/256,anchor[frame],p->facing,depth_key(y,0));
             }
+            jo_sprite_disable_horizontal_flip();
+        }
+        /* Flame remains visible over the unchanged hurt pose and through
+           invulnerability flicker, using exactly the collision eligibility. */
+        if(mf_torch_active(p)) {
+            int f=(game.ticks/3+j)%4;jo_sprite_set_palette(fire_palette.id);
+            if(p->facing<0)jo_sprite_enable_horizontal_flip();
+            draw_anchored(flame[f],x,y,flame_anchor[f],p->facing,depth_key(y,-2));
             jo_sprite_disable_horizontal_flip();
         }
     }

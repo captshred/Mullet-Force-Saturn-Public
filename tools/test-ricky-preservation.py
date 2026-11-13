@@ -44,12 +44,12 @@ for(int t=0;t<30000;t++){
    f=line.split('|')
    if f[0]=='TEXTURE':textures[f[1]]=tuple(f[3:6])+ (hashlib.sha256(bytes.fromhex(f[-1])).hexdigest(),)
    elif f[0]=='PALETTE':
-    if f[1]!='2':palettes[f[1]]=f[2]
+    if f[1] not in ('2','3'):palettes[f[1]]=f[2]
    elif f[0] in ('DRAW','QUAD'):
-    if f[0]=='DRAW' and textures[f[2]][2]=='1':assert f[-1]!='2','unchanged indexed draw uses Ricky palette'
+    if f[0]=='DRAW' and textures[f[2]][2]=='1':assert f[-1] not in ('2','3'),'unchanged indexed draw uses reclaimed Ricky palette'
     commands.append(tuple(f[:2])+textures[f[2]]+tuple(f[3:]));c+=1
    else:commands.append(tuple(v.replace('371072','<budget>').replace('257024','<budget>') for v in f))
   renders.append((commands,palettes));print(label,'render commands',c,flush=True)
  assert games[0]==games[1],('CP-only 30000-step gameplay changed',games)
  assert renders[0]==renders[1],'CP-only rendering or shared palettes changed'
- print('PASS direct Phase 5/current: 30000 CP-only non-attacking co-op ticks byte-identical; 7666 renderer cases/decoded textures/draw geometry/order/shared palettes identical; no unchanged indexed draw uses palette 2')
+ print('PASS direct Phase 5/current: 30000 CP-only non-attacking co-op ticks byte-identical; 7666 renderer cases/decoded textures/draw geometry/order/shared palettes identical; no unchanged indexed draw uses reclaimed palettes 2/3')

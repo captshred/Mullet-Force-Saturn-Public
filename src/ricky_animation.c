@@ -3,18 +3,27 @@
 #if MF_RICKY_ENEMY
 #include "ricky_data.h"
 static int ids[MF_RICKY_DEFS],resident;
-static jo_palette *colors;
+static jo_palette *colors,*burn_colors;
 static unsigned color_hash;
 static unsigned hash(void) {
     unsigned i,h=2166136261u;
-    if(!colors || !colors->data)return 0;
-    for(i=0;i<255;i++)h=(h^colors->data[i])*16777619u;
+    if(!colors || !colors->data || !burn_colors || !burn_colors->data)return 0;
+    for(i=0;i<255;i++){h=(h^colors->data[i])*16777619u;h=(h^burn_colors->data[i])*16777619u;}
     return h;
 }
-int mf_ricky_palette(jo_palette *p) {
+int mf_ricky_palette(jo_palette *p,jo_palette *burn) {
     unsigned i;
-    if(colors || !p || p->id!=2 || !p->data)return 0;
+    if(colors || !p || p->id!=2 || !p->data || !burn || burn->id!=3 || !burn->data)return 0;
     colors=p;for(i=0;i<255;i++)p->data[i]=mf_ricky_colors[i];
+    /* Reclaim dormant legacy Chuck slot 3; no palette allocation or base writes
+       after boot. Exact corporate punk RGB555 warm-red transformation. */
+    burn_colors=burn;
+    for(i=0;i<255;i++) {
+        unsigned c=p->data[i];unsigned r=(c&31)+10,g=((c>>5)&31)+3,b=((c>>10)&31)/2;
+        if(r>31)r=31;
+        if(g>31)g=31;
+        burn->data[i]=0x8000|r|(g<<5)|(b<<10);
+    }
     color_hash=hash();return 1;
 }
 static void invalidate(void) {
@@ -62,14 +71,17 @@ int mf_ricky_pose(const mf_game *g,int a) {
     default:return -1;
     }
 }
-int mf_ricky_draw_pose(int pose,int facing,int x,int ground,int depth) {
+static int draw_pose(int pose,int facing,int x,int ground,int depth,int palette) {
     const mf_ricky_frame *f;
     if(!resident || !mf_enemy_bank_ready() || pose<0 || pose>=MF_RICKY_DEFS)return 0;
-    f=&mf_ricky_frames[pose];jo_sprite_set_palette(2);
+    f=&mf_ricky_frames[pose];jo_sprite_set_palette(palette);
     jo_sprite_draw3D2(ids[pose],x-(facing>0?f->ax:f->width-f->ax),ground-f->ay,depth);
     return 1;
 }
+int mf_ricky_draw_pose(int pose,int facing,int x,int ground,int depth) {
+    return draw_pose(pose,facing,x,ground,depth,2);
+}
 int mf_ricky_draw(const mf_game *g,int a,int x,int ground,int depth) {
-    return mf_ricky_draw_pose(mf_ricky_pose(g,a),g->enemies[a].facing,x,ground,depth);
+    return draw_pose(mf_ricky_pose(g,a),g->enemies[a].facing,x,ground,depth,g->enemies[a].fire_flash?3:2);
 }
 #endif
