@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Direct Phase 5/current CP-only replay and decoded render comparison."""
+"""Direct Phase 5/current CP-only non-attacking replay and decoded render comparison."""
 from pathlib import Path
 import hashlib,io,subprocess,tarfile,tempfile
 R=Path(__file__).resolve().parents[1];BASE='1dd66746f37333914408234fc14d520858ac59fd'
@@ -20,7 +20,7 @@ for(int t=0;t<30000;t++){
 #if MF_RICKY_ENEMY
  g.ricky_spawns=0; /* Counterfactual: same CP spawns to isolate unchanged gameplay. */
 #endif
- for(int p=0;p<2;p++){rng=rng*1664525u+1013904223u;held[p]=(rng>>16)&127;pressed[p]=held[p]&((rng>>24)&127);}
+ for(int p=0;p<2;p++){rng=rng*1664525u+1013904223u;held[p]=((rng>>16)&127)&~MF_A; /* Exclude intentionally rebalanced bat/flame contacts. */pressed[p]=held[p]&((rng>>24)&127);}
  if(t==0 || t==30)pressed[0]=MF_START;if(t==50)pressed[1]=MF_START;
  mf_game_step_inputs(&g,held,pressed,3);
 #if MF_RICKY_ENEMY
@@ -52,4 +52,4 @@ for(int t=0;t<30000;t++){
   renders.append((commands,palettes));print(label,'render commands',c,flush=True)
  assert games[0]==games[1],('CP-only 30000-step gameplay changed',games)
  assert renders[0]==renders[1],'CP-only rendering or shared palettes changed'
- print('PASS direct Phase 5/current: 30000 CP-only co-op ticks byte-identical; 7666 renderer cases/decoded textures/draw geometry/order/shared palettes identical; no unchanged indexed draw uses palette 2')
+ print('PASS direct Phase 5/current: 30000 CP-only non-attacking co-op ticks byte-identical; 7666 renderer cases/decoded textures/draw geometry/order/shared palettes identical; no unchanged indexed draw uses palette 2')

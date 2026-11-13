@@ -288,7 +288,7 @@ static void fire_damage(mf_game *g,mf_enemy *e,int ignite,int owner)
         stage_defeat(g,(int)(e-g->enemies));
 #endif
     }
-    /* No recurring HURT state: a living enemy can escape or interrupt fire. */
+    /* Lingering burn damage adds no HURT timer; live contact gates AI below. */
 }
 /* One legal attack gate for every approach, rush and counter. */
 static int punk_attack(mf_game *g,int index)
@@ -452,6 +452,17 @@ static void enemy_step(mf_game *g,int index)
         if(--e->timer<=0){e->state=MF_ENEMY_ABSENT;e->timer=MF_ENEMY_RESPAWN_TICKS;}return;
     }
     if(e->grace)--e->grace;
+    /* Contact, not the lingering burn timer or damage cadence, gates stun.
+       Cancel queued attacks so release resumes AI without a delayed strike. */
+    for(i=0;i<MF_PLAYERS;i++)if(living(&g->players[i]) &&
+       mf_torch_hits(&g->players[i],mf_enemy_hurtbox(e))) {
+        e->state=MF_ENEMY_IDLE;e->timer=0;e->hit_done=0;
+        g->punk[index].phase=MF_PUNK_CLOSE;g->punk[index].clock=0;
+#if MF_RICKY_ENEMY
+        g->ricky_punch[index]=0;
+#endif
+        return;
+    }
     if(e->state==MF_ENEMY_HURT){
         g->punk[index].phase=MF_PUNK_CLOSE;g->punk[index].clock=0;
         e->x=clamp(e->x+e->vx,26*256,614*256);e->vx=e->vx*7/8;
@@ -793,15 +804,8 @@ static void player_hits(mf_game *g,mf_player *p)
                     g->punk[i].expiry=MF_PUNK_PRESSURE_EXPIRY;
                 }
             }
-#if MF_RUN_BAT
-            if(g->running_bat[p-g->players].active && p->bat && (g->enemy_class[i]==MF_ENEMY_CORPORATE_PUNK
-#if MF_RICKY_ENEMY
-                || g->enemy_class[i]==MF_ENEMY_RICKY
-#endif
-                ))e->hp=0;
-            else
-#endif
-            e->hp=clamp(e->hp-(p->bat?MF_BAT_DAMAGE:(p->attack_air?2:1)),0,MF_ENEMY_MAX_HP);
+            /* Enemy bat damage differs from the unchanged drum damage. */
+            e->hp=clamp(e->hp-(p->bat?3:(p->attack_air?2:1)),0,MF_ENEMY_MAX_HP);
             hit_sound(g,(int)(p-g->players),e->hp,0);
             e->state=e->hp?MF_ENEMY_HURT:MF_ENEMY_DYING;e->timer=e->hp?
                 (g->enemy_class[i]==MF_ENEMY_CORPORATE_PUNK?

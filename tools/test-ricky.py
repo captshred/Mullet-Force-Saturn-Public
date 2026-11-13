@@ -6,6 +6,7 @@ with tempfile.TemporaryDirectory(prefix='ricky-tests-') as d:
  w=Path(d);header=R/'build/build-info.h'
  common=['cc','-std=c99','-fsanitize=undefined','-fno-sanitize-recover=all','-ffunction-sections','-fdata-sections','-include',str(header),'-I'+str(R/'src'),'-I'+str(R/'build'),'-Wl,--gc-sections']
  exe=w/'combat';subprocess.run([*common,str(R/'tests/ricky/combat.c'),'-o',str(exe)],check=True);subprocess.run([str(exe)],check=True)
+ exe=w/'balance';subprocess.run([*common,str(R/'tests/ricky/balance.c'),'-o',str(exe)],check=True);subprocess.run([str(exe)],check=True)
  main=(R/'src/main.c').read_text().split('static int depth_key')[0]
  life=(R/'tests/enemy_banks/lifecycle.inc').read_text().replace('mf_corporate_bank_spec','mf_ricky_bank_spec').replace('==151','==176').replace('?151:','?176:').replace('257024','371072').replace('MF_ENEMY_BANK_CORPORATE','2').replace('bank_mock_fail_after=2;','bank_mock_fail_after=argc>1 && argv[1][1]>=\'0\' && argv[1][1]<=\'9\'?atoi(argv[1]+1):2;')
  # Exercise all 25 pose resources in both directions and both slot roots after boot.

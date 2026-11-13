@@ -38,7 +38,7 @@ int main(void) {
    if(j==3)g.running_bat[p].active=1;
    hp=g.enemies[0].hp;player_hits(&g,&g.players[p]);
    assert(g.enemies[0].hp<hp);
-   if(j==3)assert(!g.enemies[0].hp && g.stage_kills==1);
+   if(j>=2)assert(g.enemies[0].hp==3 && g.stage_kills==0);
   }
   setup(&g,p);g.enemies[0].state=MF_ENEMY_WINDUP;g.enemies[0].timer=22;
   g.players[p].x=215*256;g.players[p].attack=8;player_hits(&g,&g.players[p]);
