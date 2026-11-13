@@ -2,6 +2,7 @@
 # Source build of the recovered v3 profile; never reads a delivered executable.
 set -euo pipefail
 cd "$(dirname "$0")/.."
+export MF_RICKY_ENEMY=${MF_RICKY_ENEMY:-1}
 export MF_ENEMY_SPRITE_BANKS=1
 export MF_HUD_PANEL_MEMORY=1
 export MF_DUPLICATE_TEXTURE_CLEANUP=1

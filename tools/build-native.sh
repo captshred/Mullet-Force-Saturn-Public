@@ -2,6 +2,9 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 mkdir -p build/cd
+ricky=${MF_RICKY_ENEMY:-0}
+[[ $ricky == 0 || $ricky == 1 ]] || exit 1
+if [[ $ricky == 1 && ${MF_ENEMY_SPRITE_BANKS:-0} != 1 ]]; then echo 'Ricky requires Phase 5.' >&2; exit 1; fi
 enemy_banks=${MF_ENEMY_SPRITE_BANKS:-0}
 [[ $enemy_banks == 0 || $enemy_banks == 1 ]] || exit 1
 hud_panel=${MF_HUD_PANEL_MEMORY:-0}
@@ -32,6 +35,7 @@ if [[ $enemy_banks == 1 && $hud_panel != 1 ]]; then
     echo 'Enemy suffix banks require Phase 4.' >&2; exit 1
 fi
 printf '%s\n' "$enemy_banks" > build/enemy-bank-mode.txt
+printf '%s\n' "$ricky" > build/ricky-mode.txt
 stage_clear=${MF_LEVEL1_STAGE_CLEAR:-0}
 [[ $stage_clear == 0 || $stage_clear == 1 ]] || exit 1
 if [[ $stage_clear == 1 && ${MF_ARCADE_FX:-0} != 1 ]]; then echo 'Stage clear requires THE ONE arcade FX profile.' >&2; exit 1; fi
@@ -208,6 +212,7 @@ wingsuit=${MF_LEVEL2_WINGSUIT:-0}
 if [[ $wingsuit == 1 && ( $stage_clear != 1 || $live != 1 || $arcade_fx != 1 || $gallery != 1 ) ]]; then echo "Wingsuit requires the complete stage-clear profile" >&2; exit 1; fi
 printf '#define MF_LEVEL2_WINGSUIT %s\n' "$wingsuit" >> build/build-info.h
 printf '%s\n' "$wingsuit" > build/wingsuit-mode.txt
+printf '#define MF_RICKY_ENEMY %s\n' "$ricky" >> build/build-info.h
 printf '#define MF_ENEMY_SPRITE_BANKS %s\n' "$enemy_banks" >> build/build-info.h
 printf '#define MF_HUD_PANEL_MEMORY %s\n' "$hud_panel" >> build/build-info.h
 printf '#define MF_DUPLICATE_TEXTURE_CLEANUP %s\n' "$duplicate_cleanup" >> build/build-info.h
@@ -303,6 +308,9 @@ sha256sum build/legacy-sprite-phase2-mode.txt assets/legacy-sprite-phase2.json >
 sha256sum build/legacy-sprite-cleanup-mode.txt assets/legacy-sprite-cleanup.json >> build/SOURCE-SHA256SUMS.txt
 sha256sum build/arcade-fx-mode.txt assets/arcade-fx/* >> build/SOURCE-SHA256SUMS.txt
 if [[ $wingsuit == 1 ]]; then sha256sum assets/wingsuit/* src/wingsuit* tools/build-level2-wingsuit.sh >> build/SOURCE-SHA256SUMS.txt; fi
+if [[ $ricky == 1 ]]; then
+    sha256sum assets/ricky/*.TGA assets/ricky/manifest.json src/ricky_data.h src/ricky_budget.h build/ricky-mode.txt >> build/SOURCE-SHA256SUMS.txt
+fi
 source_hash=$(sha256sum build/SOURCE-SHA256SUMS.txt | cut -d' ' -f1)
 printf '#define MF_BUILD_SOURCE "%s"\n' "$source_hash" >> build/build-info.h
 printf 'Game: MULLET FORCE\nScene: Neon District playable prototype\nCommit: %s\nBranch: %s\nSDK: 556d081146211b6a1cfa6591d70f9487d406758b\n' \
@@ -358,8 +366,14 @@ if [[ $visual == 1 ]]; then
     cp assets/running-bat-visual/*.TGA build/cd/
     cp docs/running-bat-visual.md build/RUNNING-BAT-VISUAL-README.md
 fi
+printf 'Ricky enemy: %s\n' "$ricky" >> build/BUILD-INFO.txt
 printf 'Corporate Punk integration: %s\nCorporate Punk refined: %s\nCorporate Punk soft lighting: %s\n' "$corporate" "$refined" "$lighting" >> build/BUILD-INFO.txt
 rm -f build/cd/CP[0-9][0-9].TGA
+rm -rf build/cd/RICKY
+if [[ $ricky == 1 ]]; then
+    mkdir -p build/cd/RICKY
+    cp assets/ricky/*.TGA build/cd/RICKY/
+fi
 rm -rf build/corporate-punk-review
 if [[ $corporate == 1 ]]; then
     if [[ $lighting == 1 ]]; then cp assets/corporate-punk-lighting/*.TGA build/cd/; elif [[ $refined == 1 ]]; then cp assets/corporate-punk-refined/*.TGA build/cd/; else cp assets/corporate-punk-animation/*.TGA build/cd/; fi
@@ -463,7 +477,7 @@ fi
 rm -f build/cd/EXPLODE.TGA
 if [[ $arcade_fx == 1 ]]; then cp assets/arcade-fx/EXPLODE.TGA build/cd/; fi
 python3 tools/stage-wingsuit-assets.py "$wingsuit" build/cd
-make -C build -f ../make/saturn.mk MAKEFILE=../make/saturn.mk -j2 MF_DEV_STAGE_SKIP="$dev_skip" MF_LEVEL2_WINGSUIT="$wingsuit" MF_LEVEL1_STAGE_CLEAR="$stage_clear" MF_PUNCH_COMBO="$combo" MF_FAST_RUNNING_BAT="$fast_bat" MF_JAB_COHESION="$jab" MF_ATTACK_SEQUENCE="$sequence" MF_BAT_MOMENTUM="$momentum" MF_COMBAT_ANIMATION="$combat" MF_RUNNING_BAT_VISUALS="$visual" MF_RUN_BAT="$run_bat" MF_DASH_ENABLED="$dash" MF_DASH_PRESET="$dash_num" game.iso
+make -C build -f ../make/saturn.mk MAKEFILE=../make/saturn.mk -j2 MF_RICKY_ENEMY="$ricky" MF_DEV_STAGE_SKIP="$dev_skip" MF_LEVEL2_WINGSUIT="$wingsuit" MF_LEVEL1_STAGE_CLEAR="$stage_clear" MF_PUNCH_COMBO="$combo" MF_FAST_RUNNING_BAT="$fast_bat" MF_JAB_COHESION="$jab" MF_ATTACK_SEQUENCE="$sequence" MF_BAT_MOMENTUM="$momentum" MF_COMBAT_ANIMATION="$combat" MF_RUNNING_BAT_VISUALS="$visual" MF_RUN_BAT="$run_bat" MF_DASH_ENABLED="$dash" MF_DASH_PRESET="$dash_num" game.iso
 cp build/game.iso build/mullet-force.bin
 cat > build/mullet-force.cue <<'CUE'
 FILE "mullet-force.bin" BINARY

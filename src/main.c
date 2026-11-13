@@ -14,6 +14,7 @@ static volatile int stage2_owned;
 #if MF_CORPORATE_PUNK
 #include "corporate_animation.h"
 #include "enemy_sprite_bank.h"
+#include "ricky_animation.h"
 #endif
 #if MF_ANIMATION_PREVIEW
 #include "animation_preview.h"
@@ -289,13 +290,18 @@ static void load_assets(void)
 #if MF_PUNCH_COMBO
     if(!asset_error && !mf_cross_load())asset_failure(730,"CROSS",0);
 #if MF_ARCADE_FX
-    if(!asset_error && (jo_get_last_sprite_id()+1!=MF_FX_DEFINITIONS-(MF_ENEMY_SPRITE_BANKS?MF_ENEMY_CP_DEFS:0) ||
-                       mf_animation_texture_bytes()!=MF_FX_TEXTURE_BYTES-MF_ENEMY_DEFERRED_BYTES))
+    if(!asset_error && (jo_get_last_sprite_id()+1!=MF_FX_DEFINITIONS-MF_RICKY_EXTRA_DEFS-(MF_ENEMY_SPRITE_BANKS?MF_ENEMY_CP_DEFS:0) ||
+                       mf_animation_texture_bytes()!=MF_FX_TEXTURE_BYTES-MF_RICKY_EXTRA_BYTES-MF_ENEMY_DEFERRED_BYTES))
         asset_failure(731,"FX BUDGET",0);
 #endif
 #endif
 #if MF_ENEMY_SPRITE_BANKS
+#if MF_RICKY_ENEMY
+    if(!asset_error && !mf_ricky_palette(&buck_palette))asset_failure(734,"RICKY PALETTE",0);
+    if(!asset_error && !mf_enemy_bank_boot(&mf_ricky_bank_spec,&enemy_palette))
+#else
     if(!asset_error && !mf_enemy_bank_boot(&mf_corporate_bank_spec,&enemy_palette))
+#endif
         asset_failure(732,"ENEMY BANK",mf_enemy_bank_diagnostics()->error);
     if(!asset_error) {
     for(i=0;i<255;i++) {
@@ -354,6 +360,10 @@ static void draw_game(void)
         draw_shadow(x,y,0);
         if(e->facing<0)jo_sprite_enable_horizontal_flip();
         jo_sprite_set_palette(e->fire_flash?burn_palette.id:enemy_palette.id);i=enemy[frame];
+        #if MF_RICKY_ENEMY
+        if(game.enemy_class[j]==MF_ENEMY_RICKY)mf_ricky_draw(&game,j,x,y,depth_key(y,0));
+        else
+        #endif
         #if MF_CORPORATE_PUNK
         if(!mf_corporate_draw(&game,j,x,y,depth_key(y,0)))
         #endif

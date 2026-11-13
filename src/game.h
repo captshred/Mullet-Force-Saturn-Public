@@ -5,6 +5,7 @@
 #include "dash_config.h"
 #include "run_bat_config.h"
 #include "stage_config.h"
+#include "ricky_config.h"
 /* 24.8 ground coordinates, fixed 60 Hz NTSC simulation. */
 #define MF_SCALE 256
 #define MF_DRUMS 3
@@ -47,7 +48,7 @@ typedef struct {
     int dir,tap_dir,window,released,ready,anim;
     unsigned previous;
 } mf_dash_state;
-enum { MF_ENEMY_CORPORATE_PUNK, MF_ENEMY_SPECIAL };
+enum { MF_ENEMY_CORPORATE_PUNK, MF_ENEMY_SPECIAL, MF_ENEMY_RICKY };
 enum { MF_PUNK_BRAWLER, MF_PUNK_FLANKER, MF_PUNK_AMBUSHER, MF_PUNK_OPPORTUNIST };
 enum { MF_PUNK_APPROACH, MF_PUNK_PREP, MF_PUNK_RUSH, MF_PUNK_CLOSE };
 typedef struct {
@@ -83,6 +84,10 @@ typedef struct {
     int burn_owner[MF_ENEMIES]; /* Sound attribution only; no damage/state changes. */
 #if MF_PUNCH_COMBO
     mf_punch_combo combo[MF_PLAYERS];
+#endif
+#if MF_RICKY_ENEMY
+    unsigned ricky_spawns; /* Separate deterministic class schedule; no spawn RNG consumption. */
+    int ricky_punch[MF_ENEMIES];
 #endif
 } mf_game;
 void mf_game_init(mf_game *g);

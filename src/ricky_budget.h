@@ -1,0 +1,5 @@
+#ifndef MF_RICKY_BUDGET_H
+#define MF_RICKY_BUDGET_H
+#define MF_RICKY_DEFS 25
+#define MF_RICKY_BYTES 114048u
+#endif

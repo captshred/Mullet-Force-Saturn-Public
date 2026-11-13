@@ -1,0 +1,59 @@
+{
+  "builds": {
+    "phase1": {
+      "stages": [
+        0,
+        2,
+        3
+      ],
+      "runtime_phases": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "errors": [
+        0
+      ],
+      "first_level2_gameplay": 1843,
+      "last_stage": 3,
+      "last_phase": 3,
+      "last_sprite_id": 27,
+      "last_wingsuit_ticks": 556,
+      "level2_gameplay": true
+    },
+    "phase2": {
+      "stages": [
+        0,
+        2,
+        3
+      ],
+      "runtime_phases": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "errors": [
+        0
+      ],
+      "first_level2_gameplay": 1843,
+      "last_stage": 3,
+      "last_phase": 3,
+      "last_sprite_id": 27,
+      "last_wingsuit_ticks": 556,
+      "level2_gameplay": true
+    }
+  },
+  "level1_state_snapshots": 600,
+  "level1_state_mismatches": [],
+  "level1_image_count": 30,
+  "level1_image_mismatches": [],
+  "wall_frame_state_mismatches": [],
+  "wall_frame_image_mismatches": [],
+  "level2_common_ticks": 556,
+  "level2_state_mismatches": [],
+  "level2_common_images": 546,
+  "level2_image_mismatches": [],
+  "scope": "fresh HLE boots; physical controller inputs; approved development X stage skip at 1500; real settling/clear/load/readiness; Level2 inputs relative to gameplay ticks; no RAM writes; no natural 40-KO run or hardware/audio-listening claim"
+}

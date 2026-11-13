@@ -1,0 +1,9 @@
+{
+  "cases": 50,
+  "poses": 25,
+  "classes": [
+    "CP+R",
+    "R+R"
+  ],
+  "scope": "test-only pose/actor fixtures; actual production loader/draw_game/VDP1, both heroes present; no gameplay or hardware claim"
+}
