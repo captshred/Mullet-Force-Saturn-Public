@@ -18,7 +18,23 @@ def validate(disc=False):
   if edited:assert any(r['box'][0]<=x<r['box'][2] and r['box'][1]<=y<r['box'][3] for r in proof['regions'])
   if a>=240:assert a==b,('animated neon index',x,y)
   if 402<=x<470 and 82<=y<91:assert a==b,('ION lettering',x,y)
-  if y>=104:assert a==b,('lower posts/storefronts/road',x,y)
+  if y>=154:assert a==b,('sidewalk below pole bases/road',x,y)
+ # The regression that prompted this correction: LEFT is the real support.
+ # Require its complete lamp-to-base pixels to be identical to original art.
+ for r in proof['regions'][1:]:
+  x0,y0,x1,y1=r['preserved_left_pole_box']
+  for y in range(y0,y1):assert pixels[y*640+x0:y*640+x1]==old[y*640+x0:y*640+x1],r['name']+' LEFT pole damaged'
+  x0,y0,x1,y1=r['box']
+  for y in range(y0,y1):
+   for x in range(x0,x1):
+    at=y*640+x
+    assert pixels[at]==(old[at] if old[at]>=240 else old[at+r['donor_dx']]),r['name']+' RIGHT strip remains'
+ before=(A/'pole-correction-before.bin').read_bytes();assert digest(before)==proof['correction_before_sha256']
+ correction_boxes=[(152,64,160,104),(520,64,528,104),(160,74,165,154),(528,74,533,154)]
+ for at,(a,b) in enumerate(zip(before,pixels)):
+  if a!=b:assert any(x0<=at%640<x1 and y0<=at//640<y1 for x0,y0,x1,y1 in correction_boxes),('outside pole correction',at)
+ for x0,y0,x1,y1 in [(392,72,514,104),(166,76,374,104),(534,76,640,104)]:
+  for y in range(y0,y1):assert pixels[y*640+x0:y*640+x1]==before[y*640+x0:y*640+x1],'repaired ION/MULLET/VINYL sign changed'
  assert old[:640*64]==pixels[:640*64],'skyline/architectural roof changed'
  legacy=(A/'original/PATCHMASK.BIN').read_bytes();assert (O/'PATCHMASK.BIN').read_bytes()==bytes(a or b for a,b in zip(legacy,mask))
  for n in ('CIPAL.BIN','CISKY.BIN'):assert (O/n).read_bytes()==(A/'original'/n).read_bytes(),n
@@ -59,7 +75,7 @@ def validate(disc=False):
   for name in ('LCSKY.BIN','LCMAP.BIN'):assert files[name]==(R/'assets/city-gameplay-parallax'/name).read_bytes(),name
   source_list=(R/'build/SOURCE-SHA256SUMS.txt').read_bytes();assert digest(source_list).encode() in files['0.BIN']
   subprocess.run(['sha256sum','--check','build/SOURCE-SHA256SUMS.txt'],cwd=R,check=True,stdout=subprocess.DEVNULL)
- print('PASS current background: 3 local masks, exact lettering/neon/lower posts/lamps/skyline, 1664 unique tiles/106496 cell bytes, unchanged map/chunk geometry; zero memory delta'+('; every packaged file and executable source fingerprint verified' if disc else ''),flush=True)
+ print('PASS current background: 3 local masks, original LEFT poles continuous, RIGHT strips removed; exact repaired sign/neon/lamps/skyline, 1664 unique tiles/106496 cell bytes, unchanged map/chunk geometry; zero memory delta'+('; every packaged file and executable source fingerprint verified' if disc else ''),flush=True)
 def main():
  p=argparse.ArgumentParser();p.add_argument('--disc',action='store_true');p.add_argument('--test',action='store_true');a=p.parse_args();validate(a.disc)
  # Keep historical art/source locks intact: execute the exact approved parent,

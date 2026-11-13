@@ -18,19 +18,17 @@ for y in range(80,96):
   t=(x-464)/37;shade=(y-88)/20
   rgb=[3*(1-t)+4*t,9*(1-t)+3*t+shade,17*(1-t)+10*t+shade]
   pixels[at]=nearest(rgb);mask[at]=1
-# Matching masonry between untouched wall samples on both sides of each strip.
-# Preserve the local mortar rows and lamp lighting; borrow only subtle brick
-# grain from the existing blank masonry at x=376..383 on the same source row.
-for x0 in (152,520):
- for y in range(64,104):
-  left=colors[old[y*640+x0-1]];right=colors[old[y*640+x0+8]]
-  mean=[sum(colors[old[y*640+376+x]][c] for x in range(8))/8 for c in range(3)]
-  for x in range(x0,x0+8):
+# Restore the LEFT support directly from the original source by leaving it
+# untouched above and below the awning. Its core is x=153..157 (+368 at VINYL).
+# Remove only the separate RIGHT strip: x=160..164 (+368), lamp neck to sidewalk.
+# Clone real nearby wall/mortar/storefront-shadow and sidewalk pixels at the
+# same Y; never synthesize a flat fill or touch the lamp head/sign boundaries.
+for x0 in (160,528):
+ for y in range(74,154):
+  for x in range(x0,x0+5):
    at=y*640+x
    if old[at]>=240:continue
-   t=(x-x0+1)/9;grain=colors[old[y*640+376+(x-x0)]]
-   rgb=[left[c]*(1-t)+right[c]*t+(grain[c]-mean[c])*.35 for c in range(3)]
-   pixels[at]=nearest(rgb);mask[at]=1
+   pixels[at]=old[y*640+x-14];mask[at]=1
 (O/'CIPIX.BIN').write_bytes(pixels);(O/'TOUCHUPMASK.BIN').write_bytes(mask)
 legacy=(A/'PATCHMASK.BIN').read_bytes();(O/'PATCHMASK.BIN').write_bytes(bytes(a or b for a,b in zip(legacy,mask)))
 subprocess.run(['python3','tools/build-city-cleanup.py'],cwd=R,check=True)
