@@ -1,0 +1,23 @@
+{
+  "baseline": "8d85905eb12421cfe356b994ebab43893680e1b1",
+  "region": [
+    416,
+    0,
+    536,
+    152
+  ],
+  "editable_inset": [
+    418,
+    0,
+    534,
+    151
+  ],
+  "outside_changes": 0,
+  "changed_pixels": 15918,
+  "mask_sha256": "8924eca5178968c39f2e679a512e430a227b61dd116551cad5f2c30d28070fa0",
+  "before_sha256": "36c8bb609a2a973268a09a3e8c2af6c577485e95729e2ce09cb3b585eaba8e3c",
+  "after_sha256": "1d49e224cd4150ba4b5db735a480d279090b0580a5f74ba17b375bf145929a9c",
+  "study_sha256": "37a6f61b1d69389db5ed207411a47b774559e33cc11195874ed056389deba655",
+  "palette_sha256": "3f150ba770e16ef319909d82034afdff52c41279ab65cd23be5562c38f0e6597",
+  "scope": "Hotel front facade and stone arch only; outer plane edges, original side-facing HOTEL neon, records/residential, perspective/road, older1280px and palette unchanged; user review pending"
+}
