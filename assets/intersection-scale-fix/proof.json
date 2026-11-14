@@ -1,0 +1,33 @@
+{
+  "baseline": "7312ce1a2c21ab7881ad9e617b60524bf5736cb6",
+  "mask_sha256": "12186557c17fbdea0b1489058d354ff9554c7bacf99c1452cb9fdd7b250222d7",
+  "before_sha256": "dfe2fec708c4b3de5814a17a5d2771cb77868cf17296d9cdfca56930cf32a1d4",
+  "after_sha256": "36c8bb609a2a973268a09a3e8c2af6c577485e95729e2ce09cb3b585eaba8e3c",
+  "mask_regions": [
+    [
+      0,
+      0,
+      241,
+      152
+    ],
+    [
+      416,
+      0,
+      640,
+      152
+    ]
+  ],
+  "preserved_sky_exception": [
+    0,
+    0,
+    62,
+    56
+  ],
+  "outside_mask_pixel_changes": 0,
+  "transparent_pixels_in_corrected_foreground": 0,
+  "door_target_native_pixels": {
+    "height": 50,
+    "width": 22
+  },
+  "scope": "foreground facades only; original strip and receding-road/sky/moon/lamps/sidewalk/foreground road byte-preserved"
+}
