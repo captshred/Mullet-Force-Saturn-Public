@@ -14,6 +14,8 @@ def body(s,name):
 spec=importlib.util.spec_from_file_location('background',R/'tools/validate-level1-background-touchups.py');bg=importlib.util.module_from_spec(spec);spec.loader.exec_module(bg);bg.validate(a.disc)
 if a.disc:
  for name in ('NSCELL.BIN','NSMAP.BIN','NSPAL.BIN'):assert (R/'build/cd'/name).read_bytes()==(R/'assets/level1-neon-strip'/name).read_bytes()
+if subprocess.run(['git','cat-file','-e',BASE+'^{commit}'],cwd=R,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL).returncode:
+ run(['git','fetch','--no-tags','--depth=1','origin',BASE])
 with tempfile.TemporaryDirectory(prefix='coop-approved-') as d:
  ref=Path(d)
  with tarfile.open(fileobj=io.BytesIO(subprocess.check_output(['git','archive',BASE],cwd=R))) as t:t.extractall(ref,filter='data')
