@@ -14,14 +14,14 @@ for x in range(241,291):
  top=min([y for y in range(max(0,estimate-2),min(56,estimate+3)) if old[y,x]!=0] or [estimate])
  for y in range(top,56):
   if old[y,x]==0:new[y,x]=dark[old[y%28,128+x%24]];mask[y,x]=2
-for x in range(366,416):
+for x in range(337,416):
  estimate=max(0,math.ceil(31-(x-366)*.82))
  top=min([y for y in range(max(0,estimate-2),min(56,estimate+3)) if old[y,x]!=0] or [estimate])
  for y in range(top,56):
   if old[y,x]==0:new[y,x]=dark[old[y%28,128+x%24]];mask[y,x]=2
 # Orange crescent and its antialias pixels exist only in this isolated source box.
 for y in range(27,41):
- for x in range(325,338):
+ for x in range(324,338):
   if old[y,x]!=0:new[y,x]=0;mask[y,x]=3
 (R/'assets/level1-intersection/EXTPIX.BIN').write_bytes(new.tobytes());(A/'mask.bin').write_bytes(mask.tobytes())
 sha=lambda b:hashlib.sha256(b).hexdigest()

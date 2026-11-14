@@ -1,13 +1,13 @@
 {
   "baseline": "5363539d048062af7e862d75dd232db4bb310aad",
   "before_sha256": "dd89175efdf24df3ee5570672c35a86db47b2fa24e743b03a86b6738330e6feb",
-  "after_sha256": "17ac508ccbbddccaf6baabe53338a014a1c367bfc5bf2ac23e0747dd3be32f42",
-  "mask_sha256": "465ca59d6cf4ca9f7faa50e19b4376e9f71ac852864ee9dd75531f384465cc10",
-  "changed_pixels": 5514,
+  "after_sha256": "fe0efe1a9f6bbd87b4a5a69124a4bcd61d6d88edfda98609b112ac7ea337b140",
+  "mask_sha256": "5b82f6cb89ddb852c00110876a12a163d2d5f98fdad527d7f7653b311624b3b1",
+  "changed_pixels": 5865,
   "regions": {
     "1": 3472,
-    "2": 1997,
-    "3": 45
+    "2": 2347,
+    "3": 46
   },
   "side_nonzero_changes": 0
 }

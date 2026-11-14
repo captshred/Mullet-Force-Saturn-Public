@@ -1,0 +1,34 @@
+{
+  "first-building": {
+    "camera": 1207,
+    "rendered_world_origin": 1206,
+    "frames": [
+      {
+        "frame": 1984,
+        "telemetry_camera": 1208,
+        "static_match": 0.8777325581395349
+      },
+      {
+        "frame": 1974,
+        "telemetry_camera": 1208,
+        "static_match": 0.906046511627907
+      }
+    ]
+  },
+  "receding-street": {
+    "camera": 1469,
+    "rendered_world_origin": 1468,
+    "frames": [
+      {
+        "frame": 3184,
+        "telemetry_camera": 1469,
+        "static_match": 0.9260288244486891
+      },
+      {
+        "frame": 3268,
+        "telemetry_camera": 1471,
+        "static_match": 0.81790820165538
+      }
+    ]
+  }
+}

@@ -14,8 +14,8 @@ for i,(b,n,m) in enumerate(zip(old,new,mask)):
  x=i%640;y=i//640
  if m==0:assert n==b,('outside scope',x,y)
  elif m==1:assert x<62 and y<56 and n!=0 and not 240<=n<=247
- elif m==2:assert y<56 and (241<=x<291 or 366<=x<416) and b==0 and n!=0 and not 240<=n<=247
- elif m==3:assert 325<=x<338 and 27<=y<41 and n==0
+ elif m==2:assert y<56 and (241<=x<291 or 337<=x<416) and b==0 and n!=0 and not 240<=n<=247
+ elif m==3:assert 324<=x<338 and 27<=y<41 and n==0
  else:assert False
 assert proof['side_nonzero_changes']==0
 for y in range(240):assert old[y*640+416:y*640+640]==new[y*640+416:y*640+640], 'hotel/records changed'
