@@ -485,7 +485,7 @@ static void draw_game(void)
         if(engaged) {
             /* Keep the approved solo layout; fit all three co-op bars inside
                the 320px/40-column display, including after P2 disconnects. */
-            int spacing=mf_enemy_limit(&game)==3 || mf_enemy_count(&game)>2?12:26;
+            int spacing=mf_enemy_limit(&game)==3 || game.enemies[MF_ENEMIES-1].state!=MF_ENEMY_ABSENT?12:26;
             health_bar(16+j*(spacing==12?100:208),50,80,e->hp,MF_ENEMY_MAX_HP);
             jo_printf(2+j*spacing,5,"SUIT%d %d",j+1,e->hp);
             if(e->state==MF_ENEMY_WINDUP)jo_print(10+j*spacing,5,"!");
