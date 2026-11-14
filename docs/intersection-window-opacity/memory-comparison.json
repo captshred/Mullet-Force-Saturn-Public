@@ -1,0 +1,52 @@
+{
+  "tile_count": {
+    "before": 5369,
+    "after": 5370,
+    "delta": 1
+  },
+  "packed_source_bytes": {
+    "before": 225892,
+    "after": 226008,
+    "delta": 116
+  },
+  "static_CPU_bytes": {
+    "before": 34414,
+    "after": 34412,
+    "delta": -2
+  },
+  "decode_cache_heap_bytes": {
+    "before": 68308,
+    "after": 68308,
+    "delta": 0
+  },
+  "background_heap_bytes": {
+    "before": 294204,
+    "after": 294320,
+    "delta": 116
+  },
+  "resident_tiles": {
+    "before": 1664,
+    "after": 1664,
+    "delta": 0
+  },
+  "resident_cell_bytes": {
+    "before": 106496,
+    "after": 106496,
+    "delta": 0
+  },
+  "VDP2_reserved_bytes": {
+    "before": 434176,
+    "after": 434176,
+    "delta": 0
+  },
+  "VDP1_delta_bytes": {
+    "before": 0,
+    "after": 0,
+    "delta": 0
+  },
+  "SCSP_delta_bytes": {
+    "before": 0,
+    "after": 0,
+    "delta": 0
+  }
+}

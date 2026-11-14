@@ -1,0 +1,13 @@
+{
+  "camera": 1469,
+  "rendered_world_origin": 1468,
+  "before_frame": 2816,
+  "after_frame": 3164,
+  "telemetry_cameras": [
+    1471,
+    1469
+  ],
+  "rendered_origin_verification": "Exact static RGB565 facade pixel match; accounts for video/telemetry callback timing",
+  "before_source": "e270d2dd8461475185be6eac503ce0c0f874974b",
+  "scope": "Native production Yabause cold-start traversal, physical controller input; matching camera, actors/time may differ; no RAM writes or composited screenshots"
+}

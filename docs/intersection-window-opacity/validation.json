@@ -1,0 +1,26 @@
+{
+  "baseline": "e270d2dd8461475185be6eac503ce0c0f874974b",
+  "source_checkpoint": "06eb8b4",
+  "changed_pixels": 233,
+  "palette_index": 224,
+  "rgb555": [
+    0,
+    0,
+    1
+  ],
+  "native_profile": "stage-default",
+  "checks": {
+    "native_build": "passed",
+    "make_check": "passed",
+    "make_test": "passed",
+    "UBSan": "passed",
+    "deterministic_repair_pack": "passed",
+    "background_all_camera_both_directions": "passed",
+    "eight_heap_owner_reloads_and_failures": "passed",
+    "sprite_bank_regressions": "passed",
+    "native_traversal": "passed",
+    "independent_cold_starts": "passed"
+  },
+  "scope": "No native runtime source, palette, skyline, gameplay, audio, Level2 or previous art pixels outside the explicit zero-index window mask changed",
+  "manifest_sha256": "07ecaddfe24f21f071b592372c8a18e0e07fc223699a090653267a1d364c4384"
+}
