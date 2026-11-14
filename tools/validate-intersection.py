@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Phase 3A payload/disc/budget checks and immutable approved combat baseline."""
 from pathlib import Path
-import argparse,hashlib,importlib.util,io,json,re,subprocess,tarfile,tempfile
+import argparse,hashlib,importlib.util,io,json,re,struct,subprocess,tarfile,tempfile
 R=Path(__file__).resolve().parents[1];BASE='43cd82d33dd6195a036f9775f8b0e961fedbe9bb';O=R/'assets/level1-intersection';B=R/'assets/level1-neon-strip'
 p=argparse.ArgumentParser();p.add_argument('--disc',action='store_true');p.add_argument('--test',action='store_true');a=p.parse_args()
 def run(args,cwd=R):subprocess.run(args,cwd=cwd,check=True)
@@ -13,7 +13,14 @@ old=(B/'NSPIX.BIN').read_bytes();new=(O/'IXPIX.BIN').read_bytes();assert len(new
 for y in range(240):assert old[y*1280:(y+1)*1280]==new[y*1920:y*1920+1280],y
 assert sha((B/'NSPAL.BIN').read_bytes())==m['palette_sha256'] and m['resident_cell_bytes']==106496 and m['resident_tiles']==1664 and m['VDP2_reserved_bytes']==434176
 assert m['VDP2_delta_bytes']==m['VDP1_delta_bytes']==m['SCSP_delta_bytes']==0
-end=int(re.search(r'0x([0-9a-f]+)\s+__bend =',(R/'build/game.map').read_text()).group(1),16);assert end<0x060e5934,hex(end)
+end=int(re.search(r'0x([0-9a-f]+)\s+__bend =',(R/'build/game.map').read_text()).group(1),16)
+# Read actual linked SGLAREA constants; the SDK header's generic memory-map
+# comments are approximate and differ from this pinned library's layout.
+helper=(R/'tools/test-coop-balance-runtime.py').read_text();scope={'struct':struct}
+exec(helper[helper.index('def symbols('):helper.index('s=symbols(')],scope)
+syms=scope['symbols'](R/'build/game.elf');program=(R/'build/game.raw').read_bytes()
+vertex_work=int.from_bytes(program[syms['_Pbuffer']-0x06004000:syms['_Pbuffer']-0x06004000+4],'big')
+assert vertex_work==0x060e5784 and end<vertex_work,(hex(end),hex(vertex_work))
 if a.disc:
  spec=importlib.util.spec_from_file_location('background',R/'tools/validate-level1-background-touchups.py');bg=importlib.util.module_from_spec(spec);spec.loader.exec_module(bg);bg.validate(True)
  for n in ('IXPACK.BIN','IXOFF.BIN','IXMAP.BIN'):assert (R/'build/cd'/n).read_bytes()==(O/n).read_bytes(),n
@@ -31,7 +38,7 @@ with tempfile.TemporaryDirectory(prefix='intersection-approved-') as d:
  # Approved old-world checks execute their exact frozen source and old bounds.
  # Current production behavior/map/combat are exercised independently below.
  run(['python3','tools/validate-coop-balance.py',*(['--test'] if a.test else [])],ref)
-print(f'PASS Phase3A preservation: exact original1280px/palette/assets, combat/AI/jump-cancel/audio/Level2 unchanged; 5328 source/1664 resident tiles, zero video/audio allocation delta; CPU end {end:#x} below SDK vertex work 0x060e5934',flush=True)
+print(f'PASS Phase3A preservation: exact original1280px/palette/assets, combat/AI/jump-cancel/audio/Level2 unchanged; 5328 source/1664 resident tiles, zero video/audio allocation delta; CPU end {end:#x} below linked SDK vertex work {vertex_work:#x}',flush=True)
 if a.test:
  frozen={f:f.read_bytes() for f in [*O.glob('*.BIN'),O/'manifest.json',R/'src/intersection_data.h']}
  run(['python3','tools/prepare-level1-intersection.py']);assert all(f.read_bytes()==b for f,b in frozen.items()),'non-deterministic packing'

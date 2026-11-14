@@ -1,0 +1,60 @@
+{
+  "baseline": "43cd82d33dd6195a036f9775f8b0e961fedbe9bb",
+  "native_source": "5725578cece3072d8bee01499f7914e9e0711403",
+  "world_width": 1920,
+  "player_x_bounds": [
+    26,
+    1894
+  ],
+  "player_y_bounds": [
+    168,
+    229
+  ],
+  "enemy_x_apron_bounds": [
+    -96,
+    2048
+  ],
+  "camera_bounds": [
+    0,
+    1600
+  ],
+  "camera_pixels_per_fixed_tick": 2,
+  "checkpoints": [
+    0,
+    320,
+    640,
+    960,
+    1280
+  ],
+  "temporary_endpoint": true,
+  "diagonal_movement_implemented": false,
+  "mega_arcade_implemented": false,
+  "original_1280_pixels_identical": true,
+  "original_palette_identical": true,
+  "tile_source_count": 5328,
+  "retained_original_visible_tiles": 3089,
+  "new_authored_tiles": 2239,
+  "physical_resident_tiles": 1664,
+  "static_source_and_tables_before_bytes": 242352,
+  "static_source_and_tables_after_bytes": 242006,
+  "linked_end_before": "0x060e4274",
+  "linked_end_after": "0x060e4984",
+  "linked_end_delta_bytes": 1808,
+  "linked_SGL_Pbuffer": "0x060e5784",
+  "gap_to_SGL_Pbuffer_bytes": 3584,
+  "cpu_decode_cache_payload_bytes": 68284,
+  "cpu_decode_cache_allocator_bytes": 68292,
+  "cpu_decode_cache_address": "0x60844cc",
+  "cpu_decode_cache_end": "0x6094f88",
+  "cpu_decode_cache_freed_before_level2": "PASS native cold-start handoff assertion",
+  "video_audio_allocation_delta_bytes": 0,
+  "native_stage_default": "PASS",
+  "make_check": "PASS",
+  "make_test": "PASS",
+  "ubsan_current_gameplay_world_cache_combat": "PASS",
+  "native_traversal": "PASS",
+  "native_three_enemy_coop": "PASS",
+  "repeated_cold_starts": "PASS",
+  "level2_skip_audio_regressions": "PASS",
+  "hardware_gameplay_approval": "PENDING"
+}

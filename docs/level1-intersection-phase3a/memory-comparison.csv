@@ -1,0 +1,21 @@
+resource,approved,phase3a,delta
+World width (pixels),1280,1920,640
+Camera maximum (pixels),960,1600,640
+Source tile count,3424,5328,1904
+Resident VDP2 tiles,1664,1664,0
+Resident VDP2 cells (bytes),106496,106496,0
+VDP2 ring map (bytes),16384,16384,0
+VDP2 reserved (bytes),434176,434176,0
+Raw CPU source (bytes),219136,340992,121856
+Loaded source payload (bytes),219136,207704,-11432
+Source offset table (bytes),0,2668,2668
+Logical source map (bytes),9600,14400,4800
+Static source/tables including scratch (bytes),242352,242006,-346
+CPU decode-cache payload (bytes),0,68284,68284
+CPU decode-cache allocator block (bytes),0,68292,68292
+Existing Jo heap size (bytes),393216,393216,0
+VDP1 definitions,177,177,0
+VDP1 texture bytes,371072,371072,0
+Protected future sprite reserve (bytes),49152,49152,0
+SCSP high water (bytes),485812,485812,0
+SCSP free (bytes),38476,38476,0
