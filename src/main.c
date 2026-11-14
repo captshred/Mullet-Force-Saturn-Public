@@ -494,7 +494,7 @@ static void draw_game(void)
 #if MF_LEVEL1_STAGE_CLEAR
 #if MF_LEVEL1_WORLD_FLOW
     jo_printf(14,3,"KOs %04d",game.stage_kills);
-    jo_print(14,4,game.camera==MF_WORLD_CAMERA_MAX?"TEST END   ":game.camera>320?"NEON STRIP ":"           ");
+    jo_print(14,4,game.camera==MF_WORLD_CAMERA_MAX?"TEST END   ":game.camera>960?"INTERSECT  ":game.camera>320?"NEON STRIP ":"           ");
 #else
     jo_printf(14,3,"KOs %02d/40",game.stage_kills);
 #endif
@@ -673,6 +673,7 @@ static void update(void)
 #if MF_ENEMY_SPRITE_BANKS
             mf_enemy_bank_retire();
 #endif
+            mf_parallax_leave(); /* Release Phase 3A CPU decode cache before Level 2. */
             stage2_owned=1;pending[0]=pending[1]=0;
             mf_ws_runtime_begin(game.players[1].active,&street_palette,now);return;
         }
