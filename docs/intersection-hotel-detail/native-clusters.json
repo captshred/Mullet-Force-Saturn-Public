@@ -1,0 +1,10 @@
+{
+  "approved": {
+    "same_color_2x2_fraction": 0.34017391304347827,
+    "distinct_palette_indices": 24
+  },
+  "hotel_candidate": {
+    "same_color_2x2_fraction": 0.023246376811594204,
+    "distinct_palette_indices": 150
+  }
+}
