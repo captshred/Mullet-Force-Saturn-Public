@@ -1,0 +1,22 @@
+Native stage-default: PASS
+make check: PASS
+make test: PASS
+
+PASS solo: 12000 ticks of player/enemy/AI/RNG/score state byte-identical to approved Phase 2
+PASS candidate scope: all approved art/audio/Level2/camera/Ricky AI byte-identical; only population/peer handling and player input priority changed
+PASS exact 1280px cache/ring decoded pixels at every camera both ways, old/new scan-out pinned, 1024 wrap/reloads, palette-1/even PNDs, A0 tail/B0 skyline/SDK guards; sequential peak uploads 29 tiles (<=1920 bytes/update)
+PASS world 1280/endpoint, 75 KOs, smooth checkpoint floors, no partner warp/catch-up, offscreen spawns/mix, retirement/no score, recovery and explicit stage handoff
+PASS bat 3HP/single hit/two-hit KO; flame contact interrupt/release/cadence/death; all classes, both slots and players
+PASS charge through hits at 20/45/59, threshold while hurt, visible-volume damage, release, repeated hits, independent ports, death/disconnect/pause/stage/air cancellation, single ignition and active-fire interruption
+PASS Ricky chain/punch, P1/P2, lane/height/facing misses, single-hit, interrupt, all player attacks, flame, diagonal/axis pursuit, 40 KOs, class schedule
+PASS jump-chain P1/P2/both facings/checkpoints, 12/24/5/18 timing, visible reach, 1HP single-hit latches, lane/height/invulnerability/facing misses, captured trajectory, counterplay, flame/release/death/reset, cooldown and variety
+PASS current production-world flags: existing 3HP bat/flame/contact/charge and Ricky combat regressions; only obsolete auto-40-KO expectation replaced by explicit handoff fixture
+PASS camera 0: solo max 2, coop max 3, join/leave, all slots CP/Ricky fight/KO/retire
+PASS camera 320: solo max 2, coop max 3, join/leave, all slots CP/Ricky fight/KO/retire
+PASS camera 640: solo max 2, coop max 3, join/leave, all slots CP/Ricky fight/KO/retire
+PASS camera 960: solo max 2, coop max 3, join/leave, all slots CP/Ricky fight/KO/retire
+PASS jump cancel: all startup/active/recovery ticks, both actors, moving, hit/miss, held B, buffered A, hit-stop, special/hurt/death guards; mf_game 980 bytes
+PASS bat command buffer: both players/facings, 1..5 punches then FF+A, earliest13/17 transition, no punch cancel/dash boost/extra jab/double attack/spam; FF without A and cancellation guards
+PASS combo: both players/facings, buffered jab/jab/cross/next-jab intervals12/12/16,28-tick cross,unchanged6..10 active/one damage/SFX,45-tick timeout,held rejection,independent players,damage/death/jump/bat/torch resets,pause freeze
+PASS current production renderer: 144 mixed three-enemy/bat/flame/impact/leap fixtures, max 45 sprite draws; shared residency unchanged
+PASS Fire/Hit resources: exact mono import, preserved Fire/Flame/music/Explosion parameters and isolated Hit allocation, frozen Fire/Explosion schedulers and readiness; native allocator selects free records for channel8 Hit separately from Fire, 29-principal/32 physical budget

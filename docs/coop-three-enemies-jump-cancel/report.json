@@ -1,0 +1,29 @@
+{
+  "solo_max": 2,
+  "coop_max": 3,
+  "three_visible_frame": 1474,
+  "jump_cancels": [
+    {
+      "player": 1,
+      "before_frame": 1107,
+      "after_frame": 1108,
+      "punch_tick": 7,
+      "height": 1510
+    },
+    {
+      "player": 2,
+      "before_frame": 1410,
+      "after_frame": 1411,
+      "punch_tick": 7,
+      "height": 1510
+    }
+  ],
+  "asset_errors": [
+    0
+  ],
+  "scope": "production native disc; fresh Yabause HLE boot, physical controller input only, no memory writes or save-state loading; hardware approval pending",
+  "three_visible_capture_frame": 1498,
+  "native_source_commit": "0f5daa1b82de22fa2050d49673a8ddb4a2462d81",
+  "source_sha256": "1014757401155fe9d9f07ce2f0632577530ac33f9340f10f15abcd6b48362fdd",
+  "core_commit": "8926b0c6c347f8c5c755911ddb0ac695420ffbf8"
+}
