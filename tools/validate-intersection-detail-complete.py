@@ -22,6 +22,13 @@ for i,(b,n,m) in enumerate(zip(old,new,mask)):
 assert proof['hotel_changes']==proof['outside_mask_changes']==0
 m=json.loads((O/'manifest.json').read_text())
 for n,h in m['sha256'].items():assert hashlib.sha256((O/n).read_bytes()).hexdigest()==h,n
+pixels=(O/'IXPIX.BIN').read_bytes();original=(R/'assets/level1-neon-strip/NSPIX.BIN').read_bytes()
+assert len(pixels)==1920*240
+for y in range(240):
+ assert pixels[y*1920:y*1920+1280]==original[y*1280:(y+1)*1280],('older panorama',y)
+ assert pixels[y*1920+1280:(y+1)*1920]==new[y*640:(y+1)*640],('extension',y)
+assert m['palette_sha256']==hashlib.sha256((R/'assets/level1-neon-strip/NSPAL.BIN').read_bytes()).hexdigest()
+assert m['original_pixel_sha256']==hashlib.sha256(original).hexdigest()
 assert m['packed_source_storage']=='existing-fixed-Jo-heap' and m['background_heap_bytes']==((m['packed_source_bytes']+7)&~3)+m['decode_cache_heap_bytes']
 assert m['background_heap_bytes']+16384<393216 and m['resident_cell_bytes']==106496 and m['VDP2_reserved_bytes']==434176
 # Check actual linked SDK addresses and the full fixed allocator, not a relaxed
@@ -44,6 +51,9 @@ with tempfile.TemporaryDirectory(prefix='complete-approved-') as d:
  for f in ref.rglob('*'):
   if f.is_file() and str(f.relative_to(ref)) not in allowed:assert (R/f.relative_to(ref)).read_bytes()==f.read_bytes(),f.relative_to(ref)
  assert old==(ref/'assets/level1-intersection/EXTPIX.BIN').read_bytes()
+ prior=json.loads((ref/'assets/level1-intersection/manifest.json').read_text())
+ for key in ('width','height','original_width','codec','block_bytes','resident_tiles','resident_cell_bytes','map_bytes','chunk_bytes','VDP2_reserved_bytes','VDP2_delta_bytes','VDP1_delta_bytes','SCSP_delta_bytes'):
+  assert m[key]==prior[key],key
  for y in range(152):assert old[y*640+416:y*640+536]==new[y*640+416:y*640+536]
  oldp=(ref/'src/parallax.c').read_text();newp=(R/'src/parallax.c').read_text()
  # Every decoder/cache/prefetch/render function body stays exact. The only
