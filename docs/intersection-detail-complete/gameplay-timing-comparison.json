@@ -1,0 +1,10 @@
+{
+  "reference": "recorded approved hotel production traversal",
+  "candidate": "complete fine-art and combined-heap traversal",
+  "compared_frames": 3300,
+  "scope": "same physical-controller schedule and input-only camera feedback; all 34 game-prefix fields compared; background heap pointer/size fields intentionally excluded; emulator scheduling evidence, not hardware timing proof",
+  "gameplay_field_mismatch_count": 2644,
+  "camera_mismatch_count": 2127,
+  "tick_mismatch_count": 2641,
+  "interpretation": "Full-art combat traces are not frame-identical. This is not used as an FPS test; input latching/contact/hit-stop can diverge with scheduling. See native-cadence-comparison.json for direct last_vblank render observations; gameplay/AI source remains byte-identical."
+}

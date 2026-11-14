@@ -1,0 +1,30 @@
+{
+  "builds": {
+    "baseline": {
+      "frames": 3300,
+      "observed_update_frames": 3110,
+      "update_frames_per_60Hz_second": 56.563,
+      "max_observed_update_gap_frames": 7,
+      "p99_vblank_lag": 2,
+      "max_vblank_lag": 7,
+      "endpoint_reached": true,
+      "last_camera": 1280,
+      "scope": "read-only last_vblank change observations at 60Hz; same physical-controller/camera-feedback schedule; no debug writes; paused/hit-stop simulation ticks are not an FPS measure"
+    },
+    "candidate": {
+      "frames": 3300,
+      "observed_update_frames": 3112,
+      "update_frames_per_60Hz_second": 56.599,
+      "max_observed_update_gap_frames": 8,
+      "p99_vblank_lag": 2,
+      "max_vblank_lag": 8,
+      "endpoint_reached": true,
+      "last_camera": 1280,
+      "scope": "read-only last_vblank change observations at 60Hz; same physical-controller/camera-feedback schedule; no debug writes; paused/hit-stop simulation ticks are not an FPS measure"
+    }
+  },
+  "tolerance": "At most 1% fewer observed render-update frames (scheduler jitter envelope); actual values reported, not assumed equal",
+  "scope": "Fresh production HLE A/B, 3300 samples each. This is emulator update cadence, not a hardware GPU timing claim.",
+  "observed_update_delta": 2,
+  "within_baseline_cadence": true
+}

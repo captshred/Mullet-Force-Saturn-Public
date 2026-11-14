@@ -1,0 +1,9 @@
+{
+  "baseline": "approved hotel production recording",
+  "candidate": "complete foreground and combined heap",
+  "common_Level2_ticks": 555,
+  "state_mismatches": [],
+  "common_Level2_images": 545,
+  "image_mismatches": [],
+  "scope": "recorded native production HLE runs aligned by live Level2 tick; physical X skip; source and decode pool released before stage2; no RAM writes"
+}
