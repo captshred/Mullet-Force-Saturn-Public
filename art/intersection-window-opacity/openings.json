@@ -1,0 +1,142 @@
+{
+  "baseline": "e270d2dd8461475185be6eac503ce0c0f874974b",
+  "opaque_index": 224,
+  "bounds": "native extension-local half-open rectangles; only transparent pixels within these jamb-bounded openings are changed",
+  "openings": [
+    {
+      "name": "left-1",
+      "box": [
+        243,
+        30,
+        245,
+        49
+      ]
+    },
+    {
+      "name": "left-2",
+      "box": [
+        247,
+        37,
+        249,
+        53
+      ]
+    },
+    {
+      "name": "left-3",
+      "box": [
+        251,
+        42,
+        253,
+        56
+      ]
+    },
+    {
+      "name": "left-4",
+      "box": [
+        254,
+        46,
+        256,
+        56
+      ]
+    },
+    {
+      "name": "left-5",
+      "box": [
+        259,
+        47,
+        260,
+        56
+      ]
+    },
+    {
+      "name": "left-6",
+      "box": [
+        263,
+        50,
+        264,
+        56
+      ]
+    },
+    {
+      "name": "left-7",
+      "box": [
+        268,
+        52,
+        269,
+        56
+      ]
+    },
+    {
+      "name": "left-8",
+      "box": [
+        272,
+        54,
+        273,
+        56
+      ]
+    },
+    {
+      "name": "right-1",
+      "box": [
+        408,
+        15,
+        411,
+        30
+      ]
+    },
+    {
+      "name": "right-2",
+      "box": [
+        400,
+        22,
+        403,
+        36
+      ]
+    },
+    {
+      "name": "right-3",
+      "box": [
+        392,
+        29,
+        394,
+        42
+      ]
+    },
+    {
+      "name": "right-4",
+      "box": [
+        384,
+        35,
+        388,
+        45
+      ]
+    },
+    {
+      "name": "right-5",
+      "box": [
+        378,
+        41,
+        381,
+        53
+      ]
+    },
+    {
+      "name": "right-6",
+      "box": [
+        372,
+        47,
+        374,
+        56
+      ]
+    },
+    {
+      "name": "right-7",
+      "box": [
+        368,
+        51,
+        370,
+        56
+      ]
+    }
+  ]
+}
