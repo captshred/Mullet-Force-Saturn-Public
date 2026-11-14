@@ -312,7 +312,7 @@ static int size_matches(int id,int expected)
     Sint32 sector=0,count=0,last=0;
     if(!file)return 0;
     GFS_GetFileSize(file,&sector,&count,&last);GFS_Close(file);
-    if(sector<=0 || count<=0 || last<=0 || last>sector || count>expected/sector+1)return 0;
+    if(sector<=0 || count<=0 || count>expected/sector+1)return 0;
     return (count-1)*sector+last==expected;
 }
 static int read_exact(const char *name,void *dst,int size,int code)

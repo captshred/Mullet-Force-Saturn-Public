@@ -8,8 +8,8 @@
   "retained_original_visible_tiles": 3089,
   "new_tiles": 2280,
   "raw_source_bytes": 343616,
-  "packed_source_bytes": 225964,
-  "packed_data_bytes": 225961,
+  "packed_source_bytes": 225892,
+  "packed_data_bytes": 225890,
   "offset_bytes": 2692,
   "codec": "block512-LZ512-Huffman",
   "huffman_nodes": 312,
@@ -29,16 +29,16 @@
   "decode_cache_metadata_bytes": 796,
   "palette_sha256": "3f150ba770e16ef319909d82034afdff52c41279ab65cd23be5562c38f0e6597",
   "original_pixel_sha256": "f870f3f01b0d35c9df1aa2dc054ee7c8bbfc17db3622680dc669d0bc09eccfcc",
-  "extension_sha256": "92d8051733abb1e2901df04b36171495045ce3c8f57fc8588d3d56cea992806c",
+  "extension_sha256": "1a04cce12a8283eeecf29d8b650676dbf8aea9cf22f131f0488a215f13b030df",
   "sha256": {
-    "IXPIX.BIN": "b958339e35b5fb3e660cef908b944f76122d01a7acd5129391099c501c6dcf21",
-    "IXPACK.BIN": "5a4515af0bb7adda91608d5bdbe1f251196932090440621a208b2c94be0fc90a",
-    "IXOFF.BIN": "133507c690a845dd524645fb4d52a32e4faf3d44b4e455100b5630a50729ae05",
+    "IXPIX.BIN": "d492f39af03b59caeef65040a4222b9fc605ee5bfe5037b6842f8f6db91e2439",
+    "IXPACK.BIN": "d27d87d20d6c0a38d2fe340371d7c9b72dda607d3bb89f6f60ac57327a58adf3",
+    "IXOFF.BIN": "c47e7bb40be1cb0372a34a0981be9c4de41adc198f93d11dd984b2568eb7d7f8",
     "IXMAP.BIN": "1116204ee099d094c972b27b0dfef11015e6e969d42a8ab18ea7940f496ae064"
   },
   "static_CPU_bytes": 34414,
   "packed_source_storage": "existing-fixed-Jo-heap",
-  "packed_heap_storage_bytes": 225968,
-  "background_heap_bytes": 294276,
+  "packed_heap_storage_bytes": 225896,
+  "background_heap_bytes": 294204,
   "heap_capacity_bytes": 393216
 }
