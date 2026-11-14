@@ -4,6 +4,8 @@ from pathlib import Path
 import argparse,hashlib,io,json,subprocess,tarfile,tempfile
 R=Path(__file__).resolve().parents[1];BASE='8d85905eb12421cfe356b994ebab43893680e1b1';A=R/'art/intersection-hotel-detail';O=R/'assets/level1-intersection'
 p=argparse.ArgumentParser();p.add_argument('--disc',action='store_true');p.add_argument('--test',action='store_true');a=p.parse_args()
+if subprocess.run(['git','cat-file','-e',BASE+'^{commit}'],cwd=R,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL).returncode:
+ subprocess.run(['git','fetch','--no-tags','--depth=1','origin',BASE],cwd=R,check=True)
 proof=json.loads((A/'proof.json').read_text());old=(A/'before.bin').read_bytes();new=(O/'EXTPIX.BIN').read_bytes();mask=(A/'mask.bin').read_bytes()
 assert len(old)==len(new)==len(mask)==640*240
 assert proof['baseline']==BASE and proof['outside_changes']==0
