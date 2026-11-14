@@ -1,0 +1,25 @@
+{
+  "cpu_cache_address": "0x60828bc",
+  "cpu_cache_allocator_block_bytes": 68312,
+  "cpu_cache_requested_bytes": 68304,
+  "max_camera": 1600,
+  "max_checkpoint": 1280,
+  "last_camera": 1280,
+  "max_enemies": 3,
+  "capture_frame": 2500,
+  "capture_camera": 1417,
+  "capture_enemy_classes": [
+    0,
+    0,
+    2
+  ],
+  "asset_errors": [
+    0
+  ],
+  "parallax_errors": [
+    0
+  ],
+  "camera_max_step": 9,
+  "scope": "production native disc; fresh unmodified Yabause HLE core; physical two-player controller input only; read-only camera feedback chooses a 1100-tick combat stop then endpoint/reverse; no RAM writes, healing, teleport or save-state loading; hardware approval pending",
+  "native_art_source": "63ff0ecf5398b991bace6a081a58dae683425f77"
+}

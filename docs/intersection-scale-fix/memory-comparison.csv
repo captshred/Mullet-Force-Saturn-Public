@@ -1,0 +1,14 @@
+resource,phase3a,scale_fix,delta
+Source tiles,5328,5362,34
+Packed CPU payload bytes,207704,200416,-7288
+Static source/tables bytes,242006,234823,-7183
+CPU cache payload bytes,68284,68304,20
+CPU cache allocator bytes,68292,68312,20
+VDP2 resident tiles,1664,1664,0
+VDP2 resident cell bytes,106496,106496,0
+VDP2 ring bytes,16384,16384,0
+Total VDP2 reserved bytes,434176,434176,0
+VDP1 texture bytes,371072,371072,0
+VDP1 definitions,177,177,0
+Protected sprite reserve bytes,49152,49152,0
+SCSP high-water bytes,485812,485812,0

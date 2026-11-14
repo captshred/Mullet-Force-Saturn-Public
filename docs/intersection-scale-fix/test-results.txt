@@ -1,0 +1,26 @@
+Native stage-default: PASS
+make check: PASS
+make test: PASS
+Repeated cold starts / Level2: PASS
+
+PASS art-only scope: all runtime code/camera/AI/input/audio/Level2/palette and approved receding street unchanged; all foreground facade pixels opaque
+PASS 1920px lossless source/decoder/cache: 5328 tiles, every camera0..1600 both ways, prior scan-out pinned, ring wraps, all original tiles/pixels, transparent skyline mask, guarded VRAM tails, cold resets/jumps/corrupt streams; peak 30 uploads <=1920B per update
+PASS solo 1920px traversal, endpoint1600/checkpoint1280 backstop, smooth camera/tether, offscreen spawns, max2, class schedule intact, retirement/no KO, join/leave
+PASS coop 1920px traversal, endpoint1600/checkpoint1280 backstop, smooth camera/tether, offscreen spawns, max3, class schedule intact, retirement/no KO, join/leave
+PASS camera 0: solo max 2, coop max 3, join/leave, all slots CP/Ricky fight/KO/retire
+PASS camera 320: solo max 2, coop max 3, join/leave, all slots CP/Ricky fight/KO/retire
+PASS camera 640: solo max 2, coop max 3, join/leave, all slots CP/Ricky fight/KO/retire
+PASS camera 960: solo max 2, coop max 3, join/leave, all slots CP/Ricky fight/KO/retire
+PASS camera 1280: solo max 2, coop max 3, join/leave, all slots CP/Ricky fight/KO/retire
+PASS camera 1600: solo max 2, coop max 3, join/leave, all slots CP/Ricky fight/KO/retire
+PASS jump cancel: all startup/active/recovery ticks, both actors, moving, hit/miss, held B, buffered A, hit-stop, special/hurt/death guards; mf_game 980 bytes
+PASS bat 3HP/single hit/two-hit KO; flame contact interrupt/release/cadence/death; all classes, both slots and players
+PASS charge through hits at 20/45/59, threshold while hurt, visible-volume damage, release, repeated hits, independent ports, death/disconnect/pause/stage/air cancellation, single ignition and active-fire interruption
+PASS Ricky chain/punch, P1/P2, lane/height/facing misses, single-hit, interrupt, all player attacks, flame, diagonal/axis pursuit, 40 KOs, class schedule
+PASS jump-chain P1/P2/both facings/checkpoints, 12/24/5/18 timing, visible reach, 1HP single-hit latches, lane/height/invulnerability/facing misses, captured trajectory, counterplay, flame/release/death/reset, cooldown and variety
+{"seeds":4,"ticks_per_seed":60000,"simulated_minutes":66.67,"punch":578,"standing_chain":537,"jump_chain":314,"ricky_slot_ticks_by_state":[4354,869,76609,22692,10827,34882,16870,9743],"method":"normal two-player patrol/attack inputs, real health/recovery and original enemy mix; no NPC forcing"}
+PASS combo: both players/facings, buffered jab/jab/cross/next-jab intervals12/12/16,28-tick cross,unchanged6..10 active/one damage/SFX,45-tick timeout,held rejection,independent players,damage/death/jump/bat/torch resets,pause freeze
+PASS bat command buffer: both players/facings, 1..5 punches then FF+A, earliest13/17 transition, no punch cancel/dash boost/extra jab/double attack/spam; FF without A and cancellation guards
+PASS current production renderer: 144 mixed three-enemy/bat/flame/impact/leap fixtures, max 45 sprite draws; shared residency unchanged
+PASS actual jump renderer: both slots/facings, launch/air/landing, warm flash palettes, fixed anchor geometry and shadow elevation
+PASS Fire/Hit resources: exact mono import, preserved Fire/Flame/music/Explosion parameters and isolated Hit allocation, frozen Fire/Explosion schedulers and readiness; native allocator selects free records for channel8 Hit separately from Fire, 29-principal/32 physical budget
