@@ -11,10 +11,12 @@ static int live_ready,live_error;
 /* Load-time CPU source, fixed 1664-tile A0 residency. Neither SDK-owned bank
    nor the existing NBG2 skyline allocation is borrowed for facade graphics. */
 static unsigned char world_chunks[MF_INTERSECTION_MAP_BYTES+4];
-static unsigned char world_packed[MF_INTERSECTION_PACK_BYTES+4] __attribute__((aligned(4)));
+static unsigned char *world_packed; /* Owned heap base; compressed bytes stay resident. */
 static unsigned char world_offsets[MF_INTERSECTION_OFFSET_BYTES+4] __attribute__((aligned(4)));
 static unsigned char world_decoded[512];
 #define MF_WORLD_DECODE_CACHE 128
+#define MF_WORLD_PACK_STORAGE ((MF_INTERSECTION_PACK_BYTES+4u+3u)&~3u)
+#define MF_WORLD_BACKGROUND_HEAP (MF_WORLD_PACK_STORAGE+MF_WORLD_DECODE_HEAP)
 #define MF_WORLD_DECODE_HEAP (MF_WORLD_DECODE_CACHE*512+MF_INTERSECTION_BLOCKS*4+(MF_INTERSECTION_BLOCKS+7)/8)
 static unsigned char *world_block_cache;
 static short world_block_tag[MF_WORLD_DECODE_CACHE];
@@ -24,6 +26,31 @@ static unsigned short *world_prefetch_queue;
 static unsigned char *world_prefetch_queued;
 static unsigned world_prefetch_count,world_prefetch_at;
 static int world_decoded_group=-1;
+static void world_release(void) {
+    if(world_packed)jo_free(world_packed);
+    world_packed=world_block_cache=JO_NULL;
+    world_block_index=JO_NULL;world_prefetch_queue=JO_NULL;world_prefetch_queued=JO_NULL;
+    world_decoded_group=-1;
+}
+static int world_pack_load(void) {
+    int id=GFS_NameToId((Sint8 *)"IXPACK.BIN"),length=-1;
+    GfsHn file;Sint32 sector=0,count=0,last=0;
+    if(id<0 || !(file=GFS_Open(id)))return 0;
+    GFS_GetFileSize(file,&sector,&count,&last);GFS_Close(file);
+    if(sector<=0 || count<=0 || last<=0 || last>sector || count>MF_INTERSECTION_PACK_BYTES/(unsigned)sector+1 ||
+       (unsigned)((count-1)*sector+last)!=MF_INTERSECTION_PACK_BYTES)return 0;
+    world_release();
+    world_packed=jo_malloc_with_behaviour(MF_WORLD_BACKGROUND_HEAP,JO_MALLOC_TRY_REUSE_BLOCK);
+    if(!world_packed)return 0;
+    /* Existing fixed heap only. The whole owner block, not just the decode
+       suffix, must fit below the pinned SDK sort/work boundary. */
+    if((unsigned long)world_packed+MF_WORLD_BACKGROUND_HEAP>0x060c0000u)return 0;
+    world_block_cache=world_packed+MF_WORLD_PACK_STORAGE;
+    if(!jo_fs_read_file_ptr("IXPACK.BIN",world_packed,&length) ||
+       length!=(int)MF_INTERSECTION_PACK_BYTES)return 0;
+    return 1;
+}
+
 /* Independently bounded 512-byte blocks (eight source tiles). No gameplay
    filesystem calls, heap work, or framebuffer-dependent decompression. */
 static unsigned world_offset(unsigned group) {
@@ -204,7 +231,7 @@ int mf_parallax_load(void)
     slScrWindow1(1,1,319,55);slScrWindowModeNbg2(win1_IN);
     if(slScrAutoDisp(NBG0ON|NBG1ON|NBG2ON)<0)goto failed;
 #if MF_LEVEL1_WORLD_FLOW
-    if(!live_copy("IXPACK.BIN",world_packed,MF_INTERSECTION_PACK_BYTES) ||
+    if(!world_pack_load() ||
        !live_copy("IXOFF.BIN",world_offsets,MF_INTERSECTION_OFFSET_BYTES) ||
        !live_copy("IXMAP.BIN",world_chunks,MF_INTERSECTION_MAP_BYTES))goto failed;
     {unsigned i,j;
@@ -213,8 +240,6 @@ int mf_parallax_load(void)
      for(i=0;i<MF_INTERSECTION_BLOCKS;i++)if(!world_decode(i))goto failed;
      for(i=0;i<MF_INTERSECTION_MAP_BYTES;i+=2)
         if(((unsigned)(world_chunks[i]<<8)|world_chunks[i+1])>=MF_INTERSECTION_TILES)goto failed;
-     if(world_block_cache)jo_free(world_block_cache);
-     world_block_cache=jo_malloc_with_behaviour(MF_WORLD_DECODE_HEAP,JO_MALLOC_TRY_REUSE_BLOCK);
      if(!world_block_cache)goto failed;
      /* The pinned SGL sort area starts at 0x060c0000; never place this new
         retained heap allocation inside any SDK command/work reservation. */
@@ -231,7 +256,7 @@ int mf_parallax_load(void)
     live_ready=1;slTVOn();return 1;
 failed:
 #if MF_LEVEL1_WORLD_FLOW
-    if(world_block_cache){jo_free(world_block_cache);world_block_cache=JO_NULL;}
+    world_release();
 #endif
     live_error=860;slTVOn();return 0;
 }
@@ -253,7 +278,7 @@ int mf_parallax_active(void){return 0;}
 int mf_parallax_enter(void){return 0;}
 void mf_parallax_leave(void){
 #if MF_LEVEL1_WORLD_FLOW
-    if(world_block_cache){jo_free(world_block_cache);world_block_cache=JO_NULL;}
+    world_release();
     live_ready=0;
 #endif
 }
@@ -287,7 +312,7 @@ static int size_matches(int id,int expected)
     Sint32 sector=0,count=0,last=0;
     if(!file)return 0;
     GFS_GetFileSize(file,&sector,&count,&last);GFS_Close(file);
-    if(sector<=0 || count<=0 || count>expected/sector+1)return 0;
+    if(sector<=0 || count<=0 || last<=0 || last>sector || count>expected/sector+1)return 0;
     return (count-1)*sector+last==expected;
 }
 static int read_exact(const char *name,void *dst,int size,int code)

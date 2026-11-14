@@ -8,10 +8,12 @@ unsigned char street_a0[131072],street_b0[131072];
 static unsigned char panorama[1920*240];
 static unsigned uploads,peak;
 static unsigned char block_heap[MF_WORLD_DECODE_HEAP];
+static unsigned char packed_heap[MF_INTERSECTION_PACK_BYTES+4];
 static void file(const char *path,void *dst,unsigned bytes) {
  FILE *f=fopen(path,"rb");assert(f && fread(dst,1,bytes,f)==bytes && fgetc(f)==EOF);fclose(f);
 }
 static void load(void) {
+ world_packed=packed_heap;
  file("assets/level1-intersection/IXPACK.BIN",world_packed,MF_INTERSECTION_PACK_BYTES);
  file("assets/level1-intersection/IXOFF.BIN",world_offsets,MF_INTERSECTION_OFFSET_BYTES);
  file("assets/level1-intersection/IXMAP.BIN",world_chunks,MF_INTERSECTION_MAP_BYTES);
