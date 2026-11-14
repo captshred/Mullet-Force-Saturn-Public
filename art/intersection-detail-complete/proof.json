@@ -1,0 +1,14 @@
+{
+  "baseline": "89b0332de1bd2c4e84e9f086cd0e078169bd8103",
+  "before_sha256": "1d49e224cd4150ba4b5db735a480d279090b0580a5f74ba17b375bf145929a9c",
+  "after_sha256": "92d8051733abb1e2901df04b36171495045ce3c8f57fc8588d3d56cea992806c",
+  "mask_sha256": "69bcfe4ea0ae65cab1a42f4e8a587c738c15d7d97464ee24bd0b914ebdc8e5f9",
+  "changed_pixels": 45250,
+  "outside_mask_changes": 0,
+  "hotel_changes": 0,
+  "scope": "All remaining coarse foreground residential/DELI/shutter/RECORDS surfaces; exact hotel, outer plane edges, original1280, road/perspective/sky/lamps/crosswalk/palette frozen; candidate pending user review",
+  "source_sha256": {
+    "residential-native.png": "7e913e8545a8326be49e19c91df1c0c35435873857f8f6072c3d7f0511d34291",
+    "records-native.png": "5c32b9f2cd543f28b447bfface9c658109ca42f0ab667b7b190f8de3586bb15c"
+  }
+}
