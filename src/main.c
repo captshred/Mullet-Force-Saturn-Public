@@ -483,9 +483,12 @@ static void draw_game(void)
         mf_enemy *e=&game.enemies[j];
         engaged=e->state!=MF_ENEMY_ABSENT && e->x/256>game.camera-40 && e->x/256<game.camera+360;
         if(engaged) {
-            health_bar(16+j*208,50,80,e->hp,MF_ENEMY_MAX_HP);
-            jo_printf(2+j*26,5,"SUIT%d %d",j+1,e->hp);
-            if(e->state==MF_ENEMY_WINDUP)jo_print(10+j*26,5,"!");
+            /* Keep the approved solo layout; fit all three co-op bars inside
+               the 320px/40-column display, including after P2 disconnects. */
+            int spacing=mf_enemy_limit(&game)==3 || mf_enemy_count(&game)>2?12:26;
+            health_bar(16+j*(spacing==12?100:208),50,80,e->hp,MF_ENEMY_MAX_HP);
+            jo_printf(2+j*spacing,5,"SUIT%d %d",j+1,e->hp);
+            if(e->state==MF_ENEMY_WINDUP)jo_print(10+j*spacing,5,"!");
         }
     }
 #if MF_LEVEL1_STAGE_CLEAR

@@ -11,7 +11,7 @@
 #define MF_SCALE 256
 #define MF_DRUMS 3
 #define MF_PLAYERS 2
-#define MF_ENEMIES 2
+#define MF_ENEMIES 3 /* Actor capacity; population is 2 solo / 3 co-op. */
 #define MF_BUCK_FRAMES 15
 #define MF_BUCK_ANCHOR_Y 92
 #define MF_ENEMY_FRAMES 12
@@ -100,6 +100,8 @@ typedef struct {
     mf_ricky_jump ricky_jump[MF_ENEMIES]; /* Appended: preserve existing ABI prefix. */
 #endif
 } mf_game;
+int mf_enemy_count(const mf_game *g);
+int mf_enemy_limit(const mf_game *g);
 void mf_game_init(mf_game *g);
 void mf_game_step(mf_game *g,unsigned held,unsigned pressed);
 void mf_game_step_coop(mf_game *g,const unsigned held[2],const unsigned pressed[2]);
