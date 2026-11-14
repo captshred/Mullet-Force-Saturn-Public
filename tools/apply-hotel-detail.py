@@ -21,9 +21,9 @@ proof=dict(baseline='8d85905eb12421cfe356b994ebab43893680e1b1',region=[416,0,536
 colors=(rgb*255//31).astype(np.uint8);before=Image.fromarray(colors[np.frombuffer(old,np.uint8).reshape(240,640)]);after=Image.fromarray(colors[np.frombuffer(new,np.uint8).reshape(240,640)])
 before.save(A/'extension-before.png');after.save(A/'extension-after.png')
 from PIL import ImageDraw
-canvas=Image.new('RGB',(1000,800),(22,28,35));d=ImageDraw.Draw(canvas)
+canvas=Image.new('RGB',(1020,900),(22,28,35));d=ImageDraw.Draw(canvas)
 for col,q in enumerate((before,after)):
  crop=q.crop((416,0,536,152));x=col*500+12;d.text((x,8),('Approved 8d85905','Hotel detail candidate')[col],fill='white');canvas.paste(crop,(x,30));canvas.paste(crop.resize((360,456),Image.Resampling.NEAREST),(x+130,30))
- canvas.paste(q.crop((400,36,552,152)).resize((456,348),Image.Resampling.NEAREST),(col*500+12,444))
+ canvas.paste(q.crop((400,36,552,152)).resize((456,348),Image.Resampling.NEAREST),(col*500+12,530))
 canvas.save(R/'docs/intersection-hotel-detail/before-after.png');after.save(R/'docs/intersection-hotel-detail/intersection-after.png')
 print(json.dumps(proof,indent=2))
