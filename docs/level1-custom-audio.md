@@ -107,3 +107,19 @@ maximum gameplay SFX stress, or provide human listening/real-Saturn approval.
 See `docs/level1-custom-emulator.json`. Reproduce with
 `bash tools/run-level1-audio-emulator.sh` after building. Private authoring media
 are not needed. Captured runtime PCM/slot traces remain in ignored `build/`.
+
+## Playtest download
+
+`downloads/mullet-force-level1-custom-audio.zip` contains matching BIN/CUE,
+checksums, build identity, licenses and the audio review/emulator report. The
+executable was compiled from source commit
+`a0982c738f78ac7a00bdbd248c1d5ebe299b6971`; the subsequent packaging commit changes
+only delivery/validation documentation and ZIP checking. It is a locally built
+candidate: this environment could push the development branch but its network
+policy blocked the GitHub Actions API, so no Actions run is claimed.
+
+Local `make check` and `make test` passed, including the new five-case audio suite
+and the archived approved gameplay/graphics/Level2 regression suites. All1747
+unmodified baseline files are hash-locked. Source drum timing/velocity and all16
+original authoring-file bytes were separately checked against the supplied assets.
+Keep BIN/CUE together and load the CUE. Owner listening approval is pending.

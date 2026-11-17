@@ -1,18 +1,27 @@
 #!/usr/bin/env python3
 """Validate this scoped Level1 upgrade and run unmodified approved-baseline tests."""
 from pathlib import Path
-import argparse,hashlib,json,struct,subprocess,tempfile,tarfile,io,re
+import argparse,hashlib,json,struct,subprocess,tempfile,tarfile,io,re,zipfile
 from level1_audio import BASE,peak,digest
 import seq
 R=Path(__file__).resolve().parents[1]
 ALLOWED={'Makefile','src/music_data.h','assets/cd/STAGE.SEQ','assets/cd/STAGE.TON','assets/cd/CUSTOM.MAP','assets/music/report.json'}
-ADDED={'tools/level1_audio.py','tools/import-level1-music.py','tools/validate-level1-custom-audio.py','tests/level1_custom_audio_test.py','assets/music/level1-custom-report.json','docs/level1-custom-audio.md','docs/level1-custom-audio-lock.json','tools/run-level1-audio-emulator.sh','tools/analyze-level1-emulator.py','tests/runtime/level1-audio-frontend.c','docs/level1-custom-emulator.json'}
+ADDED={'tools/level1_audio.py','tools/import-level1-music.py','tools/validate-level1-custom-audio.py','tests/level1_custom_audio_test.py','assets/music/level1-custom-report.json','docs/level1-custom-audio.md','docs/level1-custom-audio-lock.json','tools/run-level1-audio-emulator.sh','tools/analyze-level1-emulator.py','tests/runtime/level1-audio-frontend.c','docs/level1-custom-emulator.json','downloads/mullet-force-level1-custom-audio.zip'}
 
 def validate(disc=False):
  lock=json.loads((R/'docs/level1-custom-audio-lock.json').read_text());assert lock['baseline']==BASE and set(lock['changes'])==ALLOWED
  for name,entry in lock['frozen'].items():assert digest((R/name).read_bytes())==entry,name
  for name,entry in lock['changes'].items():assert digest((R/name).read_bytes())==entry['after'],name
  for name,entry in lock['added'].items():assert digest((R/name).read_bytes())==entry,name
+ archive=R/'downloads/mullet-force-level1-custom-audio.zip'
+ with zipfile.ZipFile(archive) as z:
+  assert z.testzip() is None
+  expected={'mullet-force.bin','mullet-force.cue','BUILD-INFO.txt','JO-ENGINE-LICENSE.txt','MID2SEQ-LICENSE.txt','LEVEL1-AUDIO.md','LEVEL1-EMULATOR.json','SHA256SUMS.txt'}
+  assert len(z.namelist())==len(expected) and set(z.namelist())==expected
+  for line in z.read('SHA256SUMS.txt').decode().splitlines():
+   checksum,name=line.split('  ',1);assert digest(z.read(name))==checksum
+  assert z.read('mullet-force.bin')[:16]==b'SEGA SEGASATURN '
+  assert z.read('mullet-force.cue').startswith(b'FILE "mullet-force.bin" BINARY')
  report=json.loads((R/'assets/music/level1-custom-report.json').read_text());h=(R/'src/music_data.h').read_text();constants={k:int(v,0) for k,v in re.findall(r'#define (MF_\w+) (0x[\da-f]+|\d+)\n',h)}
  decoded=seq.decode((R/'assets/cd/STAGE.SEQ').read_bytes());assert decoded['ppqn']==480 and decoded['end']==279840 and decoded['loops']==[0,279840] and decoded['tempo_loop_offset']==8
  assert decoded['tempos']==[(279840,365854)]

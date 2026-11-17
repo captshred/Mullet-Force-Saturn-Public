@@ -27,16 +27,17 @@
     }
   },
   "added": {
+    "docs/level1-custom-audio.md": "435cf33c1559a7d4d687f6fee9fd2afe74ef802742963507f45e53e4380b2348",
     "tools/run-level1-audio-emulator.sh": "5c137d1b464a04fd1bd5e7658f2dd15bb8743dfd0011fbc0eba467a0c6bb0ee9",
-    "tools/import-level1-music.py": "f61398eab704f64cfbed7dc397fdfe10846cb19512bf925c24a66852636e3233",
-    "tools/level1_audio.py": "2be3299203ab16ea6ee459081be0a5af84594407308413e588e3a34b41f80555",
     "assets/music/level1-custom-report.json": "7d384e02d895b9821adae224d1bf92e45856b51c870cad6d9f6651a4ea50192b",
-    "docs/level1-custom-audio.md": "c6b461ed204538d0361943e2ebfaf722f18c2847fde96b95ec83f49350c45d46",
-    "docs/level1-custom-emulator.json": "98a2df4aef012ef2babd28c5dd06fa348ce7ee46bc9a8eb32232e6a72540781e",
-    "tools/validate-level1-custom-audio.py": "989e2aaa11d06ce2434ccb5908bb12dc4dc434aab689ba1487d620f46a7993a7",
+    "tools/level1_audio.py": "2be3299203ab16ea6ee459081be0a5af84594407308413e588e3a34b41f80555",
+    "tools/validate-level1-custom-audio.py": "c2b73b61e1762f12e89b15645171948f8ad818c8a0d03e5a9010e75fe5fdf463",
     "tests/level1_custom_audio_test.py": "61238d66436cc3cf6edfa4c3e3e34a84e248ba378b95164ff55a4e32637879fd",
+    "downloads/mullet-force-level1-custom-audio.zip": "1e7734949be557e584762de5080244be94b18f70a35a97ac1eda3fa4d7c4a43b",
     "tests/runtime/level1-audio-frontend.c": "4f8b92e84106a156b793a5070777d6ff7a1a01f159f707cd6cc55a1c578dd0e1",
-    "tools/analyze-level1-emulator.py": "1efbe214671aa138c0b2d9bdba690a7b4a389a61af8cc59ce8ea58d5b49e2ea9"
+    "tools/import-level1-music.py": "f61398eab704f64cfbed7dc397fdfe10846cb19512bf925c24a66852636e3233",
+    "tools/analyze-level1-emulator.py": "1efbe214671aa138c0b2d9bdba690a7b4a389a61af8cc59ce8ea58d5b49e2ea9",
+    "docs/level1-custom-emulator.json": "98a2df4aef012ef2babd28c5dd06fa348ce7ee46bc9a8eb32232e6a72540781e"
   },
   "frozen": {
     ".dockerignore": "4290dc594a0ad3999eae9903e1460f8d75f84c21a7aae59c7123acf1ff4113ef",
