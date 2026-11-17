@@ -17,6 +17,7 @@ def pcm(b,l):
  a=(l[3]&15)*65536+int.from_bytes(l[4:6],'big');n=int.from_bytes(l[8:10],'big')*(1 if l[3]&16 else 2);return b[a:a+n+4]
 ALLOWED={'Makefile','assets/wingsuit/WDEATH.MAP','assets/wingsuit/WDEATH.SEQ','assets/wingsuit/WDEATH.TON','assets/wingsuit/WFIRE.MAP','assets/wingsuit/WMUSIC.MAP','assets/wingsuit/WMUSIC.SEQ','assets/wingsuit/WMUSIC.TON','assets/wingsuit/manifest.json','src/wingsuit_audio.c','src/wingsuit_audio_data.h'}
 def validate(disc):
+ ensure_base()
  lock=json.loads((R/'docs/wristbreaker-refinement-lock.json').read_text());assert lock['baseline']==BASE and set(lock['changed'])==ALLOWED
  for n,h in lock['frozen'].items():assert sha((R/n).read_bytes())==h,n
  for n,h in lock['changed'].items():assert sha((R/n).read_bytes())==h,n

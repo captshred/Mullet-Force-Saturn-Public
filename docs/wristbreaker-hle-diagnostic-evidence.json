@@ -1,0 +1,54 @@
+{
+  "method": "Read-only existing native KEYON/KEYOFF traces and per-frame slot snapshots; no emulator or game changes",
+  "native_evidence": {
+    "capture-before": {
+      "active_cross_owner_reassignments": 0,
+      "explosion_noteoff_age_and_pc_counts": {
+        "(49, '0x3d26')": 12
+      }
+    },
+    "capture-after": {
+      "active_cross_owner_reassignments": 0,
+      "explosion_noteoff_age_and_pc_counts": {
+        "(49, '0x3d26')": 12
+      }
+    },
+    "capture-stress-before": {
+      "active_cross_owner_reassignments": 0,
+      "explosion_noteoff_age_and_pc_counts": {
+        "(49, '0x3d26')": 889,
+        "(0, '0x3d26')": 8,
+        "(19, '0x319e')": 1,
+        "(24, '0x319e')": 1,
+        "(14, '0x319e')": 1,
+        "(9, '0x319e')": 1
+      }
+    },
+    "capture-stress": {
+      "active_cross_owner_reassignments": 0,
+      "explosion_noteoff_age_and_pc_counts": {
+        "(49, '0x3d26')": 895,
+        "(0, '0x3d26')": 12
+      }
+    },
+    "final-source-smoke": {
+      "active_cross_owner_reassignments": 0,
+      "explosion_noteoff_age_and_pc_counts": {
+        "(49, '0x3d26')": 24
+      }
+    }
+  },
+  "cached_warning_example": {
+    "capture": "capture-after",
+    "control": 4,
+    "slot": 31,
+    "on_frame": 2718,
+    "driver_cached_eg": 8,
+    "native_phase_at_frame2722": 1881600,
+    "native_phase_at_frame2738": 7902720,
+    "native_envelope_phase": 2,
+    "normal_keyoff_frame": 2767,
+    "normal_keyoff_age": 49
+  },
+  "conclusion": "Game cached-envelope loss warnings are contradicted by continued native sample-phase advancement, unchanged ownership and full scheduled playback. Existing diagnostic code preserved. Separate deliberately saturated stress retains an inherited same-control stop/start edge; see the noteoff counts and technical report."
+}
