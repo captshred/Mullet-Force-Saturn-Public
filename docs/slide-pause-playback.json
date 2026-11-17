@@ -1,0 +1,125 @@
+{
+  "baseline": "d97b5a9e77f418d16f22e408690f038f727e1828",
+  "core": "8926b0c6c347f8c5c755911ddb0ac695420ffbf8",
+  "bios": "HLE",
+  "method": "Read-only native note/owner/PCM traces and video hashes; no emulated RAM writes",
+  "long_pause": {
+    "music_note_ons": 5722,
+    "music_note_ons_while_paused": 5375,
+    "sfx_note_ons_while_paused": 0,
+    "missing_or_reordered_music_note_ons": 0,
+    "music_noteoff_pcs_while_paused": {
+      "0x3d26": 5376
+    },
+    "mixed_peak": 17171,
+    "clipped_samples": 0,
+    "identical_paused_world_frames": 13900,
+    "complete_music_loop_during_pause": true
+  },
+  "short_pause_and_transition": {
+    "music_note_ons": 406,
+    "music_note_ons_while_paused": 66,
+    "sfx_note_ons_while_paused": 0,
+    "missing_or_reordered_music_note_ons": 0,
+    "music_noteoff_pcs_while_paused": {
+      "0x3d26": 65
+    },
+    "mixed_peak": 19611,
+    "clipped_samples": 0,
+    "level2_first_music_frame": 3348,
+    "level1_notes_after_level2_start": 0,
+    "transition_passed": true
+  },
+  "late_handoff_success": {
+    "pause-loop": false,
+    "pause-loop-repeat": false,
+    "baseline-late": false,
+    "pause-loop-baseline": true
+  },
+  "late_handoff_limitation": "E108 after a late handoff is reproduced on approved D97 without pausing and on candidate after full-loop pause; unchanged startup code. This required late scenario does NOT pass; no claim of hardware validation.",
+  "level2": {
+    "level2-after": {
+      "frames": 14000,
+      "first_music_frame": 2549,
+      "notes_per_loop": 5834,
+      "native_loop_frames": 9674,
+      "native_note_ons": 6816,
+      "complete_loops": 1,
+      "missing_or_reordered_note_ons": 0,
+      "global_forced_keyoffs_by_control": {},
+      "global_music_interruptions": 0,
+      "cross_control_music_steals": 0,
+      "normal_music_noteoffs_observed": 6809,
+      "premature_music_noteoffs_over_2_frames": 0,
+      "ordinary_one_shot_tails_cut": 0,
+      "ordinary_one_shots_finished_before_gate": 2800,
+      "peak_music_slots": 22,
+      "peak_sfx_slots": 6,
+      "peak_combined_slots": 22,
+      "mixed_peak": 20285,
+      "clipped_samples": 0,
+      "music_rms": 3509.3223156401987,
+      "music_opening_2s_rms": 2568.9336829450494,
+      "music_peak": 18136,
+      "sfx_peak": 10976,
+      "sfx_note_ons_by_control": {
+        "4": 6,
+        "5": 3,
+        "2": 29,
+        "3": 28,
+        "6": 2,
+        "7": 1,
+        "1": 2
+      }
+    },
+    "level2-stress": {
+      "frames": 11500,
+      "first_music_frame": 330,
+      "notes_per_loop": 5834,
+      "native_loop_frames": 9674,
+      "native_note_ons": 6657,
+      "complete_loops": 1,
+      "missing_or_reordered_note_ons": 0,
+      "global_forced_keyoffs_by_control": {},
+      "global_music_interruptions": 0,
+      "cross_control_music_steals": 0,
+      "normal_music_noteoffs_observed": 6651,
+      "premature_music_noteoffs_over_2_frames": 0,
+      "ordinary_one_shot_tails_cut": 0,
+      "ordinary_one_shots_finished_before_gate": 2758,
+      "peak_music_slots": 22,
+      "peak_sfx_slots": 11,
+      "peak_combined_slots": 31,
+      "mixed_peak": 29858,
+      "clipped_samples": 0,
+      "music_rms": 3520.6355945503533,
+      "music_opening_2s_rms": 2568.7023306929673,
+      "music_peak": 18089,
+      "sfx_peak": 18325,
+      "sfx_note_ons_by_control": {
+        "2": 5425,
+        "5": 228,
+        "3": 2234,
+        "6": 228,
+        "7": 228,
+        "1": 2,
+        "4": 227
+      }
+    }
+  },
+  "native_driver_sustain_explosion_pause": {
+    "music_note_ons": 5712,
+    "music_note_ons_while_paused": 5547,
+    "sfx_note_ons_while_paused": 0,
+    "missing_or_reordered_music_note_ons": 0,
+    "music_noteoff_pcs_while_paused": {
+      "0x3d26": 5547
+    },
+    "mixed_peak": 16344,
+    "clipped_samples": 0,
+    "complete_music_loop_during_pause": true,
+    "explosion_note_on_before_pause_frame": 391,
+    "pause_request_test_clock": 315
+  },
+  "e108_status": "User confirms pre-existing intermittent E108; deferred to a separate task. Recorded failures retained; no claim that E108 is fixed or all cold starts pass."
+}

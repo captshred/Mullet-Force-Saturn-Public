@@ -127,13 +127,13 @@ void mf_music_update(int started,int paused,int events,unsigned int now)
         if(SND_StartSeq(0,1,0,MF_MUSIC_PRIORITY)!=SND_RET_SET)return;
         playing=1;
     }
-    /* Hiss is stopped above. Pause/resume owns all other fixed ports 0..6. */
+    /* Hiss is stopped above. Pause/resume owns SFX ports1..6; music control0 keeps running. */
     if(paused!=paused_state || pause_target>=0) {
         if(pause_target!=paused){pause_target=paused;pause_mask=0;}
-        for(i=0;i<7;i++)if(i!=4 && !(pause_mask&(1u<<i))) {
+        for(i=1;i<7;i++)if(i!=4 && !(pause_mask&(1u<<i))) {
             if((paused?SND_PauseSeq(i):SND_ContSeq(i))==SND_RET_SET)pause_mask|=1u<<i;
         }
-        if(pause_mask!=0x6f)return;
+        if(pause_mask!=0x6e)return;
         paused_state=paused;pause_mask=0;pause_target=-1;
         /* A collision awaiting a replacement must not become a stale hit on resume. */
         if(paused)for(i=0;i<3;i++)combat[i].pending=-1;
