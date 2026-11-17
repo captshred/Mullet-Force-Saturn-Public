@@ -1,0 +1,67 @@
+{
+  "emulator": "libretro Yabause",
+  "core_commit": "8926b0c6c347f8c5c755911ddb0ac695420ffbf8",
+  "bios": "HLE",
+  "frames": 15500,
+  "first_music_frame": 1804,
+  "observed_native_music_peak": 17,
+  "observed_native_sfx_peak": 2,
+  "observed_native_total_peak": 18,
+  "observed_music_roles": {
+    "open_guitar": 21594,
+    "bass": 9504,
+    "low_tom": 408,
+    "snare": 7090,
+    "kick": 13697,
+    "crash": 4799,
+    "muted_guitar": 22371,
+    "china": 1714,
+    "open_hat": 5417,
+    "ride": 4445,
+    "mid_tom": 230,
+    "high_tom": 293
+  },
+  "first_role_frames": {
+    "open_guitar": 1804,
+    "bass": 1804,
+    "low_tom": 1889,
+    "snare": 1890,
+    "kick": 1965,
+    "crash": 1965,
+    "muted_guitar": 2029,
+    "china": 2051,
+    "open_hat": 2084,
+    "ride": 4217,
+    "mid_tom": 10800,
+    "high_tom": 11522
+  },
+  "observed_phase_wraps": {
+    "open_guitar": 6302,
+    "bass": 263
+  },
+  "pcm_peak": 8384,
+  "pcm_clipped_samples": 0,
+  "pcm_rms": 713.8585364916261,
+  "pcm_sha256": "9db41de2f40eb26d04f4dbc310593d7af96cf9e3ebc75febb91ecb79fd4ac6d8",
+  "music_receipts": 7392,
+  "limitations": [
+    "Read-only frame-sampled driver/native-SCSP observation; not complete event receipts",
+    "HLE BIOS; does not establish real-Saturn behavior or listening approval",
+    "Pause/resume and mixed two-player SFX exercised by controller inputs; no emulated RAM writes"
+  ],
+  "observed_loop_restart_frame": 14461,
+  "tested_audio_outputs": {
+    "STAGE.SEQ": {
+      "bytes": 50224,
+      "sha256": "e5c1e95398a20f4d4d67d098f6cbe7e3e95da30fcb42142c36e1801e972493f2"
+    },
+    "STAGE.TON": {
+      "bytes": 132148,
+      "sha256": "90d163dce490cedd06c973dbea1cb0cedb420d517af91b3ac97dbb5646f87a41"
+    },
+    "CUSTOM.MAP": {
+      "bytes": 56,
+      "sha256": "1eef6665fabb2d622333d892b43b017f664dda9e8435cc9a5dc5403651ed6afb"
+    }
+  }
+}
