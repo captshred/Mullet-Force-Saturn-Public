@@ -129,3 +129,22 @@ It builds the pinned read-only observer and separate native stress harness,
 captures both builds, and writes `build/LEVEL1-REFINEMENT-PLAYBACK.json`.
 Raw runtime PCM/stems and verbose traces stay under ignored `build/`.
 The delivered experimental build still requires the owner's hardware playtest.
+
+## Experimental delivery
+
+Branch: `audio/level1-mono-volume-voice-fix`.
+Executable source commit: `17445b421bcafd8d5c974d624ddc2a34e768d725`.
+Download: `downloads/mullet-force-level1-mono-volume-voice-fix.zip`.
+The later packaging commit changes delivery/validation metadata only; use the
+embedded source commit above when identifying this tested executable.
+
+Native build, `make check`, `make test`, focused audio/preservation tests and
+full-loop combat/six-port stress/transition checks pass. The committed executable's
+2300-frame smoke audio is bit-identical to the tested full capture prefix.
+The validator also passed a cold shallow-checkout parent-fetch test.
+Original private GP/MIDI/WAV files are excluded. No definitive tag is changed.
+
+This is a locally built playtest ZIP; no Actions run is claimed. To reproduce,
+use workflow from `main`, profile `stage-default`, source_ref `17445b421bcafd8d5c974d624ddc2a34e768d725`.
+The ZIP includes BIN/CUE, checksums, licenses, results and allocation traces.
+Owner hardware/listening approval remains required for this experimental build.
