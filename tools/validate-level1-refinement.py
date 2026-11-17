@@ -1,27 +1,25 @@
 #!/usr/bin/env python3
 """Exact refinement scope, unchanged source performances/PCM/SFX gain/Level2."""
 from pathlib import Path
-import subprocess,hashlib,json,struct,argparse,tarfile,tempfile,io,re,zipfile
+import subprocess,hashlib,json,struct,argparse,tarfile,tempfile,io,re
 from level1_refinement import BASE,read,signature,peak,curve
 R=Path(__file__).resolve().parents[1]
 ALLOWED={'Makefile','src/music_data.h','assets/cd/STAGE.SEQ','assets/cd/STAGE.TON','assets/cd/CUSTOM.MAP','assets/cd/FX.SEQ','assets/music/report.json'}
-ADDED={'tools/level1_refinement.py','tools/refine-level1-audio.py','tools/validate-level1-refinement.py','tests/level1_refinement_test.py','docs/level1-refinement.md','docs/level1-refinement-lock.json','assets/music/level1-refinement-report.json','tests/level1_refinement/driver-stress.c','tests/level1_refinement/frontend.c','tools/prepare-level1-refinement-probe.py','tools/build-level1-driver-stress.py','tools/run-level1-refinement-playback.sh','tools/analyze-level1-refinement.py','docs/level1-refinement-playback.json','docs/level1-refinement-traces/before-events.csv.gz','docs/level1-refinement-traces/after-events.csv.gz','docs/level1-refinement-traces/stress-events.csv.gz','downloads/mullet-force-level1-mono-volume-voice-fix.zip'}
+ADDED={'tools/level1_refinement.py','tools/refine-level1-audio.py','tools/validate-level1-refinement.py','tests/level1_refinement_test.py','docs/level1-refinement.md','docs/level1-refinement-lock.json','assets/music/level1-refinement-report.json','tests/level1_refinement/driver-stress.c','tests/level1_refinement/frontend.c','tools/prepare-level1-refinement-probe.py','tools/build-level1-driver-stress.py','tools/run-level1-refinement-playback.sh','tools/analyze-level1-refinement.py','docs/level1-refinement-playback.json','docs/level1-refinement-traces/before-events.csv.gz','docs/level1-refinement-traces/after-events.csv.gz','docs/level1-refinement-traces/stress-events.csv.gz'}
 def sha(b):return hashlib.sha256(b).hexdigest()
-def original(n):return subprocess.check_output(['git','show',BASE+':'+n],cwd=R)
+_baseline_ready=False
+def original(n):
+ global _baseline_ready
+ if not _baseline_ready:
+  if subprocess.run(['git','cat-file','-e',BASE+'^{commit}'],cwd=R,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL).returncode:
+   subprocess.run(['git','fetch','--no-tags','--depth=1','origin',BASE],cwd=R,check=True)
+  _baseline_ready=True
+ return subprocess.check_output(['git','show',BASE+':'+n],cwd=R)
 def validate(disc=False):
  lock=json.loads((R/'docs/level1-refinement-lock.json').read_text());assert lock['baseline']==BASE and set(lock['changes'])==ALLOWED
  for n,h in lock['frozen'].items():assert sha((R/n).read_bytes())==h,n
  for n,h in lock['changes'].items():assert sha((R/n).read_bytes())==h['after'],n
  for n,h in lock['added'].items():assert sha((R/n).read_bytes())==h,n
- with zipfile.ZipFile(R/'downloads/mullet-force-level1-mono-volume-voice-fix.zip') as z:
-  assert z.testzip() is None
-  expected={'mullet-force.bin','mullet-force.cue','BUILD-INFO.txt','JO-ENGINE-LICENSE.txt','MID2SEQ-LICENSE.txt','LEVEL1-REFINEMENT.md','PLAYBACK-RESULTS.json','AUDIO-RESOURCE-REPORT.json','before-events.csv.gz','after-events.csv.gz','stress-events.csv.gz','TEST-RESULTS.txt','SHA256SUMS.txt'}
-  assert len(z.namelist())==len(expected) and set(z.namelist())==expected
-  for line in z.read('SHA256SUMS.txt').decode().splitlines():
-   checksum,name=line.split('  ',1);assert sha(z.read(name))==checksum
-  assert b'Commit: c64bb5cb4d67e57fe806b4f78913767aae9d728f\n' in z.read('BUILD-INFO.txt')
-  assert z.read('mullet-force.bin')[:16]==b'SEGA SEGASATURN '
-  assert z.read('mullet-force.cue').startswith(b'FILE "mullet-force.bin" BINARY')
  oldh,old,end=read(original('assets/cd/STAGE.SEQ'));newh,new,end2=read((R/'assets/cd/STAGE.SEQ').read_bytes());assert oldh==newh and end==end2==279840
  oldnotes=[n for n in old if n['kind']=='note'];newnotes=[n for n in new if n['kind']=='note'];oldmap={signature(n):n for n in oldnotes}
  assert len(oldnotes)==6924 and len(newnotes)==4907
