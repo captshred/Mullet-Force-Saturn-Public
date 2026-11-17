@@ -532,7 +532,7 @@ static void audio_step(unsigned now,unsigned focused)
     if(!startup_done && hit_prep==2 && all_prepared && flame[0].prep==3 && flame[1].prep==3 && commands_empty()){
         /* Preserve native score on control 0. SFX preparation must never
            attenuate its gain; Flames share control 1, separate MIDI channels. */
-        if(music_prep==0 && budget && SND_SetSeqVl(0,127,0)==SND_RET_SET){--budget;music_prep=1;}
+        if(music_prep==0 && budget && SND_SetSeqVl(0,108,0)==SND_RET_SET){--budget;music_prep=1;}
         else if(music_prep==1){startup_done=1;completed();trace_sample(6);mf_ws_startup_capture.frozen=1;}
     }
     if(startup_done){

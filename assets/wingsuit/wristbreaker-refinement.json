@@ -1,0 +1,172 @@
+{
+  "baseline": "17445b421bcafd8d5c974d624ddc2a34e768d725",
+  "removed_rhythm_events": 1372,
+  "unique_right_events": 298,
+  "left_events": 1669,
+  "right_events": 1670,
+  "kept_melodic_events": 3031,
+  "drum_hits": 2803,
+  "mapping": {
+    "36": "kick",
+    "38": "snare",
+    "39": "snare",
+    "40": "snare",
+    "41": "low_tom",
+    "43": "low_tom",
+    "45": "mid_tom",
+    "47": "mid_tom",
+    "48": "high_tom",
+    "49": "crash",
+    "50": "crash",
+    "52": "china",
+    "53": "ride",
+    "55": "crash",
+    "57": "crash",
+    "59": "ride",
+    "60": "open_hat",
+    "64": "open_hat",
+    "51": "ride"
+  },
+  "drum_note_counts": {
+    "60": 86,
+    "36": 1229,
+    "38": 528,
+    "52": 73,
+    "55": 27,
+    "45": 56,
+    "43": 23,
+    "49": 4,
+    "57": 21,
+    "39": 22,
+    "48": 40,
+    "41": 10,
+    "64": 358,
+    "47": 16,
+    "50": 18,
+    "51": 96,
+    "53": 188,
+    "59": 8
+  },
+  "drum_key_aliases": {
+    "open_hat": [
+      24,
+      25,
+      26
+    ],
+    "kick": [
+      27,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35
+    ],
+    "snare": [
+      28,
+      36,
+      47,
+      48,
+      49,
+      50
+    ],
+    "china": [
+      29,
+      37,
+      39
+    ],
+    "crash": [
+      38,
+      46
+    ],
+    "mid_tom": [
+      40,
+      41,
+      42,
+      43
+    ],
+    "low_tom": [
+      44,
+      45,
+      61
+    ],
+    "high_tom": [
+      51,
+      52,
+      59,
+      60
+    ],
+    "ride": [
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      62
+    ]
+  },
+  "sound_ram_high_water": 506192,
+  "sound_ram_free": 18096,
+  "music_held_peak_before": 9,
+  "melodic_held_peak_after": 6,
+  "music_held_peak_after": 22,
+  "music_50ms_release_peak": 25,
+  "sequence_bytes": 52064,
+  "tone_bytes": 115844,
+  "music_volume": 108,
+  "original_bend_range": 6,
+  "level1_bend_range": 12,
+  "sfx_pcm_unchanged": true,
+  "level1_unchanged": true,
+  "unloaded_unused_samples": [
+    "muted_guitar",
+    "closed_hat"
+  ],
+  "one_shot_gate_allowance": "50ms plus2% beyond PCM duration; short articulations50/64 unchanged",
+  "source_midi_sha256": "414175a35308265aa7667efc72ceea861b3ae1eb417ce15b0288712c0ee8c0d1",
+  "drum_performance_sha256": "4dcc35ef4fe44db3ef81bfd6ce097253cd9118e06f27404a6d1929fc60baf0af",
+  "outputs": {
+    "assets/wingsuit/WMUSIC.SEQ": {
+      "bytes": 52064,
+      "sha256": "b1921ed64af356b4fb9a9666788d2e843679166a14f7157747b283325781f9ba"
+    },
+    "assets/wingsuit/WMUSIC.TON": {
+      "bytes": 115844,
+      "sha256": "6dddcf7032db3d1ba18a5bd6b205025135be3290c930f55b189b36429f1cf3bb"
+    },
+    "assets/wingsuit/WDEATH.TON": {
+      "bytes": 151112,
+      "sha256": "991ad592c925463bc2e0747e7f64c976507f07432ee986d7f9e7ceb3a36989e0"
+    },
+    "assets/wingsuit/WDEATH.SEQ": {
+      "bytes": 84,
+      "sha256": "3c06c536801ac5ccfc09ec3d40642d0027af291cc117f890c7374ce9eb5b1efc"
+    },
+    "assets/wingsuit/WMUSIC.MAP": {
+      "bytes": 56,
+      "sha256": "dd5921e27d39e5ef1f86d514027d878819689f281f75eba945399cd858aa6191"
+    },
+    "assets/wingsuit/WFIRE.MAP": {
+      "bytes": 64,
+      "sha256": "a305f41f1f6e8ad392605cfb8ccdb53ef235ca759b80f72453e3298acd6033e1"
+    },
+    "assets/wingsuit/WDEATH.MAP": {
+      "bytes": 40,
+      "sha256": "4023cd4344448a157f6b6a654fd9e7ca798bcdad5c4b6cad819482c19d0f9ba7"
+    },
+    "src/wingsuit_audio_data.h": {
+      "bytes": 1054,
+      "sha256": "85a73f8e2e30574427d013166e7022cd9646f0c1104bd002d866c19893438502"
+    },
+    "src/wingsuit_audio.c": {
+      "bytes": 28428,
+      "sha256": "0a920b5654d5ef7df3c47ab06cb684591952a6f917d4b574eaac77f43b34bc00"
+    },
+    "assets/wingsuit/manifest.json": {
+      "bytes": 7865,
+      "sha256": "7e99526863ba2e7bc9ae430516bd89b76b08b4618004d59c5732f48b732088b3"
+    }
+  },
+  "compiled_drum_performance_sha256": "12338e5cbe2e9fd0ef70c35b713cc85d0a903ff5fb7355838622e3c8b03c8585"
+}
