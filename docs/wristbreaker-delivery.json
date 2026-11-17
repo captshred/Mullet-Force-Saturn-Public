@@ -1,0 +1,30 @@
+{
+  "executable_source_commit": "d97b5a9e77f418d16f22e408690f038f727e1828",
+  "branch": "audio/level2-wristbreaker-full-refinement",
+  "artifact_path": "downloads/mullet-force-level2-wristbreaker-full-refinement.zip",
+  "artifact_sha256": "5933a044cc7e6293916a0c67be2bb364a2737baf63442df3170848a1a7e98131",
+  "bin_sha256": "d7c8613f17fe05bf018b2125b73fe41520f0730851ababf02f093cc463497898",
+  "source_fingerprint_sha256": "71841cfbf6be6f18a028ef0a888f11c7bebbfd91229eacc6d881eed29e8cd562",
+  "build_method": "Local native pinned compiler; no Actions run claimed",
+  "verification": {
+    "source_commit": "d97b5a9e77f418d16f22e408690f038f727e1828",
+    "branch": "audio/level2-wristbreaker-full-refinement",
+    "bin_sha256": "d7c8613f17fe05bf018b2125b73fe41520f0730851ababf02f093cc463497898",
+    "cue_sha256": "69e1d58b461af378eeec5fcc951f6a1c294f332de5abb7e684e0e643cb034b88",
+    "source_fingerprint_sha256": "71841cfbf6be6f18a028ef0a888f11c7bebbfd91229eacc6d881eed29e8cd562",
+    "smoke_frames": 7200,
+    "full_capture_prefix_frames": 6500,
+    "full_capture_prefix_pcm_bit_identical": true,
+    "whole_smoke_pcm_matches_previous_source": true,
+    "source_identity_embedded_in_bin": true,
+    "game_restart_input_frame": 6500,
+    "restart_visually_confirmed": true,
+    "cached_hle_diagnostic_warning_observed": true,
+    "inherited_overloaded_sfx_stop_start_edge_documented": true,
+    "shallow_source_validation_passed": true,
+    "hardware_approved": false
+  },
+  "baseline_tag": "the-one-level1-audio-refined-definitive",
+  "baseline_commit": "17445b421bcafd8d5c974d624ddc2a34e768d725",
+  "hardware_approved": false
+}
