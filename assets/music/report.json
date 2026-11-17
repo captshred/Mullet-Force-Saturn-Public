@@ -1,18 +1,18 @@
 {
-  "architecture": "SDDRVS 2.10 native Level1 custom PCM/SEQ/TON; private authoring, public runtime assets",
+  "architecture": "SDDRVS2.10 Level1 mono rhythm/music gain/global-SFX-panic correction; runtime PCM preserved",
   "level1_custom_report": "assets/music/level1-custom-report.json",
   "outputs": {
     "STAGE.SEQ": {
-      "bytes": 50224,
-      "sha256": "e5c1e95398a20f4d4d67d098f6cbe7e3e95da30fcb42142c36e1801e972493f2"
+      "bytes": 40128,
+      "sha256": "3186778bc3bea539a3a69234cfb4d9fb5580f504fad56f360e7cee4893c93ba3"
     },
     "STAGE.TON": {
       "bytes": 132148,
-      "sha256": "90d163dce490cedd06c973dbea1cb0cedb420d517af91b3ac97dbb5646f87a41"
+      "sha256": "b5d40d9620e370fce7c75c818b19f4f48f1d93bb7fce20a6c79cef18e8aa0c39"
     },
     "FX.SEQ": {
       "bytes": 328,
-      "sha256": "99a5a133d3db53a31aa0950bdaf5853f65effa81301914e44c2c61d3cc14bee6"
+      "sha256": "aada8a28c324994c771f35c7e44c23a6ba29d8c8c24a8e9527005816a33b21e5"
     },
     "FX.TON": {
       "bytes": 182912,
@@ -20,7 +20,7 @@
     },
     "CUSTOM.MAP": {
       "bytes": 56,
-      "sha256": "1eef6665fabb2d622333d892b43b017f664dda9e8435cc9a5dc5403651ed6afb"
+      "sha256": "1a685da7ac64a6a3d17717c1f17057317870d1582ea09f977abec016d875de53"
     }
   },
   "sound_ram_regions": [
@@ -69,20 +69,21 @@
     {
       "name": "STAGE.SEQ",
       "start": 332104,
-      "size": 50224,
-      "end": 382328
+      "size": 40128,
+      "end": 372232
     },
     {
       "name": "STAGE.TON",
-      "start": 382328,
+      "start": 372232,
       "size": 132148,
-      "end": 514476
+      "end": 504380
     }
   ],
-  "sound_ram_high_water": 514476,
-  "sound_ram_unallocated": 9812,
-  "music_held_peak": 17,
+  "sound_ram_high_water": 504380,
+  "sound_ram_unallocated": 19908,
+  "music_held_peak": 15,
   "drum_tail_cap": 8,
-  "sfx_reservation": 10,
-  "release_policy": "RR31; driver can retire released musical voices under pressure; physical audibility unverified"
+  "release_policy": "RR31; driver can retire released musical voices under pressure; physical audibility unverified",
+  "level1_refinement_report": "assets/music/level1-refinement-report.json",
+  "voice_policy": "Unchanged native allocation; scoped SFX bank selectors instead of global panic; duplicate-rhythm capacity recovered"
 }

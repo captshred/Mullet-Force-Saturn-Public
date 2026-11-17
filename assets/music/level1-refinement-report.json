@@ -1,0 +1,188 @@
+{
+  "baseline_tag": "the-one-level1-custom-audio-definitive",
+  "baseline_commit": "a0982c738f78ac7a00bdbd248c1d5ebe299b6971",
+  "source_seq_sha256": "e5c1e95398a20f4d4d67d098f6cbe7e3e95da30fcb42142c36e1801e972493f2",
+  "removed_rhythm": "redundant notes of right rhythm guitar, original pan93",
+  "retained_rhythm": "complete left rhythm guitar, original pan35, now centered64",
+  "left_notes": 2025,
+  "right_notes": 2023,
+  "removed_identical_notes": 2017,
+  "right_unique_notes_preserved": [
+    {
+      "on": 33840,
+      "off": 34080,
+      "pitch": 46,
+      "velocity": 76,
+      "program": 1
+    },
+    {
+      "on": 33840,
+      "off": 34080,
+      "pitch": 53,
+      "velocity": 76,
+      "program": 1
+    },
+    {
+      "on": 66000,
+      "off": 66480,
+      "pitch": 79,
+      "velocity": 65,
+      "program": 0
+    },
+    {
+      "on": 89760,
+      "off": 90000,
+      "pitch": 43,
+      "velocity": 76,
+      "program": 0
+    },
+    {
+      "on": 214320,
+      "off": 216480,
+      "pitch": 38,
+      "velocity": 76,
+      "program": 0
+    },
+    {
+      "on": 239880,
+      "off": 240000,
+      "pitch": 48,
+      "velocity": 65,
+      "program": 0
+    }
+  ],
+  "before_music_notes": 6924,
+  "after_music_notes": 4907,
+  "drum_notes": 1804,
+  "before_music_held_peak": 17,
+  "after_music_held_peak": 15,
+  "before_music_50ms_release_peak": 28,
+  "after_music_50ms_release_peak": 24,
+  "rhythm_held_before": 8,
+  "rhythm_held_after": 4,
+  "music_volume_before": 100,
+  "music_volume_after": 108,
+  "channel_volume_before": 112,
+  "channel_volume_after": 127,
+  "instrument_tl_changes": [
+    {
+      "program": 0,
+      "offset": 95,
+      "before": 8,
+      "after": 0,
+      "boost_db": 3.0
+    },
+    {
+      "program": 1,
+      "offset": 131,
+      "before": 9,
+      "after": 0,
+      "boost_db": 3.375
+    },
+    {
+      "program": 2,
+      "offset": 167,
+      "before": 3,
+      "after": 0,
+      "boost_db": 1.125
+    },
+    {
+      "program": 3,
+      "offset": 203,
+      "before": 8,
+      "after": 2,
+      "boost_db": 2.25
+    },
+    {
+      "program": 4,
+      "offset": 239,
+      "before": 10,
+      "after": 4,
+      "boost_db": 2.25
+    },
+    {
+      "program": 5,
+      "offset": 275,
+      "before": 22,
+      "after": 14,
+      "boost_db": 3.0
+    },
+    {
+      "program": 6,
+      "offset": 311,
+      "before": 22,
+      "after": 14,
+      "boost_db": 3.0
+    },
+    {
+      "program": 7,
+      "offset": 347,
+      "before": 24,
+      "after": 18,
+      "boost_db": 2.25
+    },
+    {
+      "program": 8,
+      "offset": 383,
+      "before": 22,
+      "after": 16,
+      "boost_db": 2.25
+    },
+    {
+      "program": 9,
+      "offset": 419,
+      "before": 24,
+      "after": 18,
+      "boost_db": 2.25
+    },
+    {
+      "program": 10,
+      "offset": 455,
+      "before": 13,
+      "after": 7,
+      "boost_db": 2.25
+    },
+    {
+      "program": 11,
+      "offset": 491,
+      "before": 13,
+      "after": 7,
+      "boost_db": 2.25
+    },
+    {
+      "program": 12,
+      "offset": 527,
+      "before": 13,
+      "after": 7,
+      "boost_db": 2.25
+    }
+  ],
+  "sfx_gain_changed": false,
+  "sfx_panic_events_replaced": 8,
+  "music_global_cleanup_events_replaced": 16,
+  "pcm_payload_unchanged": true,
+  "loops_roots_envelopes_unchanged": true,
+  "sound_ram_high_water": 504380,
+  "sound_ram_free": 19908,
+  "sequence_address": 332104,
+  "tone_address": 372232,
+  "outputs": {
+    "STAGE.SEQ": {
+      "bytes": 40128,
+      "sha256": "3186778bc3bea539a3a69234cfb4d9fb5580f504fad56f360e7cee4893c93ba3"
+    },
+    "STAGE.TON": {
+      "bytes": 132148,
+      "sha256": "b5d40d9620e370fce7c75c818b19f4f48f1d93bb7fce20a6c79cef18e8aa0c39"
+    },
+    "FX.SEQ": {
+      "bytes": 328,
+      "sha256": "aada8a28c324994c771f35c7e44c23a6ba29d8c8c24a8e9527005816a33b21e5"
+    },
+    "CUSTOM.MAP": {
+      "bytes": 56,
+      "sha256": "1a685da7ac64a6a3d17717c1f17057317870d1582ea09f977abec016d875de53"
+    }
+  },
+  "dropout_cause": "SFX terminal CC123 dispatches to global all-notes-off at3172, releasing all32 slots. Replaced with same-tick same-bank select; driver and SFX scheduling unchanged."
+}

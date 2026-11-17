@@ -1,0 +1,157 @@
+{
+  "baseline_commit": "a0982c738f78ac7a00bdbd248c1d5ebe299b6971",
+  "core_commit": "8926b0c6c347f8c5c755911ddb0ac695420ffbf8",
+  "bios": "HLE",
+  "tested_audio_outputs": {
+    "STAGE.SEQ": {
+      "bytes": 40128,
+      "sha256": "3186778bc3bea539a3a69234cfb4d9fb5580f504fad56f360e7cee4893c93ba3"
+    },
+    "STAGE.TON": {
+      "bytes": 132148,
+      "sha256": "b5d40d9620e370fce7c75c818b19f4f48f1d93bb7fce20a6c79cef18e8aa0c39"
+    },
+    "FX.SEQ": {
+      "bytes": 328,
+      "sha256": "aada8a28c324994c771f35c7e44c23a6ba29d8c8c24a8e9527005816a33b21e5"
+    },
+    "CUSTOM.MAP": {
+      "bytes": 56,
+      "sha256": "1a685da7ac64a6a3d17717c1f17057317870d1582ea09f977abec016d875de53"
+    }
+  },
+  "method": "Read-only SCSP KEYON/KEYOFF observer with68K PC and slot ownership; isolated music/SFX stems taken as unchanged mixer contributions; original audio buffers are never modified",
+  "before": {
+    "frames": 15500,
+    "first_music_frame": 1804,
+    "first_sfx_frame": 2002,
+    "native_music_note_ons": 7420,
+    "expected_notes_per_loop": 6924,
+    "complete_loops_observed": 1,
+    "missing_or_reordered_note_ons": 0,
+    "global_music_interruptions": 1842,
+    "global_interruptions_by_role": {
+      "muted_guitar": 462,
+      "bass": 185,
+      "kick": 257,
+      "open_hat": 111,
+      "snare": 153,
+      "open_guitar": 430,
+      "crash": 107,
+      "china": 36,
+      "ride": 81,
+      "low_tom": 8,
+      "mid_tom": 7,
+      "high_tom": 5
+    },
+    "cross_control_music_steals": 0,
+    "peak_music_slots": 17,
+    "peak_sfx_slots": 3,
+    "peak_combined_slots": 19,
+    "sfx_note_ons_by_control": {
+      "5": 564,
+      "6": 599,
+      "2": 34,
+      "3": 2
+    },
+    "mixed_pcm_peak": 10465,
+    "mixed_pcm_clipped_samples": 0,
+    "music_opening_rms": 303.06829157701475,
+    "music_opening_peak": 1748,
+    "music_combat_rms": 460.3573239328446,
+    "music_combat_peak": 2949,
+    "sfx_stem_peak": 9658
+  },
+  "after": {
+    "frames": 15500,
+    "first_music_frame": 1804,
+    "first_sfx_frame": 2002,
+    "native_music_note_ons": 5248,
+    "expected_notes_per_loop": 4907,
+    "complete_loops_observed": 1,
+    "missing_or_reordered_note_ons": 0,
+    "global_music_interruptions": 0,
+    "global_interruptions_by_role": {},
+    "cross_control_music_steals": 0,
+    "peak_music_slots": 15,
+    "peak_sfx_slots": 3,
+    "peak_combined_slots": 17,
+    "sfx_note_ons_by_control": {
+      "5": 564,
+      "6": 599,
+      "2": 34,
+      "3": 2
+    },
+    "mixed_pcm_peak": 20649,
+    "mixed_pcm_clipped_samples": 0,
+    "music_opening_rms": 1745.697549292386,
+    "music_opening_peak": 12146,
+    "music_combat_rms": 2805.0356562100155,
+    "music_combat_peak": 17548,
+    "sfx_stem_peak": 9658
+  },
+  "stress": {
+    "frames": 15500,
+    "first_music_frame": 333,
+    "first_sfx_frame": 334,
+    "native_music_note_ons": 5712,
+    "expected_notes_per_loop": 4907,
+    "complete_loops_observed": 1,
+    "missing_or_reordered_note_ons": 0,
+    "global_music_interruptions": 0,
+    "global_interruptions_by_role": {},
+    "cross_control_music_steals": 0,
+    "peak_music_slots": 15,
+    "peak_sfx_slots": 6,
+    "peak_combined_slots": 20,
+    "sfx_note_ons_by_control": {
+      "4": 1028,
+      "1": 253,
+      "5": 1012,
+      "6": 1012,
+      "3": 506,
+      "2": 252
+    },
+    "mixed_pcm_peak": 20966,
+    "mixed_pcm_clipped_samples": 0,
+    "music_opening_rms": 1715.3950307856178,
+    "music_opening_peak": 12822,
+    "music_combat_rms": 2786.1452484644933,
+    "music_combat_peak": 17318,
+    "sfx_stem_peak": 12712
+  },
+  "music_opening_rms_gain_db": 15.208570028067921,
+  "music_combat_rms_gain_db": 15.6968665865206,
+  "first_sfx_100ms_bit_identical": true,
+  "level2_transition": {
+    "ordered_note_effect_and_gain_parameters_identical": true,
+    "max_event_frame_boundary_difference": 1,
+    "before_first_level2_music_frame": 2613,
+    "after_first_level2_music_frame": 2613,
+    "native_event_trace_identical": false,
+    "aligned_pcm_identical": false,
+    "compared_pcm_frames": 1605240,
+    "baseline_repeat_trace_bit_identical": true,
+    "baseline_repeat_pcm_bit_identical": true,
+    "interpretation": "Source and all Level2 resources/levels unchanged; identical ordered note/effect/gain parameters and startup frame; post-transition native frame-boundary phase differs by at most1 frame, so no waveform bit-identity claim."
+  },
+  "limitations": [
+    "HLE BIOS/software SCSP; owner hardware/listening approval remains required",
+    "Input-driven combat plus driver-only stress harness; the latter is a separate test image, not the delivered game",
+    "Runtime PCM and per-frame traces are authoring-free native captures; source WAV/GP/MIDI not included"
+  ],
+  "trace_files": {
+    "docs/level1-refinement-traces/before-events.csv.gz": {
+      "bytes": 163298,
+      "sha256": "f45d04ff470b57866cb8eb2def6554a784c6c0e2e6cb60bed94ad20ae331c7f3"
+    },
+    "docs/level1-refinement-traces/after-events.csv.gz": {
+      "bytes": 121808,
+      "sha256": "15fc77a75081455f17fe31ebed7c4286f6d31a4755e7b6a353d4f8b87d331cfc"
+    },
+    "docs/level1-refinement-traces/stress-events.csv.gz": {
+      "bytes": 184934,
+      "sha256": "22acda4a307b9dba20c4611703a962a1b8b5c0449d9ba7ded19d72571680e8a6"
+    }
+  }
+}
