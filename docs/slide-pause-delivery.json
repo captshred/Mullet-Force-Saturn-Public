@@ -1,0 +1,20 @@
+{
+  "executable_source_commit": "38ed9a690f9349f490b5280992fcef882b32aaaf",
+  "branch": "fix/wristbreaker-slides-level1-pause-music",
+  "bin_sha256": "8cc9d3e365fcc90d87d360bc5250db47eeaf6b1b52015474cafaf82db68bf62f",
+  "cue_sha256": "69e1d58b461af378eeec5fcc951f6a1c294f332de5abb7e684e0e643cb034b88",
+  "source_fingerprint": "adb83386085e4132cc0db7a703019acf49ca1e372d52b26d8f6876ed17b88b89",
+  "entire_capture_pcm_identical_to_tested_candidate": true,
+  "source_identity_embedded_in_bin": true,
+  "shallow_source_validation_passed": true,
+  "e108_fixed": false,
+  "all_cold_starts_pass": false,
+  "hardware_approved": false,
+  "final_source_pause_transition_capture_frames": 6000,
+  "zip_path": "downloads/mullet-force-wristbreaker-slides-level1-pause-music.zip",
+  "zip_sha256": "8d7dbe8eef629ab06f0f6b41c193446ee6e6af557328dc8ec4125b978223fd94",
+  "build_method": "Local native; no Actions run claimed",
+  "make_check": "PASS",
+  "make_test": "PASS",
+  "e108": "Pre-existing intermittent; observed; deferred, not fixed"
+}

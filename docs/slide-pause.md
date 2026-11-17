@@ -35,10 +35,14 @@ Pinned Yabause8926b0c6c347f8c5c755911ddb0ac695420ffbf8/HLE BIOS. Read-only note/
 
 ## Existing E108 and other baseline limitations
 
-E108 is a longstanding intermittent issue, personally confirmed by the owner and deferred to a separate task. A late handoff after a full-loop pause hit E108 twice in this HLE test; the approved executable without pause also failed at the late handoff. The approved executable with music paused, and the corrected build after shorter pauses, successfully loaded Level2. These occurrences remain recorded. **E108 is not fixed; not all cold-start/handoff tests pass.** No conclusion of a significant frequency change follows from these few controlled captures. Startup/stage-transition source is byte-identical. An unsuccessful private quiesce experiment was removed; it is not in the delivered source.
+E108 is a longstanding intermittent issue, personally confirmed by the owner and deferred to a separate task. A late handoff after a full-loop pause hit E108 twice in this HLE test; the approved executable without pause also failed at the late handoff. The approved executable with music paused, and the corrected build after shorter pauses, successfully loaded Level2. These occurrences remain recorded. **E108 is not fixed; not all cold-start/handoff tests pass.** No conclusion of a significant frequency change follows from these few controlled captures. Startup/stage-transition source is byte-identical.
 
 Existing HLE cached-envelope SFX-loss warnings and the approved build's extreme-overload SFX retrigger edge remain as documented in the Wristbreaker baseline. No diagnostic is silenced or unrelated scheduling policy changed. Native results are not hardware validation. Owner listening/hardware approval remains pending.
 
 ## Build and reproduce
 
 `bash tools/setup.sh`, `bash tools/build-source-complete.sh`, `make check`, `make test`. SDK/compiler pin and Docker base unchanged. Public builds use committed runtime assets, never private GP/MIDI/WAV masters. `bash tools/run-slide-pause-playback.sh /path/to/approved-D97/mullet-force.cue` reproduces native comparisons and records E108 outcomes. Test-driver images and raw audio stay in ignored build directories. No Actions run is claimed for the local delivery.
+
+## Delivery identity
+
+Executable source `38ed9a690f9349f490b5280992fcef882b32aaaf`. Later packaging commit changes docs and ZIP only. ZIP `downloads/mullet-force-wristbreaker-slides-level1-pause-music.zip`, SHA256 `8d7dbe8eef629ab06f0f6b41c193446ee6e6af557328dc8ec4125b978223fd94`. Final-source6000-frame pause/transition PCM exactly matches the tested candidate. Native build, make check, make test and cold source-checkout validation pass. E108 remains unresolved and not all cold-start/handoff cases pass; owner hardware approval pending.
