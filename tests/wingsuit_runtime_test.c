@@ -8,6 +8,7 @@
 /* Exercise the real render routine without exposing test hooks in production. */
 #include "wingsuit_audio_data.h"
 #include "../src/wingsuit_runtime.c"
+mf_ws_startup_trace mf_ws_startup_capture;
 unsigned short ws_vdp1[262144],ws_a0[65536],ws_b0[65536],ws_scsp[262144];
 unsigned short ws_ptmr=0,ws_edsr=2;
 unsigned short ws_cram[2050];
@@ -85,7 +86,26 @@ void jo_dma_copy(const void *a,void *b,unsigned n){memcpy(b,a,n);}
 int jo_sprite_add(const jo_img *im){if(register_fail)return -1;assert(last<27);slots+=im->width*im->height*2;return ++last;}
 void jo_sprite_free_all(void){++resets;last=-1;slots=0;}
 int jo_get_last_sprite_id(void){return last;}
-void slSoundOffWait(void){++off;}
+static int polling_suspended, stop_failed, cancel_failed, restore_failed;
+int slIntBackCancel(void)
+{
+    assert(!polling_suspended);
+    if(cancel_failed)return -1;
+    polling_suspended=1;
+    return 0;
+}
+int slGetPeripheral(void)
+{
+    assert(polling_suspended);
+    polling_suspended=0;
+    return restore_failed?-1:0;
+}
+int slSoundOffWait(void)
+{
+    assert(polling_suspended);
+    ++off;
+    return stop_failed?-1:0;
+}
 void slScrDisp(unsigned a){assert(a==(NBG1OFF|NBG2OFF));}
 void slCharNbg1(int a,int b){assert(a==COL_TYPE_256 && b==CHAR_SIZE_1x1);}
 void slPageNbg1(void *a,void *b,int c){assert(a==ws_a0 && !b && c==(PNB_1WORD|CN_12BIT));}
@@ -362,5 +382,20 @@ int main(void)
     palette.data=cram+256;r=reads;i=resets;
     mf_ws_runtime_begin(0,&palette,now);frame(in,p);frame(in,p);frame(in,p);frame(in,p);
     assert(error==100 && reads==r && resets==i && strstr(diagnostic,"CRAM"));
+    assert(!polling_suspended);
+    palette.data=cram+257;
+    cancel_failed=1;
+    mf_ws_runtime_begin(0,&palette,now);frame(in,p);
+    assert(error==108 && phase==4 && strstr(diagnostic,"CANCEL INTBACK"));
+    assert(reads==r && resets==i && !polling_suspended);
+    cancel_failed=0;stop_failed=1;
+    memset(ws_scsp,0x55,sizeof(ws_scsp));
+    mf_ws_runtime_begin(0,&palette,now);frame(in,p);frame(in,p);frame(in,p);frame(in,p);
+    assert(error==108 && phase==4 && strstr(diagnostic,"SOUND OFF") && !polling_suspended);
+    for(i=0;i<262144;i++)assert(ws_scsp[i]==0x5555);
+    stop_failed=0;restore_failed=1;
+    mf_ws_runtime_begin(0,&palette,now);frame(in,p);frame(in,p);frame(in,p);frame(in,p);
+    assert(error==108 && phase==4 && strstr(diagnostic,"RESTORE INTBACK") && !polling_suspended);
+    puts("PASS SMPC feedback: failed stop preserves sound RAM; controller polling restores on load failure");
     return 0;
 }

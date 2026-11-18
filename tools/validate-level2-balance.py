@@ -16,20 +16,21 @@ def validate(disc):
  m=old('tests/wingsuit_audio_mock/SEGA_SND.H').decode().replace('typedef struct {unsigned short mode;unsigned char stat;} SndSeqStat;\n','').replace('void SND_GetSeqStat(SndSeqStat *,int);\n','');assert (R/'tests/wingsuit_audio_mock/SEGA_SND.H').read_text()==m
  for name,end in [('assets/cd/CUSTOM.MAP',521304),('assets/wingsuit/WFIRE.MAP',506660)]:
   b=(R/name).read_bytes();a=len(b)-16;assert int.from_bytes(b[a+1:a+4],'big')+int.from_bytes(b[a+5:a+8],'big')==end
- if disc:
-  from wingsuit_disc import directory_records
-  image=(R/'build/mullet-force.bin').read_bytes();files={}
-  def scan(rec,prefix=''):
-   for n,r in directory_records(image,rec):
-    if n in ('.','..'):continue
-    if r[25]&2:scan(r,prefix+n+'/')
-    else:
-     a=struct.unpack_from('<I',r,2)[0]*2048;size=struct.unpack_from('<I',r,10)[0];files[prefix+n]=image[a:a+size]
-  scan(image[16*2048+156:16*2048+190])
-  for p in (R/'build/cd').rglob('*'):
-   if p.is_file():assert files[p.relative_to(R/'build/cd').as_posix().upper()]==p.read_bytes()
-  assert hashlib.sha256((R/'build/SOURCE-SHA256SUMS.txt').read_bytes()).hexdigest().encode() in files['0.BIN'];subprocess.run(['sha256sum','--check','build/SOURCE-SHA256SUMS.txt'],cwd=R,check=True,stdout=subprocess.DEVNULL)
+ if disc:validate_disc()
  print('PASS exact5-value audio delta: five Level2 SFX110->127; music control0 volume108 unchanged; Level1/POOWAH/all PCM+SEQ/slides/gameplay/priorities/schedulers/cleanup exact; RAM unchanged',flush=True)
+def validate_disc():
+ from wingsuit_disc import directory_records
+ image=(R/'build/mullet-force.bin').read_bytes();files={}
+ def scan(rec,prefix=''):
+  for n,r in directory_records(image,rec):
+   if n in ('.','..'):continue
+   if r[25]&2:scan(r,prefix+n+'/')
+   else:
+    a=struct.unpack_from('<I',r,2)[0]*2048;size=struct.unpack_from('<I',r,10)[0];files[prefix+n]=image[a:a+size]
+ scan(image[16*2048+156:16*2048+190])
+ for p in (R/'build/cd').rglob('*'):
+  if p.is_file():assert files[p.relative_to(R/'build/cd').as_posix().upper()]==p.read_bytes()
+ assert hashlib.sha256((R/'build/SOURCE-SHA256SUMS.txt').read_bytes()).hexdigest().encode() in files['0.BIN'];subprocess.run(['sha256sum','--check','build/SOURCE-SHA256SUMS.txt'],cwd=R,check=True,stdout=subprocess.DEVNULL)
 def tests():
  subprocess.run(['python3','tools/test-level2-balance.py'],cwd=R,check=True)
  subprocess.run(['cc','-std=c99','-Wall','-Wextra','-Werror','-Itests/sound_mock','-Isrc','tests/ugh_transport_test.c','-o','/tmp/mf-balance-poowah'],cwd=R,check=True);subprocess.run(['/tmp/mf-balance-poowah'],check=True)

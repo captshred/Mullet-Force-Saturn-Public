@@ -30,7 +30,7 @@ static slot_watch watch[32];
 static int ready,clock_set,budget,startup_done,startup_failed,boot_clock;
 static unsigned boot,boot_since,boot_counter,music_prep,music_requested,map_ack_bytes;
 static mf_ws_audio_reader bank_reader;
-enum { BOOT_CPU=1,BOOT_MAP,BOOT_MAP_ACK,BOOT_DSP,BOOT_DSP_ACK,
+enum { BOOT_CPU=1,BOOT_MAP,BOOT_MAP_ACK,
        BOOT_CDDA,BOOT_CDDA_ACK,BOOT_VOLUME,BOOT_VOLUME_ACK,
        BOOT_FIRE_UPLOAD,BOOT_FIRE_MAP,BOOT_FIRE_ACK };
 static mf_ws_audio_diagnostic diagnostic;
@@ -112,7 +112,10 @@ int mf_ws_audio_load(mf_ws_audio_reader read,mf_ws_audio_progress notify)
     stage(MF_WS_AUDIO_MAP_READ);map=read("WMUSIC.MAP",MF_WS_MUSIC_MAP_BYTES);
     if(!map){diagnostic.has_status=1;diagnostic.expected=MF_WS_MUSIC_MAP_BYTES;diagnostic.actual=-1;return 0;}
     memcpy(map_storage,map,MF_WS_MUSIC_MAP_BYTES);completed();
-    stage(MF_WS_AUDIO_SOUND_OFF);slSoundOffWait();completed();
+    stage(MF_WS_AUDIO_SOUND_OFF);
+    int status=slSoundOffWait();
+    if(status){diagnostic.has_status=1;diagnostic.expected=0;diagnostic.actual=status;jo_free(map);return 0;}
+    completed();
     SND_INI_PRG_ADR(init)=(Uint16 *)sddrvstsk;SND_INI_PRG_SZ(init)=MF_SOUND_DRIVER_BYTES;
     SND_INI_ARA_ADR(init)=(Uint16 *)map_storage;
     SND_INI_ARA_SZ(init)=MF_WS_MUSIC_MAP_BYTES/sizeof(Uint16); /* Binary-verified word count. */
@@ -129,16 +132,14 @@ int mf_ws_audio_load(mf_ws_audio_reader read,mf_ws_audio_progress notify)
     stage(MF_WS_AUDIO_TON_UPLOAD);if(!upload(read,"WDEATH.TON",MF_WS_TON_BYTES,MF_WS_TON_ADDR))return 0;
     if(!upload(read,"WMUSIC.SEQ",MF_WS_MUSIC_SEQ_BYTES,MF_WS_MUSIC_SEQ_ADDR))return 0;
     if(!upload(read,"WMUSIC.TON",MF_WS_MUSIC_TON_BYTES,MF_WS_MUSIC_TON_ADDR))return 0;
-    /* Follow src/music.c's working SND/SGL initialization pairing, restart,
-       flush and SND-only command submission. No slSoundRequest return checks. */
-    MF_WS_SOUND_BASE[0x4e1]=0;
-    stage(MF_WS_AUDIO_CPU_RESTART);slSoundOnWait();completed();
+    /* slInitSound has started the 68000 and acknowledged its map command.
+       Starting it again resets the cursor and can discard requests sent
+       before the driver finishes clearing its queue and work RAM. */
     stage(MF_WS_AUDIO_FLUSH);slSndFlush();slDMAWait();completed();
     /* Pinned 2.10 dispatch at 0x1bd4..0x1be4 advances history cursor
        (exported word 0x041a) and RESETS interval timer 0x8838 per command.
        Capture before submission: commands may finish before load returns. */
     boot_counter=sound_word(0x41a);
-    stage(MF_WS_AUDIO_DSP_STOP);if(!result(SND_StopDsp()))return 0;
     stage(MF_WS_AUDIO_CDDA_LEVEL);if(!result(SND_SetCdDaLev(0,0)))return 0;
     stage(MF_WS_AUDIO_TOTAL_VOLUME);if(!result(SND_SetTlVl(15)))return 0;
     /* Submission success is not driver consumption. Finish a bounded, live
@@ -425,12 +426,10 @@ static void startup(unsigned now)
     }
     case BOOT_MAP_ACK:
         if(!commands_empty() || !map_ready())return;
-        completed();stage(MF_WS_AUDIO_DSP_STOP);boot=BOOT_DSP;break;
-    case BOOT_DSP:
-        if(result(SND_StopDsp())){pending("DSP ACK");boot=BOOT_DSP_ACK;}break;
-    case BOOT_DSP_ACK:
-        if(!commands_empty())return;
-        stage(MF_WS_AUDIO_CDDA_LEVEL);boot=BOOT_CDDA;break;
+        /* The pinned driver's map change already stops the DSP after
+           keying off all slots and clearing its cached envelopes. A separate
+           SND_StopDsp command can block on stale slot monitor state. */
+        completed();stage(MF_WS_AUDIO_CDDA_LEVEL);boot=BOOT_CDDA;break;
     case BOOT_CDDA:
         if(result(SND_SetCdDaLev(0,0))){pending("CDDA ACK");boot=BOOT_CDDA_ACK;}break;
     case BOOT_CDDA_ACK:

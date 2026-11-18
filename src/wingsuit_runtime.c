@@ -133,7 +133,9 @@ static int load_resources(void)
          JO_VDP1_USER_AREA_END_ADDR-(JO_VDP1_VRAM+JO_VDP1_TEXTURE_DEF_BASE_ADDRESS));
     /* slSoundOffWait halts the 68000 before releasing its entire sample bank.
        A minimal stage-local barrel bank is initialized after the wipe. */
-    slSoundOffWait();wipe(MF_WS_SOUND_RAM,0x80000);
+    int status=slSoundOffWait();
+    if(status){load_failure("SCSP","SOUND OFF",0,status);return 108;}
+    wipe(MF_WS_SOUND_RAM,0x80000);
     /* Keep SDK NBG0/text and back screen intact. Clear both stage-owned arenas,
        including the retired NBG2 skyline, before installing Level 2 tiles. */
     wipe((volatile unsigned short *)WS_CELLS,106496);
@@ -201,6 +203,10 @@ void mf_ws_runtime_begin(int coop,jo_palette *background,unsigned now)
     phase=1;drain=0;title=120;error=0;previous=now;
     failed_asset=failed_reason=0;failed_expected=failed_actual=-1;
     slScrDisp(NBG1OFF|NBG2OFF);jo_clear_screen();
+    /* SGL wait-mode sound commands are rejected during peripheral INTBACK.
+       Suspend automatic polling before the existing VBlank drain. */
+    int status=slIntBackCancel();
+    if(status){load_failure("SMPC","CANCEL INTBACK",0,status);error=108;phase=4;}
 }
 static void draw(int id,int x,int y)
 {
@@ -324,7 +330,12 @@ void mf_ws_runtime_frame(const mf_input input[2],unsigned pressed[2],unsigned no
     if(phase==1){
         pressed[0]=pressed[1]=0;
         /* A callback count alone is insufficient: count only real VBlanks. */
-        if(elapsed && ++drain>=3){error=load();phase=error?4:2;jo_clear_screen();}
+        if(elapsed && ++drain>=3){
+            error=load();
+            int status=slGetPeripheral();
+            if(status && !error){load_failure("SMPC","RESTORE INTBACK",0,status);error=108;}
+            phase=error?4:2;jo_clear_screen();
+        }
         return;
     }
     if(phase==4){

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Actual recovered transport with SDK/RAM mocks, UBSan and readiness mutations."""
 from pathlib import Path
-import subprocess,tempfile
+import subprocess,tempfile,sys
 R=Path(__file__).resolve().parents[1]
 s=(R/'tests/wingsuit_audio_test.c').read_text()
 s=s.replace('"../src/wingsuit_audio.c"','"'+str(R/'src/wingsuit_audio.c')+'"').replace('"../src/wingsuit.c"','"'+str(R/'src/wingsuit.c')+'"')
@@ -149,6 +149,38 @@ int main(void){
  return 0;
 }
 '''
+# The current loader leaves the SDK-started CPU running and uses map change
+# to stop the DSP. The archived profiles retain their original call contract.
+confirmed_startup='--e108-root-cause' in sys.argv
+if confirmed_startup:
+ s=s.replace('void slSoundOffWait(void){stopped=1;}',
+             'static int smpc_busy; int slSoundOffWait(void){if(smpc_busy)return -1;stopped=1;return 0;}')
+ s=s.replace('assert((stopped || boot==BOOT_FIRE_UPLOAD) && !inflight',
+             'assert(!inflight')
+ s=s.replace('inflight=1;ram[0x4e1]=0x80;', 'inflight=1;stopped=0;ram[0x4e1]=0x80;')
+ s=s.replace('void slSoundOnWait(void){assert(stopped && !ram[0x4e1] && diagnostic.stage==MF_WS_AUDIO_CPU_RESTART);stopped=0;}',
+             'void slSoundOnWait(void){assert(!"Redundant CPU restart");}')
+ s=s.replace('int SND_StopDsp(void){assert(diagnostic.stage==MF_WS_AUDIO_DSP_STOP && !stopped);return fail_stage==MF_WS_AUDIO_DSP_STOP?init_status:submit(12);}',
+             'int SND_StopDsp(void){assert(!"Redundant standalone DSP stop");return 1;}')
+ s=s.replace('diagnostic.completed==0xfff','diagnostic.completed==0xd7f')
+ s=s.replace('assert(trace_n==12);{unsigned j;for(j=0;j<12;j++)assert(trace[j]==j+1);}',
+             'const unsigned expected[]={1,2,3,4,5,6,7,9,11,12};assert(trace_n==10 && !memcmp(expected,trace,sizeof(expected)));')
+ s=s.replace('diagnostic.completed==0x7fff','diagnostic.completed==0x7d7f')
+ s=s.replace('{8,12,128,130,8,12,128,130,8};assert(boot_n>=9',
+             '{8,128,130,8,128,130,8};assert(boot_n>=7')
+ s=s.replace(' unsigned t,p;load(1000);', """ unsigned t,p;
+ smpc_busy=1;assert(!mf_ws_audio_load(read_exact,NULL));
+ assert(diagnostic.stage==MF_WS_AUDIO_SOUND_OFF && diagnostic.actual==-1 && !initializations);
+ smpc_busy=0;
+ for(unsigned seed=1;seed<=128;seed++){
+   unsigned value=seed;
+   for(unsigned i=0;i<sizeof(ram);i++){
+     value=value*1664525u+1013904223u;ram[i]=value>>24;
+   }
+   load(30000+seed*64);
+ }
+ puts("PASS confirmed SMPC stop and 128 poisoned sound-RAM audio reloads");
+ load(1000);""")
 source=(R/'src/wingsuit_audio.c').read_text()
 mutants=[('fixed',source),('early-combined-map',source.replace('MF_WS_MUSIC_MAP_BYTES','MF_WS_FIRE_MAP_BYTES').replace('read("WMUSIC.MAP"','read("WFIRE.MAP"')),
  ('timer-alias',source.replace('boot_counter=sound_word(0x41a);','boot_counter=sound_word(0x8838);').replace('if(sound_word(0x41a)==boot_counter','if(sound_word(0x8838)==boot_counter')),
@@ -156,10 +188,19 @@ mutants=[('fixed',source),('early-combined-map',source.replace('MF_WS_MUSIC_MAP_
 import resource
 def no_core():resource.setrlimit(resource.RLIMIT_CORE,(0,0))
 with tempfile.TemporaryDirectory() as d:
+ mock=[]
+ if confirmed_startup:
+  jo=Path(d)/'jo';jo.mkdir()
+  header=(R/'tests/wingsuit_audio_mock/jo/jo.h').read_text()
+  sdk_mock=R/'tests/sound_mock/jo/jo.h'
+  header=header.replace('#include "../../sound_mock/jo/jo.h"',
+                        sdk_mock.read_text().replace('void slSoundOffWait(void);','int slSoundOffWait(void);'))
+  (jo/'jo.h').write_text(header)
+  mock=['-I'+d]
  for name,transport in mutants:
   audio=Path(d)/'transport.c';audio.write_text(transport)
   test=Path(d)/'audio.c';test.write_text(s.replace(str(R/'src/wingsuit_audio.c'),str(audio)));exe=Path(d)/'test'
-  subprocess.run(['cc','-std=c99','-Wall','-Wextra','-Werror','-fsanitize=undefined','-fno-sanitize-recover=all','-I'+str(R/'tests/wingsuit_audio_mock'),'-I'+str(R/'tests/sound_mock'),'-I'+str(R/'src'),str(test),'-o',str(exe)],check=True)
+  subprocess.run(['cc','-std=c99','-Wall','-Wextra','-Werror','-fsanitize=undefined','-fno-sanitize-recover=all',*mock,'-I'+str(R/'tests/wingsuit_audio_mock'),'-I'+str(R/'tests/sound_mock'),'-I'+str(R/'src'),str(test),'-o',str(exe)],check=True)
   result=subprocess.run([str(exe)],cwd=R,text=True,capture_output=True,preexec_fn=no_core)
   if name=='fixed':
    assert result.returncode==0,(result.stdout,result.stderr)
