@@ -190,7 +190,7 @@ static void advance_hit(unsigned now)
        simultaneous impacts drain deterministically on following VBlanks. */
     if(pending_hits && budget){
         if(hit.state==PLAYING){if(!hit_midi(0,60,0))return;hit.state=RESTARTING;}
-        if(!hit_midi(1,60,110))return;
+        if(!hit_midi(1,60,127))return;
         --pending_hits;hit.state=PLAYING;hit.started=now;hit.until=now+MF_WS_HIT_TICKS;
     }
 }
@@ -202,7 +202,7 @@ static void advance_explosions(unsigned now)
         /* Retire only after natural PCM completion, with the existing lease.
            Rejected retirement retains ownership and retries. */
         if(p->state==PLAYING && (int)(now-p->until)>=0 && midi(4+i,0,60,0))p->state=FREE;
-        if(p->state==FREE && pending_explosions && (int)(now-explosion_next)>=0 && midi(4+i,1,60,110)){
+        if(p->state==FREE && pending_explosions && (int)(now-explosion_next)>=0 && midi(4+i,1,60,127)){
             --pending_explosions;p->state=PLAYING;p->started=now;p->until=now+MF_WS_EXP_TICKS;
             explosion_next=now+MF_WS_EXPLOSION_MIN_SPACING;
         }
@@ -225,7 +225,7 @@ static void advance_shots(unsigned now)
             if(!midi(2+selected,0,60,0))break;
             p->state=RESTARTING;
         }
-        if(!midi(2+selected,1,60,110))break;
+        if(!midi(2+selected,1,60,127))break;
         --pending_shots;p->state=PLAYING;p->started=now;p->until=now+MF_WS_SHOT_TICKS;
         shot_next=1-selected;
     }
@@ -502,13 +502,13 @@ static void audio_step(unsigned now,unsigned focused)
         if(f->guard && now!=f->stopped)f->guard=0;
         if(f->stop)continue;
         if((focused&(1u<<i)) && !f->attack && !f->loop && !f->guard &&
-           midi(i,1,MF_WS_FLAME_ATTACK_NOTE,110)){
+           midi(i,1,MF_WS_FLAME_ATTACK_NOTE,127)){
             f->attack=1;f->started=now;f->program=0;f->missing=0;
         }
         /* Program Change does not retune/replace the already sounding note. */
         if(f->attack && !f->program && now!=f->started && midi(i,4,MF_WS_FLAME_LOOP_PROGRAM,0))f->program=1;
         if(f->attack && f->program && !f->loop && now-f->started>=MF_WS_FLAME_HANDOFF_TICKS &&
-           midi(i,1,MF_WS_FLAME_LOOP_NOTE,110)){
+           midi(i,1,MF_WS_FLAME_LOOP_NOTE,127)){
             f->loop=1;f->loop_started=now;f->missing=0;
         }
         /* The attack ends naturally ~1.02ms after the 38-tick Loop start.

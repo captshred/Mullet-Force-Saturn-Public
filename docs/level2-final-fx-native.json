@@ -1,0 +1,113 @@
+{
+  "captures": {
+    "before": {
+      "music_note_ons": 6657,
+      "sfx_note_ons": 8578,
+      "sfx_role_counts": {
+        "flame_attack": 2,
+        "fire": 4470,
+        "hit": 3192,
+        "explosion": 912,
+        "flame_loop": 2
+      },
+      "peak_live_slots_per_vblank": 29,
+      "pcm_peak": 29858,
+      "clipped_samples": 0,
+      "full_music_loop_frames": 9674,
+      "forced_music_offs": 0,
+      "cross_owner_music_steals": 0,
+      "music_native_tl_values": [
+        28,
+        52,
+        61,
+        80,
+        103,
+        112,
+        123,
+        134,
+        146,
+        159,
+        173,
+        189,
+        206,
+        225,
+        245,
+        267,
+        292
+      ],
+      "flame_loops_continuously_active": true
+    },
+    "after": {
+      "music_note_ons": 6657,
+      "sfx_note_ons": 8578,
+      "sfx_role_counts": {
+        "flame_attack": 2,
+        "fire": 4470,
+        "hit": 3192,
+        "explosion": 912,
+        "flame_loop": 2
+      },
+      "peak_live_slots_per_vblank": 29,
+      "pcm_peak": 31220,
+      "clipped_samples": 0,
+      "full_music_loop_frames": 9674,
+      "forced_music_offs": 0,
+      "cross_owner_music_steals": 0,
+      "music_native_tl_values": [
+        28,
+        52,
+        61,
+        80,
+        103,
+        112,
+        123,
+        134,
+        146,
+        159,
+        173,
+        189,
+        206,
+        225,
+        245,
+        267,
+        292
+      ],
+      "flame_loops_continuously_active": true
+    }
+  },
+  "sfx_native_tl_multiplier_audit": {
+    "flame_attack": {
+      "before": 95,
+      "after": 103,
+      "linear_ratio": 1.0842105263157895
+    },
+    "fire": {
+      "before": 189,
+      "after": 206,
+      "linear_ratio": 1.08994708994709
+    },
+    "hit": {
+      "before": 189,
+      "after": 206,
+      "linear_ratio": 1.08994708994709
+    },
+    "explosion": {
+      "before": 225,
+      "after": 245,
+      "linear_ratio": 1.0888888888888888
+    },
+    "flame_loop": {
+      "before": 95,
+      "after": 103,
+      "linear_ratio": 1.0842105263157895
+    }
+  },
+  "sfx_per_frame_events_and_samples_identical": true,
+  "music_control_gain_unchanged": 108,
+  "music_full_loop_rms_ratio": 1.0000526708103374,
+  "velocity_exceptions": [],
+  "silent_baseline_paths": [
+    "drone/hostile bullet launch has no MIDI note-on; no new sound event added"
+  ],
+  "level1_first3000_frames_audio_byte_identical": true
+}
