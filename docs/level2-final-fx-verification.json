@@ -1,0 +1,72 @@
+{
+  "executable_source_commit": "7a55bae6b6428faec7300df7c82a2e4669f5063b",
+  "branch": "audio/level2-final-mix-balance",
+  "approved_baseline_source": "a38c39259304b2af8980e16e192304f6d2ecad83",
+  "bin_sha256": "d32680c5686ea9f1850a0d86096090c1f3c865ca27f5d297f2be66d8688c5bd7",
+  "cue_sha256": "69e1d58b461af378eeec5fcc951f6a1c294f332de5abb7e684e0e643cb034b88",
+  "source_fingerprint": "1cf4460239f899def94599dea52d83612b4b4d811115079b62427ca461c60fe0",
+  "source_identity_embedded_in_bin": true,
+  "make_check": "PASS",
+  "make_test": "PASS",
+  "regression_log_sha256": "a0d0f1bb3b257b45db48a7c359934cc094620240bce9280d0f6694f9e4ad904c",
+  "runtime_scope": "Only five existing Level2 SFX note-on velocity arguments110->127; no music adjustment",
+  "music_controls_both_levels_unchanged": 108,
+  "level1_audio_and_poowah_unchanged": true,
+  "level1_first3000_capture_frames_byte_identical": true,
+  "all_pcm_instruments_music_sequences_slides_gameplay_schedulers_priorities_cleanup_unchanged": true,
+  "level2_sfx_per_frame_note_events_identical": 8578,
+  "level2_music_stress_note_ons": 6657,
+  "full_music_loop_frames": 9674,
+  "music_full_loop_rms_ratio": 1.0000526708103374,
+  "sfx_native_gain_ratios": {
+    "flame_attack": {
+      "before": 95,
+      "after": 103,
+      "linear_ratio": 1.0842105263157895
+    },
+    "fire": {
+      "before": 189,
+      "after": 206,
+      "linear_ratio": 1.08994708994709
+    },
+    "hit": {
+      "before": 189,
+      "after": 206,
+      "linear_ratio": 1.08994708994709
+    },
+    "explosion": {
+      "before": 225,
+      "after": 245,
+      "linear_ratio": 1.0888888888888888
+    },
+    "flame_loop": {
+      "before": 95,
+      "after": 103,
+      "linear_ratio": 1.0842105263157895
+    }
+  },
+  "velocity_response_exceptions": [],
+  "existing_silent_launches": "Drone/hostile bullet launch has no baseline MIDI SFX; no new event added",
+  "peak_live_slots_per_vblank": 29,
+  "flame_loop_voicing_continuous": true,
+  "clipped_samples": 0,
+  "forced_music_offs": 0,
+  "cross_owner_music_steals": 0,
+  "final_source_capture_frames": 8000,
+  "entire_final_capture_pcm_and_events_identical_to_validated_candidate": true,
+  "sound_ram_free_level1": 2984,
+  "sound_ram_free_level2": 17628,
+  "previous_the_one_tags_intact": 10,
+  "new_definitive_tag_created": false,
+  "hardware_approved": false,
+  "e108_fixed": false,
+  "all_cold_starts_pass": false,
+  "build_method": "Local native; no Actions run claimed",
+  "actions": {
+    "workflow": "Manual Saturn playtest build",
+    "workflow_ref": "audio/level2-final-mix-balance",
+    "profile": "level1-ugh-protected-sfx",
+    "source_ref": "7a55bae6b6428faec7300df7c82a2e4669f5063b",
+    "artifact_retention_days": 1
+  }
+}
