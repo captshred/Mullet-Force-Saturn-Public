@@ -7,7 +7,7 @@ Parent approved executable: `38ed9a690f9349f490b5280992fcef882b32aaaf`
 ## Runtime routing
 
 Human enemy death (melee or fire) selects FX song/program8. Nonlethal cross
-punch or unarmed aerial kick against a human enemy selects the existing FX
+punch or unarmed aerial kick against an enemy or surviving breakable selects the existing FX
 song/program6. Both attacks reference that single original PCM allocation.
 Ordinary jab hits retain song0; jab initiation retains song5. Player death
 retains song6. Bat, ordinary jump, ignition/hiss, environmental/inorganic
@@ -18,7 +18,8 @@ is preserved. Existing collision masks, four-tick impact suppression, per-player
 ports5/6, volume112, priority31, acknowledged stop and one-real-VBlank release
 replacement guard are unchanged. Damage, health, collision, attack buffering,
 animations, hit-stop and knockback are unchanged. Audio classification flags
-are added only at the existing confirmed enemy hit/death sites.
+are added only at the existing confirmed hit/death sites. Inorganic destruction
+always retains its original explosion routing.
 
 ## Source and conversion
 
@@ -53,7 +54,7 @@ its separate map still has17628 bytes free. No unrelated PCM is degraded.
 ## Validation
 
 - Current collision tests: both players; jab/cross/kick; lethal/nonlethal;
-  misses; per-target duplicate prevention; fire deaths; separate player death;
+  misses; surviving breakable impacts; per-target duplicate prevention; fire deaths; separate player death;
   unchanged inorganic destruction.
 - Current transport tests: actual music.c with SDK acknowledgments mocked;
   correct old/new program routing, lethal precedence, retry/stop guard,
@@ -70,7 +71,8 @@ its separate map still has17628 bytes free. No unrelated PCM is degraded.
   excluded; cached envelope output is not a reliable live-slot count).
   Eighteen new-death and eighteen shared-old-sample starts. All18 new sample
   runs reach their natural PCM end. Mixed PCM peak22162/32768.
--8000-frame in-game combat capture:23 new-death and19 shared-old-sample starts.
+-Initial8000-frame in-game combat capture (before the surviving-breakable
+  classification extension; final-source capture verified separately):23 new-death and19 shared-old-sample starts.
 -6000-frame in-game pause/transition capture enters Level2 successfully.
   All1460 captured Level2 music note-ons match approved ordered keys/sample
   addresses. Stage entry is2 frontend frames later; normalized note-on times

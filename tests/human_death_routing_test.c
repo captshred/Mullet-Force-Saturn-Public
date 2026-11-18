@@ -19,6 +19,9 @@ int main(void){mf_game g;int actor,kind,lethal;
   setup(&g,actor,kind,lethal);g.enemies[0].x=600*256;player_hits(&g,&g.players[actor]);assert(!g.events);
  }
  setup(&g,0,2,0);g.enemies[0].hp=0;g.drums[0].hp=1;g.drums[0].x=230*256;g.drums[0].y=200*256;player_hits(&g,&g.players[0]);assert(g.events&MF_WORLD_IMPACT);assert(!(g.events&(MF_COMBAT_HEAVY_HIT(0)|MF_COMBAT_HUMAN_DEATH(0))));
+ for(actor=0;actor<2;actor++)for(kind=0;kind<3;kind++){
+  setup(&g,actor,kind,0);g.enemies[0].hp=0;g.drums[0].hp=3;g.drums[0].x=230*256;g.drums[0].y=200*256;player_hits(&g,&g.players[actor]);assert(g.drums[0].hp==2);assert(!!(g.events&MF_COMBAT_HEAVY_HIT(actor))==(kind!=0));assert(!(g.events&MF_COMBAT_HUMAN_DEATH(actor)));g.events=0;player_hits(&g,&g.players[actor]);assert(!g.events);
+ }
  setup(&g,0,0,1);fire_damage(&g,&g.enemies[0],1,0);assert(g.events&MF_COMBAT_HUMAN_DEATH(0));
  g.events=0;hit_sound(&g,0,0,0);assert(g.events&MF_COMBAT_CONNECT(0));assert(!(g.events&MF_COMBAT_HUMAN_DEATH(0)));
  puts("PASS actual dispatcher: both players, jab/cross/kick, lethal precedence, misses, duplicate masks, inorganic destruction, fire death and separate player death");return 0;}

@@ -896,6 +896,15 @@ static int contact_height(const mf_player *p,int target_top)
     int bottom=b.bottom>4?b.bottom:4,top=b.top<target_top?b.top:target_top;
     return (bottom+top)/2;
 }
+/* Shared confirmed-hit classification; lethal destruction keeps its own sound. */
+static void heavy_hit_sound(mf_game *g,const mf_player *p,int health)
+{
+    if(health>0 && !p->bat && (p->attack_air
+#if MF_PUNCH_COMBO
+        || g->combo[p-g->players].phase==2
+#endif
+        ))g->events|=MF_COMBAT_HEAVY_HIT((int)(p-g->players));
+}
 static void player_hits(mf_game *g,mf_player *p)
 {
     int i;
@@ -914,6 +923,7 @@ static void player_hits(mf_game *g,mf_player *p)
 #endif
             d->hp=clamp(d->hp-(p->bat?MF_BAT_DAMAGE:1),0,3);
             hit_sound(g,(int)(p-g->players),d->hp,1);
+            heavy_hit_sound(g,p,d->hp);
             d->flash=10;d->vx=p->facing*(p->bat?MF_BAT_KNOCKBACK:850);g->score+=10;
             impact(g,d->x/256,d->y/256,p->bat?contact_height(p,46):36);if(!d->hp){++g->broken;g->score+=100;}
         }
@@ -938,11 +948,7 @@ static void player_hits(mf_game *g,mf_player *p)
             hit_sound(g,(int)(p-g->players),e->hp,0);
             /* Audio classification only; the existing hit mask owns suppression. */
             if(!e->hp)g->events|=MF_COMBAT_HUMAN_DEATH((int)(p-g->players));
-            else if(!p->bat && (p->attack_air
-#if MF_PUNCH_COMBO
-                || g->combo[p-g->players].phase==2
-#endif
-                ))g->events|=MF_COMBAT_HEAVY_HIT((int)(p-g->players));
+            heavy_hit_sound(g,p,e->hp);
             e->state=e->hp?MF_ENEMY_HURT:MF_ENEMY_DYING;e->timer=e->hp?
                 (g->enemy_class[i]==MF_ENEMY_CORPORATE_PUNK?
                  (g->punk[i].punches>=MF_PUNK_COUNTER_THRESHOLD?MF_PUNK_COUNTER_HURT:
