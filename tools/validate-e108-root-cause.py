@@ -24,9 +24,22 @@ def git(*args):
     return subprocess.check_output(["git", "-C", ROOT, *args])
 
 
+def verify_baseline(repo):
+    commit = subprocess.check_output(["git", "rev-parse", "--verify", BASE + "^{commit}"],
+                                     cwd=repo, text=True).strip()
+    if commit != BASE:
+        raise RuntimeError(f"Unexpected approved baseline commit: {commit}")
+    # Traverse the complete snapshot, including every subtree and blob.
+    subprocess.run(["git", "rev-list", "--objects", "--missing=error", BASE],
+                   cwd=repo, stdout=subprocess.DEVNULL, check=True)
+
+
 def approved_tree():
-    if subprocess.run(["git", "-C", ROOT, "cat-file", "-e", BASE], stderr=subprocess.DEVNULL).returncode:
-        subprocess.run(["git", "-C", ROOT, "fetch", "--no-tags", "--depth=1", "origin", BASE], check=True)
+    if subprocess.run(["git", "-C", ROOT, "rev-list", "--objects", "--missing=error", BASE],
+                      stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode:
+        subprocess.run(["git", "-C", ROOT, "fetch", "--refetch", "--no-tags", "--depth=1",
+                        "origin", BASE], check=True)
+    verify_baseline(ROOT)
     for item in git("ls-tree", "-r", "-z", BASE).split(b"\0"):
         if not item:
             continue
@@ -66,10 +79,15 @@ def test_current():
 def test_approved():
     with tempfile.TemporaryDirectory(prefix="mf-e108-approved-") as folder:
         reference = Path(folder)
-        subprocess.run(["git", "clone", "--quiet", "--shared", "--no-checkout", ROOT, reference], check=True)
-        subprocess.run(["git", "checkout", "--quiet", "--detach", BASE], cwd=reference, check=True)
+        # Fetch into an independent object store so shallow CI checkouts
+        # cannot affect which baseline objects are visible in the test clone.
         origin = git("remote", "get-url", "origin").decode().strip()
-        subprocess.run(["git", "remote", "set-url", "origin", origin], cwd=reference, check=True)
+        subprocess.run(["git", "init", "--quiet"], cwd=reference, check=True)
+        subprocess.run(["git", "remote", "add", "origin", origin], cwd=reference, check=True)
+        subprocess.run(["git", "fetch", "--no-tags", "origin", BASE],
+                       cwd=reference, check=True)
+        verify_baseline(reference)
+        subprocess.run(["git", "checkout", "--quiet", "--detach", BASE], cwd=reference, check=True)
         for name in (".deps", "build"):
             (reference / name).symlink_to(ROOT / name, target_is_directory=True)
         subprocess.run(["make", "test"], cwd=reference, check=True)
