@@ -17,6 +17,48 @@ static const unsigned char custom_ticks[9]=MF_CUSTOM_SFX_TICKS;
 static combat_sound combat[3]={{0,-1,0,0,0,0},{0,-1,0,0,0,0},{0,-1,0,0,0,0}};
 static const unsigned char retrigger_ticks[3]=MF_SFX_RETRIGGER_TICKS;
 
+/* Control7 is unused by Level1's existing effects. It is a logical sequencer
+   control, not a permanently reserved SCSP slot. Never stop/pause/restart an active UGH. */
+static int death_pending,death_prepared,death_active,death_seen,death_retiring;
+static unsigned int death_started,death_stopped_at;
+int mf_music_protected(void){return death_pending || death_active || death_retiring;}
+static int death_update(int events,unsigned int now)
+{
+    int i;
+    if(death_retiring && now!=death_stopped_at)death_retiring=0;
+    if(death_active) {
+        SndSeqStat status;
+        SND_GetSeqStat(&status,7);
+        if(SND_SEQ_STAT_MODE(status)!=SND_MD_STOP && !death_seen) {
+            death_seen=1;death_started=now;
+        }
+        /* Ignore the initial STOP before the accepted start reaches the68K.
+           The score extends past PCM LEA; the sample-derived floor also guards
+           a stale/early status. No short timeout can release this protection. */
+        if(death_seen && SND_SEQ_STAT_MODE(status)==SND_MD_STOP &&
+           now-death_started>=MF_DEATH_MIN_TICKS && SND_StopSeq(7)==SND_RET_SET) {
+            /* The sample has already finished. Retire only our cached control,
+               then allow a real VBlank for the68K before reuse/stage teardown. */
+            death_active=0;death_retiring=1;death_stopped_at=now;
+        }
+    }
+    if(!mf_music_protected() && (events&(MF_COMBAT_HUMAN_DEATH(0)|MF_COMBAT_HUMAN_DEATH(1)))) {
+        death_pending=1;death_prepared=0;
+    }
+    if(mf_music_protected())for(i=0;i<3;i++)combat[i].pending=-1;
+    if(death_pending) {
+        if(!death_prepared) {
+            if(SND_SetSeqVl(7,MF_SFX_VOLUME,0)!=SND_RET_SET)return 1;
+            death_prepared=1;
+        }
+        if(SND_StartSeq(7,0,8,MF_SFX_PRIORITY)==SND_RET_SET) {
+            death_pending=0;death_active=1;death_seen=0;
+        }
+    }
+    return mf_music_protected();
+}
+
+
 static int upload(const char *name,unsigned int expected,unsigned int address)
 {
     int bytes=0;
@@ -80,8 +122,6 @@ static void combat_update(int player,int events,unsigned int now,unsigned int el
     if(events&(MF_COMBAT_JAB(player)|MF_COMBAT_BAT(player)|MF_COMBAT_HURT(player)))c->hit_wait=0;
     if(player==2 && (events&MF_WORLD_IMPACT)) {
         song=2;
-    }else if(events&MF_COMBAT_HUMAN_DEATH(player)) {
-        song=8;c->hit_wait=4; /* Enemy death replaces impact; player death stays6. */
     }else if(events&MF_COMBAT_CONNECT(player)) {
         song=6;c->hit_wait=4; /* Lethal results always take precedence. */
     }else if((events&MF_COMBAT_NONKILL(player)) && !c->hit_wait) {
@@ -111,8 +151,10 @@ static void combat_update(int player,int events,unsigned int now,unsigned int el
 }
 void mf_music_update(int started,int paused,int events,unsigned int now)
 {
-    int i;unsigned int elapsed=now-audio_tick;audio_tick=now;
+    int i,protected;unsigned int elapsed=now-audio_tick;audio_tick=now;
     if(!ready)return;
+    protected=death_update(events,now);
+    if(protected)events&=MF_TORCH_HISS;
     if(paused || paused_state)for(i=0;i<3;i++)if(combat[i].playing)combat[i].ends_at+=elapsed;
     if(torch_playing && (!started || paused || !(events&MF_TORCH_HISS))) {
         if(SND_StopSeq(4)==SND_RET_SET){torch_playing=0;hiss_guard=1;hiss_stopped_at=now;}
@@ -142,6 +184,13 @@ void mf_music_update(int started,int paused,int events,unsigned int now)
     }
     if(paused)return;
     for(i=0;i<3;i++)sfx_wait[i]=elapsed>=sfx_wait[i]?0:sfx_wait[i]-elapsed;
+    if(protected) {
+        for(i=0;i<3;i++) {
+            combat[i].hit_wait=elapsed>=combat[i].hit_wait?0:combat[i].hit_wait-elapsed;
+            if(combat[i].playing && (int)(now-combat[i].ends_at)>=0)combat[i].playing=0;
+        }
+        return; /* Requests are discarded, never queued for a later burst. */
+    }
     /* Shared ignition/hiss and original jump retain their sounds.
        No ignition cooldown bypass: at most one retirement tail per legacy port. */
     if(hiss_guard && now-hiss_stopped_at>=3)hiss_guard=0;

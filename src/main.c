@@ -669,7 +669,7 @@ static void update(void)
 #endif
         mf_music_update(game.started,game.paused,game.events,now);
 #if MF_LEVEL2_WINGSUIT
-        if(game.stage==MF_STAGE_LEVEL2_ENTRY){
+        if(game.stage==MF_STAGE_LEVEL2_ENTRY && !mf_music_protected()){
 #if MF_ENEMY_SPRITE_BANKS
             mf_enemy_bank_retire();
 #endif

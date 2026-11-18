@@ -7,6 +7,11 @@ typedef struct {Uint16 *program,*map; unsigned int program_size,map_size;} SndIn
 #define SND_INI_ARA_ADR(x) ((x).map)
 #define SND_INI_ARA_SZ(x) ((x).map_size)
 #define SND_RET_SET 0
+typedef struct {unsigned short mode;unsigned char stat;} SndSeqStat;
+#define SND_MD_STOP 0
+#define SND_MD_PLAY 256
+#define SND_SEQ_STAT_MODE(s) ((s).mode)
+void SND_GetSeqStat(SndSeqStat *,int);
 int SND_StopDsp(void);
 int SND_SetCdDaLev(int,int);
 int SND_SetTlVl(int);

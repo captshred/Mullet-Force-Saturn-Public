@@ -1,9 +1,9 @@
 # Recovered source is checked against the complete v3 delta/golden-resource lock.
 .PHONY: check test
 check:
-	python3 tools/validate-human-death.py --disc
+	python3 tools/validate-ugh-sfx.py --disc
 test:
-	python3 tools/validate-human-death.py --test
+	python3 tools/validate-ugh-sfx.py --test
 .PHONY: all setup bootstrap native check test clean
 all:
 	bash tools/build.sh

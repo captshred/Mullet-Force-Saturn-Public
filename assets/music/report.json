@@ -11,16 +11,16 @@
       "sha256": "b5d40d9620e370fce7c75c818b19f4f48f1d93bb7fce20a6c79cef18e8aa0c39"
     },
     "FX.SEQ": {
-      "bytes": 372,
-      "sha256": "2f1a18fb977f87fee698f22c7b2100872320b9130cdfd964bc53f67aca2ab893"
+      "bytes": 368,
+      "sha256": "1578a07808b77db8c5463e7c610cd1e6157cfe4e77e035b2cd5493c5809fc6ca"
     },
     "FX.TON": {
-      "bytes": 195232,
-      "sha256": "717e79b616101bcea6b027a43e3869996b0a2284e1134f0422117a13f060e382"
+      "bytes": 193684,
+      "sha256": "79e05c0d443798b611a913fbc307bd1c6a7e4971ae460f8f596a04ca998ec8a6"
     },
     "CUSTOM.MAP": {
       "bytes": 56,
-      "sha256": "fcd47b2de18a5702eb3828b89b2fa9d3ff74641b60d221d31a06e60fdfa1c941"
+      "sha256": "60d5cce572b1fb92a0d4eb161ff45dffa925857ada85a191e63ebd61b720ae5f"
     }
   },
   "sound_ram_regions": [
@@ -57,30 +57,30 @@
     {
       "name": "FX.SEQ",
       "start": 148864,
-      "size": 372,
-      "end": 149236
+      "size": 368,
+      "end": 149232
     },
     {
       "name": "FX.TON",
-      "start": 149236,
-      "size": 195232,
-      "end": 344468
+      "start": 149232,
+      "size": 193684,
+      "end": 342916
     },
     {
       "name": "STAGE.SEQ",
-      "start": 344468,
+      "start": 342916,
       "size": 40128,
-      "end": 384596
+      "end": 383044
     },
     {
       "name": "STAGE.TON",
-      "start": 384596,
+      "start": 383044,
       "size": 132148,
-      "end": 516744
+      "end": 515192
     }
   ],
-  "sound_ram_high_water": 516744,
-  "sound_ram_unallocated": 7544,
+  "sound_ram_high_water": 515192,
+  "sound_ram_unallocated": 9096,
   "music_held_peak": 15,
   "drum_tail_cap": 8,
   "release_policy": "RR31; driver can retire released musical voices under pressure; physical audibility unverified",
@@ -115,6 +115,85 @@
       "CUSTOM.MAP": {
         "bytes": 56,
         "sha256": "fcd47b2de18a5702eb3828b89b2fa9d3ff74641b60d221d31a06e60fdfa1c941"
+      }
+    }
+  },
+  "ugh_refinement": {
+    "baseline_executable": "744053ba851c9da6b8953708f125313f177b7dcb",
+    "source_sha256": "98ee01ea172e2dbf1a6f9ae7735644fd33551f7170c5b5ebb44a3794f0a90355",
+    "source_channels": 2,
+    "source_rate": 44100,
+    "source_bits": 16,
+    "source_frames": 42899,
+    "source_seconds": 0.972766439909297,
+    "frames": 10725,
+    "sample_rate": 11025,
+    "bits": 8,
+    "pcm_bytes": 10725,
+    "pcm_sha256": "bbc3b1f306740c307a321e287020dcf31ff3da212d97fc1306925e550d3bda2f",
+    "removed_argh_bytes": 12274,
+    "removed_argh_sha256": "6d461e766bdd1adadc74d4030b535ee66992be00718be8c157edb7ae6ff95889",
+    "conversion": "arithmetic mean of stereo channels, bandlimited11025Hz resample, signed PCM8; no gain, normalization, trimming, fades or compression",
+    "program": 8,
+    "velocity": 110,
+    "velocity_rounding": "nearest integer, half upward",
+    "velocity_audit": [
+      {
+        "song": 0,
+        "original": 110,
+        "new": 127
+      },
+      {
+        "song": 1,
+        "original": 110,
+        "new": 127
+      },
+      {
+        "song": 2,
+        "original": 110,
+        "new": 127
+      },
+      {
+        "song": 3,
+        "original": 110,
+        "new": 127
+      },
+      {
+        "song": 4,
+        "original": 110,
+        "new": 127
+      },
+      {
+        "song": 5,
+        "original": 110,
+        "new": 127
+      },
+      {
+        "song": 6,
+        "original": 110,
+        "new": 127
+      },
+      {
+        "song": 7,
+        "original": 110,
+        "new": 127
+      }
+    ],
+    "sound_ram_high_water": 515192,
+    "sound_ram_free": 9096,
+    "pcm_runtime_address": 332184,
+    "outputs": {
+      "FX.SEQ": {
+        "bytes": 368,
+        "sha256": "1578a07808b77db8c5463e7c610cd1e6157cfe4e77e035b2cd5493c5809fc6ca"
+      },
+      "FX.TON": {
+        "bytes": 193684,
+        "sha256": "79e05c0d443798b611a913fbc307bd1c6a7e4971ae460f8f596a04ca998ec8a6"
+      },
+      "CUSTOM.MAP": {
+        "bytes": 56,
+        "sha256": "60d5cce572b1fb92a0d4eb161ff45dffa925857ada85a191e63ebd61b720ae5f"
       }
     }
   }

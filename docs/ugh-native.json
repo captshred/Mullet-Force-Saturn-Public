@@ -1,0 +1,209 @@
+{
+  "ugh_native_tl_multiplier": 378.0,
+  "ugh_completed_plays": 16,
+  "ugh_intervals": [
+    {
+      "start": 1653,
+      "natural_end": 1711,
+      "frames": 58,
+      "last_pcm_position": 10725.25,
+      "slot": 28
+    },
+    {
+      "start": 1715,
+      "natural_end": 1773,
+      "frames": 58,
+      "last_pcm_position": 10725.25,
+      "slot": 1
+    },
+    {
+      "start": 1777,
+      "natural_end": 1835,
+      "frames": 58,
+      "last_pcm_position": 10725.25,
+      "slot": 25
+    },
+    {
+      "start": 1893,
+      "natural_end": 1951,
+      "frames": 58,
+      "last_pcm_position": 10725.25,
+      "slot": 31
+    },
+    {
+      "start": 1955,
+      "natural_end": 2013,
+      "frames": 58,
+      "last_pcm_position": 10725.25,
+      "slot": 29
+    },
+    {
+      "start": 2017,
+      "natural_end": 2075,
+      "frames": 58,
+      "last_pcm_position": 10725.25,
+      "slot": 7
+    },
+    {
+      "start": 2313,
+      "natural_end": 2371,
+      "frames": 58,
+      "last_pcm_position": 10725.25,
+      "slot": 28
+    },
+    {
+      "start": 2375,
+      "natural_end": 2433,
+      "frames": 58,
+      "last_pcm_position": 10725.25,
+      "slot": 27
+    },
+    {
+      "start": 2437,
+      "natural_end": 2495,
+      "frames": 58,
+      "last_pcm_position": 10725.25,
+      "slot": 3
+    },
+    {
+      "start": 15163,
+      "natural_end": 15221,
+      "frames": 58,
+      "last_pcm_position": 10725.25,
+      "slot": 26
+    },
+    {
+      "start": 15273,
+      "natural_end": 15331,
+      "frames": 58,
+      "last_pcm_position": 10725.25,
+      "slot": 0
+    },
+    {
+      "start": 15383,
+      "natural_end": 15441,
+      "frames": 58,
+      "last_pcm_position": 10725.25,
+      "slot": 27
+    },
+    {
+      "start": 15493,
+      "natural_end": 15551,
+      "frames": 58,
+      "last_pcm_position": 10725.25,
+      "slot": 26
+    },
+    {
+      "start": 15603,
+      "natural_end": 15661,
+      "frames": 58,
+      "last_pcm_position": 10725.25,
+      "slot": 26
+    },
+    {
+      "start": 15713,
+      "natural_end": 15771,
+      "frames": 58,
+      "last_pcm_position": 10725.25,
+      "slot": 21
+    },
+    {
+      "start": 15823,
+      "natural_end": 15881,
+      "frames": 58,
+      "last_pcm_position": 10725.25,
+      "slot": 24
+    }
+  ],
+  "prior_argh_premature_stop_examples": [
+    {
+      "start": 1654,
+      "off": 1655,
+      "pc": "0x554a",
+      "pcm_position": 183.75
+    },
+    {
+      "start": 1657,
+      "off": 1658,
+      "pc": "0x554a",
+      "pcm_position": 183.75
+    },
+    {
+      "start": 1677,
+      "off": 1678,
+      "pc": "0x554a",
+      "pcm_position": 183.75
+    },
+    {
+      "start": 1682,
+      "off": 1683,
+      "pc": "0x554a",
+      "pcm_position": 183.75
+    },
+    {
+      "start": 1696,
+      "off": 1697,
+      "pc": "0x554a",
+      "pcm_position": 183.75
+    }
+  ],
+  "measured_peak_active_native_ecnt_slots": 15,
+  "total_music_ons": 5890,
+  "full_music_loop_preserved": true,
+  "forced_music_offs": 0,
+  "music_ons_during_long_pause": 4880,
+  "mixed_pcm_peak": 18588,
+  "clipped_samples": 0,
+  "velocity_native_gain_audit": [
+    {
+      "song": 0,
+      "before_native_tl_multiplier": 378,
+      "after_native_tl_multiplier": 412,
+      "increases_gain": true
+    },
+    {
+      "song": 1,
+      "before_native_tl_multiplier": 378,
+      "after_native_tl_multiplier": 412,
+      "increases_gain": true
+    },
+    {
+      "song": 2,
+      "before_native_tl_multiplier": 378,
+      "after_native_tl_multiplier": 412,
+      "increases_gain": true
+    },
+    {
+      "song": 3,
+      "before_native_tl_multiplier": 378.0,
+      "after_native_tl_multiplier": 412.0,
+      "increases_gain": true
+    },
+    {
+      "song": 4,
+      "before_native_tl_multiplier": 378,
+      "after_native_tl_multiplier": 412,
+      "increases_gain": true
+    },
+    {
+      "song": 5,
+      "before_native_tl_multiplier": 378.0,
+      "after_native_tl_multiplier": 412.0,
+      "increases_gain": true
+    },
+    {
+      "song": 6,
+      "before_native_tl_multiplier": 378.0,
+      "after_native_tl_multiplier": 412.0,
+      "increases_gain": true
+    },
+    {
+      "song": 7,
+      "before_native_tl_multiplier": 378,
+      "after_native_tl_multiplier": 412,
+      "increases_gain": true
+    }
+  ],
+  "velocity_exceptions": [],
+  "existing_hiss_continues": true
+}
