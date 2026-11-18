@@ -1,0 +1,160 @@
+{
+  "driver": {
+    "death_plays": 19,
+    "death_completed": 19,
+    "death_in_progress_at_capture_end": 0,
+    "peak_native_active_slots_per_vblank": 15,
+    "mixed_pcm_peak": 18431,
+    "clipped_samples": 0,
+    "music_ons": 5890,
+    "level2_start_frame": null,
+    "level2_music_ons": null,
+    "death_intervals": [
+      {
+        "start": 1654,
+        "phase": 8420.25,
+        "live": true,
+        "end": 1699
+      },
+      {
+        "start": 1704,
+        "phase": 8420.25,
+        "live": true,
+        "end": 1749
+      },
+      {
+        "start": 1754,
+        "phase": 8420.25,
+        "live": true,
+        "end": 1799
+      },
+      {
+        "start": 1804,
+        "phase": 8420.25,
+        "live": true,
+        "end": 1849
+      },
+      {
+        "start": 1894,
+        "phase": 8420.25,
+        "live": true,
+        "end": 1939
+      },
+      {
+        "start": 1944,
+        "phase": 8420.25,
+        "live": true,
+        "end": 1989
+      },
+      {
+        "start": 1994,
+        "phase": 8420.25,
+        "live": true,
+        "end": 2039
+      },
+      {
+        "start": 2044,
+        "phase": 8420.25,
+        "live": true,
+        "end": 2089
+      },
+      {
+        "start": 2314,
+        "phase": 8420.25,
+        "live": true,
+        "end": 2359
+      },
+      {
+        "start": 2364,
+        "phase": 8420.25,
+        "live": true,
+        "end": 2409
+      },
+      {
+        "start": 2414,
+        "phase": 8420.25,
+        "live": true,
+        "end": 2459
+      },
+      {
+        "start": 2464,
+        "phase": 8420.25,
+        "live": true,
+        "end": 2509
+      },
+      {
+        "start": 15164,
+        "phase": 8420.25,
+        "live": true,
+        "end": 15209
+      },
+      {
+        "start": 15274,
+        "phase": 8420.25,
+        "live": true,
+        "end": 15319
+      },
+      {
+        "start": 15384,
+        "phase": 8420.25,
+        "live": true,
+        "end": 15429
+      },
+      {
+        "start": 15494,
+        "phase": 8420.25,
+        "live": true,
+        "end": 15539
+      },
+      {
+        "start": 15604,
+        "phase": 8420.25,
+        "live": true,
+        "end": 15649
+      },
+      {
+        "start": 15714,
+        "phase": 8420.25,
+        "live": true,
+        "end": 15759
+      },
+      {
+        "start": 15824,
+        "phase": 8420.25,
+        "live": true,
+        "end": 15869
+      }
+    ]
+  },
+  "transition": {
+    "death_plays": 3,
+    "death_completed": 3,
+    "death_in_progress_at_capture_end": 0,
+    "peak_native_active_slots_per_vblank": 23,
+    "mixed_pcm_peak": 19611,
+    "clipped_samples": 0,
+    "music_ons": 3262,
+    "level2_start_frame": 3348,
+    "level2_music_ons": 2847,
+    "death_intervals": [
+      {
+        "start": 2198,
+        "phase": 8420.25,
+        "live": true,
+        "end": 2243
+      },
+      {
+        "start": 2618,
+        "phase": 8420.25,
+        "live": true,
+        "end": 2663
+      },
+      {
+        "start": 2876,
+        "phase": 8420.25,
+        "live": true,
+        "end": 2921
+      }
+    ]
+  }
+}

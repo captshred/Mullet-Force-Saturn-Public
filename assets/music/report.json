@@ -12,15 +12,15 @@
     },
     "FX.SEQ": {
       "bytes": 368,
-      "sha256": "1578a07808b77db8c5463e7c610cd1e6157cfe4e77e035b2cd5493c5809fc6ca"
+      "sha256": "4e6739cbd480af5cc282d3ae9e8d9f786c92e67caec1b4ebf3f6351412683ed5"
     },
     "FX.TON": {
-      "bytes": 193684,
-      "sha256": "79e05c0d443798b611a913fbc307bd1c6a7e4971ae460f8f596a04ca998ec8a6"
+      "bytes": 199796,
+      "sha256": "52f1306274c06d2cde3390ff14d7c9488b5bda79b01b80b73db868429683687a"
     },
     "CUSTOM.MAP": {
       "bytes": 56,
-      "sha256": "60d5cce572b1fb92a0d4eb161ff45dffa925857ada85a191e63ebd61b720ae5f"
+      "sha256": "6cd2c7422191dbb66109c3deb2ccd3be72bba7f36bf36e9326fb0870501a838e"
     }
   },
   "sound_ram_regions": [
@@ -63,24 +63,24 @@
     {
       "name": "FX.TON",
       "start": 149232,
-      "size": 193684,
-      "end": 342916
+      "size": 199796,
+      "end": 349028
     },
     {
       "name": "STAGE.SEQ",
-      "start": 342916,
+      "start": 349028,
       "size": 40128,
-      "end": 383044
+      "end": 389156
     },
     {
       "name": "STAGE.TON",
-      "start": 383044,
+      "start": 389156,
       "size": 132148,
-      "end": 515192
+      "end": 521304
     }
   ],
-  "sound_ram_high_water": 515192,
-  "sound_ram_unallocated": 9096,
+  "sound_ram_high_water": 521304,
+  "sound_ram_unallocated": 2984,
   "music_held_peak": 15,
   "drum_tail_cap": 8,
   "release_policy": "RR31; driver can retire released musical voices under pressure; physical audibility unverified",
@@ -194,6 +194,44 @@
       "CUSTOM.MAP": {
         "bytes": 56,
         "sha256": "60d5cce572b1fb92a0d4eb161ff45dffa925857ada85a191e63ebd61b720ae5f"
+      }
+    }
+  },
+  "poowah_swap": {
+    "baseline_executable": "653b5f4206e58e9aa8e4c540ce08fa89f9db595a",
+    "source_sha256": "ef83d442051ff15c678eacc4d04a14f975af1eceeca5e1cc5d23bf24d20c9a92",
+    "source_channels": 1,
+    "source_bits": 16,
+    "source_rate": 44100,
+    "source_frames": 33679,
+    "source_seconds": 0.7636961451247165,
+    "frames": 8420,
+    "sample_rate": 11025,
+    "bits": 16,
+    "pcm_bytes": 16840,
+    "pcm_sha256": "d4bd1c3dc7d9fbd30132b6e1f7e08780b5d530748fd2e619d89e484d060552d3",
+    "removed_ugh_pcm_bytes": 10725,
+    "removed_ugh_pcm_sha256": "bbc3b1f306740c307a321e287020dcf31ff3da212d97fc1306925e550d3bda2f",
+    "conversion": "mono PCM16 preserved; deterministic bandlimited44100->11025Hz resample, big-endian PCM16; no gain/normalization/trim/fade/compression/stretch",
+    "gate_ticks": 782,
+    "protection_min_ticks": 46,
+    "velocity": 110,
+    "priority": 31,
+    "sound_ram_high_water": 521304,
+    "sound_ram_free": 2984,
+    "pcm_runtime_address": 332184,
+    "outputs": {
+      "FX.SEQ": {
+        "bytes": 368,
+        "sha256": "4e6739cbd480af5cc282d3ae9e8d9f786c92e67caec1b4ebf3f6351412683ed5"
+      },
+      "FX.TON": {
+        "bytes": 199796,
+        "sha256": "52f1306274c06d2cde3390ff14d7c9488b5bda79b01b80b73db868429683687a"
+      },
+      "CUSTOM.MAP": {
+        "bytes": 56,
+        "sha256": "6cd2c7422191dbb66109c3deb2ccd3be72bba7f36bf36e9326fb0870501a838e"
       }
     }
   }
