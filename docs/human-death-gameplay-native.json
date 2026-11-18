@@ -1,0 +1,23 @@
+{
+  "gameplay": {
+    "note_ons": 2807,
+    "new_death_ons": 23,
+    "shared_old_sample_ons": 19
+  },
+  "transition": {
+    "note_ons": 2009,
+    "new_death_ons": 4,
+    "shared_old_sample_ons": 3
+  },
+  "level2_comparison": {
+    "native_music_note_ons": 1460,
+    "ordered_keys_and_samples_identical": true,
+    "note_frame_delta_minmax": [
+      -1,
+      1
+    ],
+    "stage_entry_frame_approved": 3348,
+    "stage_entry_frame_current": 3350,
+    "mixed_waveform_bit_identical": false
+  }
+}

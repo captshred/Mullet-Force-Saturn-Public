@@ -30,6 +30,8 @@ typedef struct { int x,y,vx,hp,facing,state,timer,walk,hit_done,grace,flash,targ
 #define MF_COMBAT_JAB(i) (1u << (5+3*(i)))
 #define MF_COMBAT_BAT(i) (1u << (6+3*(i)))
 #define MF_COMBAT_CONNECT(i) (1u << (7+3*(i)))
+#define MF_COMBAT_HEAVY_HIT(i) (1u << (18+(i))) /* confirmed cross/jump-kick hit */
+#define MF_COMBAT_HUMAN_DEATH(i) (1u << (20+(i))) /* enemy only, never player */
 #define MF_WORLD_IMPACT (1u<<11) /* inorganic destruction only */
 #define MF_COMBAT_HURT(i) (1u << (16+(i)))
 #define MF_COMBAT_DESTROY(i) (1u << (14+(i)))

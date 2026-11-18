@@ -1,0 +1,32 @@
+{
+  "baseline": "38ed9a690f9349f490b5280992fcef882b32aaaf",
+  "source_sha256": "0cf4a9469b77414090585db7556cef664d2510aa4992ee430232baf88ebb5126",
+  "conversion": "ffmpeg arithmetic stereo mean, bandlimited resample to11025Hz, signed PCM8; no normalization, trimming, fades, compression or time stretch",
+  "frames": 12274,
+  "sample_rate": 11025,
+  "bits": 8,
+  "new_pcm_bytes": 12274,
+  "new_pcm_sha256": "6d461e766bdd1adadc74d4030b535ee66992be00718be8c157edb7ae6ff95889",
+  "old_pcm_bytes": 41824,
+  "old_pcm_sha256": "47f5e17f0f874572e4390a87b6414ddfa6b05c34dddce54093081fe5c1d0ecdd",
+  "sound_ram_high_water": 516744,
+  "sound_ram_free": 7544,
+  "old_program": 6,
+  "new_program": 8,
+  "old_pcm_runtime_address": 256896,
+  "new_pcm_runtime_address": 332188,
+  "outputs": {
+    "FX.SEQ": {
+      "bytes": 372,
+      "sha256": "2f1a18fb977f87fee698f22c7b2100872320b9130cdfd964bc53f67aca2ab893"
+    },
+    "FX.TON": {
+      "bytes": 195232,
+      "sha256": "717e79b616101bcea6b027a43e3869996b0a2284e1134f0422117a13f060e382"
+    },
+    "CUSTOM.MAP": {
+      "bytes": 56,
+      "sha256": "fcd47b2de18a5702eb3828b89b2fa9d3ff74641b60d221d31a06e60fdfa1c941"
+    }
+  }
+}

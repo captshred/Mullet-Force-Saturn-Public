@@ -13,7 +13,7 @@ static int torch_playing;
 static unsigned int audio_tick,hiss_stopped_at;
 static int hiss_guard;
 typedef struct { int playing,pending,stopping; unsigned int stopped_at,ends_at; unsigned char hit_wait; } combat_sound;
-static const unsigned char custom_ticks[8]=MF_CUSTOM_SFX_TICKS;
+static const unsigned char custom_ticks[9]=MF_CUSTOM_SFX_TICKS;
 static combat_sound combat[3]={{0,-1,0,0,0,0},{0,-1,0,0,0,0},{0,-1,0,0,0,0}};
 static const unsigned char retrigger_ticks[3]=MF_SFX_RETRIGGER_TICKS;
 
@@ -80,10 +80,12 @@ static void combat_update(int player,int events,unsigned int now,unsigned int el
     if(events&(MF_COMBAT_JAB(player)|MF_COMBAT_BAT(player)|MF_COMBAT_HURT(player)))c->hit_wait=0;
     if(player==2 && (events&MF_WORLD_IMPACT)) {
         song=2;
+    }else if(events&MF_COMBAT_HUMAN_DEATH(player)) {
+        song=8;c->hit_wait=4; /* Enemy death replaces impact; player death stays6. */
     }else if(events&MF_COMBAT_CONNECT(player)) {
         song=6;c->hit_wait=4; /* Lethal results always take precedence. */
     }else if((events&MF_COMBAT_NONKILL(player)) && !c->hit_wait) {
-        song=0;c->hit_wait=4;
+        song=(events&MF_COMBAT_HEAVY_HIT(player))?6:0;c->hit_wait=4;
     }else if(events&MF_COMBAT_BAT(player))song=7;
     else if(events&MF_COMBAT_JAB(player))song=5;
     if(player<2 && song<0 && (events&MF_COMBAT_DESTROY(player))) {

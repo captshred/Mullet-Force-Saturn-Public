@@ -20,9 +20,9 @@ int SND_SetTlVl(int v){(void)v;return 0;}
 
 static unsigned int clock_now;
 static int accepts=1,fail_stop=-1,fail_pause=-1;
-static int started_song[7][8],stopped_port[7],paused_port[7],resumed_port[7];
+static int started_song[7][9],stopped_port[7],paused_port[7],resumed_port[7];
 int SND_SetSeqVl(int p,int v,int fade){assert(p>=0 && p<7 && v==(p?MF_SFX_VOLUME:MF_MUSIC_VOLUME) && fade==0);return !accepts;}
-int SND_StartSeq(int p,int bank,int song,int priority){assert(p>=0 && p<7 && song>=0 && song<8);assert(bank==(p?0:1) && priority==(p?MF_SFX_PRIORITY:MF_MUSIC_PRIORITY));if(!accepts)return 1;started_song[p][song]++;return 0;}
+int SND_StartSeq(int p,int bank,int song,int priority){assert(p>=0 && p<7 && song>=0 && song<9);assert(bank==(p?0:1) && priority==(p?MF_SFX_PRIORITY:MF_MUSIC_PRIORITY));if(!accepts)return 1;started_song[p][song]++;return 0;}
 int SND_StopSeq(int p){assert(p>0 && p<7);if(!accepts || p==fail_stop)return 1;stopped_port[p]++;return 0;}
 int SND_PauseSeq(int p){assert(p>0 && p<7 && p!=4);paused_port[p]++;return !accepts || p==fail_pause;}
 int SND_ContSeq(int p){assert(p>0 && p<7 && p!=4);resumed_port[p]++;return !accepts;}
@@ -52,7 +52,7 @@ int main(void){int i,n;
  fail_pause=6;mf_music_update(1,1,0,++clock_now);assert(!paused_state && pause_target==1);
  n=paused_port[5];fail_pause=-1;mf_music_update(1,1,0,++clock_now);assert(paused_state && paused_port[5]==n);
  /* A complete song-loop-length pause cannot restart music or emit SFX. */
- {int before[7][8],p,s;memcpy(before,started_song,sizeof(before));
+ {int before[7][9],p,s;memcpy(before,started_song,sizeof(before));
   for(i=0;i<14000;i++)mf_music_update(1,1,MF_COMBAT_JAB(0)|MF_WORLD_IMPACT|MF_TORCH_HISS,++clock_now);
   for(p=0;p<7;p++)for(s=0;s<8;s++)assert(started_song[p][s]==before[p][s]);
   assert(!paused_port[0] && !resumed_port[0] && started_song[0][0]==1);
@@ -71,4 +71,16 @@ int main(void){int i,n;
  assert(started_song[3][2]==n+1 && combat[0].playing);
  assert(!started_song[3][0] && !started_song[3][6]);
  assert(started_song[0][0]==1);
+ for(i=0;i<2;i++){
+  int p=5+i,j,old6,new8,normal0;
+  for(j=0;j<100;j++)update(0);
+  old6=started_song[p][6];normal0=started_song[p][0];
+  update(MF_COMBAT_NONKILL(i)|MF_COMBAT_HEAVY_HIT(i));update(0);
+  assert(started_song[p][6]==old6+1 && started_song[p][0]==normal0);
+  new8=started_song[p][8];old6=started_song[p][6];
+  update(MF_COMBAT_HUMAN_DEATH(i)|MF_COMBAT_CONNECT(i)|MF_COMBAT_NONKILL(i)|MF_COMBAT_HEAVY_HIT(i));update(0);
+  assert(started_song[p][8]==new8+1 && started_song[p][6]==old6);
+  for(j=0;j<100;j++)update(0);
+  update(MF_COMBAT_CONNECT(i));update(0);assert(started_song[p][6]==old6+1);
+ }
  puts("PASS custom transport: independent ports, collision precedence, acknowledged stop/release guard, rejection retries, no catch-up bypass, misses/rapid repeats, two-player isolation, pause and unchanged unrelated sounds");return 0;}

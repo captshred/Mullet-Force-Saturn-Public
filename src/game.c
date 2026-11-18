@@ -323,6 +323,7 @@ static void fire_damage(mf_game *g,mf_enemy *e,int ignite,int owner)
     if(ignite)g->burn_owner[e-g->enemies]=owner;
     e->hp=clamp(e->hp-(ignite?MF_TORCH_DAMAGE:MF_BURN_DAMAGE),0,MF_ENEMY_MAX_HP);e->fire_flash=4;
     hit_sound(g,owner,e->hp,0);
+    if(!e->hp)g->events|=MF_COMBAT_HUMAN_DEATH(owner);
     if(ignite){if(!e->burn)e->burn_clock=MF_BURN_DAMAGE_TICKS;e->burn=MF_BURN_TICKS;}
     if(!e->hp){
         e->state=MF_ENEMY_DYING;e->timer=30;e->vx=0;e->burn=e->burn_clock=0;
@@ -935,6 +936,13 @@ static void player_hits(mf_game *g,mf_player *p)
             /* Enemy bat damage differs from the unchanged drum damage. */
             e->hp=clamp(e->hp-(p->bat?3:(p->attack_air?2:1)),0,MF_ENEMY_MAX_HP);
             hit_sound(g,(int)(p-g->players),e->hp,0);
+            /* Audio classification only; the existing hit mask owns suppression. */
+            if(!e->hp)g->events|=MF_COMBAT_HUMAN_DEATH((int)(p-g->players));
+            else if(!p->bat && (p->attack_air
+#if MF_PUNCH_COMBO
+                || g->combo[p-g->players].phase==2
+#endif
+                ))g->events|=MF_COMBAT_HEAVY_HIT((int)(p-g->players));
             e->state=e->hp?MF_ENEMY_HURT:MF_ENEMY_DYING;e->timer=e->hp?
                 (g->enemy_class[i]==MF_ENEMY_CORPORATE_PUNK?
                  (g->punk[i].punches>=MF_PUNK_COUNTER_THRESHOLD?MF_PUNK_COUNTER_HURT:

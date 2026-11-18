@@ -1,0 +1,41 @@
+{
+  "baseline": "38ed9a690f9349f490b5280992fcef882b32aaaf",
+  "changed_existing_text_files": {
+    "src/game.c": {
+      "before_sha256": "213026a3e85ac0c56b9e9427db0132b697d14d2fc8bb12978cf817f487006ea6",
+      "after_sha256": "424a1110526aca433d2bebd4db4d46cd2146d6ac0190f6cc8dfe98d68a3a5953"
+    },
+    "src/game.h": {
+      "before_sha256": "432e154541b07bf309eca066c17180e94f5e813c61cafc99bb6e9ee91b7a5f89",
+      "after_sha256": "73b76ea19d74c37128c8233398a270418b40da3407d4eb26335a35f5dc23290e"
+    },
+    "src/music.c": {
+      "before_sha256": "3c330456dab3be808990f8f8407566b5bdb16a437b4171f5c77ddbddbee46ed0",
+      "after_sha256": "63f406e0107a27a77ca718713a286c6027055636836c4ad547951f47f0db2760"
+    },
+    "src/music_data.h": {
+      "before_sha256": "619f8c52aa4854575083057a90ca63dfc632add56d6f85257d8abd8d5ca5d3d3",
+      "after_sha256": "8549a1c34f9df9e00813d8c5ff727b0b3079971ddc801c4fdb8b50fc1a4c6841"
+    },
+    ".github/workflows/build.yml": {
+      "before_sha256": "4767f50e2d09fe346170140b06bea5c253c4fb9aa774c126807eab9b8d339d63",
+      "after_sha256": "130abdc98263b33dc3988bee3e5ee8fe8babb26ed1c902c32a42a84eb89e69e7"
+    },
+    "Makefile": {
+      "before_sha256": "c4ee1b584ba360a5cce93615d8c083ccefb745dd9602c34e66777adb95f6d9c8",
+      "after_sha256": "1008acf2d7d213aea375f3e553dd1e725a58112d021f7ab3c6fb43116b7ebc5c"
+    },
+    "assets/music/report.json": {
+      "before_sha256": "9c0079ad7226dd5be0a7e2db3f7c94a969a9465709b8234ebec193066d2e7176",
+      "after_sha256": "bcc775d861518f873d362076fe3ce8b205c40694c1c83e07ddbba419fd3cfe2c"
+    },
+    "assets/public-runtime-lock.json": {
+      "before_sha256": "115422ec32dc08a11b67e40b4b45e2f445773bed75bb20908a080c8448b35905",
+      "after_sha256": "1c53d369cef24528e3279a2283c6a2d0d7cd51f2eae6a18e591f846742519122"
+    },
+    "tests/slide_pause_transport_test.c": {
+      "before_sha256": "57f7745a833ea0d8a2ba171b69996d86edb484ed6fc23fdeb88f897cb54b0ade",
+      "after_sha256": "6cd0fb518a44812ce18fea2642d1444705a90688947e863955d600ad90cb9e33"
+    }
+  }
+}

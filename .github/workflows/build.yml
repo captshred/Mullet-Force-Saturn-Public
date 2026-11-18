@@ -12,6 +12,7 @@ on:
         required: true
         default: arcade-impact-fx
         options:
+          - level1-human-death-combat-sfx
           - level2-neon-city
           - level2-audio-engine-review
           - arcade-impact-fx
@@ -68,6 +69,7 @@ jobs:
         run: |
           export MF_BUILD_BRANCH="$REQUESTED_REF"
           case "$BUILD_PROFILE" in
+            level1-human-death-combat-sfx) bash tools/build-source-complete.sh ;;
             arcade-impact-fx) bash tools/build-arcade-impact-fx.sh --native ;;
             level1-stage-clear) bash tools/build-level1-stage-clear.sh --native ;;
             stage-default) bash tools/build-stage.sh --native ;;

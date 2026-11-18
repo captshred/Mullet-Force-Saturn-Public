@@ -1,0 +1,148 @@
+{
+  "music_ons": 6243,
+  "complete_song_notes": 4907,
+  "complete_loop_preserved": true,
+  "music_ons_during_long_pause": 4970,
+  "forced_music_offs": 0,
+  "cross_owner_music_steals": 0,
+  "new_death_ons": 18,
+  "shared_old_impact_ons": 18,
+  "new_sample_runs": [
+    {
+      "frame": 494,
+      "active_frames": 69,
+      "last_pcm_position": 12274.25,
+      "first_pcm_position": 183.75,
+      "max_envelope_output": 377
+    },
+    {
+      "frame": 654,
+      "active_frames": 68,
+      "last_pcm_position": 12274.25,
+      "first_pcm_position": 183.75,
+      "max_envelope_output": 377
+    },
+    {
+      "frame": 814,
+      "active_frames": 69,
+      "last_pcm_position": 12274.25,
+      "first_pcm_position": 183.75,
+      "max_envelope_output": 377
+    },
+    {
+      "frame": 974,
+      "active_frames": 69,
+      "last_pcm_position": 12274.25,
+      "first_pcm_position": 183.75,
+      "max_envelope_output": 377
+    },
+    {
+      "frame": 1134,
+      "active_frames": 69,
+      "last_pcm_position": 12274.25,
+      "first_pcm_position": 183.75,
+      "max_envelope_output": 377
+    },
+    {
+      "frame": 1294,
+      "active_frames": 68,
+      "last_pcm_position": 12274.25,
+      "first_pcm_position": 183.75,
+      "max_envelope_output": 377
+    },
+    {
+      "frame": 1454,
+      "active_frames": 69,
+      "last_pcm_position": 12274.25,
+      "first_pcm_position": 183.75,
+      "max_envelope_output": 377
+    },
+    {
+      "frame": 1614,
+      "active_frames": 69,
+      "last_pcm_position": 12274.25,
+      "first_pcm_position": 183.75,
+      "max_envelope_output": 377
+    },
+    {
+      "frame": 1774,
+      "active_frames": 68,
+      "last_pcm_position": 12274.25,
+      "first_pcm_position": 183.75,
+      "max_envelope_output": 377
+    },
+    {
+      "frame": 15304,
+      "active_frames": 69,
+      "last_pcm_position": 12274.25,
+      "first_pcm_position": 183.75,
+      "max_envelope_output": 377
+    },
+    {
+      "frame": 15394,
+      "active_frames": 69,
+      "last_pcm_position": 12274.25,
+      "first_pcm_position": 183.75,
+      "max_envelope_output": 377
+    },
+    {
+      "frame": 15484,
+      "active_frames": 68,
+      "last_pcm_position": 12274.25,
+      "first_pcm_position": 183.75,
+      "max_envelope_output": 377
+    },
+    {
+      "frame": 15574,
+      "active_frames": 69,
+      "last_pcm_position": 12274.25,
+      "first_pcm_position": 183.75,
+      "max_envelope_output": 377
+    },
+    {
+      "frame": 15664,
+      "active_frames": 68,
+      "last_pcm_position": 12274.25,
+      "first_pcm_position": 183.75,
+      "max_envelope_output": 377
+    },
+    {
+      "frame": 15754,
+      "active_frames": 69,
+      "last_pcm_position": 12274.25,
+      "first_pcm_position": 183.75,
+      "max_envelope_output": 377
+    },
+    {
+      "frame": 15844,
+      "active_frames": 69,
+      "last_pcm_position": 12274.25,
+      "first_pcm_position": 183.75,
+      "max_envelope_output": 377
+    },
+    {
+      "frame": 15934,
+      "active_frames": 69,
+      "last_pcm_position": 12274.25,
+      "first_pcm_position": 183.75,
+      "max_envelope_output": 377
+    },
+    {
+      "frame": 16024,
+      "active_frames": 69,
+      "last_pcm_position": 12274.25,
+      "first_pcm_position": 183.75,
+      "max_envelope_output": 377
+    }
+  ],
+  "pcm_peak": 22162,
+  "clipped_samples": 0,
+  "peak_nonrelease_envelope_slots": 17,
+  "fx_by_control": {
+    "5": 35,
+    "6": 18,
+    "3": 16,
+    "4": 55
+  },
+  "voice_peak_measurement": "17 non-release native envelope slots; excludes short release tails. Positive cached envelope output alone is not a live-voice counter."
+}

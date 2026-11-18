@@ -11,16 +11,16 @@
       "sha256": "b5d40d9620e370fce7c75c818b19f4f48f1d93bb7fce20a6c79cef18e8aa0c39"
     },
     "FX.SEQ": {
-      "bytes": 328,
-      "sha256": "aada8a28c324994c771f35c7e44c23a6ba29d8c8c24a8e9527005816a33b21e5"
+      "bytes": 372,
+      "sha256": "2f1a18fb977f87fee698f22c7b2100872320b9130cdfd964bc53f67aca2ab893"
     },
     "FX.TON": {
-      "bytes": 182912,
-      "sha256": "d86a4664b4c9de8e9a1d31489a10b48cb8924f474f7c8b6fbcb0b2cc91d002e2"
+      "bytes": 195232,
+      "sha256": "717e79b616101bcea6b027a43e3869996b0a2284e1134f0422117a13f060e382"
     },
     "CUSTOM.MAP": {
       "bytes": 56,
-      "sha256": "1a685da7ac64a6a3d17717c1f17057317870d1582ea09f977abec016d875de53"
+      "sha256": "fcd47b2de18a5702eb3828b89b2fa9d3ff74641b60d221d31a06e60fdfa1c941"
     }
   },
   "sound_ram_regions": [
@@ -57,33 +57,65 @@
     {
       "name": "FX.SEQ",
       "start": 148864,
-      "size": 328,
-      "end": 149192
+      "size": 372,
+      "end": 149236
     },
     {
       "name": "FX.TON",
-      "start": 149192,
-      "size": 182912,
-      "end": 332104
+      "start": 149236,
+      "size": 195232,
+      "end": 344468
     },
     {
       "name": "STAGE.SEQ",
-      "start": 332104,
+      "start": 344468,
       "size": 40128,
-      "end": 372232
+      "end": 384596
     },
     {
       "name": "STAGE.TON",
-      "start": 372232,
+      "start": 384596,
       "size": 132148,
-      "end": 504380
+      "end": 516744
     }
   ],
-  "sound_ram_high_water": 504380,
-  "sound_ram_unallocated": 19908,
+  "sound_ram_high_water": 516744,
+  "sound_ram_unallocated": 7544,
   "music_held_peak": 15,
   "drum_tail_cap": 8,
   "release_policy": "RR31; driver can retire released musical voices under pressure; physical audibility unverified",
   "level1_refinement_report": "assets/music/level1-refinement-report.json",
-  "voice_policy": "Unchanged native allocation; scoped SFX bank selectors instead of global panic; duplicate-rhythm capacity recovered"
+  "voice_policy": "Unchanged native allocation; scoped SFX bank selectors instead of global panic; duplicate-rhythm capacity recovered",
+  "human_death_update": {
+    "baseline": "38ed9a690f9349f490b5280992fcef882b32aaaf",
+    "source_sha256": "0cf4a9469b77414090585db7556cef664d2510aa4992ee430232baf88ebb5126",
+    "conversion": "ffmpeg arithmetic stereo mean, bandlimited resample to11025Hz, signed PCM8; no normalization, trimming, fades, compression or time stretch",
+    "frames": 12274,
+    "sample_rate": 11025,
+    "bits": 8,
+    "new_pcm_bytes": 12274,
+    "new_pcm_sha256": "6d461e766bdd1adadc74d4030b535ee66992be00718be8c157edb7ae6ff95889",
+    "old_pcm_bytes": 41824,
+    "old_pcm_sha256": "47f5e17f0f874572e4390a87b6414ddfa6b05c34dddce54093081fe5c1d0ecdd",
+    "sound_ram_high_water": 516744,
+    "sound_ram_free": 7544,
+    "old_program": 6,
+    "new_program": 8,
+    "old_pcm_runtime_address": 256896,
+    "new_pcm_runtime_address": 332188,
+    "outputs": {
+      "FX.SEQ": {
+        "bytes": 372,
+        "sha256": "2f1a18fb977f87fee698f22c7b2100872320b9130cdfd964bc53f67aca2ab893"
+      },
+      "FX.TON": {
+        "bytes": 195232,
+        "sha256": "717e79b616101bcea6b027a43e3869996b0a2284e1134f0422117a13f060e382"
+      },
+      "CUSTOM.MAP": {
+        "bytes": 56,
+        "sha256": "fcd47b2de18a5702eb3828b89b2fa9d3ff74641b60d221d31a06e60fdfa1c941"
+      }
+    }
+  }
 }
