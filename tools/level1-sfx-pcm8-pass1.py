@@ -207,10 +207,46 @@ def test_level1():
         subprocess.run([exe], cwd=ROOT, check=True)
 
 
+def validate_reset_wingsuit():
+    import hero_sprite_pass3_data
+
+    base = "9d7b1018af5757f01b5b48e8d20e11a10789e0c8"
+    if subprocess.run(["git", "cat-file", "-e", base + "^{commit}"], cwd=ROOT,
+                      capture_output=True).returncode:
+        subprocess.run(["git", "fetch", "--no-tags", "--depth=1", "origin", base],
+                       cwd=ROOT, check=True)
+    directory = "assets/wingsuit/"
+    manifest_path = directory + "manifest.json"
+    expected_manifest = json.loads(git("show", f"{base}:{manifest_path}"))
+    buck = {0x8c51: 0xe123, 0x949c: 0xfe05, 0xa55f: 0xfe8a}
+    chuck = {0xc04a: 0x9475, 0xe8b2: 0xa4ff}
+    sprites = {f"W{hero}{pose}.BIN": ramp for hero, ramp in
+               (("BUCK", buck), ("CHUCK", chuck)) for pose in ("", "L", "R")}
+    for name, ramp in sprites.items():
+        path = directory + name
+        old = git("show", f"{base}:{path}")
+        pixels = struct.unpack(">1024H", old)
+        expected = struct.pack(">1024H", *(ramp.get(pixel, pixel) for pixel in pixels))
+        assert expected != old and (ROOT / path).read_bytes() == expected, path
+        assert bytes.fromhex("".join(hero_sprite_pass3_data.HERO_RGB555[name])) == expected, name
+        expected_manifest["files"][name] = fingerprint(expected)
+    assert json.loads((ROOT / manifest_path).read_text()) == expected_manifest
+    allowed = {"Makefile", "src/main.c", "tools/hero_sprite_pass3_data.py",
+               "tools/level1-sfx-pcm8-pass1.py", "tests/hero_sprite_pass3_test.py",
+               "docs/global-reset-wingsuit-colors/README.md",
+               "docs/global-reset-wingsuit-colors/street.png",
+               "docs/global-reset-wingsuit-colors/rooftops.png", manifest_path}
+    allowed.update(directory + name for name in sprites)
+    changed = set(git("diff", "--name-only", base, "--").decode().splitlines())
+    assert changed <= allowed, changed - allowed
+    print("PASS six RGB555 membrane recolors and exact protected PCM8 Pass 2 files", flush=True)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--pass2", action="store_true")
     parser.add_argument("--write", action="store_true")
+    parser.add_argument("--reset-wingsuit", action="store_true")
     parser.add_argument("--disc", action="store_true")
     parser.add_argument("--test", action="store_true")
     args = parser.parse_args()
@@ -227,14 +263,20 @@ def main():
             (ROOT / path).write_bytes(data)
         assert (ROOT / path).read_bytes() == data, path
 
-    changed = set(git("diff", "--name-only", base, "--").decode().splitlines())
-    assert changed <= set(expected) | {"Makefile", "tools/level1-sfx-pcm8-pass1.py",
-                                     f"docs/level1-sfx-pcm8-pass{pass_number}.md"}, changed
-    print("PASS exact PCM8 payloads, contiguously relocated banks, and protected baseline files", flush=True)
+    if args.reset_wingsuit:
+        assert args.pass2 and not args.write
+        validate_reset_wingsuit()
+    else:
+        changed = set(git("diff", "--name-only", base, "--").decode().splitlines())
+        assert changed <= set(expected) | {"Makefile", "tools/level1-sfx-pcm8-pass1.py",
+                                         f"docs/level1-sfx-pcm8-pass{pass_number}.md"}, changed
+    print("PASS exact PCM8 payloads and contiguously relocated banks", flush=True)
     if args.disc:
         importlib.import_module("validate-level2-balance").validate_disc()
         print("PASS native disc payloads and executable source fingerprint", flush=True)
     if args.test:
+        if args.reset_wingsuit:
+            subprocess.run(["python3", "tests/hero_sprite_pass3_test.py"], cwd=ROOT, check=True)
         test_level1()
         startup = importlib.import_module("validate-e108-root-cause")
         startup.test_current()

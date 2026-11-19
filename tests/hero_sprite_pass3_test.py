@@ -1,4 +1,4 @@
-"""Native asset checks for the approved red/purple identity and roll direction."""
+"""Native asset checks for the blue/red identity and roll direction."""
 from pathlib import Path
 import struct,sys
 R=Path(__file__).resolve().parents[1];sys.path.insert(0,str(R/'tools'))
@@ -11,8 +11,8 @@ for name,rows in HERO_RGB555.items():
     words=struct.unpack('>1024H',b);assert all(v==0 or v&0x8000 for v in words)
     colors=[((v&31)*8,((v>>5)&31)*8,((v>>10)&31)*8) for v in words if v]
     red=sum(r>120 and r>2.5*g and r>2.5*bl for r,g,bl in colors)
-    purple=sum(bl>100 and bl>1.15*r and bl>2*g for r,g,bl in colors)
-    assert (red>=12 and purple==0) if name.startswith('WBUCK') else (purple>=12 and red==0),name
+    blue=sum(bl>150 and bl>2*r and bl>1.4*g for r,g,bl in colors)
+    assert (blue>=12 and red==0) if name.startswith('WBUCK') else (red>=12 and blue==0),name
     tips=[[i//32 for i,v in enumerate(words) if v and i//32<24 and (i%32<5 if side==0 else i%32>=27)] for side in (0,1)]
     assert all(tips),name
     means=[sum(v)/len(v) for v in tips]
@@ -25,4 +25,4 @@ for actor in ('WBUCK','WCHUCK'):
     left=struct.unpack('>1024H',(R/'assets/wingsuit'/(actor+'L.BIN')).read_bytes())
     right=struct.unpack('>1024H',(R/'assets/wingsuit'/(actor+'R.BIN')).read_bytes())
     assert tuple(v for y in range(32) for v in left[y*32:(y+1)*32][::-1])!=right
-print('PASS canonical hero assets: six exact 32x32 RGB555 grids, silver/red versus black/purple membranes, center symmetry and both roll attitudes; no mirrored bank substitution')
+print('PASS canonical hero assets: six exact 32x32 RGB555 grids, silver/blue versus black/red membranes, center symmetry and both roll attitudes; no mirrored bank substitution')

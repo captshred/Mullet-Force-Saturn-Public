@@ -8,27 +8,27 @@
   "files": {
     "WBUCK.BIN": {
       "bytes": 2048,
-      "sha256": "9fa9c843be05bf9c98498462fa76d99f16048bc3e304ca502e28f81a08ca647e"
+      "sha256": "524c64a83eb54c6f0ceafeaa47afddf3c583d0e2f3afc965876d9e84bc6ade5e"
     },
     "WBUCKL.BIN": {
       "bytes": 2048,
-      "sha256": "42e60af95abd2df67cf6ed10c717aa4b67a1e87e3c6af8a8c281be7152300016"
+      "sha256": "87d588dee7e32ca4bb98b0363e4c2f8bb3978bc8b01f424e3eda1c29d75454fe"
     },
     "WBUCKR.BIN": {
       "bytes": 2048,
-      "sha256": "dad1a5c4bb330991a76b8831ba775fd3d93c4e70f11a946ef8425a3e5abd3249"
+      "sha256": "0d1f077681337723e522d1682e8119378867177238de85bfcc0e8418e8bc7bc7"
     },
     "WCHUCK.BIN": {
       "bytes": 2048,
-      "sha256": "cbfcddef945754a4f5185e6b10a05b10c590127067dc80632419b921a256a659"
+      "sha256": "f2f0c3fc29cc715f50bec21887f277d791f7e876c217e05fbad1b7d293c89c91"
     },
     "WCHUCKL.BIN": {
       "bytes": 2048,
-      "sha256": "9fc01c73ce666b083e1cbe092eab625a7d7adcfcfb246e0df4805bac1aabb713"
+      "sha256": "f5adc57c6bd3d1189adfbe8b1b81c65bbad4543b85a205e962a7ee83d8fcb546"
     },
     "WCHUCKR.BIN": {
       "bytes": 2048,
-      "sha256": "326b3182f2231b99bd4665f33cfe4cdc2b649a85b9a420b083cd1864ad8e61c6"
+      "sha256": "30ff3be41284b0274540702022f41c44ef6bc30800fb56e8c5fe357506b61b39"
     },
     "WDRONE.BIN": {
       "bytes": 1152,

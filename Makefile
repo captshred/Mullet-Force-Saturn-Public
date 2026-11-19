@@ -1,9 +1,9 @@
 # Recovered source is checked against the complete v3 delta/golden-resource lock.
 .PHONY: check test
 check:
-	python3 tools/level1-sfx-pcm8-pass1.py --pass2 --disc
+	python3 tools/level1-sfx-pcm8-pass1.py --pass2 --reset-wingsuit --disc
 test:
-	python3 tools/level1-sfx-pcm8-pass1.py --pass2 --test
+	python3 tools/level1-sfx-pcm8-pass1.py --pass2 --reset-wingsuit --test
 .PHONY: all setup bootstrap native check test clean
 all:
 	bash tools/build.sh

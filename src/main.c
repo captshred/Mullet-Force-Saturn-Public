@@ -79,6 +79,29 @@ static void draw_asset_diagnostics(void)
 static volatile unsigned int vblanks;
 static unsigned int last_vblank,last_input_vblank=~0u,pending[2];
 static mf_input sampled_input[2];
+enum { RESET_CHORD = MF_START | MF_A | MF_B | MF_C };
+static volatile unsigned reset_requested;
+static unsigned reset_armed[2];
+
+static void poll_reset_chord(void)
+{
+    unsigned port;
+
+    /* Jo's peripheral callback runs first. Latch short presses even while
+       the main thread is in a synchronous disc or sound startup operation. */
+    for (port = 0; port < 2; ++port) {
+        mf_input input = mf_input_read_port(port);
+        if (!input.connected) {
+            reset_armed[port] = 0;
+        } else if ((input.held & RESET_CHORD) != RESET_CHORD) {
+            reset_armed[port] = 1;
+        } else if (reset_armed[port]) {
+            reset_armed[port] = 0;
+            reset_requested = 1;
+        }
+    }
+}
+
 static void clock_tick(void)
 {
     ++vblanks;
@@ -561,9 +584,26 @@ static void update(void)
     if(now!=last_input_vblank){
         for(j=0;j<2;j++){
             sampled_input[j]=mf_input_read_port(j);
+            if ((sampled_input[j].held & RESET_CHORD) == RESET_CHORD) {
+                /* A chord held across boot must neither reset again nor
+                   activate any of its component buttons. */
+                sampled_input[j].held &= ~RESET_CHORD;
+                sampled_input[j].pressed &= ~RESET_CHORD;
+                pending[j] &= ~RESET_CHORD;
+            }
             if(!sampled_input[j].connected)pending[j]=0;else pending[j]|=sampled_input[j].pressed;
         }
         last_input_vblank=now;
+    }
+    if (reset_requested) {
+        pending[0] = pending[1] = 0;
+        /* This boundary is outside the loading/audio call stacks. Finish
+           queued DMA and let SGL arbitrate SYSRES with peripheral polling. */
+        slDMAWait();
+        reset_requested = 0;
+        if (slSystemReset())
+            reset_requested = 1; /* SGL did not accept the command yet. */
+        return;
     }
 #if MF_ENEMY_SPRITE_BANKS
     if(!asset_error && !mf_enemy_bank_ready() && !stage2_owned) {
@@ -685,6 +725,7 @@ void jo_main(void)
 {
     jo_core_init(JO_COLOR_RGB(9,12,29));
     core_init_complete=1;
+    jo_core_add_vblank_callback(poll_reset_chord);
     jo_print(10,12,"LOADING NEON DISTRICT");
     load_assets();
     jo_clear_screen();
