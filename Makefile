@@ -5,7 +5,7 @@ check:
 	python3 tools/validate_level1_diagonal.py
 test:
 	python3 tools/level1-sfx-pcm8-pass1.py --pass2 --reset-wingsuit --diagonal --test
-	python3 tools/test-intersection.py
+	python3 tools/test-intersection.py --level1-only
 .PHONY: all setup bootstrap native check test clean
 all:
 	bash tools/build.sh

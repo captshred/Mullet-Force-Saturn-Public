@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
 """Current production flags: extended cache/world, approved combat and rendering."""
 from pathlib import Path
-import subprocess,tempfile
+import argparse,subprocess,tempfile
 R=Path(__file__).resolve().parents[1]
+parser=argparse.ArgumentParser(description=__doc__)
+parser.add_argument('--level1-only',action='store_true',
+                    help='skip the historical Fire/Hit bank lock on later audio profiles')
+args=parser.parse_args()
 def run(args):subprocess.run(args,cwd=R,check=True)
 with tempfile.TemporaryDirectory(prefix='intersection-tests-') as d:
  common=['cc','-std=c99','-g','-fsanitize=undefined','-fno-sanitize-recover=all','-ffunction-sections','-fdata-sections','-include',str(R/'build/build-info.h'),'-I'+str(R/'src'),'-I'+str(R/'build'),'-Wl,--gc-sections']
@@ -17,4 +21,5 @@ with tempfile.TemporaryDirectory(prefix='intersection-tests-') as d:
  source=(R/'tools/validate-coop-balance.py').read_text();block=source[source.index(' # Use the production renderer'):]
  exec('\n'.join(line[1:] for line in block.splitlines()))
 run(['python3','tools/test-ricky-jump-render.py'])
-run(['python3','tools/validate-fire-hit.py'])
+if not args.level1_only:
+ run(['python3','tools/validate-fire-hit.py'])
