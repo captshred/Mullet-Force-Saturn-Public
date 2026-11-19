@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify the Phase 3B delta, unchanged approved downhill pixels, and background budget."""
+"""Verify the Phase 3B delta, protected approved geometry and repacked visual art, and background budget."""
 import hashlib
 import json
 from pathlib import Path
@@ -8,7 +8,7 @@ import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE = "320f0465c1e2c6addbedbbace7ed99e87b390791"
-APPROVED_HILL = "b95759d321b9a77a401620e1c552ed28f8c24a0a"
+APPROVED_HILL = "382b226b476b305c9ebab8e6d2ddbe763603d41b"
 ART = "assets/level1-intersection/"
 PHASE_DELTA = {
     "Makefile",
@@ -39,13 +39,11 @@ def validate():
     changed = set(git("diff", "--name-only", BASE, "--").decode().splitlines())
     assert changed <= PHASE_DELTA, changed - PHASE_DELTA
 
-    downhill_delta = {
-        "src/intersection_data.h", "src/world_config.h", "tests/intersection/world.c",
-        "tools/test-intersection-runtime.py", "tools/validate_level1_diagonal.py",
-        "docs/level1-diagonal.md",
+    polish_delta = {
+        "src/intersection_data.h", "tools/validate_level1_diagonal.py", "docs/level1-diagonal.md",
     } | {ART + name for name in ("IXMAP.BIN", "IXOFF.BIN", "IXPACK.BIN", "IXPIX.BIN", "manifest.json")}
     changed = set(git("diff", "--name-only", APPROVED_HILL, "--").decode().splitlines())
-    assert changed <= downhill_delta, changed - downhill_delta
+    assert changed <= polish_delta, changed - polish_delta
 
     art = ROOT / ART
     manifest = json.loads((art / "manifest.json").read_text())
@@ -58,14 +56,28 @@ def validate():
     old = git("show", f"{APPROVED_HILL}:{ART}IXPIX.BIN")
     current = (art / "IXPIX.BIN").read_bytes()
     assert len(current) == 2560 * 368
-    for y in range(304):
-        assert current[y*2560:y*2560+2240] == old[y*2240:(y+1)*2240], y
+    assert len(old) == len(current)
+    for y in range(368):
+        start = y * 2560
+        assert current[start:start+1928] == old[start:start+1928], y
     for x in range(1920, 2560):
-        y = 150 + (x - 1920) // 5
-        assert all(current[y*2560+x::2560]), x
-    for x in range(2262, 2560):
-        y = 51 + (x - 1920) // 5
-        assert all(current[y*2560+x:(y+100)*2560+x:2560]), x
+        drop = (x - 1920) // 5
+        road = (158 + drop) * 2560 + x
+        assert current[road::2560] == old[road::2560], x
+        assert all(current[road::2560]), x
+        # The only transparent pixels in a facade column are above its roof.
+        if 1928 <= x < 2240:
+            column = current[drop*2560+x:road:2560]
+            first_solid = next(i for i, pixel in enumerate(column) if pixel)
+            assert all(column[first_solid:]), x
+        if x >= 2257:
+            roof = 61 if x < 2398 else 85
+            assert all(current[roof*2560+x:road:2560]), x
+    # Each storefront starts at a level roof on its own stepped foundation.
+    for start, end, roof in ((1936, 2028, 13), (2029, 2133, 41), (2134, 2239, 57)):
+        row = current[roof*2560+start:roof*2560+end+1]
+        assert row and row[0] and row == row[:1]*len(row), start
+    assert hashlib.sha256((ROOT / "build/cd/NSPAL.BIN").read_bytes()).hexdigest() == manifest["palette_sha256"]
 
     assert manifest["resident_cell_bytes"] == 106496 and manifest["VDP2_reserved_bytes"] == 434176
     assert all(manifest[f"{chip}_delta_bytes"] == 0 for chip in ("VDP1", "VDP2", "SCSP"))
@@ -73,7 +85,7 @@ def validate():
     link_map = (ROOT / "build/game.map").read_text()
     end = int(re.search(r"0x([0-9a-f]+)\s+__bend =", link_map)[1], 16)
     assert end < 0x060c0000, hex(end)
-    print("PASS exact Phase 3B-1 pixels, opaque new road and parking lot, protected source delta, disc assets and graphics budgets")
+    print("PASS exact pre-bend and road pixels, opaque facades and parking lot, protected source delta, disc assets and graphics budgets")
 
 
 if __name__ == "__main__":

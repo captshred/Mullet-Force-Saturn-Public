@@ -50,3 +50,17 @@ the existing world-boundary code.
 Build with the source-complete profile above. Select
 `feature/level1-phase3b-downhill-extension` in the Actions branch picker
 and use its exact commit SHA for `source_ref`.
+
+## Phase 3B-3 · Visual polish
+
+The approved geometry is retained from `382b226b476b305c9ebab8e6d2ddbe763603d41b`.
+The uphill connection and the entire playable roadway retain their original
+indexed pixels. Above the road, storefront rooflines, windows and signage stay level on
+stepped foundations. Three open-sided parking decks at each of two
+elevations sit behind a sloped concrete forecourt with stalls, drainage,
+a ramp and streetlights. All art is flattened into the street layer using the
+existing palette. The skyline remains an independent parallax layer.
+
+The build uses the same source-complete profile. Select
+`art/level1-downhill-visual-polish` in the Actions branch picker and use
+the candidate's exact commit SHA for `source_ref`.
