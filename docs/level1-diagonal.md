@@ -19,3 +19,34 @@ The original 1,920 × 240 indexed pixels and the street palette are preserved by
 ## Build
 
 Run `bash tools/build-source-complete.sh`, `make check` and `make test` with the pinned host setup. On GitHub Actions open **Manual Saturn playtest build**, select **Run workflow**, choose `feature/level1-phase3b-diagonal` in the branch picker, set `profile` to `level1-human-death-combat-sfx` (the workflow's source-complete recipe), and use the candidate's full SHA for `source_ref`. Download the artifact and open the CUE with its matching BIN alongside it.
+
+## Phase 3B-2 · The Downhill Bomb
+
+This continuation starts at tested Phase 3B-1 commit
+`b95759d321b9a77a401620e1c552ed28f8c24a0a`. The road keeps its 1:5 grade
+(11.31°) and the same curb-to-curb playable width. The parking lot is
+placeholder scenery on the far side of the curb, with painted spaces,
+concrete retaining walls and fencing. Its pavement and walls use the
+existing street palette and VDP2 tile cache.
+
+| Measurement | Phase 3B-1 | Phase 3B-2 |
+|---|---:|---:|
+| Hill start | X 1,920 | X 1,920 |
+| Hill end | X 2,240 | X 2,560 |
+| Horizontal hill length | 320 px | 640 px |
+| Total road drop | 64 px | 128 px |
+| Length measured along the grade | 326.3 px | 652.7 px |
+| World | 2,240 × 304 px | 2,560 × 368 px |
+| Camera X / Y limits | 0–1,920 / 0–64 | 0–2,240 / 0–128 |
+| Player X limits | 26–2,214 | 26–2,534 |
+
+All 2,240 × 304 approved source pixels are preserved. The packed tile
+dictionary is 275,496 bytes on disc and the complete background allocation
+is 377,435 bytes of the existing 393,216-byte Jo heap. The 128-block decode
+cache and the 1,664-tile VDP2 cache retain their capacities. Camera tracking,
+checkpoint rules and player and enemy lane coordinates continue through
+the existing world-boundary code.
+
+Build with the source-complete profile above. Select
+`feature/level1-phase3b-downhill-extension` in the Actions branch picker
+and use its exact commit SHA for `source_ref`.

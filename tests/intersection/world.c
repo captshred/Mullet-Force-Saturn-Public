@@ -5,14 +5,14 @@ static void tick(mf_game *g,unsigned a,unsigned b,unsigned connected) {
  unsigned h[2]={a,b},p[2]={0,0};mf_game_step_inputs(g,h,p,connected);
 }
 int main(void) {
- assert(MF_WORLD_WIDTH==2240 && MF_WORLD_RIGHT==2214 && MF_WORLD_CAMERA_MAX==1920);
+ assert(MF_WORLD_WIDTH==2560 && MF_WORLD_RIGHT==2534 && MF_WORLD_CAMERA_MAX==2240);
  int marks[]={0,320,640,960,1280};
  for(unsigned i=0;i<sizeof marks/sizeof marks[0];i++)assert(mf_world_checkpoint(marks[i])==marks[i]);
  assert(mf_world_checkpoint(1599)==1280 && mf_world_checkpoint(1600)==1280);
  for(int coop=0;coop<2;coop++) {
   mf_game g;mf_game_init(&g);g.started=1;
   if(coop)recover_player(&g,1,1);
-  int max_count=0,seen_classes=0,retired=0;
+  int max_count=0,seen_classes=0,retired=0,lot_enemies=0;
   for(int t=0;t<2400;t++) {
    int camera=g.camera,floor=g.camera_floor;
    for(int p=0;p<2;p++)g.players[p].invulnerable=100;
@@ -32,6 +32,8 @@ int main(void) {
     if(states[j]!=MF_ENEMY_ABSENT && e->state==MF_ENEMY_ABSENT)++retired;
     if(e->state!=MF_ENEMY_ABSENT) {
      seen_classes|=1<<g.enemy_class[j];
+     if(e->x>2240*256 && e->x/256<g.camera+320 &&
+        e->y>=168*256 && e->y<=229*256)lot_enemies|=1<<g.enemy_class[j];
      assert(e->x>=MF_ENEMY_WORLD_LEFT*256 && e->x<=MF_ENEMY_WORLD_RIGHT*256);
      if(states[j]==MF_ENEMY_ABSENT)assert(e->x/256<g.camera || e->x/256>g.camera+320);
     }
@@ -47,8 +49,11 @@ int main(void) {
    }
    for(int p=0;p<coop+1;p++)assert(g.players[p].y==(direction?229:168)*256);
   }
-  assert(mf_world_camera_y(1600)==0 && mf_world_camera_y(MF_WORLD_CAMERA_MAX)==64);
-  assert(mf_world_road_drop(1920)==0 && mf_world_road_drop(MF_WORLD_RIGHT)==58);
+  assert(mf_world_camera_y(1600)==0 && mf_world_camera_y(1920)==64 &&
+         mf_world_camera_y(MF_WORLD_CAMERA_MAX)==128);
+  assert(mf_world_road_drop(1920)==0 && mf_world_road_drop(2240)==64 &&
+         mf_world_road_drop(2560)==128 && mf_world_road_drop(MF_WORLD_RIGHT)==122);
+  assert(lot_enemies & (1<<MF_ENEMY_CORPORATE_PUNK));
   assert(max_count==(coop?3:2) && g.ricky_spawns>(unsigned)max_count && (seen_classes&1));
   for(int t=0;t<1000;t++) {
    int camera=g.camera;for(int p=0;p<2;p++)g.players[p].invulnerable=100;
@@ -61,6 +66,6 @@ int main(void) {
    unsigned h[2]={0,MF_START},p[2]={0,MF_START};mf_game_step_inputs(&g,h,p,3);
    assert(g.players[1].active && g.players[1].x>=g.camera*256 && g.players[1].x<=(g.camera+320)*256);
   }
-  printf("PASS %s diagonal traversal, endpoint1920/checkpoint1280 backstop, smooth camera/tether, offscreen spawns, max%d, class schedule intact, retirement/no KO, join/leave\n",coop?"coop":"solo",max_count);
+  printf("PASS %s diagonal traversal, endpoint2240/checkpoint1280 backstop, smooth camera/tether, offscreen spawns, max%d, class schedule intact, retirement/no KO, join/leave\n",coop?"coop":"solo",max_count);
  }
 }
