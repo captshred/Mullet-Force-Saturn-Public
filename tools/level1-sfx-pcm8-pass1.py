@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Reproduce and verify the three PCM8 effects against the approved PCM16 bank."""
+"""Reproduce and verify either experimental Level 1 PCM8 pass."""
 import argparse
 from hashlib import sha256
 import importlib
@@ -15,20 +15,20 @@ from level1_refinement import read as read_sequence
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE = "342595360d8c0d82377b1b0a44171cef0d5ef341"
+PASS1_COMMIT = "43b788a02e37d9b3b962c2aaa735ba0b2afb0340"
 CANDIDATES = {
-    0: ("Nonlethal impact", 8044, "95dbb6e91512"),
-    2: ("Inorganic explosion", 15840, "2eca5219e7a0"),
-    7: ("Bat swing", 16733, "8aca2c9a3c08"),
+    0: ("Nonlethal impact", 8044, 22050, "95dbb6e91512"),
+    2: ("Inorganic explosion", 15840, 22050, "2eca5219e7a0"),
+    7: ("Bat swing", 16733, 22050, "8aca2c9a3c08"),
 }
-RATE = 22050
+PASS2_CANDIDATES = {
+    5: ("Jab initiation whoosh", 17844, 44100,
+        "18176fffa2f121c3ab986398116f464eb702a7a43879c6f3ee847fe6836ce6b4"),
+}
 
 
 def git(*args):
     return subprocess.check_output(["git", *args], cwd=ROOT)
-
-
-def baseline(path):
-    return git("show", f"{BASE}:{path}")
 
 
 def aligned(n):
@@ -43,7 +43,7 @@ def db_ratio(numerator, denominator):
     return round(20 * math.log10(numerator / denominator), 5)
 
 
-def quantize(raw):
+def quantize(raw, rate):
     original = struct.unpack(f">{len(raw) // 2}h", raw)
     rounded = [round(value / 256) for value in original]
     pcm = [min(127, max(-128, value)) for value in rounded]
@@ -59,7 +59,7 @@ def quantize(raw):
     threshold = peak_before * 10 ** (-30 / 20)
     onset_before = next(i for i, value in enumerate(original) if abs(value) >= threshold)
     onset_after = next(i for i, value in enumerate(restored) if abs(value) >= threshold)
-    attack = slice(onset_before, onset_before + round(RATE * .020))
+    attack = slice(onset_before, onset_before + round(rate * .020))
     stats = {
         "peak_pcm16_scale": [peak_before, peak_after],
         "rms_pcm16_scale": [round(rms_before, 3), round(rms_after, 3)],
@@ -77,7 +77,7 @@ def quantize(raw):
     return struct.pack(f"{len(pcm)}b", *pcm), stats
 
 
-def repack(tone, sequence, tone_address):
+def repack(tone, sequence, tone_address, candidates):
     count = (word(tone, 0) - 8) // 2
     assert count == 9
     layers = [word(tone, 8 + 2 * i) + 4 for i in range(count)]
@@ -88,27 +88,29 @@ def repack(tone, sequence, tone_address):
     measurements = []
     for program, (layer, start, end) in enumerate(zip(layers, offsets, offsets[1:] + [len(tone)])):
         frames = word(tone, layer + 8)
-        assert start % 4 == 0 and not tone[layer + 3] & 16
-        pcm_end = start + frames * 2
+        flags = tone[layer + 3] & 0xf0
+        assert start % 4 == 0
+        pcm_end = start + frames * (1 if flags & 16 else 2)
         assert pcm_end <= end
         new_start = len(bank)
-        flags = tone[layer + 3] & 0xf0
-        if program in CANDIDATES:
-            name, expected_frames, digest = CANDIDATES[program]
+        if program in candidates:
+            name, expected_frames, rate, digest = candidates[program]
+            assert not flags & 16
             raw = tone[start:pcm_end]
             assert frames == expected_frames and sha256(raw).hexdigest().startswith(digest)
             assert not (flags & 0x60) and word(tone, layer + 6) == 0
-            assert tone[layer + 25] == 72 and end == aligned(pcm_end)
+            expected_root = {22050: 72, 44100: 60}[rate]
+            assert tone[layer + 25] == expected_root and end == aligned(pcm_end)
             assert not any(tone[pcm_end:end])
             _, events, _ = read_sequence(sequence, program)
             notes = [event for event in events if event["kind"] == "note"]
             assert [(n["program"], n["pitch"], n["velocity"]) for n in notes] == [(program, 60, 127)]
-            pcm, stats = quantize(raw)
+            pcm, stats = quantize(raw, rate)
             flags |= 16
             bank.extend(pcm)
             bank.extend(bytes(aligned(len(bank)) - len(bank)))
             measurements.append({
-                "program": program, "name": name, "sample_rate": RATE, "frames": frames,
+                "program": program, "name": name, "sample_rate": rate, "frames": frames,
                 "original_pcm_bytes": len(raw), "converted_pcm_bytes": len(pcm),
                 "packed_bytes_saved": end - start - (len(bank) - new_start),
                 "original_address": tone_address + start, "converted_address": tone_address + new_start,
@@ -134,7 +136,10 @@ def replace_define(header, name, value):
     return updated
 
 
-def outputs():
+def outputs(base, candidates, pass_number):
+    def baseline(path):
+        return git("show", f"{base}:{path}")
+
     map_path = "assets/cd/CUSTOM.MAP"
     tone_path = "assets/cd/FX.TON"
     report_path = "assets/music/report.json"
@@ -143,7 +148,7 @@ def outputs():
     index = bytearray(baseline(map_path))
     old_tone = baseline(tone_path)
     fx_base = int.from_bytes(index[25:28], "big")
-    tone, measurements = repack(old_tone, baseline("assets/cd/FX.SEQ"), fx_base)
+    tone, measurements = repack(old_tone, baseline("assets/cd/FX.SEQ"), fx_base, candidates)
     report = json.loads(baseline(report_path))
     lengths = [len(tone), len(baseline("assets/cd/STAGE.SEQ")), len(baseline("assets/cd/STAGE.TON"))]
     address = fx_base
@@ -160,8 +165,8 @@ def outputs():
     assert savings == len(old_tone) - len(tone) == sum(m["packed_bytes_saved"] for m in measurements)
     assert 0 <= address <= 524288 and index[48:] == b"\xff" * 8
     report.update(sound_ram_high_water=address, sound_ram_unallocated=524288 - address)
-    report["level1_sfx_pcm8_pass1"] = {
-        "baseline": BASE, "encoding": "signed PCM8, nearest ties-to-even, no dither or gain change",
+    report[f"level1_sfx_pcm8_pass{pass_number}"] = {
+        "baseline": base, "encoding": "signed PCM8, nearest ties-to-even, no dither or gain change",
         "packed_bytes_saved": savings, "samples": measurements,
     }
     binaries = {map_path: bytes(index), tone_path: tone}
@@ -204,22 +209,27 @@ def test_level1():
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--pass2", action="store_true")
     parser.add_argument("--write", action="store_true")
     parser.add_argument("--disc", action="store_true")
     parser.add_argument("--test", action="store_true")
     args = parser.parse_args()
-    if subprocess.run(["git", "cat-file", "-e", BASE + "^{commit}"], cwd=ROOT,
+    if args.pass2:
+        base, candidates, pass_number = PASS1_COMMIT, PASS2_CANDIDATES, 2
+    else:
+        base, candidates, pass_number = BASE, CANDIDATES, 1
+    if subprocess.run(["git", "cat-file", "-e", base + "^{commit}"], cwd=ROOT,
                       capture_output=True).returncode:
-        subprocess.run(["git", "fetch", "--no-tags", "--depth=1", "origin", BASE], cwd=ROOT, check=True)
-    expected = outputs()
+        subprocess.run(["git", "fetch", "--no-tags", "--depth=1", "origin", base], cwd=ROOT, check=True)
+    expected = outputs(base, candidates, pass_number)
     for path, data in expected.items():
         if args.write:
             (ROOT / path).write_bytes(data)
         assert (ROOT / path).read_bytes() == data, path
 
-    changed = set(git("diff", "--name-only", BASE, "--").decode().splitlines())
+    changed = set(git("diff", "--name-only", base, "--").decode().splitlines())
     assert changed <= set(expected) | {"Makefile", "tools/level1-sfx-pcm8-pass1.py",
-                                     "docs/level1-sfx-pcm8-pass1.md"}, changed
+                                     f"docs/level1-sfx-pcm8-pass{pass_number}.md"}, changed
     print("PASS exact PCM8 payloads, contiguously relocated banks, and protected baseline files", flush=True)
     if args.disc:
         importlib.import_module("validate-level2-balance").validate_disc()

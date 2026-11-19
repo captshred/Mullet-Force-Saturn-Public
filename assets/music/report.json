@@ -15,12 +15,12 @@
       "sha256": "4e6739cbd480af5cc282d3ae9e8d9f786c92e67caec1b4ebf3f6351412683ed5"
     },
     "FX.TON": {
-      "bytes": 159180,
-      "sha256": "50b6e67ccc4190a120cea7d95208ace7494befa52aff63ca5c04d7631cafc974"
+      "bytes": 141336,
+      "sha256": "d25c0a6953d9cfbaf543ff640f4ff608f428fc8c908128c631a63bcf74a80c1c"
     },
     "CUSTOM.MAP": {
       "bytes": 56,
-      "sha256": "b58b41d2ef9cce10c4d60f031e74081ba256c6ec1ea3178c06564622cd871e34"
+      "sha256": "21a5df8f3171074ea3c8afe314e2a3f09ce88ae0421abe91e7c8ed39fc740d57"
     }
   },
   "sound_ram_regions": [
@@ -63,24 +63,24 @@
     {
       "name": "FX.TON",
       "start": 149232,
-      "size": 159180,
-      "end": 308412
+      "size": 141336,
+      "end": 290568
     },
     {
       "name": "STAGE.SEQ",
-      "start": 308412,
+      "start": 290568,
       "size": 40128,
-      "end": 348540
+      "end": 330696
     },
     {
       "name": "STAGE.TON",
-      "start": 348540,
+      "start": 330696,
       "size": 132148,
-      "end": 480688
+      "end": 462844
     }
   ],
-  "sound_ram_high_water": 480688,
-  "sound_ram_unallocated": 43600,
+  "sound_ram_high_water": 462844,
+  "sound_ram_unallocated": 61444,
   "music_held_peak": 15,
   "drum_tail_cap": 8,
   "release_policy": "RR31; driver can retire released musical voices under pressure; physical audibility unverified",
@@ -336,6 +336,46 @@
         "error_rms_pcm16_scale": 72.227,
         "maximum_absolute_error_pcm16_scale": 128,
         "signal_to_error_db": 30.86435,
+        "saturated_samples": 0,
+        "output_rail_samples": 0
+      }
+    ]
+  },
+  "level1_sfx_pcm8_pass2": {
+    "baseline": "43b788a02e37d9b3b962c2aaa735ba0b2afb0340",
+    "encoding": "signed PCM8, nearest ties-to-even, no dither or gain change",
+    "packed_bytes_saved": 17844,
+    "samples": [
+      {
+        "program": 5,
+        "name": "Jab initiation whoosh",
+        "sample_rate": 44100,
+        "frames": 17844,
+        "original_pcm_bytes": 35688,
+        "converted_pcm_bytes": 17844,
+        "packed_bytes_saved": 17844,
+        "original_address": 197320,
+        "converted_address": 197320,
+        "original_pcm_sha256": "18176fffa2f121c3ab986398116f464eb702a7a43879c6f3ee847fe6836ce6b4",
+        "converted_pcm_sha256": "f1de6a8795e040ad5f1f5e3f008ea3607cd71aeb0f2b8ad64b4d8ab7245da941",
+        "peak_pcm16_scale": [
+          11468,
+          11520
+        ],
+        "rms_pcm16_scale": [
+          1495.96,
+          1497.858
+        ],
+        "peak_delta_db": 0.0393,
+        "rms_delta_db": 0.01101,
+        "attack_20ms_rms_delta_db": 0.22868,
+        "onset_frames_at_minus_30db": [
+          423,
+          424
+        ],
+        "error_rms_pcm16_scale": 61.746,
+        "maximum_absolute_error_pcm16_scale": 128,
+        "signal_to_error_db": 27.68625,
         "saturated_samples": 0,
         "output_rail_samples": 0
       }
