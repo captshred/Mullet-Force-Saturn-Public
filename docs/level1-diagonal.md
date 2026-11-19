@@ -64,3 +64,25 @@ existing palette. The skyline remains an independent parallax layer.
 The build uses the same source-complete profile. Select
 `art/level1-downhill-visual-polish` in the Actions branch picker and use
 the candidate's exact commit SHA for `source_ref`.
+
+## Phase 3B-4 · Downhill architecture rescue
+
+Native indexed masonry samples from the approved city were regraded into
+the new brick, steel and concrete material ramps. Level rooflines and
+floor slabs sit above stepped foundations. AUTO SERVICE has a shuttered
+bay and a partially open, warm-lit bay, each with a paved apron. A third
+apron connects the parking structure's public vehicle entrance to the
+road. These three curb cuts stop short of the playable lane. The deck
+cars, pillars and guardrails are flattened into the VDP2 scenery.
+
+[Six Yabause captures](downhill-architecture-review.png) show the
+RECORDS transition, service aprons, connecting storefronts, public
+parking ramp, occupied decks and endpoint. The native palette, skyline,
+renderer and walkable-road pixels come from the approved build.
+
+The packed tiles occupy 275,052 bytes on disc. The background heap is
+377,357 bytes, with 434,176 bytes of VDP2 reserved as before.
+
+For a manual build, select `art/level1-downhill-architecture-rescue`
+and the `level1-human-death-combat-sfx` profile. Set `source_ref` to
+the exact candidate SHA.

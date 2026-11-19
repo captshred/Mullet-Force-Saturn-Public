@@ -8,7 +8,7 @@ import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE = "320f0465c1e2c6addbedbbace7ed99e87b390791"
-APPROVED_HILL = "382b226b476b305c9ebab8e6d2ddbe763603d41b"
+APPROVED_HILL = "459f50e8c414368bf60200d3570c813299933764"
 ART = "assets/level1-intersection/"
 PHASE_DELTA = {
     "Makefile",
@@ -24,6 +24,7 @@ PHASE_DELTA = {
     "tools/test-intersection-runtime.py",
     "tools/validate_level1_diagonal.py",
     "docs/level1-diagonal.md",
+    "docs/downhill-architecture-review.png",
 } | {ART + name for name in ("IXMAP.BIN", "IXOFF.BIN", "IXPACK.BIN", "IXPIX.BIN", "manifest.json")}
 
 
@@ -41,6 +42,7 @@ def validate():
 
     polish_delta = {
         "src/intersection_data.h", "tools/validate_level1_diagonal.py", "docs/level1-diagonal.md",
+        "docs/downhill-architecture-review.png",
     } | {ART + name for name in ("IXMAP.BIN", "IXOFF.BIN", "IXPACK.BIN", "IXPIX.BIN", "manifest.json")}
     changed = set(git("diff", "--name-only", APPROVED_HILL, "--").decode().splitlines())
     assert changed <= polish_delta, changed - polish_delta
@@ -62,7 +64,7 @@ def validate():
         assert current[start:start+1928] == old[start:start+1928], y
     for x in range(1920, 2560):
         drop = (x - 1920) // 5
-        road = (158 + drop) * 2560 + x
+        road = (168 + drop) * 2560 + x
         assert current[road::2560] == old[road::2560], x
         assert all(current[road::2560]), x
         # The only transparent pixels in a facade column are above its roof.
@@ -71,12 +73,21 @@ def validate():
             first_solid = next(i for i, pixel in enumerate(column) if pixel)
             assert all(column[first_solid:]), x
         if x >= 2257:
-            roof = 61 if x < 2398 else 85
+            roof = 92 if x < 2398 else 125
             assert all(current[roof*2560+x:road:2560]), x
     # Each storefront starts at a level roof on its own stepped foundation.
-    for start, end, roof in ((1936, 2028, 13), (2029, 2133, 41), (2134, 2239, 57)):
+    for start, end, roof in ((1936, 2028, 14), (2029, 2133, 41), (2134, 2239, 57)):
         row = current[roof*2560+start:roof*2560+end+1]
         assert row and row[0] and row == row[:1]*len(row), start
+    # These three open thresholds connect through the curb to the same
+    # sloping road surface. Check that the old curb pixels were replaced.
+    for left, right, threshold in ((1945, 1968, 143), (1990, 2012, 151), (2298, 2328, 216)):
+        for x in range(left, right + 1):
+            curb_y = 157 + (x - 1920) // 5
+            apron = current[threshold*2560+x:(curb_y+1)*2560+x:2560]
+            assert apron and all(apron), (x, threshold)
+            curb = (curb_y-3)*2560+x
+            assert current[curb:curb+7*2560:2560] != old[curb:curb+7*2560:2560], x
     assert hashlib.sha256((ROOT / "build/cd/NSPAL.BIN").read_bytes()).hexdigest() == manifest["palette_sha256"]
 
     assert manifest["resident_cell_bytes"] == 106496 and manifest["VDP2_reserved_bytes"] == 434176
