@@ -45,6 +45,6 @@ static inline void mf_fx_draw_spark(const mf_game *g,int impact,int explosion,
     int sprite=impact;(void)explosion;(void)is_explosion;
 #endif
     if(g->spark)jo_sprite_draw3D2(sprite,g->spark_x-g->camera-16,
-                                g->spark_y-g->spark_z-16,depth);
+                                mf_world_screen_y(g->spark_x,g->spark_y,g->camera)-g->spark_z-16,depth);
 }
 #endif

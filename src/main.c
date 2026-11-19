@@ -370,7 +370,7 @@ static void draw_game(void)
     int i,j,x,y,depth,mode,engaged;
     mf_street_draw(street,street_palette.id,game.camera);
     for(i=0;i<3;i++) {
-        mf_drum *d=&game.drums[i];x=d->x/256-game.camera;y=d->y/256;depth=depth_key(y,0);
+        mf_drum *d=&game.drums[i];x=d->x/256-game.camera;y=mf_world_screen_y(d->x/256,d->y/256,game.camera);depth=depth_key(y,0);
         if(x<-32 || x>352)continue;
         if(d->hp || d->respawn<20)draw_shadow(x,y,0);
         if(d->hp && !(d->flash&1))jo_sprite_draw3D2(drum[3-d->hp],x-16,y-46,depth);
@@ -378,7 +378,7 @@ static void draw_game(void)
     }
     for(j=0;j<MF_ENEMIES;j++) {
         mf_enemy *e=&game.enemies[j];int frame=mf_enemy_frame(&game,j);
-        x=e->x/256-game.camera;y=e->y/256;
+        x=e->x/256-game.camera;y=mf_world_screen_y(e->x/256,e->y/256,game.camera);
         if(e->state==MF_ENEMY_ABSENT || x<-100 || x>420)continue;
 #if MF_RICKY_ENEMY
         draw_shadow(x,y,game.enemy_class[j]==MF_ENEMY_RICKY && game.ricky_jump[j].active && e->state==MF_ENEMY_ACTIVE?24+game.ricky_jump[j].height:0);
@@ -407,7 +407,7 @@ static void draw_game(void)
         mf_player *p=&game.players[j];int frame=mf_player_frame(&game,j);
         const short (*anchor)[2]=j?chuck_anchor:buck_anchor;
         if(!p->active)continue;
-        x=p->x/256-game.camera;y=p->y/256;draw_shadow(x,y,p->height/256);
+        x=p->x/256-game.camera;y=mf_world_screen_y(p->x/256,p->y/256,game.camera);draw_shadow(x,y,p->height/256);
 /* PLAYERHURT BEGIN */
 #if MF_PLAYER_HURT
         int hurt_visible=p->health>0 && p->hurt>0;
@@ -491,9 +491,10 @@ static void draw_game(void)
     }
     for(j=0;j<MF_PLAYERS;j++)if(game.players[j].charge>=MF_TORCH_CUE_TICKS && (game.ticks&4)){
         mf_player *p=&game.players[j];jo_sprite_set_palette(fire_palette.id);
-        jo_sprite_draw3D2(charge_cue,p->x/256-game.camera+p->facing*20-4,p->y/256-49,depth_key(p->y/256,-2));
+        y=mf_world_screen_y(p->x/256,p->y/256,game.camera);
+        jo_sprite_draw3D2(charge_cue,p->x/256-game.camera+p->facing*20-4,y-49,depth_key(y,-2));
     }
-    mf_fx_draw_spark(&game,spark,explosion,spark_explosion,depth_key(game.spark_y,-1));
+    mf_fx_draw_spark(&game,spark,explosion,spark_explosion,depth_key(mf_world_screen_y(game.spark_x,game.spark_y,game.camera),-1));
     health_bar(16,25,80,game.players[0].health,100);
     jo_print(2,1,"BUCK");jo_printf(14,1,"%06d",game.score);
     jo_printf(2,2,"HP %03d",game.players[0].health);
@@ -517,7 +518,7 @@ static void draw_game(void)
 #if MF_LEVEL1_STAGE_CLEAR
 #if MF_LEVEL1_WORLD_FLOW
     jo_printf(14,3,"KOs %04d",game.stage_kills);
-    jo_print(14,4,game.camera==MF_WORLD_CAMERA_MAX?"TEST END   ":game.camera>960?"INTERSECT  ":game.camera>320?"NEON STRIP ":"           ");
+    jo_print(14,4,game.camera==MF_WORLD_CAMERA_MAX?"TEST END   ":mf_world_camera_y(game.camera)>0?"DIAGONAL   ":game.camera>960?"INTERSECT  ":game.camera>320?"NEON STRIP ":"           ");
 #else
     jo_printf(14,3,"KOs %02d/40",game.stage_kills);
 #endif

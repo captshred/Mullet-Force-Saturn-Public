@@ -207,7 +207,7 @@ def test_level1():
         subprocess.run([exe], cwd=ROOT, check=True)
 
 
-def validate_reset_wingsuit():
+def validate_reset_wingsuit(diagonal=False):
     import hero_sprite_pass3_data
 
     base = "9d7b1018af5757f01b5b48e8d20e11a10789e0c8"
@@ -237,6 +237,9 @@ def validate_reset_wingsuit():
                "docs/global-reset-wingsuit-colors/street.png",
                "docs/global-reset-wingsuit-colors/rooftops.png", manifest_path}
     allowed.update(directory + name for name in sprites)
+    if diagonal:
+        from validate_level1_diagonal import PHASE_DELTA
+        allowed.update(PHASE_DELTA)
     changed = set(git("diff", "--name-only", base, "--").decode().splitlines())
     assert changed <= allowed, changed - allowed
     print("PASS six RGB555 membrane recolors and exact protected PCM8 Pass 2 files", flush=True)
@@ -247,6 +250,7 @@ def main():
     parser.add_argument("--pass2", action="store_true")
     parser.add_argument("--write", action="store_true")
     parser.add_argument("--reset-wingsuit", action="store_true")
+    parser.add_argument("--diagonal", action="store_true")
     parser.add_argument("--disc", action="store_true")
     parser.add_argument("--test", action="store_true")
     args = parser.parse_args()
@@ -265,7 +269,7 @@ def main():
 
     if args.reset_wingsuit:
         assert args.pass2 and not args.write
-        validate_reset_wingsuit()
+        validate_reset_wingsuit(args.diagonal)
     else:
         changed = set(git("diff", "--name-only", base, "--").decode().splitlines())
         assert changed <= set(expected) | {"Makefile", "tools/level1-sfx-pcm8-pass1.py",

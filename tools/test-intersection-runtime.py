@@ -9,6 +9,8 @@ for n in ('core','include','out'):p.add_argument('--'+n,type=Path,required=True)
 a=p.parse_args();a.out=a.out.resolve();a.out.mkdir(parents=True);assert not any(a.out.iterdir())
 # Use the approved COFF parser without executing its command-line runner.
 helper=(R/'tools/test-coop-balance-runtime.py').read_text();scope={'struct':struct};exec(helper[helper.index('def symbols('):helper.index('s=symbols(')],scope);symbols=scope['symbols'];addr=scope['addr']
+manifest=json.loads((R/'assets/level1-intersection/manifest.json').read_text())
+camera_max=manifest['width']-320
 s=symbols(R/'build/game.elf');src=(R/'tests/runtime/playable-frontend.c').read_text()
 src=src.replace('static unsigned frame,pixel_format;','static unsigned seen_camera,travel_phase,hold_steps;static unsigned frame,pixel_format;')
 b=src.index(' (void)index;',src.index('static int16_t input('));e=src.index('\nstatic unsigned read32',b)
@@ -40,7 +42,7 @@ src=src[:b]+''' fwrite(&frame,4,1,trace);
  }
  if(travel_phase==0 && seen_camera>=1400){travel_phase=1;hold_steps=0;}
  if(travel_phase==1 && ++hold_steps>=360)travel_phase=2;
- if(travel_phase==2 && seen_camera==1600){travel_phase=3;hold_steps=0;}
+ if(travel_phase==2 && seen_camera==MF_WORLD_CAMERA_MAX){travel_phase=3;hold_steps=0;}
  if(travel_phase==3 && ++hold_steps>=120)travel_phase=4;
  if(travel_phase==4 && seen_camera==1280)travel_phase=5;
  FIELD(offsetof(mf_game,ticks));
@@ -50,11 +52,11 @@ src=src[:b]+''' fwrite(&frame,4,1,trace);
 '''+src[e:]
 unit=a.out/'frontend.c';unit.write_text(src);exe=a.out/'frontend';captures=a.out/'captures';captures.mkdir()
 subprocess.run(['cc','-std=c99','-O2','-Wall','-Wextra','-Wno-unused-variable','-include',str(R/'build/build-info.h'),'-I'+str(a.include.resolve()),'-I'+str(R/'src'),f'-DASSET_ERROR={addr(s,"_asset_error")}',f'-DPARALLAX_ERROR={addr(s,"_live_error")}',f'-DWORLD_CACHE_POINTER={addr(s,"_world_block_cache")}',str(unit),'-ldl','-o',str(exe)],check=True)
-with (a.out/'run.log').open('w') as log:subprocess.run([str(exe),str(a.core.resolve()),str(R/'build/mullet-force.cue'),str(captures),'3400','traverse',hex(addr(s,'_game')),hex(addr(s,'_idle_ticks'))],stdout=log,stderr=log,check=True)
+with (a.out/'run.log').open('w') as log:subprocess.run([str(exe),str(a.core.resolve()),str(R/'build/mullet-force.cue'),str(captures),'3900','traverse',hex(addr(s,'_game')),hex(addr(s,'_idle_ticks'))],stdout=log,stderr=log,check=True)
 data=(captures/'trace.bin').read_bytes();rows=[struct.unpack_from('<36I',data,i) for i in range(0,len(data),144)]
 rows=[r for r in rows if r[0]>=1100]
 assert all(r[3]==r[4]==r[5]==0 for r in rows),'stage/asset/parallax error'
-assert max(r[1] for r in rows)==1600 and max(r[2] for r in rows)==1280,'endpoint not reached'
+assert max(r[1] for r in rows)==camera_max and max(r[2] for r in rows)==1280,'endpoint not reached'
 assert any(r[1]==1280 and r[0]>2800 for r in rows) and all(abs(b[1]-c[1])<=2*max(1,c[33]-b[33]) for b,c in zip(rows,rows[1:])),'camera speed/backstop'
 def count(r):return sum(r[18+j*5]!=0 for j in range(3))
 assert max(map(count,rows))==3 and all(count(r)<=3 for r in rows)
@@ -62,13 +64,16 @@ visible=[r for r in rows if r[0]%4==0 and 1380<=r[1]<=1460 and r[6] and r[12] an
 assert visible,'no mixed combat capture at intersection'
 def quality(r):return sum(r[22+j*5]==2 and r[19+j*5]>0 for j in range(3))*10+sum(10<r[20+j*5]//256-r[1]<310 for j in range(3))
 chosen=max(visible,key=quality);Image.open(captures/f'frame-{chosen[0]:04}.ppm').save(a.out/'intersection-gameplay.png')
-for name,predicate in [('transition',lambda r:1000<=r[1]<=1040),('endpoint',lambda r:r[1]==1600),('checkpoint-backstop',lambda r:r[1]==1280 and r[0]>2800)]:
+for name,predicate in [('transition',lambda r:1000<=r[1]<=1040),('diagonal',lambda r:1750<=r[1]<=1800),('endpoint',lambda r:r[1]==camera_max),('checkpoint-backstop',lambda r:r[1]==1280 and r[0]>2800)]:
  matches=[r for r in rows if r[0]%4==0 and predicate(r)];assert matches,name
  r=matches[0];Image.open(captures/f'frame-{r[0]:04}.ppm').save(a.out/(name+'.png'))
 # Uninterrupted native combat excerpt around the selected intersection frame.
-first=max(1100,chosen[0]-40);first=(first//4)*4;last=min(3396,first+120)
+first=max(1100,chosen[0]-40);first=(first//4)*4;last=min(3896,first+120)
 ims=[Image.open(captures/f'frame-{f:04}.ppm').convert('RGB') for f in range(first,last+1,4)]
 ims[0].save(a.out/'intersection-combat.gif',save_all=True,append_images=ims[1:],duration=67,loop=0,optimize=True)
-assert all(r[34]+68284<=0x060c0000 and r[35]>=68292 for r in rows),'CPU decode cache placement/allocation'
-report=dict(cpu_cache_address=hex(rows[-1][34]),cpu_cache_allocator_block_bytes=rows[-1][35],cpu_cache_requested_bytes=68284,max_camera=max(r[1] for r in rows),max_checkpoint=max(r[2] for r in rows),last_camera=rows[-1][1],max_enemies=max(map(count,rows)),capture_frame=chosen[0],capture_camera=chosen[1],capture_enemy_classes=[chosen[22+j*5] for j in range(3)],asset_errors=sorted({r[4] for r in rows}),parallax_errors=sorted({r[5] for r in rows}),camera_max_step=max(abs(b[1]-c[1]) for b,c in zip(rows,rows[1:])),scope='production native disc; fresh unmodified Yabause HLE core; physical two-player controller input only; read-only camera feedback chooses a 360-tick combat stop then endpoint/reverse; no RAM writes, healing, teleport or save-state loading; hardware approval pending')
+payload=manifest['background_heap_bytes']
+offset=payload-manifest['decode_cache_heap_bytes']
+assert all(r[34]>offset and r[34]-offset+payload<=0x060c0000 for r in rows),'CPU background placement'
+assert all(r[34]==rows[0][34] for r in rows),'background ownership changed during Level 1'
+report=dict(cpu_background_address=hex(rows[-1][34]-offset),cpu_background_requested_bytes=payload,max_camera=max(r[1] for r in rows),max_checkpoint=max(r[2] for r in rows),last_camera=rows[-1][1],max_enemies=max(map(count,rows)),capture_frame=chosen[0],capture_camera=chosen[1],capture_enemy_classes=[chosen[22+j*5] for j in range(3)],asset_errors=sorted({r[4] for r in rows}),parallax_errors=sorted({r[5] for r in rows}),camera_max_step=max(abs(b[1]-c[1]) for b,c in zip(rows,rows[1:])),scope='production native disc; fresh unmodified Yabause HLE core; physical two-player controller input only; read-only camera feedback chooses a 360-tick combat stop then endpoint/reverse; no RAM writes, healing, teleport or save-state loading; hardware approval pending')
 (a.out/'report.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report,indent=2))
