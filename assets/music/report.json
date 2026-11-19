@@ -15,12 +15,12 @@
       "sha256": "4e6739cbd480af5cc282d3ae9e8d9f786c92e67caec1b4ebf3f6351412683ed5"
     },
     "FX.TON": {
-      "bytes": 199796,
-      "sha256": "52f1306274c06d2cde3390ff14d7c9488b5bda79b01b80b73db868429683687a"
+      "bytes": 159180,
+      "sha256": "50b6e67ccc4190a120cea7d95208ace7494befa52aff63ca5c04d7631cafc974"
     },
     "CUSTOM.MAP": {
       "bytes": 56,
-      "sha256": "6cd2c7422191dbb66109c3deb2ccd3be72bba7f36bf36e9326fb0870501a838e"
+      "sha256": "b58b41d2ef9cce10c4d60f031e74081ba256c6ec1ea3178c06564622cd871e34"
     }
   },
   "sound_ram_regions": [
@@ -63,24 +63,24 @@
     {
       "name": "FX.TON",
       "start": 149232,
-      "size": 199796,
-      "end": 349028
+      "size": 159180,
+      "end": 308412
     },
     {
       "name": "STAGE.SEQ",
-      "start": 349028,
+      "start": 308412,
       "size": 40128,
-      "end": 389156
+      "end": 348540
     },
     {
       "name": "STAGE.TON",
-      "start": 389156,
+      "start": 348540,
       "size": 132148,
-      "end": 521304
+      "end": 480688
     }
   ],
-  "sound_ram_high_water": 521304,
-  "sound_ram_unallocated": 2984,
+  "sound_ram_high_water": 480688,
+  "sound_ram_unallocated": 43600,
   "music_held_peak": 15,
   "drum_tail_cap": 8,
   "release_policy": "RR31; driver can retire released musical voices under pressure; physical audibility unverified",
@@ -234,5 +234,111 @@
         "sha256": "6cd2c7422191dbb66109c3deb2ccd3be72bba7f36bf36e9326fb0870501a838e"
       }
     }
+  },
+  "level1_sfx_pcm8_pass1": {
+    "baseline": "342595360d8c0d82377b1b0a44171cef0d5ef341",
+    "encoding": "signed PCM8, nearest ties-to-even, no dither or gain change",
+    "packed_bytes_saved": 40616,
+    "samples": [
+      {
+        "program": 0,
+        "name": "Nonlethal impact",
+        "sample_rate": 22050,
+        "frames": 8044,
+        "original_pcm_bytes": 16088,
+        "converted_pcm_bytes": 8044,
+        "packed_bytes_saved": 8044,
+        "original_address": 149624,
+        "converted_address": 149624,
+        "original_pcm_sha256": "95dbb6e915125f44e38ea40d0e0231e7ec67c8f2663b0ce9e5f2fc88a7e01fed",
+        "converted_pcm_sha256": "3213553341d0b82cdc3d3a3e88af4adc370685fcf58cd2d593112744e532acfb",
+        "peak_pcm16_scale": [
+          13107,
+          13056
+        ],
+        "rms_pcm16_scale": [
+          2641.792,
+          2643.188
+        ],
+        "peak_delta_db": -0.03386,
+        "rms_delta_db": 0.00459,
+        "attack_20ms_rms_delta_db": -0.00324,
+        "onset_frames_at_minus_30db": [
+          124,
+          124
+        ],
+        "error_rms_pcm16_scale": 60.126,
+        "maximum_absolute_error_pcm16_scale": 128,
+        "signal_to_error_db": 32.8567,
+        "saturated_samples": 0,
+        "output_rail_samples": 0
+      },
+      {
+        "program": 2,
+        "name": "Inorganic explosion",
+        "sample_rate": 22050,
+        "frames": 15840,
+        "original_pcm_bytes": 31680,
+        "converted_pcm_bytes": 15840,
+        "packed_bytes_saved": 15840,
+        "original_address": 177176,
+        "converted_address": 169132,
+        "original_pcm_sha256": "2eca5219e7a0255532d46c6c0a4835dee475781787334da46bfb451363e4fa6b",
+        "converted_pcm_sha256": "babcdea5af0ba835ad35a0c923cd4c5cfc7d28cc2d8fe938ec527dc4d36cd7aa",
+        "peak_pcm16_scale": [
+          13107,
+          13056
+        ],
+        "rms_pcm16_scale": [
+          5191.019,
+          5192.378
+        ],
+        "peak_delta_db": -0.03386,
+        "rms_delta_db": 0.00227,
+        "attack_20ms_rms_delta_db": 0.00094,
+        "onset_frames_at_minus_30db": [
+          305,
+          305
+        ],
+        "error_rms_pcm16_scale": 73.502,
+        "maximum_absolute_error_pcm16_scale": 128,
+        "signal_to_error_db": 36.97902,
+        "saturated_samples": 0,
+        "output_rail_samples": 0
+      },
+      {
+        "program": 7,
+        "name": "Bat swing",
+        "sample_rate": 22050,
+        "frames": 16733,
+        "original_pcm_bytes": 33466,
+        "converted_pcm_bytes": 16733,
+        "packed_bytes_saved": 16732,
+        "original_address": 298716,
+        "converted_address": 274832,
+        "original_pcm_sha256": "8aca2c9a3c080ef934fb83a987dafde9ce1828bd5a5c02242bf86197c90b6b5a",
+        "converted_pcm_sha256": "acc2b20070aa417003339bb17397d3b7ade9d0d345b9a4be873a28047865480a",
+        "peak_pcm16_scale": [
+          12451,
+          12544
+        ],
+        "rms_pcm16_scale": [
+          2523.001,
+          2525.085
+        ],
+        "peak_delta_db": 0.06464,
+        "rms_delta_db": 0.00717,
+        "attack_20ms_rms_delta_db": 0.0581,
+        "onset_frames_at_minus_30db": [
+          900,
+          900
+        ],
+        "error_rms_pcm16_scale": 72.227,
+        "maximum_absolute_error_pcm16_scale": 128,
+        "signal_to_error_db": 30.86435,
+        "saturated_samples": 0,
+        "output_rail_samples": 0
+      }
+    ]
   }
 }
