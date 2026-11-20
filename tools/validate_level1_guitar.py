@@ -88,8 +88,9 @@ def outputs(pcm, mix=False):
         packed_bytes=len(sample), additional_bytes=delta,
     )
     if mix:
-        report["level1_music_mix_pass1"] = dict(
-            baseline=level1_music_mix.BASE, drum_tl_change=2,
+        report["level1_music_mix_midpoint"] = dict(
+            baseline=level1_music_mix.BASE, drum_tl_change=0,
+            drum_pcm_gain=level1_music_mix.DRUM_PCM_GAIN,
             bass_velocity_curve_before=list(level1_music_mix.SHARED_CURVE),
             bass_velocity_curve_after=list(level1_music_mix.BASS_CURVE),
             bass_cc7=127, bass_cc11=127, bass_tl=0, additional_bytes=12,
@@ -135,7 +136,7 @@ def validate(pcm=None, mix=False, write_mix=False):
         scope = scope | level1_music_mix.SCOPE
     assert changed <= scope, changed - scope
     print("PASS exact Medium PCM, loop and guard, protected instruments and gameplay"
-          + (", native Level 1 gain changes, 46,288 SCSP bytes free" if mix
+          + (", Level 1 midpoint gain changes, 46,288 SCSP bytes free" if mix
              else ", 46,300 SCSP bytes free"), flush=True)
     return scope
 

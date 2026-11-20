@@ -8,7 +8,7 @@
     },
     "STAGE.TON": {
       "bytes": 147304,
-      "sha256": "725ce83bf975fe0434ad2538042657af42de060f5e5caf12b6915a6a445361b6"
+      "sha256": "68611bf57d7c261d8dbed5f2d0a1b56add7e9f75b9c2816627a6be027bcaded4"
     },
     "FX.SEQ": {
       "bytes": 368,
@@ -394,9 +394,10 @@
     "packed_bytes": 21880,
     "additional_bytes": 15144
   },
-  "level1_music_mix_pass1": {
+  "level1_music_mix_midpoint": {
     "baseline": "5cdafa491cad5f785001147e8af5092a62e90324",
-    "drum_tl_change": 2,
+    "drum_tl_change": 0,
+    "drum_pcm_gain": 0.9577452351172412,
     "bass_velocity_curve_before": [
       25,
       16,
@@ -412,13 +413,13 @@
     "bass_velocity_curve_after": [
       25,
       16,
-      68,
+      61,
       9,
       49,
-      116,
+      108,
       19,
       93,
-      127,
+      124,
       43
     ],
     "bass_cc7": 127,
