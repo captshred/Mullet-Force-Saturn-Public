@@ -9,7 +9,7 @@ import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE = "320f0465c1e2c6addbedbbace7ed99e87b390791"
-APPROVED_HILL = "b95759d321b9a77a401620e1c552ed28f8c24a0a"
+APPROVED_HILL = "45ac7b3e80e77b1971e796b4eaa6b2a5aa3f6cff"
 ART = "assets/level1-intersection/"
 PHASE_DELTA = {
     "Makefile",
@@ -26,6 +26,23 @@ PHASE_DELTA = {
     "tools/validate_level1_diagonal.py",
     "docs/level1-diagonal.md",
 } | {ART + name for name in ("IXMAP.BIN", "IXOFF.BIN", "IXPACK.BIN", "IXPIX.BIN", "manifest.json")}
+
+
+HQ_DELTA = {
+    "src/parallax.c", "src/intersection_data.h",
+    "tools/validate_level1_diagonal.py", "tools/validate_level1_guitar.py",
+    "tools/level1_music_mix.py",
+    "docs/level1-diagonal.md", "docs/downhill-hq-comparison.png",
+} | {ART + name for name in ("IXMAP.BIN", "IXOFF.BIN", "IXPACK.BIN", "IXPIX.BIN", "manifest.json")}
+PHASE_DELTA |= HQ_DELTA
+
+
+def validate_hq_scope():
+    if subprocess.run(["git", "cat-file", "-e", APPROVED_HILL], cwd=ROOT, capture_output=True).returncode:
+        git("fetch", "--no-tags", "--depth=1", "origin", APPROVED_HILL)
+    changed = set(git("diff", "--name-only", APPROVED_HILL, "--").decode().splitlines())
+    assert changed <= HQ_DELTA, changed - HQ_DELTA
+    return HQ_DELTA
 
 
 def git(*args):
@@ -45,13 +62,7 @@ def validate(medium_guitar=False, mix_pass1=False):
     changed = set(git("diff", "--name-only", BASE, "--").decode().splitlines())
     assert changed <= PHASE_DELTA | extra_scope, changed - (PHASE_DELTA | extra_scope)
 
-    downhill_delta = {
-        "src/intersection_data.h", "src/world_config.h", "tests/intersection/world.c",
-        "tools/test-intersection-runtime.py", "tools/validate_level1_diagonal.py",
-        "docs/level1-diagonal.md",
-    } | {ART + name for name in ("IXMAP.BIN", "IXOFF.BIN", "IXPACK.BIN", "IXPIX.BIN", "manifest.json")}
-    changed = set(git("diff", "--name-only", APPROVED_HILL, "--").decode().splitlines())
-    assert changed <= downhill_delta | extra_scope, changed - (downhill_delta | extra_scope)
+    validate_hq_scope()
 
     art = ROOT / ART
     manifest = json.loads((art / "manifest.json").read_text())
@@ -64,14 +75,23 @@ def validate(medium_guitar=False, mix_pass1=False):
     old = git("show", f"{APPROVED_HILL}:{ART}IXPIX.BIN")
     current = (art / "IXPIX.BIN").read_bytes()
     assert len(current) == 2560 * 368
-    for y in range(304):
-        assert current[y*2560:y*2560+2240] == old[y*2240:(y+1)*2240], y
-    for x in range(1920, 2560):
-        y = 150 + (x - 1920) // 5
-        assert all(current[y*2560+x::2560]), x
-    for x in range(2262, 2560):
-        y = 51 + (x - 1920) // 5
-        assert all(current[y*2560+x:(y+100)*2560+x:2560]), x
+    assert len(old) == len(current)
+    for y in range(368):
+        start = y * 2560
+        assert current[start:start+1928] == old[start:start+1928], y
+    for x in range(1928, 2560):
+        drop = (x - 1920) // 5
+        road = (168 + drop) * 2560 + x
+        assert current[road::2560] == old[road::2560], x
+        column = current[x:road:2560]
+        first_solid = next(i for i, pixel in enumerate(column) if pixel)
+        assert all(column[first_solid:]), x
+    palette = ROOT / "build/cd/NSPAL.BIN"
+    assert hashlib.sha256(palette.read_bytes()).hexdigest() == manifest["palette_sha256"]
+    assert manifest["packed_source_storage"] == "low-work-ram"
+    assert manifest["packed_low_work_ram_bytes"] == manifest["packed_source_bytes"] <= 0x80000
+    assert manifest["background_heap_bytes"] == manifest["map_offset_heap_bytes"] + manifest["decode_cache_heap_bytes"]
+    assert manifest["peak_cd_staging_heap_bytes"] < manifest["heap_capacity_bytes"]
 
     assert manifest["resident_cell_bytes"] == 106496 and manifest["VDP2_reserved_bytes"] == 434176
     assert all(manifest[f"{chip}_delta_bytes"] == 0 for chip in ("VDP1", "VDP2", "SCSP"))
@@ -79,7 +99,7 @@ def validate(medium_guitar=False, mix_pass1=False):
     link_map = (ROOT / "build/game.map").read_text()
     end = int(re.search(r"0x([0-9a-f]+)\s+__bend =", link_map)[1], 16)
     assert end < 0x060c0000, hex(end)
-    print("PASS exact Phase 3B-1 pixels, opaque new road and parking lot, protected source delta, disc assets and graphics budgets")
+    print("PASS exact starting storefront and roadway pixels, opaque HQ facades, protected source delta, disc assets and graphics budgets")
 
 
 if __name__ == "__main__":

@@ -11,12 +11,20 @@ static int live_ready,live_error;
 /* Load-time CPU source, fixed 1664-tile A0 residency. Neither SDK-owned bank
    nor the existing NBG2 skyline allocation is borrowed for facade graphics. */
 static unsigned char *world_chunks;
-static unsigned char *world_packed; /* Owned heap base; compressed bytes stay resident. */
+static unsigned char *world_heap;
+static unsigned char *world_packed;
+/* The upper half of the Saturn's 1 MiB low work RAM holds the CD pack.
+   Keep hot decoded data and indices in the existing high work RAM heap. */
+#define MF_WORLD_PACK_ADDRESS 0x00280000u
+#define MF_WORLD_PACK_LIMIT 0x00300000u
+#if MF_INTERSECTION_PACK_BYTES > MF_WORLD_PACK_LIMIT-MF_WORLD_PACK_ADDRESS
+#error "Downhill tile pack exceeds its low work RAM region"
+#endif
 static unsigned char *world_offsets;
 static unsigned char world_decoded[512];
 #define MF_WORLD_DECODE_CACHE 128
 #define MF_WORLD_PACK_STORAGE ((MF_INTERSECTION_PACK_BYTES+4u+3u)&~3u)
-#define MF_WORLD_BACKGROUND_HEAP (MF_WORLD_PACK_STORAGE+MF_INTERSECTION_MAP_BYTES+4u+MF_INTERSECTION_OFFSET_BYTES+4u+MF_WORLD_DECODE_HEAP)
+#define MF_WORLD_BACKGROUND_HEAP (MF_INTERSECTION_MAP_BYTES+4u+MF_INTERSECTION_OFFSET_BYTES+4u+MF_WORLD_DECODE_HEAP)
 #define MF_WORLD_VIEW_ROWS 32
 #define MF_WORLD_DECODE_HEAP (MF_WORLD_DECODE_CACHE*512+MF_INTERSECTION_BLOCKS*4+(MF_INTERSECTION_BLOCKS+7)/8)
 static unsigned char *world_block_cache;
@@ -28,8 +36,8 @@ static unsigned char *world_prefetch_queued;
 static unsigned world_prefetch_count,world_prefetch_at;
 static int world_decoded_group=-1;
 static void world_release(void) {
-    if(world_packed)jo_free(world_packed);
-    world_packed=world_block_cache=world_chunks=world_offsets=JO_NULL;
+    if(world_heap)jo_free(world_heap);
+    world_heap=world_packed=world_block_cache=world_chunks=world_offsets=JO_NULL;
     world_block_index=JO_NULL;world_prefetch_queue=JO_NULL;world_prefetch_queued=JO_NULL;
     world_decoded_group=-1;
 }
@@ -45,16 +53,27 @@ static int world_read(const char *name,void *dst,int expected) {
     return jo_fs_read_file_ptr(name,dst,&length)!=JO_NULL && length==expected;
 }
 static int world_pack_load(void) {
+    unsigned char *staging;
+    unsigned i;
     world_release();
-    world_packed=jo_malloc_with_behaviour(MF_WORLD_BACKGROUND_HEAP,JO_MALLOC_TRY_REUSE_BLOCK);
-    if(!world_packed)return 0;
-    /* Existing fixed heap only. The whole owner block, not just the decode
-       suffix, must fit below the pinned SDK sort/work boundary. */
-    if((unsigned long)world_packed+MF_WORLD_BACKGROUND_HEAP>0x060c0000u)return 0;
-    world_chunks=world_packed+MF_WORLD_PACK_STORAGE;
+    /* Retain the SDK's normal CD destination. The SH-2 copies into low
+       work RAM after the read, so the CD DMA target needs no change. */
+    staging=jo_malloc_with_behaviour(MF_WORLD_PACK_STORAGE,JO_MALLOC_TRY_REUSE_BLOCK);
+    if(!staging)return 0;
+    if(!world_read("IXPACK.BIN",staging,MF_INTERSECTION_PACK_BYTES)){
+        jo_free(staging);
+        return 0;
+    }
+    world_packed=(unsigned char *)MF_WORLD_PACK_ADDRESS;
+    for(i=0;i<MF_INTERSECTION_PACK_BYTES;i++)world_packed[i]=staging[i];
+    jo_free(staging);
+    world_heap=jo_malloc_with_behaviour(MF_WORLD_BACKGROUND_HEAP,JO_MALLOC_TRY_REUSE_BLOCK);
+    if(!world_heap)return 0;
+    if((unsigned long)world_heap+MF_WORLD_BACKGROUND_HEAP>0x060c0000u)return 0;
+    world_chunks=world_heap;
     world_offsets=world_chunks+MF_INTERSECTION_MAP_BYTES+4u;
     world_block_cache=world_offsets+MF_INTERSECTION_OFFSET_BYTES+4u;
-    return world_read("IXPACK.BIN",world_packed,MF_INTERSECTION_PACK_BYTES);
+    return 1;
 }
 
 /* Independently bounded 512-byte blocks (eight source tiles). No gameplay

@@ -50,3 +50,32 @@ the existing world-boundary code.
 Build with the source-complete profile above. Select
 `feature/level1-phase3b-downhill-extension` in the Actions branch picker
 and use its exact commit SHA for `source_ref`.
+
+## Phase 3B-6 · HQ downhill import
+
+This phase starts at the midpoint audio commit
+`45ac7b3e80e77b1971e796b4eaa6b2a5aa3f6cff`. Five source regions from
+the supplied 1,764 × 892 PNG were registered to the existing curb and
+downhill frontage. The 2,560 × 368 native panorama uses a light prefilter,
+selective local sharpening and nearest assignment into the existing
+indexed street palette. The source skyline is cropped above the building
+silhouettes, where gameplay continues to use its live parallax skyline.
+The original RECORDS facade and pixels at and below the playable lane
+are byte-identical to the starting commit. The import includes the
+sidewalk, driveways and narrow road apron in front of the new facades.
+
+The packed tile dictionary is 346,572 bytes. At boot, the existing CD
+reader loads it into a 346,576-byte Jo heap staging buffer, then the
+SH-2 copies it to low work RAM at `0x00280000`. The staging buffer is
+released before allocating the 102,902-byte map, offsets and decode
+cache in the existing high work RAM heap. The existing VDP2 ring,
+1,664 resident tiles and quarter-speed skyline preserve their geometry
+and allocations. SCSP has 46,288 bytes free in Level 1.
+
+[Native Yabause comparison](downhill-hq-comparison.png) shows the
+baseline and candidate at matching camera positions.
+
+To build locally, run `bash tools/build-stage.sh --native`, `make check`
+and `make test`. For the manual Actions build, select
+`art/level1-downhill-hq-import`, profile `stage-default` and the exact
+candidate SHA in `source_ref`.

@@ -132,8 +132,10 @@ def validate(pcm=None, mix=False, write_mix=False):
     scope = SCOPE
     if mix:
         import level1_music_mix
-        level1_music_mix.validate_scope(git)
-        scope = scope | level1_music_mix.SCOPE
+        from validate_level1_diagonal import validate_hq_scope
+        hq_scope = validate_hq_scope()
+        level1_music_mix.validate_scope(git, hq_scope)
+        scope = scope | level1_music_mix.SCOPE | hq_scope
     assert changed <= scope, changed - scope
     print("PASS exact Medium PCM, loop and guard, protected instruments and gameplay"
           + (", Level 1 midpoint gain changes, 46,288 SCSP bytes free" if mix

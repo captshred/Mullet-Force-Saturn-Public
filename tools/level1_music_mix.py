@@ -56,9 +56,10 @@ def apply(tone, voice):
     return result
 
 
-def validate_scope(git):
+def validate_scope(git, extra_scope=()):
     if subprocess.run(["git", "cat-file", "-e", BASE + "^{commit}"], cwd=ROOT,
                       capture_output=True).returncode:
         git("fetch", "--no-tags", "--depth=1", "origin", BASE)
     changed = set(git("diff", "--name-only", BASE, "--").decode().splitlines())
-    assert changed <= SCOPE, changed - SCOPE
+    scope = SCOPE | set(extra_scope)
+    assert changed <= scope, changed - scope
