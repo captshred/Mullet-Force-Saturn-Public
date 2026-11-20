@@ -332,19 +332,23 @@ static void player_take_hit(mf_game *g,int i,int damage,int direction)
     p->attack=p->bat=0;p->buffered=0;torch_interrupt(p);impact(g,p->x/256,p->y/256,48+p->height/256);hit_sound(g,i,p->health,0);g->events|=MF_COMBAT_HURT(i);
     if(!p->health)p->defeated=MF_BUCK_RECOVERY_TICKS;
 }
+enum { MF_ROAD_BACK=168, MF_ROAD_FRONT=229 };
+
 #if MF_VEHICLE_AMBUSH
-enum { VEHICLE_WARN=90, VEHICLE_FIRST=125, VEHICLE_GAP=120, VEHICLE_RETURN=145,
+enum { VEHICLE_WARN=90, VEHICLE_FIRST=109, VEHICLE_GAP=120, VEHICLE_RETURN=126,
        VEHICLE_SECOND_START=VEHICLE_WARN+VEHICLE_FIRST+VEHICLE_GAP,
        VEHICLE_THIRD_START=VEHICLE_SECOND_START+VEHICLE_RETURN+VEHICLE_GAP,
-       VEHICLE_END=VEHICLE_THIRD_START+VEHICLE_FIRST, VEHICLE_LATER_WARN=48 };
+       VEHICLE_END=VEHICLE_THIRD_START+VEHICLE_FIRST, VEHICLE_LATER_WARN=48,
+       VEHICLE_MID=(MF_ROAD_BACK+MF_ROAD_FRONT)/2,
+       VEHICLE_JUMP_CLEARANCE=18*256, VEHICLE_BUMPER_CLEARANCE=8*256 };
 /* The upright tire contacts span roughly -64..+43 pixels from the
    texture anchor before mirroring. At 1:5 the local road moves up to
    13 pixels beneath them. Inset the two outer lanes from 168..229
    to keep both tire patches clear of the curb and near edge. */
-static const struct { int start,duration,direction,lane; } vehicle_passes[]={
-    {VEHICLE_WARN,VEHICLE_FIRST,1,214},
-    {VEHICLE_SECOND_START,VEHICLE_RETURN,-1,187},
-    {VEHICLE_THIRD_START,VEHICLE_FIRST,1,200}
+static const struct { int start,duration,direction,lane,back,front; } vehicle_passes[]={
+    {VEHICLE_WARN,VEHICLE_FIRST,1,214,VEHICLE_MID-4,MF_ROAD_FRONT},
+    {VEHICLE_SECOND_START,VEHICLE_RETURN,-1,187,MF_ROAD_BACK,VEHICLE_MID+4},
+    {VEHICLE_THIRD_START,VEHICLE_FIRST,1,200,200-12,200+12}
 };
 
 int mf_vehicle_warning_lane(const mf_game *g)
@@ -357,10 +361,14 @@ int mf_vehicle_warning_lane(const mf_game *g)
     return 0;
 }
 
-static int vehicle_contact(int x,int y,int height,int lane,int left,int right)
+static int vehicle_contact(int x,int y,int height,unsigned pass,int left,int right)
 {
-    return x/256>=left && x/256<=right &&
-           abs_i(y-lane*256)<=12*256 && height<24*256;
+    /* Feet above the low bumper overhangs meet the shorter body. Sweep
+       both footprints from the previous position to prevent tunneling. */
+    int reach=height>=VEHICLE_BUMPER_CLEARANCE?56:64;
+    return height<VEHICLE_JUMP_CLEARANCE &&
+           x/256>=left-reach && x/256<=right+reach &&
+           y>=vehicle_passes[pass].back*256 && y<=vehicle_passes[pass].front*256;
 }
 
 static void vehicle_step(mf_game *g)
@@ -399,12 +407,12 @@ static void vehicle_step(mf_game *g)
     g->vehicle_x=g->vehicle_dir>0?left+(right-left)*progress/(duration-1):
                                   right-(right-left)*progress/(duration-1);
     if(!progress)previous=g->vehicle_x;
-    left=(previous<g->vehicle_x?previous:g->vehicle_x)-76;
-    right=(previous>g->vehicle_x?previous:g->vehicle_x)+76;
+    left=previous<g->vehicle_x?previous:g->vehicle_x;
+    right=previous>g->vehicle_x?previous:g->vehicle_x;
     for(i=0;i<MF_PLAYERS;i++){
         mf_player *p=&g->players[i];
         if(!living(p) || p->invulnerable || (g->vehicle_hits&(1u<<i)))continue;
-        if(!vehicle_contact(p->x,p->y,p->height,g->vehicle_lane,left,right))continue;
+        if(!vehicle_contact(p->x,p->y,p->height,pass,left,right))continue;
         g->vehicle_hits|=1u<<i;
         player_take_hit(g,i,50,g->vehicle_dir);
     }
@@ -416,7 +424,7 @@ static void vehicle_step(mf_game *g)
             height=g->ricky_jump[i].height*256;
 #endif
         if(e->hp<=0 || e->state==MF_ENEMY_ABSENT || e->state==MF_ENEMY_DYING ||
-           !vehicle_contact(e->x,e->y,height,g->vehicle_lane,left,right))continue;
+           !vehicle_contact(e->x,e->y,height,pass,left,right))continue;
         e->hp=0;e->state=MF_ENEMY_DYING;e->timer=30;
         e->vx=g->vehicle_dir*850;e->burn=e->burn_clock=e->fire_flash=0;
 #if MF_RICKY_ENEMY
@@ -963,7 +971,7 @@ static void player_step(mf_game *g,int index,unsigned held,unsigned pressed)
 #else
     p->x=clamp(p->x+dx*speed,MF_WORLD_LEFT*256,MF_WORLD_RIGHT*256);
 #endif
-    p->y=clamp(p->y+dy*speed*3/4,168*256,229*256);
+    p->y=clamp(p->y+dy*speed*3/4,MF_ROAD_BACK*256,MF_ROAD_FRONT*256);
     p->moving=dx||dy;if(p->moving)++p->walk;else p->walk=0;
 #if MF_DASH_ENABLED
     if(g->dash[index].dir)g->dash[index].anim=(g->dash[index].anim+MF_DASH_ANIM_NUM)%

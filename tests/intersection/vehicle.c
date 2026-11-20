@@ -30,7 +30,7 @@ static void check_pass(unsigned pass,int expected_lane,int direction,int off_lan
         g.players[0].y=expected_lane*256;
         g.players[1].invulnerable=avoidance==2?120:0;
         g.players[1].y=(avoidance==1?off_lane:expected_lane)*256;
-        g.players[1].height=avoidance==0?24*256:0;
+        g.players[1].height=avoidance==0?VEHICLE_JUMP_CLEARANCE:0;
         g.enemies[0]=(mf_enemy){.x=g.players[0].x,.y=expected_lane*256,
                                .hp=MF_ENEMY_MAX_HP,.state=MF_ENEMY_ACTIVE};
         g.enemies[1]=g.enemies[0];
@@ -45,6 +45,87 @@ static void check_pass(unsigned pass,int expected_lane,int direction,int off_lan
         assert(g.enemies[1].hp==MF_ENEMY_MAX_HP && !g.stage_kills && !g.score);
     }
 }
+/* Run the production input, tether and jump physics with no other
+   enemies, sweeping the jump press across an entire pass. */
+static int play_pass(unsigned pass,int player,int jump_tick,int lane,unsigned dodge)
+{
+    mf_game g;
+    fixture(&g);
+    g.spawn_wait=1000;
+    g.vehicle_tick=vehicle_passes[pass].start;
+    g.players[0].active=player!=1;
+    g.players[1].active=player==1;
+    g.players[player].y=lane*256;
+    g.players[player].invulnerable=0;
+    for(int t=0;t<vehicle_passes[pass].duration;t++){
+        unsigned held[2]={0,0},pressed[2]={0,0};
+        if(t>=jump_tick && jump_tick>=0)held[player]=MF_B;
+        if(t==jump_tick)pressed[player]=MF_B;
+        held[player]|=dodge;
+        mf_game_step_inputs(&g,held,pressed,player?3:1);
+        assert(g.camera==2080);
+    }
+    return g.players[player].health;
+}
+
+static void check_policy(void)
+{
+    const int camp[]={MF_ROAD_BACK,VEHICLE_MID,MF_ROAD_FRONT};
+    const int lanes[]={214,187,200};
+    for(int player=0;player<MF_PLAYERS;player++){
+        for(unsigned i=0;i<3;i++){
+            int hits=0;
+            for(unsigned pass=0;pass<3;pass++)
+                hits+=play_pass(pass,player,-1,camp[i],0)==50;
+            assert(hits>0);
+        }
+        assert(play_pass(0,player,-1,MF_ROAD_FRONT,0)==50);
+        assert(play_pass(1,player,-1,MF_ROAD_BACK,0)==50);
+        assert(play_pass(0,player,-1,214,MF_UP)==100);
+        assert(play_pass(1,player,-1,187,MF_DOWN)==100);
+        assert(play_pass(2,player,-1,MF_ROAD_BACK,0)==100);
+        assert(play_pass(2,player,-1,MF_ROAD_FRONT,0)==100);
+
+        for(unsigned pass=0;pass<3;pass++){
+            int streak=0,best=0;
+            int duration=vehicle_passes[pass].duration;
+            assert(play_pass(pass,player,0,lanes[pass],0)==50);
+            assert(play_pass(pass,player,duration-1,lanes[pass],0)==50);
+            for(int t=1;t<duration-1;t++){
+                streak=play_pass(pass,player,t,lanes[pass],0)==100?streak+1:0;
+                if(streak>best)best=streak;
+            }
+            assert(best>=6);
+            printf("PASS hero %d pass %u: %d consecutive safe jump-press ticks at mid-screen\n",
+                   player+1,pass+1,best);
+        }
+    }
+}
+static void check_encounter(int coop)
+{
+    mf_game g;
+    fixture(&g);
+    g.spawn_wait=1000;
+    g.players[1].active=coop;
+    for(int i=0;i<MF_PLAYERS;i++){
+        g.players[i].y=VEHICLE_MID*256;
+        g.players[i].invulnerable=0;
+    }
+    unsigned pressed[2]={0,0};
+    for(int t=1;t<=VEHICLE_END;t++){
+        unsigned direction=t<VEHICLE_WARN+VEHICLE_FIRST?MF_UP:MF_DOWN;
+        unsigned held[2]={direction,coop?direction:0};
+        mf_game_step_inputs(&g,held,pressed,coop?3:1);
+        if(t<VEHICLE_END)assert(g.camera==2080);
+        for(int i=0;i<=coop;i++)assert(g.players[i].health==100);
+    }
+    assert(!g.vehicle_dir && g.vehicle_tick==VEHICLE_END+1);
+    unsigned forward[2]={MF_RIGHT,coop?MF_RIGHT:0};
+    for(int t=0;t<16;t++)mf_game_step_inputs(&g,forward,pressed,coop?3:1);
+    assert(g.camera>2080);
+    printf("PASS %s full ambush, repositioning on original controls and camera release\n",
+           coop?"co-op":"solo");
+}
 #endif
 
 int main(void)
@@ -52,6 +133,9 @@ int main(void)
 #if MF_VEHICLE_AMBUSH
     mf_game g;
     int passes=0,warnings=1,last=0;
+    check_policy();
+    check_encounter(0);
+    check_encounter(1);
     check_pass(0,214,1,187);
     check_pass(1,187,-1,214);
     check_pass(2,200,1,214);
