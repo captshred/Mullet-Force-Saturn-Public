@@ -60,7 +60,11 @@ LINE_REVIEW = {
         "IXPIX-garage-proposed.BIN", "IXPIX-full-proposed.BIN", "README.md",
     )
 }
-HQ_DELTA |= VEHICLE_DELTA | CLARITY_REVIEW | LINE_REVIEW | {
+MEGA_DELTA = {
+    "tools/prepare-mega-arcade.py", "tools/pack-level1-panorama.py", "docs/level1-mega-arcade.md",
+    "downloads/mullet-force-mega-arcade-phase4a.zip", "src/world_config.h",
+}
+HQ_DELTA |= VEHICLE_DELTA | CLARITY_REVIEW | LINE_REVIEW | MEGA_DELTA | {
     "downloads/mullet-force-downhill-clarity.zip",
     "downloads/mullet-force-horizontal-line-restoration.zip",
 }
@@ -103,15 +107,21 @@ def validate(medium_guitar=False, mix_pass1=False):
         assert 478000 + len(tone) == 503764
     art = ROOT / ART
     manifest = json.loads((art / "manifest.json").read_text())
-    assert manifest["parent"] == APPROVED_HILL and (manifest["width"], manifest["height"]) == (2560, 368)
+    width, height = manifest["width"], manifest["height"]
+    assert manifest["parent"] == APPROVED_HILL and width in (2560, 3328) and height == 368
     for name, digest in manifest["sha256"].items():
         data = (art / name).read_bytes()
         assert hashlib.sha256(data).hexdigest() == digest, name
         if name != "IXPIX.BIN":
             assert (ROOT / "build/cd" / name).read_bytes() == data, name
     old = git("show", f"{APPROVED_HILL}:{ART}IXPIX.BIN")
-    current = (art / "IXPIX.BIN").read_bytes()
-    assert len(current) == 2560 * 368
+    panorama = (art / "IXPIX.BIN").read_bytes()
+    assert len(panorama) == width * height
+    current = b"".join(panorama[y:y+2560] for y in range(0, len(panorama), width))
+    if width > 2560:
+        assert all(0 not in panorama[y+2560:y+width] for y in range(127*width, len(panorama), width))
+        assert all(panorama[y+2559] == panorama[y+2560]
+                   for y in range(127*width, len(panorama), width) if panorama[y+2559])
     assert len(old) == len(current)
     for y in range(368):
         start = y * 2560

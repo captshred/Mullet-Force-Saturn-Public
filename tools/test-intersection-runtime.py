@@ -11,7 +11,7 @@ a=p.parse_args();a.out=a.out.resolve();a.out.mkdir(parents=True);assert not any(
 helper=(R/'tools/test-coop-balance-runtime.py').read_text();scope={'struct':struct};exec(helper[helper.index('def symbols('):helper.index('s=symbols(')],scope);symbols=scope['symbols'];addr=scope['addr']
 manifest=json.loads((R/'assets/level1-intersection/manifest.json').read_text())
 camera_max=manifest['width']-320
-frames=5900
+frames=5900 + 4 * max(0, camera_max - 2240)
 s=symbols(R/'build/game.elf');src=(R/'tests/runtime/playable-frontend.c').read_text()
 src=src.replace('static unsigned frame,pixel_format;','static unsigned seen_camera,travel_phase,hold_steps;static unsigned frame,pixel_format;')
 b=src.index(' (void)index;',src.index('static int16_t input('));e=src.index('\nstatic unsigned read32',b)
@@ -81,8 +81,16 @@ assert any(r[1]==1280 and r[0]>2800 for r in rows) and all(abs(b[1]-c[1])<=2*max
 def count(r):return sum(r[18+j*5]!=0 for j in range(3))
 assert max(map(count,rows))==3 and all(count(r)<=3 for r in rows)
 lot=[r for r in rows if r[6] and r[12] and r[9]>0 and r[15]>0 and
-     r[10]>2240*256 and r[16]>2240*256]
+     r[10]>max(2240,camera_max-60)*256 and r[16]>max(2240,camera_max-60)*256]
 assert lot,'both players must reach the parking lot alive together'
+if camera_max > 2240:
+    for name, camera in (
+        ('mega-downhill-transition', 2360), ('mega-garage', 2520),
+        ('mega-arcade-exterior', 2760), ('mega-arena-entrance', 2820),
+    ):
+        shot = min((r for r in rows if r[0]%4 == 0), key=lambda r: abs(r[1]-camera))
+        assert abs(shot[1]-camera) <= 8, (name, shot[1])
+        Image.open(captures/f'frame-{shot[0]:04}.ppm').save(a.out/(name+'.png'))
 assert any(0<r[18+j*5]<7 and 2240<r[20+j*5]//256<r[1]+320
            for r in lot for j in range(3)),'no active enemy in the parking lot'
 visible=[r for r in rows if r[0]%4==0 and 1380<=r[1]<=1460 and r[6] and r[12] and r[9]>0 and r[15]>0 and count(r)==3 and sum(0<r[18+j*5]<7 and -10<=r[20+j*5]//256-r[1]<=330 for j in range(3))>=2]

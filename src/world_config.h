@@ -5,9 +5,10 @@
 #endif
 #if MF_LEVEL1_WORLD_FLOW
 #ifndef MF_WORLD_WIDTH
-#define MF_WORLD_WIDTH 2560
+#define MF_WORLD_WIDTH 3328
 #endif
 #define MF_WORLD_BEND_X 1920
+#define MF_WORLD_SLOPE_END 2560
 #define MF_WORLD_HEIGHT 368
 #define MF_WORLD_LEFT 26
 #define MF_WORLD_RIGHT (MF_WORLD_WIDTH-26)
@@ -24,6 +25,7 @@
 static inline int mf_world_road_drop(int x) {
     if (x <= MF_WORLD_BEND_X) return 0;
     if (x >= MF_WORLD_WIDTH) x = MF_WORLD_WIDTH;
+    if (x >= MF_WORLD_SLOPE_END) x = MF_WORLD_SLOPE_END;
     return (x - MF_WORLD_BEND_X) / 5;
 }
 static inline int mf_world_camera_y(int camera) {
