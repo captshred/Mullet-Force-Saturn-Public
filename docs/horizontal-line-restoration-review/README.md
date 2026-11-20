@@ -25,3 +25,18 @@ The concrete cap highlights alternated between adjoining pixel rows even where a
 The indexed diff is confined to twelve rows within the garage proof area. The transparent-pixel mask is identical across the full panorama. The proposal uses the approved RGB555 palette. The separately saved `IXPIX-garage-proposed.BIN` is a 2560 × 368 row-major indexed review copy.
 
 The 392 changed pixels touch 79 tile positions. Recounting with the runtime mask yields the same 7,797 unique tiles and 499,008 uncompressed tile bytes as the approved build. Estimated VDP2 reservation remains 434,176 bytes with the fixed resident street cache. Compression and scrolling behavior will be measured if the artwork reaches playable integration.
+
+## Expanded visual review
+
+This proposal includes the first garage proof and extends it across both garage wings and the neighboring downhill storefronts. The comparison sheets use the approved geometry build on the left.
+
+- [F. Full downhill comparison at native resolution](F-full-downhill-native.png)
+- [G. Both garage wings, upper decks, rails, and parked cars at 4×](G-garage-upper-decks-and-cars-4x.png)
+- [H. AUTO SERVICE, MOTOR PARTS, and COIN LAUNDRY at 4×](H-storefront-details-4x.png)
+- [I. Full change map at 2×](I-full-change-map-2x.png)
+
+The expanded garage edits align upper deck cap highlights and selected railing runs, including the lower right deck. They straighten short roof, hood, shoulder, and bumper highlights on the five parked vehicles. Each car retains its original roof profile, sloping windshield and hood contours, proportions, and shading. The storefront pass levels sign-border highlights at AUTO SERVICE and COIN LAUNDRY and repairs small discontinuities on a MOTOR PARTS window header and sill. Existing letterforms, structural posts, reflected light, and decorative texture remain in place.
+
+The workflow uses explicit pixel-run selections and swaps existing palette indices between adjacent rows. The full proposal, `IXPIX-full-proposed.BIN`, changes **1,062 pixels** from the approved art, including the original 392-pixel proof. The additional 670 changes comprise 356 garage architecture pixels, 114 parked-car pixels, and 200 storefront pixels. The changes touch 218 tile positions and preserve the 7,797 unique indexed tiles. The estimated VDP2 reservation remains 434,176 bytes. The full transparency mask, all columns left of the downhill edit, and the protected roadway region are pixel-identical to the approved art.
+
+This deliverable is for visual review. In-game scrolling and hardware behavior have yet to be tested.
