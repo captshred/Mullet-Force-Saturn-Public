@@ -212,6 +212,7 @@ wingsuit=${MF_LEVEL2_WINGSUIT:-0}
 if [[ $wingsuit == 1 && ( $stage_clear != 1 || $live != 1 || $arcade_fx != 1 || $gallery != 1 ) ]]; then echo "Wingsuit requires the complete stage-clear profile" >&2; exit 1; fi
 printf '#define MF_LEVEL2_WINGSUIT %s\n' "$wingsuit" >> build/build-info.h
 printf '%s\n' "$wingsuit" > build/wingsuit-mode.txt
+printf '#define MF_VEHICLE_AMBUSH %s\n' "${MF_VEHICLE_AMBUSH:-0}" >> build/build-info.h
 printf '#define MF_RICKY_ENEMY %s\n' "$ricky" >> build/build-info.h
 printf '#define MF_ENEMY_SPRITE_BANKS %s\n' "$enemy_banks" >> build/build-info.h
 printf '#define MF_HUD_PANEL_MEMORY %s\n' "$hud_panel" >> build/build-info.h
@@ -485,7 +486,7 @@ fi
 rm -f build/cd/EXPLODE.TGA
 if [[ $arcade_fx == 1 ]]; then cp assets/arcade-fx/EXPLODE.TGA build/cd/; fi
 python3 tools/stage-wingsuit-assets.py "$wingsuit" build/cd
-make -C build -f ../make/saturn.mk MAKEFILE=../make/saturn.mk -j2 MF_RICKY_ENEMY="$ricky" MF_DEV_STAGE_SKIP="$dev_skip" MF_LEVEL2_WINGSUIT="$wingsuit" MF_LEVEL1_STAGE_CLEAR="$stage_clear" MF_PUNCH_COMBO="$combo" MF_FAST_RUNNING_BAT="$fast_bat" MF_JAB_COHESION="$jab" MF_ATTACK_SEQUENCE="$sequence" MF_BAT_MOMENTUM="$momentum" MF_COMBAT_ANIMATION="$combat" MF_RUNNING_BAT_VISUALS="$visual" MF_RUN_BAT="$run_bat" MF_DASH_ENABLED="$dash" MF_DASH_PRESET="$dash_num" game.iso
+make -C build -f ../make/saturn.mk MAKEFILE=../make/saturn.mk -j2 MF_VEHICLE_AMBUSH="${MF_VEHICLE_AMBUSH:-0}" MF_RICKY_ENEMY="$ricky" MF_DEV_STAGE_SKIP="$dev_skip" MF_LEVEL2_WINGSUIT="$wingsuit" MF_LEVEL1_STAGE_CLEAR="$stage_clear" MF_PUNCH_COMBO="$combo" MF_FAST_RUNNING_BAT="$fast_bat" MF_JAB_COHESION="$jab" MF_ATTACK_SEQUENCE="$sequence" MF_BAT_MOMENTUM="$momentum" MF_COMBAT_ANIMATION="$combat" MF_RUNNING_BAT_VISUALS="$visual" MF_RUN_BAT="$run_bat" MF_DASH_ENABLED="$dash" MF_DASH_PRESET="$dash_num" game.iso
 cp build/game.iso build/mullet-force.bin
 cat > build/mullet-force.cue <<'CUE'
 FILE "mullet-force.bin" BINARY

@@ -34,6 +34,15 @@ HQ_DELTA = {
     "tools/level1_music_mix.py",
     "docs/level1-diagonal.md", "docs/downhill-hq-comparison.png",
 } | {ART + name for name in ("IXMAP.BIN", "IXOFF.BIN", "IXPACK.BIN", "IXPIX.BIN", "manifest.json")}
+VEHICLE_DELTA = {
+    "assets/cd/MF88.TGA", "src/game.c", "src/game.h", "src/main.c", "src/music.c",
+    "src/enemy_bank_config.h", "make/saturn.mk", "tools/build-native.sh",
+    "tools/build-source-complete.sh", "tools/audit-sprite-memory.py",
+    "tools/test-intersection.py", "tools/test-intersection-runtime.py", "tools/test-ricky-jump-render.py",
+    "tests/intersection/vehicle.c", "docs/level1-vehicle-ambush.md",
+    "downloads/mullet-force-vehicle-ambush.zip",
+}
+HQ_DELTA |= VEHICLE_DELTA
 PHASE_DELTA |= HQ_DELTA
 
 

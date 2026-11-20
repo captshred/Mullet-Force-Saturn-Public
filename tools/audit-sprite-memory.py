@@ -32,6 +32,7 @@ with tempfile.TemporaryDirectory(prefix='mf-sprite-audit-') as temp:
         info=info.replace('#define MF_ENEMY_SPRITE_BANKS 1','#define MF_ENEMY_SPRITE_BANKS 0')
     if args.phase5 or args.phase4 or args.phase3 or args.phase2 or args.phase1 or args.legacy_bat or args.legacy_fx:
         info=info.replace('#define MF_RICKY_ENEMY 1','#define MF_RICKY_ENEMY 0')
+    vehicle=int('#define MF_VEHICLE_AMBUSH 1' in info)
     ricky='#define MF_RICKY_ENEMY 1' in info
     banked='#define MF_ENEMY_SPRITE_BANKS 1' in info
     hud_panel='#define MF_HUD_PANEL_MEMORY 1' in info
@@ -46,8 +47,8 @@ with tempfile.TemporaryDirectory(prefix='mf-sprite-audit-') as temp:
         info=info.replace('#define MF_PUNCH_COMBO 1','#define MF_PUNCH_COMBO 0')
     (work/'build-info.h').write_text(info)
     source=(root/'src/main.c').read_text().split('static int depth_key')[0]
-    source='#include <assert.h>\nvoid audit_finish(void);\n'+source
-    source+='\nint main(void){load_assets();assert(!asset_error);audit_finish();return 0;}\n'
+    source='#include <assert.h>\n#include <stdio.h>\nvoid audit_finish(void);\n'+source
+    source+='\nint main(void){load_assets();if(asset_error){fprintf(stderr,"Asset E%d %s %d\\n",asset_error,asset_item,asset_index);return 1;}audit_finish();return 0;}\n'
     (work/'loader.c').write_text(source)
     subprocess.run(['cc','-std=c99','-ffunction-sections','-fdata-sections',
         '-include',str(work/'build-info.h'),'-I'+str(work),'-I'+str(root/'tests/enemy_banks'),
@@ -55,10 +56,11 @@ with tempfile.TemporaryDirectory(prefix='mf-sprite-audit-') as temp:
         *[str(root/p) for p in ['tests/enemy_banks/audit.c','src/animation_preview.c',
                                  'src/corporate_animation.c','src/ricky_animation.c','src/gallery.c','src/enemy_sprite_bank.c']],
         '-Wl,--gc-sections','-o',str(work/'audit')],check=True,cwd=root)
-    result=subprocess.run([str(work/'audit')],check=True,cwd=root,capture_output=True,text=True)
+    result=subprocess.run([str(work/'audit')],check=False,cwd=root,capture_output=True,text=True)
+    if result.returncode: raise SystemExit(result.stderr)
     rows=list(csv.DictReader(result.stdout.splitlines()))
-    assert len(rows)==(253 if args.without_combo else 255)-removed+(25 if ricky else 0)
-    assert sum(int(r['allocated_bytes']) for r in rows)==(446304 if args.without_combo else 452800 if dual else 453344)-saved+(114048 if ricky else 0)
+    assert len(rows)==vehicle+(253 if args.without_combo else 255)-removed+(25 if ricky else 0)
+    assert sum(int(r['allocated_bytes']) for r in rows)==15360*vehicle+(446304 if args.without_combo else 452800 if dual else 453344)-saved+(114048 if ricky else 0)
     assert sum(r['path']=='EXPLODE.TGA' for r in rows)==int(dual)
     assert sum(r['path']=='BU01.TGA' for r in rows)==int(not dual)
     assert sum(int(r['allocated_bytes'])==0 for r in rows)==14
@@ -74,22 +76,27 @@ with tempfile.TemporaryDirectory(prefix='mf-sprite-audit-') as temp:
         assert {'GB2.TGA','GC2.TGA'} <= {r['path'] for r in rows}
     panel=next(r for r in rows if r['path']=='generated:panel')
     assert (int(panel['width']),int(panel['height']),int(panel['allocated_bytes']))==((8,40,640) if hud_panel else (256,40,20480))
+    prefix=138+vehicle
+    if vehicle:
+        car=next(r for r in rows if r['path']=='MF88.TGA')
+        assert (int(car['width']),int(car['height']),int(car['allocated_bytes']))==(192,80,15360)
     if banked:
-        assert len(rows[:138])==138 and sum(int(r['allocated_bytes']) for r in rows[:138])==224000
-        assert {r['path'] for r in rows[138:152]}=={f'{p}{i:02}.TGA' for p,n in [('CP',10),('CQ',4)] for i in range(n)}
-        assert sum(int(r['allocated_bytes']) for r in rows[138:152])==33024
-        assert all(r['path']!='alias' for r in rows[138:152])
+        assert sum(int(r['allocated_bytes']) for r in rows[:prefix])==224000+15360*vehicle
+        assert {r['path'] for r in rows[prefix:prefix+14]}=={f'{p}{i:02}.TGA' for p,n in [('CP',10),('CQ',4)] for i in range(n)}
+        assert sum(int(r['allocated_bytes']) for r in rows[prefix:prefix+14])==33024
+        assert all(r['path']!='alias' for r in rows[prefix:prefix+14])
     if ricky:
-        assert len(rows)==177 and sum(int(r['allocated_bytes']) for r in rows)==371072
-        assert [r['path'] for r in rows[152:]]==[f'RICKY/RK{i:02}.TGA' for i in range(25)]
-        assert 458488-371072>=49152
+        assert len(rows)==177+vehicle and sum(int(r['allocated_bytes']) for r in rows)==371072+15360*vehicle
+        assert [r['path'] for r in rows[prefix+14:]]==[f'RICKY/RK{i:02}.TGA' for i in range(25)]
+        assert 458488-371072-15360*vehicle>=49152
     def usage(row):
-        if banked and int(row['id'])>=138:return 'replaceable Corporate Punk suffix; palette4 persistent/shared'
+        if row['path']=='MF88.TGA':return 'persistent MF-88; indexed street palette; shared by both passes'
+        if banked and int(row['id'])>=prefix:return 'replaceable Corporate Punk suffix; palette4 persistent/shared'
         name=row['path']
         if name=='alias':return 'stable row/tail view: HQ torch or jump; shares existing payload'
         if name.startswith('COMBAT/'):return 'shared attack sequence bank: jab/cross lower/horizontal contact plus legacy bat poses'
-        for prefix,label in [('HQTORCH/','HQ blowtorch'),('HQJUMP/','jump and aerial kick'),('HQHURT/','hurt reactions'),('HQDEATH/','death lower pieces'),('COMBO/','jab-jab-cross upper')]:
-            if name.startswith(prefix):return label
+        for family,label in [('HQTORCH/','HQ blowtorch'),('HQJUMP/','jump and aerial kick'),('HQHURT/','hurt reactions'),('HQDEATH/','death lower pieces'),('COMBO/','jab-jab-cross upper')]:
+            if name.startswith(family):return label
         if name.startswith(('BT','CT','AL')) or name=='LEGS.TGA':return 'legacy bat/aerial fallback; selected fast profile does not deploy planted bat'
         if name.startswith(('BU','CH','NL')):return 'legacy player fallback pieces; shared lower/body consumers'
         if name.startswith(('CP','HQ')):return 'Corporate Punk shared enemy bank'

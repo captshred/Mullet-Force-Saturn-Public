@@ -10,7 +10,7 @@ args=parser.parse_args()
 def run(args):subprocess.run(args,cwd=R,check=True)
 with tempfile.TemporaryDirectory(prefix='intersection-tests-') as d:
  common=['cc','-std=c99','-g','-fsanitize=undefined','-fno-sanitize-recover=all','-ffunction-sections','-fdata-sections','-include',str(R/'build/build-info.h'),'-I'+str(R/'src'),'-I'+str(R/'build'),'-Wl,--gc-sections']
- for path in ['tests/intersection/cache.c','tests/intersection/world.c','tests/coop_balance/combat.c','tests/ricky/balance.c','tests/ricky/polish-charge.c','tests/ricky/combat.c','tests/ricky/jump-chain.c','tests/ricky/jump-chain-frequency.c','tests/punch_combo_test.c','tests/bat_command_buffer_test.c']:
+ for path in ['tests/intersection/cache.c','tests/intersection/world.c','tests/intersection/vehicle.c','tests/coop_balance/combat.c','tests/ricky/balance.c','tests/ricky/polish-charge.c','tests/ricky/combat.c','tests/ricky/jump-chain.c','tests/ricky/jump-chain-frequency.c','tests/punch_combo_test.c','tests/bat_command_buffer_test.c']:
   source=(R/path).read_text();unit=Path(d)/Path(path).name;unit.write_text(source);exe=str(Path(d)/('run-'+Path(path).stem))
   if path=='tests/coop_balance/combat.c':unit.write_text(source.replace('camera<=960','camera<=MF_WORLD_CAMERA_MAX'))
   if path=='tests/ricky/jump-chain.c':unit.write_text(source.replace('c<=960','c<=MF_WORLD_CAMERA_MAX').replace('<=1254*256','<=MF_WORLD_RIGHT*256'))

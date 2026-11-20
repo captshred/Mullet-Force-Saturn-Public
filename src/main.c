@@ -34,6 +34,9 @@ static volatile int stage2_owned;
 static mf_game game;
 static int explosion=-1,spark_explosion;
 static int street[5],buck[MF_BUCK_FRAMES],chuck[MF_BUCK_FRAMES],enemy[MF_ENEMY_FRAMES],bat[2][MF_BAT_FRAMES],bat_legs,air_legs[3],normal_lower[MF_NORMAL_LOWERS],torch_art[2][3],flame[4],embers[2],charge_cue,drum[3],shadow,spark,bar,panel;
+#if MF_VEHICLE_AMBUSH
+static int vehicle_sprite;
+#endif
 static jo_palette street_palette,buck_palette,chuck_palette,enemy_palette,burn_palette,fire_palette;
 static int asset_error,asset_stage,asset_index,overlay=-1;
 #if MF_SPRITE_GALLERY
@@ -318,6 +321,13 @@ static void load_assets(void)
         asset_failure(731,"FX BUDGET",0);
 #endif
 #endif
+#if MF_VEHICLE_AMBUSH
+    if(!asset_error){
+        asset_stage=736;
+        jo_set_tga_default_palette(JO_NULL);
+        vehicle_sprite=load_indexed("MF88.TGA",0);
+    }
+#endif
 #if MF_ENEMY_SPRITE_BANKS
 #if MF_RICKY_ENEMY
     if(!asset_error && !mf_ricky_palette(&buck_palette,&chuck_palette))asset_failure(734,"RICKY PALETTE",0);
@@ -333,7 +343,7 @@ static void load_assets(void)
         if(g>31)g=31;
         burn_palette.data[i]=0x8000|r|(g<<5)|(b<<10);
     }
-        if(jo_get_last_sprite_id()+1!=MF_FX_DEFINITIONS || mf_animation_texture_bytes()!=MF_FX_TEXTURE_BYTES)
+        if(jo_get_last_sprite_id()+1!=MF_FX_DEFINITIONS+MF_VEHICLE_AMBUSH || mf_animation_texture_bytes()!=MF_FX_TEXTURE_BYTES)
             asset_failure(733,"BANK BUDGET",0);
     }
 #endif
@@ -369,6 +379,15 @@ static void draw_game(void)
 {
     int i,j,x,y,depth,mode,engaged;
     mf_street_draw(street,street_palette.id,game.camera);
+#if MF_VEHICLE_AMBUSH
+    if(game.vehicle_dir){
+        int ground=mf_world_screen_y(game.vehicle_x,MF_VEHICLE_LANE,game.camera);
+        jo_sprite_set_palette(street_palette.id);
+        if(game.vehicle_dir<0)jo_sprite_enable_horizontal_flip();
+        jo_sprite_draw3D2(vehicle_sprite,game.vehicle_x-game.camera-96,ground-68,depth_key(ground,0));
+        jo_sprite_disable_horizontal_flip();
+    }
+#endif
     for(i=0;i<3;i++) {
         mf_drum *d=&game.drums[i];x=d->x/256-game.camera;y=mf_world_screen_y(d->x/256,d->y/256,game.camera);depth=depth_key(y,0);
         if(x<-32 || x>352)continue;
@@ -522,6 +541,10 @@ static void draw_game(void)
 #else
     jo_printf(14,3,"KOs %02d/40",game.stage_kills);
 #endif
+#endif
+#if MF_VEHICLE_AMBUSH
+    if(game.vehicle_tick>0 && game.vehicle_tick<90)
+        jo_print(14,4,"CAR INCOMING");
 #endif
     mode=!game.started?1:(game.paused?2:0);
 #if MF_LEVEL1_STAGE_CLEAR

@@ -11,7 +11,7 @@ a=p.parse_args();a.out=a.out.resolve();a.out.mkdir(parents=True);assert not any(
 helper=(R/'tools/test-coop-balance-runtime.py').read_text();scope={'struct':struct};exec(helper[helper.index('def symbols('):helper.index('s=symbols(')],scope);symbols=scope['symbols'];addr=scope['addr']
 manifest=json.loads((R/'assets/level1-intersection/manifest.json').read_text())
 camera_max=manifest['width']-320
-frames=4600
+frames=5400
 s=symbols(R/'build/game.elf');src=(R/'tests/runtime/playable-frontend.c').read_text()
 src=src.replace('static unsigned frame,pixel_format;','static unsigned seen_camera,travel_phase,hold_steps;static unsigned frame,pixel_format;')
 b=src.index(' (void)index;',src.index('static int16_t input('));e=src.index('\nstatic unsigned read32',b)
@@ -48,7 +48,11 @@ src=src[:b]+''' fwrite(&frame,4,1,trace);
  if(travel_phase==4 && seen_camera==1280)travel_phase=5;
  FIELD(offsetof(mf_game,ticks));
  v=read32(ram,WORLD_CACHE_POINTER);fwrite(&v,4,1,trace);
- v=v?read32(ram,v-4):0;fwrite(&v,4,1,trace);
+ #if MF_VEHICLE_AMBUSH
+ FIELD(offsetof(mf_game,vehicle_dir));
+ #else
+ v=0;fwrite(&v,4,1,trace);
+ #endif
  #undef FIELD
 '''+src[e:]
 unit=a.out/'frontend.c';unit.write_text(src);exe=a.out/'frontend';captures=a.out/'captures';captures.mkdir()
@@ -57,6 +61,14 @@ with (a.out/'run.log').open('w') as log:subprocess.run([str(exe),str(a.core.reso
 data=(captures/'trace.bin').read_bytes();rows=[struct.unpack_from('<36I',data,i) for i in range(0,len(data),144)]
 rows=[r for r in rows if r[0]>=1100]
 assert all(r[3]==r[4]==r[5]==0 for r in rows),'stage/asset/parallax error'
+if '#define MF_VEHICLE_AMBUSH 1' in (R/'build/build-info.h').read_text():
+    passes=[r for r in rows if r[35]]
+    assert {r[35] for r in passes}=={1,0xffffffff},'both car directions must render'
+    assert len({r[1] for r in passes})==1,'camera moved during the ambush'
+    for direction,name in ((1,'downhill-pass'),(0xffffffff,'uphill-pass')):
+        shot=[r for r in passes if r[35]==direction and r[0]%4==0]
+        Image.open(captures/f'frame-{shot[len(shot)//2][0]:04}.ppm').save(a.out/(name+'.png'))
+
 assert max(r[1] for r in rows)==camera_max and max(r[2] for r in rows)==1280,'endpoint not reached'
 assert any(r[1]==1280 and r[0]>2800 for r in rows) and all(abs(b[1]-c[1])<=2*max(1,c[33]-b[33]) for b,c in zip(rows,rows[1:])),'camera speed/backstop'
 def count(r):return sum(r[18+j*5]!=0 for j in range(3))

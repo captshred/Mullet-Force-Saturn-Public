@@ -314,6 +314,74 @@ static void hit_sound(mf_game *g,int actor,int health,int inorganic)
     if(inorganic && health<=0)g->events|=MF_WORLD_IMPACT|MF_COMBAT_DESTROY(actor);
     else g->events|=health>0?MF_COMBAT_NONKILL(actor):MF_COMBAT_CONNECT(actor);
 }
+
+static void player_take_hit(mf_game *g,int i,int damage,int direction)
+{
+    mf_player *p=&g->players[i];
+    p->health=clamp(p->health-damage,0,100);
+#if MF_DASH_ENABLED
+    dash_clear(&g->dash[i]);
+#endif
+    g->running_bat[i]=(mf_running_bat){0};
+/* JAB BEGIN */
+#if MF_JAB_COHESION
+    g->jab[i].buffer=0;
+#endif
+/* JAB END */
+    p->invulnerable=MF_BUCK_INVULNERABLE_TICKS;p->hurt=12;p->knockback=direction*650;
+    p->attack=p->bat=0;p->buffered=0;torch_interrupt(p);impact(g,p->x/256,p->y/256,48+p->height/256);hit_sound(g,i,p->health,0);g->events|=MF_COMBAT_HURT(i);
+    if(!p->health)p->defeated=MF_BUCK_RECOVERY_TICKS;
+}
+#if MF_VEHICLE_AMBUSH
+enum { VEHICLE_WARN=90, VEHICLE_FIRST=125, VEHICLE_GAP=120, VEHICLE_RETURN=145,
+       VEHICLE_END=VEHICLE_WARN+VEHICLE_FIRST+VEHICLE_GAP+VEHICLE_RETURN };
+
+static void vehicle_step(mf_game *g)
+{
+    int tick=g->vehicle_tick, progress, duration, i, previous;
+    int left=g->vehicle_camera-100,right=g->vehicle_camera+420;
+    g->vehicle_dir=0;
+    if(!tick){
+        for(i=0;i<MF_PLAYERS;i++)if(living(&g->players[i]) &&
+           g->players[i].x>=MF_VEHICLE_TRIGGER_X*256){
+            g->vehicle_camera=g->camera;
+            g->vehicle_tick=1;
+            g->events|=MF_VEHICLE_WARNING;
+            break;
+        }
+        return;
+    }
+    if(tick>VEHICLE_END)return;
+    ++g->vehicle_tick;
+    if(tick<VEHICLE_WARN)return;
+    if(tick<VEHICLE_WARN+VEHICLE_FIRST){
+        progress=tick-VEHICLE_WARN;
+        duration=VEHICLE_FIRST;
+        g->vehicle_dir=1;
+    }else if(tick<VEHICLE_WARN+VEHICLE_FIRST+VEHICLE_GAP){
+        g->vehicle_hits=0;
+        if(tick==VEHICLE_WARN+VEHICLE_FIRST+VEHICLE_GAP-36)
+            g->events|=MF_VEHICLE_WARNING;
+        return;
+    }else if(tick<VEHICLE_END){
+        progress=tick-(VEHICLE_WARN+VEHICLE_FIRST+VEHICLE_GAP);
+        duration=VEHICLE_RETURN;
+        g->vehicle_dir=-1;
+    }else return;
+    g->vehicle_x=g->vehicle_dir>0?left+(right-left)*progress/duration:
+                                  right-(right-left)*progress/duration;
+    previous=progress?g->vehicle_x-g->vehicle_dir*5:g->vehicle_x;
+    for(i=0;i<MF_PLAYERS;i++){
+        mf_player *p=&g->players[i];
+        if(!living(p) || p->invulnerable || (g->vehicle_hits&(1u<<i)))continue;
+        if(abs_i(p->y-MF_VEHICLE_LANE*256)>12*256 || p->height>=24*256)continue;
+        if(p->x/256<(previous<g->vehicle_x?previous:g->vehicle_x)-76 || p->x/256>(previous>g->vehicle_x?previous:g->vehicle_x)+76)continue;
+        g->vehicle_hits|=1u<<i;
+        player_take_hit(g,i,20,g->vehicle_dir);
+    }
+}
+#endif
+
 static void fire_damage(mf_game *g,mf_enemy *e,int ignite,int owner)
 {
 #if MF_LEVEL1_STAGE_CLEAR
@@ -454,19 +522,8 @@ static void ricky_step(mf_game *g,int index)
             p=&g->players[i];
             if(striking && !(e->hit_done&(1<<i)) && living(p) && !p->invulnerable && (p->x-e->x)*e->facing>0 &&
                mf_boxes_overlap(strike,mf_player_hurtbox(p))){
-                e->hit_done|=1<<i;p->health=clamp(p->health-damage,0,100);
-#if MF_DASH_ENABLED
-                dash_clear(&g->dash[i]);
-#endif
-                g->running_bat[i]=(mf_running_bat){0};
-/* JAB BEGIN */
-#if MF_JAB_COHESION
-                g->jab[i].buffer=0;
-#endif
-/* JAB END */
-                p->invulnerable=MF_BUCK_INVULNERABLE_TICKS;p->hurt=12;p->knockback=e->facing*650;
-                p->attack=p->bat=0;p->buffered=0;torch_interrupt(p);impact(g,p->x/256,p->y/256,48+p->height/256);hit_sound(g,i,p->health,0);g->events|=MF_COMBAT_HURT(i);
-                if(!p->health)p->defeated=MF_BUCK_RECOVERY_TICKS;
+                e->hit_done|=1<<i;
+                player_take_hit(g,i,damage,e->facing);
             }
         }
         if(--e->timer<=0){e->state=MF_ENEMY_RECOVER;e->timer=jump->active?MF_RICKY_JUMP_RECOVERY:24;jump->height=0;}
@@ -592,19 +649,8 @@ static void enemy_step(mf_game *g,int index)
             p=&g->players[i];
             if(!(e->hit_done&(1<<i)) && living(p) && !p->invulnerable && (p->x-e->x)*e->facing>0 &&
                mf_boxes_overlap(mf_enemy_attackbox(e),mf_player_hurtbox(p))){
-                e->hit_done|=1<<i;p->health=clamp(p->health-MF_ENEMY_DAMAGE,0,100);
-#if MF_DASH_ENABLED
-                dash_clear(&g->dash[i]);
-#endif
-                g->running_bat[i]=(mf_running_bat){0};
-/* JAB BEGIN */
-#if MF_JAB_COHESION
-                g->jab[i].buffer=0;
-#endif
-/* JAB END */
-                p->invulnerable=MF_BUCK_INVULNERABLE_TICKS;p->hurt=12;p->knockback=e->facing*650;
-                p->attack=p->bat=0;p->buffered=0;torch_interrupt(p);impact(g,p->x/256,p->y/256,48+p->height/256);hit_sound(g,i,p->health,0);g->events|=MF_COMBAT_HURT(i);
-                if(!p->health)p->defeated=MF_BUCK_RECOVERY_TICKS;
+                e->hit_done|=1<<i;
+                player_take_hit(g,i,MF_ENEMY_DAMAGE,e->facing);
             }
         }
         if(--e->timer<=0){e->state=MF_ENEMY_RECOVER;
@@ -1027,7 +1073,13 @@ void mf_game_step_inputs(mf_game *g,const unsigned held[2],const unsigned presse
         return;
     }
 #if MF_LEVEL1_STAGE_CLEAR
-    if(g->stage!=MF_STAGE_LEVEL1){stage_transition_step(g);return;}
+    if(g->stage!=MF_STAGE_LEVEL1){
+#if MF_VEHICLE_AMBUSH
+        g->vehicle_tick=VEHICLE_END+1;
+        g->vehicle_dir=0;
+#endif
+        stage_transition_step(g);return;
+    }
 #endif
     for(i=0;i<MF_PLAYERS;i++){
         gesture_step(&g->players[i],held[i],pressed[i]);
@@ -1113,6 +1165,10 @@ void mf_game_step_inputs(mf_game *g,const unsigned held[2],const unsigned presse
         if(!p->attack && !g->running_bat[i].pending)g->running_bat[i]=(mf_running_bat){0};
     }
     torch_events(g);
+#if MF_VEHICLE_AMBUSH
+    vehicle_step(g);
+    if(g->vehicle_tick>0 && g->vehicle_tick<=VEHICLE_END)return;
+#endif
 #if MF_LEVEL1_WORLD_FLOW
     {
         int i,minx=MF_WORLD_RIGHT,maxx=MF_WORLD_LEFT,count=0,target,delta;

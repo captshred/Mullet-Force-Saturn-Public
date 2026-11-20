@@ -32,6 +32,7 @@ typedef struct { int x,y,vx,hp,facing,state,timer,walk,hit_done,grace,flash,targ
 #define MF_COMBAT_CONNECT(i) (1u << (7+3*(i)))
 #define MF_COMBAT_HEAVY_HIT(i) (1u << (18+(i))) /* confirmed cross/jump-kick hit */
 #define MF_COMBAT_HUMAN_DEATH(i) (1u << (20+(i))) /* enemy only, never player */
+#define MF_VEHICLE_WARNING (1u<<22)
 #define MF_WORLD_IMPACT (1u<<11) /* inorganic destruction only */
 #define MF_COMBAT_HURT(i) (1u << (16+(i)))
 #define MF_COMBAT_DESTROY(i) (1u << (14+(i)))
@@ -101,7 +102,14 @@ typedef struct {
 #if MF_RICKY_ENEMY
     mf_ricky_jump ricky_jump[MF_ENEMIES]; /* Appended: preserve existing ABI prefix. */
 #endif
+#if MF_VEHICLE_AMBUSH
+    int vehicle_tick,vehicle_camera,vehicle_x,vehicle_dir;
+    unsigned vehicle_hits;
+#endif
 } mf_game;
+#if MF_VEHICLE_AMBUSH
+enum { MF_VEHICLE_TRIGGER_X=2240, MF_VEHICLE_LANE=198 };
+#endif
 int mf_enemy_count(const mf_game *g);
 int mf_enemy_limit(const mf_game *g);
 void mf_game_init(mf_game *g);

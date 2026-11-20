@@ -122,6 +122,8 @@ static void combat_update(int player,int events,unsigned int now,unsigned int el
     if(events&(MF_COMBAT_JAB(player)|MF_COMBAT_BAT(player)|MF_COMBAT_HURT(player)))c->hit_wait=0;
     if(player==2 && (events&MF_WORLD_IMPACT)) {
         song=2;
+    }else if(player==2 && (events&MF_VEHICLE_WARNING)){
+        song=7;
     }else if(events&MF_COMBAT_CONNECT(player)) {
         song=6;c->hit_wait=4; /* Lethal results always take precedence. */
     }else if((events&MF_COMBAT_NONKILL(player)) && !c->hit_wait) {
@@ -205,5 +207,5 @@ void mf_music_update(int started,int paused,int events,unsigned int now)
         if(SND_SetSeqVl(port,MF_SFX_VOLUME,0)!=SND_RET_SET)continue;
         if(SND_StartSeq(port,0,i==0?3:i,MF_SFX_PRIORITY)==SND_RET_SET)sfx_wait[i]=retrigger_ticks[i];
     }
-    for(i=0;i<3;i++)combat_update(i,i==2?(int)(events&MF_WORLD_IMPACT):events,now,elapsed);
+    for(i=0;i<3;i++)combat_update(i,i==2?(int)(events&(MF_WORLD_IMPACT|MF_VEHICLE_WARNING)):events,now,elapsed);
 }
