@@ -731,6 +731,9 @@ static void update(void)
 #if MF_CORPORATE_PUNK
         if(game.ticks!=before_tick)mf_corporate_step(&game);
 #endif
+#if MF_VEHICLE_AMBUSH
+        if(game.vehicle_dir)game.events|=MF_VEHICLE_PASS;
+#endif
         mf_music_update(game.started,game.paused,game.events,now);
 #if MF_LEVEL2_WINGSUIT
         if(game.stage==MF_STAGE_LEVEL2_ENTRY && !mf_music_protected()){

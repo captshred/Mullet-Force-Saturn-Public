@@ -13,15 +13,19 @@ centered on lane Y 198 and covers ±12 pixels of depth. A jump at least
 24 pixels high clears it. Each hero has a separate hit latch per pass
 and keeps their usual invulnerability. The warning displays CAR INCOMING
 and uses the existing swoosh through the world SFX control. This is a
-placeholder cue for a dedicated engine-rev recording.
+placeholder cue for a dedicated engine-rev recording. Both passes play
+the exact Level 2 flame-hold PCM loop on its own low-priority control.
+The loop stops between passes, on pause, and during protected POOWAH
+playback.
 
 The supplied transparent 192 × 80 indexed PNG was mapped to the existing
 street palette, excluding its animated indices. The zero-key mask is
 identical to the PNG's alpha mask. One 15,360-byte indexed texture is
 shared by both directions. The VDP1 loader audit reports 178 definitions
 and 386,432 bytes, leaving 72,056 bytes free, including the protected
-49,152-byte reserve. There is no additional CRAM allocation or SCSP
-sample data.
+49,152-byte reserve. The existing CRAM allocation is preserved. The separate Level 1 pass
+bank uses 25,808 SCSP bytes and leaves 20,480 bytes free. The approved
+Level 1 banks and the original Level 2 banks remain byte-identical.
 
 The native profile is `stage-default`. Build with
 `bash tools/build-stage.sh --native`, then run `make check` and

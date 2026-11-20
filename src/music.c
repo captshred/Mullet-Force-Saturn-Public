@@ -72,13 +72,51 @@ static int upload(const char *name,unsigned int expected,unsigned int address)
     jo_free(data);
     return 1;
 }
+#if MF_VEHICLE_AMBUSH
+enum {
+    CAR_SOUND_PORT=8, CAR_SOUND_BANK=2, CAR_SEQ_ADDR=478000,
+    CAR_SEQ_BYTES=44, CAR_TON_ADDR=CAR_SEQ_ADDR+CAR_SEQ_BYTES, CAR_TON_BYTES=25764
+};
+static int car_sound_playing;
+
+static void car_sound_update(int requested)
+{
+    if(car_sound_playing && !requested){
+        if(SND_StopSeq(CAR_SOUND_PORT)==SND_RET_SET)car_sound_playing=0;
+    }else if(requested && !car_sound_playing){
+        if(SND_SetSeqVl(CAR_SOUND_PORT,80,0)==SND_RET_SET &&
+           SND_StartSeq(CAR_SOUND_PORT,CAR_SOUND_BANK,0,15)==SND_RET_SET)
+            car_sound_playing=1;
+    }
+}
+#endif
+
 int mf_music_init(void)
 {
     int size=0,ok;
     char *map=jo_fs_read_file("CUSTOM.MAP",&size);
     SndIniDt init;
     volatile unsigned int *p;
+#if MF_VEHICLE_AMBUSH
+    /* Preserve all six stock map entries. Two more describe the standalone
+       loop bank. Padding covers the SDK's word-sized initialization copy. */
+    unsigned int extended_map[36]={0};
+    static const unsigned char car_entries[24]={
+        0x12,CAR_SEQ_ADDR>>16,(CAR_SEQ_ADDR>>8)&255,CAR_SEQ_ADDR&255,0x80,0,0,CAR_SEQ_BYTES,
+        0x02,CAR_TON_ADDR>>16,(CAR_TON_ADDR>>8)&255,CAR_TON_ADDR&255,0x80,0,CAR_TON_BYTES>>8,CAR_TON_BYTES&255,
+        0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff
+    };
+    char *original_map=map;
+#endif
     if(!map || size!=MF_CUSTOM_MAP_BYTES) { if(map) jo_free(map); return 0; }
+#if MF_VEHICLE_AMBUSH
+    for(int i=0;i<MF_CUSTOM_MAP_BYTES-8;i++)((unsigned char *)extended_map)[i]=(unsigned char)map[i];
+    for(unsigned i=0;i<sizeof(car_entries);i++)
+        ((unsigned char *)extended_map)[MF_CUSTOM_MAP_BYTES-8+i]=car_entries[i];
+    map=(char *)extended_map;
+    size=MF_CUSTOM_MAP_BYTES+16;
+    car_sound_playing=0;
+#endif
     /* Same SND_Init + slInitSound pairing as the compatible SRL SEQ sample.
        Driver/work 0..B000 and standard DSP/transfer reservations stay intact. */
     slSoundOffWait();
@@ -92,11 +130,19 @@ int mf_music_init(void)
     slDMAWait();
     /* Defined, silent DSP memory; this project uses only dry PCM voices. */
     for(p=(volatile unsigned int *)0x25a0c000;p<(volatile unsigned int *)0x25a1c580;++p) *p=0;
+#if MF_VEHICLE_AMBUSH
+    jo_free(original_map);
+#else
     jo_free(map);
+#endif
     ok=upload("FX.SEQ",MF_FX_SEQ_BYTES,MF_FX_SEQ_ADDR);
     ok=upload("FX.TON",MF_FX_TON_BYTES,MF_FX_TON_ADDR)&&ok;
     ok=upload("STAGE.SEQ",MF_STAGE_SEQ_BYTES,MF_STAGE_SEQ_ADDR)&&ok;
     ok=upload("STAGE.TON",MF_STAGE_TON_BYTES,MF_STAGE_TON_ADDR)&&ok;
+#if MF_VEHICLE_AMBUSH
+    ok=upload("CARPASS.SEQ",CAR_SEQ_BYTES,CAR_SEQ_ADDR)&&ok;
+    ok=upload("CARPASS.TON",CAR_TON_BYTES,CAR_TON_ADDR)&&ok;
+#endif
     *(volatile unsigned char *)0x25a004e1=0;
     slSoundOnWait();
     slSndFlush();
@@ -156,6 +202,9 @@ void mf_music_update(int started,int paused,int events,unsigned int now)
     int i,protected;unsigned int elapsed=now-audio_tick;audio_tick=now;
     if(!ready)return;
     protected=death_update(events,now);
+#if MF_VEHICLE_AMBUSH
+    car_sound_update(started && !paused && !protected && (events&MF_VEHICLE_PASS));
+#endif
     if(protected)events&=MF_TORCH_HISS;
     if(paused || paused_state)for(i=0;i<3;i++)if(combat[i].playing)combat[i].ends_at+=elapsed;
     if(torch_playing && (!started || paused || !(events&MF_TORCH_HISS))) {
