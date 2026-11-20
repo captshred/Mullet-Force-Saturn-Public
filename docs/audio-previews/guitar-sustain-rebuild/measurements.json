@@ -1,0 +1,164 @@
+{
+  "open": {
+    "current": {
+      "start": 2693,
+      "end": 3366,
+      "length_ms": 30.521541950113377,
+      "pcm_ms": 152.6530612244898,
+      "guard_pcm16": [
+        -1059,
+        1491
+      ],
+      "seam_step": 0.148712158203125,
+      "seam_slope_delta": -0.004547119140625,
+      "seam_rms_db": 0.22225143647041476,
+      "level_span_db": 0.817033129216922,
+      "centroid_span_hz": 297.92114265221267,
+      "pitch_range_hz": null,
+      "packed": 6736,
+      "extra": 0,
+      "total": 462844,
+      "free": 61444
+    },
+    "short": {
+      "start": 3300,
+      "end": 6831,
+      "length_ms": 160.1360544217687,
+      "pcm_ms": 309.7959183673469,
+      "guard_pcm16": [
+        -296,
+        -1215
+      ],
+      "seam_step": -0.050201416015625,
+      "seam_slope_delta": 0.016143798828125,
+      "seam_rms_db": 0.80661929810944,
+      "level_span_db": 1.9488480911428976,
+      "centroid_span_hz": 857.9059716735258,
+      "pitch_range_hz": [
+        131.02881919551376,
+        131.61981052863015
+      ],
+      "packed": 13668,
+      "extra": 6932,
+      "total": 469776,
+      "free": 54512,
+      "unblended_phase_correlation": 0.5964315608227043,
+      "crossfade_frames": 176
+    },
+    "medium": {
+      "start": 4344,
+      "end": 10937,
+      "length_ms": 299.00226757369614,
+      "pcm_ms": 496.0090702947846,
+      "guard_pcm16": [
+        -834,
+        30
+      ],
+      "seam_step": 0.024627685546875,
+      "seam_slope_delta": -0.014129638671875,
+      "seam_rms_db": 0.1685406520427465,
+      "level_span_db": 2.09153157656991,
+      "centroid_span_hz": 775.3592941857114,
+      "pitch_range_hz": [
+        131.01347620279086,
+        131.33043986481616
+      ],
+      "packed": 21880,
+      "extra": 15144,
+      "total": 477988,
+      "free": 46300,
+      "unblended_phase_correlation": 0.476095706377739,
+      "crossfade_frames": 176
+    },
+    "long": {
+      "start": 4008,
+      "end": 16662,
+      "length_ms": 573.8775510204082,
+      "pcm_ms": 755.6462585034013,
+      "guard_pcm16": [
+        -1535,
+        -1854
+      ],
+      "seam_step": 0.010833740234375,
+      "seam_slope_delta": 0.04278564453125,
+      "seam_rms_db": -0.25791956904447816,
+      "level_span_db": 2.307142661800846,
+      "centroid_span_hz": 816.7004469169335,
+      "pitch_range_hz": [
+        130.86118666281874,
+        131.32782450096045
+      ],
+      "packed": 33328,
+      "extra": 26592,
+      "total": 489436,
+      "free": 34852,
+      "unblended_phase_correlation": 0.6312394080582782,
+      "crossfade_frames": 176
+    }
+  },
+  "muted": {
+    "current": {
+      "peak_dbfs": -2.7745404218786653,
+      "rms_dbfs": -9.548602323616596,
+      "error_dbfs": -53.01035812711579,
+      "first_100ms_error_dbfs": -52.942167582940925,
+      "last_54ms_error_dbfs": -53.23782221419228,
+      "packed": 11624
+    },
+    "dithered-8": {
+      "peak_dbfs": -2.6816423209633946,
+      "rms_dbfs": -9.547481246997014,
+      "error_dbfs": -48.11019273336268,
+      "first_100ms_error_dbfs": -48.211911750793064,
+      "last_54ms_error_dbfs": -47.72275091357824,
+      "packed": 11624
+    },
+    "16-bit": {
+      "peak_dbfs": -2.766153366012772,
+      "rms_dbfs": -9.54855283006445,
+      "error_dbfs": -101.0852824611551,
+      "first_100ms_error_dbfs": -101.09030137147512,
+      "last_54ms_error_dbfs": -101.35185816782077,
+      "packed": 23244
+    }
+  },
+  "master_demo_gain": 1,
+  "windows": {
+    "sustained": {
+      "ticks": [
+        214080,
+        217920
+      ],
+      "seconds": [
+        163.170884,
+        166.097716
+      ],
+      "open_notes": 5,
+      "mute_notes": 2
+    },
+    "rapid": {
+      "ticks": [
+        236160,
+        240000
+      ],
+      "seconds": [
+        180.000168,
+        182.927
+      ],
+      "open_notes": 28,
+      "mute_notes": 0
+    },
+    "palm-muted": {
+      "ticks": [
+        154560,
+        158400
+      ],
+      "seconds": [
+        117.80498800000001,
+        120.73182
+      ],
+      "open_notes": 0,
+      "mute_notes": 40
+    }
+  }
+}
