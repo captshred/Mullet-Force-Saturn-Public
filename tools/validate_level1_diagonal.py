@@ -51,7 +51,19 @@ CLARITY_REVIEW = {
         "IXPIX-proposed.BIN", "README.md",
     )
 }
-HQ_DELTA |= VEHICLE_DELTA | CLARITY_REVIEW | {"downloads/mullet-force-downhill-clarity.zip"}
+LINE_REVIEW = {
+    "docs/horizontal-line-restoration-review/" + name for name in (
+        "A-original-native.png", "B-structural-overlay-4x.png",
+        "C-corrected-native.png", "D-before-after-4x.png", "E-changed-pixels-4x.png",
+        "F-full-downhill-native.png", "G-garage-upper-decks-and-cars-4x.png",
+        "H-storefront-details-4x.png", "I-full-change-map-2x.png",
+        "IXPIX-garage-proposed.BIN", "IXPIX-full-proposed.BIN", "README.md",
+    )
+}
+HQ_DELTA |= VEHICLE_DELTA | CLARITY_REVIEW | LINE_REVIEW | {
+    "downloads/mullet-force-downhill-clarity.zip",
+    "downloads/mullet-force-horizontal-line-restoration.zip",
+}
 PHASE_DELTA |= HQ_DELTA
 
 
@@ -112,14 +124,23 @@ def validate(medium_guitar=False, mix_pass1=False):
         first_solid = next(i for i, pixel in enumerate(column) if pixel)
         assert all(column[first_solid:]), x
     proposal = ROOT / "docs/downhill-clarity-review/IXPIX-proposed.BIN"
+    line_proposal = ROOT / "docs/horizontal-line-restoration-review/IXPIX-full-proposed.BIN"
+    if line_proposal.exists():
+        assert current == line_proposal.read_bytes(), "runtime art differs from the reviewed line restoration"
+        geometry = proposal.read_bytes()
+        assert current.count(0) == geometry.count(0)
+        assert all((a == 0) == (b == 0) for a, b in zip(current, geometry))
+    elif proposal.exists():
+        assert current == proposal.read_bytes(), "runtime art differs from the reviewed geometry"
     if proposal.exists():
-        assert current == proposal.read_bytes(), "runtime art differs from the reviewed proposal"
         if subprocess.run(["git", "cat-file", "-e", DEFINITIVE], cwd=ROOT, capture_output=True).returncode:
             git("fetch", "--no-tags", "--depth=1", "origin", DEFINITIVE)
         definitive = git("show", f"{DEFINITIVE}:{ART}IXPIX.BIN")
         for x in range(1928, 2560):
             protected = (146 + (x - 1920) // 5) * 2560 + x
             assert current[protected::2560] == definitive[protected::2560], x
+            if line_proposal.exists():
+                assert current[protected::2560] == geometry[protected::2560], x
     palette = ROOT / "build/cd/NSPAL.BIN"
     assert hashlib.sha256(palette.read_bytes()).hexdigest() == manifest["palette_sha256"]
     assert manifest["packed_source_storage"] == "low-work-ram"
