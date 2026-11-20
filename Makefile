@@ -1,10 +1,10 @@
 # Recovered source is checked against the complete v3 delta/golden-resource lock.
 .PHONY: check test
 check:
-	python3 tools/level1-sfx-pcm8-pass1.py --pass2 --reset-wingsuit --diagonal --medium-guitar --disc
-	python3 tools/validate_level1_diagonal.py --medium-guitar
+	python3 tools/level1-sfx-pcm8-pass1.py --pass2 --reset-wingsuit --diagonal --medium-guitar --mix-pass1 --disc
+	python3 tools/validate_level1_diagonal.py --medium-guitar --mix-pass1
 test:
-	python3 tools/level1-sfx-pcm8-pass1.py --pass2 --reset-wingsuit --diagonal --medium-guitar --test
+	python3 tools/level1-sfx-pcm8-pass1.py --pass2 --reset-wingsuit --diagonal --medium-guitar --mix-pass1 --test
 	python3 tools/test-intersection.py --level1-only
 .PHONY: all setup bootstrap native check test clean
 all:

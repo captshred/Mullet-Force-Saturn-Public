@@ -7,8 +7,8 @@
       "sha256": "3186778bc3bea539a3a69234cfb4d9fb5580f504fad56f360e7cee4893c93ba3"
     },
     "STAGE.TON": {
-      "bytes": 147292,
-      "sha256": "ccb4c2be4bb1a98f0fc319a73ef3d5cd8044ae638cd36bcba2ea7491c61bfd62"
+      "bytes": 147304,
+      "sha256": "725ce83bf975fe0434ad2538042657af42de060f5e5caf12b6915a6a445361b6"
     },
     "FX.SEQ": {
       "bytes": 368,
@@ -20,7 +20,7 @@
     },
     "CUSTOM.MAP": {
       "bytes": 56,
-      "sha256": "5302f2db8d790a4c28c62db7311435b52f51b5a04c168d6d04b229e99137fe5c"
+      "sha256": "ac108e862fc1c3645f30a442e512413300950f6bc5b7b3ccfefd0a624d40a808"
     }
   },
   "sound_ram_regions": [
@@ -75,12 +75,12 @@
     {
       "name": "STAGE.TON",
       "start": 330696,
-      "size": 147292,
-      "end": 477988
+      "size": 147304,
+      "end": 478000
     }
   ],
-  "sound_ram_high_water": 477988,
-  "sound_ram_unallocated": 46300,
+  "sound_ram_high_water": 478000,
+  "sound_ram_unallocated": 46288,
   "music_held_peak": 15,
   "drum_tail_cap": 8,
   "release_policy": "RR31; driver can retire released musical voices under pressure; physical audibility unverified",
@@ -393,5 +393,37 @@
     "pcm_sha256": "85af16caed83de4e60841cbb325df88578dda2d755145a2eb5ef50292c8682ef",
     "packed_bytes": 21880,
     "additional_bytes": 15144
+  },
+  "level1_music_mix_pass1": {
+    "baseline": "5cdafa491cad5f785001147e8af5092a62e90324",
+    "drum_tl_change": 2,
+    "bass_velocity_curve_before": [
+      25,
+      16,
+      54,
+      9,
+      49,
+      102,
+      19,
+      93,
+      122,
+      43
+    ],
+    "bass_velocity_curve_after": [
+      25,
+      16,
+      68,
+      9,
+      49,
+      116,
+      19,
+      93,
+      127,
+      43
+    ],
+    "bass_cc7": 127,
+    "bass_cc11": 127,
+    "bass_tl": 0,
+    "additional_bytes": 12
   }
 }

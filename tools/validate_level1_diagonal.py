@@ -32,12 +32,12 @@ def git(*args):
     return subprocess.check_output(["git", *args], cwd=ROOT)
 
 
-def validate(medium_guitar=False):
+def validate(medium_guitar=False, mix_pass1=False):
+    assert not mix_pass1 or medium_guitar
     extra_scope = set()
     if medium_guitar:
         import validate_level1_guitar as guitar
-        guitar.validate()
-        extra_scope = guitar.SCOPE
+        extra_scope = guitar.validate(mix=mix_pass1)
     if subprocess.run(["git", "cat-file", "-e", BASE], cwd=ROOT, capture_output=True).returncode:
         git("fetch", "--no-tags", "--depth=1", "origin", BASE)
     if subprocess.run(["git", "cat-file", "-e", APPROVED_HILL], cwd=ROOT, capture_output=True).returncode:
@@ -85,4 +85,6 @@ def validate(medium_guitar=False):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--medium-guitar", action="store_true")
-    validate(parser.parse_args().medium_guitar)
+    parser.add_argument("--mix-pass1", action="store_true")
+    args = parser.parse_args()
+    validate(args.medium_guitar, args.mix_pass1)

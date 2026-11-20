@@ -253,6 +253,7 @@ def main():
     parser.add_argument("--reset-wingsuit", action="store_true")
     parser.add_argument("--diagonal", action="store_true")
     parser.add_argument("--medium-guitar", action="store_true")
+    parser.add_argument("--mix-pass1", action="store_true")
     parser.add_argument("--disc", action="store_true")
     parser.add_argument("--test", action="store_true")
     args = parser.parse_args()
@@ -265,11 +266,11 @@ def main():
         subprocess.run(["git", "fetch", "--no-tags", "--depth=1", "origin", base], cwd=ROOT, check=True)
     expected = outputs(base, candidates, pass_number)
     extra_scope = ()
+    assert not args.mix_pass1 or args.medium_guitar
     if args.medium_guitar:
         assert args.pass2 and args.reset_wingsuit and args.diagonal and not args.write
         import validate_level1_guitar as guitar
-        guitar.validate()
-        extra_scope = guitar.SCOPE
+        extra_scope = guitar.validate(mix=args.mix_pass1)
         expected = {path: data for path, data in expected.items() if path not in guitar.AUDIO_DELTA}
     for path, data in expected.items():
         if args.write:

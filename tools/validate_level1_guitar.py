@@ -47,7 +47,7 @@ def voice(data, program):
     return layer, address
 
 
-def outputs(pcm):
+def outputs(pcm, mix=False):
     assert fingerprint(pcm) == {"bytes": END * 2, "sha256": PCM_SHA}
     original = old(TON)
     count = (int.from_bytes(original[:2], "big") - 8) // 2
@@ -66,6 +66,10 @@ def outputs(pcm):
         tone[layer + 3] = (original[layer + 3] & 0xf0) | (relocated >> 16)
         tone[layer + 4:layer + 6] = (relocated & 0xffff).to_bytes(2, "big")
 
+    if mix:
+        import level1_music_mix
+        tone = level1_music_mix.apply(tone, voice)
+
     index = bytearray(old(MAP))
     stage = len(index) - 16
     assert index[stage] == 1 and index[stage + 4] == 0x80
@@ -73,7 +77,7 @@ def outputs(pcm):
     base = int.from_bytes(index[stage + 1:stage + 4], "big")
     index[stage + 5:stage + 8] = len(tone).to_bytes(3, "big")
     high_water = base + len(tone)
-    assert (delta, high_water) == (15144, 477988)
+    assert (delta, high_water) == (15144, 478000 if mix else 477988)
 
     report = json.loads(old(REPORT))
     report["sound_ram_regions"][-1].update(size=len(tone), end=high_water)
@@ -83,6 +87,13 @@ def outputs(pcm):
         loop_start=START, loop_end=END, crossfade_frames=176, pcm_sha256=PCM_SHA,
         packed_bytes=len(sample), additional_bytes=delta,
     )
+    if mix:
+        report["level1_music_mix_pass1"] = dict(
+            baseline=level1_music_mix.BASE, drum_tl_change=2,
+            bass_velocity_curve_before=list(level1_music_mix.SHARED_CURVE),
+            bass_velocity_curve_after=list(level1_music_mix.BASS_CURVE),
+            bass_cc7=127, bass_cc11=127, bass_tl=0, additional_bytes=12,
+        )
     lock = old(LOCK)
     entries = json.loads(lock)
     for path, data in ((TON, tone), (MAP, index)):
@@ -101,7 +112,7 @@ def outputs(pcm):
             REPORT: (json.dumps(report, indent=2) + "\n").encode()}
 
 
-def validate(pcm=None):
+def validate(pcm=None, mix=False, write_mix=False):
     if subprocess.run(["git", "cat-file", "-e", BASE + "^{commit}"], cwd=ROOT,
                       capture_output=True).returncode:
         git("fetch", "--no-tags", "--depth=1", "origin", BASE)
@@ -109,21 +120,31 @@ def validate(pcm=None):
         tone = (ROOT / TON).read_bytes()
         _, address = voice(tone, 0)
         pcm = tone[address:address + END * 2]
-        write = False
+        write = write_mix
     else:
         write = True
-    for path, data in outputs(pcm).items():
+    for path, data in outputs(pcm, mix).items():
         if write:
             (ROOT / path).write_bytes(data)
         assert (ROOT / path).read_bytes() == data, path
     changed = set(git("diff", "--name-only", BASE, "--").decode().splitlines())
-    assert changed <= SCOPE, changed - SCOPE
-    print("PASS exact Medium PCM, loop and guard, protected instruments and gameplay, 46,300 SCSP bytes free",
-          flush=True)
+    scope = SCOPE
+    if mix:
+        import level1_music_mix
+        level1_music_mix.validate_scope(git)
+        scope = scope | level1_music_mix.SCOPE
+    assert changed <= scope, changed - scope
+    print("PASS exact Medium PCM, loop and guard, protected instruments and gameplay"
+          + (", native Level 1 gain changes, 46,288 SCSP bytes free" if mix
+             else ", 46,300 SCSP bytes free"), flush=True)
+    return scope
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--pcm", type=Path, help="Install the hash-verified audition PCM")
+    parser.add_argument("--mix-pass1", action="store_true")
+    parser.add_argument("--write-mix", action="store_true", help="Install the verified native mix")
     args = parser.parse_args()
-    validate(args.pcm.read_bytes() if args.pcm else None)
+    assert not args.write_mix or args.mix_pass1
+    validate(args.pcm.read_bytes() if args.pcm else None, mix=args.mix_pass1, write_mix=args.write_mix)

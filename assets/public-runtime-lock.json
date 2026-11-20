@@ -892,8 +892,8 @@
     "bytes": 31506
   },
   "assets/cd/STAGE.TON": {
-    "sha256": "ccb4c2be4bb1a98f0fc319a73ef3d5cd8044ae638cd36bcba2ea7491c61bfd62",
-    "bytes": 147292
+    "sha256": "725ce83bf975fe0434ad2538042657af42de060f5e5caf12b6915a6a445361b6",
+    "bytes": 147304
   },
   "assets/cd/CT05.TGA": {
     "sha256": "d30b2f9fc7e12f0169a680bcb606d25764dfc7093a94d6f0971add026713ee42",
@@ -993,7 +993,7 @@
   },
   "assets/cd/CUSTOM.MAP": {
     "bytes": 56,
-    "sha256": "5302f2db8d790a4c28c62db7311435b52f51b5a04c168d6d04b229e99137fe5c"
+    "sha256": "ac108e862fc1c3645f30a442e512413300950f6bc5b7b3ccfefd0a624d40a808"
   },
   "assets/cd/TU0.TGA": {
     "sha256": "7b20bd20b1848c050ec6c5edbe387b098cd7ce207b76f24cb71791316e35ced7",
