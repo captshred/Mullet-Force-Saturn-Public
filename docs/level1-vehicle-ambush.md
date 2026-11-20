@@ -2,8 +2,8 @@
 
 The car triggers once per game when a living player reaches world X 2,240.
 The camera holds its current position while the normal player controls,
-combat and spawning continue. The three passes run downhill in near lane 216, uphill in far lane 180,
-and downhill in center lane 198. The initial warning lasts 90 ticks.
+combat and spawning continue. The three passes run downhill in near lane 214, uphill in far lane 187,
+and downhill in center lane 200. The initial warning lasts 90 ticks.
 Each 120-tick gap includes a lane-specific warning in its final
 48 ticks. The camera resumes after the third pass exits.
 The Stage 2 handoff clears the encounter pose, and a
@@ -33,12 +33,9 @@ The native profile is `stage-default`. Build with
 `make test`. In GitHub Actions select `stage-default` and supply the
 implementation commit as `source_ref`.
 
-## Road perspective
+## Upright car and inset lanes
 
-The MF-88 and its contact shadow use the pinned SGL four-point sprite path.
-The rotation is derived from the downhill run and rise and anchored where
-the tire bottoms meet the active road lane. Uphill uses the hardware
-horizontal flip with the same tilted geometry. The shallow contact shadow reuses
-the existing shadow texture, adding one draw command during an active pass.
-No new texture or palette is loaded. Encounter state, collision and timing
-are identical to the approved triple-pass build.
+The original horizontal sprite draw is used on all three passes.
+The lane insets account for the 1:5 grade under the measured front and
+rear tire patches in both directions. Rendering and collision continue
+to use the same lane coordinate.

@@ -375,49 +375,18 @@ static void draw_anchored(int sprite,int x,int y,const short *anchor,int facing,
 {
     jo_sprite_draw3D2(sprite,x-(facing>0?anchor[0]:jo_sprite_get_width(sprite)-anchor[0]),y-anchor[1],depth);
 }
-#if MF_VEHICLE_AMBUSH
-static void draw_vehicle_quad(int sprite,int x,int ground,int left,int right,
-                              int top,int bottom,int depth)
-{
-    const int one=65536;
-    int run=MF_WORLD_WIDTH-MF_WORLD_BEND_X;
-    int rise=mf_world_road_drop(MF_WORLD_WIDTH)-mf_world_road_drop(MF_WORLD_BEND_X);
-    int slope=rise*one/run;
-    /* Q16 normalization, with sub-pixel error across the texture at 1:5. */
-    int cosine=one-(slope*slope)/(2*one);
-    int sine=slope*cosine/one;
-    int u[4]={left,right,right,left},v[4]={top,top,bottom,bottom};
-    jo_pos2D_fixed corners[4];
-    for(int i=0;i<4;i++){
-        corners[i].x=(x-160)*one+u[i]*cosine-v[i]*sine;
-        corners[i].y=(ground-120)*one+u[i]*sine+v[i]*cosine;
-    }
-    jo_sprite_draw_4p_fixed(sprite,corners,depth*one,true);
-}
-
-static void draw_vehicle(void)
-{
-    int x=game.vehicle_x-game.camera;
-    int ground=mf_world_screen_y(game.vehicle_x,game.vehicle_lane,game.camera);
-    int depth=depth_key(ground,0);
-    /* Wheels bottom out at texture rows 66–67. Put the axle line on the
-       lane at the same X and Y used by collision. */
-    int axle_offset=game.vehicle_dir>0?-13:13;
-    jo_sprite_disable_horizontal_flip();
-    draw_vehicle_quad(shadow,x,ground,axle_offset-58,axle_offset+57,-3,3,depth+1);
-    jo_sprite_set_palette(street_palette.id);
-    if(game.vehicle_dir<0)jo_sprite_enable_horizontal_flip();
-    draw_vehicle_quad(vehicle_sprite,x,ground,-96,95,-67,12,depth);
-    jo_sprite_disable_horizontal_flip();
-}
-#endif
-
 static void draw_game(void)
 {
     int i,j,x,y,depth,mode,engaged;
     mf_street_draw(street,street_palette.id,game.camera);
 #if MF_VEHICLE_AMBUSH
-    if(game.vehicle_dir)draw_vehicle();
+    if(game.vehicle_dir){
+        int ground=mf_world_screen_y(game.vehicle_x,game.vehicle_lane,game.camera);
+        jo_sprite_set_palette(street_palette.id);
+        if(game.vehicle_dir<0)jo_sprite_enable_horizontal_flip();
+        jo_sprite_draw3D2(vehicle_sprite,game.vehicle_x-game.camera-96,ground-68,depth_key(ground,0));
+        jo_sprite_disable_horizontal_flip();
+    }
 #endif
     for(i=0;i<3;i++) {
         mf_drum *d=&game.drums[i];x=d->x/256-game.camera;y=mf_world_screen_y(d->x/256,d->y/256,game.camera);depth=depth_key(y,0);
@@ -576,7 +545,7 @@ static void draw_game(void)
 #if MF_VEHICLE_AMBUSH
     {
         int lane=mf_vehicle_warning_lane(&game);
-        if(lane)jo_print(14,4,lane>198?"CAR NEAR    ":lane<198?"CAR FAR     ":"CAR CENTER  ");
+        if(lane)jo_print(14,4,lane>200?"CAR NEAR    ":lane<200?"CAR FAR     ":"CAR CENTER  ");
     }
 #endif
     mode=!game.started?1:(game.paused?2:0);

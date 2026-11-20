@@ -66,13 +66,15 @@ assert all(r[3]==r[4]==r[5]==0 for r in rows),'stage/asset/parallax error'
 if '#define MF_VEHICLE_AMBUSH 1' in (R/'build/build-info.h').read_text():
     passes=[r for r in rows if r[35]]
     observed=[r[35] for i,r in enumerate(passes) if i==0 or r[35]!=passes[i-1][35]]
-    expected=[433,360,397]  # Lane * 2 plus one for downhill.
+    expected=[429,374,401]  # Lane * 2 plus one for downhill.
     assert observed==expected, observed
     lock=passes[0][1]
     assert all(r[1]==lock for r in rows if passes[0][0]<=r[0]<=passes[-1][0])
     for code,name in zip(expected,('downhill-near','uphill-far','downhill-center')):
         shot=[r for r in passes if r[35]==code and r[0]%4==0]
-        Image.open(captures/f'frame-{shot[len(shot)//2][0]:04}.ppm').save(a.out/(name+'.png'))
+        for suffix, index in (('early',1),('middle',2),('late',3)):
+            frame=shot[len(shot)*index//4][0]
+            Image.open(captures/f'frame-{frame:04}.ppm').save(a.out/(name+'-'+suffix+'.png'))
 
 assert max(r[1] for r in rows)==camera_max and max(r[2] for r in rows)==1280,'endpoint not reached'
 assert any(r[1]==1280 and r[0]>2800 for r in rows) and all(abs(b[1]-c[1])<=2*max(1,c[33]-b[33]) for b,c in zip(rows,rows[1:])),'camera speed/backstop'

@@ -52,9 +52,24 @@ int main(void)
 #if MF_VEHICLE_AMBUSH
     mf_game g;
     int passes=0,warnings=1,last=0;
-    check_pass(0,216,1,180);
-    check_pass(1,180,-1,216);
-    check_pass(2,198,1,216);
+    check_pass(0,214,1,187);
+    check_pass(1,187,-1,214);
+    check_pass(2,200,1,214);
+
+    /* Tire contact patch extremes in the 192px source, measured at rows
+       65–67. Mirror texture X for the uphill pass. Compare ground and curb
+       in world coordinates so camera position cancels. */
+    const int tire_x[]={32,53,112,138};
+    for(unsigned pass=0;pass<3;pass++){
+        int direction=vehicle_passes[pass].direction;
+        for(int x=MF_WORLD_BEND_X-200;x<=MF_WORLD_WIDTH+200;x++)
+            for(unsigned i=0;i<sizeof(tire_x)/sizeof(tire_x[0]);i++){
+                int offset=(direction>0?tire_x[i]:191-tire_x[i])-96;
+                int local=vehicle_passes[pass].lane+
+                    mf_world_road_drop(x)-mf_world_road_drop(x+offset);
+                assert(local-3>=168 && local-1<=229);
+            }
+    }
 
     fixture(&g);
     for(int t=1;t<=VEHICLE_END;t++){
@@ -62,7 +77,7 @@ int main(void)
         vehicle_step(&g);
         if(g.events&MF_VEHICLE_WARNING){
             warnings++;
-            assert(mf_vehicle_warning_lane(&g)==(warnings==2?180:198));
+            assert(mf_vehicle_warning_lane(&g)==(warnings==2?187:200));
         }
         if(g.vehicle_dir && !last)passes++;
         last=g.vehicle_dir;
@@ -75,7 +90,7 @@ int main(void)
     g.players[0].active=0;
     g.players[1].health=50;
     g.players[1].invulnerable=0;
-    g.players[1].y=216*256;
+    g.players[1].y=214*256;
     g.players[1].x=(g.vehicle_camera-100)*256;
     g.vehicle_tick=VEHICLE_WARN;
     g.vehicle_hits=0;

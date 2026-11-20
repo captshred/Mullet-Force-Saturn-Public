@@ -337,10 +337,14 @@ enum { VEHICLE_WARN=90, VEHICLE_FIRST=125, VEHICLE_GAP=120, VEHICLE_RETURN=145,
        VEHICLE_SECOND_START=VEHICLE_WARN+VEHICLE_FIRST+VEHICLE_GAP,
        VEHICLE_THIRD_START=VEHICLE_SECOND_START+VEHICLE_RETURN+VEHICLE_GAP,
        VEHICLE_END=VEHICLE_THIRD_START+VEHICLE_FIRST, VEHICLE_LATER_WARN=48 };
+/* The upright tire contacts span roughly -64..+43 pixels from the
+   texture anchor before mirroring. At 1:5 the local road moves up to
+   13 pixels beneath them. Inset the two outer lanes from 168..229
+   to keep both tire patches clear of the curb and near edge. */
 static const struct { int start,duration,direction,lane; } vehicle_passes[]={
-    {VEHICLE_WARN,VEHICLE_FIRST,1,216},
-    {VEHICLE_SECOND_START,VEHICLE_RETURN,-1,180},
-    {VEHICLE_THIRD_START,VEHICLE_FIRST,1,198}
+    {VEHICLE_WARN,VEHICLE_FIRST,1,214},
+    {VEHICLE_SECOND_START,VEHICLE_RETURN,-1,187},
+    {VEHICLE_THIRD_START,VEHICLE_FIRST,1,200}
 };
 
 int mf_vehicle_warning_lane(const mf_game *g)
