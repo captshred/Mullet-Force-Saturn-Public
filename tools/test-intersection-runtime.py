@@ -18,7 +18,8 @@ b=src.index(' (void)index;',src.index('static int16_t input('));e=src.index('\ns
 src=src[:b]+''' (void)index;if(!controls || port>1 || device!=RETRO_DEVICE_JOYPAD)return 0;
  if(id==RETRO_DEVICE_ID_JOYPAD_START && ((!port && ((frame>=1000 && frame<1004)||(frame>=1020 && frame<1024))) || (port && frame>=1040 && frame<1044)))return 1;
  if(frame<1100)return 0;
- if(id==RETRO_DEVICE_ID_JOYPAD_RIGHT && (travel_phase==0 || travel_phase==2))return 1;
+ if(id==RETRO_DEVICE_ID_JOYPAD_RIGHT && (travel_phase==0 || travel_phase==2 ||
+    (travel_phase==3 && hold_steps<205)))return 1;
  if(id==RETRO_DEVICE_ID_JOYPAD_LEFT && travel_phase==4)return 1;
  if(id==RETRO_DEVICE_ID_JOYPAD_B && (travel_phase==1 || travel_phase==3 || travel_phase==5 || (frame+port*17)%60<3))return 1;
  if(id==RETRO_DEVICE_ID_JOYPAD_A && travel_phase!=1 && travel_phase!=3 && travel_phase!=5 && (frame+port*17)%60>=6 && (frame+port*17)%60<9)return 1;
@@ -44,7 +45,7 @@ src=src[:b]+''' fwrite(&frame,4,1,trace);
  if(travel_phase==0 && seen_camera>=1400){travel_phase=1;hold_steps=0;}
  if(travel_phase==1 && ++hold_steps>=360)travel_phase=2;
  if(travel_phase==2 && seen_camera==MF_WORLD_CAMERA_MAX){travel_phase=3;hold_steps=0;}
- if(travel_phase==3 && ++hold_steps>=120)travel_phase=4;
+ if(travel_phase==3 && ++hold_steps>=280)travel_phase=4;
  if(travel_phase==4 && seen_camera==1280)travel_phase=5;
  FIELD(offsetof(mf_game,ticks));
  v=read32(ram,WORLD_CACHE_POINTER);fwrite(&v,4,1,trace);
@@ -84,9 +85,16 @@ lot=[r for r in rows if r[6] and r[12] and r[9]>0 and r[15]>0 and
      r[10]>max(2240,camera_max-60)*256 and r[16]>max(2240,camera_max-60)*256]
 assert lot,'both players must reach the parking lot alive together'
 if camera_max > 2240:
+    entrance = [r for r in lot if r[1]==camera_max and
+                min(r[10],r[16])>=(camera_max+280)*256]
+    assert entrance, 'both players must reach the entrance apron'
+    entry_shots = [r for r in entrance if r[0]%4==0]
+    assert entry_shots, 'missing entrance apron screenshot'
+    frame = entry_shots[len(entry_shots)//2][0]
+    Image.open(captures/f'frame-{frame:04}.ppm').save(a.out/'mega-arena-entrance.png')
     for name, camera in (
         ('mega-downhill-transition', 2360), ('mega-garage', 2520),
-        ('mega-arcade-exterior', 2760), ('mega-arena-entrance', 2820),
+        ('mega-open-lot', 2740), ('mega-arcade-exterior', 2972),
     ):
         shot = min((r for r in rows if r[0]%4 == 0), key=lambda r: abs(r[1]-camera))
         assert abs(shot[1]-camera) <= 8, (name, shot[1])

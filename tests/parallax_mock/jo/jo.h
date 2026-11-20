@@ -10,6 +10,9 @@ typedef int Sint32;
 GfsHn GFS_Open(int);
 void GFS_GetFileSize(GfsHn,Sint32 *,Sint32 *,Sint32 *);
 void GFS_Close(GfsHn);
+#define GFS_SEEK_SET 0
+Sint32 GFS_Seek(GfsHn,Sint32,Sint32);
+Sint32 GFS_Fread(GfsHn,Sint32,void *,Sint32);
 char *jo_fs_read_file_ptr(const char *,void *,int *);
 void slCharNbg2(int,int);
 void slPageNbg2(void *,void *,int);

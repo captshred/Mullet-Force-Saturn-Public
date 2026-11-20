@@ -13,6 +13,55 @@ static unsigned char packed_heap[MF_INTERSECTION_PACK_BYTES+4];
 static void file(const char *path,void *dst,unsigned bytes) {
  FILE *f=fopen(path,"rb");assert(f && fread(dst,1,bytes,f)==bytes && fgetc(f)==EOF);fclose(f);
 }
+/* Test the same sector-read path used at native boot, including a
+   partial final sector and a short transfer that advances the cursor. */
+static unsigned char staging[MF_WORLD_PACK_STORAGE], received[MF_INTERSECTION_PACK_BYTES];
+static unsigned cd_offset, cd_seeks, cd_short_reads, cd_short_budget, cd_bad_size, cd_alloc_fail;
+static int cd_open, cd_allocated;
+int GFS_NameToId(Sint8 *name) { assert(!strcmp((const char *)name,"IXPACK.BIN"));return 1; }
+GfsHn GFS_Open(int id) { assert(id==1 && !cd_open);cd_open=1;return &cd_open; }
+void GFS_Close(GfsHn handle) { assert(handle==&cd_open && cd_open);cd_open=0; }
+void GFS_GetFileSize(GfsHn handle,Sint32 *size,Sint32 *count,Sint32 *last) {
+ unsigned length=MF_INTERSECTION_PACK_BYTES+cd_bad_size;
+ assert(handle==&cd_open && cd_open);
+ *size=MF_WORLD_PACK_SECTOR;*count=(length+*size-1)/ *size;*last=length-(*count-1)* *size;
+}
+Sint32 GFS_Seek(GfsHn handle,Sint32 offset,Sint32 mode) {
+ assert(handle==&cd_open && cd_open && mode==GFS_SEEK_SET && offset>=0);
+ cd_offset=(unsigned)offset*MF_WORLD_PACK_SECTOR;++cd_seeks;
+ return offset;
+}
+Sint32 GFS_Fread(GfsHn handle,Sint32 sectors,void *dst,Sint32 length) {
+ unsigned bytes=(unsigned)length;
+ assert(handle==&cd_open && cd_open && cd_allocated && dst==staging);
+ assert(bytes<=MF_WORLD_PACK_CHUNK && cd_offset+bytes<=MF_INTERSECTION_PACK_BYTES);
+ assert((unsigned)sectors==(bytes+MF_WORLD_PACK_SECTOR-1)/MF_WORLD_PACK_SECTOR);
+ if(cd_short_budget){--cd_short_budget;++cd_short_reads;--bytes;}
+ memcpy(dst,packed_heap+cd_offset,bytes);
+ cd_offset+=(unsigned)sectors*MF_WORLD_PACK_SECTOR;
+ return (Sint32)bytes;
+}
+void *jo_malloc_with_behaviour(unsigned bytes,int behavior) {
+ assert(bytes==sizeof staging && behavior==JO_MALLOC_TRY_REUSE_BLOCK && !cd_allocated);
+ if(cd_alloc_fail)return NULL;
+ cd_allocated=1;return staging;
+}
+void jo_free(void *ptr) { assert(ptr==staging && cd_allocated);cd_allocated=0; }
+static void check_pack_read(void) {
+ unsigned chunks=(MF_INTERSECTION_PACK_BYTES+MF_WORLD_PACK_CHUNK-1)/ MF_WORLD_PACK_CHUNK;
+ file("assets/level1-intersection/IXPACK.BIN",packed_heap,MF_INTERSECTION_PACK_BYTES);
+ cd_short_budget=1;
+ assert(world_pack_read(received) && !cd_open && !cd_allocated);
+ assert(cd_short_reads==1 && cd_seeks==chunks+1);
+ assert(!memcmp(received,packed_heap,sizeof received));
+ cd_bad_size=1;
+ assert(!world_pack_read(received) && !cd_open && !cd_allocated);
+ cd_bad_size=0;cd_alloc_fail=1;
+ assert(!world_pack_read(received) && !cd_open && !cd_allocated);
+ cd_alloc_fail=0;cd_short_budget=3;
+ assert(!world_pack_read(received) && !cd_open && !cd_allocated);
+ puts("PASS bounded CD staging, byte-exact pack, short-read retry, and cleanup");
+}
 static void load(void) {
  world_packed=packed_heap;world_chunks=map_data;world_offsets=offset_data;
  file("assets/level1-intersection/IXPACK.BIN",world_packed,MF_INTERSECTION_PACK_BYTES);
@@ -59,6 +108,7 @@ static void update(int camera) {
  unsigned count=0;for(unsigned i=0;i<1664;i++)count+=before[i]!=world_source[i];uploads+=count;if(count>peak)peak=count;
 }
 int main(void) {
+ check_pack_read();
  load();
  for(int direction=0;direction<2;direction++)for(int i=0;i<=MF_WORLD_CAMERA_MAX;i++) {
   int camera=direction?MF_WORLD_CAMERA_MAX-i:i;update(camera);visible(camera);

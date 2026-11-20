@@ -23,7 +23,9 @@ static unsigned char *world_packed;
 static unsigned char *world_offsets;
 static unsigned char world_decoded[512];
 #define MF_WORLD_DECODE_CACHE 128
-#define MF_WORLD_PACK_STORAGE ((MF_INTERSECTION_PACK_BYTES+4u+3u)&~3u)
+#define MF_WORLD_PACK_SECTOR 2048u
+#define MF_WORLD_PACK_CHUNK 65536u
+#define MF_WORLD_PACK_STORAGE ((MF_INTERSECTION_PACK_BYTES<MF_WORLD_PACK_CHUNK?MF_INTERSECTION_PACK_BYTES:MF_WORLD_PACK_CHUNK)+4u)
 #define MF_WORLD_BACKGROUND_HEAP (MF_INTERSECTION_MAP_BYTES+4u+MF_INTERSECTION_OFFSET_BYTES+4u+MF_WORLD_DECODE_HEAP)
 #define MF_WORLD_VIEW_ROWS 32
 #define MF_WORLD_DECODE_HEAP (MF_WORLD_DECODE_CACHE*512+MF_INTERSECTION_BLOCKS*4+(MF_INTERSECTION_BLOCKS+7)/8)
@@ -52,21 +54,44 @@ static int world_read(const char *name,void *dst,int expected) {
        count>expected/sector+1 || (count-1)*sector+last!=expected)return 0;
     return jo_fs_read_file_ptr(name,dst,&length)!=JO_NULL && length==expected;
 }
-static int world_pack_load(void) {
-    unsigned char *staging;
-    unsigned i;
-    world_release();
-    /* Retain the SDK's normal CD destination. The SH-2 copies into low
-       work RAM after the read, so the CD DMA target needs no change. */
+/* Read only at stage load, with CD DMA still targeting high work RAM.
+   The pack is one file; seek by sector before each read so a retry after
+   a short transfer restarts at the same offset. */
+static int world_pack_read(unsigned char *target) {
+    int id=GFS_NameToId((Sint8 *)"IXPACK.BIN"),ok=0;
+    GfsHn file;
+    Sint32 sector=0,count=0,last=0;
+    unsigned char *staging=JO_NULL;
+    unsigned offset,bytes;
+    if(id<0 || !(file=GFS_Open(id)))return 0;
+    GFS_GetFileSize(file,&sector,&count,&last);
+    if(sector!=MF_WORLD_PACK_SECTOR ||
+       count!=(MF_INTERSECTION_PACK_BYTES+MF_WORLD_PACK_SECTOR-1)/MF_WORLD_PACK_SECTOR ||
+       last!=(Sint32)(MF_INTERSECTION_PACK_BYTES-(count-1)*MF_WORLD_PACK_SECTOR))goto done;
     staging=jo_malloc_with_behaviour(MF_WORLD_PACK_STORAGE,JO_MALLOC_TRY_REUSE_BLOCK);
-    if(!staging)return 0;
-    if(!world_read("IXPACK.BIN",staging,MF_INTERSECTION_PACK_BYTES)){
-        jo_free(staging);
-        return 0;
+    if(!staging)goto done;
+    for(offset=0;offset<MF_INTERSECTION_PACK_BYTES;offset+=bytes) {
+        unsigned i,retry,sectors;
+        bytes=MF_INTERSECTION_PACK_BYTES-offset;
+        if(bytes>MF_WORLD_PACK_CHUNK)bytes=MF_WORLD_PACK_CHUNK;
+        sectors=(bytes+MF_WORLD_PACK_SECTOR-1)/MF_WORLD_PACK_SECTOR;
+        for(retry=0;retry<3;retry++)
+            if(GFS_Seek(file,offset/MF_WORLD_PACK_SECTOR,GFS_SEEK_SET)>=0 &&
+               GFS_Fread(file,sectors,staging,bytes)==(Sint32)bytes)break;
+        if(retry==3)goto done;
+        for(i=0;i<bytes;i++)target[offset+i]=staging[i];
     }
-    world_packed=(unsigned char *)MF_WORLD_PACK_ADDRESS;
-    for(i=0;i<MF_INTERSECTION_PACK_BYTES;i++)world_packed[i]=staging[i];
-    jo_free(staging);
+    ok=1;
+done:
+    if(staging)jo_free(staging);
+    GFS_Close(file);
+    return ok;
+}
+static int world_pack_load(void) {
+    unsigned char *packed=(unsigned char *)MF_WORLD_PACK_ADDRESS;
+    world_release();
+    if(!world_pack_read(packed))return 0;
+    world_packed=packed;
     world_heap=jo_malloc_with_behaviour(MF_WORLD_BACKGROUND_HEAP,JO_MALLOC_TRY_REUSE_BLOCK);
     if(!world_heap)return 0;
     if((unsigned long)world_heap+MF_WORLD_BACKGROUND_HEAP>0x060c0000u)return 0;

@@ -13,7 +13,7 @@ import numpy as np
 BLOCK_BYTES = 512
 TILE_BYTES = 64
 LOW_WORK_LIMIT = 0x80000
-HEAP_BYTES = 393216
+PACK_STAGING_BYTES = 65536
 ROOT = Path(__file__).resolve().parents[1]
 
 
@@ -112,8 +112,8 @@ def main():
     offsets.append(len(packed))
     payload = len(packed)
     packed.extend(bytes(-payload % 4))
-    if len(packed) + 4 >= HEAP_BYTES or len(packed) > LOW_WORK_LIMIT:
-        parser.error(f'{len(packed)} packed bytes exceed the current staging or low work RAM budget')
+    if len(packed) > LOW_WORK_LIMIT:
+        parser.error(f'{len(packed)} packed bytes exceed the low work RAM budget')
     if len(tile_ids) >= 32768:
         parser.error('tile IDs exceed the renderer signed-short slot tables')
 
@@ -132,7 +132,7 @@ def main():
         huffman_max_bits=max(n for _, n in codes.values()), block_count=len(blocks),
         blank_tile=blank, chunk_bytes=len(files['IXMAP.BIN']), decode_cache_heap_bytes=decode_heap,
         map_offset_heap_bytes=map_heap, background_heap_bytes=map_heap+decode_heap,
-        packed_low_work_ram_bytes=len(packed), peak_cd_staging_heap_bytes=len(packed)+4,
+        packed_low_work_ram_bytes=len(packed), peak_cd_staging_heap_bytes=min(len(packed), PACK_STAGING_BYTES)+4,
         sha256={name:hashlib.sha256(data).hexdigest() for name,data in files.items()},
     )
     header = f"""#ifndef MF_INTERSECTION_DATA_H

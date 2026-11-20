@@ -63,6 +63,8 @@ LINE_REVIEW = {
 MEGA_DELTA = {
     "tools/prepare-mega-arcade.py", "tools/pack-level1-panorama.py", "docs/level1-mega-arcade.md",
     "downloads/mullet-force-mega-arcade-phase4a.zip", "src/world_config.h",
+    "tools/import-mega-arcade-art.py", "downloads/mullet-force-mega-arcade-art.zip",
+    "tests/parallax_mock/jo/jo.h", "tests/intersection/cache.c",
 }
 HQ_DELTA |= VEHICLE_DELTA | CLARITY_REVIEW | LINE_REVIEW | MEGA_DELTA | {
     "downloads/mullet-force-downhill-clarity.zip",
