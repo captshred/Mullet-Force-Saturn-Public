@@ -74,16 +74,17 @@ static int upload(const char *name,unsigned int expected,unsigned int address)
 }
 #if MF_VEHICLE_AMBUSH
 enum {
-    CAR_SOUND_PORT=8, CAR_SOUND_BANK=2, CAR_SEQ_ADDR=478000,
+    CAR_SOUND_PORT=3, CAR_SOUND_BANK=2, CAR_SEQ_ADDR=478000,
     CAR_SEQ_BYTES=44, CAR_TON_ADDR=CAR_SEQ_ADDR+CAR_SEQ_BYTES, CAR_TON_BYTES=25764
 };
 static int car_sound_playing;
 
 static void car_sound_update(int requested)
 {
+    if(combat[2].playing && (int)(audio_tick-combat[2].ends_at)>=0)combat[2].playing=0;
     if(car_sound_playing && !requested){
         if(SND_StopSeq(CAR_SOUND_PORT)==SND_RET_SET)car_sound_playing=0;
-    }else if(requested && !car_sound_playing){
+    }else if(requested && !car_sound_playing && !combat[2].playing && combat[2].pending<0 && !combat[2].stopping){
         if(SND_SetSeqVl(CAR_SOUND_PORT,80,0)==SND_RET_SET &&
            SND_StartSeq(CAR_SOUND_PORT,CAR_SOUND_BANK,0,15)==SND_RET_SET)
             car_sound_playing=1;
@@ -203,7 +204,8 @@ void mf_music_update(int started,int paused,int events,unsigned int now)
     if(!ready)return;
     protected=death_update(events,now);
 #if MF_VEHICLE_AMBUSH
-    car_sound_update(started && !paused && !protected && (events&MF_VEHICLE_PASS));
+    car_sound_update(started && !paused && !protected && (events&MF_VEHICLE_PASS) &&
+                     !(events&MF_WORLD_IMPACT));
 #endif
     if(protected)events&=MF_TORCH_HISS;
     if(paused || paused_state)for(i=0;i<3;i++)if(combat[i].playing)combat[i].ends_at+=elapsed;
@@ -256,5 +258,10 @@ void mf_music_update(int started,int paused,int events,unsigned int now)
         if(SND_SetSeqVl(port,MF_SFX_VOLUME,0)!=SND_RET_SET)continue;
         if(SND_StartSeq(port,0,i==0?3:i,MF_SFX_PRIORITY)==SND_RET_SET)sfx_wait[i]=retrigger_ticks[i];
     }
-    for(i=0;i<3;i++)combat_update(i,i==2?(int)(events&(MF_WORLD_IMPACT|MF_VEHICLE_WARNING)):events,now,elapsed);
+    for(i=0;i<3;i++){
+#if MF_VEHICLE_AMBUSH
+        if(i==2 && car_sound_playing)continue;
+#endif
+        combat_update(i,i==2?(int)(events&(MF_WORLD_IMPACT|MF_VEHICLE_WARNING)):events,now,elapsed);
+    }
 }

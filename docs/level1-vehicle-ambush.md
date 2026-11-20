@@ -14,7 +14,7 @@ centered on lane Y 198 and covers ±12 pixels of depth. A jump at least
 and keeps their usual invulnerability. The warning displays CAR INCOMING
 and uses the existing swoosh through the world SFX control. This is a
 placeholder cue for a dedicated engine-rev recording. Both passes play
-the exact Level 2 flame-hold PCM loop on its own low-priority control.
+the exact Level 2 flame-hold PCM loop on the world SFX control at lower priority. A world impact can interrupt the loop.
 The loop stops between passes, on pause, and during protected POOWAH
 playback.
 
