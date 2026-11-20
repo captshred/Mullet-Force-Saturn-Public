@@ -32,3 +32,13 @@ The native profile is `stage-default`. Build with
 `bash tools/build-stage.sh --native`, then run `make check` and
 `make test`. In GitHub Actions select `stage-default` and supply the
 implementation commit as `source_ref`.
+
+## Road perspective
+
+The MF-88 and its contact shadow use the pinned SGL four-point sprite path.
+The rotation is derived from the downhill run and rise and anchored where
+the tire bottoms meet the active road lane. Uphill uses the hardware
+horizontal flip with the same tilted geometry. The shallow contact shadow reuses
+the existing shadow texture, adding one draw command during an active pass.
+No new texture or palette is loaded. Encounter state, collision and timing
+are identical to the approved triple-pass build.
