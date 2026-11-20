@@ -5,7 +5,7 @@ static void tick(mf_game *g,unsigned a,unsigned b,unsigned connected) {
  unsigned h[2]={a,b},p[2]={0,0};mf_game_step_inputs(g,h,p,connected);
 }
 int main(void) {
- assert(MF_WORLD_WIDTH==3328 && MF_WORLD_RIGHT==3302 && MF_WORLD_CAMERA_MAX==3008);
+ assert(MF_WORLD_WIDTH==3200 && MF_WORLD_RIGHT==3130 && MF_WORLD_CAMERA_MAX==2880);
  int marks[]={0,320,640,960,1280};
  for(unsigned i=0;i<sizeof marks/sizeof marks[0];i++)assert(mf_world_checkpoint(marks[i])==marks[i]);
  assert(mf_world_checkpoint(1599)==1280 && mf_world_checkpoint(1600)==1280);
@@ -69,6 +69,6 @@ int main(void) {
    unsigned h[2]={0,MF_START},p[2]={0,MF_START};mf_game_step_inputs(&g,h,p,3);
    assert(g.players[1].active && g.players[1].x>=g.camera*256 && g.players[1].x<=(g.camera+320)*256);
   }
-  printf("PASS %s diagonal and flat apron traversal, endpoint3008/checkpoint1280 backstop, smooth camera/tether, offscreen spawns, max%d, class schedule intact, retirement/no KO, join/leave\n",coop?"coop":"solo",max_count);
+  printf("PASS %s diagonal and flat apron traversal, endpoint2880/checkpoint1280 backstop, smooth camera/tether, offscreen spawns, max%d, class schedule intact, retirement/no KO, join/leave\n",coop?"coop":"solo",max_count);
  }
 }

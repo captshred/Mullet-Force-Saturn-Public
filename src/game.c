@@ -962,6 +962,7 @@ static void player_step(mf_game *g,int index,unsigned held,unsigned pressed)
     {
         int lo=(g->camera+26)*256,hi=(g->camera+294)*256;
         const mf_player *other=&g->players[1-index];
+        if(hi>MF_WORLD_RIGHT*256)hi=MF_WORLD_RIGHT*256;
         if(living(other)) {
             if(p->x>=other->x && dx>0 && other->x+MF_WORLD_PAIR_SPAN*256<hi)hi=other->x+MF_WORLD_PAIR_SPAN*256<p->x?p->x:other->x+MF_WORLD_PAIR_SPAN*256;
             if(p->x<other->x && dx<0 && other->x-MF_WORLD_PAIR_SPAN*256>lo)lo=other->x-MF_WORLD_PAIR_SPAN*256>p->x?p->x:other->x-MF_WORLD_PAIR_SPAN*256;

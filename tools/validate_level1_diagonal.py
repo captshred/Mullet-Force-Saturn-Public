@@ -65,6 +65,7 @@ MEGA_DELTA = {
     "downloads/mullet-force-mega-arcade-phase4a.zip", "src/world_config.h",
     "tools/import-mega-arcade-art.py", "downloads/mullet-force-mega-arcade-art.zip",
     "tests/parallax_mock/jo/jo.h", "tests/intersection/cache.c",
+    "tools/recompose-mega-arcade.py", "downloads/mullet-force-mega-arcade-phase4a2.zip",
 }
 HQ_DELTA |= VEHICLE_DELTA | CLARITY_REVIEW | LINE_REVIEW | MEGA_DELTA | {
     "downloads/mullet-force-downhill-clarity.zip",
@@ -110,7 +111,7 @@ def validate(medium_guitar=False, mix_pass1=False):
     art = ROOT / ART
     manifest = json.loads((art / "manifest.json").read_text())
     width, height = manifest["width"], manifest["height"]
-    assert manifest["parent"] == APPROVED_HILL and width in (2560, 3328) and height == 368
+    assert manifest["parent"] == APPROVED_HILL and width in (2560, 3200, 3328) and height == 368
     for name, digest in manifest["sha256"].items():
         data = (art / name).read_bytes()
         assert hashlib.sha256(data).hexdigest() == digest, name

@@ -11,6 +11,7 @@ a=p.parse_args();a.out=a.out.resolve();a.out.mkdir(parents=True);assert not any(
 helper=(R/'tools/test-coop-balance-runtime.py').read_text();scope={'struct':struct};exec(helper[helper.index('def symbols('):helper.index('s=symbols(')],scope);symbols=scope['symbols'];addr=scope['addr']
 manifest=json.loads((R/'assets/level1-intersection/manifest.json').read_text())
 camera_max=manifest['width']-320
+player_end=3130 if manifest['width']==3200 else camera_max+294
 frames=5900 + 4 * max(0, camera_max - 2240)
 s=symbols(R/'build/game.elf');src=(R/'tests/runtime/playable-frontend.c').read_text()
 src=src.replace('static unsigned frame,pixel_format;','static unsigned seen_camera,travel_phase,hold_steps;static unsigned frame,pixel_format;')
@@ -86,7 +87,7 @@ lot=[r for r in rows if r[6] and r[12] and r[9]>0 and r[15]>0 and
 assert lot,'both players must reach the parking lot alive together'
 if camera_max > 2240:
     entrance = [r for r in lot if r[1]==camera_max and
-                min(r[10],r[16])>=(camera_max+280)*256]
+                min(r[10],r[16])==player_end*256]
     assert entrance, 'both players must reach the entrance apron'
     entry_shots = [r for r in entrance if r[0]%4==0]
     assert entry_shots, 'missing entrance apron screenshot'
@@ -94,7 +95,7 @@ if camera_max > 2240:
     Image.open(captures/f'frame-{frame:04}.ppm').save(a.out/'mega-arena-entrance.png')
     for name, camera in (
         ('mega-downhill-transition', 2360), ('mega-garage', 2520),
-        ('mega-open-lot', 2740), ('mega-arcade-exterior', 2972),
+        ('mega-open-lot', 2660), ('mega-arcade-exterior', camera_max),
     ):
         shot = min((r for r in rows if r[0]%4 == 0), key=lambda r: abs(r[1]-camera))
         assert abs(shot[1]-camera) <= 8, (name, shot[1])

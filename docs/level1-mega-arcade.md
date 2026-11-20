@@ -1,52 +1,52 @@
-# Level 1 Phase 4A · MEGA ARCADE
+# Level 1 Phase 4A.2 · MEGA ARCADE composition
 
-The art pass starts from the tested Phase 4A geometry source
-`24c0cdc0d2d1d1e986ff6d8e9e2273b8a6304362`. The definitive downhill
-baseline is `dce0d49cbba8da61b90df7b42ed446d47a54c41a`. Approved panorama
-pixels through world X 2559 are retained byte for byte.
-
-## Layout
+Source starts at `9301bd2831371f03461debf1a404a12441c5a896`. The definitive
+downhill baseline remains `dce0d49cbba8da61b90df7b42ed446d47a54c41a`. Every
+approved downhill pixel through world X 2559 is preserved.
 
 | Geometry | Range |
 | --- | --- |
-| World art | X 0–3327, Y 0–367 |
-| Player centers, subject to the existing tether | X 26–3302 |
-| Camera origin | X 0–3008 |
+| World art | X 0–3199, Y 0–367 |
+| Player centers, subject to the existing tether | X 26–3130 |
+| Camera origin | X 0–2880 |
+| Native final view | X 2880–3199, 320 × 240 |
 | Original slope | X 1920–2560 |
-| Garage and its transition into the lot | Approximately X 2560–2758 |
-| Unobstructed arena floor | X 2688–3327 |
-| Entrance center and playable end | Approximately X 3287 and X 3302 |
+| Open lot to doorway | Approximately X 2758–3130 |
+| Main entrance center | Approximately X 3095 |
 | Arena combat lanes | Simulation Y 168–229, panorama Y 296–357 |
 
-The garage ends at the left side of the arena view. The trees, skyline and
-parked vehicles frame the open lot behind the combat lanes. The camera
-scrolls into the full frontage with the entrance behind the rightmost
-playable point. The entrance is scenery for this phase. The flat road,
-horizontal follow, Y projection, co-op tether and reverse checkpoint use
-the existing Phase 4A geometry.
+The annex is 128 pixels shorter. The garaged cars, deck geometry and garage
+lighting are retained. The gold and blue lot cars are independently reduced
+from the concept at uniform scales. The red car uses the same uniform scale
+as the frontage. All remain behind the main combat lanes. The facade
+includes the complete marquee and doors in the final camera view. The
+remaining right-hand pixels frame the building, with the walking limit on
+the entrance apron. The original sky patch behind the facade was replaced
+with clear concept sky to remove the superseded roof and marquee.
 
-## Indexed art and memory
+The downhill asphalt's dominant approved RGB555 swatch (index 220) sets the
+lot's pavement base. The transition retains its existing curb, railing and
+trash cans. Cracks, parking paint and wet neon accents remain distinct
+against the darker road. The renderer, RGB555 palette, follow behavior,
+Y projection, combat controls and original MF-88 encounter are reused.
 
-The approved concept is cropped and mapped by feature across the rightmost
-768 columns. The facade uses the final view, while the garage and open lot
-receive their own horizontal proportions. The existing RGB555 palette is
-used without dithering. The concept moon was removed, and new floor
-reflections are subdued toward the foreground for sprite readability.
-The art uses ordinary 8 × 8 NBG1 cells with the existing map ring. No
-additional layers or VDP1 textures are required.
+| Resource | Usage |
+| --- | --- |
+| VDP1 texture use | 386,432 bytes, with 49,152-byte hero reserve protected |
+| VDP2 allocation | 434,176 bytes, including 106,496 bytes of street cells |
+| Packed background low work RAM | 440,176 of 524,288 bytes |
+| CD staging peak | 65,540 bytes, with reads confined to startup |
+| Retained background heap | 112,765 bytes |
 
-The 459,488-byte pack fits the 524,288-byte low-work-RAM slot with 64,800
-bytes to spare. It is read in sector-aligned chunks using a single
-65,540-byte high-work-RAM staging allocation. The compressed format, tile
-cache and loader's stage-lifetime ownership are retained. There are no CD
-reads during scrolling. The retained background allocation is 114,732
-bytes. VDP2 still reserves 434,176 bytes, with 106,496 bytes for resident
-street cells. VDP1 still uses 386,432 bytes with the 49,152-byte hero reserve
-protected. Audio assets and SCSP allocation are unchanged.
+The indexed artwork uses 10,250 unique source tiles and the existing 1,664
+resident street cells. Audio assets and SCSP allocation are unchanged.
 
-With the approved 2172 × 724 concept PNG available locally, reproduce the
-indexed panorama with
-`python3 tools/import-mega-arcade-art.py "/path/to/concept.png" --output /tmp/mega-panorama.bin`
-and repack it with
-`python3 tools/pack-level1-panorama.py /tmp/mega-panorama.bin`.
-The authoring source is kept outside the repository.
+To reproduce with the approved 2172 × 724 concept PNG available locally:
+
+```sh
+git show 9301bd2831371f03461debf1a404a12441c5a896:assets/level1-intersection/IXPIX.BIN > /tmp/mega-previous.bin
+python3 tools/recompose-mega-arcade.py "/path/to/concept.png" /tmp/mega-previous.bin --output /tmp/mega-panorama.bin
+python3 tools/pack-level1-panorama.py /tmp/mega-panorama.bin
+```
+
+The master concept remains outside the repository.
