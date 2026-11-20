@@ -19,6 +19,11 @@ int main(void)
     g.players[0].y=g.players[1].y=MF_VEHICLE_LANE*256;
     g.players[0].invulnerable=g.players[1].invulnerable=0;
     g.players[1].height=24*256;
+    for(int i=0;i<MF_ENEMIES;i++){
+        g.enemies[i]=(mf_enemy){.x=g.players[0].x,.y=MF_VEHICLE_LANE*256,
+                               .hp=MF_ENEMY_MAX_HP,.state=MF_ENEMY_ACTIVE};
+    }
+    g.enemies[2].y=229*256;
     for(int t=0;t<=VEHICLE_END;t++){
         g.events=0;
         vehicle_step(&g);
@@ -27,15 +32,17 @@ int main(void)
         last=g.vehicle_dir;
         directions|=g.vehicle_dir==1?1:g.vehicle_dir==-1?2:0;
         if(t==VEHICLE_WARN+VEHICLE_FIRST){
-            assert(g.players[0].health==80 && g.players[0].knockback>0);
+            assert(g.players[0].health==50 && g.players[0].knockback>0);
             assert(g.players[1].health==100);
             g.players[0].invulnerable=0;
             g.players[0].y=168*256;
             g.players[1].height=0;
         }
     }
+    assert(g.enemies[0].state==MF_ENEMY_DYING && g.enemies[1].state==MF_ENEMY_DYING);
+    assert(g.enemies[2].hp==MF_ENEMY_MAX_HP && !g.stage_kills && !g.score);
     assert(passes==2 && directions==3 && warnings==2);
-    assert(g.players[0].health==80 && g.players[1].health==80);
+    assert(g.players[0].health==50 && g.players[1].health==50);
     assert(g.players[1].knockback<0 && !g.vehicle_dir);
     vehicle_step(&g);
     assert(g.vehicle_tick==VEHICLE_END+1);

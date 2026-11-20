@@ -336,6 +336,12 @@ static void player_take_hit(mf_game *g,int i,int damage,int direction)
 enum { VEHICLE_WARN=90, VEHICLE_FIRST=125, VEHICLE_GAP=120, VEHICLE_RETURN=145,
        VEHICLE_END=VEHICLE_WARN+VEHICLE_FIRST+VEHICLE_GAP+VEHICLE_RETURN };
 
+static int vehicle_contact(int x,int y,int height,int left,int right)
+{
+    return x/256>=left && x/256<=right &&
+           abs_i(y-MF_VEHICLE_LANE*256)<=12*256 && height<24*256;
+}
+
 static void vehicle_step(mf_game *g)
 {
     int tick=g->vehicle_tick, progress, duration, i, previous;
@@ -371,13 +377,31 @@ static void vehicle_step(mf_game *g)
     g->vehicle_x=g->vehicle_dir>0?left+(right-left)*progress/duration:
                                   right-(right-left)*progress/duration;
     previous=progress?g->vehicle_x-g->vehicle_dir*5:g->vehicle_x;
+    left=(previous<g->vehicle_x?previous:g->vehicle_x)-76;
+    right=(previous>g->vehicle_x?previous:g->vehicle_x)+76;
     for(i=0;i<MF_PLAYERS;i++){
         mf_player *p=&g->players[i];
         if(!living(p) || p->invulnerable || (g->vehicle_hits&(1u<<i)))continue;
-        if(abs_i(p->y-MF_VEHICLE_LANE*256)>12*256 || p->height>=24*256)continue;
-        if(p->x/256<(previous<g->vehicle_x?previous:g->vehicle_x)-76 || p->x/256>(previous>g->vehicle_x?previous:g->vehicle_x)+76)continue;
+        if(!vehicle_contact(p->x,p->y,p->height,left,right))continue;
         g->vehicle_hits|=1u<<i;
-        player_take_hit(g,i,20,g->vehicle_dir);
+        player_take_hit(g,i,50,g->vehicle_dir);
+    }
+    for(i=0;i<MF_ENEMIES;i++){
+        mf_enemy *e=&g->enemies[i];
+        int height=0;
+#if MF_RICKY_ENEMY
+        if(g->enemy_class[i]==MF_ENEMY_RICKY && g->ricky_jump[i].active)
+            height=g->ricky_jump[i].height*256;
+#endif
+        if(e->hp<=0 || e->state==MF_ENEMY_ABSENT || e->state==MF_ENEMY_DYING ||
+           !vehicle_contact(e->x,e->y,height,left,right))continue;
+        e->hp=0;e->state=MF_ENEMY_DYING;e->timer=30;
+        e->vx=g->vehicle_dir*850;e->burn=e->burn_clock=e->fire_flash=0;
+#if MF_RICKY_ENEMY
+        g->ricky_jump[i].active=0;
+#endif
+        /* Environmental KO. The player score and spawn progression use only
+           credited player KOs. */
     }
 }
 #endif

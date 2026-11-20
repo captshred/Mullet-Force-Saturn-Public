@@ -36,7 +36,7 @@ HQ_DELTA = {
 } | {ART + name for name in ("IXMAP.BIN", "IXOFF.BIN", "IXPACK.BIN", "IXPIX.BIN", "manifest.json")}
 VEHICLE_DELTA = {
     "assets/cd/MF88.TGA", "src/game.c", "src/game.h", "src/main.c", "src/music.c",
-    "assets/cd/CARPASS.SEQ", "assets/cd/CARPASS.TON",
+    "assets/cd/CARPASS.TON",
     "src/enemy_bank_config.h", "make/saturn.mk", "tools/build-native.sh",
     "tools/build-source-complete.sh", "tools/audit-sprite-memory.py",
     "tools/test-intersection.py", "tools/test-intersection-runtime.py", "tools/test-ricky-jump-render.py",
@@ -79,13 +79,8 @@ def validate(medium_guitar=False, mix_pass1=False):
         sample = tone[96:-4]
         assert len(sample) == 25664 and tone[-4:] == sample[:4]
         assert hashlib.sha256(sample).hexdigest() == "effcb354cef8271d53590c298c5f32b9df29946a29e203582988941d88c0122d"
-        from seq import decode
-        seq = (ROOT / "assets/cd/CARPASS.SEQ").read_bytes()
-        song = decode(seq)
-        assert song["notes"] == [(0, 512, 0, 61, 110)] and song["end"] == 512
-        assert song["programs"] == [(0, 0, 3)] and (0, 0, 32, 2) in song["controls"]
         assert int.from_bytes(tone[64:68], "big") == 0x00200060
-        assert 478000 + len(seq) + len(tone) == 503808
+        assert 478000 + len(tone) == 503764
     art = ROOT / ART
     manifest = json.loads((art / "manifest.json").read_text())
     assert manifest["parent"] == APPROVED_HILL and (manifest["width"], manifest["height"]) == (2560, 368)

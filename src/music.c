@@ -74,20 +74,32 @@ static int upload(const char *name,unsigned int expected,unsigned int address)
 }
 #if MF_VEHICLE_AMBUSH
 enum {
-    CAR_SOUND_PORT=3, CAR_SOUND_BANK=2, CAR_SEQ_ADDR=478000,
-    CAR_SEQ_BYTES=44, CAR_TON_ADDR=CAR_SEQ_ADDR+CAR_SEQ_BYTES, CAR_TON_BYTES=25764
+    CAR_SOUND_PORT=3, CAR_SOUND_CHANNEL=15, CAR_TONE_BANK=2,
+    CAR_TON_ADDR=478000, CAR_TON_BYTES=25764, CAR_LOOP_NOTE=61
 };
-static int car_sound_playing;
+static int car_sound_playing,car_sound_setup;
 
 static void car_sound_update(int requested)
 {
-    if(combat[2].playing && (int)(audio_tick-combat[2].ends_at)>=0)combat[2].playing=0;
-    if(car_sound_playing && !requested){
-        if(SND_StopSeq(CAR_SOUND_PORT)==SND_RET_SET)car_sound_playing=0;
-    }else if(requested && !car_sound_playing && !combat[2].playing && combat[2].pending<0 && !combat[2].stopping){
-        if(SND_SetSeqVl(CAR_SOUND_PORT,80,0)==SND_RET_SET &&
-           SND_StartSeq(CAR_SOUND_PORT,CAR_SOUND_BANK,0,15)==SND_RET_SET)
-            car_sound_playing=1;
+    if(!requested){
+        car_sound_setup=0;
+        if(car_sound_playing &&
+           SND_CtrlDirMidi(CAR_SOUND_PORT,0,0,CAR_SOUND_CHANNEL,CAR_LOOP_NOTE,0)==SND_RET_SET)
+            car_sound_playing=0;
+        return;
+    }
+    if(car_sound_playing || combat[2].pending>=0 || combat[2].stopping ||
+       (combat[2].playing && (int)(audio_tick-combat[2].ends_at)<0))return;
+    if(car_sound_setup==0){
+        if(SND_SetSeqVl(CAR_SOUND_PORT,80,0)==SND_RET_SET)car_sound_setup=1;
+    }else if(car_sound_setup==1){
+        if(SND_CtrlDirMidi(CAR_SOUND_PORT,0,3,CAR_SOUND_CHANNEL,32,CAR_TONE_BANK)==SND_RET_SET)
+            car_sound_setup=2;
+    }else if(car_sound_setup==2){
+        if(SND_CtrlDirMidi(CAR_SOUND_PORT,0,4,CAR_SOUND_CHANNEL,3,0)==SND_RET_SET)
+            car_sound_setup=3;
+    }else if(SND_CtrlDirMidi(CAR_SOUND_PORT,0,1,CAR_SOUND_CHANNEL,CAR_LOOP_NOTE,110)==SND_RET_SET){
+        car_sound_playing=1;
     }
 }
 #endif
@@ -99,11 +111,10 @@ int mf_music_init(void)
     SndIniDt init;
     volatile unsigned int *p;
 #if MF_VEHICLE_AMBUSH
-    /* Preserve all six stock map entries. Two more describe the standalone
+    /* Preserve all six stock map entries. One more describes the standalone
        loop bank. Padding covers the SDK's word-sized initialization copy. */
     unsigned int extended_map[36]={0};
-    static const unsigned char car_entries[24]={
-        0x12,CAR_SEQ_ADDR>>16,(CAR_SEQ_ADDR>>8)&255,CAR_SEQ_ADDR&255,0x80,0,0,CAR_SEQ_BYTES,
+    static const unsigned char car_entries[16]={
         0x02,CAR_TON_ADDR>>16,(CAR_TON_ADDR>>8)&255,CAR_TON_ADDR&255,0x80,0,CAR_TON_BYTES>>8,CAR_TON_BYTES&255,
         0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff
     };
@@ -115,8 +126,8 @@ int mf_music_init(void)
     for(unsigned i=0;i<sizeof(car_entries);i++)
         ((unsigned char *)extended_map)[MF_CUSTOM_MAP_BYTES-8+i]=car_entries[i];
     map=(char *)extended_map;
-    size=MF_CUSTOM_MAP_BYTES+16;
-    car_sound_playing=0;
+    size=MF_CUSTOM_MAP_BYTES+8;
+    car_sound_playing=car_sound_setup=0;
 #endif
     /* Same SND_Init + slInitSound pairing as the compatible SRL SEQ sample.
        Driver/work 0..B000 and standard DSP/transfer reservations stay intact. */
@@ -141,7 +152,6 @@ int mf_music_init(void)
     ok=upload("STAGE.SEQ",MF_STAGE_SEQ_BYTES,MF_STAGE_SEQ_ADDR)&&ok;
     ok=upload("STAGE.TON",MF_STAGE_TON_BYTES,MF_STAGE_TON_ADDR)&&ok;
 #if MF_VEHICLE_AMBUSH
-    ok=upload("CARPASS.SEQ",CAR_SEQ_BYTES,CAR_SEQ_ADDR)&&ok;
     ok=upload("CARPASS.TON",CAR_TON_BYTES,CAR_TON_ADDR)&&ok;
 #endif
     *(volatile unsigned char *)0x25a004e1=0;
