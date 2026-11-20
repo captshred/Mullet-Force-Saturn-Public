@@ -104,12 +104,13 @@ typedef struct {
     mf_ricky_jump ricky_jump[MF_ENEMIES]; /* Appended: preserve existing ABI prefix. */
 #endif
 #if MF_VEHICLE_AMBUSH
-    int vehicle_tick,vehicle_camera,vehicle_x,vehicle_dir;
+    int vehicle_tick,vehicle_camera,vehicle_x,vehicle_dir,vehicle_lane;
     unsigned vehicle_hits;
 #endif
 } mf_game;
 #if MF_VEHICLE_AMBUSH
-enum { MF_VEHICLE_TRIGGER_X=2240, MF_VEHICLE_LANE=198 };
+enum { MF_VEHICLE_TRIGGER_X=2240 };
+int mf_vehicle_warning_lane(const mf_game *g);
 #endif
 int mf_enemy_count(const mf_game *g);
 int mf_enemy_limit(const mf_game *g);

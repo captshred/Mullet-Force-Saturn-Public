@@ -334,17 +334,35 @@ static void player_take_hit(mf_game *g,int i,int damage,int direction)
 }
 #if MF_VEHICLE_AMBUSH
 enum { VEHICLE_WARN=90, VEHICLE_FIRST=125, VEHICLE_GAP=120, VEHICLE_RETURN=145,
-       VEHICLE_END=VEHICLE_WARN+VEHICLE_FIRST+VEHICLE_GAP+VEHICLE_RETURN };
+       VEHICLE_SECOND_START=VEHICLE_WARN+VEHICLE_FIRST+VEHICLE_GAP,
+       VEHICLE_THIRD_START=VEHICLE_SECOND_START+VEHICLE_RETURN+VEHICLE_GAP,
+       VEHICLE_END=VEHICLE_THIRD_START+VEHICLE_FIRST, VEHICLE_LATER_WARN=48 };
+static const struct { int start,duration,direction,lane; } vehicle_passes[]={
+    {VEHICLE_WARN,VEHICLE_FIRST,1,216},
+    {VEHICLE_SECOND_START,VEHICLE_RETURN,-1,180},
+    {VEHICLE_THIRD_START,VEHICLE_FIRST,1,198}
+};
 
-static int vehicle_contact(int x,int y,int height,int left,int right)
+int mf_vehicle_warning_lane(const mf_game *g)
+{
+    int tick=g->vehicle_tick;
+    if(tick>0 && tick<=VEHICLE_WARN)return vehicle_passes[0].lane;
+    for(unsigned pass=1;pass<sizeof(vehicle_passes)/sizeof(vehicle_passes[0]);pass++)
+        if(tick>vehicle_passes[pass].start-VEHICLE_LATER_WARN &&
+           tick<=vehicle_passes[pass].start)return vehicle_passes[pass].lane;
+    return 0;
+}
+
+static int vehicle_contact(int x,int y,int height,int lane,int left,int right)
 {
     return x/256>=left && x/256<=right &&
-           abs_i(y-MF_VEHICLE_LANE*256)<=12*256 && height<24*256;
+           abs_i(y-lane*256)<=12*256 && height<24*256;
 }
 
 static void vehicle_step(mf_game *g)
 {
     int tick=g->vehicle_tick, progress, duration, i, previous;
+    unsigned pass;
     int left=g->vehicle_camera-100,right=g->vehicle_camera+420;
     g->vehicle_dir=0;
     if(!tick){
@@ -359,30 +377,30 @@ static void vehicle_step(mf_game *g)
     }
     if(tick>VEHICLE_END)return;
     ++g->vehicle_tick;
-    if(tick<VEHICLE_WARN)return;
-    if(tick<VEHICLE_WARN+VEHICLE_FIRST){
-        progress=tick-VEHICLE_WARN;
-        duration=VEHICLE_FIRST;
-        g->vehicle_dir=1;
-    }else if(tick<VEHICLE_WARN+VEHICLE_FIRST+VEHICLE_GAP){
-        g->vehicle_hits=0;
-        if(tick==VEHICLE_WARN+VEHICLE_FIRST+VEHICLE_GAP-36)
-            g->events|=MF_VEHICLE_WARNING;
-        return;
-    }else if(tick<VEHICLE_END){
-        progress=tick-(VEHICLE_WARN+VEHICLE_FIRST+VEHICLE_GAP);
-        duration=VEHICLE_RETURN;
-        g->vehicle_dir=-1;
-    }else return;
-    g->vehicle_x=g->vehicle_dir>0?left+(right-left)*progress/duration:
-                                  right-(right-left)*progress/duration;
-    previous=progress?g->vehicle_x-g->vehicle_dir*5:g->vehicle_x;
+    for(pass=0;pass<sizeof(vehicle_passes)/sizeof(vehicle_passes[0]);pass++){
+        if(tick<vehicle_passes[pass].start){
+            g->vehicle_hits=0;
+            if(pass && tick==vehicle_passes[pass].start-VEHICLE_LATER_WARN)
+                g->events|=MF_VEHICLE_WARNING;
+            return;
+        }
+        if(tick<vehicle_passes[pass].start+vehicle_passes[pass].duration)break;
+    }
+    if(pass==sizeof(vehicle_passes)/sizeof(vehicle_passes[0]))return;
+    progress=tick-vehicle_passes[pass].start;
+    duration=vehicle_passes[pass].duration;
+    g->vehicle_dir=vehicle_passes[pass].direction;
+    g->vehicle_lane=vehicle_passes[pass].lane;
+    previous=g->vehicle_x;
+    g->vehicle_x=g->vehicle_dir>0?left+(right-left)*progress/(duration-1):
+                                  right-(right-left)*progress/(duration-1);
+    if(!progress)previous=g->vehicle_x;
     left=(previous<g->vehicle_x?previous:g->vehicle_x)-76;
     right=(previous>g->vehicle_x?previous:g->vehicle_x)+76;
     for(i=0;i<MF_PLAYERS;i++){
         mf_player *p=&g->players[i];
         if(!living(p) || p->invulnerable || (g->vehicle_hits&(1u<<i)))continue;
-        if(!vehicle_contact(p->x,p->y,p->height,left,right))continue;
+        if(!vehicle_contact(p->x,p->y,p->height,g->vehicle_lane,left,right))continue;
         g->vehicle_hits|=1u<<i;
         player_take_hit(g,i,50,g->vehicle_dir);
     }
@@ -394,7 +412,7 @@ static void vehicle_step(mf_game *g)
             height=g->ricky_jump[i].height*256;
 #endif
         if(e->hp<=0 || e->state==MF_ENEMY_ABSENT || e->state==MF_ENEMY_DYING ||
-           !vehicle_contact(e->x,e->y,height,left,right))continue;
+           !vehicle_contact(e->x,e->y,height,g->vehicle_lane,left,right))continue;
         e->hp=0;e->state=MF_ENEMY_DYING;e->timer=30;
         e->vx=g->vehicle_dir*850;e->burn=e->burn_clock=e->fire_flash=0;
 #if MF_RICKY_ENEMY

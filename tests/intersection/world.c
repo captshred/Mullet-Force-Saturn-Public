@@ -13,7 +13,7 @@ int main(void) {
   mf_game g;mf_game_init(&g);g.started=1;
   if(coop)recover_player(&g,1,1);
   int max_count=0,seen_classes=0,retired=0,lot_enemies=0;
-  for(int t=0;t<2400;t++) {
+  for(int t=0;t<3100;t++) {
    int camera=g.camera,floor=g.camera_floor;
    for(int p=0;p<2;p++)g.players[p].invulnerable=100;
    int states[MF_ENEMIES];for(int j=0;j<MF_ENEMIES;j++)states[j]=g.enemies[j].state;

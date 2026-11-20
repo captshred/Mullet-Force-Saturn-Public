@@ -11,7 +11,7 @@ a=p.parse_args();a.out=a.out.resolve();a.out.mkdir(parents=True);assert not any(
 helper=(R/'tools/test-coop-balance-runtime.py').read_text();scope={'struct':struct};exec(helper[helper.index('def symbols('):helper.index('s=symbols(')],scope);symbols=scope['symbols'];addr=scope['addr']
 manifest=json.loads((R/'assets/level1-intersection/manifest.json').read_text())
 camera_max=manifest['width']-320
-frames=5400
+frames=5900
 s=symbols(R/'build/game.elf');src=(R/'tests/runtime/playable-frontend.c').read_text()
 src=src.replace('static unsigned frame,pixel_format;','static unsigned seen_camera,travel_phase,hold_steps;static unsigned frame,pixel_format;')
 b=src.index(' (void)index;',src.index('static int16_t input('));e=src.index('\nstatic unsigned read32',b)
@@ -49,7 +49,9 @@ src=src[:b]+''' fwrite(&frame,4,1,trace);
  FIELD(offsetof(mf_game,ticks));
  v=read32(ram,WORLD_CACHE_POINTER);fwrite(&v,4,1,trace);
  #if MF_VEHICLE_AMBUSH
- FIELD(offsetof(mf_game,vehicle_dir));
+ v=read32(ram,game_addr+offsetof(mf_game,vehicle_dir));
+ v=v?read32(ram,game_addr+offsetof(mf_game,vehicle_lane))*2+(v==1):0;
+ fwrite(&v,4,1,trace);
  #else
  v=0;fwrite(&v,4,1,trace);
  #endif
@@ -63,10 +65,13 @@ rows=[r for r in rows if r[0]>=1100]
 assert all(r[3]==r[4]==r[5]==0 for r in rows),'stage/asset/parallax error'
 if '#define MF_VEHICLE_AMBUSH 1' in (R/'build/build-info.h').read_text():
     passes=[r for r in rows if r[35]]
-    assert {r[35] for r in passes}=={1,0xffffffff},'both car directions must render'
-    assert len({r[1] for r in passes})==1,'camera moved during the ambush'
-    for direction,name in ((1,'downhill-pass'),(0xffffffff,'uphill-pass')):
-        shot=[r for r in passes if r[35]==direction and r[0]%4==0]
+    observed=[r[35] for i,r in enumerate(passes) if i==0 or r[35]!=passes[i-1][35]]
+    expected=[433,360,397]  # Lane * 2 plus one for downhill.
+    assert observed==expected, observed
+    lock=passes[0][1]
+    assert all(r[1]==lock for r in rows if passes[0][0]<=r[0]<=passes[-1][0])
+    for code,name in zip(expected,('downhill-near','uphill-far','downhill-center')):
+        shot=[r for r in passes if r[35]==code and r[0]%4==0]
         Image.open(captures/f'frame-{shot[len(shot)//2][0]:04}.ppm').save(a.out/(name+'.png'))
 
 assert max(r[1] for r in rows)==camera_max and max(r[2] for r in rows)==1280,'endpoint not reached'

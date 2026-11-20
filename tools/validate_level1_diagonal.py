@@ -40,7 +40,7 @@ VEHICLE_DELTA = {
     "src/enemy_bank_config.h", "make/saturn.mk", "tools/build-native.sh",
     "tools/build-source-complete.sh", "tools/audit-sprite-memory.py",
     "tools/test-intersection.py", "tools/test-intersection-runtime.py", "tools/test-ricky-jump-render.py",
-    "tests/intersection/vehicle.c", "docs/level1-vehicle-ambush.md",
+    "tests/intersection/vehicle.c", "tests/intersection/world.c", "docs/level1-vehicle-ambush.md",
     "downloads/mullet-force-vehicle-ambush.zip",
 }
 HQ_DELTA |= VEHICLE_DELTA

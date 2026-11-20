@@ -381,7 +381,7 @@ static void draw_game(void)
     mf_street_draw(street,street_palette.id,game.camera);
 #if MF_VEHICLE_AMBUSH
     if(game.vehicle_dir){
-        int ground=mf_world_screen_y(game.vehicle_x,MF_VEHICLE_LANE,game.camera);
+        int ground=mf_world_screen_y(game.vehicle_x,game.vehicle_lane,game.camera);
         jo_sprite_set_palette(street_palette.id);
         if(game.vehicle_dir<0)jo_sprite_enable_horizontal_flip();
         jo_sprite_draw3D2(vehicle_sprite,game.vehicle_x-game.camera-96,ground-68,depth_key(ground,0));
@@ -543,8 +543,10 @@ static void draw_game(void)
 #endif
 #endif
 #if MF_VEHICLE_AMBUSH
-    if(game.vehicle_tick>0 && game.vehicle_tick<90)
-        jo_print(14,4,"CAR INCOMING");
+    {
+        int lane=mf_vehicle_warning_lane(&game);
+        if(lane)jo_print(14,4,lane>198?"CAR NEAR    ":lane<198?"CAR FAR     ":"CAR CENTER  ");
+    }
 #endif
     mode=!game.started?1:(game.paused?2:0);
 #if MF_LEVEL1_STAGE_CLEAR
