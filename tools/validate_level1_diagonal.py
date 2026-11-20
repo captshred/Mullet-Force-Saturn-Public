@@ -11,6 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 BASE = "320f0465c1e2c6addbedbbace7ed99e87b390791"
 APPROVED_HILL = "45ac7b3e80e77b1971e796b4eaa6b2a5aa3f6cff"
 ART = "assets/level1-intersection/"
+DEFINITIVE = "732fbf3ddeef383fcb80ddfddd4b977afe9ab2b2"
 PHASE_DELTA = {
     "Makefile",
     "src/arcade_fx.h",
@@ -43,7 +44,14 @@ VEHICLE_DELTA = {
     "tests/intersection/vehicle.c", "tests/intersection/world.c", "docs/level1-vehicle-ambush.md",
     "downloads/mullet-force-vehicle-ambush.zip",
 }
-HQ_DELTA |= VEHICLE_DELTA
+CLARITY_REVIEW = {
+    "docs/downhill-clarity-review/" + name for name in (
+        "01-laundry-parking-native.png", "02-auto-service-native.png",
+        "03-downhill-composite-native.png", "04-source-runtime-evidence.png",
+        "IXPIX-proposed.BIN", "README.md",
+    )
+}
+HQ_DELTA |= VEHICLE_DELTA | CLARITY_REVIEW | {"downloads/mullet-force-downhill-clarity.zip"}
 PHASE_DELTA |= HQ_DELTA
 
 
@@ -103,6 +111,15 @@ def validate(medium_guitar=False, mix_pass1=False):
         column = current[x:road:2560]
         first_solid = next(i for i, pixel in enumerate(column) if pixel)
         assert all(column[first_solid:]), x
+    proposal = ROOT / "docs/downhill-clarity-review/IXPIX-proposed.BIN"
+    if proposal.exists():
+        assert current == proposal.read_bytes(), "runtime art differs from the reviewed proposal"
+        if subprocess.run(["git", "cat-file", "-e", DEFINITIVE], cwd=ROOT, capture_output=True).returncode:
+            git("fetch", "--no-tags", "--depth=1", "origin", DEFINITIVE)
+        definitive = git("show", f"{DEFINITIVE}:{ART}IXPIX.BIN")
+        for x in range(1928, 2560):
+            protected = (146 + (x - 1920) // 5) * 2560 + x
+            assert current[protected::2560] == definitive[protected::2560], x
     palette = ROOT / "build/cd/NSPAL.BIN"
     assert hashlib.sha256(palette.read_bytes()).hexdigest() == manifest["palette_sha256"]
     assert manifest["packed_source_storage"] == "low-work-ram"
