@@ -3,8 +3,9 @@
 Audition branch from `382b226b476b305c9ebab8e6d2ddbe763603d41b`,
 the doubled-downhill commit on `feature/level1-phase3b-downhill-extension`.
 It precedes visual polish `459f50e` and garage rebuild `97d07f4`. The
-640-pixel downhill with its 1:5 grade, shipped audio assets, sequence and
-runtime are preserved. This branch contains documentation and preview WAVs.
+640-pixel downhill with its 1:5 grade, Level 1 sequence, and runtime are
+preserved. The build integrates the approved Medium open guitar. The
+previews document the choices that preceded integration.
 
 Both private masters matched the SHA-256 in
 `assets/music/level1-custom-report.json`. Open is 89,373 frames and Mute
@@ -107,3 +108,20 @@ An eventual signed PCM8 bank version would use 16,668 B packed, saving
 16,660 B relative to Long PCM16 and leaving 51,512 B of Level 1 sound RAM
 free with the rest of the starting bank preserved. These files are for
 offline audition.
+
+
+## Playtest build
+
+The approved Medium PCM16 sample is installed in program 0. Its packed
+allocation is 21,880 B, adding 15,144 B to the exact doubled-downhill bank.
+Level 1 uses 477,988 B and retains 46,300 B of free SCSP RAM. The new
+STAGE.TON is 147,292 B. The first sample address, pitch and envelope are
+unchanged. The other instruments retain their exact sample bytes and
+parameters with relocated addresses. The shipped muted guitar keeps its
+11,025 Hz PCM8 one-shot, and FX.TON, FX.SEQ, STAGE.SEQ, Level 2 audio and
+gameplay source remain byte-identical.
+
+Build with the Manual Saturn playtest workflow and `stage-default`, using
+the exact implementation commit as `source_ref`. Keep its BIN and CUE
+together. The public build consumes the committed runtime tone bank and
+does not require the private masters.

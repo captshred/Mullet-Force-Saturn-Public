@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Verify the Phase 3B delta, unchanged approved downhill pixels, and background budget."""
+import argparse
 import hashlib
 import json
 from pathlib import Path
@@ -31,13 +32,18 @@ def git(*args):
     return subprocess.check_output(["git", *args], cwd=ROOT)
 
 
-def validate():
+def validate(medium_guitar=False):
+    extra_scope = set()
+    if medium_guitar:
+        import validate_level1_guitar as guitar
+        guitar.validate()
+        extra_scope = guitar.SCOPE
     if subprocess.run(["git", "cat-file", "-e", BASE], cwd=ROOT, capture_output=True).returncode:
         git("fetch", "--no-tags", "--depth=1", "origin", BASE)
     if subprocess.run(["git", "cat-file", "-e", APPROVED_HILL], cwd=ROOT, capture_output=True).returncode:
         git("fetch", "--no-tags", "--depth=1", "origin", APPROVED_HILL)
     changed = set(git("diff", "--name-only", BASE, "--").decode().splitlines())
-    assert changed <= PHASE_DELTA, changed - PHASE_DELTA
+    assert changed <= PHASE_DELTA | extra_scope, changed - (PHASE_DELTA | extra_scope)
 
     downhill_delta = {
         "src/intersection_data.h", "src/world_config.h", "tests/intersection/world.c",
@@ -45,7 +51,7 @@ def validate():
         "docs/level1-diagonal.md",
     } | {ART + name for name in ("IXMAP.BIN", "IXOFF.BIN", "IXPACK.BIN", "IXPIX.BIN", "manifest.json")}
     changed = set(git("diff", "--name-only", APPROVED_HILL, "--").decode().splitlines())
-    assert changed <= downhill_delta, changed - downhill_delta
+    assert changed <= downhill_delta | extra_scope, changed - (downhill_delta | extra_scope)
 
     art = ROOT / ART
     manifest = json.loads((art / "manifest.json").read_text())
@@ -77,4 +83,6 @@ def validate():
 
 
 if __name__ == "__main__":
-    validate()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--medium-guitar", action="store_true")
+    validate(parser.parse_args().medium_guitar)

@@ -207,7 +207,7 @@ def test_level1():
         subprocess.run([exe], cwd=ROOT, check=True)
 
 
-def validate_reset_wingsuit(diagonal=False):
+def validate_reset_wingsuit(diagonal=False, extra_scope=()):
     import hero_sprite_pass3_data
 
     base = "9d7b1018af5757f01b5b48e8d20e11a10789e0c8"
@@ -240,6 +240,7 @@ def validate_reset_wingsuit(diagonal=False):
     if diagonal:
         from validate_level1_diagonal import PHASE_DELTA
         allowed.update(PHASE_DELTA)
+    allowed.update(extra_scope)
     changed = set(git("diff", "--name-only", base, "--").decode().splitlines())
     assert changed <= allowed, changed - allowed
     print("PASS six RGB555 membrane recolors and exact protected PCM8 Pass 2 files", flush=True)
@@ -251,6 +252,7 @@ def main():
     parser.add_argument("--write", action="store_true")
     parser.add_argument("--reset-wingsuit", action="store_true")
     parser.add_argument("--diagonal", action="store_true")
+    parser.add_argument("--medium-guitar", action="store_true")
     parser.add_argument("--disc", action="store_true")
     parser.add_argument("--test", action="store_true")
     args = parser.parse_args()
@@ -262,6 +264,13 @@ def main():
                       capture_output=True).returncode:
         subprocess.run(["git", "fetch", "--no-tags", "--depth=1", "origin", base], cwd=ROOT, check=True)
     expected = outputs(base, candidates, pass_number)
+    extra_scope = ()
+    if args.medium_guitar:
+        assert args.pass2 and args.reset_wingsuit and args.diagonal and not args.write
+        import validate_level1_guitar as guitar
+        guitar.validate()
+        extra_scope = guitar.SCOPE
+        expected = {path: data for path, data in expected.items() if path not in guitar.AUDIO_DELTA}
     for path, data in expected.items():
         if args.write:
             (ROOT / path).write_bytes(data)
@@ -269,7 +278,7 @@ def main():
 
     if args.reset_wingsuit:
         assert args.pass2 and not args.write
-        validate_reset_wingsuit(args.diagonal)
+        validate_reset_wingsuit(args.diagonal, extra_scope)
     else:
         changed = set(git("diff", "--name-only", base, "--").decode().splitlines())
         assert changed <= set(expected) | {"Makefile", "tools/level1-sfx-pcm8-pass1.py",
