@@ -90,3 +90,20 @@ noise here. PCM16 reduces that error without changing bandwidth, gates or
 attack timing. Keep the current PCM8 initially and reserve judgment for
 the score audition. These are offline measurements, with hardware and
 perceived quality still to be evaluated.
+
+## Open PCM8 audition
+
+- `open-loop-auditions-pcm8.wav` uses the same order as the original
+  open comparison. Its WAV container stores unsigned PCM8, the standard
+  offset representation of the signed PCM8 source samples.
+- `open-long-pcm16-vs-pcm8.wav` alternates Long PCM16 and Long PCM8 twice.
+  This matched comparison uses a PCM16 container for both versions.
+
+Both render at 22,050 Hz with the original loop settings and gain. PCM8
+uses nearest rounding without dither, resampling or normalization.
+Long retains 16,662 frames with loop bounds [4008, 16662). Measured RMS
+changes by −0.00023 dB and quantization error is 37.45 dB below signal RMS.
+An eventual signed PCM8 bank version would use 16,668 B packed, saving
+16,660 B relative to Long PCM16 and leaving 51,512 B of Level 1 sound RAM
+free with the rest of the starting bank preserved. These files are for
+offline audition.
