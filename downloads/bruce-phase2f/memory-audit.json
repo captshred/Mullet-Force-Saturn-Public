@@ -1,0 +1,16 @@
+{
+  "clip_texture_bytes": {
+    "idle": 19584,
+    "walk": 30528,
+    "punch": 28544,
+    "charge": 23392,
+    "slam": 17760,
+    "hit-stun": 16128
+  },
+  "unique_textures": 15,
+  "cumulative_bytes": 135936,
+  "reserve_safe_ceiling": 169976,
+  "reserve_safe_headroom": 34040,
+  "protected_hero_reserve": 49152,
+  "final_pose_projection_with_shared_fall": 19904
+}
