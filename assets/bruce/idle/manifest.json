@@ -1,0 +1,55 @@
+{
+  "canvas": [
+    144,
+    120
+  ],
+  "ground_pivot": [
+    64,
+    112
+  ],
+  "facing": "right",
+  "frames": [
+    {
+      "frame": "idle_00_r.png",
+      "texture": "BR00.TGA",
+      "bounds": [
+        11,
+        17,
+        115,
+        112
+      ],
+      "anchor": [
+        53,
+        95
+      ],
+      "width": 104,
+      "height": 95,
+      "bytes": 9888,
+      "hold_ms": 360,
+      "decoded_sha256": "7c7f26cec04c56ea2c72d6e3ad5cf2c52cfa28de79a80bb282fb62fdf11bcab0"
+    },
+    {
+      "frame": "idle_02_r.png",
+      "texture": "BR02.TGA",
+      "bounds": [
+        10,
+        19,
+        113,
+        112
+      ],
+      "anchor": [
+        54,
+        93
+      ],
+      "width": 104,
+      "height": 93,
+      "bytes": 9696,
+      "hold_ms": 360,
+      "decoded_sha256": "8be8cd6320281d02fc345799f16df7d470e1fcc95664a4938019019a1320cf8f"
+    }
+  ],
+  "palette_opaque_colors": 254,
+  "texture_definitions": 2,
+  "texture_bytes": 19584,
+  "protected_hero_reserve": 49152
+}

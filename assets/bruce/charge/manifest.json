@@ -1,0 +1,94 @@
+{
+  "canvas": [
+    144,
+    120
+  ],
+  "ground_pivot": [
+    64,
+    112
+  ],
+  "facing": "right",
+  "playback": "once",
+  "source_sha256": "ca3d2b5d32abfd9d975ed283d1465dbe460a279cb1de578bdf7df2b97dd6548b",
+  "palette_source": "../idle/BR00.TGA",
+  "palette_sha256": "c8a4676997b7fc7a0ce261a0271f7941ae54d30736f02ec0df8a49e624d82769",
+  "recovery": null,
+  "shared_boot_view": {
+    "source": "../idle/BR00.TGA",
+    "byte_offset": 8320,
+    "width": 104,
+    "height": 15,
+    "anchor": [
+      53,
+      15
+    ],
+    "incremental_bytes": 0
+  },
+  "frames": [
+    {
+      "frame": "charge_00_r.png",
+      "bounds": [
+        16,
+        24,
+        110,
+        112
+      ],
+      "texture": "BC00.TGA",
+      "width": 96,
+      "height": 73,
+      "anchor": [
+        48,
+        88
+      ],
+      "bytes": 7008,
+      "hold_ms": 240,
+      "shared_boot_view": true,
+      "decoded_sha256": "d8d95e1e67ab6d15a76781e2412ca5c674faffd4443dfcc3eab52c630c9809b9"
+    },
+    {
+      "frame": "charge_01_r.png",
+      "bounds": [
+        14,
+        30,
+        109,
+        112
+      ],
+      "texture": "BC01.TGA",
+      "width": 96,
+      "height": 82,
+      "anchor": [
+        50,
+        82
+      ],
+      "bytes": 7872,
+      "hold_ms": 150,
+      "shared_boot_view": false,
+      "decoded_sha256": "45659d103d4cf11125cfee157a1cdffcbd39de0dbd5ec1d47bf48b864707acdf"
+    },
+    {
+      "frame": "charge_02_r.png",
+      "bounds": [
+        10,
+        36,
+        121,
+        112
+      ],
+      "texture": "BC02.TGA",
+      "width": 112,
+      "height": 76,
+      "anchor": [
+        54,
+        76
+      ],
+      "bytes": 8512,
+      "hold_ms": 420,
+      "shared_boot_view": false,
+      "decoded_sha256": "39d8f597f84b7dcd9f558279852a69ff2a178006ad983d75224880b84e08ad18"
+    }
+  ],
+  "texture_definitions": 3,
+  "texture_bytes": 23392,
+  "cumulative_bruce_bytes": 102048,
+  "reserve_safe_headroom": 67928,
+  "protected_hero_reserve": 49152
+}

@@ -1,0 +1,80 @@
+{
+  "canvas": [
+    144,
+    120
+  ],
+  "ground_pivot": [
+    64,
+    112
+  ],
+  "facing": "right",
+  "source_sha256": "d27cef07be6a7f466268c3469c5fe360f4c8b0c532d89cd6a554e97c4d493f85",
+  "palette_source": "../idle/BR00.TGA",
+  "palette_sha256": "c8a4676997b7fc7a0ce261a0271f7941ae54d30736f02ec0df8a49e624d82769",
+  "frames": [
+    {
+      "frame": "walk_00_r.png",
+      "source_pose": 0,
+      "texture": "BW00.TGA",
+      "bounds": [
+        11,
+        17,
+        115,
+        112
+      ],
+      "anchor": [
+        53,
+        95
+      ],
+      "width": 104,
+      "height": 95,
+      "bytes": 9888,
+      "hold_ms": 200,
+      "decoded_sha256": "9024ae7ce08909b6d4aa89f66be1eb8280996752ad59f583265dfec0b86fb7c1"
+    },
+    {
+      "frame": "walk_01_r.png",
+      "source_pose": 1,
+      "texture": "BW01.TGA",
+      "bounds": [
+        11,
+        16,
+        117,
+        112
+      ],
+      "anchor": [
+        53,
+        96
+      ],
+      "width": 112,
+      "height": 96,
+      "bytes": 10752,
+      "hold_ms": 170,
+      "decoded_sha256": "50ea8790f2947bb96c5c205c87b4e82e13b68d121eab50899ad2736d0432998b"
+    },
+    {
+      "frame": "walk_02_r.png",
+      "source_pose": 3,
+      "texture": "BW02.TGA",
+      "bounds": [
+        10,
+        17,
+        114,
+        112
+      ],
+      "anchor": [
+        54,
+        95
+      ],
+      "width": 104,
+      "height": 95,
+      "bytes": 9888,
+      "hold_ms": 210,
+      "decoded_sha256": "43def2becc850a895b054f15ab9c775fad7bedea5cfbcc2d4d796f7c062d2c1b"
+    }
+  ],
+  "texture_definitions": 3,
+  "texture_bytes": 30528,
+  "idle_plus_walk_bytes": 50112,
+  "protected_hero_reserve": 49152
+}

@@ -1,0 +1,94 @@
+{
+  "canvas": [
+    144,
+    120
+  ],
+  "ground_pivot": [
+    64,
+    112
+  ],
+  "facing": "right",
+  "palette_source": "../idle/BR00.TGA",
+  "palette_sha256": "c8a4676997b7fc7a0ce261a0271f7941ae54d30736f02ec0df8a49e624d82769",
+  "source_sha256": "1ffc9246c8af6b70e57099dbc2ae4a453be628408422c8900b08f2eca7aaf59d",
+  "frames": [
+    {
+      "texture": "BH00.TGA",
+      "width": 96,
+      "height": 77,
+      "anchor": [
+        50,
+        92
+      ],
+      "bytes": 7392,
+      "decoded_sha256": "71cae994048ff6a76e539f53d82d4505fb484f017a81857a149f1317ed411304",
+      "shared_views": [
+        "idle_lower"
+      ],
+      "frame": "hit_00_r.png",
+      "bounds": [
+        14,
+        20,
+        110,
+        112
+      ]
+    },
+    {
+      "texture": "BH01.TGA",
+      "width": 104,
+      "height": 84,
+      "anchor": [
+        53,
+        84
+      ],
+      "bytes": 8736,
+      "decoded_sha256": "6925eee85fe79f62ca0b2721e0dd80fe688109d779b60ff974b46b3a5b678cef",
+      "frame": "hit_01_r.png",
+      "bounds": [
+        11,
+        28,
+        114,
+        112
+      ]
+    }
+  ],
+  "shared_views": {
+    "idle_lower": {
+      "texture": "../idle/BR00.TGA",
+      "byte_offset": 8320,
+      "width": 104,
+      "height": 15,
+      "anchor": [
+        53,
+        15
+      ]
+    }
+  },
+  "hit": {
+    "playback": "once",
+    "sequence": [
+      {
+        "frame": "hit_00_r.png",
+        "hold_ms": 100
+      },
+      {
+        "frame": "hit_01_r.png",
+        "hold_ms": 150
+      },
+      {
+        "frame": "../charge/charge_00_r.png",
+        "hold_ms": 133
+      },
+      {
+        "frame": "../idle/idle_00_r.png",
+        "transition": "idle"
+      }
+    ]
+  },
+  "texture_definitions": 2,
+  "texture_bytes": 16128,
+  "cumulative_bruce_bytes": 135936,
+  "reserve_safe_headroom": 34040,
+  "remaining_pose_projection": 19904,
+  "protected_hero_reserve": 49152
+}

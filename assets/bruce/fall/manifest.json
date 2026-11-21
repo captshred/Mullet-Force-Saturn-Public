@@ -1,0 +1,220 @@
+{
+  "canvas": [
+    144,
+    120
+  ],
+  "ground_pivot": [
+    64,
+    112
+  ],
+  "facing": "right",
+  "palette_source": "../idle/BR00.TGA",
+  "palette_sha256": "c8a4676997b7fc7a0ce261a0271f7941ae54d30736f02ec0df8a49e624d82769",
+  "source_sha256": "4ac22be49c850b89c7b148efe734bf29f82505297add119f9bc1e64770d36e84",
+  "frames": [
+    {
+      "texture": "BF00.TGA",
+      "width": 112,
+      "height": 58,
+      "anchor": [
+        52,
+        58
+      ],
+      "bytes": 6496,
+      "decoded_sha256": "3778b22234ca8eab076fb636ae91b5af62338f2005b2c3bc65b4a13c75daf8f8",
+      "frame": "kd_00_r.png",
+      "bounds": [
+        12,
+        54,
+        120,
+        112
+      ]
+    },
+    {
+      "texture": "BF01.TGA",
+      "width": 128,
+      "height": 59,
+      "anchor": [
+        58,
+        59
+      ],
+      "bytes": 7552,
+      "decoded_sha256": "a4e438efd3de1c8d4b332cbd36615f71b453f85436ce9708b6fab357e83ffe1a",
+      "frame": "kd_01_r.png",
+      "bounds": [
+        6,
+        53,
+        129,
+        112
+      ]
+    },
+    {
+      "texture": "BF02.TGA",
+      "width": 144,
+      "height": 41,
+      "anchor": [
+        61,
+        41
+      ],
+      "bytes": 5920,
+      "decoded_sha256": "3721b284cd0d35b401e4aa85f5986e740d4520e233b8fa6a606584127af74794",
+      "frame": "kd_02_r.png",
+      "bounds": [
+        3,
+        71,
+        141,
+        112
+      ]
+    },
+    {
+      "texture": "BF03.TGA",
+      "width": 80,
+      "height": 79,
+      "anchor": [
+        38,
+        79
+      ],
+      "bytes": 6336,
+      "decoded_sha256": "38faebca2b4843a4e446e11647be3c4cb2e25b5e9d7d43c9b1e238dbc807572b",
+      "frame": "gu_01_r.png",
+      "bounds": [
+        26,
+        33,
+        101,
+        112
+      ]
+    }
+  ],
+  "shared_poses": {
+    "prone": "kd_02_r.png",
+    "GU02": "../charge/charge_00_r.png"
+  },
+  "knockdown": {
+    "playback": "once",
+    "sequence": [
+      {
+        "frame": "kd_00_r.png",
+        "hold_ms": 100
+      },
+      {
+        "frame": "kd_01_r.png",
+        "hold_ms": 133,
+        "render_offset": [
+          -4,
+          -9
+        ]
+      },
+      {
+        "frame": "kd_02_r.png"
+      }
+    ],
+    "hold": "until_get_up"
+  },
+  "get_up": {
+    "playback": "once",
+    "sequence": [
+      {
+        "frame": "kd_02_r.png",
+        "hold_ms": 160
+      },
+      {
+        "frame": "gu_01_r.png",
+        "hold_ms": 217
+      },
+      {
+        "frame": "../charge/charge_00_r.png",
+        "hold_ms": 150
+      },
+      {
+        "frame": "../idle/idle_00_r.png",
+        "transition": "idle"
+      }
+    ]
+  },
+  "defeat": {
+    "playback": "once",
+    "sequence": [
+      {
+        "frame": "kd_00_r.png",
+        "hold_ms": 100
+      },
+      {
+        "frame": "kd_01_r.png",
+        "hold_ms": 133,
+        "render_offset": [
+          -4,
+          -9
+        ]
+      },
+      {
+        "frame": "kd_02_r.png"
+      }
+    ],
+    "hold": "until_encounter_transition"
+  },
+  "bank": {
+    "inventory": {
+      "idle": {
+        "textures": [
+          "BR00.TGA",
+          "BR02.TGA"
+        ],
+        "bytes": 19584
+      },
+      "walk": {
+        "textures": [
+          "BW00.TGA",
+          "BW01.TGA",
+          "BW02.TGA"
+        ],
+        "bytes": 30528
+      },
+      "punch": {
+        "textures": [
+          "BP00.TGA",
+          "BP01.TGA",
+          "BP02.TGA"
+        ],
+        "bytes": 28544
+      },
+      "charge": {
+        "textures": [
+          "BC00.TGA",
+          "BC01.TGA",
+          "BC02.TGA"
+        ],
+        "bytes": 23392
+      },
+      "slam": {
+        "textures": [
+          "slam-impact/BS01.TGA",
+          "slam-windup/BS00.TGA"
+        ],
+        "bytes": 17760
+      },
+      "hit-stun": {
+        "textures": [
+          "BH00.TGA",
+          "BH01.TGA"
+        ],
+        "bytes": 16128
+      },
+      "fall": {
+        "textures": [
+          "BF00.TGA",
+          "BF01.TGA",
+          "BF02.TGA",
+          "BF03.TGA"
+        ],
+        "bytes": 26304
+      }
+    },
+    "unique_textures": 19,
+    "prior_bytes": 135936,
+    "incremental_bytes": 26304,
+    "cumulative_bytes": 162240,
+    "reserve_safe_ceiling": 169976,
+    "reserve_safe_headroom": 7736,
+    "protected_hero_reserve": 49152
+  }
+}

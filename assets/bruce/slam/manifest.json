@@ -1,0 +1,101 @@
+{
+  "canvas": [
+    144,
+    120
+  ],
+  "ground_pivot": [
+    64,
+    112
+  ],
+  "facing": "right",
+  "playback": "once",
+  "frames": [
+    {
+      "frame": "slam-windup/slam-windup_00_r.png",
+      "texture": "slam-windup/BS00.TGA",
+      "bounds": [
+        16,
+        3,
+        112,
+        112
+      ],
+      "width": 96,
+      "height": 109,
+      "anchor": [
+        48,
+        109
+      ],
+      "bytes": 10464,
+      "hold_ms": 250,
+      "decoded_sha256": "95ef6ea3203aa6aead6dcaa75f7edf869ea22b3d575387e4eee794f3ce30e584"
+    },
+    {
+      "frame": "slam-impact/slam-impact_00_r.png",
+      "texture": "slam-impact/BS01.TGA",
+      "bounds": [
+        12,
+        42,
+        116,
+        112
+      ],
+      "width": 104,
+      "height": 70,
+      "anchor": [
+        52,
+        70
+      ],
+      "bytes": 7296,
+      "hold_ms": 133,
+      "decoded_sha256": "24c680bab998bb1a1de57caf0a6611de2849f13c17a8ca0208982eb3cfd5a066"
+    }
+  ],
+  "texture_definitions": 2,
+  "source_sha256": "80df49e985e00129f34266966a1ba022c1538ca3e574735389eae1be25cded53",
+  "palette_source": "../idle/BR00.TGA",
+  "palette_sha256": "c8a4676997b7fc7a0ce261a0271f7941ae54d30736f02ec0df8a49e624d82769",
+  "recovery": "../charge/charge_00_r.png",
+  "recovery_hold_ms": 133,
+  "return_to": "../idle/idle_00_r.png",
+  "airborne_alternative": {
+    "frame": "../charge/charge_01_r.png",
+    "texture": "../charge/BC01.TGA",
+    "render_lift_px": 8,
+    "hold_ms": 67,
+    "selected": true
+  },
+  "sequence": [
+    {
+      "frame": "slam-windup/slam-windup_00_r.png",
+      "texture": "slam-windup/BS00.TGA",
+      "hold_ms": 250,
+      "render_offset_y": 0
+    },
+    {
+      "frame": "../charge/charge_01_r.png",
+      "texture": "../charge/BC01.TGA",
+      "hold_ms": 67,
+      "render_offset_y": -8
+    },
+    {
+      "frame": "slam-impact/slam-impact_00_r.png",
+      "texture": "slam-impact/BS01.TGA",
+      "hold_ms": 133,
+      "render_offset_y": 0
+    },
+    {
+      "frame": "../charge/charge_00_r.png",
+      "texture": "../charge/BC00.TGA",
+      "hold_ms": 133,
+      "render_offset_y": 0
+    },
+    {
+      "transition": "idle",
+      "frame": "../idle/idle_00_r.png",
+      "render_offset_y": 0
+    }
+  ],
+  "texture_bytes": 17760,
+  "cumulative_bruce_bytes": 119808,
+  "reserve_safe_headroom": 50168,
+  "protected_hero_reserve": 49152
+}

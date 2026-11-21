@@ -1,0 +1,94 @@
+{
+  "canvas": [
+    144,
+    120
+  ],
+  "ground_pivot": [
+    64,
+    112
+  ],
+  "facing": "right",
+  "playback": "once",
+  "source_sha256": "48a6a640aac786ae7b3630847ae44ef949e6b8f80e5b105bc156d8e052114ad5",
+  "palette_source": "../idle/BR00.TGA",
+  "palette_sha256": "c8a4676997b7fc7a0ce261a0271f7941ae54d30736f02ec0df8a49e624d82769",
+  "recovery": "../idle/idle_00_r.png",
+  "shared_boot_view": {
+    "source": "../idle/BR00.TGA",
+    "byte_offset": 8320,
+    "width": 104,
+    "height": 15,
+    "anchor": [
+      53,
+      15
+    ],
+    "incremental_bytes": 0
+  },
+  "frames": [
+    {
+      "frame": "punch_00_r.png",
+      "bounds": [
+        14,
+        17,
+        114,
+        112
+      ],
+      "texture": "BP00.TGA",
+      "width": 104,
+      "height": 80,
+      "anchor": [
+        50,
+        95
+      ],
+      "bytes": 8320,
+      "hold_ms": 240,
+      "shared_boot_view": true,
+      "decoded_sha256": "610561543a441b7a9cfa55ca7593aa8f6da1494c9272aa3c1c3c3b7fdc73beda"
+    },
+    {
+      "frame": "punch_01_r.png",
+      "bounds": [
+        12,
+        17,
+        115,
+        112
+      ],
+      "texture": "BP01.TGA",
+      "width": 104,
+      "height": 80,
+      "anchor": [
+        52,
+        95
+      ],
+      "bytes": 8320,
+      "hold_ms": 140,
+      "shared_boot_view": true,
+      "decoded_sha256": "1184be8a02db392421479af300362defdf865e8e95e14e029960974e57b03dfb"
+    },
+    {
+      "frame": "punch_02_r.png",
+      "bounds": [
+        9,
+        19,
+        136,
+        112
+      ],
+      "texture": "BP02.TGA",
+      "width": 128,
+      "height": 93,
+      "anchor": [
+        55,
+        93
+      ],
+      "bytes": 11904,
+      "hold_ms": 160,
+      "shared_boot_view": false,
+      "decoded_sha256": "baa7f00139f0f1959199fafb7fc3e9e912173ed903a754cebfd97b52308ff58d"
+    }
+  ],
+  "texture_definitions": 3,
+  "texture_bytes": 28544,
+  "cumulative_bruce_bytes": 78656,
+  "reserve_safe_headroom": 91320,
+  "protected_hero_reserve": 49152
+}
