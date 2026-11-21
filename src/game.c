@@ -1,4 +1,5 @@
 #include "game.h"
+#include "bruce.h"
 /* JAB BEGIN */
 #include "punch_combo.h"
 #include "jab_repeat.h"
@@ -827,6 +828,12 @@ int mf_torch_hits(const mf_player *p,mf_hitbox b)
     hi=MF_TORCH_NOZZLE_Z*(MF_TORCH_END_X-near)/(MF_TORCH_END_X-MF_TORCH_NOZZLE_X)+5;
     return b.bottom<=hi && b.top>=lo;
 }
+#if MF_BRUCE_RUNTIME
+static mf_hitbox bruce_hurtbox(const mf_bruce *bruce)
+{
+    return hurtbox(bruce->x/256,bruce->y/256,bruce->height,25,10,80);
+}
+#endif
 static void torch_hits(mf_game *g,mf_player *p)
 {
     int i;
@@ -837,6 +844,12 @@ static void torch_hits(mf_game *g,mf_player *p)
     if(p->torch_tick>0)--p->torch_tick;
     if(p->torch_tick)return;
     p->torch_tick=MF_TORCH_DAMAGE_TICKS;
+#if MF_BRUCE_RUNTIME
+    if(mf_bruce_vulnerable(&g->bruce) && mf_torch_hits(p,bruce_hurtbox(&g->bruce))) {
+        mf_bruce_receive(&g->bruce,MF_TORCH_DAMAGE,0,p->facing);
+        g->events|=MF_IMPACT;
+    }
+#endif
     for(i=0;i<MF_ENEMIES;i++)if(mf_torch_hits(p,mf_enemy_hurtbox(&g->enemies[i])))fire_damage(g,&g->enemies[i],1,(int)(p-g->players));
     for(i=0;i<MF_DRUMS;i++){
         mf_drum *d=&g->drums[i];
@@ -1013,6 +1026,22 @@ static void player_hits(mf_game *g,mf_player *p)
     if(g->stage!=MF_STAGE_LEVEL1)return;
 #endif
     if(!player_active(p))return;
+#if MF_BRUCE_RUNTIME
+    {
+        const unsigned bruce_bit=1u<<(MF_DRUMS+MF_ENEMIES);
+        mf_bruce *bruce=&g->bruce;
+        if(mf_bruce_vulnerable(bruce) && !(p->hit_mask&bruce_bit) &&
+           (bruce->x-p->x)*p->facing>0 &&
+           mf_boxes_overlap(mf_player_attackbox(p),bruce_hurtbox(bruce))) {
+            p->hit_mask|=bruce_bit;
+            mf_bruce_receive(bruce,p->bat?3:(p->attack_air?2:1),p->bat!=0,p->facing);
+            hit_sound(g,(int)(p-g->players),bruce->health,0);
+            heavy_hit_sound(g,p,bruce->health);
+            if(!bruce->health)g->events|=MF_COMBAT_HUMAN_DEATH((int)(p-g->players));
+            impact(g,bruce->x/256,bruce->y/256,48+bruce->height);
+        }
+    }
+#endif
     for(i=0;i<MF_DRUMS;i++){
         mf_drum *d=&g->drums[i];
         if(d->hp && !(p->hit_mask&(1<<i)) && (d->x-p->x)*p->facing>0 &&
@@ -1199,6 +1228,21 @@ void mf_game_step_inputs(mf_game *g,const unsigned held[2],const unsigned presse
     }
     for(i=0;i<MF_PLAYERS;i++){player_hits(g,&g->players[i]);torch_hits(g,&g->players[i]);}
     for(i=0;i<MF_ENEMIES;i++)enemy_step(g,i);
+#if MF_BRUCE_RUNTIME
+    if(g->stage==MF_STAGE_LEVEL1 && g->bruce.ready) {
+        mf_bruce *bruce=&g->bruce;
+        mf_bruce_step(bruce,g);
+        for(i=0;i<MF_PLAYERS;i++) {
+            int damage;
+            if(bruce->hit_players&(1u<<i))continue;
+            damage=mf_bruce_strike(bruce,&g->players[i]);
+            if(damage) {
+                bruce->hit_players|=1u<<i;
+                player_take_hit(g,i,damage,g->players[i].x<bruce->x?-1:1);
+            }
+        }
+    }
+#endif
 #if MF_LEVEL1_STAGE_CLEAR
     stage_spawns(g);
 #endif

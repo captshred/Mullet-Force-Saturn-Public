@@ -69,6 +69,13 @@ typedef struct {int next,phase,timeout;} mf_punch_combo;
 #if MF_RICKY_ENEMY
 typedef struct {int cooldown,active,start_x,start_y,dx,dy,height,last;} mf_ricky_jump;
 #endif
+#if MF_BRUCE_RUNTIME
+typedef struct {
+    int x, y, facing, target, retarget, moving, animation, active, approach;
+    int state, timer, height, start_x, land_x, health, cooldown, invulnerable;
+    int ready, hit_players, attack_cycle, impact, fall_direction;
+} mf_bruce;
+#endif
 typedef struct {
     mf_player players[MF_PLAYERS];
     mf_enemy enemies[MF_ENEMIES];
@@ -108,6 +115,9 @@ typedef struct {
     unsigned vehicle_hits;
 #endif
     int street_spawns_suspended;
+#if MF_BRUCE_RUNTIME
+    mf_bruce bruce;
+#endif
 } mf_game;
 #if MF_VEHICLE_AMBUSH
 enum { MF_VEHICLE_TRIGGER_X=2240 };

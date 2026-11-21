@@ -214,6 +214,7 @@ printf '#define MF_LEVEL2_WINGSUIT %s\n' "$wingsuit" >> build/build-info.h
 printf '%s\n' "$wingsuit" > build/wingsuit-mode.txt
 printf '#define MF_VEHICLE_AMBUSH %s\n' "${MF_VEHICLE_AMBUSH:-0}" >> build/build-info.h
 printf '#define MF_RICKY_ENEMY %s\n' "$ricky" >> build/build-info.h
+printf '#define MF_BRUCE_RUNTIME %s\n' "${MF_BRUCE_RUNTIME:-0}" >> build/build-info.h
 printf '#define MF_ENEMY_SPRITE_BANKS %s\n' "$enemy_banks" >> build/build-info.h
 printf '#define MF_HUD_PANEL_MEMORY %s\n' "$hud_panel" >> build/build-info.h
 printf '#define MF_DUPLICATE_TEXTURE_CLEANUP %s\n' "$duplicate_cleanup" >> build/build-info.h

@@ -33,9 +33,7 @@ static volatile int stage2_owned;
 #endif
 
 static mf_game game;
-#if MF_BRUCE_RUNTIME
-static mf_bruce bruce;
-#endif
+
 static int explosion=-1,spark_explosion;
 static int street[5],buck[MF_BUCK_FRAMES],chuck[MF_BUCK_FRAMES],enemy[MF_ENEMY_FRAMES],bat[2][MF_BAT_FRAMES],bat_legs,air_legs[3],normal_lower[MF_NORMAL_LOWERS],torch_art[2][3],flame[4],embers[2],charge_cue,drum[3],shadow,spark,bar,panel;
 #if MF_VEHICLE_AMBUSH
@@ -430,10 +428,15 @@ static void draw_game(void)
         }
     }
 #if MF_BRUCE_RUNTIME
-    if(bruce.active && mf_enemy_bank_current()==&mf_bruce_bank_spec) {
-        x=bruce.x/256-game.camera;
-        y=mf_world_screen_y(bruce.x/256,bruce.y/256,game.camera);
-        if(x>=-112 && x<=432) mf_bruce_draw(&bruce,x,y,depth_key(y,0));
+    if(game.bruce.active && mf_enemy_bank_current()==&mf_bruce_bank_spec) {
+        x=game.bruce.x/256-game.camera;
+        y=mf_world_screen_y(game.bruce.x/256,game.bruce.y/256,game.camera);
+        if(x>=-112 && x<=432) {
+            draw_shadow(x,y,game.bruce.height);
+            mf_bruce_draw(&game.bruce,x,y,depth_key(y,0));
+            if(game.bruce.impact)
+                jo_sprite_draw3D2(spark,x-16,y-24,depth_key(y,-1));
+        }
     }
 #endif
     for(j=0;j<MF_PLAYERS;j++) {
@@ -448,7 +451,11 @@ static void draw_game(void)
         int hurt_visible=0;
 #endif
 /* PLAYERHURT END */
-        if(hurt_visible || !p->health || !p->invulnerable || p->invulnerable>=112 || (game.ticks&4)) {
+        if(
+#if MF_BRUCE_RUNTIME
+           game.street_spawns_suspended || p->x/256>=MF_BRUCE_LOT_RETURN ||
+#endif
+           hurt_visible || !p->health || !p->invulnerable || p->invulnerable>=112 || (game.ticks&4)) {
             if(p->facing<0)jo_sprite_enable_horizontal_flip();
 #if MF_PLAYABLE_ANIMATION
 /* PLAYERHURT BEGIN */
@@ -652,7 +659,12 @@ static void update(void)
         mf_music_update(game.started,game.paused,0,now);
         if(state!=MF_BANK_READY) {
             if(state==MF_BANK_FAILED)jo_printf(3,12,"ENEMY BANK FAILED E%u",mf_enemy_bank_diagnostics()->error);
-            return; /* No sprite submissions while draining/loading/failed. */
+#if MF_BRUCE_RUNTIME
+            /* Street slots are empty and their handles invalidated. The
+               remaining scene only references the persistent sprite prefix. */
+            if(state==MF_BANK_DRAIN)draw_game();
+#endif
+            return;
         }
     }
 #endif
@@ -727,7 +739,7 @@ static void update(void)
     if(steps>6)steps=6;
     for(i=0;i<steps;i++) {
         for(j=0;j<2;j++){pressed[j]=pending[j];pending[j]=0;}
-#if MF_PLAYABLE_ANIMATION || MF_CORPORATE_PUNK || MF_BRUCE_RUNTIME
+#if MF_PLAYABLE_ANIMATION || MF_CORPORATE_PUNK
         int before_tick=game.ticks;
 #endif
 #if MF_ARCADE_FX
@@ -739,22 +751,18 @@ static void update(void)
 #endif
 #if MF_BRUCE_RUNTIME
         if(game.started && !game.paused && game.stage==MF_STAGE_LEVEL1) {
-            int approach=mf_bruce_approach(&bruce,&game);
+            int approach=mf_bruce_approach(&game.bruce,&game);
             const mf_enemy_bank_spec *bank=mf_enemy_bank_current();
-            game.street_spawns_suspended=approach || bank==&mf_bruce_bank_spec;
+            game.bruce.ready=bank==&mf_bruce_bank_spec;
+            game.street_spawns_suspended=approach || game.bruce.ready;
             if((approach && bank==&mf_ricky_bank_spec) ||
                (!approach && bank==&mf_bruce_bank_spec)) {
                 const mf_enemy_bank_spec *next=approach?&mf_bruce_bank_spec:&mf_ricky_bank_spec;
-                if(mf_enemy_bank_prepare(next,&game,now)) return;
+                if(mf_enemy_bank_prepare(next,&game,now)) {draw_game();return;}
             }
         }
 #endif
         mf_game_step_inputs(&game,held,pressed,(sampled_input[0].connected?1u:0u)|(sampled_input[1].connected?2u:0u));
-#if MF_BRUCE_RUNTIME
-        if(game.ticks!=before_tick && game.stage==MF_STAGE_LEVEL1 &&
-           mf_enemy_bank_current()==&mf_bruce_bank_spec)
-            mf_bruce_step(&bruce,&game);
-#endif
 #if MF_ARCADE_FX
         spark_explosion=mf_fx_spark_explosion(&game,previous_hits,spark_explosion);
 #endif

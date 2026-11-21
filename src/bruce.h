@@ -3,15 +3,21 @@
 #include "game.h"
 
 #if MF_BRUCE_RUNTIME
-typedef struct {
-    int x, y, facing, target, retarget, moving, animation, active, approach;
-} mf_bruce;
+enum {
+    MF_BRUCE_ENTRANCE, MF_BRUCE_ENTRANCE_IMPACT, MF_BRUCE_RECOVERY,
+    MF_BRUCE_READY, MF_BRUCE_PUNCH, MF_BRUCE_CHARGE, MF_BRUCE_SLAM,
+    MF_BRUCE_HURT, MF_BRUCE_FALL, MF_BRUCE_DOWN, MF_BRUCE_RISE, MF_BRUCE_DEFEATED
+};
+enum { MF_BRUCE_LOT_RETURN = MF_WORLD_SLOPE_END + 80 };
 
 int mf_bruce_approach(mf_bruce *bruce, const mf_game *game);
 void mf_bruce_step(mf_bruce *bruce, const mf_game *game);
+int mf_bruce_vulnerable(const mf_bruce *bruce);
+void mf_bruce_receive(mf_bruce *bruce, int damage, int knockdown, int direction);
+int mf_bruce_strike(const mf_bruce *bruce, const mf_player *player);
 int mf_bruce_pose(const mf_bruce *bruce);
 
-#ifdef MF_BRUCE_SATURN
+#if defined(MF_BRUCE_SATURN) && MF_ENEMY_SPRITE_BANKS
 #include "enemy_sprite_bank.h"
 extern const mf_enemy_bank_spec mf_bruce_bank_spec;
 void mf_bruce_use_palette(jo_palette *palette);

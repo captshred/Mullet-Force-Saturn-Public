@@ -76,11 +76,12 @@ PHASE_DELTA |= HQ_DELTA
 
 BRUCE_ASSET_TREE = "84dd2903d3f8120e663a718d025a8ce9eb235f06"
 BRUCE_RUNTIME_DELTA = {
+    "src/enemy_sprite_bank.c", "src/enemy_sprite_bank.h",
     "src/bruce.c", "src/bruce.h", "src/game.h", "src/ricky_animation.c",
     "make/saturn.mk", "tools/build-native.sh", "tools/build-source-complete.sh",
     "tools/stage-bruce-bank.py", "tools/validate_level1_diagonal.py",
     "tests/bruce_runtime_test.c",
-    "docs/bruce-phase3a-runtime.md", "Makefile",
+    "docs/bruce-phase3a-runtime.md", "docs/bruce-phase3b-combat.md", "Makefile",
 }
 
 

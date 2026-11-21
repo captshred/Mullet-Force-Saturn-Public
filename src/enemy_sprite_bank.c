@@ -90,12 +90,17 @@ unsigned mf_enemy_bank_service(unsigned now)
     if(now==last_tick)return info.state;
     last_tick=now;
     if(++info.drains<3)return info.state;
-    /* Called once/core callback after three sprite-free slSynch barriers.
+    /* Called once/core callback after three suffix-free slSynch barriers.
        Stop auto restarts and confirm actual VDP1 completion before freeing. */
     JO_VDP1_PTMR=0;
     for(wait=0;wait<1000000u && !(JO_VDP1_EDSR&2u);++wait){}
     if(!(JO_VDP1_EDSR&2u)){failure(MF_BANK_VDP1);return info.state;}
     if(prefix_hash()!=prefix_lock || palette_hash()!=palette_lock){failure(MF_BANK_PREFIX);return info.state;}
+#if MF_BRUCE_RUNTIME
+    /* Keep the completed front buffer visible through synchronous CD reads.
+       Manual mode with no frame-change request leaves it on display. */
+    JO_VDP1_FBCR=2;
+#endif
     next=pending;
     jo_sprite_free_from(MF_ENEMY_PREFIX_DEFS);live=0;
     if(jo_get_last_sprite_id()!=MF_ENEMY_PREFIX_DEFS-1 ||
@@ -103,6 +108,9 @@ unsigned mf_enemy_bank_service(unsigned now)
     if(install(next,0)) {
         ++info.swaps;
         /* Approved SGL automatic frame-change policy, not a sampled PTMR. */
+#if MF_BRUCE_RUNTIME
+        JO_VDP1_FBCR=0;
+#endif
         JO_VDP1_PTMR=2;
     }
     return info.state;

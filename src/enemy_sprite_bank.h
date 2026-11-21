@@ -20,7 +20,7 @@ extern const mf_enemy_bank_spec mf_corporate_bank_spec;
 /* Boot only, before the core render callback is installed. */
 int mf_enemy_bank_boot(const mf_enemy_bank_spec *,jo_palette *shared_palette);
 /* Running Level 1 section boundary only (not pause/gallery/clear): both slots ABSENT; caller/core integration freezes
-   game/spawns and submits no sprites while draining/loading. Invalid request is
+   game/spawns and submits no suffix sprites while draining/loading. Invalid request is
    rejected without changing a live bank. Failed installation latches text-only
    failure until restart. Three distinct core VBlanks + hardware completion needed. */
 int mf_enemy_bank_prepare(const mf_enemy_bank_spec *,const mf_game *,unsigned now);

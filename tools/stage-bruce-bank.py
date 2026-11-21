@@ -16,6 +16,8 @@ for clip in ("idle", "walk", "punch", "charge", "slam", "hit-stun", "fall"):
     for frame in manifest["frames"]:
         frames.append((art / clip / frame["texture"], frame))
 
+boot = json.loads((art / "charge/manifest.json").read_text())["shared_boot_view"]
+assert boot == json.loads((art / "punch/manifest.json").read_text())["shared_boot_view"]
 palette = (art / "idle/BR00.TGA").read_bytes()[18:786]
 textures = {}
 names = set()
@@ -44,11 +46,15 @@ assert [(p.name) for p, _ in frames[:5]] == [
 folder = out / "cd/BRUCE"
 folder.mkdir(parents=True, exist_ok=True)
 lines = [f"#define BRUCE_BYTES {size}u", f"#define BRUCE_DEFS {len(textures)}",
+         f'#define BRUCE_BOOT_WIDTH {boot["width"]}', f'#define BRUCE_BOOT_HEIGHT {boot["height"]}',
+         f'#define BRUCE_BOOT_OFFSET {boot["byte_offset"]}',
+         f'#define BRUCE_BOOT_X {boot["anchor"][0]}', f'#define BRUCE_BOOT_Y {boot["anchor"][1]}',
          "static const bruce_frame bruce_frames[BRUCE_DEFS] = {"]
 for path, frame in textures.values():
     shutil.copyfile(path, folder / path.name)
     x, y = frame["anchor"]
-    lines.append(f'    {{"{path.name}", {frame["width"]}, {frame["height"]}, {x}, {y}}},')
+    shared = int(bool(frame.get("shared_boot_view") or frame.get("shared_views")))
+    lines.append(f'    {{"{path.name}", {frame["width"]}, {frame["height"]}, {x}, {y}, {shared}}},')
 lines += ["};", "static const unsigned short bruce_colors[255] = {"]
 for start in range(0, 255, 12):
     row = []
