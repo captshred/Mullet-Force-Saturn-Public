@@ -13,7 +13,7 @@ enum { MF_BRUCE_LOT_RETURN = MF_WORLD_SLOPE_END + 80 };
 int mf_bruce_approach(mf_bruce *bruce, const mf_game *game);
 void mf_bruce_step(mf_bruce *bruce, const mf_game *game);
 int mf_bruce_vulnerable(const mf_bruce *bruce);
-void mf_bruce_receive(mf_bruce *bruce, int damage, int knockdown, int direction);
+void mf_bruce_receive(mf_bruce *bruce, int damage, int bat, int direction);
 int mf_bruce_strike(const mf_bruce *bruce, const mf_player *player);
 int mf_bruce_pose(const mf_bruce *bruce);
 

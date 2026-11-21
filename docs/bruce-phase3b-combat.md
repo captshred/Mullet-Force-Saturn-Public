@@ -6,7 +6,7 @@ Bruce launches from beyond the right side of the camera, travels left along a 48
 
 | Initial tuning | Value |
 | --- | --- |
-| Health | 30 |
+| Health | 60 |
 | Heavy punch | 24 damage, 26-tick windup, 5-tick strike |
 | Shoulder charge | 18 damage, 27-tick windup, up to 30 active ticks |
 | Ground slam | 24 damage, 18-tick windup, 32-tick flight, 52-pixel horizontal and 26-pixel lane radii at impact |
@@ -20,3 +20,7 @@ The suffix keeps 19 textures at 162,240 bytes. The twentieth sprite definition r
 ## Phase 3B.1 ground slam
 
 The combat slam commits to the nearest living player at the start of its windup. Bruce launches when the clamped target is 72–140 pixels away horizontally and within 42 pixels along the lane axis. His ground position crosses both axes while his render height traces a 44-pixel arc over 32 NTSC simulation ticks. The landing point remains fixed after commitment. The impact applies damage once at touchdown and keeps the existing jump clearance and recovery cooldown.
+
+## Phase 3B.2 bat interruption
+
+Bruce starts at 60 HP in solo and co-op, up from 30. The existing bat contact deals 3 HP and ends an active shoulder charge or airborne slam. Contact resolves before Bruce advances his attack, including the simulation tick that would land the slam. A canceled airborne slam holds its world-ground position and descends up to five pixels per tick in HIT 00 before continuing through HIT 01 and CHARGE 00. The existing hit recovery and cooldown resume after landing. Zero HP follows the existing defeat sequence after any controlled descent. Punches and jump kicks keep their existing flinch rules.

@@ -42,7 +42,7 @@ static int advance(int position, int goal, int allowance, int speed)
 
 /* Readability and balance controls for the first playtest, at 60 Hz. */
 enum {
-    BRUCE_HP = 30, PUNCH_DAMAGE = 24, CHARGE_DAMAGE = 18, SLAM_DAMAGE = 24,
+    BRUCE_HP = 60, PUNCH_DAMAGE = 24, CHARGE_DAMAGE = 18, SLAM_DAMAGE = 24,
     ENTRANCE_TICKS = 48, ENTRANCE_APEX = 62,
     PUNCH_WINDUP = 26, PUNCH_ACTIVE = 5, PUNCH_END = 53,
     CHARGE_WINDUP = 27, CHARGE_ACTIVE = 30, CHARGE_END = 82,
@@ -138,6 +138,13 @@ static int action_tick(mf_bruce *bruce)
         if (t >= SLAM_END) settle(bruce, 38);
         break;
     case MF_BRUCE_HURT:
+        if (bruce->height > 0) {
+            /* Freeze the ground root and finish the interrupted arc safely. */
+            bruce->height = bruce->height > 5 ? bruce->height - 5 : 0;
+            bruce->timer = 0;
+            if (!bruce->height && !bruce->health) enter(bruce, MF_BRUCE_FALL);
+            break;
+        }
         if (t >= 23) settle(bruce, 18);
         break;
     case MF_BRUCE_FALL: {
@@ -168,7 +175,7 @@ int mf_bruce_vulnerable(const mf_bruce *bruce)
            bruce->state != MF_BRUCE_FALL && bruce->state != MF_BRUCE_DOWN;
 }
 
-void mf_bruce_receive(mf_bruce *bruce, int damage, int knockdown, int direction)
+void mf_bruce_receive(mf_bruce *bruce, int damage, int bat, int direction)
 {
     int armored;
     if (!mf_bruce_vulnerable(bruce)) return;
@@ -178,7 +185,19 @@ void mf_bruce_receive(mf_bruce *bruce, int damage, int knockdown, int direction)
     armored = (bruce->state == MF_BRUCE_PUNCH && bruce->timer < PUNCH_WINDUP + PUNCH_ACTIVE) ||
               (bruce->state == MF_BRUCE_CHARGE && bruce->timer < CHARGE_WINDUP + CHARGE_ACTIVE) ||
               (bruce->state == MF_BRUCE_SLAM && bruce->timer < SLAM_TOUCHDOWN + SLAM_IMPACT);
-    if (!bruce->health || (knockdown && !armored)) {
+    /* Player contact resolves before Bruce advances his attack timer.
+       Include the tick that would start moving the charge. At slam timer
+       TOUCHDOWN-1, a connecting bat still wins over the pending impact. */
+    if (bat && ((bruce->state == MF_BRUCE_CHARGE && bruce->timer >= CHARGE_WINDUP - 1 &&
+                 bruce->timer < CHARGE_WINDUP + CHARGE_ACTIVE) ||
+                (bruce->state == MF_BRUCE_SLAM && bruce->timer >= SLAM_WINDUP &&
+                 bruce->timer < SLAM_TOUCHDOWN))) {
+        int height = bruce->height;
+        bruce->impact = 0;
+        bruce->fall_direction = direction;
+        enter(bruce, height || bruce->health ? MF_BRUCE_HURT : MF_BRUCE_FALL);
+        bruce->height = height;
+    } else if (!bruce->health || (bat && !armored)) {
         bruce->fall_direction = direction;
         enter(bruce, MF_BRUCE_FALL);
     }
