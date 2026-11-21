@@ -4,7 +4,7 @@ check:
 	python3 tools/level1-sfx-pcm8-pass1.py --pass2 --reset-wingsuit --diagonal --medium-guitar --mix-pass1 --disc
 	python3 tools/validate_level1_diagonal.py --medium-guitar --mix-pass1
 test:
-	$(CC) -std=c99 -Wall -Wextra -Werror -DMF_BRUCE_RUNTIME=1 -DMF_LEVEL1_WORLD_FLOW=1 -Isrc tests/bruce_runtime_test.c src/bruce.c -o /tmp/mf-bruce-runtime
+	$(CC) -std=c99 -Wall -Wextra -Werror -DMF_LEVEL1_STAGE_CLEAR=1 -DMF_BRUCE_RUNTIME=1 -DMF_LEVEL1_WORLD_FLOW=1 -Isrc tests/bruce_runtime_test.c src/bruce.c src/game.c -o /tmp/mf-bruce-runtime
 	/tmp/mf-bruce-runtime
 	python3 tools/level1-sfx-pcm8-pass1.py --pass2 --reset-wingsuit --diagonal --medium-guitar --mix-pass1 --test
 	python3 tools/test-intersection.py --level1-only

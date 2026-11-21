@@ -6,6 +6,49 @@ static void tick(mf_bruce *bruce, const mf_game *game, int count)
     while (count-- > 0) mf_bruce_step(bruce,game);
 }
 
+static void verify_game_dispatch(void)
+{
+    mf_game game = {0};
+    mf_bruce *bruce = &game.bruce;
+    int i;
+    game.started = 1;
+    game.camera = 2700;
+    game.street_spawns_suspended = 1;
+    bruce->active = bruce->ready = 1;
+    bruce->health = 30;
+    bruce->x = 2840 * 256;
+    bruce->y = 200 * 256;
+    bruce->facing = -1;
+    bruce->state = MF_BRUCE_PUNCH;
+    bruce->timer = 25;
+    for(i=0;i<MF_PLAYERS;i++) {
+        game.players[i].active = 1;
+        game.players[i].health = 100;
+        game.players[i].x = bruce->x - (28+i*8)*256;
+        game.players[i].y = bruce->y;
+    }
+    mf_game_step(&game,0,0);
+    assert(bruce->hit_players == 3);
+    assert(game.players[0].health == 76 && game.players[1].health == 76);
+    game.players[0].invulnerable = game.players[1].invulnerable = 0;
+    game.hitstop = 0;
+    mf_game_step(&game,0,0);
+    assert(game.players[0].health == 76 && game.players[1].health == 76);
+
+    /* A real player bat contact routes damage into Bruce's private HP. */
+    game.players[1].active = 0;
+    game.players[0].hurt = game.players[0].knockback = 0;
+    game.players[0].x = bruce->x - 36*256;
+    game.players[0].y = bruce->y;
+    game.players[0].facing = 1;
+    game.players[0].bat = 1;
+    game.players[0].attack = MF_BAT_ACTIVE_FIRST;
+    bruce->state = MF_BRUCE_READY;
+    bruce->cooldown = 24;
+    mf_game_step(&game,0,0);
+    assert(bruce->health == 27 && bruce->state == MF_BRUCE_FALL);
+}
+
 int main(void)
 {
     mf_game game = {0};
@@ -100,5 +143,6 @@ int main(void)
     assert(bruce.state == MF_BRUCE_DEFEATED && mf_bruce_pose(&bruce) == 17);
     game.players[0].x = 2639 * 256;
     assert(!mf_bruce_approach(&bruce,&game));
+    verify_game_dispatch();
     return 0;
 }
