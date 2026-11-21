@@ -169,16 +169,31 @@ const mf_enemy_bank_spec mf_bruce_bank_spec = {
     3, BRUCE_DEFS, BRUCE_BYTES, install, invalidate, validate
 };
 
+/* Scale the texture rectangle about the same ground pivot for every pose.
+   The endpoints stay in fixed point until SGL builds the VDP1 command. */
+static void draw_pose(int pose, int facing, int x, int ground, int depth)
+{
+    enum { SCALE = (85 * 65536 + 50) / 100 };
+    const bruce_frame *frame = &bruce_frames[pose];
+    int anchor_x = facing > 0 ? frame->anchor_x : frame->width - frame->anchor_x;
+    jo_fixed left = jo_int2fixed(x - JO_TV_WIDTH_2) - anchor_x * SCALE;
+    jo_fixed top = jo_int2fixed(ground - JO_TV_HEIGHT_2) - frame->anchor_y * SCALE;
+    jo_fixed right = left + frame->width * SCALE;
+    jo_fixed bottom = top + frame->height * SCALE;
+    const jo_pos2D_fixed corners[4] = {
+        {left, top}, {right, top}, {right, bottom}, {left, bottom}
+    };
+
+    jo_sprite_set_palette(colors->id);
+    if (facing < 0) jo_sprite_enable_horizontal_flip();
+    jo_sprite_draw_4p_fixed(ids[pose], corners, jo_int2fixed(depth), true);
+    jo_sprite_disable_horizontal_flip();
+}
+
 void mf_bruce_draw(const mf_bruce *bruce, int x, int ground, int depth)
 {
-    int pose = mf_bruce_pose(bruce);
-    const bruce_frame *frame = &bruce_frames[pose];
-    if (!resident || !bruce->active) return;
-    jo_sprite_set_palette(colors->id);
-    if (bruce->facing < 0) jo_sprite_enable_horizontal_flip();
-    jo_sprite_draw3D2(ids[pose], x - (bruce->facing > 0 ? frame->anchor_x : frame->width - frame->anchor_x),
-                     ground - frame->anchor_y, depth);
-    jo_sprite_disable_horizontal_flip();
+    if (resident && bruce->active)
+        draw_pose(mf_bruce_pose(bruce), bruce->facing, x, ground, depth);
 }
 #endif
 #endif
