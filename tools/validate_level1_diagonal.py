@@ -74,12 +74,32 @@ HQ_DELTA |= VEHICLE_DELTA | CLARITY_REVIEW | LINE_REVIEW | MEGA_DELTA | {
 PHASE_DELTA |= HQ_DELTA
 
 
+BRUCE_ASSET_TREE = "84dd2903d3f8120e663a718d025a8ce9eb235f06"
+BRUCE_RUNTIME_DELTA = {
+    "src/bruce.c", "src/bruce.h", "src/game.h", "src/ricky_animation.c",
+    "make/saturn.mk", "tools/build-native.sh", "tools/build-source-complete.sh",
+    "tools/stage-bruce-bank.py", "tools/validate_level1_diagonal.py",
+    "tests/bruce_runtime_test.c",
+    "docs/bruce-phase3a-runtime.md", "Makefile",
+}
+
+
+def bruce_scope():
+    if not (ROOT / "assets/bruce").is_dir():
+        return set()
+    assert git("rev-parse", "HEAD:assets/bruce").decode().strip() == BRUCE_ASSET_TREE
+    assert not git("diff", "HEAD", "--", "assets/bruce"), "approved Bruce assets changed"
+    assets = set(git("ls-tree", "-r", "--name-only", "HEAD", "assets/bruce").decode().splitlines())
+    return BRUCE_RUNTIME_DELTA | assets
+
+
 def validate_hq_scope():
     if subprocess.run(["git", "cat-file", "-e", APPROVED_HILL], cwd=ROOT, capture_output=True).returncode:
         git("fetch", "--no-tags", "--depth=1", "origin", APPROVED_HILL)
     changed = set(git("diff", "--name-only", APPROVED_HILL, "--").decode().splitlines())
-    assert changed <= HQ_DELTA, changed - HQ_DELTA
-    return HQ_DELTA
+    scope = HQ_DELTA | bruce_scope()
+    assert changed <= scope, changed - scope
+    return scope
 
 
 def git(*args):

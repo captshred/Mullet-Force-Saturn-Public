@@ -1,5 +1,6 @@
 #include "build-info.h"
 #include "ricky_animation.h"
+#include "bruce.h"
 #if MF_RICKY_ENEMY
 #include "ricky_data.h"
 static int ids[MF_RICKY_DEFS],resident;
@@ -32,6 +33,9 @@ static void invalidate(void) {
 }
 static int install(jo_palette *p) {
     int i,id;char name[]="RK00.TGA";
+#if MF_BRUCE_RUNTIME
+    mf_bruce_restore_palette(); /* The manager has drained all Bruce draws. */
+#endif
     if(hash()!=color_hash || !colors || !mf_corporate_bank_spec.install(p))return 0;
     jo_set_tga_default_palette(JO_NULL); /* Palette 2 is installed once, never during a swap. */
     for(i=0;i<MF_RICKY_DEFS;i++) {

@@ -1,0 +1,9 @@
+# Bruce Phase 3A runtime review
+
+Play to the open MEGA ARCADE lot. The handoff becomes eligible when a living player reaches world X 2758 and any living partner has cleared X 2640. Finish any street enemies still on screen. The game pauses new street spawns locally while those enemies finish, then drains three VBlanks before replacing their texture suffix. An enemy already offscreen behind the party can retire without a KO. Backtracking below X 2640 brings the street bank and its original palette back.
+
+Bruce spawns at world X 3015, simulation lane Y 203 (panorama Y 331), 80 pixels left of the entrance. Every 24 simulation ticks he picks the closest living player. He moves up to 0.5625 pixels per tick horizontally and 0.375 vertically, and aims to stop within 56 pixels horizontally and 7 vertically. Idle alternates the two approved sprites and walking uses all three approved frames, with the authored timing rounded to NTSC ticks. His position and depth use the same world-to-screen path as the players.
+
+The bank loads 19 indexed textures from the disc's BRUCE directory. Shared poses reference their existing texture IDs. The 139-definition persistent prefix occupies 239,360 bytes. Bruce takes 162,240 bytes, for 401,600 resident texture bytes and 158 total definitions. This leaves 56,888 physical texture bytes, of which 49,152 remain reserved for Buck and Chuck. The installed suffix validator checks each handle, dimensions, color mode, contiguous VRAM address, palette, and final allocation. Palette slot 2 belongs to Bruce while the street bank is dormant. The bank restores Ricky's colors after draining Bruce draws on the return path.
+
+Bruce is harmless during this review. He does not affect the camera, level clear, or the arcade doors. In a separate run, X exercises the existing development shortcut to Level 2. Use START+A+B+C for a soft reset.

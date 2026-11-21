@@ -4,6 +4,7 @@
 #include "music.h"
 #include "art_data.h"
 #include "build-info.h"
+#include "bruce.h"
 #if MF_LEVEL2_WINGSUIT
 #include "wingsuit_runtime.h"
 #include "dev_stage_skip.h"
@@ -32,6 +33,9 @@ static volatile int stage2_owned;
 #endif
 
 static mf_game game;
+#if MF_BRUCE_RUNTIME
+static mf_bruce bruce;
+#endif
 static int explosion=-1,spark_explosion;
 static int street[5],buck[MF_BUCK_FRAMES],chuck[MF_BUCK_FRAMES],enemy[MF_ENEMY_FRAMES],bat[2][MF_BAT_FRAMES],bat_legs,air_legs[3],normal_lower[MF_NORMAL_LOWERS],torch_art[2][3],flame[4],embers[2],charge_cue,drum[3],shadow,spark,bar,panel;
 #if MF_VEHICLE_AMBUSH
@@ -331,6 +335,9 @@ static void load_assets(void)
 #if MF_ENEMY_SPRITE_BANKS
 #if MF_RICKY_ENEMY
     if(!asset_error && !mf_ricky_palette(&buck_palette,&chuck_palette))asset_failure(734,"RICKY PALETTE",0);
+#if MF_BRUCE_RUNTIME
+    mf_bruce_use_palette(&buck_palette);
+#endif
     if(!asset_error && !mf_enemy_bank_boot(&mf_ricky_bank_spec,&enemy_palette))
 #else
     if(!asset_error && !mf_enemy_bank_boot(&mf_corporate_bank_spec,&enemy_palette))
@@ -422,6 +429,13 @@ static void draw_game(void)
             jo_sprite_draw3D2(embers[(game.ticks/4+1)%2],x+7,y-42,depth_key(y,-1));
         }
     }
+#if MF_BRUCE_RUNTIME
+    if(bruce.active && mf_enemy_bank_current()==&mf_bruce_bank_spec) {
+        x=bruce.x/256-game.camera;
+        y=mf_world_screen_y(bruce.x/256,bruce.y/256,game.camera);
+        if(x>=-112 && x<=432) mf_bruce_draw(&bruce,x,y,depth_key(y,0));
+    }
+#endif
     for(j=0;j<MF_PLAYERS;j++) {
         mf_player *p=&game.players[j];int frame=mf_player_frame(&game,j);
         const short (*anchor)[2]=j?chuck_anchor:buck_anchor;
@@ -713,7 +727,7 @@ static void update(void)
     if(steps>6)steps=6;
     for(i=0;i<steps;i++) {
         for(j=0;j<2;j++){pressed[j]=pending[j];pending[j]=0;}
-#if MF_PLAYABLE_ANIMATION || MF_CORPORATE_PUNK
+#if MF_PLAYABLE_ANIMATION || MF_CORPORATE_PUNK || MF_BRUCE_RUNTIME
         int before_tick=game.ticks;
 #endif
 #if MF_ARCADE_FX
@@ -723,7 +737,24 @@ static void update(void)
 #if MF_LEVEL2_WINGSUIT
         mf_dev_stage_skip(&game,pressed);
 #endif
+#if MF_BRUCE_RUNTIME
+        if(game.started && !game.paused && game.stage==MF_STAGE_LEVEL1) {
+            int approach=mf_bruce_approach(&bruce,&game);
+            const mf_enemy_bank_spec *bank=mf_enemy_bank_current();
+            game.street_spawns_suspended=approach || bank==&mf_bruce_bank_spec;
+            if((approach && bank==&mf_ricky_bank_spec) ||
+               (!approach && bank==&mf_bruce_bank_spec)) {
+                const mf_enemy_bank_spec *next=approach?&mf_bruce_bank_spec:&mf_ricky_bank_spec;
+                if(mf_enemy_bank_prepare(next,&game,now)) return;
+            }
+        }
+#endif
         mf_game_step_inputs(&game,held,pressed,(sampled_input[0].connected?1u:0u)|(sampled_input[1].connected?2u:0u));
+#if MF_BRUCE_RUNTIME
+        if(game.ticks!=before_tick && game.stage==MF_STAGE_LEVEL1 &&
+           mf_enemy_bank_current()==&mf_bruce_bank_spec)
+            mf_bruce_step(&bruce,&game);
+#endif
 #if MF_ARCADE_FX
         spark_explosion=mf_fx_spark_explosion(&game,previous_hits,spark_explosion);
 #endif

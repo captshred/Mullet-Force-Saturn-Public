@@ -277,7 +277,7 @@ static void stage_spawns(mf_game *g)
     static const int low[4]={90,66,45,30},span[4]={61,55,46,37},pairs[4]={25,40,50,65};
     int i,phase=clamp(g->stage_kills/10,0,3),free_slots=0;
     unsigned roll;
-    if(g->stage!=MF_STAGE_LEVEL1)return;
+    if(g->stage!=MF_STAGE_LEVEL1 || g->street_spawns_suspended)return;
     if(g->spawn_wait>0 && --g->spawn_wait>0)return;
     free_slots=mf_enemy_limit(g)-mf_enemy_count(g);
     if(free_slots<=0)return;
@@ -649,7 +649,7 @@ static void enemy_step(mf_game *g,int index)
         if(--e->timer<=0){e->state=MF_ENEMY_ABSENT;e->timer=MF_ENEMY_RESPAWN_TICKS;}return;
     }
 #if MF_LEVEL1_WORLD_FLOW
-    if(e->x<(g->camera-128)*256 && e->x<g->camera_floor*256) {
+    if(e->x<(g->camera-128)*256 && (e->x<g->camera_floor*256 || g->street_spawns_suspended)) {
         /* Offscreen retirement is not a defeat and never changes KO/score. */
         e->state=MF_ENEMY_ABSENT;e->hp=e->burn=e->burn_clock=0;return;
     }

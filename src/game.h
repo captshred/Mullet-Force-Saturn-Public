@@ -107,6 +107,7 @@ typedef struct {
     int vehicle_tick,vehicle_camera,vehicle_x,vehicle_dir,vehicle_lane;
     unsigned vehicle_hits;
 #endif
+    int street_spawns_suspended;
 } mf_game;
 #if MF_VEHICLE_AMBUSH
 enum { MF_VEHICLE_TRIGGER_X=2240 };

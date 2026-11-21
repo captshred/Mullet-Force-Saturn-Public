@@ -1,6 +1,6 @@
 JO_ENGINE_SRC_DIR = ../.deps/joengine/jo_engine
 COMPILER_DIR = ../.deps/joengine/Compiler
-SRCS = main.c input.c game.c music.c gallery.c street.c parallax.c animation_preview.c player_animation.c corporate_animation.c enemy_sprite_bank.c ricky_animation.c
+SRCS = main.c input.c game.c music.c gallery.c street.c parallax.c animation_preview.c player_animation.c corporate_animation.c enemy_sprite_bank.c ricky_animation.c bruce.c
 MF_LEVEL2_WINGSUIT ?= 0
 ifeq ($(MF_LEVEL2_WINGSUIT),1)
 SRCS += wingsuit.c wingsuit_runtime.c wingsuit_audio.c
@@ -49,5 +49,7 @@ CCFLAGS += -DMF_DEV_STAGE_SKIP=$(MF_DEV_STAGE_SKIP)
 MF_RICKY_ENEMY ?= 0
 CCFLAGS += -DMF_RICKY_ENEMY=$(MF_RICKY_ENEMY)
 
+MF_BRUCE_RUNTIME ?= 0
+CCFLAGS += -DMF_BRUCE_RUNTIME=$(MF_BRUCE_RUNTIME) -DMF_BRUCE_SATURN
 MF_VEHICLE_AMBUSH ?= 0
 CCFLAGS += -DMF_VEHICLE_AMBUSH=$(MF_VEHICLE_AMBUSH)
