@@ -173,7 +173,7 @@ const mf_enemy_bank_spec mf_bruce_bank_spec = {
    The endpoints stay in fixed point until SGL builds the VDP1 command. */
 static void draw_pose(int pose, int facing, int x, int ground, int depth)
 {
-    enum { SCALE = (85 * 65536 + 50) / 100 };
+    enum { SCALE = (90 * 65536 + 50) / 100 };
     const bruce_frame *frame = &bruce_frames[pose];
     int anchor_x = facing > 0 ? frame->anchor_x : frame->width - frame->anchor_x;
     jo_fixed left = jo_int2fixed(x - JO_TV_WIDTH_2) - anchor_x * SCALE;
