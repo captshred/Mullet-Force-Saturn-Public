@@ -49,6 +49,51 @@ static void verify_game_dispatch(void)
     assert(bruce->health == 27 && bruce->state == MF_BRUCE_FALL);
 }
 
+static void verify_slam_lunge(void)
+{
+    mf_game game = {0};
+    mf_bruce bruce = {0};
+    mf_player *buck = &game.players[0], *chuck = &game.players[1];
+    int direction;
+    for(direction=-1;direction<=1;direction+=2) {
+        bruce = (mf_bruce){.active=1,.ready=1,.health=30,.state=MF_BRUCE_READY,
+                           .x=2910*256,.y=201*256,.target=0,.retarget=10,.attack_cycle=2};
+        *buck = (mf_player){.active=1,.health=100,.x=(2910+direction*135)*256,.y=199*256};
+        *chuck = (mf_player){.active=1,.health=100,.x=(2910+direction*108)*256,.y=231*256};
+        mf_bruce_step(&bruce,&game);
+        assert(bruce.state == MF_BRUCE_SLAM && bruce.target == 1 && bruce.facing == direction);
+        assert(bruce.land_x == (2910+direction*108)*256 && bruce.slam_land_y == 229*256);
+        /* Retain the target even if it moves, then leaves the encounter. */
+        chuck->x = 2910*256;
+        chuck->y = 168*256;
+        chuck->active = 0;
+        tick(&bruce,&game,17);
+        assert(bruce.x == 2910*256 && bruce.y == 201*256 && mf_bruce_pose(&bruce) == 11);
+        tick(&bruce,&game,17);
+        assert(bruce.x == (2910+direction*54)*256 && bruce.y == 215*256);
+        assert(bruce.height == 44 && mf_bruce_pose(&bruce) == 9 && !mf_bruce_strike(&bruce,buck));
+        tick(&bruce,&game,16);
+        assert(bruce.x == bruce.land_x && bruce.y == 229*256 && !bruce.height);
+        assert(bruce.impact && mf_bruce_pose(&bruce) == 12);
+        assert(!mf_bruce_strike(&bruce,buck)); /* Buck moved outside the landing ellipse. */
+        buck->x = bruce.x;
+        buck->y = bruce.y;
+        assert(mf_bruce_strike(&bruce,buck) == 24);
+        buck->height = 18*256;
+        assert(!mf_bruce_strike(&bruce,buck));
+        buck->height = 0;
+        buck->invulnerable = 1;
+        assert(!mf_bruce_strike(&bruce,buck));
+        buck->invulnerable = 0;
+        tick(&bruce,&game,1);
+        assert(!mf_bruce_strike(&bruce,buck)); /* Impact hold is visual only. */
+        tick(&bruce,&game,7);
+        assert(mf_bruce_pose(&bruce) == 8);
+        tick(&bruce,&game,8);
+        assert(bruce.state == MF_BRUCE_READY && bruce.cooldown == 38);
+    }
+}
+
 int main(void)
 {
     mf_game game = {0};
@@ -105,20 +150,7 @@ int main(void)
     assert(!mf_bruce_strike(&bruce,player));
     player->height = 0;
 
-    bruce.state = MF_BRUCE_SLAM;
-    bruce.timer = 14;
-    tick(&bruce,&game,1);
-    assert(bruce.height == 8 && !mf_bruce_strike(&bruce,player));
-    tick(&bruce,&game,4);
-    assert(!bruce.height && bruce.impact && mf_bruce_strike(&bruce,player) == 24);
-    player->y = bruce.y + 24 * 256;
-    assert(!mf_bruce_strike(&bruce,player));
-    player->y = bruce.y;
-    player->invulnerable = 1;
-    assert(!mf_bruce_strike(&bruce,player));
-    player->invulnerable = 0;
-
-    tick(&bruce,&game,16);
+    tick(&bruce,&game,60);
     assert(bruce.state == MF_BRUCE_READY);
     mf_bruce_receive(&bruce,1,0,1);
     assert(bruce.state == MF_BRUCE_HURT && mf_bruce_pose(&bruce) == 13);
@@ -144,5 +176,6 @@ int main(void)
     game.players[0].x = 2639 * 256;
     assert(!mf_bruce_approach(&bruce,&game));
     verify_game_dispatch();
+    verify_slam_lunge();
     return 0;
 }

@@ -74,6 +74,7 @@ typedef struct {
     int x, y, facing, target, retarget, moving, animation, active, approach;
     int state, timer, height, start_x, land_x, health, cooldown, invulnerable;
     int ready, hit_players, attack_cycle, impact, fall_direction;
+    int slam_start_y, slam_land_y;
 } mf_bruce;
 #endif
 typedef struct {
