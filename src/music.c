@@ -6,6 +6,9 @@
 #include "game.h"
 
 extern char sddrvstsk[]; /* Existing Jo Engine driver 2.10; no second/new driver. */
+#ifndef MF_BRUCE_INTERLUDE_TICKS
+#define MF_BRUCE_INTERLUDE_TICKS 30
+#endif
 static int ready,paused_state,pause_target=-1;
 enum { MUSIC_IDLE, MUSIC_STREET, MUSIC_STOPPING, MUSIC_INTERLUDE, MUSIC_BRUCE };
 static int music_state,bruce_combat_ready;
@@ -123,6 +126,9 @@ int mf_music_init(void)
     };
     char *original_map=map;
 #endif
+    ready=0;
+    music_state=MUSIC_IDLE;
+    bruce_combat_ready=0;
     if(!map || size!=MF_CUSTOM_MAP_BYTES) { if(map) jo_free(map); return 0; }
 #if MF_VEHICLE_AMBUSH
     for(int i=0;i<MF_CUSTOM_MAP_BYTES-8;i++)((unsigned char *)extended_map)[i]=(unsigned char)map[i];
@@ -166,8 +172,6 @@ int mf_music_init(void)
     SND_SetCdDaLev(0,0);
     SND_SetTlVl(15);
     ready=ok;
-    music_state=MUSIC_IDLE;
-    bruce_combat_ready=0;
     return ready;
 }
 int mf_music_ready(void) { return ready; }
@@ -222,6 +226,7 @@ static int start_music(int song)
 static void update_music(int started,int events,unsigned int now)
 {
     SndSeqStat status;
+    /* Player respawn keeps the current encounter. A new stage starts idle. */
     if(!started) {
         if(music_state!=MUSIC_IDLE && SND_StopSeq(0)==SND_RET_SET) {
             music_state=MUSIC_IDLE;

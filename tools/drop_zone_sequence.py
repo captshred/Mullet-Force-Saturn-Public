@@ -112,6 +112,8 @@ def build(original):
                              for a, b, *note in old["notes"] if a >= BRUCE_BAR] + [
                                  (a + boss_ticks, b + boss_ticks, *note) for a, b, *note in normal["notes"]]
     assert boss["loops"] == [boss_ticks, boss_ticks + street_ticks]
+    assert boss["tempo_loop_offset"] == 16
+    assert boss["tempos"] == [(boss_ticks, tempo), (street_ticks, tempo)]
     return bank
 
 
@@ -136,8 +138,6 @@ def relocate(bank, index, header, report):
         header, count = re.subn(rb"(?m)^(#define " + name.encode() + rb") \d+$",
                                 lambda m: m[1] + f" {value}".encode(), header)
         assert count == 1
-    header = header.replace(b"#define MF_MUSIC_PRIORITY 8\n",
-                            b"#define MF_MUSIC_PRIORITY 8\n#define MF_BRUCE_INTERLUDE_TICKS 30\n")
     regions = report["sound_ram_regions"]
     regions[-2].update(size=len(bank), end=tone_addr)
     regions[-1].update(start=tone_addr, end=high_water)
