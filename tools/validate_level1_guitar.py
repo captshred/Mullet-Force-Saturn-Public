@@ -14,7 +14,8 @@ MAP = "assets/cd/CUSTOM.MAP"
 HEADER = "src/music_data.h"
 REPORT = "assets/music/report.json"
 LOCK = "assets/public-runtime-lock.json"
-AUDIO_DELTA = {TON, MAP, HEADER, REPORT, LOCK}
+SEQ = "assets/cd/STAGE.SEQ"
+AUDIO_DELTA = {TON, MAP, HEADER, REPORT, LOCK, SEQ}
 PREVIEWS = "docs/audio-previews/guitar-sustain-rebuild/"
 SCOPE = AUDIO_DELTA | {
     "Makefile", "tools/validate_level1_guitar.py", "tools/validate_level1_diagonal.py",
@@ -95,9 +96,18 @@ def outputs(pcm, mix=False):
             bass_velocity_curve_after=list(level1_music_mix.BASS_CURVE),
             bass_cc7=127, bass_cc11=127, bass_tl=0, additional_bytes=12,
         )
+    header, count_updated = re.subn(rb"(?m)^#define MF_STAGE_TON_BYTES 132148$",
+                                    f"#define MF_STAGE_TON_BYTES {len(tone)}".encode(), old(HEADER))
+    assert count_updated == 1
+    assets = {TON: tone, MAP: index}
+    if mix:
+        import drop_zone_sequence as score
+        bank = score.build(score.baseline(SEQ))
+        index, header = score.relocate(bank, index, header, report)
+        assets.update({SEQ: bank, MAP: index})
     lock = old(LOCK)
     entries = json.loads(lock)
-    for path, data in ((TON, tone), (MAP, index)):
+    for path, data in assets.items():
         entry = fingerprint(data)
         previous = entries[path]
         for key in ("bytes", "sha256"):
@@ -106,10 +116,7 @@ def outputs(pcm, mix=False):
             lock, count_updated = re.subn(pattern, lambda match: match[1] + json.dumps(entry[key]).encode(), lock)
             assert count_updated == 1, (path, key)
         report["outputs"][Path(path).name] = entry
-    header, count_updated = re.subn(rb"(?m)^#define MF_STAGE_TON_BYTES 132148$",
-                                    f"#define MF_STAGE_TON_BYTES {len(tone)}".encode(), old(HEADER))
-    assert count_updated == 1
-    return {TON: tone, MAP: index, HEADER: header, LOCK: lock,
+    return {**assets, HEADER: header, LOCK: lock,
             REPORT: (json.dumps(report, indent=2) + "\n").encode()}
 
 
@@ -138,7 +145,7 @@ def validate(pcm=None, mix=False, write_mix=False):
         scope = scope | level1_music_mix.SCOPE | hq_scope
     assert changed <= scope, changed - scope
     print("PASS exact Medium PCM, loop and guard, protected instruments and gameplay"
-          + (", Level 1 midpoint gain changes, 46,288 SCSP bytes free" if mix
+          + (", Level 1 midpoint gains and exact native Drop Zone entrances" if mix
              else ", 46,300 SCSP bytes free"), flush=True)
     return scope
 

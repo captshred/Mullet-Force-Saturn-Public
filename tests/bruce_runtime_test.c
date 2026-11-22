@@ -6,6 +6,28 @@ static void tick(mf_bruce *bruce, const mf_game *game, int count)
     while (count-- > 0) mf_bruce_step(bruce,game);
 }
 
+static void verify_entrance_events(void)
+{
+    mf_game game = {0};
+    int landed=0,ready=0;
+    game.started=1;
+    game.camera=2700;
+    game.street_spawns_suspended=1;
+    game.bruce.ready=1;
+    for(int frame=0;frame<80;frame++) {
+        mf_game_step(&game,0,0);
+        if(game.events&MF_BRUCE_ENTRANCE_LANDED) {
+            assert(game.bruce.state==MF_BRUCE_ENTRANCE_IMPACT && frame==48);
+            ++landed;
+        }
+        if(game.events&MF_BRUCE_COMBAT_READY) {
+            assert(game.bruce.state==MF_BRUCE_READY && frame==68);
+            ++ready;
+        }
+    }
+    assert(landed==1 && ready==1);
+}
+
 static void verify_game_dispatch(void)
 {
     mf_game game = {0};
@@ -231,6 +253,7 @@ int main(void)
     game.players[0].x = 2639 * 256;
     assert(!mf_bruce_approach(&bruce,&game));
     verify_game_dispatch();
+    verify_entrance_events();
     verify_bat_interruptions();
     verify_slam_lunge();
     return 0;

@@ -98,7 +98,8 @@ def validate_hq_scope():
     if subprocess.run(["git", "cat-file", "-e", APPROVED_HILL], cwd=ROOT, capture_output=True).returncode:
         git("fetch", "--no-tags", "--depth=1", "origin", APPROVED_HILL)
     changed = set(git("diff", "--name-only", APPROVED_HILL, "--").decode().splitlines())
-    scope = HQ_DELTA | bruce_scope()
+    import drop_zone_sequence
+    scope = HQ_DELTA | bruce_scope() | drop_zone_sequence.SCOPE
     assert changed <= scope, changed - scope
     return scope
 
@@ -128,7 +129,9 @@ def validate(medium_guitar=False, mix_pass1=False):
         assert len(sample) == 25664 and tone[-4:] == sample[:4]
         assert hashlib.sha256(sample).hexdigest() == "effcb354cef8271d53590c298c5f32b9df29946a29e203582988941d88c0122d"
         assert int.from_bytes(tone[64:68], "big") == 0x00200060
-        assert 478000 + len(tone) == 503764
+        report = json.loads((ROOT / "assets/music/report.json").read_text())
+        free = 0x80000 - report["sound_ram_high_water"] - len(tone)
+        assert free >= 0 and free == report["drop_zone_bruce_entry"]["car_profile_free_bytes"]
     art = ROOT / ART
     manifest = json.loads((art / "manifest.json").read_text())
     width, height = manifest["width"], manifest["height"]

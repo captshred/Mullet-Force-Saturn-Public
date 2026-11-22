@@ -3,8 +3,8 @@
   "level1_custom_report": "assets/music/level1-custom-report.json",
   "outputs": {
     "STAGE.SEQ": {
-      "bytes": 40128,
-      "sha256": "3186778bc3bea539a3a69234cfb4d9fb5580f504fad56f360e7cee4893c93ba3"
+      "bytes": 59036,
+      "sha256": "97d7c365c2ce3fa243632e2cd2f7ab4fa54e43714802bf2ba4917f74a9513f01"
     },
     "STAGE.TON": {
       "bytes": 147304,
@@ -20,7 +20,7 @@
     },
     "CUSTOM.MAP": {
       "bytes": 56,
-      "sha256": "ac108e862fc1c3645f30a442e512413300950f6bc5b7b3ccfefd0a624d40a808"
+      "sha256": "1a7748513cb0477b653502592ae3e8b9dbc45322c7a5716148055030453f5604"
     }
   },
   "sound_ram_regions": [
@@ -69,18 +69,18 @@
     {
       "name": "STAGE.SEQ",
       "start": 290568,
-      "size": 40128,
-      "end": 330696
+      "size": 59036,
+      "end": 349604
     },
     {
       "name": "STAGE.TON",
-      "start": 330696,
+      "start": 349604,
       "size": 147304,
-      "end": 478000
+      "end": 496908
     }
   ],
-  "sound_ram_high_water": 478000,
-  "sound_ram_unallocated": 46288,
+  "sound_ram_high_water": 496908,
+  "sound_ram_unallocated": 27380,
   "music_held_peak": 15,
   "drum_tail_cap": 8,
   "release_policy": "RR31; driver can retire released musical voices under pressure; physical audibility unverified",
@@ -426,5 +426,12 @@
     "bass_cc11": 127,
     "bass_tl": 0,
     "additional_bytes": 12
+  },
+  "drop_zone_bruce_entry": {
+    "opening_ticks_removed": 1920,
+    "original_measure": 80,
+    "original_tick": 151680,
+    "first_full_loop_ticks": 277920,
+    "car_profile_free_bytes": 1616
   }
 }

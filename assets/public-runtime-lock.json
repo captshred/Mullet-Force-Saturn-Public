@@ -993,7 +993,7 @@
   },
   "assets/cd/CUSTOM.MAP": {
     "bytes": 56,
-    "sha256": "ac108e862fc1c3645f30a442e512413300950f6bc5b7b3ccfefd0a624d40a808"
+    "sha256": "1a7748513cb0477b653502592ae3e8b9dbc45322c7a5716148055030453f5604"
   },
   "assets/cd/TU0.TGA": {
     "sha256": "7b20bd20b1848c050ec6c5edbe387b098cd7ce207b76f24cb71791316e35ced7",
@@ -1248,8 +1248,8 @@
     "bytes": 850
   },
   "assets/cd/STAGE.SEQ": {
-    "sha256": "0858a4a9af303a853ba6aac2df5aa98ec119fbb6d0d22ce8cf4a8cec5fb08eff",
-    "bytes": 29528
+    "sha256": "97d7c365c2ce3fa243632e2cd2f7ab4fa54e43714802bf2ba4917f74a9513f01",
+    "bytes": 59036
   },
   "assets/cd/EN01.TGA": {
     "sha256": "534754936547ccaa5da00b542bd3632091c3177dd335d34b611a21869d77b064",
