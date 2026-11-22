@@ -77,7 +77,7 @@ static int upload(const char *name,unsigned int expected,unsigned int address)
 #if MF_VEHICLE_AMBUSH
 enum {
     CAR_SOUND_PORT=3, CAR_SOUND_CHANNEL=15, CAR_TONE_BANK=2,
-    CAR_TON_ADDR=MF_STAGE_TON_ADDR+MF_STAGE_TON_BYTES, CAR_TON_BYTES=25764, CAR_LOOP_NOTE=61
+    CAR_TON_ADDR=MF_STAGE_TON_ADDR+MF_STAGE_TON_BYTES, CAR_TON_BYTES=MF_CAR_TON_BYTES, CAR_LOOP_NOTE=61
 };
 static int car_sound_playing,car_sound_setup;
 
@@ -189,8 +189,7 @@ static void combat_update(int player,int events,unsigned int now,unsigned int el
         song=6;c->hit_wait=4; /* Lethal results always take precedence. */
     }else if((events&MF_COMBAT_NONKILL(player)) && !c->hit_wait) {
         song=(events&MF_COMBAT_HEAVY_HIT(player))?6:0;c->hit_wait=4;
-    }else if(events&MF_COMBAT_BAT(player))song=7;
-    else if(events&MF_COMBAT_JAB(player))song=5;
+    }else if(events&(MF_COMBAT_BAT(player)|MF_COMBAT_JAB(player)))song=5;
     if(player<2 && song<0 && (events&MF_COMBAT_DESTROY(player))) {
         c->pending=-1;if(c->playing)c->stopping=1;
     }

@@ -99,7 +99,8 @@ def validate_hq_scope():
         git("fetch", "--no-tags", "--depth=1", "origin", APPROVED_HILL)
     changed = set(git("diff", "--name-only", APPROVED_HILL, "--").decode().splitlines())
     import drop_zone_sequence
-    scope = HQ_DELTA | bruce_scope() | drop_zone_sequence.SCOPE
+    import level1_housekeeping
+    scope = HQ_DELTA | bruce_scope() | drop_zone_sequence.SCOPE | level1_housekeeping.SCOPE
     assert changed <= scope, changed - scope
     return scope
 
@@ -125,13 +126,15 @@ def validate(medium_guitar=False, mix_pass1=False):
 
     if (ROOT / "assets/cd/CARPASS.TON").exists():
         tone = (ROOT / "assets/cd/CARPASS.TON").read_bytes()
-        sample = tone[96:-4]
-        assert len(sample) == 25664 and tone[-4:] == sample[:4]
-        assert hashlib.sha256(sample).hexdigest() == "effcb354cef8271d53590c298c5f32b9df29946a29e203582988941d88c0122d"
-        assert int.from_bytes(tone[64:68], "big") == 0x00200060
+        from level1_housekeeping import CAR_FRAMES, CAR_LOOP_START, sample
+        layer, start = sample(tone, 3)
+        assert tone[layer+3] & 0xf0 == 0x30
+        assert int.from_bytes(tone[layer+6:layer+8], "big") == CAR_LOOP_START
+        assert int.from_bytes(tone[layer+8:layer+10], "big") == CAR_FRAMES
+        assert tone[start+CAR_FRAMES:start+CAR_FRAMES+4] == tone[start+CAR_LOOP_START:start+CAR_LOOP_START+4]
         report = json.loads((ROOT / "assets/music/report.json").read_text())
         free = 0x80000 - report["sound_ram_high_water"] - len(tone)
-        assert free >= 0 and free == report["drop_zone_bruce_entry"]["car_profile_free_bytes"]
+        assert free >= 0 and free == report["level1_housekeeping"]["car_profile_free_bytes"]
     art = ROOT / ART
     manifest = json.loads((art / "manifest.json").read_text())
     width, height = manifest["width"], manifest["height"]

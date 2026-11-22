@@ -29,4 +29,7 @@ int main(void){int i,j,total_before=0,total_after=0,n;ready=1;update(MF_COMBAT_J
  update(0,0);assert(mf_music_protected() && death_retiring);update(0,0);assert(!mf_music_protected());for(i=0;i<3;i++)assert(combat[i].pending<0);n=starts[6][6];update(MF_COMBAT_NONKILL(1)|MF_COMBAT_HEAVY_HIT(1),0);assert(starts[6][6]==n+1);
  n=starts[7][8];update(MF_COMBAT_HUMAN_DEATH(0)|MF_COMBAT_HUMAN_DEATH(1),0);assert(starts[7][8]==n+1);mode=SND_MD_PLAY;update(0,1);for(i=0;i<MF_DEATH_MIN_TICKS+5;i++)update(MF_COMBAT_JAB(0),1);assert(mf_music_protected()); /* PLAY blocks even past the duration floor. */
  mode=SND_MD_STOP;update(0,1);assert(mf_music_protected());update(0,1);assert(!mf_music_protected());assert(starts[0][0]==1);for(i=0;i<3;i++)assert(!combat[i].pending || combat[i].pending==-1);
+ combat[1]=(combat_sound){0,-1,0,0,0,0};
+ n=starts[6][5];update(MF_COMBAT_BAT(1),0);
+ assert(starts[6][5]==n+1 && starts[6][7]==0);
  puts("PASS protected UGH: dedicated control, existing SFX retained, acknowledged retries, async status, full-duration floor, no restart/backlog, pause-independent completion, immediate fresh hits and continuous music");return 0;}

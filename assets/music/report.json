@@ -12,15 +12,19 @@
     },
     "FX.SEQ": {
       "bytes": 368,
-      "sha256": "4e6739cbd480af5cc282d3ae9e8d9f786c92e67caec1b4ebf3f6351412683ed5"
+      "sha256": "77c65cfebc1193669d9b8326dfee5272b680342ea10a97bb91551e52f4d4377a"
     },
     "FX.TON": {
-      "bytes": 141336,
-      "sha256": "d25c0a6953d9cfbaf543ff640f4ff608f428fc8c908128c631a63bcf74a80c1c"
+      "bytes": 134076,
+      "sha256": "cdb8aea29076453188618b1f207626b9b1c1e7b44cbfaec22b20f9ffe9882c65"
     },
     "CUSTOM.MAP": {
       "bytes": 56,
-      "sha256": "e8908e5c3e1f3a46bb09b38619a054ba6079278cba526814b31412947ad26d6b"
+      "sha256": "71180c99ada8913ac0c91d3acaa2811ad27620a73377aa83941b9659c96bfeb1"
+    },
+    "CARPASS.TON": {
+      "bytes": 18544,
+      "sha256": "fbebf77ec65533e79533ed3589021b525ae19a234159b44a62255d34906028ae"
     }
   },
   "sound_ram_regions": [
@@ -63,24 +67,24 @@
     {
       "name": "FX.TON",
       "start": 149232,
-      "size": 141336,
-      "end": 290568
+      "size": 134076,
+      "end": 283308
     },
     {
       "name": "STAGE.SEQ",
-      "start": 290568,
+      "start": 283308,
       "size": 59516,
-      "end": 350084
+      "end": 342824
     },
     {
       "name": "STAGE.TON",
-      "start": 350084,
+      "start": 342824,
       "size": 147304,
-      "end": 497388
+      "end": 490128
     }
   ],
-  "sound_ram_high_water": 497388,
-  "sound_ram_unallocated": 26900,
+  "sound_ram_high_water": 490128,
+  "sound_ram_unallocated": 34160,
   "music_held_peak": 15,
   "drum_tail_cap": 8,
   "release_policy": "RR31; driver can retire released musical voices under pressure; physical audibility unverified",
@@ -433,6 +437,25 @@
     "original_tick": 151680,
     "ditty_ticks": 1920,
     "first_full_loop_ticks": 277920,
-    "car_profile_free_bytes": 1136
+    "car_profile_free_bytes": 15616
+  },
+  "level1_housekeeping": {
+    "baseline": "34b82980e1bb8bef967c29a1280d427d4f7ad2f0",
+    "bat_sample_bytes_removed": 16736,
+    "honk": {
+      "rate": 22050,
+      "frames": 9474,
+      "packed_bytes": 9476,
+      "pcm_sha256": "688dc4946d09b5904be51987d50f11d5468ff6353c85eea34553b72e7ab4b3c9"
+    },
+    "drive": {
+      "rate": 11025,
+      "frames": 18441,
+      "packed_bank_bytes": 18544,
+      "loop_start": 128,
+      "pcm_sha256": "16df49e0a5a2084192107c894011495e6a9a274fc62c969efd9a0b21176b7caf"
+    },
+    "car_profile_used_bytes": 508672,
+    "car_profile_free_bytes": 15616
   }
 }

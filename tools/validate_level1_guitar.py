@@ -7,6 +7,8 @@ from pathlib import Path
 import re
 import subprocess
 
+import level1_housekeeping
+
 ROOT = Path(__file__).resolve().parents[1]
 BASE = "382b226b476b305c9ebab8e6d2ddbe763603d41b"
 TON = "assets/cd/STAGE.TON"
@@ -15,7 +17,7 @@ HEADER = "src/music_data.h"
 REPORT = "assets/music/report.json"
 LOCK = "assets/public-runtime-lock.json"
 SEQ = "assets/cd/STAGE.SEQ"
-AUDIO_DELTA = {TON, MAP, HEADER, REPORT, LOCK, SEQ}
+AUDIO_DELTA = {TON, MAP, HEADER, REPORT, LOCK, SEQ} | level1_housekeeping.AUDIO_DELTA
 PREVIEWS = "docs/audio-previews/guitar-sustain-rebuild/"
 SCOPE = AUDIO_DELTA | {
     "Makefile", "tools/validate_level1_guitar.py", "tools/validate_level1_diagonal.py",
@@ -48,7 +50,7 @@ def voice(data, program):
     return layer, address
 
 
-def outputs(pcm, mix=False):
+def outputs(pcm, mix=False, vehicle_pcm=None):
     assert fingerprint(pcm) == {"bytes": END * 2, "sha256": PCM_SHA}
     original = old(TON)
     count = (int.from_bytes(original[:2], "big") - 8) // 2
@@ -105,10 +107,19 @@ def outputs(pcm, mix=False):
         bank = score.build(score.baseline(SEQ))
         index, header = score.relocate(bank, index, header, report)
         assets.update({SEQ: bank, MAP: index})
+        honk, drive = vehicle_pcm if vehicle_pcm is not None else level1_housekeeping.current_pcm()
+        vehicle_assets, index, header = level1_housekeeping.outputs(honk, drive, index, header, report)
+        assets.update(vehicle_assets)
+        assets[MAP] = index
     lock = old(LOCK)
     entries = json.loads(lock)
     for path, data in assets.items():
         entry = fingerprint(data)
+        if path not in entries:
+            # The vehicle bank predates this runtime lock. Its exact bytes
+            # are independently verified by the housekeeping validator.
+            report["outputs"][Path(path).name] = entry
+            continue
         previous = entries[path]
         for key in ("bytes", "sha256"):
             pattern = (rb'("' + re.escape(path.encode()) + rb'": \{[^}]*?"' +
@@ -120,7 +131,7 @@ def outputs(pcm, mix=False):
             REPORT: (json.dumps(report, indent=2) + "\n").encode()}
 
 
-def validate(pcm=None, mix=False, write_mix=False):
+def validate(pcm=None, mix=False, write_mix=False, vehicle_pcm=None):
     if subprocess.run(["git", "cat-file", "-e", BASE + "^{commit}"], cwd=ROOT,
                       capture_output=True).returncode:
         git("fetch", "--no-tags", "--depth=1", "origin", BASE)
@@ -131,7 +142,7 @@ def validate(pcm=None, mix=False, write_mix=False):
         write = write_mix
     else:
         write = True
-    for path, data in outputs(pcm, mix).items():
+    for path, data in outputs(pcm, mix, vehicle_pcm).items():
         if write:
             (ROOT / path).write_bytes(data)
         assert (ROOT / path).read_bytes() == data, path
@@ -155,6 +166,14 @@ if __name__ == "__main__":
     parser.add_argument("--pcm", type=Path, help="Install the hash-verified audition PCM")
     parser.add_argument("--mix-pass1", action="store_true")
     parser.add_argument("--write-mix", action="store_true", help="Install the verified native mix")
+    parser.add_argument("--vehicle-wavs", type=Path, help="Private directory containing honk.wav and drive.wav")
     args = parser.parse_args()
     assert not args.write_mix or args.mix_pass1
-    validate(args.pcm.read_bytes() if args.pcm else None, mix=args.mix_pass1, write_mix=args.write_mix)
+    vehicle_pcm = None
+    if args.vehicle_wavs:
+        assert args.write_mix
+        h = level1_housekeeping
+        vehicle_pcm = (h.import_pcm(args.vehicle_wavs / "honk.wav", h.HONK_RATE),
+                       h.import_pcm(args.vehicle_wavs / "drive.wav", h.CAR_RATE, h.CAR_LOOP_START))
+    validate(args.pcm.read_bytes() if args.pcm else None, mix=args.mix_pass1,
+             write_mix=args.write_mix, vehicle_pcm=vehicle_pcm)

@@ -993,7 +993,7 @@
   },
   "assets/cd/CUSTOM.MAP": {
     "bytes": 56,
-    "sha256": "e8908e5c3e1f3a46bb09b38619a054ba6079278cba526814b31412947ad26d6b"
+    "sha256": "71180c99ada8913ac0c91d3acaa2811ad27620a73377aa83941b9659c96bfeb1"
   },
   "assets/cd/TU0.TGA": {
     "sha256": "7b20bd20b1848c050ec6c5edbe387b098cd7ce207b76f24cb71791316e35ced7",
@@ -1009,7 +1009,7 @@
   },
   "assets/cd/FX.SEQ": {
     "bytes": 368,
-    "sha256": "4e6739cbd480af5cc282d3ae9e8d9f786c92e67caec1b4ebf3f6351412683ed5"
+    "sha256": "77c65cfebc1193669d9b8326dfee5272b680342ea10a97bb91551e52f4d4377a"
   },
   "assets/cd/FL1.TGA": {
     "sha256": "b4b13b91919226ac0642e63fc635a7e60091ea52bc68bfc466dd33bce0e848a8",
@@ -1084,8 +1084,8 @@
     "bytes": 5826
   },
   "assets/cd/FX.TON": {
-    "bytes": 141336,
-    "sha256": "d25c0a6953d9cfbaf543ff640f4ff608f428fc8c908128c631a63bcf74a80c1c"
+    "bytes": 134076,
+    "sha256": "cdb8aea29076453188618b1f207626b9b1c1e7b44cbfaec22b20f9ffe9882c65"
   },
   "assets/cd/EN02.TGA": {
     "sha256": "d6b50d424a01dfdfcb1c91186e68f5c105e825588d5ebbf0f4f07d2b8b6db86e",
