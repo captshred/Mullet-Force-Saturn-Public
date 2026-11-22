@@ -17,6 +17,7 @@ SCOPE = {
     "tools/bruce_ditty.py", "assets/music/bruce-ditty.json",
     "downloads/bruce-music-transition/mullet-force-bruce-drop-zone-34735c3.zip",
     "downloads/bruce-entrance-ditty/mullet-force-bruce-entrance-ditty.zip",
+    "downloads/bruce-entrance-ditty/mullet-force-bruce-ditty-octave-down.zip",
 }
 OPENING = 1920
 BRUCE_BAR = 151680  # GPIF master bar 80, 3/4, at 480 PPQN.

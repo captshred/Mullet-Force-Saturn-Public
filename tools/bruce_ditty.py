@@ -67,6 +67,7 @@ def events(parts, samples):
                 program, key = tones[ROUTING[key]]
             else:
                 program, _ = tones["bass" if part == "bass" else "open_guitar"]
+                key -= 12  # Bruce playtest octave correction for the pitched parts.
             if programs.get(channel) != program:
                 programs[channel] = program
                 packets.append((start, b"", bytes((0xc0 | channel, program))))
