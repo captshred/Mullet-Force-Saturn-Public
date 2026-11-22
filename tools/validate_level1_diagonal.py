@@ -2,6 +2,7 @@
 """Verify the Phase 3B delta, unchanged approved downhill pixels, and background budget."""
 import argparse
 import hashlib
+import importlib
 import json
 from pathlib import Path
 import re
@@ -61,6 +62,9 @@ LINE_REVIEW = {
     )
 }
 MEGA_DELTA = {
+    "tools/clean-parking-garage.py",
+    "downloads/parking-garage-cleanup/mullet-force-parking-garage-cleanup.zip",
+    "downloads/parking-garage-cleanup/garage-before-after.png",
     "tools/prepare-mega-arcade.py", "tools/pack-level1-panorama.py", "docs/level1-mega-arcade.md",
     "downloads/mullet-force-mega-arcade-phase4a.zip", "src/world_config.h",
     "tools/import-mega-arcade-art.py", "downloads/mullet-force-mega-arcade-art.zip",
@@ -147,6 +151,15 @@ def validate(medium_guitar=False, mix_pass1=False):
     old = git("show", f"{APPROVED_HILL}:{ART}IXPIX.BIN")
     panorama = (art / "IXPIX.BIN").read_bytes()
     assert len(panorama) == width * height
+    cleanup = importlib.import_module("clean-parking-garage")
+    approved = cleanup.baseline()
+    assert panorama == cleanup.paint(approved), "unexpected garage panorama changes"
+    assert width == cleanup.WIDTH and len(panorama) == len(approved)
+    for i, (before, after) in enumerate(zip(approved, panorama)):
+        if before != after:
+            row, column = divmod(i, width)
+            assert 265 <= row <= 322 and 2561 <= column <= 2688
+            assert before and after, "garage cleanup changed transparency"
     current = b"".join(panorama[y:y+2560] for y in range(0, len(panorama), width))
     if width > 2560:
         assert all(0 not in panorama[y+2560:y+width] for y in range(127*width, len(panorama), width))
