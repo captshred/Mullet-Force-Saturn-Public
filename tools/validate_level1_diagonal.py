@@ -63,6 +63,10 @@ LINE_REVIEW = {
 }
 MEGA_DELTA = {
     "tools/clean-parking-garage.py",
+    "tools/correct-garage-geometry.py",
+    "downloads/garage-geometry-correction/mullet-force-garage-geometry.zip",
+    "downloads/garage-geometry-correction/garage-geometry-comparison.png",
+    "downloads/garage-geometry-correction/garage-geometry-scroll.mp4",
     "downloads/parking-garage-cleanup/mullet-force-parking-garage-cleanup.zip",
     "downloads/parking-garage-cleanup/garage-before-after.png",
     "tools/prepare-mega-arcade.py", "tools/pack-level1-panorama.py", "docs/level1-mega-arcade.md",
@@ -151,6 +155,17 @@ def validate(medium_guitar=False, mix_pass1=False):
     old = git("show", f"{APPROVED_HILL}:{ART}IXPIX.BIN")
     panorama = (art / "IXPIX.BIN").read_bytes()
     assert len(panorama) == width * height
+    geometry_pass = importlib.import_module("correct-garage-geometry")
+    previous = geometry_pass.baseline()
+    assert panorama == geometry_pass.paint(previous)
+    assert len(panorama) == len(previous) and width == geometry_pass.WIDTH
+    for i, (before, after) in enumerate(zip(previous, panorama)):
+        if before != after:
+            row, column = divmod(i, width)
+            assert 136 <= row <= 297 and 2552 <= column <= 2688
+            assert before and after, "garage geometry changed transparency"
+            assert column >= 2560 or row < 292, "garage geometry reached the downhill roadway"
+    panorama = previous  # Compare the parent against the older approved art checks below.
     cleanup = importlib.import_module("clean-parking-garage")
     approved = cleanup.baseline()
     assert panorama == cleanup.paint(approved), "unexpected garage panorama changes"
