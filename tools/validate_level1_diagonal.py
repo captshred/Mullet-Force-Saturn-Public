@@ -175,6 +175,17 @@ def validate(medium_guitar=False, mix_pass1=False):
             assert current[protected::2560] == definitive[protected::2560], x
             if line_proposal.exists():
                 assert current[protected::2560] == geometry[protected::2560], x
+    from wingsuit_disc import directory_records
+    disc = (ROOT / "build/mullet-force.bin").read_bytes()
+    root = list(directory_records(disc, disc[16*2048+156:16*2048+190]))
+    # Count both ISO directory records for "." and "..", as GFS does.
+    visible = {name for name, _ in root[:256]}
+    audio = {"CUSTOM.MAP", "FX.SEQ", "FX.TON", "STAGE.SEQ", "STAGE.TON"}
+    if (ROOT / "build/cd/CARPASS.TON").exists():
+        audio.add("CARPASS.TON")
+    assert audio <= visible, f"Level 1 audio outside GFS root table: {sorted(audio-visible)}"
+    print("PASS Level 1 audio files fit the 256-record GFS root lookup")
+
     palette = ROOT / "build/cd/NSPAL.BIN"
     assert hashlib.sha256(palette.read_bytes()).hexdigest() == manifest["palette_sha256"]
     assert manifest["packed_source_storage"] == "low-work-ram"

@@ -398,21 +398,37 @@ static void bind_boot_view(void)
     __jo_sprite_pic[boot_view].data = (char *)__jo_sprite_pic[base].data + BRUCE_BOOT_OFFSET;
 }
 
+/* RICKY is already present at the root. Nesting BRUCE keeps STAGE.TON
+   in the 256-record GFS root lookup table. Restore the caller's root on error. */
+static int load_textures(void)
+{
+    int i = 0;
+    if (GFS_NameToId((Sint8 *)"RICKY") < 0) return 0;
+    jo_fs_cd("RICKY");
+    if (GFS_NameToId((Sint8 *)"BRUCE") >= 0) {
+        jo_fs_cd("BRUCE");
+        for (i = 0; i < BRUCE_DEFS; ++i) {
+            if (i == BRUCE_DEFS - 1) {
+                jo_img_8bits empty = {.width=8,.height=0,.data=JO_NULL};
+                boot_view = jo_sprite_add_8bits_image(&empty);
+                if (boot_view < 0) break;
+            }
+            ids[i] = jo_sprite_add_tga(JO_ROOT_DIR, bruce_frames[i].name, 1);
+            if (ids[i] < 0) break;
+        }
+        jo_fs_cd(JO_PARENT_DIR);
+    }
+    jo_fs_cd(JO_PARENT_DIR);
+    return i == BRUCE_DEFS;
+}
+
 static int install(jo_palette *shared)
 {
     int i;
     if (shared || !colors || colors->id != 2 || !colors->data || palette_owned ||
         MF_ENEMY_PREFIX_BYTES + BRUCE_BYTES + 49152u > 458488u) return 0;
     jo_set_tga_default_palette(JO_NULL);
-    for (i = 0; i < BRUCE_DEFS; ++i) {
-        if (i == BRUCE_DEFS - 1) {
-            jo_img_8bits empty = {.width=8,.height=0,.data=JO_NULL};
-            boot_view = jo_sprite_add_8bits_image(&empty);
-            if (boot_view < 0) return 0;
-        }
-        ids[i] = jo_sprite_add_tga("BRUCE", bruce_frames[i].name, 1);
-        if (ids[i] < 0) return 0;
-    }
+    if (!load_textures()) return 0;
     /* Jo appends after the previous definition. Keep the placeholder at the
        allocation cursor until the final real texture has been registered. */
     bind_boot_view();

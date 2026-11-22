@@ -43,7 +43,7 @@ assert size + 239360 + 49152 <= 458488
 assert [(p.name) for p, _ in frames[:5]] == [
     "BR00.TGA", "BR02.TGA", "BW00.TGA", "BW01.TGA", "BW02.TGA",
 ]
-folder = out / "cd/BRUCE"
+folder = out / "cd/RICKY/BRUCE"
 folder.mkdir(parents=True, exist_ok=True)
 lines = [f"#define BRUCE_BYTES {size}u", f"#define BRUCE_DEFS {len(textures)}",
          f'#define BRUCE_BOOT_WIDTH {boot["width"]}', f'#define BRUCE_BOOT_HEIGHT {boot["height"]}',
