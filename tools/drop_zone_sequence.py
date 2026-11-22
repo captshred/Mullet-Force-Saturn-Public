@@ -1,9 +1,11 @@
 """Build the two native Drop Zone entrances from the committed Bruce score."""
+import json
 from pathlib import Path
 import re
 import struct
 import subprocess
 
+import bruce_ditty
 import seq
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -12,6 +14,9 @@ SCOPE = {
     "assets/cd/STAGE.SEQ", "assets/cd/CUSTOM.MAP", "assets/music/report.json",
     "assets/public-runtime-lock.json", "src/music_data.h",
     "tools/drop_zone_sequence.py", "tests/bruce_music_test.c",
+    "tools/bruce_ditty.py", "assets/music/bruce-ditty.json",
+    "downloads/bruce-music-transition/mullet-force-bruce-drop-zone-34735c3.zip",
+    "downloads/bruce-entrance-ditty/mullet-force-bruce-entrance-ditty.zip",
 }
 OPENING = 1920
 BRUCE_BAR = 151680  # GPIF master bar 80, 3/4, at 480 PPQN.
@@ -85,14 +90,21 @@ def build(original):
             key = event[:2] if event[0] & 0xf0 == 0xb0 else event[:1]
             state[key] = event
     assert all(key[0] & 0xf0 in (0xb0, 0xc0, 0xe0) for key in state)
-    prelude = [(0, b"", event) for _, event in sorted(state.items())]
+    parts = json.loads(bruce_ditty.ASSET.read_text())
+    samples = json.loads((ROOT / "assets/music/level1-custom-report.json").read_text())["samples"]
+    prelude, ditty_notes = bruce_ditty.events(parts, samples)
+    ditty_ticks = bruce_ditty.BAR_TICKS
+    # Release the entrance lanes and restore the original score state at the
+    # barline. The first boss notes and the full fill follow on this same clock.
+    prelude += [(ditty_ticks, b"", bytes((0xb0 | c, 123, 0))) for c in range(16)]
+    prelude += [(ditty_ticks, b"", event) for _, event in sorted(state.items())]
     # Match the street loop's complete terminal state cleanup before entering
     # its shared loop marker and bank/program initialization.
-    prelude += [(tick - BRUCE_BAR, gate, event) for tick, gate, event in events
+    prelude += [(ditty_ticks + tick - BRUCE_BAR, gate, event) for tick, gate, event in events
                 if tick >= BRUCE_BAR and event != b"\x82"]
     prefix = encode(prelude)
 
-    street_ticks, boss_ticks = end - OPENING, end - BRUCE_BAR
+    street_ticks, boss_ticks = end - OPENING, ditty_ticks + end - BRUCE_BAR
     street_header, boss_header = 12, 28
     loop_data = boss_header + 24 + len(prefix)
     bank = struct.pack(">HII", 2, street_header, boss_header) + bytes(2)
@@ -108,7 +120,8 @@ def build(original):
     for key in ("controls", "programs", "bends"):
         assert normal[key] == [(max(0, t - OPENING), *event) for t, *event in old[key]]
     assert normal["loops"] == [0, street_ticks] and normal["end"] == street_ticks
-    assert boss["notes"] == [(a - BRUCE_BAR, b - BRUCE_BAR, *note)
+    assert sorted(boss["notes"][:len(ditty_notes)]) == sorted(ditty_notes)
+    assert boss["notes"][len(ditty_notes):] == [(ditty_ticks + a - BRUCE_BAR, ditty_ticks + b - BRUCE_BAR, *note)
                              for a, b, *note in old["notes"] if a >= BRUCE_BAR] + [
                                  (a + boss_ticks, b + boss_ticks, *note) for a, b, *note in normal["notes"]]
     assert boss["loops"] == [boss_ticks, boss_ticks + street_ticks]
@@ -144,7 +157,7 @@ def relocate(bank, index, header, report):
     report.update(sound_ram_high_water=high_water, sound_ram_unallocated=0x80000-high_water)
     report["drop_zone_bruce_entry"] = dict(
         opening_ticks_removed=OPENING, original_measure=80, original_tick=BRUCE_BAR,
-        first_full_loop_ticks=277920, car_profile_free_bytes=0x80000-car_end,
+        ditty_ticks=bruce_ditty.BAR_TICKS, first_full_loop_ticks=277920, car_profile_free_bytes=0x80000-car_end,
     )
     return bytes(index), header
 

@@ -6,13 +6,9 @@
 #include "game.h"
 
 extern char sddrvstsk[]; /* Existing Jo Engine driver 2.10; no second/new driver. */
-#ifndef MF_BRUCE_INTERLUDE_TICKS
-#define MF_BRUCE_INTERLUDE_TICKS 30
-#endif
 static int ready,paused_state,pause_target=-1;
-enum { MUSIC_IDLE, MUSIC_STREET, MUSIC_STOPPING, MUSIC_INTERLUDE, MUSIC_BRUCE };
-static int music_state,bruce_combat_ready;
-static unsigned int interlude_start;
+enum { MUSIC_IDLE, MUSIC_STREET, MUSIC_STOPPING, MUSIC_STARTING_BRUCE, MUSIC_BRUCE };
+static int music_state;
 static unsigned int pause_mask;
 static unsigned char sfx_wait[3];
 static int torch_playing;
@@ -128,7 +124,6 @@ int mf_music_init(void)
 #endif
     ready=0;
     music_state=MUSIC_IDLE;
-    bruce_combat_ready=0;
     if(!map || size!=MF_CUSTOM_MAP_BYTES) { if(map) jo_free(map); return 0; }
 #if MF_VEHICLE_AMBUSH
     for(int i=0;i<MF_CUSTOM_MAP_BYTES-8;i++)((unsigned char *)extended_map)[i]=(unsigned char)map[i];
@@ -223,33 +218,24 @@ static int start_music(int song)
            SND_StartSeq(0,1,song,MF_MUSIC_PRIORITY)==SND_RET_SET;
 }
 
-static void update_music(int started,int events,unsigned int now)
+static void update_music(int started,int events)
 {
-    SndSeqStat status;
     /* Player respawn keeps the current encounter. A new stage starts idle. */
     if(!started) {
-        if(music_state!=MUSIC_IDLE && SND_StopSeq(0)==SND_RET_SET) {
+        if(music_state!=MUSIC_IDLE && SND_StopSeq(0)==SND_RET_SET)
             music_state=MUSIC_IDLE;
-        }
-        bruce_combat_ready=0;
         return;
     }
-    if(events&MF_BRUCE_COMBAT_READY)bruce_combat_ready=1;
     if((music_state==MUSIC_IDLE || music_state==MUSIC_STREET) &&
-       (events&MF_BRUCE_ENTRANCE_LANDED))
+       (events&MF_BRUCE_ENTRANCE_JUMP))
         music_state=MUSIC_STOPPING;
     if(music_state==MUSIC_IDLE && start_music(0))music_state=MUSIC_STREET;
-    if(music_state==MUSIC_STOPPING && SND_StopSeq(0)==SND_RET_SET) {
-        music_state=MUSIC_INTERLUDE;
-        interlude_start=now;
-        return;
-    }
-    /* A future entrance cue can own this interlude and signal its completion. */
-    if(music_state==MUSIC_INTERLUDE && bruce_combat_ready &&
-       now-interlude_start>=MF_BRUCE_INTERLUDE_TICKS) {
-        SND_GetSeqStat(&status,0);
-        if(SND_SEQ_STAT_MODE(status)==SND_MD_STOP && start_music(1))music_state=MUSIC_BRUCE;
-    }
+    /* The native queue consumes the stop and start in submission order.
+       Retry rejected commands without submitting a second accepted stop. */
+    if(music_state==MUSIC_STOPPING && SND_StopSeq(0)==SND_RET_SET)
+        music_state=MUSIC_STARTING_BRUCE;
+    if(music_state==MUSIC_STARTING_BRUCE && start_music(1))
+        music_state=MUSIC_BRUCE;
 }
 
 void mf_music_update(int started,int paused,int events,unsigned int now)
@@ -267,14 +253,14 @@ void mf_music_update(int started,int paused,int events,unsigned int now)
         if(SND_StopSeq(4)==SND_RET_SET){torch_playing=0;hiss_guard=1;hiss_stopped_at=now;}
     }
     if(!started) {
-        update_music(0,0,now);
+        update_music(0,0);
         for(i=0;i<3;i++) {
             combat[i].pending=-1;
             if(combat[i].playing && SND_StopSeq(combat_port(i))==SND_RET_SET)combat[i].playing=0;
         }
         return;
     }
-    update_music(1,music_events,now);
+    update_music(1,music_events);
     /* Hiss is stopped above. Pause/resume owns SFX ports1..6; music control0 keeps running. */
     if(paused!=paused_state || pause_target>=0) {
         if(pause_target!=paused){pause_target=paused;pause_mask=0;}

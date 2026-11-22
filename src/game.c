@@ -1231,12 +1231,10 @@ void mf_game_step_inputs(mf_game *g,const unsigned held[2],const unsigned presse
 #if MF_BRUCE_RUNTIME
     if(g->stage==MF_STAGE_LEVEL1 && g->bruce.ready) {
         mf_bruce *bruce=&g->bruce;
-        int before=bruce->state;
+        int was_active=bruce->active;
         mf_bruce_step(bruce,g);
-        if(before==MF_BRUCE_ENTRANCE && bruce->state==MF_BRUCE_ENTRANCE_IMPACT)
-            g->events|=MF_BRUCE_ENTRANCE_LANDED;
-        if(before==MF_BRUCE_RECOVERY && bruce->state==MF_BRUCE_READY)
-            g->events|=MF_BRUCE_COMBAT_READY;
+        if(!was_active && bruce->active && bruce->state==MF_BRUCE_ENTRANCE)
+            g->events|=MF_BRUCE_ENTRANCE_JUMP;
         for(i=0;i<MF_PLAYERS;i++) {
             int damage;
             if(bruce->hit_players&(1u<<i))continue;

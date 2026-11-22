@@ -9,23 +9,19 @@ static void tick(mf_bruce *bruce, const mf_game *game, int count)
 static void verify_entrance_events(void)
 {
     mf_game game = {0};
-    int landed=0,ready=0;
+    int launches=0;
     game.started=1;
     game.camera=2700;
     game.street_spawns_suspended=1;
     game.bruce.ready=1;
     for(int frame=0;frame<80;frame++) {
         mf_game_step(&game,0,0);
-        if(game.events&MF_BRUCE_ENTRANCE_LANDED) {
-            assert(game.bruce.state==MF_BRUCE_ENTRANCE_IMPACT && frame==48);
-            ++landed;
-        }
-        if(game.events&MF_BRUCE_COMBAT_READY) {
-            assert(game.bruce.state==MF_BRUCE_READY && frame==68);
-            ++ready;
+        if(game.events&MF_BRUCE_ENTRANCE_JUMP) {
+            assert(game.bruce.state==MF_BRUCE_ENTRANCE && frame==0);
+            ++launches;
         }
     }
-    assert(landed==1 && ready==1);
+    assert(launches==1 && game.bruce.state==MF_BRUCE_READY);
 }
 
 static void verify_game_dispatch(void)
