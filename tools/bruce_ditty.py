@@ -6,6 +6,8 @@ import midi
 from level1_audio import PPQN, ROUTING
 
 BAR_TICKS = 4 * PPQN
+# The native Drop Zone rhythm, lead and bass parts most often use MF.
+DROP_ZONE_MF_VELOCITY = 76
 ASSET = Path(__file__).resolve().parents[1] / "assets/music/bruce-ditty.json"
 PARTS = ("bass", "guitar", "lead", "drums")
 
@@ -60,7 +62,9 @@ def events(parts, samples):
             for cc, value in ((32, 1), (7, 127), (11, 127), (10, pan)):
                 packets.append((0, b"", bytes((0xb0 | channel, cc, value))))
             packets.append((0, b"", bytes((0xe0 | channel, 64))))
-        for start, stop, key, velocity in parts[part]["notes"]:
+        source_notes = parts[part]["notes"]
+        peak_velocity = max(velocity for _, _, _, velocity in source_notes)
+        for start, stop, key, velocity in source_notes:
             channel = next(c for c in channels if available[c] <= start)
             available[channel] = stop
             if part == "drums":
@@ -68,6 +72,8 @@ def events(parts, samples):
             else:
                 program, _ = tones["bass" if part == "bass" else "open_guitar"]
                 key -= 12  # Bruce playtest octave correction for the pitched parts.
+                # Match the theme's usual attack strength and keep relative accents.
+                velocity = round(velocity * DROP_ZONE_MF_VELOCITY / peak_velocity)
             if programs.get(channel) != program:
                 programs[channel] = program
                 packets.append((start, b"", bytes((0xc0 | channel, program))))
