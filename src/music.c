@@ -77,20 +77,23 @@ static int upload(const char *name,unsigned int expected,unsigned int address)
 #if MF_VEHICLE_AMBUSH
 enum {
     CAR_SOUND_PORT=3, CAR_SOUND_CHANNEL=15, CAR_TONE_BANK=2,
-    CAR_TON_ADDR=MF_STAGE_TON_ADDR+MF_STAGE_TON_BYTES, CAR_TON_BYTES=MF_CAR_TON_BYTES, CAR_LOOP_NOTE=61
+    CAR_TON_ADDR=MF_STAGE_TON_ADDR+MF_STAGE_TON_BYTES, CAR_TON_BYTES=MF_CAR_TON_BYTES, CAR_DRIVE_NOTE=61
 };
-static int car_sound_playing,car_sound_setup;
+static int car_sound_playing,car_sound_setup,car_sound_triggered;
 
-static void car_sound_update(int requested)
+static void car_sound_update(int in_pass,int requested,int paused)
 {
+    /* Pause and temporary SFX priority changes can stop a clip, but only
+       leaving the pass arms the next one-shot. */
+    if(!in_pass && !paused)car_sound_triggered=0;
     if(!requested){
         car_sound_setup=0;
         if(car_sound_playing &&
-           SND_CtrlDirMidi(CAR_SOUND_PORT,0,0,CAR_SOUND_CHANNEL,CAR_LOOP_NOTE,0)==SND_RET_SET)
+           SND_CtrlDirMidi(CAR_SOUND_PORT,0,0,CAR_SOUND_CHANNEL,CAR_DRIVE_NOTE,0)==SND_RET_SET)
             car_sound_playing=0;
         return;
     }
-    if(car_sound_playing || combat[2].pending>=0 || combat[2].stopping ||
+    if(car_sound_triggered || car_sound_playing || combat[2].pending>=0 || combat[2].stopping ||
        (combat[2].playing && (int)(audio_tick-combat[2].ends_at)<0))return;
     if(car_sound_setup==0){
         if(SND_SetSeqVl(CAR_SOUND_PORT,80,0)==SND_RET_SET)car_sound_setup=1;
@@ -100,8 +103,8 @@ static void car_sound_update(int requested)
     }else if(car_sound_setup==2){
         if(SND_CtrlDirMidi(CAR_SOUND_PORT,0,4,CAR_SOUND_CHANNEL,3,0)==SND_RET_SET)
             car_sound_setup=3;
-    }else if(SND_CtrlDirMidi(CAR_SOUND_PORT,0,1,CAR_SOUND_CHANNEL,CAR_LOOP_NOTE,110)==SND_RET_SET){
-        car_sound_playing=1;
+    }else if(SND_CtrlDirMidi(CAR_SOUND_PORT,0,1,CAR_SOUND_CHANNEL,CAR_DRIVE_NOTE,110)==SND_RET_SET){
+        car_sound_triggered=car_sound_playing=1;
     }
 }
 #endif
@@ -114,7 +117,7 @@ int mf_music_init(void)
     volatile unsigned int *p;
 #if MF_VEHICLE_AMBUSH
     /* Preserve all six stock map entries. One more describes the standalone
-       loop bank. Padding covers the SDK's word-sized initialization copy. */
+       vehicle bank. Padding covers the SDK's word-sized initialization copy. */
     unsigned int extended_map[36]={0};
     static const unsigned char car_entries[16]={
         0x02,CAR_TON_ADDR>>16,(CAR_TON_ADDR>>8)&255,CAR_TON_ADDR&255,0x80,0,CAR_TON_BYTES>>8,CAR_TON_BYTES&255,
@@ -131,7 +134,7 @@ int mf_music_init(void)
         ((unsigned char *)extended_map)[MF_CUSTOM_MAP_BYTES-8+i]=car_entries[i];
     map=(char *)extended_map;
     size=MF_CUSTOM_MAP_BYTES+8;
-    car_sound_playing=car_sound_setup=0;
+    car_sound_triggered=car_sound_playing=car_sound_setup=0;
 #endif
     /* Same SND_Init + slInitSound pairing as the compatible SRL SEQ sample.
        Driver/work 0..B000 and standard DSP/transfer reservations stay intact. */
@@ -243,8 +246,9 @@ void mf_music_update(int started,int paused,int events,unsigned int now)
     if(!ready)return;
     protected=death_update(events,now);
 #if MF_VEHICLE_AMBUSH
-    car_sound_update(started && !paused && !protected && (events&MF_VEHICLE_PASS) &&
-                     !(events&MF_WORLD_IMPACT));
+    int vehicle_pass=started && (events&MF_VEHICLE_PASS);
+    car_sound_update(vehicle_pass,vehicle_pass && !paused && !protected && !(events&MF_WORLD_IMPACT),
+                     started && paused);
 #endif
     if(protected)events&=MF_TORCH_HISS;
     if(paused || paused_state)for(i=0;i<3;i++)if(combat[i].playing)combat[i].ends_at+=elapsed;

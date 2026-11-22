@@ -174,6 +174,6 @@ if __name__ == "__main__":
         assert args.write_mix
         h = level1_housekeeping
         vehicle_pcm = (h.import_pcm(args.vehicle_wavs / "honk.wav", h.HONK_RATE),
-                       h.import_pcm(args.vehicle_wavs / "drive.wav", h.CAR_RATE, h.CAR_LOOP_START))
+                       h.scale_pcm(h.import_pcm(args.vehicle_wavs / "drive.wav", h.CAR_RATE), None)[0])
     validate(args.pcm.read_bytes() if args.pcm else None, mix=args.mix_pass1,
              write_mix=args.write_mix, vehicle_pcm=vehicle_pcm)

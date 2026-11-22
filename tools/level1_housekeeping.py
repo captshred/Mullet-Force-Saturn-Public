@@ -20,12 +20,13 @@ SCOPE = AUDIO_DELTA | {
     "tools/level1_housekeeping.py", "tests/ugh_transport_test.c",
     "downloads/level1-audio-housekeeping/mullet-force-level1-audio-housekeeping.zip",
     "downloads/level1-audio-housekeeping/mullet-force-level1-vehicle-gain-touchup.zip",
+    "downloads/level1-audio-housekeeping/mullet-force-level1-vehicle-drive-oneshot.zip",
 }
 HONK_RATE = 22050
 CAR_RATE = 11025
 HONK_FRAMES = 9474
 CAR_FRAMES = 18441
-CAR_LOOP_START = 128
+DRIVE_PCM_SHA = "b37a581675e0fd34258cf0546f3538a09aa01dc7fffe8d39d3385ec83bbdd978"
 
 
 def old(path):
@@ -42,7 +43,7 @@ def sample(data, program):
     return layer, start
 
 
-def import_pcm(source, rate, loop_start=0):
+def import_pcm(source, rate):
     # Private authoring only. Public builds consume the checked runtime banks.
     import wave
     import numpy as np
@@ -54,16 +55,15 @@ def import_pcm(source, rate, loop_start=0):
     mono = stereo.astype(float).reshape(-1, 2).mean(axis=1) - 128
     mono -= mono.mean()
     pcm = resample_poly(mono, 1, 44100 // rate)
-    if loop_start:
-        weight = np.linspace(0, 1, loop_start)
-        pcm[-loop_start:] = pcm[-loop_start:] * (1 - weight) + pcm[:loop_start] * weight
     return np.clip(np.rint(pcm), -128, 127).astype("i1").tobytes()
 
 
 def scale_pcm(data, requested):
     samples = struct.unpack(f"{len(data)}b", data)
     low, high = min(samples), max(samples)
-    gain = min(requested, Fraction(-128, low), Fraction(127, high))
+    gain = min(Fraction(-128, low), Fraction(127, high))
+    if requested is not None:
+        gain = min(requested, gain)
     scaled = [round(value * gain) for value in samples]
     assert all(-128 <= value <= 127 for value in scaled)
     return struct.pack(f"{len(data)}b", *scaled), {
@@ -75,7 +75,8 @@ def scale_pcm(data, requested):
 def outputs(honk, drive, index, header, report):
     assert len(honk) == HONK_FRAMES and len(drive) == CAR_FRAMES
     honk, honk_gain = scale_pcm(honk, Fraction(95, 100))
-    drive, drive_gain = scale_pcm(drive, Fraction(115, 100))
+    assert sha256(drive).hexdigest() == DRIVE_PCM_SHA
+    drive_gain = dict(gain=127 / 91, input_range=[-88, 91], output_range=[-123, 127], clipped_samples=0)
     original = old(FX_TONE)
     layer, start = sample(original, 7)
     next_layer, end = sample(original, 8)
@@ -105,10 +106,10 @@ def outputs(honk, drive, index, header, report):
     car_header = bytearray(old(CAR_TONE)[:96])
     car_layer, car_start = sample(car_header, 3)
     assert car_start == len(car_header)
-    car_header[car_layer+3] |= 0x10
+    car_header[car_layer+3] = (car_header[car_layer+3] & 0x0f) | 0x10
     car_header[car_layer+25] = 61 + 24  # 11.025 kHz at the unchanged MIDI note 61.
-    struct.pack_into(">HH", car_header, car_layer+6, CAR_LOOP_START, len(drive))
-    car = aligned(car_header + drive + drive[CAR_LOOP_START:CAR_LOOP_START+4])
+    struct.pack_into(">HH", car_header, car_layer+6, 0, len(drive))
+    car = aligned(car_header + drive)
 
     index = bytearray(index)
     rewrites = importlib.import_module("level1-sfx-pcm8-pass1")
@@ -136,7 +137,7 @@ def outputs(honk, drive, index, header, report):
         baseline=BASE, bat_sample_bytes_removed=end-start,
         honk=dict(rate=HONK_RATE, frames=len(honk), packed_bytes=len(packed_honk), pcm_sha256=sha256(honk).hexdigest(), **honk_gain),
         drive=dict(rate=CAR_RATE, frames=len(drive), packed_bank_bytes=len(car),
-                   loop_start=CAR_LOOP_START, pcm_sha256=sha256(drive).hexdigest(), **drive_gain),
+                   loop=False, pcm_sha256=sha256(drive).hexdigest(), **drive_gain),
         car_profile_used_bytes=address+len(car), car_profile_free_bytes=free,
     )
     return {FX_TONE: bytes(tone), FX_SCORE: bytes(sequence), CAR_TONE: bytes(car)}, bytes(index), header
@@ -147,10 +148,10 @@ def baseline_vehicle_pcm():
         return subprocess.check_output(["git", "show", f"{VEHICLE_AUDIO_BASE}:{path}"], cwd=ROOT)
 
     tone = baseline(FX_TONE)
-    car = baseline(CAR_TONE)
+    car = (ROOT / CAR_TONE).read_bytes()
     _, start = sample(tone, 7)
     _, car_start = sample(car, 3)
     pcm = tone[start:start+HONK_FRAMES], car[car_start:car_start+CAR_FRAMES]
     report = json.loads(baseline("assets/music/report.json"))["level1_housekeeping"]
-    assert [sha256(x).hexdigest() for x in pcm] == [report[k]["pcm_sha256"] for k in ("honk", "drive")]
+    assert [sha256(x).hexdigest() for x in pcm] == [report["honk"]["pcm_sha256"], DRIVE_PCM_SHA]
     return pcm

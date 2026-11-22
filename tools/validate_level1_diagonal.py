@@ -126,12 +126,12 @@ def validate(medium_guitar=False, mix_pass1=False):
 
     if (ROOT / "assets/cd/CARPASS.TON").exists():
         tone = (ROOT / "assets/cd/CARPASS.TON").read_bytes()
-        from level1_housekeeping import CAR_FRAMES, CAR_LOOP_START, sample
+        from level1_housekeeping import CAR_FRAMES, sample
         layer, start = sample(tone, 3)
-        assert tone[layer+3] & 0xf0 == 0x30
-        assert int.from_bytes(tone[layer+6:layer+8], "big") == CAR_LOOP_START
+        assert tone[layer+3] & 0xf0 == 0x10
+        assert int.from_bytes(tone[layer+6:layer+8], "big") == 0
         assert int.from_bytes(tone[layer+8:layer+10], "big") == CAR_FRAMES
-        assert tone[start+CAR_FRAMES:start+CAR_FRAMES+4] == tone[start+CAR_LOOP_START:start+CAR_LOOP_START+4]
+        assert tone[start+CAR_FRAMES:] == bytes(-(start+CAR_FRAMES) % 4)
         report = json.loads((ROOT / "assets/music/report.json").read_text())
         free = 0x80000 - report["sound_ram_high_water"] - len(tone)
         assert free >= 0 and free == report["level1_housekeeping"]["car_profile_free_bytes"]

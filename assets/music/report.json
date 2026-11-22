@@ -23,8 +23,8 @@
       "sha256": "71180c99ada8913ac0c91d3acaa2811ad27620a73377aa83941b9659c96bfeb1"
     },
     "CARPASS.TON": {
-      "bytes": 18544,
-      "sha256": "fee1f6d89a9a2f516c8d278443fe5e7f1bb4ab4614dac0994dc7b15155b561f3"
+      "bytes": 18540,
+      "sha256": "5df1de0db5f9b94e5497c785944f2d8b561cccf9361211a411d700cc983b9378"
     }
   },
   "sound_ram_regions": [
@@ -437,7 +437,7 @@
     "original_tick": 151680,
     "ditty_ticks": 1920,
     "first_full_loop_ticks": 277920,
-    "car_profile_free_bytes": 15616
+    "car_profile_free_bytes": 15620
   },
   "level1_housekeeping": {
     "baseline": "34b82980e1bb8bef967c29a1280d427d4f7ad2f0",
@@ -461,21 +461,21 @@
     "drive": {
       "rate": 11025,
       "frames": 18441,
-      "packed_bank_bytes": 18544,
-      "loop_start": 128,
-      "pcm_sha256": "bd233e93dfa3c7a5600fbc3a73d52c6394776d82d39fb73c753ed636b448199c",
-      "gain": 1.15,
+      "packed_bank_bytes": 18540,
+      "loop": false,
+      "pcm_sha256": "b37a581675e0fd34258cf0546f3538a09aa01dc7fffe8d39d3385ec83bbdd978",
+      "gain": 1.3956043956043955,
       "input_range": [
         -88,
         91
       ],
       "output_range": [
-        -101,
-        105
+        -123,
+        127
       ],
       "clipped_samples": 0
     },
-    "car_profile_used_bytes": 508672,
-    "car_profile_free_bytes": 15616
+    "car_profile_used_bytes": 508668,
+    "car_profile_free_bytes": 15620
   }
 }
