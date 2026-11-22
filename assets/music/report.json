@@ -16,7 +16,7 @@
     },
     "FX.TON": {
       "bytes": 134076,
-      "sha256": "cdb8aea29076453188618b1f207626b9b1c1e7b44cbfaec22b20f9ffe9882c65"
+      "sha256": "bf7532c07f5f6e990b806083748cff84a6931c5f8c43d62c5b220531c772b9b3"
     },
     "CUSTOM.MAP": {
       "bytes": 56,
@@ -24,7 +24,7 @@
     },
     "CARPASS.TON": {
       "bytes": 18544,
-      "sha256": "fbebf77ec65533e79533ed3589021b525ae19a234159b44a62255d34906028ae"
+      "sha256": "fee1f6d89a9a2f516c8d278443fe5e7f1bb4ab4614dac0994dc7b15155b561f3"
     }
   },
   "sound_ram_regions": [
@@ -446,14 +446,34 @@
       "rate": 22050,
       "frames": 9474,
       "packed_bytes": 9476,
-      "pcm_sha256": "688dc4946d09b5904be51987d50f11d5468ff6353c85eea34553b72e7ab4b3c9"
+      "pcm_sha256": "cfb9b19efaa23f70b901e78c334b8bf1d496ec2342e499892ce101b2219b2d49",
+      "gain": 0.95,
+      "input_range": [
+        -50,
+        40
+      ],
+      "output_range": [
+        -48,
+        38
+      ],
+      "clipped_samples": 0
     },
     "drive": {
       "rate": 11025,
       "frames": 18441,
       "packed_bank_bytes": 18544,
       "loop_start": 128,
-      "pcm_sha256": "16df49e0a5a2084192107c894011495e6a9a274fc62c969efd9a0b21176b7caf"
+      "pcm_sha256": "bd233e93dfa3c7a5600fbc3a73d52c6394776d82d39fb73c753ed636b448199c",
+      "gain": 1.15,
+      "input_range": [
+        -88,
+        91
+      ],
+      "output_range": [
+        -101,
+        105
+      ],
+      "clipped_samples": 0
     },
     "car_profile_used_bytes": 508672,
     "car_profile_free_bytes": 15616

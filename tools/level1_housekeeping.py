@@ -1,4 +1,5 @@
 """Pack and audit the Bruce baseline's vehicle audio replacement."""
+from fractions import Fraction
 from hashlib import sha256
 import importlib
 import json
@@ -10,6 +11,7 @@ from drop_zone_sequence import encode, packets
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE = "34b82980e1bb8bef967c29a1280d427d4f7ad2f0"
+VEHICLE_AUDIO_BASE = "de242ac70814aa01ddd5f8ff4ae6ff339c0e4942"
 FX_TONE = "assets/cd/FX.TON"
 FX_SCORE = "assets/cd/FX.SEQ"
 CAR_TONE = "assets/cd/CARPASS.TON"
@@ -17,6 +19,7 @@ AUDIO_DELTA = {FX_SCORE, FX_TONE, CAR_TONE}
 SCOPE = AUDIO_DELTA | {
     "tools/level1_housekeeping.py", "tests/ugh_transport_test.c",
     "downloads/level1-audio-housekeeping/mullet-force-level1-audio-housekeeping.zip",
+    "downloads/level1-audio-housekeeping/mullet-force-level1-vehicle-gain-touchup.zip",
 }
 HONK_RATE = 22050
 CAR_RATE = 11025
@@ -57,8 +60,22 @@ def import_pcm(source, rate, loop_start=0):
     return np.clip(np.rint(pcm), -128, 127).astype("i1").tobytes()
 
 
+def scale_pcm(data, requested):
+    samples = struct.unpack(f"{len(data)}b", data)
+    low, high = min(samples), max(samples)
+    gain = min(requested, Fraction(-128, low), Fraction(127, high))
+    scaled = [round(value * gain) for value in samples]
+    assert all(-128 <= value <= 127 for value in scaled)
+    return struct.pack(f"{len(data)}b", *scaled), {
+        "gain": float(gain), "input_range": [low, high],
+        "output_range": [min(scaled), max(scaled)], "clipped_samples": 0,
+    }
+
+
 def outputs(honk, drive, index, header, report):
     assert len(honk) == HONK_FRAMES and len(drive) == CAR_FRAMES
+    honk, honk_gain = scale_pcm(honk, Fraction(95, 100))
+    drive, drive_gain = scale_pcm(drive, Fraction(115, 100))
     original = old(FX_TONE)
     layer, start = sample(original, 7)
     next_layer, end = sample(original, 8)
@@ -117,20 +134,23 @@ def outputs(honk, drive, index, header, report):
     report["drop_zone_bruce_entry"]["car_profile_free_bytes"] = free
     report["level1_housekeeping"] = dict(
         baseline=BASE, bat_sample_bytes_removed=end-start,
-        honk=dict(rate=HONK_RATE, frames=len(honk), packed_bytes=len(packed_honk), pcm_sha256=sha256(honk).hexdigest()),
+        honk=dict(rate=HONK_RATE, frames=len(honk), packed_bytes=len(packed_honk), pcm_sha256=sha256(honk).hexdigest(), **honk_gain),
         drive=dict(rate=CAR_RATE, frames=len(drive), packed_bank_bytes=len(car),
-                   loop_start=CAR_LOOP_START, pcm_sha256=sha256(drive).hexdigest()),
+                   loop_start=CAR_LOOP_START, pcm_sha256=sha256(drive).hexdigest(), **drive_gain),
         car_profile_used_bytes=address+len(car), car_profile_free_bytes=free,
     )
     return {FX_TONE: bytes(tone), FX_SCORE: bytes(sequence), CAR_TONE: bytes(car)}, bytes(index), header
 
 
-def current_pcm():
-    tone = (ROOT / FX_TONE).read_bytes()
-    car = (ROOT / CAR_TONE).read_bytes()
+def baseline_vehicle_pcm():
+    def baseline(path):
+        return subprocess.check_output(["git", "show", f"{VEHICLE_AUDIO_BASE}:{path}"], cwd=ROOT)
+
+    tone = baseline(FX_TONE)
+    car = baseline(CAR_TONE)
     _, start = sample(tone, 7)
     _, car_start = sample(car, 3)
     pcm = tone[start:start+HONK_FRAMES], car[car_start:car_start+CAR_FRAMES]
-    report = json.loads((ROOT / "assets/music/report.json").read_text())["level1_housekeeping"]
+    report = json.loads(baseline("assets/music/report.json"))["level1_housekeeping"]
     assert [sha256(x).hexdigest() for x in pcm] == [report[k]["pcm_sha256"] for k in ("honk", "drive")]
     return pcm

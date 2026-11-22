@@ -107,7 +107,7 @@ def outputs(pcm, mix=False, vehicle_pcm=None):
         bank = score.build(score.baseline(SEQ))
         index, header = score.relocate(bank, index, header, report)
         assets.update({SEQ: bank, MAP: index})
-        honk, drive = vehicle_pcm if vehicle_pcm is not None else level1_housekeeping.current_pcm()
+        honk, drive = vehicle_pcm if vehicle_pcm is not None else level1_housekeeping.baseline_vehicle_pcm()
         vehicle_assets, index, header = level1_housekeeping.outputs(honk, drive, index, header, report)
         assets.update(vehicle_assets)
         assets[MAP] = index
