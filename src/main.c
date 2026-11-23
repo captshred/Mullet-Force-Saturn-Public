@@ -642,6 +642,10 @@ static void update(void)
                 sampled_input[j].pressed &= ~RESET_CHORD;
                 pending[j] &= ~RESET_CHORD;
             }
+#if MF_LEVEL2_WINGSUIT && MF_DEV_STAGE_SKIP
+            /* Never buffer an X edge from gameplay into the pause menu. */
+            if(!game.paused)sampled_input[j].pressed&=~MF_X;
+#endif
             if(!sampled_input[j].connected)pending[j]=0;else pending[j]|=sampled_input[j].pressed;
         }
         last_input_vblank=now;

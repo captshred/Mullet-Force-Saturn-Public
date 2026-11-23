@@ -97,6 +97,7 @@ BRUCE_RUNTIME_DELTA = {
     "make/saturn.mk", "tools/build-native.sh", "tools/build-source-complete.sh",
     "tools/stage-bruce-bank.py", "tools/validate_level1_diagonal.py",
     "tests/bruce_runtime_test.c", "tests/bruce_sfx_test.c",
+    "src/dev_stage_skip.h", "tests/dev_stage_skip_test.c",
     "src/music.h", "src/bruce_sfx_data.h", "tools/pack-bruce-sfx.py",
     "assets/bruce-sfx/BSFX.TON", "assets/bruce-sfx/BSFX.SEQ", "assets/bruce-sfx/manifest.json",
     "docs/bruce-custom-sfx.md",
