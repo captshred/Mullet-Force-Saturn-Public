@@ -163,8 +163,113 @@ static void verify_slam_lunge(void)
         tick(&bruce,&game,7);
         assert(mf_bruce_pose(&bruce) == 8);
         tick(&bruce,&game,8);
-        assert(bruce.state == MF_BRUCE_READY && bruce.cooldown == 38);
+        assert(bruce.state == MF_BRUCE_READY && bruce.cooldown == 30);
     }
+}
+
+
+static void verify_counter(int coop)
+{
+    mf_game g = {0};
+    mf_bruce *b = &g.bruce;
+    int x = 2910*256, y = 202*256;
+    g.started = g.street_spawns_suspended = 1;
+    g.camera = 2740;
+    g.players[0] = (mf_player){.active=1,.health=100,.x=x-24*256,.y=y,.facing=1};
+    g.players[1] = (mf_player){.active=coop,.health=100,.x=x+25*256,.y=y,.facing=-1};
+    *b = (mf_bruce){.active=1,.ready=1,.health=75,.state=MF_BRUCE_READY,.x=x,.y=y,.target=-1};
+
+    /* Same boss pressure record regardless of which player lands the jab. */
+    for (int hit=0; hit<3; ++hit) {
+        mf_player *p=&g.players[coop && (hit&1)];
+        p->attack=6;
+        p->hit_mask=0;
+        mf_game_step(&g,0,0);
+        assert(b->health==74-hit);
+        if (hit<2) {
+            assert(b->state==MF_BRUCE_HURT && b->pressure_hits==hit+1);
+            for (int frame=0; frame<20; ++frame) mf_game_step(&g,0,0);
+        }
+    }
+    assert(b->state==MF_BRUCE_COUNTER && mf_bruce_pose(b)==11);
+    assert(b->counter_cooldown==MF_BRUCE_COUNTER_COOLDOWN);
+    assert(!mf_bruce_strike(b,&g.players[0]));
+    tick(b,&g,MF_BRUCE_COUNTER_WINDUP-1);
+    mf_bruce_receive(b,1,0,1); /* Ordinary hit during the windup. */
+    assert(b->health==71 && b->state==MF_BRUCE_COUNTER && b->timer==19);
+    g.players[0].x=x-47*256;g.players[0].y=y+12*256;
+    g.players[1].x=x+68*256;
+    tick(b,&g,1);
+    assert(b->land_x==g.players[0].x && b->slam_land_y==g.players[0].y);
+    assert(b->x==x && b->y==y && mf_bruce_pose(b)==9);
+    g.players[0].x=x-112*256;
+    tick(b,&g,MF_BRUCE_COUNTER_AIR/2);
+    assert(b->height==48 && b->land_x==x-47*256);
+    mf_bruce_receive(b,2,0,-1); /* Flame/light contact in the arc. */
+    assert(b->health==69 && b->state==MF_BRUCE_COUNTER && b->height==48);
+    tick(b,&g,MF_BRUCE_COUNTER_AIR/2);
+    assert(b->x==b->land_x && b->y==b->slam_land_y && !b->height && mf_bruce_pose(b)==12);
+    assert(!mf_bruce_strike(b,&g.players[0]));
+    g.players[0].x=b->x;g.players[0].y=b->y;
+    assert(mf_bruce_strike(b,&g.players[0])==24);
+    g.players[0].height=18*256;
+    assert(!mf_bruce_strike(b,&g.players[0]));
+    g.players[0].height=0;
+    tick(b,&g,1);
+    assert(b->state==MF_BRUCE_COUNTER_RECOVERY && !mf_bruce_strike(b,&g.players[0]));
+    mf_bruce_receive(b,3,1,1);
+    assert(b->health==66 && b->state==MF_BRUCE_FALL);
+    assert(b->counter_cooldown>0);
+}
+
+static void verify_torch_pressure(void)
+{
+    mf_game g={0};
+    mf_bruce *b=&g.bruce;
+    g.started=g.street_spawns_suspended=1;
+    g.camera=2740;
+    g.players[0]=(mf_player){.active=1,.health=100,.x=2850*256,.y=202*256,
+                            .facing=1,.torch=MF_TORCH_FIRE};
+    *b=(mf_bruce){.active=1,.ready=1,.health=75,.state=MF_BRUCE_READY,
+                  .x=2910*256,.y=202*256,.target=-1,.cooldown=24};
+    for(int frame=0;frame<50 && b->state!=MF_BRUCE_COUNTER;++frame)
+        mf_game_step_coop(&g,(unsigned[2]){MF_A,0},(unsigned[2]){0,0});
+    assert(b->health==75-3*MF_TORCH_DAMAGE && b->state==MF_BRUCE_COUNTER);
+    for(int frame=0;frame<20;++frame)
+        mf_game_step_coop(&g,(unsigned[2]){MF_A,0},(unsigned[2]){0,0});
+    assert(b->state==MF_BRUCE_COUNTER && b->timer==20 && b->health<75-3*MF_TORCH_DAMAGE);
+}
+
+static void verify_counter_vulnerability_and_pursuit(void)
+{
+    mf_game g={0};
+    mf_bruce b={.active=1,.ready=1,.health=75,.state=MF_BRUCE_COUNTER,.timer=19,
+                .x=3000*256,.y=170*256,.counter_cooldown=130,.target=-1};
+    g.players[0]=(mf_player){.active=1,.health=100,.x=3060*256,.y=229*256};
+    mf_bruce_receive(&b,3,1,-1);
+    assert(b.state==MF_BRUCE_HURT && b.health==72 && !b.impact);
+    b.state=MF_BRUCE_COUNTER;b.timer=25;b.height=25;b.invulnerable=0;
+    mf_bruce_receive(&b,72,0,1);
+    assert(b.state==MF_BRUCE_HURT && b.height==25 && b.health==0);
+    tick(&b,&g,19);
+    assert(b.state==MF_BRUCE_DEFEATED && !b.impact);
+    b=(mf_bruce){.active=1,.ready=1,.health=75,.state=MF_BRUCE_READY,
+                 .x=3049*256,.y=168*256,.target=-1,.attack_cycle=1};
+    tick(&b,&g,80);
+    assert(b.x<=3049*256 && b.y>=216*256 && b.y<=229*256 && b.state==MF_BRUCE_PUNCH);
+    b.state=MF_BRUCE_PUNCH;b.timer=52;b.health=38;
+    tick(&b,&g,1);assert(b.cooldown==26);
+    b.state=MF_BRUCE_PUNCH;b.timer=52;b.health=37;
+    tick(&b,&g,1);assert(b.cooldown==20);
+    b.state=MF_BRUCE_READY;b.cooldown=24;b.counter_cooldown=60;
+    for(int hit=0;hit<3;++hit){
+        b.invulnerable=0;
+        mf_bruce_receive(&b,1,0,1);
+        assert(b.state==MF_BRUCE_READY && b.pressure_hits==0);
+    }
+    b.counter_cooldown=0;b.invulnerable=0;b.pressure_window=1;b.pressure_hits=2;
+    tick(&b,&g,1);
+    assert(!b.pressure_hits && b.state==MF_BRUCE_READY);
 }
 
 int main(void)
@@ -187,7 +292,7 @@ int main(void)
     bruce.ready = 1;
     mf_bruce_step(&bruce,&game);
     assert(bruce.active && bruce.x / 256 > game.camera + 320 && bruce.facing == -1);
-    assert(bruce.health == 60 && mf_bruce_pose(&bruce) == 11);
+    assert(bruce.health == MF_BRUCE_MAX_HP && MF_BRUCE_MAX_HP == 75 && mf_bruce_pose(&bruce) == 11);
     for(i=0;i<48;i++) {
         assert(!mf_bruce_strike(&bruce,player) && !mf_bruce_vulnerable(&bruce));
         mf_bruce_step(&bruce,&game);
@@ -208,9 +313,9 @@ int main(void)
     assert(!mf_bruce_strike(&bruce,player));
     player->y = bruce.y;
     mf_bruce_receive(&bruce,1,0,1);
-    assert(bruce.health == 59 && bruce.state == MF_BRUCE_PUNCH);
+    assert(bruce.health == 74 && bruce.state == MF_BRUCE_PUNCH);
     mf_bruce_receive(&bruce,1,0,1);
-    assert(bruce.health == 59);
+    assert(bruce.health == 74);
 
     bruce.state = MF_BRUCE_CHARGE;
     bruce.timer = 26;
@@ -252,5 +357,9 @@ int main(void)
     verify_entrance_events();
     verify_bat_interruptions();
     verify_slam_lunge();
+    verify_counter(0);
+    verify_counter(1);
+    verify_counter_vulnerability_and_pursuit();
+    verify_torch_pressure();
     return 0;
 }

@@ -42,12 +42,13 @@ static int advance(int position, int goal, int allowance, int speed)
 
 /* Readability and balance controls for the first playtest, at 60 Hz. */
 enum {
-    BRUCE_HP = 60, PUNCH_DAMAGE = 24, CHARGE_DAMAGE = 18, SLAM_DAMAGE = 24,
+    PUNCH_DAMAGE = 24, CHARGE_DAMAGE = 18, SLAM_DAMAGE = 24,
     ENTRANCE_TICKS = 48, ENTRANCE_APEX = 62,
     PUNCH_WINDUP = 26, PUNCH_ACTIVE = 5, PUNCH_END = 53,
     CHARGE_WINDUP = 27, CHARGE_ACTIVE = 30, CHARGE_END = 82,
     SLAM_WINDUP = 18, SLAM_AIR = 32, SLAM_APEX = 44, SLAM_IMPACT = 8,
-    SLAM_TOUCHDOWN = SLAM_WINDUP + SLAM_AIR, SLAM_END = SLAM_TOUCHDOWN + SLAM_IMPACT + 8
+    SLAM_TOUCHDOWN = SLAM_WINDUP + SLAM_AIR, SLAM_END = SLAM_TOUCHDOWN + SLAM_IMPACT + 8,
+    COUNTER_TOUCHDOWN = MF_BRUCE_COUNTER_WINDUP + MF_BRUCE_COUNTER_AIR, COUNTER_APEX = 48
 };
 enum {
     POSE_PUNCH = 5, POSE_CHARGE = 8, POSE_SLAM = 11,
@@ -89,11 +90,34 @@ static void entrance(mf_bruce *bruce, const mf_game *game)
     bruce->facing = -1;
     bruce->target = -1;
     bruce->active = 1;
-    bruce->health = BRUCE_HP;
+    bruce->health = MF_BRUCE_MAX_HP;
+    bruce->pressure_hits = bruce->pressure_window = bruce->counter_cooldown = 0;
     enter(bruce, MF_BRUCE_ENTRANCE);
 }
 
-static int action_tick(mf_bruce *bruce)
+static int aggressive(const mf_bruce *bruce)
+{
+    return bruce->health * 2 < MF_BRUCE_MAX_HP;
+}
+
+static int nearest_player(const mf_bruce *bruce, const mf_game *game);
+static int clamp_to_floor(int value, int low, int high);
+
+static void counter_takeoff(mf_bruce *bruce, const mf_game *game)
+{
+    int index = nearest_player(bruce, game);
+    int x = index < 0 ? bruce->x : game->players[index].x;
+    int y = index < 0 ? bruce->y : game->players[index].y;
+    x = clamp_to_floor(x, bruce->x - 112*Q, bruce->x + 112*Q);
+    y = clamp_to_floor(y, bruce->y - 44*Q, bruce->y + 44*Q);
+    bruce->start_x = bruce->x;
+    bruce->slam_start_y = bruce->y;
+    bruce->land_x = clamp_to_floor(x, LOT_FIRST*Q, BRUCE_RIGHT*Q);
+    bruce->slam_land_y = clamp_to_floor(y, LANE_BACK*Q, LANE_FRONT*Q);
+    if (bruce->land_x != bruce->x) bruce->facing = bruce->land_x > bruce->x ? 1 : -1;
+}
+
+static int action_tick(mf_bruce *bruce, const mf_game *game)
 {
     int t;
     if (bruce->state == MF_BRUCE_READY) return 0;
@@ -115,10 +139,10 @@ static int action_tick(mf_bruce *bruce)
         if (t >= 12) settle(bruce, 34);
         break;
     case MF_BRUCE_PUNCH:
-        if (t >= PUNCH_END) settle(bruce, 26);
+        if (t >= PUNCH_END) settle(bruce, aggressive(bruce) ? 20 : 26);
         break;
     case MF_BRUCE_CHARGE:
-        if (t >= CHARGE_END) settle(bruce, 32);
+        if (t >= CHARGE_END) settle(bruce, aggressive(bruce) ? 25 : 32);
         else if (t >= CHARGE_WINDUP && t < CHARGE_WINDUP + CHARGE_ACTIVE) {
             int next = bruce->x + bruce->facing * 896;
             if (next < LOT_FIRST * Q || next > BRUCE_RIGHT * Q)
@@ -135,7 +159,21 @@ static int action_tick(mf_bruce *bruce)
             bruce->height = 4 * SLAM_APEX * air * (SLAM_AIR - air) / (SLAM_AIR * SLAM_AIR);
             if (t == SLAM_TOUCHDOWN) effect(bruce);
         }
-        if (t >= SLAM_END) settle(bruce, 38);
+        if (t >= SLAM_END) settle(bruce, aggressive(bruce) ? 30 : 38);
+        break;
+    case MF_BRUCE_COUNTER:
+        if (t == MF_BRUCE_COUNTER_WINDUP) counter_takeoff(bruce, game);
+        if (t > MF_BRUCE_COUNTER_WINDUP && t <= COUNTER_TOUCHDOWN) {
+            int air = t - MF_BRUCE_COUNTER_WINDUP;
+            int duration = MF_BRUCE_COUNTER_AIR;
+            bruce->x = bruce->start_x + (bruce->land_x - bruce->start_x) * air / duration;
+            bruce->y = bruce->slam_start_y + (bruce->slam_land_y - bruce->slam_start_y) * air / duration;
+            bruce->height = 4 * COUNTER_APEX * air * (duration - air) / (duration * duration);
+            if (t == COUNTER_TOUCHDOWN) effect(bruce);
+        } else if (t > COUNTER_TOUCHDOWN) enter(bruce, MF_BRUCE_COUNTER_RECOVERY);
+        break;
+    case MF_BRUCE_COUNTER_RECOVERY:
+        if (t >= MF_BRUCE_COUNTER_RECOVERY_TICKS) settle(bruce, aggressive(bruce) ? 6 : 10);
         break;
     case MF_BRUCE_HURT:
         if (bruce->height > 0) {
@@ -178,20 +216,30 @@ int mf_bruce_vulnerable(const mf_bruce *bruce)
 void mf_bruce_receive(mf_bruce *bruce, int damage, int bat, int direction)
 {
     int armored;
-    if (!mf_bruce_vulnerable(bruce)) return;
+    if (damage <= 0 || !mf_bruce_vulnerable(bruce)) return;
+    if (!bat && !bruce->counter_cooldown) {
+        if (bruce->pressure_hits < MF_BRUCE_PRESSURE_HITS) ++bruce->pressure_hits;
+        bruce->pressure_window = MF_BRUCE_PRESSURE_WINDOW;
+    }
     bruce->health -= damage;
     if (bruce->health < 0) bruce->health = 0;
     bruce->invulnerable = 12;
     armored = (bruce->state == MF_BRUCE_PUNCH && bruce->timer < PUNCH_WINDUP + PUNCH_ACTIVE) ||
               (bruce->state == MF_BRUCE_CHARGE && bruce->timer < CHARGE_WINDUP + CHARGE_ACTIVE) ||
               (bruce->state == MF_BRUCE_SLAM && bruce->timer < SLAM_TOUCHDOWN + SLAM_IMPACT);
+    /* Light hits still deal damage. Once the counter is committed, ordinary
+       attacks and flame cannot restart the windup, arc or landing timer.
+       Cooldown also prevents a fresh light-hit lock while Bruce regroups. */
+    if (bruce->state == MF_BRUCE_COUNTER || (!bat && bruce->counter_cooldown))
+        armored = 1;
     /* Player contact resolves before Bruce advances his attack timer.
        Include the tick that would start moving the charge. At slam timer
        TOUCHDOWN-1, a connecting bat still wins over the pending impact. */
-    if (bat && ((bruce->state == MF_BRUCE_CHARGE && bruce->timer >= CHARGE_WINDUP - 1 &&
+    if ((bruce->state == MF_BRUCE_COUNTER && (bat || !bruce->health)) ||
+        (bat && ((bruce->state == MF_BRUCE_CHARGE && bruce->timer >= CHARGE_WINDUP - 1 &&
                  bruce->timer < CHARGE_WINDUP + CHARGE_ACTIVE) ||
                 (bruce->state == MF_BRUCE_SLAM && bruce->timer >= SLAM_WINDUP &&
-                 bruce->timer < SLAM_TOUCHDOWN))) {
+                 bruce->timer < SLAM_TOUCHDOWN)))) {
         int height = bruce->height;
         bruce->impact = 0;
         bruce->fall_direction = direction;
@@ -221,6 +269,9 @@ int mf_bruce_strike(const mf_bruce *bruce, const mf_player *player)
                height < 44 ? CHARGE_DAMAGE : 0;
     case MF_BRUCE_SLAM:
         return t == SLAM_TOUCHDOWN && dx * dx + 4 * dy * dy <= 52 * 52 &&
+               height < 18 ? SLAM_DAMAGE : 0;
+    case MF_BRUCE_COUNTER:
+        return t == COUNTER_TOUCHDOWN && dx * dx + 4 * dy * dy <= 38 * 38 &&
                height < 18 ? SLAM_DAMAGE : 0;
     default:
         return 0;
@@ -274,10 +325,12 @@ static int choose_attack(mf_bruce *bruce, const mf_player *player, const mf_game
 {
     int i, dx = (player->x - bruce->x) / Q, dy = (player->y - bruce->y) / Q;
     int near = dx >= -76 && dx <= 76 && dy >= -12 && dy <= 12;
-    int aligned = dx >= -152 && dx <= 152 && dy >= -12 && dy <= 12;
+    int runway = dx < 0 ? bruce->x - LOT_FIRST*Q : BRUCE_RIGHT*Q - bruce->x;
+    int aligned = dx >= -152 && dx <= 152 && dy >= -12 && dy <= 12 && runway >= 36*Q;
     for (i = 0; i < 3; ++i) {
         int pick = (bruce->attack_cycle + i) % 3;
         if ((pick == 0 && near) || (pick == 1 && aligned) || (pick == 2 && commit_slam(bruce, game))) {
+            if (pick != 2 && dx) bruce->facing = dx > 0 ? 1 : -1;
             enter(bruce, MF_BRUCE_PUNCH + pick);
             bruce->attack_cycle = (pick + 1) % 3;
             return 1;
@@ -297,24 +350,35 @@ void mf_bruce_step(mf_bruce *bruce, const mf_game *game)
     }
     if (bruce->invulnerable) --bruce->invulnerable;
     if (bruce->impact) --bruce->impact;
-    if (action_tick(bruce)) return;
+    if (bruce->counter_cooldown) --bruce->counter_cooldown;
+    if (bruce->pressure_window && !--bruce->pressure_window) bruce->pressure_hits = 0;
+    if ((bruce->state == MF_BRUCE_READY || (bruce->state == MF_BRUCE_HURT && !bruce->height)) &&
+        bruce->health && bruce->pressure_hits >= MF_BRUCE_PRESSURE_HITS) {
+        int index = nearest_player(bruce, game);
+        if (index >= 0) {
+            int target_x = game->players[index].x;
+            if (target_x != bruce->x) bruce->facing = target_x > bruce->x ? 1 : -1;
+            bruce->pressure_hits = bruce->pressure_window = 0;
+            bruce->counter_cooldown = MF_BRUCE_COUNTER_COOLDOWN;
+            enter(bruce, MF_BRUCE_COUNTER);
+            return;
+        }
+    }
+    if (action_tick(bruce, game)) return;
     if (bruce->cooldown) --bruce->cooldown;
     if (bruce->target < 0 || !living(&game->players[bruce->target]) || --bruce->retarget <= 0) {
         bruce->target = nearest_player(bruce, game);
-        bruce->retarget = 24;
+        bruce->retarget = aggressive(bruce) ? 16 : 20;
     }
     x = bruce->x;
     y = bruce->y;
     if (bruce->target >= 0) {
         target = &game->players[bruce->target];
-        if (target->x != x) bruce->facing = target->x > x ? 1 : -1;
+        if (target->x - x > 4*Q || x - target->x > 4*Q)
+            bruce->facing = target->x > x ? 1 : -1;
         if (!bruce->cooldown && choose_attack(bruce, target, game)) return;
-        x = advance(x, target->x, 42 * Q, 144);
-        y = advance(y, target->y, 7 * Q, 96);
-        if (x < LOT_FIRST * Q) x = LOT_FIRST * Q;
-        if (x > BRUCE_RIGHT * Q) x = BRUCE_RIGHT * Q;
-        if (y < LANE_BACK * Q) y = LANE_BACK * Q;
-        if (y > LANE_FRONT * Q) y = LANE_FRONT * Q;
+        x = advance(x, clamp_to_floor(target->x, LOT_FIRST*Q, BRUCE_RIGHT*Q), 30*Q, 208);
+        y = advance(y, clamp_to_floor(target->y, LANE_BACK*Q, LANE_FRONT*Q), 3*Q, 176);
     }
     moving = x != bruce->x || y != bruce->y;
     bruce->animation = moving == bruce->moving ? bruce->animation + 1 : 0;
@@ -342,6 +406,11 @@ int mf_bruce_pose(const mf_bruce *bruce)
         if (bruce->timer < SLAM_TOUCHDOWN) return POSE_CHARGE + 1;
         if (bruce->timer < SLAM_TOUCHDOWN + SLAM_IMPACT) return POSE_SLAM + 1;
         return POSE_CHARGE;
+    case MF_BRUCE_COUNTER:
+        if (bruce->timer < MF_BRUCE_COUNTER_WINDUP) return POSE_SLAM;
+        return bruce->timer < COUNTER_TOUCHDOWN ? POSE_CHARGE + 1 : POSE_SLAM + 1;
+    case MF_BRUCE_COUNTER_RECOVERY:
+        return bruce->timer < SLAM_IMPACT ? POSE_SLAM + 1 : POSE_CHARGE;
     case MF_BRUCE_HURT:
         return bruce->timer < 6 ? POSE_HIT : bruce->timer < 15 ? POSE_HIT + 1 : POSE_CHARGE;
     case MF_BRUCE_FALL: return POSE_KD + (bruce->timer >= 6);
