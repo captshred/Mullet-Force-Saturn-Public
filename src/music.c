@@ -198,7 +198,7 @@ static void bruce_audio_update(unsigned events,unsigned now,int legacy_death,int
         bruce_laugh_pending=0;
     }else if(!paused && !legacy_death && bruce_pending!=BRUCE_DEATH_CUE){
         if(events&MF_BRUCE_SFX_LAUGH)bruce_laugh_pending=1;
-        if(events&MF_BRUCE_SFX_JUMP)cue=BRUCE_JUMP_SONG;
+        if(events&(MF_BRUCE_SFX_JUMP|MF_BRUCE_ENTRANCE_JUMP))cue=BRUCE_JUMP_SONG;
         else if(events&MF_BRUCE_SFX_CHARGE)cue=BRUCE_CHARGE_SONG;
         else if((events&MF_BRUCE_SFX_HURT) && bruce_voice<0)cue=BRUCE_HURT_SONG;
         if(cue>=0 && (bruce_pending<0 ||
@@ -363,7 +363,7 @@ static void combat_update(int player,int events,unsigned int now,unsigned int el
     if(c->playing && (int)(now-c->ends_at)>=0)c->playing=0;
     c->hit_wait=elapsed>=c->hit_wait?0:c->hit_wait-elapsed;
     if(events&(MF_COMBAT_JAB(player)|MF_COMBAT_BAT(player)|MF_COMBAT_HURT(player)))c->hit_wait=0;
-    if(player==2 && (events&MF_WORLD_IMPACT)) {
+    if(player==2 && (events&(MF_WORLD_IMPACT|MF_BRUCE_SFX_LAND))) {
         song=2;
     }else if(player==2 && (events&MF_VEHICLE_WARNING)){
         song=7;
@@ -434,7 +434,7 @@ void mf_music_update(int started,int paused,int events,unsigned int now)
 #if MF_BRUCE_RUNTIME
     if(bruce_tone_owner!=0)vehicle_pass=0;
 #endif
-    car_sound_update(vehicle_pass,vehicle_pass && !paused && !protected && !(events&MF_WORLD_IMPACT),
+    car_sound_update(vehicle_pass,vehicle_pass && !paused && !protected && !(events&(MF_WORLD_IMPACT|MF_BRUCE_SFX_LAND)),
                      started && paused);
 #endif
     if(protected)events&=MF_TORCH_HISS;
@@ -489,6 +489,6 @@ void mf_music_update(int started,int paused,int events,unsigned int now)
 #if MF_VEHICLE_AMBUSH
         if(i==2 && car_sound_playing)continue;
 #endif
-        combat_update(i,i==2?(int)(events&(MF_WORLD_IMPACT|MF_VEHICLE_WARNING)):events,now,elapsed);
+        combat_update(i,i==2?(int)(events&(MF_WORLD_IMPACT|MF_BRUCE_SFX_LAND|MF_VEHICLE_WARNING)):events,now,elapsed);
     }
 }

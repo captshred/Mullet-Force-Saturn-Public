@@ -81,12 +81,12 @@ int main(void)
     assert(mf_music_bruce_bank(1,111) && uploads==1);
 
     fail_start=1;
-    bruce_audio_update(MF_BRUCE_SFX_JUMP,111,0,0);
+    bruce_audio_update(MF_BRUCE_ENTRANCE_JUMP,111,0,0);
     assert(!starts);
     fail_start=0;
     bruce_audio_update(0,112,0,0);
     assert(starts==1 && last_song==BRUCE_JUMP_SONG && last_priority==29);
-    bruce_audio_update(MF_BRUCE_SFX_HURT|MF_BRUCE_SFX_LAUGH,113,0,0);
+    bruce_audio_update(MF_BRUCE_SFX_LAND|MF_BRUCE_SFX_HURT|MF_BRUCE_SFX_LAUGH,113,0,0);
     bruce_audio_update(MF_BRUCE_SFX_CHARGE,114,0,0);
     assert(!stops && starts==1 && bruce_laugh_pending);
     mode=SND_MD_STOP;

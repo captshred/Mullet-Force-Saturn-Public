@@ -22,10 +22,18 @@ static void dash_input(mf_game *g,int index,unsigned held,unsigned pressed,int l
     int punching=MF_FAST_RUNNING_BAT && p->attack && !p->bat && !p->attack_air;
     unsigned h=held&(MF_LEFT|MF_RIGHT),edge=(pressed&h)&~d->previous;
     int dir=h==MF_RIGHT?1:h==MF_LEFT?-1:0;
+    unsigned actions=(pressed|p->buffered)&(punching?MF_B:(MF_A|MF_B));
     d->previous=h;
     if(!live || !connected || !p->active || !p->health || p->hurt || (p->attack && !punching) ||
        p->height || p->vz || p->landing || p->torch || (p->charge && !punching) ||
-       ((pressed|p->buffered)&(punching?MF_B:(MF_A|MF_B))) || h==(MF_LEFT|MF_RIGHT)) {
+       h==(MF_LEFT|MF_RIGHT)) {
+        dash_clear(d);return;
+    }
+    if(actions) {
+        /* Keep an established run until an accepted jump consumes it. */
+#if MF_LEVEL1_STAGE_CLEAR
+        if((actions&MF_B) && dir && d->dir==dir && g->stage==MF_STAGE_LEVEL1)return;
+#endif
         dash_clear(d);return;
     }
     /* Hit-stop freezes an established dash. Punch command recognition may
@@ -240,6 +248,9 @@ static void recover_player(mf_game *g,int index,int joining)
     mf_combo_reset(g,index);
 #endif
     g->dash[index]=(mf_dash_state){0};
+#if MF_DASH_ENABLED
+    g->running_jump[index]=0;
+#endif
     g->running_bat[index]=(mf_running_bat){0};
     *p=(mf_player){0};p->active=1;p->health=100;p->x=x*256;p->y=y*256;
     p->facing=1;p->invulnerable=120;p->a_blocked=1;
@@ -323,6 +334,7 @@ static void player_take_hit(mf_game *g,int i,int damage,int direction)
     p->health=clamp(p->health-damage,0,100);
 #if MF_DASH_ENABLED
     dash_clear(&g->dash[i]);
+    g->running_jump[i]=0;
 #endif
     g->running_bat[i]=(mf_running_bat){0};
 /* JAB BEGIN */
@@ -882,7 +894,7 @@ static void torch_hits(mf_game *g,mf_player *p)
 }
 static void player_step(mf_game *g,int index,unsigned held,unsigned pressed)
 {
-    mf_player *p=&g->players[index];int dx=0,dy=0,speed;
+    mf_player *p=&g->players[index];int dx=0,dy=0,speed,horizontal_speed;
     if(!p->active)return;
     pressed|=p->buffered;p->buffered=0;
 #if MF_FAST_RUNNING_BAT
@@ -933,6 +945,10 @@ static void player_step(mf_game *g,int index,unsigned held,unsigned pressed)
         if((pressed&MF_B) && !p->height && !p->vz && !p->attack){
 #if MF_PUNCH_COMBO
             mf_combo_reset(g,index);
+#endif
+#if MF_DASH_ENABLED
+            g->running_jump[index]=g->dash[index].dir!=0;
+            dash_clear(&g->dash[index]);
 #endif
             p->landing=0;p->vz=1510;p->air_bat_used=0;clear_gesture(p);torch_cancel(p);
             /* Even forward+B cannot contribute a stale grounded first tap. */
@@ -990,7 +1006,11 @@ static void player_step(mf_game *g,int index,unsigned held,unsigned pressed)
         if(rb->carry)--rb->carry;
     }
 #endif
-    if(dx && dy)speed=speed*181/256;
+    horizontal_speed=speed;
+#if MF_DASH_ENABLED
+    if(g->running_jump[index])horizontal_speed=speed*MF_DASH_SPEED_NUM/MF_DASH_SPEED_DEN;
+#endif
+    if(dx && dy){speed=speed*181/256;horizontal_speed=horizontal_speed*181/256;}
     if(dx && (!p->attack || p->charge) && !p->torch)p->facing=dx;
 #if MF_LEVEL1_WORLD_FLOW
     {
@@ -1001,10 +1021,10 @@ static void player_step(mf_game *g,int index,unsigned held,unsigned pressed)
             if(p->x>=other->x && dx>0 && other->x+MF_WORLD_PAIR_SPAN*256<hi)hi=other->x+MF_WORLD_PAIR_SPAN*256<p->x?p->x:other->x+MF_WORLD_PAIR_SPAN*256;
             if(p->x<other->x && dx<0 && other->x-MF_WORLD_PAIR_SPAN*256>lo)lo=other->x-MF_WORLD_PAIR_SPAN*256>p->x?p->x:other->x-MF_WORLD_PAIR_SPAN*256;
         }
-        p->x=clamp(p->x+dx*speed,lo,hi);
+        p->x=clamp(p->x+dx*horizontal_speed,lo,hi);
     }
 #else
-    p->x=clamp(p->x+dx*speed,MF_WORLD_LEFT*256,MF_WORLD_RIGHT*256);
+    p->x=clamp(p->x+dx*horizontal_speed,MF_WORLD_LEFT*256,MF_WORLD_RIGHT*256);
 #endif
     p->y=clamp(p->y+dy*speed*3/4,MF_ROAD_BACK*256,MF_ROAD_FRONT*256);
     p->moving=dx||dy;if(p->moving)++p->walk;else p->walk=0;
@@ -1019,6 +1039,9 @@ static void player_step(mf_game *g,int index,unsigned held,unsigned pressed)
     if(p->height || p->vz){p->height+=p->vz;p->vz-=74;
         if(p->height<=0){
             p->height=0;p->vz=0;p->landing=6;clear_gesture(p);
+#if MF_DASH_ENABLED
+            g->running_jump[index]=0;
+#endif
             if(p->bat && p->attack_air){
                 /* Never restart active frames or reset the per-target mask. */
                 p->attack=MF_BAT_LAND_RECOVERY_START;p->attack_air=0;
@@ -1165,6 +1188,9 @@ void mf_game_step_inputs(mf_game *g,const unsigned held[2],const unsigned presse
 #endif
     g->events=0;
     if(!(connected&2u) && g->players[1].active) {
+#if MF_DASH_ENABLED
+        g->running_jump[1]=0;
+#endif
         g->players[1].active=0;g->players[1].attack=0;g->players[1].buffered=0;
         torch_cancel(&g->players[1]);
     }
@@ -1266,10 +1292,14 @@ void mf_game_step_inputs(mf_game *g,const unsigned held[2],const unsigned presse
         mf_bruce *bruce=&g->bruce;
         int was_active=bruce->active;
 #if MF_VEHICLE_AMBUSH
-        int previous_state=bruce->state;
+        int previous_state=bruce->state,previous_height=bruce->height;
 #endif
         mf_bruce_step(bruce,g);
 #if MF_VEHICLE_AMBUSH
+        if(previous_height>0 && bruce->height==0 &&
+           ((previous_state==MF_BRUCE_ENTRANCE && bruce->state==MF_BRUCE_ENTRANCE_IMPACT) ||
+            (bruce->state==previous_state && (previous_state==MF_BRUCE_SLAM || previous_state==MF_BRUCE_COUNTER))))
+            g->events|=MF_BRUCE_SFX_LAND;
         if(bruce->state!=previous_state) {
             if(bruce->state==MF_BRUCE_SLAM || bruce->state==MF_BRUCE_COUNTER)
                 g->events|=MF_BRUCE_SFX_JUMP;

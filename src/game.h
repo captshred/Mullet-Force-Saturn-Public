@@ -40,6 +40,7 @@ typedef struct { int x,y,vx,hp,facing,state,timer,walk,hit_done,grace,flash,targ
 #define MF_BRUCE_SFX_HURT (1u<<27)
 #define MF_BRUCE_SFX_LAUGH (1u<<28)
 #define MF_BRUCE_SFX_DEATH (1u<<29)
+#define MF_BRUCE_SFX_LAND (1u<<30)
 #define MF_WORLD_IMPACT (1u<<11) /* inorganic destruction only */
 #define MF_COMBAT_HURT(i) (1u << (16+(i)))
 #define MF_COMBAT_DESTROY(i) (1u << (14+(i)))
@@ -125,6 +126,9 @@ typedef struct {
     int street_spawns_suspended;
 #if MF_BRUCE_RUNTIME
     mf_bruce bruce;
+#endif
+#if MF_DASH_ENABLED
+    unsigned char running_jump[MF_PLAYERS];
 #endif
 } mf_game;
 #if MF_VEHICLE_AMBUSH

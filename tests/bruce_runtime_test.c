@@ -1,5 +1,6 @@
 #include "bruce.h"
 #include <assert.h>
+#include <stdio.h>
 
 static void tick(mf_bruce *bruce, const mf_game *game, int count)
 {
@@ -9,7 +10,7 @@ static void tick(mf_bruce *bruce, const mf_game *game, int count)
 static void verify_entrance_events(void)
 {
     mf_game game = {0};
-    int launches=0;
+    int launches=0, landings=0;
     game.started=1;
     game.camera=2700;
     game.street_spawns_suspended=1;
@@ -20,8 +21,12 @@ static void verify_entrance_events(void)
             assert(game.bruce.state==MF_BRUCE_ENTRANCE && frame==0);
             ++launches;
         }
+        if(game.events&MF_BRUCE_SFX_LAND) {
+            assert(frame==48 && game.bruce.state==MF_BRUCE_ENTRANCE_IMPACT && !game.bruce.height);
+            ++landings;
+        }
     }
-    assert(launches==1 && game.bruce.state==MF_BRUCE_READY);
+    assert(launches==1 && landings==1 && game.bruce.state==MF_BRUCE_READY);
 }
 
 static void verify_game_dispatch(void)
@@ -88,7 +93,10 @@ static void verify_bat_interruptions(void)
         assert(b->x == x && b->y == y && !b->impact && !b->hit_players);
         assert(p->health == 100 && g.players[0].health == 100);
         assert(mf_bruce_pose(b)==13 && !mf_bruce_strike(b,p));
-        for(int i=0;i<18;++i) mf_game_step(&g,0,0);
+        for(int i=0;i<18;++i) {
+            mf_game_step(&g,0,0);
+            assert(!(g.events&MF_BRUCE_SFX_LAND));
+        }
         assert(b->health == 57 && p->health == 100);
     }
 
@@ -144,7 +152,7 @@ static void verify_slam_lunge(void)
         assert(bruce.x == 2910*256 && bruce.y == 201*256 && mf_bruce_pose(&bruce) == 11);
         tick(&bruce,&game,17);
         assert(bruce.x == (2910+direction*54)*256 && bruce.y == 215*256);
-        assert(bruce.height == 44 && mf_bruce_pose(&bruce) == 9 && !mf_bruce_strike(&bruce,buck));
+        assert(bruce.height == 55 && mf_bruce_pose(&bruce) == 9 && !mf_bruce_strike(&bruce,buck));
         tick(&bruce,&game,16);
         assert(bruce.x == bruce.land_x && bruce.y == 229*256 && !bruce.height);
         assert(bruce.impact && mf_bruce_pose(&bruce) == 12);
@@ -192,6 +200,9 @@ static void verify_counter(int coop)
         }
     }
     assert(b->state==MF_BRUCE_COUNTER && mf_bruce_pose(b)==11);
+#if MF_VEHICLE_AMBUSH
+    assert(g.events&MF_BRUCE_SFX_JUMP);
+#endif
     assert(b->counter_cooldown==MF_BRUCE_COUNTER_COOLDOWN);
     assert(!mf_bruce_strike(b,&g.players[0]));
     tick(b,&g,MF_BRUCE_COUNTER_WINDUP-1);
@@ -204,9 +215,16 @@ static void verify_counter(int coop)
     assert(b->x==x && b->y==y && mf_bruce_pose(b)==9);
     g.players[0].x=x-112*256;
     tick(b,&g,MF_BRUCE_COUNTER_AIR/2);
-    assert(b->height==48 && b->land_x==x-47*256);
+    assert(b->height==60 && b->land_x==x-47*256);
     mf_bruce_receive(b,2,0,-1); /* Flame/light contact in the arc. */
-    assert(b->health==69 && b->state==MF_BRUCE_COUNTER && b->height==48);
+    assert(b->health==69 && b->state==MF_BRUCE_COUNTER && b->height==60);
+    mf_game landing=g;
+    landing.hitstop=0;
+    landing.players[0].active=landing.players[1].active=0;
+    for(int i=1;i<=MF_BRUCE_COUNTER_AIR/2+1;++i) {
+        mf_game_step(&landing,0,0);
+        assert(!!(landing.events&MF_BRUCE_SFX_LAND)==(i==MF_BRUCE_COUNTER_AIR/2));
+    }
     tick(b,&g,MF_BRUCE_COUNTER_AIR/2);
     assert(b->x==b->land_x && b->y==b->slam_land_y && !b->height && mf_bruce_pose(b)==12);
     assert(!mf_bruce_strike(b,&g.players[0]));
@@ -308,16 +326,68 @@ static void verify_bruce_cues(void)
         g.players[0]=(mf_player){.active=1,.health=100,.x=b->x-95*256,.y=b->y,.facing=1};
         mf_game_step(&g,0,0);
         assert((g.events&event) && !b->timer);
-        for(int i=0;i<50;++i){
+        for(int i=1;i<=60;++i){
             mf_game_step(&g,0,0);
             assert(!(g.events&event));
+            assert(!!(g.events&MF_BRUCE_SFX_LAND)==(attack==2 && i==50));
         }
     }
 }
 #endif
 
+
+#if MF_DASH_ENABLED
+static void verify_running_jumps(void)
+{
+    for(int mode=0;mode<3;++mode) {
+        mf_game walk={0}, run;
+        unsigned held[2]={MF_RIGHT,MF_RIGHT}, jump[2]={MF_B,MF_B}, none[2]={0,0};
+        unsigned connected=mode==0?1:3;
+        int start[2], peak=0, frames=0;
+        walk.started=walk.street_spawns_suspended=1;
+        walk.camera=400;
+        walk.vehicle_tick=10000;
+        for(int i=0;i<2;++i) {
+            start[i]=(470+i*35)*256;
+            walk.players[i]=(mf_player){.active=mode!=0 || !i,.health=100,.x=start[i],.y=200*256};
+        }
+        run=walk;
+        for(int i=0;i<2;++i)if(mode!=1 || i)run.dash[i].dir=1,run.dash[i].ready=1;
+        do {
+            mf_game_step_inputs(&walk,held,frames?none:jump,connected);
+            mf_game_step_inputs(&run,held,frames?none:jump,connected);
+            for(int i=0;i<2;++i)assert(run.players[i].height==walk.players[i].height);
+            if(peak<run.players[0].height)peak=run.players[0].height;
+            if(!frames) {
+                mf_game reverse=run;
+                unsigned back[2]={MF_LEFT,MF_LEFT}, kick[2]={MF_A,MF_A};
+                mf_game_step_inputs(&reverse,none,none,connected);
+                for(int i=0;i<2;++i)assert(reverse.players[i].x==run.players[i].x);
+                mf_game_step_inputs(&reverse,back,kick,connected);
+                for(int i=0;i<2;++i)if(run.players[i].active) {
+                    int speed=(mode!=1 || i)?390*MF_DASH_SPEED_NUM/MF_DASH_SPEED_DEN:390;
+                    assert(reverse.players[i].x==run.players[i].x-speed && reverse.players[i].attack_air);
+                }
+            }
+            ++frames;
+            assert(frames<=42);
+        } while(run.players[0].height);
+        assert(frames==42 && peak==16170);
+        for(int i=0;i<2;++i)if(run.players[i].active) {
+            int speed=(mode!=1 || i)?390*MF_DASH_SPEED_NUM/MF_DASH_SPEED_DEN:390;
+            assert(walk.players[i].x-start[i]==390*frames);
+            assert(run.players[i].x-start[i]==speed*frames && !run.running_jump[i]);
+        }
+    }
+    puts("PASS solo and co-op running jumps, reversal, neutral, kicks, 42 ticks, unchanged 16170/256 px apex");
+}
+#endif
+
 int main(void)
 {
+#if MF_DASH_ENABLED
+    verify_running_jumps();
+#endif
     mf_game game = {0};
     mf_bruce bruce = {0};
     mf_player *player = &game.players[0];
@@ -342,7 +412,7 @@ int main(void)
         mf_bruce_step(&bruce,&game);
         if(bruce.height > apex) apex = bruce.height;
     }
-    assert(apex == 62 && bruce.state == MF_BRUCE_ENTRANCE_IMPACT);
+    assert(apex == 78 && bruce.state == MF_BRUCE_ENTRANCE_IMPACT);
     assert(!bruce.height && bruce.x == bruce.land_x && bruce.impact && mf_bruce_pose(&bruce) == 12);
     tick(&bruce,&game,20);
     assert(bruce.state == MF_BRUCE_READY && bruce.cooldown == 34);
