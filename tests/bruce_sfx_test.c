@@ -116,14 +116,17 @@ int main(void)
     assert(mf_music_bruce_bank(1,250) && uploads==5);
     bruce_audio_update(MF_BRUCE_SFX_JUMP,251,0,0);
     assert(starts==5);
-    fail_stop=1;
-    assert(bruce_legacy_death_update(MF_COMBAT_HUMAN_DEATH(0),252));
-    assert(death_pending && !death_active && stops==2);
-    fail_stop=0;
-    assert(bruce_legacy_death_update(0,253) && stops==3);
-    assert(bruce_legacy_death_update(0,255) && starts==5);
-    assert(bruce_legacy_death_update(0,256) && starts==6 && last_song==8 && death_active);
-    bruce_audio_update(MF_BRUCE_SFX_JUMP,257,1,0);
-    assert(starts==6 && stops==3);
+    assert(!bruce_legacy_death_update(MF_COMBAT_HUMAN_DEATH(0),252));
+    assert(!death_pending && !death_active && starts==5 && stops==2);
+    assert(!mf_music_bruce_bank(0,253) && stops==3);
+    assert(mf_music_bruce_bank(0,256) && uploads==6);
+    assert(bruce_legacy_death_update(MF_COMBAT_HUMAN_DEATH(1),257));
+    assert(starts==6 && last_song==8 && death_active);
+    assert(mf_music_bruce_bank(1,258)==MF_BRUCE_BANK_WAIT && uploads==6);
+    assert(bruce_legacy_death_update(0,258));
+    mode=SND_MD_STOP;
+    assert(bruce_legacy_death_update(0,304) && !death_active);
+    assert(!bruce_legacy_death_update(0,305));
+    assert(mf_music_bruce_bank(1,305)==MF_BRUCE_BANK_TRANSFERRED && uploads==7);
     puts("PASS Bruce cue arbitration, independent control, PCM completion and reversible bank guards");
 }

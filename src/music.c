@@ -123,15 +123,15 @@ static void car_sound_update(int in_pass,int requested,int paused)
 #endif
 
 #if MF_BRUCE_RUNTIME && MF_VEHICLE_AMBUSH
-/* The pinned driver has eight playable SEQ controls. During combat, use
-   control 7 when the protected POOWAH dispatcher does not own it. */
+/* The pinned driver has eight playable SEQ controls. Bruce owns control 7
+   during his encounter. The protected POOWAH dispatcher uses it on the street. */
 enum { BRUCE_SFX_PORT=7, BRUCE_SFX_BANK=2, BRUCE_SFX_SEQ_ADDR=CAR_TON_ADDR+MF_BRUCE_TON_BYTES };
 /* Song IDs start at zero independently of the SCSP addresses. */
 enum { BRUCE_JUMP_SONG, BRUCE_CHARGE_SONG, BRUCE_HURT_SONG, BRUCE_LAUGH_SONG, BRUCE_DEATH_CUE };
 typedef char bruce_sfx_ram_bound[BRUCE_SFX_SEQ_ADDR+MF_BRUCE_SEQ_BYTES<=0x80000?1:-1];
 static const unsigned char bruce_sfx_ticks[4]=MF_BRUCE_SFX_MIN_TICKS;
 static const unsigned char bruce_cue_priority[]={3,2,0,1,4};
-static int bruce_tone_owner, bruce_voice=-1, bruce_pending=-1, bruce_laugh_pending;
+static int bruce_encounter, bruce_tone_owner, bruce_voice=-1, bruce_pending=-1, bruce_laugh_pending;
 static int bruce_seen, bruce_stop_guard, bruce_audio_fault;
 static unsigned bruce_voice_at, bruce_stopped_at, bruce_pending_at;
 
@@ -184,16 +184,7 @@ static int bruce_stop_complete(unsigned now)
 
 static int bruce_legacy_death_update(unsigned events,unsigned now)
 {
-    unsigned legacy_events=MF_COMBAT_HUMAN_DEATH(0)|MF_COMBAT_HUMAN_DEATH(1);
-    if((events&legacy_events) && !mf_music_protected() &&
-       (bruce_voice>=0 || bruce_stop_guard)){
-        death_pending=1;
-        death_prepared=0;
-    }
-    if(death_pending){
-        if(!bruce_voice_reap(now) && !bruce_stop_voice(now))return 1;
-        if(!bruce_stop_complete(now))return 1;
-    }
+    if(bruce_encounter)events&=~(MF_COMBAT_HUMAN_DEATH(0)|MF_COMBAT_HUMAN_DEATH(1));
     return death_update(events,now);
 }
 
@@ -256,6 +247,10 @@ static int bruce_release_bank(unsigned now)
 
 int mf_music_bruce_bank(int requested,unsigned now)
 {
+    /* Let any already protected street death finish before Bruce enters.
+       The encounter then has exclusive use of the shared sequencer control. */
+    if(requested && mf_music_protected())return MF_BRUCE_BANK_WAIT;
+    bruce_encounter=requested;
     if(!ready || bruce_audio_fault || bruce_tone_owner==requested)return MF_BRUCE_BANK_READY;
     if(requested){
         car_sound_update(0,0,0);
@@ -339,7 +334,7 @@ int mf_music_init(void)
 #if MF_VEHICLE_AMBUSH
     ok=upload("CARPASS.TON",CAR_TON_BYTES,CAR_TON_ADDR)&&ok;
 #if MF_BRUCE_RUNTIME
-    bruce_tone_owner=bruce_audio_fault=bruce_stop_guard=bruce_laugh_pending=0;
+    bruce_encounter=bruce_tone_owner=bruce_audio_fault=bruce_stop_guard=bruce_laugh_pending=0;
     bruce_voice=bruce_pending=-1;
     car_safe_at=0;
     ok=bruce_cd_upload("BSFX.SEQ",MF_BRUCE_SEQ_BYTES,BRUCE_SFX_SEQ_ADDR)&&ok;
