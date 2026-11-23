@@ -158,22 +158,31 @@ static int world_decode_cached(unsigned group) {
     unsigned i,victim=0,j;int cached;
     if(group>=MF_INTERSECTION_BLOCKS)return 0;
     if(!world_block_cache)return world_decode(group);
+    MF_PERF_BEGIN(lookup_start);
     cached=world_block_index[group];
     if(cached>=0) {
+        MF_PERF_END(MF_PERF_LOOKUP,lookup_start);
+        MF_PERF_BEGIN(hit_copy);
         if(world_decoded_group!=(int)group)
             for(j=0;j<512;j++)world_decoded[j]=world_block_cache[cached*512+j];
-        world_decoded_group=(int)group;world_block_age[cached]=++world_block_clock;return 1;
+        world_decoded_group=(int)group;world_block_age[cached]=++world_block_clock;
+        MF_PERF_END(MF_PERF_COPY,hit_copy);
+        return 1;
     }
     for(i=1;i<MF_WORLD_DECODE_CACHE;i++)
         if(world_block_age[i]<world_block_age[victim])victim=i;
+    MF_PERF_END(MF_PERF_LOOKUP,lookup_start);
     MF_PERF_BEGIN(decode_start);
     if(!world_decode(group))return 0;
     MF_PERF_END(MF_PERF_DECODE,decode_start);
     mf_perf_stream(0,0,1);
+    MF_PERF_BEGIN(miss_copy);
     for(j=0;j<512;j++)world_block_cache[victim*512+j]=world_decoded[j];
     if(world_block_tag[victim]>=0)world_block_index[world_block_tag[victim]]=-1;
     world_block_tag[victim]=(short)group;world_block_index[group]=(short)victim;
-    world_block_age[victim]=++world_block_clock;return 1;
+    world_block_age[victim]=++world_block_clock;
+    MF_PERF_END(MF_PERF_COPY,miss_copy);
+    return 1;
 }
 static unsigned world_pattern(int column,int y) {
     int at;
@@ -206,15 +215,22 @@ static void world_mark(int first,int top) {
 static unsigned world_resident(unsigned source) {
     unsigned slot,i,at;
     volatile unsigned short *cells=(volatile unsigned short *)VDP2_VRAM_A0;
-    if(world_slot[source]>=0)return (unsigned)world_slot[source];
+    MF_PERF_BEGIN(resident_start);
+    if(world_slot[source]>=0){
+        MF_PERF_END(MF_PERF_LOOKUP,resident_start);
+        return (unsigned)world_slot[source];
+    }
     /* Current and previous visible/guard tiles are pinned before any upload.
        At most 44 columns by 33 rows can be pinned across a normal step. */
     while(world_needed[world_source[world_victim]>>3]&(1u<<(world_source[world_victim]&7)))
         world_victim=(world_victim+1)%MF_INTERSECTION_CACHE_TILES;
+    MF_PERF_END(MF_PERF_LOOKUP,resident_start);
     if(!world_decode_cached(source/8)){live_error=861;return 0;}
+    MF_PERF_BEGIN(bind_start);
     slot=world_victim;world_slot[world_source[slot]]=-1;
     world_source[slot]=(unsigned short)source;world_slot[source]=(short)slot;
     at=(source%8)*64;
+    MF_PERF_END(MF_PERF_COPY,bind_start);
     MF_PERF_BEGIN(tile_start);
     for(i=0;i<32;i++)cells[slot*32+i]=(unsigned short)((world_decoded[at+2*i]<<8)|world_decoded[at+2*i+1]);
     MF_PERF_END(MF_PERF_TILE_UPLOAD,tile_start);
@@ -226,6 +242,7 @@ static unsigned world_resident(unsigned source) {
    missing blocks are prepared per callback; no decode burst is needed when
    those tiles enter scan-out. Direct group lookup avoids per-hit LRU scans. */
 static void world_prefetch_build(int first,int top) {
+    MF_PERF_BEGIN(queue_start);
     int n,y;unsigned i;
     for(i=0;i<(MF_INTERSECTION_BLOCKS+7)/8;i++)world_prefetch_queued[i]=0;
     world_prefetch_count=world_prefetch_at=0;
@@ -241,6 +258,7 @@ static void world_prefetch_build(int first,int top) {
             }
         }
     }
+    MF_PERF_END(MF_PERF_PREFETCH,queue_start);
 }
 static void world_prefetch(void) {
     unsigned decoded=0;
@@ -258,11 +276,13 @@ static void world_map_update(int camera) {
     volatile unsigned short *map=(volatile unsigned short *)VDP2_VRAM_B0;
     if(first==world_ring_left && top==world_ring_top){world_prefetch();return;}
     if(world_ring_left!=-9999 && first!=world_ring_left)world_scroll_dir=first>world_ring_left?1:-1;
+    MF_PERF_BEGIN(mark_start);
     for(i=0;i<sizeof(world_needed);i++)world_needed[i]=0;
     world_mark(first,top);
     overlap=world_ring_left>=-1 && first-world_ring_left>=-1 &&
         first-world_ring_left<=1 && top-world_ring_top>=-1 && top-world_ring_top<=1;
     if(overlap)world_mark(world_ring_left,world_ring_top);
+    MF_PERF_END(MF_PERF_MARK,mark_start);
     for(col=first;col<=first+42;col++) {
         int physical=(col%128+128)%128;
 #if MF_PERFORMANCE_AUDIT
@@ -271,7 +291,10 @@ static void world_map_update(int camera) {
         for(y=top;y<top+MF_WORLD_VIEW_ROWS && y<MF_INTERSECTION_ROWS;y++) {
             if(overlap && col>=world_ring_left && col<=world_ring_left+42 &&
                y>=world_ring_top && y<world_ring_top+MF_WORLD_VIEW_ROWS)continue;
-            map[physical/64*4096+y*64+physical%64]=(unsigned short)(0x1000u|world_resident(world_render_pattern(col,y))*2u);
+            unsigned slot=world_resident(world_render_pattern(col,y));
+            MF_PERF_BEGIN(name_start);
+            map[physical/64*4096+y*64+physical%64]=(unsigned short)(0x1000u|slot*2u);
+            MF_PERF_END(MF_PERF_NAME_TABLE,name_start);
 #if MF_PERFORMANCE_AUDIT
             map_bytes+=2;
 #endif

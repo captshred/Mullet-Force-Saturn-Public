@@ -143,7 +143,7 @@ int main(int argc,char **argv)
     puts("field,width,height,text_hash,draw_lists,primitives,publishing,sequence,blank,gap,missed,same_blank,gap_ticks,"
          "divider,hz,blank_ticks,timer_faults,edsr_start,edsr_end,edsr_blank,busy_blanks,flags,camera,enemies,"
          "game_ticks,bank_state,bank_kind,bank_bytes,tile_bytes,map_bytes,decoded_blocks,"
-         "cpu,logic,ai,render,audio,bank,fence,install,stream,decode,tile_upload");
+         "cpu,logic,ai,render,audio,bank,fence,install,stream,decode,tile_upload,lookup,copy,mark,prefetch,name_table");
     for(field=0;field<frames;field++) {
         unsigned draws=p_retro_mf_perf_draws(), primitives=p_retro_mf_perf_primitives();
         p_retro_run();
