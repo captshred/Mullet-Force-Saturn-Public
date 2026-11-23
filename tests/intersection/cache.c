@@ -8,8 +8,8 @@ unsigned char street_a0[131072],street_b0[131072];
 static unsigned char panorama[MF_INTERSECTION_WIDTH*MF_WORLD_HEIGHT];
 static unsigned uploads,peak;
 static unsigned char map_data[MF_INTERSECTION_MAP_BYTES],offset_data[MF_INTERSECTION_OFFSET_BYTES];
-static unsigned char block_heap[MF_WORLD_DECODE_HEAP];
-static unsigned char packed_heap[MF_INTERSECTION_PACK_BYTES+4];
+static unsigned short refs[MF_INTERSECTION_TILES];
+static unsigned char packed_heap[MF_WORLD_RAW_BYTES], expected_raw[MF_WORLD_RAW_BYTES];
 static void file(const char *path,void *dst,unsigned bytes) {
  FILE *f=fopen(path,"rb");assert(f && fread(dst,1,bytes,f)==bytes && fgetc(f)==EOF);fclose(f);
 }
@@ -63,39 +63,39 @@ static void check_pack_read(void) {
  puts("PASS bounded CD staging, byte-exact pack, short-read retry, and cleanup");
 }
 static void load(void) {
- world_packed=packed_heap;world_chunks=map_data;world_offsets=offset_data;
+ world_packed=packed_heap;world_chunks=map_data;world_offsets=offset_data;world_refs=refs;
  file("assets/level1-intersection/IXPACK.BIN",world_packed,MF_INTERSECTION_PACK_BYTES);
  file("assets/level1-intersection/IXOFF.BIN",world_offsets,MF_INTERSECTION_OFFSET_BYTES);
  file("assets/level1-intersection/IXMAP.BIN",world_chunks,MF_INTERSECTION_MAP_BYTES);
  file("assets/level1-intersection/IXPIX.BIN",panorama,sizeof panorama);
- world_decoded_group=-1;
  assert(world_offset(0)==0 && world_offset(MF_INTERSECTION_BLOCKS)==MF_INTERSECTION_PACK_DATA_BYTES);
- for(unsigned i=0;i<MF_INTERSECTION_BLOCKS;i++)assert(world_decode(i));
+ for(unsigned i=0;i<MF_INTERSECTION_BLOCKS;i++){
+  assert(world_decode(i));
+  memcpy(expected_raw+i*512,world_decoded,512);
+ }
+ assert(world_expand() && !memcmp(world_packed,expected_raw,sizeof expected_raw));
  /* Every current map source decodes to its actual indexed panorama tile. */
  for(int col=0;col<MF_INTERSECTION_WIDTH/8;col++)for(int y=0;y<MF_INTERSECTION_ROWS;y++) {
-  unsigned source=world_pattern(col,y);assert(source<MF_INTERSECTION_TILES && world_decode(source/8));
+  unsigned source=world_render_pattern(col,y);assert(source<MF_INTERSECTION_TILES);
   for(unsigned row=0;row<8;row++) {
    unsigned char blank[8]={0};
-   assert(!memcmp(world_decoded+(source%8)*64+row*8,col<160 && y<7?blank:panorama+(y*8+row)*MF_INTERSECTION_WIDTH+col*8,8));
+   assert(!memcmp(world_packed+source*64+row*8,col<160 && y<7?blank:panorama+(y*8+row)*MF_INTERSECTION_WIDTH+col*8,8));
   }
  }
  for(unsigned i=0;i<131072/2;i++){((unsigned short *)street_a0)[i]=0xcafe;((unsigned short *)street_b0)[i]=0xbabe;}
- for(unsigned i=0;i<1664;i++) {
-  assert(world_decode(i/8));
-  for(unsigned j=0;j<32;j++)((unsigned short *)street_a0)[i*32+j]=(world_decoded[(i%8)*64+j*2]<<8)|world_decoded[(i%8)*64+j*2+1];
- }
- world_cache_reset();world_block_cache=block_heap;world_blocks_reset();
+ for(unsigned i=0;i<1664;i++)world_upload(i,i);
+ world_cache_reset();
 }
 static void visible(int camera) {
- int scroll=mf_world_camera_y(camera);
- int first_row=scroll>0?(scroll-1)/8:0,last_row=(scroll+239)/8;
- for(int col=camera/8;col<=(camera+319)/8;col++)for(int y=first_row;y<=last_row;y++) {
-  unsigned physical=col%128,p=((unsigned short *)street_b0)[physical/64*4096+y*64+physical%64];
+ world_rect view=world_window(camera);
+ for(int col=view.left;col<view.right;col++)for(int y=view.top;y<view.bottom;y++) {
+  unsigned physical=(unsigned)col&127,p=((unsigned short *)street_b0)[physical/64*4096+y*64+physical%64];
   assert((p&0xf000)==0x1000 && !(p&1));unsigned slot=(p&4095)/2;assert(slot<1664);
   unsigned source=world_render_pattern(col,y);assert(world_source[slot]==source && world_slot[source]==(int)slot);
   for(int row=0;row<8;row++)for(int pair=0;pair<4;pair++) {
    unsigned word=((unsigned short *)street_a0)[slot*32+row*4+pair];
-   unsigned at=(y*8+row)*MF_INTERSECTION_WIDTH+col*8+pair*2;
+   int source_col=col<0?0:col>=MF_INTERSECTION_WIDTH/8?MF_INTERSECTION_WIDTH/8-1:col;
+   unsigned at=(y*8+row)*MF_INTERSECTION_WIDTH+source_col*8+pair*2;
    unsigned expected=col<160 && y<7?0:(panorama[at]<<8)|panorama[at+1];
    assert(word==expected);
   }
@@ -114,15 +114,26 @@ int main(void) {
   int camera=direction?MF_WORLD_CAMERA_MAX-i:i;update(camera);visible(camera);
   if(i)visible(direction?camera+1:camera-1);
  }
- assert(peak<=74 && uploads>0);unsigned sequential_peak=peak;
+ assert(peak<=74+WORLD_PREFETCH_TILES && uploads>0);unsigned sequential_peak=peak;
  for(int round=0;round<3;round++){load();for(int c=0;c<=MF_WORLD_CAMERA_MAX;c+=320){update(c);visible(c);}}
+ /* Reverse at sub-tile steps in both the downhill and flat sections. */
+ for(int base=0;base<=MF_WORLD_CAMERA_MAX-16;base+=37){
+  update(base);visible(base);
+  for(int i=0;i<16;i+=2){update(base+i);visible(base+i);if(i)visible(base+i-2);}
+  for(int i=14;i>=0;i-=2){update(base+i);visible(base+i);if(i<14)visible(base+i+2);}
+ }
+ /* An intentionally short offset is rejected without crossing the buffer. */
+ file("assets/level1-intersection/IXPACK.BIN",world_packed,MF_INTERSECTION_PACK_BYTES);
+ unsigned char prefix[4];memcpy(prefix,world_offsets,4);
+ world_offsets[3]=1;assert(!world_expand());memcpy(world_offsets,prefix,4);
  /* Truncated offsets/streams and bad back-references never overrun scratch. */
- world_decoded_group=-1;unsigned char saved[4];memcpy(saved,world_offsets+4,4);
+ file("assets/level1-intersection/IXPACK.BIN",world_packed,MF_INTERSECTION_PACK_BYTES);
+ unsigned char saved[4];memcpy(saved,world_offsets+4,4);
  memset(world_offsets+4,0,4);assert(!world_decode(0));memcpy(world_offsets+4,saved,4);
  for(unsigned value=0;value<256;value++) {
-  unsigned char old=world_packed[0];world_packed[0]=(unsigned char)value;world_decoded_group=-1;
+  unsigned char old=world_packed[0];world_packed[0]=(unsigned char)value;
   (void)world_decode(0);world_packed[0]=old;
  }
  assert(!world_decode(MF_INTERSECTION_BLOCKS));
- printf("PASS diagonal tile codec, all cameras both ways, prior scan-out pinned, VRAM guards, cold resets and invalid streams. Peak %u tile uploads (%u bytes).\n",sequential_peak,sequential_peak*64);
+ printf("PASS diagonal tile codec, all cameras both ways, current and prior ring guards pinned, VRAM bounds, cold resets and invalid streams. Peak %u tile uploads (%u bytes).\n",sequential_peak,sequential_peak*64);
 }

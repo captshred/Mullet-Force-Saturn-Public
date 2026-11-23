@@ -75,7 +75,15 @@ MEGA_DELTA = {
     "tests/parallax_mock/jo/jo.h", "tests/intersection/cache.c",
     "tools/recompose-mega-arcade.py", "downloads/mullet-force-mega-arcade-phase4a2.zip",
 }
-HQ_DELTA |= VEHICLE_DELTA | CLARITY_REVIEW | LINE_REVIEW | MEGA_DELTA | {
+PERFORMANCE_DELTA = {
+    "src/game.c", "src/main.c", "src/parallax.c", "src/enemy_sprite_bank.c",
+    "src/performance_audit.c", "src/performance_audit.h", "make/saturn.mk",
+    "tests/runtime/performance-audit-frontend.c", "tests/intersection/cache.c",
+    "tools/build-native.sh", "tools/run-performance-audit-emulator.sh",
+    "docs/performance-audit.md", "docs/performance-phase2.md",
+}
+
+HQ_DELTA |= PERFORMANCE_DELTA | VEHICLE_DELTA | CLARITY_REVIEW | LINE_REVIEW | MEGA_DELTA | {
     "downloads/mullet-force-downhill-clarity.zip",
     "downloads/mullet-force-horizontal-line-restoration.zip",
 }

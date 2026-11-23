@@ -175,7 +175,7 @@ void mf_perf_overlay(int y_held,int visible)
         tenth_ms(peaks[MF_PERF_CPU]),tenth_ms(peaks[MF_PERF_LOGIC]),tenth_ms(peaks[MF_PERF_AI]));
     jo_printf(1,26,"DRAW %u AUD %u BANK %u MAP %u",tenth_ms(peaks[MF_PERF_RENDER]),
         tenth_ms(peaks[MF_PERF_AUDIO]),tenth_ms(peaks[MF_PERF_BANK]),tenth_ms(peaks[MF_PERF_STREAM]));
-    jo_printf(1,27,"BANK STATE %u TIMER FLAGS %u",frame.bank_state,frame.timer_faults);
+    jo_printf(1,27,"CAMERA %u BANK %u TIMER %u",frame.camera,frame.bank_state,frame.timer_faults);
     next_overlay=frame.blank+30;
     last_busy_blanks=frame.busy_blanks;
     count=0;

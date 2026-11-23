@@ -14,35 +14,26 @@ static int live_ready,live_error;
 static unsigned char *world_chunks;
 static unsigned char *world_heap;
 static unsigned char *world_packed;
-/* The upper half of the Saturn's 1 MiB low work RAM holds the CD pack.
-   Keep hot decoded data and indices in the existing high work RAM heap. */
-#define MF_WORLD_PACK_ADDRESS 0x00280000u
+/* The approved CD pack expands in place at stage load, descending by
+   block. The range lies inside cartridge-independent Saturn low work RAM. */
 #define MF_WORLD_PACK_LIMIT 0x00300000u
-#if MF_INTERSECTION_PACK_BYTES > MF_WORLD_PACK_LIMIT-MF_WORLD_PACK_ADDRESS
-#error "Downhill tile pack exceeds its low work RAM region"
+#define MF_WORLD_RAW_BYTES (MF_INTERSECTION_BLOCKS*512u)
+#define MF_WORLD_PACK_ADDRESS (MF_WORLD_PACK_LIMIT-MF_WORLD_RAW_BYTES)
+#if MF_WORLD_PACK_ADDRESS < 0x00200000u || MF_INTERSECTION_PACK_BYTES > MF_WORLD_RAW_BYTES
+#error "Background tiles exceed low work RAM"
 #endif
 static unsigned char *world_offsets;
+static unsigned short *world_refs;
 static unsigned char world_decoded[512];
-#define MF_WORLD_DECODE_CACHE 128
 #define MF_WORLD_PACK_SECTOR 2048u
 #define MF_WORLD_PACK_CHUNK 65536u
 #define MF_WORLD_PACK_STORAGE ((MF_INTERSECTION_PACK_BYTES<MF_WORLD_PACK_CHUNK?MF_INTERSECTION_PACK_BYTES:MF_WORLD_PACK_CHUNK)+4u)
-#define MF_WORLD_BACKGROUND_HEAP (MF_INTERSECTION_MAP_BYTES+4u+MF_INTERSECTION_OFFSET_BYTES+4u+MF_WORLD_DECODE_HEAP)
+#define MF_WORLD_BACKGROUND_HEAP (MF_INTERSECTION_MAP_BYTES+4u+MF_INTERSECTION_OFFSET_BYTES+4u+MF_INTERSECTION_TILES*2u)
 #define MF_WORLD_VIEW_ROWS 32
-#define MF_WORLD_DECODE_HEAP (MF_WORLD_DECODE_CACHE*512+MF_INTERSECTION_BLOCKS*4+(MF_INTERSECTION_BLOCKS+7)/8)
-static unsigned char *world_block_cache;
-static short world_block_tag[MF_WORLD_DECODE_CACHE];
-static unsigned world_block_age[MF_WORLD_DECODE_CACHE],world_block_clock;
-static short *world_block_index;
-static unsigned short *world_prefetch_queue;
-static unsigned char *world_prefetch_queued;
-static unsigned world_prefetch_count,world_prefetch_at;
-static int world_decoded_group=-1;
 static void world_release(void) {
     if(world_heap)jo_free(world_heap);
-    world_heap=world_packed=world_block_cache=world_chunks=world_offsets=JO_NULL;
-    world_block_index=JO_NULL;world_prefetch_queue=JO_NULL;world_prefetch_queued=JO_NULL;
-    world_decoded_group=-1;
+    world_heap=world_packed=world_chunks=world_offsets=JO_NULL;
+    world_refs=JO_NULL;
 }
 static int world_read(const char *name,void *dst,int expected) {
     int id=GFS_NameToId((Sint8 *)name),length=0;
@@ -98,12 +89,11 @@ static int world_pack_load(void) {
     if((unsigned long)world_heap+MF_WORLD_BACKGROUND_HEAP>0x060c0000u)return 0;
     world_chunks=world_heap;
     world_offsets=world_chunks+MF_INTERSECTION_MAP_BYTES+4u;
-    world_block_cache=world_offsets+MF_INTERSECTION_OFFSET_BYTES+4u;
+    world_refs=(unsigned short *)(world_offsets+MF_INTERSECTION_OFFSET_BYTES+4u);
     return 1;
 }
 
-/* Independently bounded 512-byte blocks (eight source tiles). No gameplay
-   filesystem calls, heap work, or framebuffer-dependent decompression. */
+/* Independently bounded 512-byte blocks (eight source tiles), used at load. */
 static unsigned world_offset(unsigned group) {
     const unsigned char *p=world_offsets+group*4;
     return ((unsigned)p[0]<<24)|((unsigned)p[1]<<16)|((unsigned)p[2]<<8)|p[3];
@@ -111,10 +101,8 @@ static unsigned world_offset(unsigned group) {
 static int world_decode(unsigned group) {
     unsigned at,end,bit=0,out=0;
     if(group>=MF_INTERSECTION_BLOCKS)return 0;
-    if(world_decoded_group==(int)group)return 1;
     at=world_offset(group);end=world_offset(group+1);
     if(at>=end || end>MF_INTERSECTION_PACK_DATA_BYTES)return 0;
-    world_decoded_group=-1;
     while(out<512) {
         int node=0;unsigned n,d=0,i;
         while(node>=0) {
@@ -134,174 +122,222 @@ static int world_decode(unsigned group) {
         for(i=0;i<n;i++){world_decoded[out]=world_decoded[out-d];++out;}
     }
     if(at+(bit!=0)!=end)return 0;
-    world_decoded_group=(int)group;return 1;
-}
-static short world_slot[MF_INTERSECTION_TILES];
-static unsigned short world_source[MF_INTERSECTION_CACHE_TILES];
-static unsigned char world_needed[(MF_INTERSECTION_TILES+7)/8];
-static unsigned world_victim;
-static int world_ring_left=-9999,world_ring_top,world_scroll_dir=1;
-/* Source blocks span neighboring tiles. Retain the 128 most recently used
-   blocks in the existing Jo CPU heap so column updates do not repeatedly
-   decode the same rows. This adds no video allocation or gameplay I/O. */
-static void world_blocks_reset(void) {
-    unsigned i;
-    world_block_index=(short *)(world_block_cache+MF_WORLD_DECODE_CACHE*512);
-    world_prefetch_queue=(unsigned short *)(world_block_index+MF_INTERSECTION_BLOCKS);
-    world_prefetch_queued=(unsigned char *)(world_prefetch_queue+MF_INTERSECTION_BLOCKS);
-    for(i=0;i<MF_WORLD_DECODE_CACHE;i++){world_block_tag[i]=-1;world_block_age[i]=0;}
-    for(i=0;i<MF_INTERSECTION_BLOCKS;i++)world_block_index[i]=-1;
-    world_prefetch_count=world_prefetch_at=0;
-    world_block_clock=0;world_decoded_group=-1;
-}
-static int world_decode_cached(unsigned group) {
-    unsigned i,victim=0,j;int cached;
-    if(group>=MF_INTERSECTION_BLOCKS)return 0;
-    if(!world_block_cache)return world_decode(group);
-    MF_PERF_BEGIN(lookup_start);
-    cached=world_block_index[group];
-    if(cached>=0) {
-        MF_PERF_END(MF_PERF_LOOKUP,lookup_start);
-        MF_PERF_BEGIN(hit_copy);
-        if(world_decoded_group!=(int)group)
-            for(j=0;j<512;j++)world_decoded[j]=world_block_cache[cached*512+j];
-        world_decoded_group=(int)group;world_block_age[cached]=++world_block_clock;
-        MF_PERF_END(MF_PERF_COPY,hit_copy);
-        return 1;
-    }
-    for(i=1;i<MF_WORLD_DECODE_CACHE;i++)
-        if(world_block_age[i]<world_block_age[victim])victim=i;
-    MF_PERF_END(MF_PERF_LOOKUP,lookup_start);
-    MF_PERF_BEGIN(decode_start);
-    if(!world_decode(group))return 0;
-    MF_PERF_END(MF_PERF_DECODE,decode_start);
-    mf_perf_stream(0,0,1);
-    MF_PERF_BEGIN(miss_copy);
-    for(j=0;j<512;j++)world_block_cache[victim*512+j]=world_decoded[j];
-    if(world_block_tag[victim]>=0)world_block_index[world_block_tag[victim]]=-1;
-    world_block_tag[victim]=(short)group;world_block_index[group]=(short)victim;
-    world_block_age[victim]=++world_block_clock;
-    MF_PERF_END(MF_PERF_COPY,miss_copy);
     return 1;
 }
-static unsigned world_pattern(int column,int y) {
+static int world_expand(void)
+{
+    unsigned group,i;
+    if(world_offset(0)!=0 || world_offset(MF_INTERSECTION_BLOCKS)!=MF_INTERSECTION_PACK_DATA_BYTES)return 0;
+    for(group=MF_INTERSECTION_BLOCKS;group--;) {
+        /* The output cannot overwrite bytes needed by an earlier block.
+           Decode through scratch because this block's ranges may overlap. */
+        if(world_offset(group)>group*512u || !world_decode(group))return 0;
+        for(i=0;i<512;i++)world_packed[group*512u+i]=world_decoded[i];
+    }
+    return 1;
+}
+
+/* Counts cover the union of the current rectangle and the portion of the
+   previous rectangle that could still be scanned out until the next callback. */
+typedef struct { int left, right, top, bottom; } world_rect;
+static world_rect world_ring, world_previous, world_ahead;
+static short world_slot[MF_INTERSECTION_TILES];
+static unsigned short world_source[MF_INTERSECTION_CACHE_TILES];
+static unsigned world_victim, world_ahead_cursor;
+static int world_last_camera,world_scroll_dir;
+enum { WORLD_GUARD_COLUMNS=43, WORLD_PREFETCH_TILES=8, WORLD_PREFETCH_CELLS=48 };
+
+static world_rect world_window(int camera)
+{
+    int scroll=mf_world_camera_y(camera);
+    int top=scroll>0?(scroll-1)/8:0;
+    int bottom=top+MF_WORLD_VIEW_ROWS;
+    world_rect result={camera/8-1,camera/8-1+WORLD_GUARD_COLUMNS,top,
+        bottom<MF_INTERSECTION_ROWS?bottom:MF_INTERSECTION_ROWS};
+    return result;
+}
+
+static int world_same_window(world_rect a,world_rect b)
+{
+    return a.left==b.left && a.top==b.top && a.right==b.right && a.bottom==b.bottom;
+}
+
+static unsigned world_pattern(int column,int y)
+{
     int at;
     if(column<0)column=0;
     if(column>=MF_INTERSECTION_WIDTH/8)column=MF_INTERSECTION_WIDTH/8-1;
     at=((column/16*MF_INTERSECTION_ROWS+y)*16+column%16)*2;
     return (unsigned)(world_chunks[at]<<8)|world_chunks[at+1];
 }
-/* The old top 56 pixels were always hidden behind the independent skyline.
-   Keep their source bytes intact; transparent ring cells expose that same
-   skyline while allowing the new tall buildings to rise in front of it. */
-static unsigned world_render_pattern(int column,int y) {
+
+static unsigned world_render_pattern(int column,int y)
+{
     if(column<160 && y<7)return MF_INTERSECTION_BLANK;
     return world_pattern(column,y);
 }
-static void world_cache_reset(void) {
+
+static void world_cache_reset(void)
+{
     unsigned i;
-    for(i=0;i<MF_INTERSECTION_TILES;i++)world_slot[i]=-1;
+    for(i=0;i<MF_INTERSECTION_TILES;i++){world_slot[i]=-1;world_refs[i]=0;}
     for(i=0;i<MF_INTERSECTION_CACHE_TILES;i++){world_source[i]=i;world_slot[i]=(short)i;}
-    world_victim=0;world_ring_left=-9999;world_scroll_dir=1;
+    world_ring=world_previous=world_ahead=(world_rect){0,0,0,0};
+    world_victim=world_ahead_cursor=0;
+    world_last_camera=0;world_scroll_dir=1;
 }
-static void world_mark(int first,int top) {
-    int column,y;
-    for(column=first;column<=first+42;column++)for(y=top;y<top+MF_WORLD_VIEW_ROWS && y<MF_INTERSECTION_ROWS;y++)
-        {
-        unsigned source=world_render_pattern(column,y);
-        world_needed[source>>3]|=(unsigned char)(1u<<(source&7));
-    }
-}
-static unsigned world_resident(unsigned source) {
-    unsigned slot,i,at;
-    volatile unsigned short *cells=(volatile unsigned short *)VDP2_VRAM_A0;
-    MF_PERF_BEGIN(resident_start);
-    if(world_slot[source]>=0){
-        MF_PERF_END(MF_PERF_LOOKUP,resident_start);
-        return (unsigned)world_slot[source];
-    }
-    /* Current and previous visible/guard tiles are pinned before any upload.
-       At most 44 columns by 33 rows can be pinned across a normal step. */
-    while(world_needed[world_source[world_victim]>>3]&(1u<<(world_source[world_victim]&7)))
-        world_victim=(world_victim+1)%MF_INTERSECTION_CACHE_TILES;
-    MF_PERF_END(MF_PERF_LOOKUP,resident_start);
-    if(!world_decode_cached(source/8)){live_error=861;return 0;}
-    MF_PERF_BEGIN(bind_start);
-    slot=world_victim;world_slot[world_source[slot]]=-1;
-    world_source[slot]=(unsigned short)source;world_slot[source]=(short)slot;
-    at=(source%8)*64;
-    MF_PERF_END(MF_PERF_COPY,bind_start);
+
+static void world_upload(unsigned slot,unsigned source)
+{
+    volatile unsigned short *cells=(volatile unsigned short *)VDP2_VRAM_A0+slot*32;
+    const unsigned char *pixels=world_packed+source*64;
+    unsigned i;
     MF_PERF_BEGIN(tile_start);
-    for(i=0;i<32;i++)cells[slot*32+i]=(unsigned short)((world_decoded[at+2*i]<<8)|world_decoded[at+2*i+1]);
+    for(i=0;i<32;i++)cells[i]=(unsigned short)((pixels[2*i]<<8)|pixels[2*i+1]);
     MF_PERF_END(MF_PERF_TILE_UPLOAD,tile_start);
     mf_perf_stream(64,0,0);
-    world_victim=(slot+1)%MF_INTERSECTION_CACHE_TILES;
+}
+
+static unsigned world_resident(unsigned source)
+{
+    unsigned slot;
+    MF_PERF_BEGIN(lookup_start);
+    if(world_slot[source]>=0) {
+        MF_PERF_END(MF_PERF_LOOKUP,lookup_start);
+        return (unsigned)world_slot[source];
+    }
+    /* The largest adjacent union is below the slot capacity, so a victim
+       always exists even when a speculative upload arrives at the guard. */
+    while(world_refs[world_source[world_victim]]) {
+        if(++world_victim==MF_INTERSECTION_CACHE_TILES)world_victim=0;
+    }
+    slot=world_victim;
+    MF_PERF_END(MF_PERF_LOOKUP,lookup_start);
+    MF_PERF_BEGIN(bind_start);
+    world_slot[world_source[slot]]=-1;
+    world_source[slot]=(unsigned short)source;
+    world_slot[source]=(short)slot;
+    if(++world_victim==MF_INTERSECTION_CACHE_TILES)world_victim=0;
+    MF_PERF_END(MF_PERF_COPY,bind_start);
+    world_upload(slot,source);
     return slot;
 }
-/* Queue the next 128px beyond the ring guard, nearest column first. Two
-   missing blocks are prepared per callback; no decode burst is needed when
-   those tiles enter scan-out. Direct group lookup avoids per-hit LRU scans. */
-static void world_prefetch_build(int first,int top) {
-    MF_PERF_BEGIN(queue_start);
-    int n,y;unsigned i;
-    for(i=0;i<(MF_INTERSECTION_BLOCKS+7)/8;i++)world_prefetch_queued[i]=0;
-    world_prefetch_count=world_prefetch_at=0;
-    for(n=0;n<16;n++) {
-        int column=world_scroll_dir>0?first+43+n:first-1-n;
-        if(column<0 || column>=MF_INTERSECTION_WIDTH/8)continue;
-        for(y=top;y<top+MF_WORLD_VIEW_ROWS && y<MF_INTERSECTION_ROWS;y++) {
-            unsigned source=world_render_pattern(column,y),group=source/8;
-            if(world_slot[source]<0 && world_block_index[group]<0 &&
-               !(world_prefetch_queued[group>>3]&(1u<<(group&7)))) {
-                world_prefetch_queued[group>>3]|=(unsigned char)(1u<<(group&7));
-                world_prefetch_queue[world_prefetch_count++]=(unsigned short)group;
+
+enum { WORLD_UNPIN=-1, WORLD_WRITE=0, WORLD_PIN=1 };
+
+static void world_strip(int column,int first,int end,int op)
+{
+    int y;
+    unsigned physical=(unsigned)column&127u;
+    volatile unsigned short *map=(volatile unsigned short *)VDP2_VRAM_B0+
+        (physical/64)*4096+physical%64;
+    for(y=first;y<end;y++) {
+        unsigned source=world_render_pattern(column,y);
+        if(op)world_refs[source]=(unsigned short)(world_refs[source]+op);
+        else {
+            unsigned slot=world_resident(source);
+            MF_PERF_BEGIN(name_start);
+            map[y*64]=(unsigned short)(0x1000u|slot*2u);
+            MF_PERF_END(MF_PERF_NAME_TABLE,name_start);
+        }
+    }
+    if(!op)mf_perf_stream(0,(end-first)*2,0);
+}
+
+/* Visit only entering/leaving columns and rows. Half-open rectangles avoid
+   double-counting the corner on a combined horizontal and vertical step. */
+static void world_difference(world_rect a,world_rect b,int op)
+{
+    int col,top=a.top,bottom=a.bottom;
+    if(b.top<bottom)bottom=b.top;
+    if(b.bottom>top)top=b.bottom;
+    for(col=a.left;col<a.right;col++) {
+        if(col<b.left || col>=b.right || top<=bottom)
+            world_strip(col,a.top,a.bottom,op);
+        else {
+            if(bottom>a.top)world_strip(col,a.top,bottom,op);
+            if(top<a.bottom)world_strip(col,top,a.bottom,op);
+        }
+    }
+}
+
+static void world_prefetch(int camera)
+{
+    world_rect next;
+    unsigned cells=0,uploads=0;
+    int follow=camera+8*world_scroll_dir;
+    if(follow<0)follow=0;
+    if(follow>MF_WORLD_CAMERA_MAX)follow=MF_WORLD_CAMERA_MAX;
+    next=world_window(follow);
+    if(!world_same_window(next,world_ahead)) {
+        world_ahead=next;
+        world_ahead_cursor=0;
+    }
+    while(cells<WORLD_PREFETCH_CELLS && uploads<WORLD_PREFETCH_TILES &&
+          world_ahead_cursor<MF_WORLD_VIEW_ROWS+WORLD_GUARD_COLUMNS) {
+        unsigned index=world_ahead_cursor++,source;
+        int col,y;
+        MF_PERF_BEGIN(prefetch_start);
+        if(index<MF_WORLD_VIEW_ROWS) {
+            col=world_scroll_dir>0?next.right-1:next.left;
+            y=next.top+(int)index;
+            ++cells;
+            if(y>=next.bottom || (col>=world_ring.left && col<world_ring.right &&
+               y>=world_ring.top && y<world_ring.bottom)) {
+                MF_PERF_END(MF_PERF_PREFETCH,prefetch_start);
+                continue;
+            }
+        } else {
+            col=next.left+(int)index-MF_WORLD_VIEW_ROWS;
+            y=world_scroll_dir>0?next.bottom-1:next.top;
+            ++cells;
+            if(y>=world_ring.top && y<world_ring.bottom) {
+                MF_PERF_END(MF_PERF_PREFETCH,prefetch_start);
+                continue;
             }
         }
-    }
-    MF_PERF_END(MF_PERF_PREFETCH,queue_start);
-}
-static void world_prefetch(void) {
-    unsigned decoded=0;
-    while(world_prefetch_at<world_prefetch_count && decoded<2) {
-        unsigned group=world_prefetch_queue[world_prefetch_at++];
-        if(world_block_index[group]>=0)continue;
-        if(!world_decode_cached(group)){live_error=861;return;}
-        ++decoded;
-    }
-}
-static void world_map_update(int camera) {
-    int first=camera/8-1,scroll=mf_world_camera_y(camera);
-    int top=scroll>0?(scroll-1)/8:0,col,y,overlap;
-    unsigned i;
-    volatile unsigned short *map=(volatile unsigned short *)VDP2_VRAM_B0;
-    if(first==world_ring_left && top==world_ring_top){world_prefetch();return;}
-    if(world_ring_left!=-9999 && first!=world_ring_left)world_scroll_dir=first>world_ring_left?1:-1;
-    MF_PERF_BEGIN(mark_start);
-    for(i=0;i<sizeof(world_needed);i++)world_needed[i]=0;
-    world_mark(first,top);
-    overlap=world_ring_left>=-1 && first-world_ring_left>=-1 &&
-        first-world_ring_left<=1 && top-world_ring_top>=-1 && top-world_ring_top<=1;
-    if(overlap)world_mark(world_ring_left,world_ring_top);
-    MF_PERF_END(MF_PERF_MARK,mark_start);
-    for(col=first;col<=first+42;col++) {
-        int physical=(col%128+128)%128;
-#if MF_PERFORMANCE_AUDIT
-        unsigned map_bytes=0;
-#endif
-        for(y=top;y<top+MF_WORLD_VIEW_ROWS && y<MF_INTERSECTION_ROWS;y++) {
-            if(overlap && col>=world_ring_left && col<=world_ring_left+42 &&
-               y>=world_ring_top && y<world_ring_top+MF_WORLD_VIEW_ROWS)continue;
-            unsigned slot=world_resident(world_render_pattern(col,y));
-            MF_PERF_BEGIN(name_start);
-            map[physical/64*4096+y*64+physical%64]=(unsigned short)(0x1000u|slot*2u);
-            MF_PERF_END(MF_PERF_NAME_TABLE,name_start);
-#if MF_PERFORMANCE_AUDIT
-            map_bytes+=2;
-#endif
+        source=world_render_pattern(col,y);
+        MF_PERF_END(MF_PERF_PREFETCH,prefetch_start);
+        if(world_slot[source]<0) {
+            world_resident(source);
+            ++uploads;
         }
-        mf_perf_stream(0,map_bytes,0);
     }
-    world_ring_left=first;world_ring_top=top;world_prefetch_build(first,top);world_prefetch();
+}
+
+static void world_map_update(int camera)
+{
+    world_rect next=world_window(camera);
+    if(camera!=world_last_camera) {
+        int direction=camera>world_last_camera?1:-1;
+        if(direction!=world_scroll_dir)world_ahead_cursor=0;
+        world_scroll_dir=direction;
+        world_last_camera=camera;
+    }
+    if(!world_same_window(world_previous,world_ring)) {
+        MF_PERF_BEGIN(unpin_start);
+        world_difference(world_previous,world_ring,WORLD_UNPIN);
+        world_previous=world_ring;
+        MF_PERF_END(MF_PERF_MARK,unpin_start);
+    }
+    if(!world_same_window(next,world_ring)) {
+        MF_PERF_BEGIN(pin_start);
+        /* Full discontinuities (such as exiting the gallery) already rebuild
+           the ring. Retain overlap for all normal one-tile edge changes. */
+        if(world_ring.right>world_ring.left &&
+           (next.left-world_ring.left>1 || world_ring.left-next.left>1 ||
+            next.top-world_ring.top>1 || world_ring.top-next.top>1)) {
+            world_difference(world_ring,(world_rect){0,0,0,0},WORLD_UNPIN);
+            world_ring=(world_rect){0,0,0,0};
+        }
+        world_difference(next,world_ring,WORLD_PIN);
+        MF_PERF_END(MF_PERF_MARK,pin_start);
+        world_difference(next,world_ring,WORLD_WRITE);
+        world_previous=world_ring;
+        world_ring=next;
+        world_ahead_cursor=0;
+    }
+    world_prefetch(camera);
 }
 #endif
 static int live_copy(const char *name,void *dst,int bytes)
@@ -327,22 +363,12 @@ int mf_parallax_load(void)
     if(!world_pack_load() ||
        !world_read("IXOFF.BIN",world_offsets,MF_INTERSECTION_OFFSET_BYTES) ||
        !world_read("IXMAP.BIN",world_chunks,MF_INTERSECTION_MAP_BYTES))goto failed;
-    {unsigned i,j;
-     world_decoded_group=-1;
-     if(world_offset(0)!=0 || world_offset(MF_INTERSECTION_BLOCKS)!=MF_INTERSECTION_PACK_DATA_BYTES)goto failed;
-     for(i=0;i<MF_INTERSECTION_BLOCKS;i++)if(!world_decode(i))goto failed;
-     for(i=0;i<MF_INTERSECTION_MAP_BYTES;i+=2)
-        if(((unsigned)(world_chunks[i]<<8)|world_chunks[i+1])>=MF_INTERSECTION_TILES)goto failed;
-     if(!world_block_cache)goto failed;
-     /* The pinned SGL sort area starts at 0x060c0000; never place this new
-        retained heap allocation inside any SDK command/work reservation. */
-     if((unsigned long)world_block_cache+MF_WORLD_DECODE_HEAP>0x060c0000u)goto failed;
-     world_blocks_reset();
-     for(i=0;i<MF_INTERSECTION_CACHE_TILES;i++) {
-        volatile unsigned short *dst=(volatile unsigned short *)VDP2_VRAM_A0;
-        if(!world_decode(i/8))goto failed;
-        for(j=0;j<32;j++)dst[i*32+j]=(unsigned short)((world_decoded[(i%8)*64+j*2]<<8)|world_decoded[(i%8)*64+j*2+1]);
-     }
+    {
+        unsigned i;
+        for(i=0;i<MF_INTERSECTION_MAP_BYTES;i+=2)
+            if(((unsigned)(world_chunks[i]<<8)|world_chunks[i+1])>=MF_INTERSECTION_TILES)goto failed;
+        if(!world_expand())goto failed;
+        for(i=0;i<MF_INTERSECTION_CACHE_TILES;i++)world_upload(i,i);
     }
     world_cache_reset();
 #endif

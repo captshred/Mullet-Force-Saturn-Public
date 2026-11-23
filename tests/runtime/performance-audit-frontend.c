@@ -10,7 +10,8 @@
 #include "performance_audit.h"
 
 static unsigned field;
-static bool overlay_test;
+static bool overlay_test,reverse_test,handoff_test;
+static unsigned reverse_until;
 static unsigned width, height, last_video_hash;
 
 static void logger(enum retro_log_level level,const char *format,...)
@@ -88,7 +89,11 @@ static int16_t input(unsigned port,unsigned device,unsigned index,unsigned id)
         return (field>=1290 && field<1294) || (field>=1460 && field<1464);
     if(id==RETRO_DEVICE_ID_JOYPAD_B && field>=1290 && field<1560)
         return field%120<88;
+    if(handoff_test && !port && id==RETRO_DEVICE_ID_JOYPAD_Y)
+        return field>=1700 && field<1704;
     if(field>=1560 && id==RETRO_DEVICE_ID_JOYPAD_RIGHT)
+        return field>=reverse_until;
+    if(id==RETRO_DEVICE_ID_JOYPAD_LEFT && field<reverse_until)
         return 1;
     if(field>=1560 && id==RETRO_DEVICE_ID_JOYPAD_B)
         return (field+port*20)%138<103;
@@ -105,10 +110,13 @@ int main(int argc,char **argv)
     void *lib;
     typedef unsigned (*read_word)(unsigned);
     typedef unsigned (*read_counter)(void);
-    if(argc!=6 || (strcmp(argv[5],"walk") && strcmp(argv[5],"overlay")))return 2;
+    if(argc!=6 || (strcmp(argv[5],"walk") && strcmp(argv[5],"overlay") &&
+       strcmp(argv[5],"reverse") && strcmp(argv[5],"handoff")))return 2;
     address=strtoul(argv[3],NULL,0);
     frames=strtoul(argv[4],NULL,10);
     overlay_test=!strcmp(argv[5],"overlay");
+    reverse_test=!strcmp(argv[5],"reverse");
+    handoff_test=!strcmp(argv[5],"handoff");
     game.path=argv[2];
     lib=dlopen(argv[1],RTLD_NOW);
     if(!lib){fprintf(stderr,"%s\n",dlerror());return 2;}
@@ -152,6 +160,10 @@ int main(int argc,char **argv)
         for(unsigned i=0;i<sizeof(mf_perf_sample);i+=4)
             printf(",%u",address?p_retro_mf_perf_read(address+i):0);
         putchar('\n');
+        if(reverse_test && !reverse_until && address &&
+           !p_retro_mf_perf_read(address) &&
+           p_retro_mf_perf_read(address+offsetof(mf_perf_sample,camera))>=1830)
+            reverse_until=field+240;
     }
     p_retro_unload_game();
     p_retro_deinit();
