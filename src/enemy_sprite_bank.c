@@ -1,3 +1,4 @@
+#include "performance_audit.h"
 #include "build-info.h"
 #include "enemy_sprite_bank.h"
 #if MF_ENEMY_SPRITE_BANKS
@@ -92,8 +93,10 @@ unsigned mf_enemy_bank_service(unsigned now)
     if(++info.drains<3)return info.state;
     /* Called once/core callback after three suffix-free slSynch barriers.
        Stop auto restarts and confirm actual VDP1 completion before freeing. */
+    MF_PERF_BEGIN(fence_start);
     JO_VDP1_PTMR=0;
     for(wait=0;wait<1000000u && !(JO_VDP1_EDSR&2u);++wait){}
+    MF_PERF_END(MF_PERF_FENCE,fence_start);
     if(!(JO_VDP1_EDSR&2u)){failure(MF_BANK_VDP1);return info.state;}
     if(prefix_hash()!=prefix_lock || palette_hash()!=palette_lock){failure(MF_BANK_PREFIX);return info.state;}
 #if MF_BRUCE_RUNTIME
@@ -105,7 +108,11 @@ unsigned mf_enemy_bank_service(unsigned now)
     jo_sprite_free_from(MF_ENEMY_PREFIX_DEFS);live=0;
     if(jo_get_last_sprite_id()!=MF_ENEMY_PREFIX_DEFS-1 ||
        end_of(MF_ENEMY_PREFIX_DEFS-1)!=0x10000u+MF_ENEMY_PREFIX_BYTES){failure(MF_BANK_PREFIX);return info.state;}
-    if(install(next,0)) {
+    MF_PERF_BEGIN(install_start);
+    int installed=install(next,0);
+    MF_PERF_END(MF_PERF_INSTALL,install_start);
+    if(installed) {
+        mf_perf_bank(info.state,next->kind,next->bytes);
         ++info.swaps;
         /* Approved SGL automatic frame-change policy, not a sampled PTMR. */
 #if MF_BRUCE_RUNTIME

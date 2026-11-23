@@ -1,3 +1,4 @@
+#include "performance_audit.h"
 #include "game.h"
 #include "bruce.h"
 /* JAB BEGIN */
@@ -1227,6 +1228,7 @@ void mf_game_step_inputs(mf_game *g,const unsigned held[2],const unsigned presse
         d->x=clamp(d->x+d->vx,24*256,616*256);d->vx=d->vx*7/8;if(abs_i(d->vx)<8)d->vx=0;
     }
     for(i=0;i<MF_PLAYERS;i++){player_hits(g,&g->players[i]);torch_hits(g,&g->players[i]);}
+    MF_PERF_BEGIN(ai_start);
     for(i=0;i<MF_ENEMIES;i++)enemy_step(g,i);
 #if MF_BRUCE_RUNTIME
     if(g->stage==MF_STAGE_LEVEL1 && g->bruce.ready) {
@@ -1246,6 +1248,7 @@ void mf_game_step_inputs(mf_game *g,const unsigned held[2],const unsigned presse
         }
     }
 #endif
+    MF_PERF_END(MF_PERF_AI,ai_start);
 #if MF_LEVEL1_STAGE_CLEAR
     stage_spawns(g);
 #endif

@@ -1,3 +1,4 @@
+#include "performance_audit.h"
 #include "wingsuit_audio.h"
 #include <jo/jo.h>
 #include "game.h"
@@ -110,6 +111,7 @@ static void poll_reset_chord(void)
 static void clock_tick(void)
 {
     ++vblanks;
+    mf_perf_vblank();
 #if MF_CITY_NEON
     #if MF_LEVEL2_WINGSUIT
     if(!stage2_owned)
@@ -382,6 +384,7 @@ static void draw_anchored(int sprite,int x,int y,const short *anchor,int facing,
 }
 static void draw_game(void)
 {
+    MF_PERF_BEGIN(render_start);
     int i,j,x,y,depth,mode,engaged;
     mf_street_draw(street,street_palette.id,game.camera);
 #if MF_VEHICLE_AMBUSH
@@ -621,6 +624,7 @@ static void draw_game(void)
 #endif
     }
 
+    MF_PERF_END(MF_PERF_RENDER,render_start);
 }
 static void update(void)
 {
@@ -654,9 +658,13 @@ static void update(void)
     }
 #if MF_ENEMY_SPRITE_BANKS
     if(!asset_error && !mf_enemy_bank_ready() && !stage2_owned) {
+        MF_PERF_BEGIN(service_start);
         unsigned state=mf_enemy_bank_service(now);
+        MF_PERF_END(MF_PERF_BANK,service_start);
         now=vblanks;last_vblank=now;pending[0]=pending[1]=0;
+        MF_PERF_BEGIN(drain_audio);
         mf_music_update(game.started,game.paused,0,now);
+        MF_PERF_END(MF_PERF_AUDIO,drain_audio);
         if(state!=MF_BANK_READY) {
             if(state==MF_BANK_FAILED)jo_printf(3,12,"ENEMY BANK FAILED E%u",mf_enemy_bank_diagnostics()->error);
 #if MF_BRUCE_RUNTIME
@@ -758,10 +766,14 @@ static void update(void)
             if((approach && bank==&mf_ricky_bank_spec) ||
                (!approach && bank==&mf_bruce_bank_spec)) {
                 const mf_enemy_bank_spec *next=approach?&mf_bruce_bank_spec:&mf_ricky_bank_spec;
-                if(mf_enemy_bank_prepare(next,&game,now)) {draw_game();return;}
+                MF_PERF_BEGIN(prepare_start);
+                int prepared=mf_enemy_bank_prepare(next,&game,now);
+                MF_PERF_END(MF_PERF_BANK,prepare_start);
+                if(prepared) {draw_game();return;}
             }
         }
 #endif
+        MF_PERF_BEGIN(logic_start);
         mf_game_step_inputs(&game,held,pressed,(sampled_input[0].connected?1u:0u)|(sampled_input[1].connected?2u:0u));
 #if MF_ARCADE_FX
         spark_explosion=mf_fx_spark_explosion(&game,previous_hits,spark_explosion);
@@ -775,7 +787,10 @@ static void update(void)
 #if MF_VEHICLE_AMBUSH
         if(game.vehicle_dir)game.events|=MF_VEHICLE_PASS;
 #endif
+        MF_PERF_END(MF_PERF_LOGIC,logic_start);
+        MF_PERF_BEGIN(audio_start);
         mf_music_update(game.started,game.paused,game.events,now);
+        MF_PERF_END(MF_PERF_AUDIO,audio_start);
 #if MF_LEVEL2_WINGSUIT
         if(game.stage==MF_STAGE_LEVEL2_ENTRY && !mf_music_protected()){
 #if MF_ENEMY_SPRITE_BANKS
@@ -789,6 +804,45 @@ static void update(void)
     }
     draw_game();
 }
+#if MF_PERFORMANCE_AUDIT
+static void audit_update(void)
+{
+    unsigned i,enemies=0,flags=0;
+#if MF_LEVEL2_WINGSUIT
+    if(stage2_owned){update();return;}
+#endif
+    mf_perf_begin();
+    update();
+    if(game.players[1].active)flags|=MF_PERF_P2;
+    for(i=0;i<MF_PLAYERS;i++)
+        if(mf_torch_active(&game.players[i]))flags|=MF_PERF_TORCH;
+    for(i=0;i<MF_ENEMIES;i++)
+        if(game.enemies[i].state!=MF_ENEMY_ABSENT)++enemies;
+#if MF_VEHICLE_AMBUSH
+    if(game.vehicle_dir)flags|=MF_PERF_VEHICLE;
+#endif
+#if MF_BRUCE_RUNTIME
+    if(game.bruce.active)flags|=MF_PERF_BRUCE;
+#endif
+#if MF_LEVEL1_WORLD_FLOW
+    if(mf_world_camera_y(game.camera)>0)flags|=MF_PERF_DOWNHILL;
+#endif
+#if MF_ENEMY_SPRITE_BANKS
+    {
+        const mf_enemy_bank_spec *bank=mf_enemy_bank_current();
+        mf_perf_bank(mf_enemy_bank_diagnostics()->state,bank?bank->kind:0,0);
+    }
+#endif
+    if(game.started)flags|=MF_PERF_PLAYING;
+    if(game.paused)flags|=MF_PERF_PAUSED;
+    mf_perf_end(flags,game.camera,enemies,game.ticks);
+#if MF_LEVEL2_WINGSUIT
+    if(stage2_owned)return;
+#endif
+    mf_perf_overlay(jo_is_pad1_key_pressed(JO_KEY_Y),game.started && !asset_error);
+}
+#endif
+
 void jo_main(void)
 {
     jo_core_init(JO_COLOR_RGB(9,12,29));
@@ -798,11 +852,18 @@ void jo_main(void)
     load_assets();
     jo_clear_screen();
     mf_game_init(&game);
+#if MF_PERFORMANCE_AUDIT
+    mf_perf_init();
+#endif
     jo_core_add_vblank_callback(clock_tick);
     last_vblank=vblanks;
 #if MF_LEVEL2_WINGSUIT
     mf_ws_audio_trace_clock(&vblanks);
 #endif
+#if MF_PERFORMANCE_AUDIT
+    jo_core_add_callback(audit_update);
+#else
     jo_core_add_callback(update);
+#endif
     jo_core_run();
 }

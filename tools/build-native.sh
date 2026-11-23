@@ -2,6 +2,8 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 mkdir -p build/cd
+performance_audit=${MF_PERFORMANCE_AUDIT:-0}
+[[ $performance_audit == 0 || $performance_audit == 1 ]] || { echo "MF_PERFORMANCE_AUDIT must be 0 or 1" >&2; exit 1; }
 ricky=${MF_RICKY_ENEMY:-0}
 [[ $ricky == 0 || $ricky == 1 ]] || exit 1
 if [[ $ricky == 1 && ${MF_ENEMY_SPRITE_BANKS:-0} != 1 ]]; then echo 'Ricky requires Phase 5.' >&2; exit 1; fi
@@ -491,7 +493,8 @@ fi
 rm -f build/cd/EXPLODE.TGA
 if [[ $arcade_fx == 1 ]]; then cp assets/arcade-fx/EXPLODE.TGA build/cd/; fi
 python3 tools/stage-wingsuit-assets.py "$wingsuit" build/cd
-make -C build -f ../make/saturn.mk MAKEFILE=../make/saturn.mk -j2 MF_BRUCE_RUNTIME="${MF_BRUCE_RUNTIME:-0}" MF_VEHICLE_AMBUSH="${MF_VEHICLE_AMBUSH:-0}" MF_RICKY_ENEMY="$ricky" MF_DEV_STAGE_SKIP="$dev_skip" MF_LEVEL2_WINGSUIT="$wingsuit" MF_LEVEL1_STAGE_CLEAR="$stage_clear" MF_PUNCH_COMBO="$combo" MF_FAST_RUNNING_BAT="$fast_bat" MF_JAB_COHESION="$jab" MF_ATTACK_SEQUENCE="$sequence" MF_BAT_MOMENTUM="$momentum" MF_COMBAT_ANIMATION="$combat" MF_RUNNING_BAT_VISUALS="$visual" MF_RUN_BAT="$run_bat" MF_DASH_ENABLED="$dash" MF_DASH_PRESET="$dash_num" game.iso
+if [[ $performance_audit == 1 ]]; then printf "Performance audit diagnostics: enabled (P1 Y)\n" >> build/BUILD-INFO.txt; fi
+make -C build -f ../make/saturn.mk MAKEFILE=../make/saturn.mk -j2 MF_PERFORMANCE_AUDIT="$performance_audit" MF_BRUCE_RUNTIME="${MF_BRUCE_RUNTIME:-0}" MF_VEHICLE_AMBUSH="${MF_VEHICLE_AMBUSH:-0}" MF_RICKY_ENEMY="$ricky" MF_DEV_STAGE_SKIP="$dev_skip" MF_LEVEL2_WINGSUIT="$wingsuit" MF_LEVEL1_STAGE_CLEAR="$stage_clear" MF_PUNCH_COMBO="$combo" MF_FAST_RUNNING_BAT="$fast_bat" MF_JAB_COHESION="$jab" MF_ATTACK_SEQUENCE="$sequence" MF_BAT_MOMENTUM="$momentum" MF_COMBAT_ANIMATION="$combat" MF_RUNNING_BAT_VISUALS="$visual" MF_RUN_BAT="$run_bat" MF_DASH_ENABLED="$dash" MF_DASH_PRESET="$dash_num" game.iso
 cp build/game.iso build/mullet-force.bin
 cat > build/mullet-force.cue <<'CUE'
 FILE "mullet-force.bin" BINARY
