@@ -1,0 +1,6 @@
+#ifndef MF_BRUCE_SFX_DATA_H
+#define MF_BRUCE_SFX_DATA_H
+#define MF_BRUCE_TON_BYTES 27004u
+#define MF_BRUCE_SEQ_BYTES 168u
+#define MF_BRUCE_SFX_MIN_TICKS {73,45,36,54}
+#endif

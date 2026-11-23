@@ -680,6 +680,15 @@ static void update(void)
     if(stage2_owned){mf_ws_runtime_frame(sampled_input,pending,now);return;}
     #endif
     if(asset_error) {draw_asset_diagnostics();return;}
+#if MF_BRUCE_RUNTIME && MF_VEHICLE_AMBUSH
+    if(!mf_music_bruce_bank(mf_enemy_bank_current()==&mf_bruce_bank_spec,now)){
+        mf_music_update(game.started,game.paused,0,now);
+        last_vblank=vblanks;pending[0]=pending[1]=0;
+        draw_game();return;
+    }
+    if(now!=vblanks)last_vblank=now=vblanks;
+#endif
+
 #if MF_SPRITE_GALLERY
     if(mf_gallery_active() && ((pending[0]|pending[1])&MF_C)) {
         asset_diagnostic_view=!asset_diagnostic_view;
@@ -792,7 +801,11 @@ static void update(void)
         mf_music_update(game.started,game.paused,game.events,now);
         MF_PERF_END(MF_PERF_AUDIO,audio_start);
 #if MF_LEVEL2_WINGSUIT
-        if(game.stage==MF_STAGE_LEVEL2_ENTRY && !mf_music_protected()){
+        if(game.stage==MF_STAGE_LEVEL2_ENTRY && !mf_music_protected()
+#if MF_BRUCE_RUNTIME && MF_VEHICLE_AMBUSH
+           && mf_music_bruce_exit()
+#endif
+        ){
 #if MF_ENEMY_SPRITE_BANKS
             mf_enemy_bank_retire();
 #endif

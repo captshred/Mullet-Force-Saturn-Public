@@ -272,6 +272,50 @@ static void verify_counter_vulnerability_and_pursuit(void)
     assert(!b.pressure_hits && b.state==MF_BRUCE_READY);
 }
 
+#if MF_VEHICLE_AMBUSH
+static void verify_bruce_cues(void)
+{
+    for(int slot=0;slot<MF_PLAYERS;++slot){
+        mf_game g={0};
+        mf_bruce *b=&g.bruce;
+        mf_player *p=&g.players[slot];
+        g.started=g.street_spawns_suspended=1;
+        g.vehicle_tick=10000;
+        g.camera=2740;
+        *b=(mf_bruce){.ready=1,.active=1,.health=17,.state=MF_BRUCE_READY,
+                    .x=2910*256,.y=203*256,.target=-1,.cooldown=24};
+        *p=(mf_player){.active=1,.health=100,.x=b->x-35*256,.y=b->y,.facing=1,
+                     .bat=1,.attack=MF_BAT_ACTIVE_FIRST};
+        mf_game_step(&g,0,0);
+        assert(b->health==14 && (g.events&MF_BRUCE_SFX_HURT) && (g.events&MF_BRUCE_SFX_LAUGH));
+        mf_game_step(&g,0,0);
+        assert(!(g.events&(MF_BRUCE_SFX_LAUGH|MF_BRUCE_SFX_HURT)));
+        g.hitstop=0;b->health=3;b->invulnerable=0;b->state=MF_BRUCE_READY;
+        p->hit_mask=0;p->attack=MF_BAT_ACTIVE_FIRST;
+        mf_game_step(&g,0,0);
+        assert(!b->health && (g.events&MF_BRUCE_SFX_DEATH) &&
+               !(g.events&(MF_BRUCE_SFX_LAUGH|MF_BRUCE_SFX_HURT|MF_COMBAT_HUMAN_DEATH(slot))));
+    }
+    for(int attack=1;attack<=2;++attack){
+        mf_game g={0};
+        mf_bruce *b=&g.bruce;
+        unsigned event=attack==1?MF_BRUCE_SFX_CHARGE:MF_BRUCE_SFX_JUMP;
+        g.started=g.street_spawns_suspended=1;
+        g.vehicle_tick=10000;
+        g.camera=2740;
+        *b=(mf_bruce){.ready=1,.active=1,.health=75,.state=MF_BRUCE_READY,
+                    .x=2910*256,.y=203*256,.target=-1,.attack_cycle=attack};
+        g.players[0]=(mf_player){.active=1,.health=100,.x=b->x-95*256,.y=b->y,.facing=1};
+        mf_game_step(&g,0,0);
+        assert((g.events&event) && !b->timer);
+        for(int i=0;i<50;++i){
+            mf_game_step(&g,0,0);
+            assert(!(g.events&event));
+        }
+    }
+}
+#endif
+
 int main(void)
 {
     mf_game game = {0};
@@ -361,5 +405,8 @@ int main(void)
     verify_counter(1);
     verify_counter_vulnerability_and_pursuit();
     verify_torch_pressure();
+#if MF_VEHICLE_AMBUSH
+    verify_bruce_cues();
+#endif
     return 0;
 }

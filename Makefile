@@ -4,10 +4,12 @@ check:
 	python3 tools/level1-sfx-pcm8-pass1.py --pass2 --reset-wingsuit --diagonal --medium-guitar --mix-pass1 --disc
 	python3 tools/validate_level1_diagonal.py --medium-guitar --mix-pass1
 test:
-	$(CC) -std=c99 -Wall -Wextra -Werror -DMF_LEVEL1_STAGE_CLEAR=1 -DMF_BRUCE_RUNTIME=1 -DMF_LEVEL1_WORLD_FLOW=1 -Isrc tests/bruce_runtime_test.c src/bruce.c src/game.c -o /tmp/mf-bruce-runtime
+	$(CC) -std=c99 -Wall -Wextra -Werror -DMF_LEVEL1_STAGE_CLEAR=1 -DMF_BRUCE_RUNTIME=1 -DMF_VEHICLE_AMBUSH=1 -DMF_LEVEL1_WORLD_FLOW=1 -Isrc tests/bruce_runtime_test.c src/bruce.c src/game.c -o /tmp/mf-bruce-runtime
 	/tmp/mf-bruce-runtime
 	$(CC) -std=c99 -Wall -Wextra -Werror -ffunction-sections -fdata-sections -Wl,--gc-sections -Itests/sound_mock -Isrc tests/bruce_music_test.c -o /tmp/mf-bruce-music
 	/tmp/mf-bruce-music
+	$(CC) -std=c99 -Wall -Wextra -Werror -ffunction-sections -fdata-sections -Wl,--gc-sections -Itests/sound_mock -Isrc tests/bruce_sfx_test.c -o /tmp/mf-bruce-sfx
+	/tmp/mf-bruce-sfx
 	python3 tools/level1-sfx-pcm8-pass1.py --pass2 --reset-wingsuit --diagonal --medium-guitar --mix-pass1 --test
 	python3 tools/test-intersection.py --level1-only
 .PHONY: all setup bootstrap native check test clean

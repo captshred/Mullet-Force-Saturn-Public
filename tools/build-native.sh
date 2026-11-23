@@ -317,6 +317,9 @@ if [[ $wingsuit == 1 ]]; then sha256sum assets/wingsuit/* src/wingsuit* tools/bu
 if [[ $ricky == 1 ]]; then
     sha256sum assets/ricky/*.TGA assets/ricky/manifest.json src/ricky_data.h src/ricky_budget.h build/ricky-mode.txt >> build/SOURCE-SHA256SUMS.txt
 fi
+if [[ ${MF_BRUCE_RUNTIME:-0} == 1 && ${MF_VEHICLE_AMBUSH:-0} == 1 ]]; then
+    sha256sum assets/bruce-sfx/* >> build/SOURCE-SHA256SUMS.txt
+fi
 source_hash=$(sha256sum build/SOURCE-SHA256SUMS.txt | cut -d' ' -f1)
 printf '#define MF_BUILD_SOURCE "%s"\n' "$source_hash" >> build/build-info.h
 printf 'Game: MULLET FORCE\nScene: Neon District playable prototype\nCommit: %s\nBranch: %s\nSDK: 556d081146211b6a1cfa6591d70f9487d406758b\n' \
@@ -429,6 +432,9 @@ rm -rf build/cd/BRUCE
 if [[ ${MF_BRUCE_RUNTIME:-0} == 1 ]]; then
     [[ $enemy_banks == 1 && $ricky == 1 ]] || exit 1
     python3 tools/stage-bruce-bank.py build
+    if [[ ${MF_VEHICLE_AMBUSH:-0} == 1 ]]; then
+        cp assets/bruce-sfx/BSFX.{SEQ,TON} build/cd/RICKY/
+    fi
 fi
 cp docs/native-music.md build/NATIVE-MUSIC.md
 cp docs/custom-combat-sfx.md build/CUSTOM-COMBAT-SFX.md

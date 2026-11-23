@@ -1,0 +1,64 @@
+{
+  "shared_address": 490128,
+  "tone_bytes": 27004,
+  "sequence_bytes": 168,
+  "free_bytes": 6988,
+  "samples": [
+    {
+      "name": "Woopah.wav",
+      "source_rate": 44100,
+      "source_bits": 8,
+      "source_channels": 2,
+      "source_frames": 53540,
+      "source_sha256": "b9f4a7026dbf25a25e542ea78f759da0ec4de54002cb045d7faeba82f58eeb30",
+      "pcm_rate": 7796,
+      "pcm_bits": 8,
+      "pcm_channels": 1,
+      "pcm_frames": 9465,
+      "pcm_sha256": "fa44804f45121ff0cd026f33209cb0e0061213c470792c0795d448f0fcdee7ac",
+      "minimum_vblanks": 73
+    },
+    {
+      "name": "Charge.wav",
+      "source_rate": 44100,
+      "source_bits": 8,
+      "source_channels": 2,
+      "source_frames": 32409,
+      "source_sha256": "e3f8a0aeb11fd19d130107a855216f0e7ef6c3a22c3daa9355b1fdf8629e02ca",
+      "pcm_rate": 7796,
+      "pcm_bits": 8,
+      "pcm_channels": 1,
+      "pcm_frames": 5730,
+      "pcm_sha256": "e6199d2003d38914a0f1f978e83b3e3d7c0e8926601694c0be6dbd040ddd0c08",
+      "minimum_vblanks": 45
+    },
+    {
+      "name": "Arghhh.wav",
+      "source_rate": 44100,
+      "source_bits": 8,
+      "source_channels": 2,
+      "source_frames": 26368,
+      "source_sha256": "c3c33b01db0dedf3a112bce94ae6c39911f3c663fe37743a190fc4dac8333f72",
+      "pcm_rate": 7796,
+      "pcm_bits": 8,
+      "pcm_channels": 1,
+      "pcm_frames": 4662,
+      "pcm_sha256": "a2a6c515a6b6c519d2881437636f5f8fc92c037fc4aadf482e2da161a525654a",
+      "minimum_vblanks": 36
+    },
+    {
+      "name": "laugh.wav",
+      "source_rate": 44100,
+      "source_bits": 8,
+      "source_channels": 2,
+      "source_frames": 39139,
+      "source_sha256": "f3824f351190e219f32ccb5d5ba848ea7e08550ad2b3bbe15af44b17e3a7569d",
+      "pcm_rate": 7796,
+      "pcm_bits": 8,
+      "pcm_channels": 1,
+      "pcm_frames": 6919,
+      "pcm_sha256": "7308c363b125e97f4419ebb9ba2c21a5e221b68969478f0fa9ce6b8f53cbf04f",
+      "minimum_vblanks": 54
+    }
+  ]
+}

@@ -4,6 +4,9 @@
 #include "music.h"
 #include "music_data.h"
 #include "game.h"
+#if MF_BRUCE_RUNTIME && MF_VEHICLE_AMBUSH
+#include "bruce_sfx_data.h"
+#endif
 
 extern char sddrvstsk[]; /* Existing Jo Engine driver 2.10; no second/new driver. */
 static int ready,paused_state,pause_target=-1;
@@ -61,10 +64,8 @@ static int death_update(int events,unsigned int now)
 }
 
 
-static int upload(const char *name,unsigned int expected,unsigned int address)
+static int upload_data(char *data,int bytes,unsigned int expected,unsigned int address)
 {
-    int bytes=0;
-    char *data=jo_fs_read_file(name,&bytes);
     if(!data) return 0;
     if(bytes!=(int)expected || (bytes&3) || (address&3) || address+bytes>0x80000) {
         jo_free(data); return 0;
@@ -74,12 +75,21 @@ static int upload(const char *name,unsigned int expected,unsigned int address)
     jo_free(data);
     return 1;
 }
+static int upload(const char *name,unsigned int expected,unsigned int address)
+{
+    int bytes=0;
+    char *data=jo_fs_read_file(name,&bytes);
+    return upload_data(data,bytes,expected,address);
+}
 #if MF_VEHICLE_AMBUSH
 enum {
     CAR_SOUND_PORT=3, CAR_SOUND_CHANNEL=15, CAR_TONE_BANK=2,
     CAR_TON_ADDR=MF_STAGE_TON_ADDR+MF_STAGE_TON_BYTES, CAR_TON_BYTES=MF_CAR_TON_BYTES, CAR_DRIVE_NOTE=61
 };
 static int car_sound_playing,car_sound_setup,car_sound_triggered;
+#if MF_BRUCE_RUNTIME
+static unsigned car_safe_at;
+#endif
 
 static void car_sound_update(int in_pass,int requested,int paused)
 {
@@ -105,7 +115,146 @@ static void car_sound_update(int in_pass,int requested,int paused)
             car_sound_setup=3;
     }else if(SND_CtrlDirMidi(CAR_SOUND_PORT,0,1,CAR_SOUND_CHANNEL,CAR_DRIVE_NOTE,110)==SND_RET_SET){
         car_sound_triggered=car_sound_playing=1;
+#if MF_BRUCE_RUNTIME
+        car_safe_at=audio_tick+105; /* 18441 samples at 11025 Hz plus release. */
+#endif
     }
+}
+#endif
+
+#if MF_BRUCE_RUNTIME && MF_VEHICLE_AMBUSH
+enum { BRUCE_SFX_PORT=8, BRUCE_SFX_BANK=2, BRUCE_SFX_SEQ_ADDR=CAR_TON_ADDR+MF_BRUCE_TON_BYTES };
+/* Song IDs start at zero independently of the SCSP addresses. */
+enum { BRUCE_JUMP_SONG, BRUCE_CHARGE_SONG, BRUCE_HURT_SONG, BRUCE_LAUGH_SONG, BRUCE_DEATH_CUE };
+typedef char bruce_sfx_ram_bound[BRUCE_SFX_SEQ_ADDR+MF_BRUCE_SEQ_BYTES<=0x80000?1:-1];
+static const unsigned char bruce_sfx_ticks[4]=MF_BRUCE_SFX_MIN_TICKS;
+static const unsigned char bruce_cue_priority[]={3,2,0,1,4};
+static int bruce_tone_owner, bruce_voice=-1, bruce_pending=-1, bruce_laugh_pending;
+static int bruce_seen, bruce_stop_guard, bruce_audio_fault;
+static unsigned bruce_voice_at, bruce_stopped_at, bruce_pending_at;
+
+static int bruce_cd_upload(const char *name,unsigned size,unsigned address)
+{
+    int bytes=0;
+    char *data=jo_fs_read_file_in_dir(name,"RICKY",&bytes);
+    return upload_data(data,bytes,size,address);
+}
+
+static int bruce_voice_reap(unsigned now)
+{
+    SndSeqStat status;
+    int mode;
+    if(bruce_voice<0)return 1;
+    SND_GetSeqStat(&status,BRUCE_SFX_PORT);
+    mode=SND_SEQ_STAT_MODE(status);
+    if(mode!=SND_MD_STOP && !bruce_seen){
+        bruce_seen=1;
+        bruce_voice_at=now;
+    }
+    if(mode==SND_MD_STOP &&
+       now-bruce_voice_at >= (unsigned)(bruce_seen ?
+           bruce_sfx_ticks[bruce_voice==BRUCE_DEATH_CUE?BRUCE_HURT_SONG:bruce_voice]+3 : 120)){
+        bruce_voice=-1;
+        return 1;
+    }
+    return 0;
+}
+
+static void bruce_audio_update(unsigned events,unsigned now,int legacy_death,int paused)
+{
+    int cue=-1;
+    bruce_voice_reap(now);
+    if(bruce_tone_owner!=1)return;
+    if(events&MF_BRUCE_SFX_DEATH){
+        bruce_pending=BRUCE_DEATH_CUE;
+        bruce_laugh_pending=0;
+    }else if(!paused && !legacy_death && bruce_pending!=BRUCE_DEATH_CUE){
+        if(events&MF_BRUCE_SFX_LAUGH)bruce_laugh_pending=1;
+        if(events&MF_BRUCE_SFX_JUMP)cue=BRUCE_JUMP_SONG;
+        else if(events&MF_BRUCE_SFX_CHARGE)cue=BRUCE_CHARGE_SONG;
+        else if((events&MF_BRUCE_SFX_HURT) && bruce_voice<0)cue=BRUCE_HURT_SONG;
+        if(cue>=0 && (bruce_pending<0 ||
+           bruce_cue_priority[cue]>=bruce_cue_priority[bruce_pending])){
+            bruce_pending=cue;
+            bruce_pending_at=now;
+        }
+    }
+    if(bruce_pending>=0 && bruce_pending!=BRUCE_DEATH_CUE && now-bruce_pending_at>4)
+        bruce_pending=-1;
+    if(legacy_death || paused)return;
+    if(bruce_pending<0 && bruce_laugh_pending && bruce_voice<0){
+        bruce_pending=BRUCE_LAUGH_SONG;
+        bruce_pending_at=now;
+    }
+    if(bruce_pending<0)return;
+    if(bruce_voice>=0){
+        /* Preserve WOOPAH against nonlethal overlaps. The laugh yields
+           to an attack warning, and normal battle ports are never stopped. */
+        if(bruce_cue_priority[bruce_pending]<=bruce_cue_priority[bruce_voice])return;
+        if(SND_StopSeq(BRUCE_SFX_PORT)!=SND_RET_SET)return;
+        bruce_voice=-1;
+        bruce_stop_guard=1;
+        bruce_stopped_at=now;
+    }
+    if(bruce_stop_guard && now-bruce_stopped_at<3)return;
+    if(SND_SetSeqVl(BRUCE_SFX_PORT,105,0)!=SND_RET_SET)return;
+    if(SND_StartSeq(BRUCE_SFX_PORT,BRUCE_SFX_BANK,
+                    bruce_pending==BRUCE_DEATH_CUE?BRUCE_HURT_SONG:bruce_pending,
+                    bruce_pending==BRUCE_DEATH_CUE?30:29)==SND_RET_SET){
+        bruce_voice=bruce_pending;
+        bruce_voice_at=now;
+        bruce_seen=0;
+        bruce_pending=-1;
+        bruce_stop_guard=0;
+        if(bruce_voice==BRUCE_LAUGH_SONG)bruce_laugh_pending=0;
+    }
+}
+
+static int bruce_release_bank(unsigned now)
+{
+    if(bruce_pending==BRUCE_DEATH_CUE)return 0;
+    bruce_pending=-1;
+    bruce_laugh_pending=0;
+    if(!bruce_voice_reap(now)){
+        if(bruce_voice==BRUCE_DEATH_CUE || SND_StopSeq(BRUCE_SFX_PORT)!=SND_RET_SET)return 0;
+        bruce_voice=-1;
+        bruce_stop_guard=1;
+        bruce_stopped_at=now;
+    }
+    if(bruce_stop_guard && now-bruce_stopped_at<3)return 0;
+    if(bruce_stop_guard){
+        SndSeqStat status;
+        SND_GetSeqStat(&status,BRUCE_SFX_PORT);
+        if(SND_SEQ_STAT_MODE(status)!=SND_MD_STOP)return 0;
+    }
+    bruce_stop_guard=0;
+    return 1;
+}
+
+int mf_music_bruce_bank(int requested,unsigned now)
+{
+    if(!ready || bruce_audio_fault || bruce_tone_owner==requested)return 1;
+    if(requested){
+        car_sound_update(0,0,0);
+        if(car_sound_playing || (int)(now-car_safe_at)<0)return 0;
+        if(!bruce_cd_upload("BSFX.TON",MF_BRUCE_TON_BYTES,CAR_TON_ADDR)){
+            bruce_audio_fault=1;
+            return 1; /* The old bank stays mapped if the read fails. */
+        }
+    }else{
+        if(!bruce_release_bank(now))return 0;
+        if(!upload("CARPASS.TON",CAR_TON_BYTES,CAR_TON_ADDR)){
+            bruce_audio_fault=1;
+            return 1;
+        }
+    }
+    bruce_tone_owner=requested;
+    return 1;
+}
+
+int mf_music_bruce_exit(void)
+{
+    return bruce_tone_owner!=1 || bruce_release_bank(audio_tick);
 }
 #endif
 
@@ -119,8 +268,14 @@ int mf_music_init(void)
     /* Preserve all six stock map entries. One more describes the standalone
        vehicle bank. Padding covers the SDK's word-sized initialization copy. */
     unsigned int extended_map[36]={0};
-    static const unsigned char car_entries[16]={
+    static const unsigned char car_entries[]={
+#if MF_BRUCE_RUNTIME
+        0x02,CAR_TON_ADDR>>16,(CAR_TON_ADDR>>8)&255,CAR_TON_ADDR&255,0x80,0,MF_BRUCE_TON_BYTES>>8,MF_BRUCE_TON_BYTES&255,
+        0x12,BRUCE_SFX_SEQ_ADDR>>16,(BRUCE_SFX_SEQ_ADDR>>8)&255,BRUCE_SFX_SEQ_ADDR&255,
+        0x80,0,MF_BRUCE_SEQ_BYTES>>8,MF_BRUCE_SEQ_BYTES&255,
+#else
         0x02,CAR_TON_ADDR>>16,(CAR_TON_ADDR>>8)&255,CAR_TON_ADDR&255,0x80,0,CAR_TON_BYTES>>8,CAR_TON_BYTES&255,
+#endif
         0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff
     };
     char *original_map=map;
@@ -133,7 +288,7 @@ int mf_music_init(void)
     for(unsigned i=0;i<sizeof(car_entries);i++)
         ((unsigned char *)extended_map)[MF_CUSTOM_MAP_BYTES-8+i]=car_entries[i];
     map=(char *)extended_map;
-    size=MF_CUSTOM_MAP_BYTES+8;
+    size=MF_CUSTOM_MAP_BYTES-8+sizeof(car_entries);
     car_sound_triggered=car_sound_playing=car_sound_setup=0;
 #endif
     /* Same SND_Init + slInitSound pairing as the compatible SRL SEQ sample.
@@ -160,6 +315,12 @@ int mf_music_init(void)
     ok=upload("STAGE.TON",MF_STAGE_TON_BYTES,MF_STAGE_TON_ADDR)&&ok;
 #if MF_VEHICLE_AMBUSH
     ok=upload("CARPASS.TON",CAR_TON_BYTES,CAR_TON_ADDR)&&ok;
+#if MF_BRUCE_RUNTIME
+    bruce_tone_owner=bruce_audio_fault=bruce_stop_guard=bruce_laugh_pending=0;
+    bruce_voice=bruce_pending=-1;
+    car_safe_at=0;
+    ok=bruce_cd_upload("BSFX.SEQ",MF_BRUCE_SEQ_BYTES,BRUCE_SFX_SEQ_ADDR)&&ok;
+#endif
 #endif
     *(volatile unsigned char *)0x25a004e1=0;
     slSoundOnWait();
@@ -245,8 +406,14 @@ void mf_music_update(int started,int paused,int events,unsigned int now)
     int i,protected,music_events=events;unsigned int elapsed=now-audio_tick;audio_tick=now;
     if(!ready)return;
     protected=death_update(events,now);
+#if MF_BRUCE_RUNTIME && MF_VEHICLE_AMBUSH
+    bruce_audio_update(events,now,protected,paused);
+#endif
 #if MF_VEHICLE_AMBUSH
     int vehicle_pass=started && (events&MF_VEHICLE_PASS);
+#if MF_BRUCE_RUNTIME
+    if(bruce_tone_owner!=0)vehicle_pass=0;
+#endif
     car_sound_update(vehicle_pass,vehicle_pass && !paused && !protected && !(events&MF_WORLD_IMPACT),
                      started && paused);
 #endif

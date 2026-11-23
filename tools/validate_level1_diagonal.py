@@ -96,7 +96,10 @@ BRUCE_RUNTIME_DELTA = {
     "src/bruce.c", "src/bruce.h", "src/game.h", "src/ricky_animation.c",
     "make/saturn.mk", "tools/build-native.sh", "tools/build-source-complete.sh",
     "tools/stage-bruce-bank.py", "tools/validate_level1_diagonal.py",
-    "tests/bruce_runtime_test.c",
+    "tests/bruce_runtime_test.c", "tests/bruce_sfx_test.c",
+    "src/music.h", "src/bruce_sfx_data.h", "tools/pack-bruce-sfx.py",
+    "assets/bruce-sfx/BSFX.TON", "assets/bruce-sfx/BSFX.SEQ", "assets/bruce-sfx/manifest.json",
+    "docs/bruce-custom-sfx.md",
     "docs/bruce-phase3a-runtime.md", "docs/bruce-phase3b-combat.md", "Makefile",
 }
 

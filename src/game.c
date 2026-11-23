@@ -830,6 +830,20 @@ int mf_torch_hits(const mf_player *p,mf_hitbox b)
     return b.bottom<=hi && b.top>=lo;
 }
 #if MF_BRUCE_RUNTIME
+#if MF_BRUCE_RUNTIME && MF_VEHICLE_AMBUSH
+static void bruce_damage_sound(mf_game *g,int before,int strong)
+{
+    int after=g->bruce.health;
+    if(after>=before)return;
+    if(!after){
+        g->events|=MF_BRUCE_SFX_DEATH;
+        return;
+    }
+    if(before>MF_BRUCE_MAX_HP/5 && after<=MF_BRUCE_MAX_HP/5)
+        g->events|=MF_BRUCE_SFX_LAUGH;
+    if(strong)g->events|=MF_BRUCE_SFX_HURT;
+}
+#endif
 static mf_hitbox bruce_hurtbox(const mf_bruce *bruce)
 {
     return hurtbox(bruce->x/256,bruce->y/256,bruce->height,25,10,80);
@@ -847,7 +861,13 @@ static void torch_hits(mf_game *g,mf_player *p)
     p->torch_tick=MF_TORCH_DAMAGE_TICKS;
 #if MF_BRUCE_RUNTIME
     if(mf_bruce_vulnerable(&g->bruce) && mf_torch_hits(p,bruce_hurtbox(&g->bruce))) {
+#if MF_VEHICLE_AMBUSH
+        int before=g->bruce.health;
+#endif
         mf_bruce_receive(&g->bruce,MF_TORCH_DAMAGE,0,p->facing);
+#if MF_VEHICLE_AMBUSH
+        bruce_damage_sound(g,before,0);
+#endif
         g->events|=MF_IMPACT;
     }
 #endif
@@ -1034,11 +1054,22 @@ static void player_hits(mf_game *g,mf_player *p)
         if(mf_bruce_vulnerable(bruce) && !(p->hit_mask&bruce_bit) &&
            (bruce->x-p->x)*p->facing>0 &&
            mf_boxes_overlap(mf_player_attackbox(p),bruce_hurtbox(bruce))) {
+#if MF_VEHICLE_AMBUSH
+            int before=bruce->health;
+#endif
             p->hit_mask|=bruce_bit;
             mf_bruce_receive(bruce,p->bat?3:(p->attack_air?2:1),p->bat!=0,p->facing);
             hit_sound(g,(int)(p-g->players),bruce->health,0);
             heavy_hit_sound(g,p,bruce->health);
+#if MF_VEHICLE_AMBUSH
+            bruce_damage_sound(g,before,p->bat || p->attack_air
+#if MF_PUNCH_COMBO
+                || g->combo[p-g->players].phase==2
+#endif
+            );
+#else
             if(!bruce->health)g->events|=MF_COMBAT_HUMAN_DEATH((int)(p-g->players));
+#endif
             impact(g,bruce->x/256,bruce->y/256,48+bruce->height);
         }
     }
@@ -1234,7 +1265,17 @@ void mf_game_step_inputs(mf_game *g,const unsigned held[2],const unsigned presse
     if(g->stage==MF_STAGE_LEVEL1 && g->bruce.ready) {
         mf_bruce *bruce=&g->bruce;
         int was_active=bruce->active;
+#if MF_VEHICLE_AMBUSH
+        int previous_state=bruce->state;
+#endif
         mf_bruce_step(bruce,g);
+#if MF_VEHICLE_AMBUSH
+        if(bruce->state!=previous_state) {
+            if(bruce->state==MF_BRUCE_SLAM || bruce->state==MF_BRUCE_COUNTER)
+                g->events|=MF_BRUCE_SFX_JUMP;
+            else if(bruce->state==MF_BRUCE_CHARGE)g->events|=MF_BRUCE_SFX_CHARGE;
+        }
+#endif
         if(!was_active && bruce->active && bruce->state==MF_BRUCE_ENTRANCE)
             g->events|=MF_BRUCE_ENTRANCE_JUMP;
         for(i=0;i<MF_PLAYERS;i++) {
