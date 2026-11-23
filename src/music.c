@@ -1,9 +1,9 @@
 /* Native SEQ/TON playback through the pinned Sega sound driver, not an SH-2 synth. */
 #include <jo/jo.h>
 #include <SEGA_SND.H>
+#include "game.h"
 #include "music.h"
 #include "music_data.h"
-#include "game.h"
 #if MF_BRUCE_RUNTIME && MF_VEHICLE_AMBUSH
 #include "bruce_sfx_data.h"
 #endif
@@ -123,7 +123,9 @@ static void car_sound_update(int in_pass,int requested,int paused)
 #endif
 
 #if MF_BRUCE_RUNTIME && MF_VEHICLE_AMBUSH
-enum { BRUCE_SFX_PORT=8, BRUCE_SFX_BANK=2, BRUCE_SFX_SEQ_ADDR=CAR_TON_ADDR+MF_BRUCE_TON_BYTES };
+/* The pinned driver has eight playable SEQ controls. During combat, use
+   control 7 when the protected POOWAH dispatcher does not own it. */
+enum { BRUCE_SFX_PORT=7, BRUCE_SFX_BANK=2, BRUCE_SFX_SEQ_ADDR=CAR_TON_ADDR+MF_BRUCE_TON_BYTES };
 /* Song IDs start at zero independently of the SCSP addresses. */
 enum { BRUCE_JUMP_SONG, BRUCE_CHARGE_SONG, BRUCE_HURT_SONG, BRUCE_LAUGH_SONG, BRUCE_DEATH_CUE };
 typedef char bruce_sfx_ram_bound[BRUCE_SFX_SEQ_ADDR+MF_BRUCE_SEQ_BYTES<=0x80000?1:-1];
@@ -160,6 +162,41 @@ static int bruce_voice_reap(unsigned now)
     return 0;
 }
 
+static int bruce_stop_voice(unsigned now)
+{
+    if(SND_StopSeq(BRUCE_SFX_PORT)!=SND_RET_SET)return 0;
+    bruce_voice=-1;
+    bruce_stop_guard=1;
+    bruce_stopped_at=now;
+    return 1;
+}
+
+static int bruce_stop_complete(unsigned now)
+{
+    SndSeqStat status;
+    if(!bruce_stop_guard)return 1;
+    if(now-bruce_stopped_at<3)return 0;
+    SND_GetSeqStat(&status,BRUCE_SFX_PORT);
+    if(SND_SEQ_STAT_MODE(status)!=SND_MD_STOP)return 0;
+    bruce_stop_guard=0;
+    return 1;
+}
+
+static int bruce_legacy_death_update(unsigned events,unsigned now)
+{
+    unsigned legacy_events=MF_COMBAT_HUMAN_DEATH(0)|MF_COMBAT_HUMAN_DEATH(1);
+    if((events&legacy_events) && !mf_music_protected() &&
+       (bruce_voice>=0 || bruce_stop_guard)){
+        death_pending=1;
+        death_prepared=0;
+    }
+    if(death_pending){
+        if(!bruce_voice_reap(now) && !bruce_stop_voice(now))return 1;
+        if(!bruce_stop_complete(now))return 1;
+    }
+    return death_update(events,now);
+}
+
 static void bruce_audio_update(unsigned events,unsigned now,int legacy_death,int paused)
 {
     int cue=-1;
@@ -191,16 +228,13 @@ static void bruce_audio_update(unsigned events,unsigned now,int legacy_death,int
         /* Preserve WOOPAH against nonlethal overlaps. The laugh yields
            to an attack warning, and normal battle ports are never stopped. */
         if(bruce_cue_priority[bruce_pending]<=bruce_cue_priority[bruce_voice])return;
-        if(SND_StopSeq(BRUCE_SFX_PORT)!=SND_RET_SET)return;
-        bruce_voice=-1;
-        bruce_stop_guard=1;
-        bruce_stopped_at=now;
+        if(!bruce_stop_voice(now))return;
     }
-    if(bruce_stop_guard && now-bruce_stopped_at<3)return;
+    if(!bruce_stop_complete(now))return;
     if(SND_SetSeqVl(BRUCE_SFX_PORT,105,0)!=SND_RET_SET)return;
     if(SND_StartSeq(BRUCE_SFX_PORT,BRUCE_SFX_BANK,
                     bruce_pending==BRUCE_DEATH_CUE?BRUCE_HURT_SONG:bruce_pending,
-                    bruce_pending==BRUCE_DEATH_CUE?30:29)==SND_RET_SET){
+                    bruce_pending==BRUCE_DEATH_CUE?MF_SFX_PRIORITY:29)==SND_RET_SET){
         bruce_voice=bruce_pending;
         bruce_voice_at=now;
         bruce_seen=0;
@@ -215,41 +249,30 @@ static int bruce_release_bank(unsigned now)
     if(bruce_pending==BRUCE_DEATH_CUE)return 0;
     bruce_pending=-1;
     bruce_laugh_pending=0;
-    if(!bruce_voice_reap(now)){
-        if(bruce_voice==BRUCE_DEATH_CUE || SND_StopSeq(BRUCE_SFX_PORT)!=SND_RET_SET)return 0;
-        bruce_voice=-1;
-        bruce_stop_guard=1;
-        bruce_stopped_at=now;
-    }
-    if(bruce_stop_guard && now-bruce_stopped_at<3)return 0;
-    if(bruce_stop_guard){
-        SndSeqStat status;
-        SND_GetSeqStat(&status,BRUCE_SFX_PORT);
-        if(SND_SEQ_STAT_MODE(status)!=SND_MD_STOP)return 0;
-    }
-    bruce_stop_guard=0;
-    return 1;
+    if(!bruce_voice_reap(now) &&
+       (bruce_voice==BRUCE_DEATH_CUE || !bruce_stop_voice(now)))return 0;
+    return bruce_stop_complete(now);
 }
 
 int mf_music_bruce_bank(int requested,unsigned now)
 {
-    if(!ready || bruce_audio_fault || bruce_tone_owner==requested)return 1;
+    if(!ready || bruce_audio_fault || bruce_tone_owner==requested)return MF_BRUCE_BANK_READY;
     if(requested){
         car_sound_update(0,0,0);
-        if(car_sound_playing || (int)(now-car_safe_at)<0)return 0;
+        if(car_sound_playing || (int)(now-car_safe_at)<0)return MF_BRUCE_BANK_WAIT;
         if(!bruce_cd_upload("BSFX.TON",MF_BRUCE_TON_BYTES,CAR_TON_ADDR)){
             bruce_audio_fault=1;
-            return 1; /* The old bank stays mapped if the read fails. */
+            return MF_BRUCE_BANK_TRANSFERRED; /* The old bank stays mapped if the read fails. */
         }
     }else{
-        if(!bruce_release_bank(now))return 0;
+        if(!bruce_release_bank(now))return MF_BRUCE_BANK_WAIT;
         if(!upload("CARPASS.TON",CAR_TON_BYTES,CAR_TON_ADDR)){
             bruce_audio_fault=1;
-            return 1;
+            return MF_BRUCE_BANK_TRANSFERRED;
         }
     }
     bruce_tone_owner=requested;
-    return 1;
+    return MF_BRUCE_BANK_TRANSFERRED;
 }
 
 int mf_music_bruce_exit(void)
@@ -405,9 +428,11 @@ void mf_music_update(int started,int paused,int events,unsigned int now)
 {
     int i,protected,music_events=events;unsigned int elapsed=now-audio_tick;audio_tick=now;
     if(!ready)return;
-    protected=death_update(events,now);
 #if MF_BRUCE_RUNTIME && MF_VEHICLE_AMBUSH
+    protected=bruce_legacy_death_update(events,now);
     bruce_audio_update(events,now,protected,paused);
+#else
+    protected=death_update(events,now);
 #endif
 #if MF_VEHICLE_AMBUSH
     int vehicle_pass=started && (events&MF_VEHICLE_PASS);

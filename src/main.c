@@ -681,12 +681,13 @@ static void update(void)
     #endif
     if(asset_error) {draw_asset_diagnostics();return;}
 #if MF_BRUCE_RUNTIME && MF_VEHICLE_AMBUSH
-    if(!mf_music_bruce_bank(mf_enemy_bank_current()==&mf_bruce_bank_spec,now)){
+    int sound_bank=mf_music_bruce_bank(mf_enemy_bank_current()==&mf_bruce_bank_spec,now);
+    if(sound_bank==MF_BRUCE_BANK_WAIT){
         mf_music_update(game.started,game.paused,0,now);
         last_vblank=vblanks;pending[0]=pending[1]=0;
         draw_game();return;
     }
-    if(now!=vblanks)last_vblank=now=vblanks;
+    if(sound_bank==MF_BRUCE_BANK_TRANSFERRED)last_vblank=now=vblanks;
 #endif
 
 #if MF_SPRITE_GALLERY

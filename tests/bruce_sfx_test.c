@@ -18,13 +18,13 @@ void SND_GetSeqStat(SndSeqStat *status,int port)
 
 int SND_SetSeqVl(int port,int volume,int fade)
 {
-    assert(port==BRUCE_SFX_PORT && volume==105 && !fade);
+    assert(port==BRUCE_SFX_PORT && (volume==105 || volume==MF_SFX_VOLUME) && !fade);
     return SND_RET_SET;
 }
 
 int SND_StartSeq(int port,int bank,int song,int priority)
 {
-    assert(port==BRUCE_SFX_PORT && bank==2 && song>=0 && song<4);
+    assert(port==BRUCE_SFX_PORT && ((bank==2 && song>=0 && song<4) || (bank==0 && song==8)));
     if(fail_start)return 1;
     last_song=song;
     last_priority=priority;
@@ -103,7 +103,7 @@ int main(void)
     bruce_audio_update(0,193,0,0);
     assert(stops==1 && starts==2);
     bruce_audio_update(0,196,0,0);
-    assert(starts==3 && last_song==BRUCE_HURT_SONG && last_priority==30);
+    assert(starts==3 && last_song==BRUCE_HURT_SONG && last_priority==MF_SFX_PRIORITY);
     assert(!mf_music_bruce_bank(0,197) && uploads==1);
     mode=SND_MD_STOP;
     assert(mf_music_bruce_bank(0,237) && uploads==2 && bruce_tone_owner==0);
@@ -113,5 +113,17 @@ int main(void)
     assert(!mf_music_bruce_bank(0,242) && stops==2);
     assert(!mf_music_bruce_bank(0,244));
     assert(mf_music_bruce_bank(0,245) && uploads==4);
+    assert(mf_music_bruce_bank(1,250) && uploads==5);
+    bruce_audio_update(MF_BRUCE_SFX_JUMP,251,0,0);
+    assert(starts==5);
+    fail_stop=1;
+    assert(bruce_legacy_death_update(MF_COMBAT_HUMAN_DEATH(0),252));
+    assert(death_pending && !death_active && stops==2);
+    fail_stop=0;
+    assert(bruce_legacy_death_update(0,253) && stops==3);
+    assert(bruce_legacy_death_update(0,255) && starts==5);
+    assert(bruce_legacy_death_update(0,256) && starts==6 && last_song==8 && death_active);
+    bruce_audio_update(MF_BRUCE_SFX_JUMP,257,1,0);
+    assert(starts==6 && stops==3);
     puts("PASS Bruce cue arbitration, independent control, PCM completion and reversible bank guards");
 }
