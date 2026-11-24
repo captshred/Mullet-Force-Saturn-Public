@@ -35,6 +35,7 @@ static volatile int stage2_owned;
 #endif
 
 static mf_game game;
+static int overlay=-1;
 
 #if MF_DEV_MODE
 enum {
@@ -74,8 +75,8 @@ static void dev_draw_menu(void)
         return;
     }
     if (dev_camera >= 0) {
-        jo_printf(5, 11, "FREE CAMERA  X %04d", dev_camera);
-        jo_print(5, 20, "LEFT/RIGHT  A FAST  B/START EXIT");
+        jo_printf(1, 1, "FREE CAMERA  X %04d", dev_camera);
+        jo_print(1, 29, "LEFT/RIGHT  A FAST  B/START EXIT");
         return;
     }
     jo_print(5, 11, dev_selecting ? "SECTION SELECT" : "DEVELOPER MENU");
@@ -117,7 +118,11 @@ static void dev_pause_input(unsigned buttons)
     } else if (dev_cursor == DEV_RESTART) dev_target = current_section;
     else if (dev_cursor == DEV_GOD) game.god_mode ^= 1;
     else if (dev_cursor == DEV_REFILL) mf_dev_refill_health(&game);
-    else if (dev_cursor == DEV_FREE_CAMERA) dev_camera = game.camera;
+    else if (dev_cursor == DEV_FREE_CAMERA) {
+        dev_camera = game.camera;
+        jo_clear_screen();
+        overlay = -1;
+    }
     else {
         unsigned shortcut[2] = {MF_X, 0};
         mf_dev_stage_skip(&game, shortcut);
@@ -134,6 +139,7 @@ static void dev_camera_input(unsigned held, unsigned pressed)
     int direction = !!(held & MF_RIGHT) - !!(held & MF_LEFT);
     if (pressed & (MF_B | MF_START)) {
         dev_camera = -1;
+        jo_clear_screen();
         return;
     }
     dev_camera += direction * ((held & MF_A) ? 8 : 2);
@@ -148,7 +154,7 @@ static int street[5],buck[MF_BUCK_FRAMES],chuck[MF_BUCK_FRAMES],enemy[MF_ENEMY_F
 static int vehicle_sprite;
 #endif
 static jo_palette street_palette,buck_palette,chuck_palette,enemy_palette,burn_palette,fire_palette;
-static int asset_error,asset_stage,asset_index,overlay=-1;
+static int asset_error,asset_stage,asset_index;
 #if MF_SPRITE_GALLERY
 static int asset_diagnostic_view;
 #endif
@@ -664,6 +670,13 @@ static void draw_game(void)
     if (dev_camera_visible(game.spark_x-camera))
 #endif
     mf_fx_draw_spark_at(&game,spark,explosion,spark_explosion,depth_key(mf_world_screen_y(game.spark_x,game.spark_y,camera),-1),camera);
+#if MF_DEV_MODE
+    if (dev_camera >= 0) {
+        dev_draw_menu();
+        MF_PERF_END(MF_PERF_RENDER,render_start);
+        return;
+    }
+#endif
     health_bar(16,25,80,game.players[0].health,100);
     jo_print(2,1,"BUCK");jo_printf(14,1,"%06d",game.score);
     jo_printf(2,2,"HP %03d",game.players[0].health);
