@@ -878,7 +878,9 @@ static void update(void)
                 dev_selecting = 0;
                 pending[0] = pending[1] = 0;
             }
-            if (dev_target < 0) mf_music_update(game.started, game.paused, 0, now);
+            if (dev_target < 0)
+                mf_music_update(game.started, game.paused,
+                                game.vehicle_dir ? MF_VEHICLE_PASS : 0, now);
             if (game.stage != MF_STAGE_LEVEL2_ENTRY) break;
             held[0] = held[1] = pressed[0] = pressed[1] = 0;
         }
