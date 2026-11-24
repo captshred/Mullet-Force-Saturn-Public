@@ -1,6 +1,7 @@
 #include "performance_audit.h"
 #include "game.h"
 #include "bruce.h"
+#include "dev_sections.h"
 /* JAB BEGIN */
 #include "punch_combo.h"
 #include "jab_repeat.h"
@@ -842,6 +843,78 @@ int mf_torch_hits(const mf_player *p,mf_hitbox b)
     return b.bottom<=hi && b.top>=lo;
 }
 #if MF_BRUCE_RUNTIME
+#if MF_DEV_MODE
+typedef struct {
+    const char *name;
+    int boundary, entry, camera;
+} mf_section_definition;
+
+static const mf_section_definition sections[MF_SECTION_COUNT] = {
+    {"OPENING STREET", MF_WORLD_LEFT, 100, 0},
+    {"ION ARCADE", 397, 450, 308},
+    {"INTERSECTION", 1280, 1570, 1428},
+    {"DOWNHILL STREET", MF_WORLD_BEND_X, 1950, 1808},
+    {"VEHICLE AMBUSH", MF_VEHICLE_TRIGGER_X, MF_VEHICLE_TRIGGER_X, 2098},
+    {"PARKING GARAGE", MF_WORLD_SLOPE_END, MF_BRUCE_LOT_RETURN, 2498},
+    {"BRUCE MINI-BOSS", MF_BRUCE_LOT_FIRST, MF_BRUCE_LOT_FIRST, 2616},
+    {"MEGA ARCADE APRON", MF_BRUCE_ARCADE_DOORS, MF_BRUCE_ARCADE_DOORS, MF_WORLD_CAMERA_MAX}
+};
+
+const char *mf_section_name(mf_section section)
+{
+    return sections[section].name;
+}
+
+mf_section mf_section_current(const mf_game *g, mf_section previous)
+{
+    int i, lead = MF_WORLD_LEFT, living_players = 0;
+    for (i = 0; i < MF_PLAYERS; ++i) {
+        if (!living(&g->players[i])) continue;
+        ++living_players;
+        if (g->players[i].x / 256 > lead) lead = g->players[i].x / 256;
+    }
+    if (!living_players) return previous;
+    if (lead >= sections[MF_SECTION_APRON].boundary &&
+        g->bruce.active && g->bruce.state == MF_BRUCE_DEFEATED)
+        return MF_SECTION_APRON;
+    /* Knockback can push a fighter behind the entry while the encounter
+       is still on screen. Use the existing encounter return boundary. */
+    if (previous == MF_SECTION_BRUCE && g->bruce.active &&
+        lead >= MF_BRUCE_LOT_RETURN) return MF_SECTION_BRUCE;
+    if (previous == MF_SECTION_VEHICLE && g->vehicle_tick > 0 &&
+        g->vehicle_tick <= VEHICLE_END) return MF_SECTION_VEHICLE;
+    for (i = MF_SECTION_BRUCE; i > MF_SECTION_OPENING; --i)
+        if (lead >= sections[i].boundary) return (mf_section)i;
+    return MF_SECTION_OPENING;
+}
+
+void mf_section_init(mf_game *g, mf_section section)
+{
+    const mf_section_definition *def = &sections[section];
+    int coop = g->players[1].active, debug = g->debug;
+    mf_game_init(g);
+    g->started = 1;
+    g->debug = debug;
+    g->camera = def->camera;
+    g->camera_floor = mf_world_checkpoint(g->camera);
+    g->players[0].x = def->entry * 256;
+    if (coop) {
+        recover_player(g, 1, 1);
+        g->players[1].x = (def->entry + (section == MF_SECTION_OPENING ? 40 : -36)) * 256;
+        g->players[1].invulnerable = 0;
+    }
+    if (section > MF_SECTION_VEHICLE) g->vehicle_tick = VEHICLE_END + 1;
+    if (section >= MF_SECTION_BRUCE) g->street_spawns_suspended = 1;
+    if (section == MF_SECTION_APRON) {
+        g->bruce.active = 1;
+        g->bruce.state = MF_BRUCE_DEFEATED;
+        g->bruce.x = (MF_BRUCE_ARCADE_DOORS - 80) * 256;
+        g->bruce.y = 203 * 256;
+        g->bruce.facing = -1;
+    }
+}
+#endif
+
 #if MF_BRUCE_RUNTIME && MF_VEHICLE_AMBUSH
 static void bruce_damage_sound(mf_game *g,int before,int strong)
 {

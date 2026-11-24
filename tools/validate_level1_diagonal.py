@@ -92,6 +92,10 @@ PHASE_DELTA |= HQ_DELTA
 
 BRUCE_ASSET_TREE = "84dd2903d3f8120e663a718d025a8ce9eb235f06"
 BRUCE_RUNTIME_DELTA = {
+    # Phase 1A feature branch changes are source-only. Audio and art locks
+    # remain subject to the existing byte checks.
+    ".github/workflows/build.yml", "src/dev_sections.h", "src/music.c",
+    "tools/build.sh", "tests/dev_sections_test.c",
     "src/enemy_sprite_bank.c", "src/enemy_sprite_bank.h",
     "src/bruce.c", "src/bruce.h", "src/game.h", "src/ricky_animation.c",
     "make/saturn.mk", "tools/build-native.sh", "tools/build-source-complete.sh",
@@ -168,6 +172,8 @@ def validate(medium_guitar=False, mix_pass1=False):
     panorama = (art / "IXPIX.BIN").read_bytes()
     assert len(panorama) == width * height
     geometry_pass = importlib.import_module("correct-garage-geometry")
+    if subprocess.run(["git", "cat-file", "-e", geometry_pass.BASE], cwd=ROOT, capture_output=True).returncode:
+        git("fetch", "--no-tags", "--depth=1", "origin", geometry_pass.BASE)
     previous = geometry_pass.baseline()
     assert panorama == geometry_pass.paint(previous)
     assert len(panorama) == len(previous) and width == geometry_pass.WIDTH
@@ -179,6 +185,8 @@ def validate(medium_guitar=False, mix_pass1=False):
             assert column >= 2560 or row < 292, "garage geometry reached the downhill roadway"
     panorama = previous  # Compare the parent against the older approved art checks below.
     cleanup = importlib.import_module("clean-parking-garage")
+    if subprocess.run(["git", "cat-file", "-e", cleanup.BASE], cwd=ROOT, capture_output=True).returncode:
+        git("fetch", "--no-tags", "--depth=1", "origin", cleanup.BASE)
     approved = cleanup.baseline()
     assert panorama == cleanup.paint(approved), "unexpected garage panorama changes"
     assert width == cleanup.WIDTH and len(panorama) == len(approved)

@@ -7,8 +7,8 @@
 /* Phase 4A.2 open lot starts at 2758, and the doors are centered at 3095.
    Keep Bruce's center on the apron and leave the doorway itself free. */
 enum {
-    LOT_FIRST = 2758, LOT_RETURN = MF_BRUCE_LOT_RETURN,
-    ARCADE_DOORS = 3095, BRUCE_SPAWN = ARCADE_DOORS - 80, BRUCE_RIGHT = ARCADE_DOORS - 46,
+    LOT_FIRST = MF_BRUCE_LOT_FIRST, LOT_RETURN = MF_BRUCE_LOT_RETURN,
+    ARCADE_DOORS = MF_BRUCE_ARCADE_DOORS, BRUCE_SPAWN = ARCADE_DOORS - 80, BRUCE_RIGHT = ARCADE_DOORS - 46,
     LANE_BACK = 168, LANE_FRONT = 229, BRUCE_SPAWN_LANE = 203,
     Q = 256
 };

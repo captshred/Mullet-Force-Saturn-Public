@@ -419,6 +419,46 @@ static void update_music(int started,int events)
         music_state=MUSIC_BRUCE;
 }
 
+#if MF_DEV_MODE
+/* The section loader owns audio until all accepted stops have reached the
+   driver. Keep tone ownership and the vehicle sample's reuse deadline. */
+int mf_music_section_reset(unsigned now, int post_bruce)
+{
+    static unsigned stopped, stopped_at;
+    unsigned port;
+    if (!ready) return 1;
+
+    car_sound_update(0, 0, 0);
+    if (car_sound_playing) return 0;
+    for (port = 0; port < 8; ++port) {
+        if (stopped & (1u << port)) continue;
+        if (SND_StopSeq(port) != SND_RET_SET) return 0;
+        stopped |= 1u << port;
+        stopped_at = now;
+    }
+    if (now - stopped_at < 3) return 0;
+    for (port = 0; port < 8; ++port) {
+        SndSeqStat status;
+        SND_GetSeqStat(&status, port);
+        if (SND_SEQ_STAT_MODE(status) != SND_MD_STOP) return 0;
+    }
+
+    music_state = post_bruce ? MUSIC_STARTING_BRUCE : MUSIC_IDLE;
+    audio_tick = now;
+    pause_mask = paused_state = torch_playing = hiss_guard = 0;
+    pause_target = -1;
+    for (port = 0; port < 3; ++port) {
+        combat[port] = (combat_sound){.pending = -1};
+        sfx_wait[port] = 0;
+    }
+    death_pending = death_prepared = death_active = death_seen = death_retiring = 0;
+    bruce_voice = bruce_pending = -1;
+    bruce_seen = bruce_stop_guard = bruce_laugh_pending = 0;
+    stopped = 0;
+    return 1;
+}
+#endif
+
 void mf_music_update(int started,int paused,int events,unsigned int now)
 {
     int i,protected,music_events=events;unsigned int elapsed=now-audio_tick;audio_tick=now;

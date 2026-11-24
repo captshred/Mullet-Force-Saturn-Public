@@ -6,6 +6,7 @@
 #include "art_data.h"
 #include "build-info.h"
 #include "bruce.h"
+#include "dev_sections.h"
 #if MF_LEVEL2_WINGSUIT
 #include "wingsuit_runtime.h"
 #include "dev_stage_skip.h"
@@ -34,6 +35,74 @@ static volatile int stage2_owned;
 #endif
 
 static mf_game game;
+
+#if MF_DEV_MODE
+enum { DEV_RESUME, DEV_SELECT, DEV_RESTART, DEV_SKIP, DEV_MENU_COUNT };
+static const char *const dev_options[] = {
+    "RESUME GAME", "SECTION SELECT", "RESTART SECTION", "LEVEL SKIP"
+};
+static mf_section current_section;
+static int dev_target = -1, dev_cursor, dev_selecting, dev_menu_visible;
+static unsigned dev_release[MF_PLAYERS];
+
+static int dev_paused(void)
+{
+    return game.started && game.paused && game.stage == MF_STAGE_LEVEL1;
+}
+
+static void dev_draw_menu(void)
+{
+    int row, count;
+    if (!dev_paused() && !dev_menu_visible) return;
+    for (row = 11; row <= 20; ++row) jo_clear_screen_line(row);
+    dev_menu_visible = dev_paused();
+    if (!dev_menu_visible) return;
+    if (dev_target >= 0) {
+        jo_print(5, 11, "LOADING SECTION");
+        return;
+    }
+    jo_print(5, 11, dev_selecting ? "SECTION SELECT" : "DEVELOPER MENU");
+    count = dev_selecting ? MF_SECTION_COUNT : DEV_MENU_COUNT;
+    for (row = 0; row < count; ++row)
+        jo_printf(5, 12 + row, "%s %s", row == dev_cursor ? ">" : " ",
+                  dev_selecting ? mf_section_name((mf_section)row) : dev_options[row]);
+    jo_print(5, 20, "UP/DOWN  A SELECT  B BACK");
+}
+
+static void dev_discard_menu_buttons(const unsigned held[2])
+{
+    int player;
+    for (player = 0; player < MF_PLAYERS; ++player)
+        dev_release[player] |= held[player] & (MF_UP | MF_DOWN | MF_A | MF_B | MF_START | MF_X);
+}
+
+static void dev_pause_input(unsigned buttons)
+{
+    int count = dev_selecting ? MF_SECTION_COUNT : DEV_MENU_COUNT;
+    if ((buttons & MF_START) || (!dev_selecting && (buttons & MF_B))) {
+        game.paused = 0;
+        return;
+    }
+    if (buttons & MF_B) {
+        dev_selecting = 0;
+        dev_cursor = DEV_SELECT;
+        return;
+    }
+    if (buttons & MF_UP) dev_cursor = (dev_cursor + count - 1) % count;
+    else if (buttons & MF_DOWN) dev_cursor = (dev_cursor + 1) % count;
+    if (!(buttons & MF_A)) return;
+    if (dev_selecting) dev_target = dev_cursor;
+    else if (dev_cursor == DEV_RESUME) game.paused = 0;
+    else if (dev_cursor == DEV_SELECT) {
+        dev_selecting = 1;
+        dev_cursor = current_section;
+    } else if (dev_cursor == DEV_RESTART) dev_target = current_section;
+    else {
+        unsigned shortcut[2] = {MF_X, 0};
+        mf_dev_stage_skip(&game, shortcut);
+    }
+}
+#endif
 
 static int explosion=-1,spark_explosion;
 static int street[5],buck[MF_BUCK_FRAMES],chuck[MF_BUCK_FRAMES],enemy[MF_ENEMY_FRAMES],bat[2][MF_BAT_FRAMES],bat_legs,air_legs[3],normal_lower[MF_NORMAL_LOWERS],torch_art[2][3],flame[4],embers[2],charge_cue,drum[3],shadow,spark,bar,panel;
@@ -625,6 +694,9 @@ static void draw_game(void)
     }
 
     MF_PERF_END(MF_PERF_RENDER,render_start);
+#if MF_DEV_MODE
+    dev_draw_menu();
+#endif
 }
 static void update(void)
 {
@@ -646,6 +718,11 @@ static void update(void)
             /* Never buffer an X edge from gameplay into the pause menu. */
             if(!game.paused)sampled_input[j].pressed&=~MF_X;
 #endif
+#if MF_DEV_MODE
+            dev_release[j] &= sampled_input[j].held | sampled_input[j].pressed;
+            sampled_input[j].held &= ~dev_release[j];
+            sampled_input[j].pressed &= ~dev_release[j];
+#endif
             if(!sampled_input[j].connected)pending[j]=0;else pending[j]|=sampled_input[j].pressed;
         }
         last_input_vblank=now;
@@ -660,6 +737,24 @@ static void update(void)
             reset_requested = 1; /* SGL did not accept the command yet. */
         return;
     }
+#if MF_DEV_MODE
+    if (dev_target >= 0) {
+        unsigned menu_held[2] = {sampled_input[0].held, sampled_input[1].held};
+        dev_discard_menu_buttons(menu_held);
+        pending[0] = pending[1] = 0;
+        last_vblank = now;
+        if (mf_music_section_reset(now, dev_target == MF_SECTION_APRON)) {
+            current_section = (mf_section)dev_target;
+            mf_section_init(&game, current_section);
+            spark_explosion = 0;
+            dev_cursor = DEV_RESUME;
+            dev_selecting = 0;
+            dev_target = -1;
+        }
+        draw_game();
+        return;
+    }
+#endif
 #if MF_ENEMY_SPRITE_BANKS
     if(!asset_error && !mf_enemy_bank_ready() && !stage2_owned) {
         MF_PERF_BEGIN(service_start);
@@ -768,8 +863,25 @@ static void update(void)
         unsigned previous_hits[MF_PLAYERS];
         for(j=0;j<MF_PLAYERS;j++)previous_hits[j]=(unsigned)game.players[j].hit_mask;
 #endif
+#if MF_DEV_MODE
+        int menu_was_open = dev_paused();
+#endif
 #if MF_LEVEL2_WINGSUIT
         mf_dev_stage_skip(&game,pressed);
+#endif
+#if MF_DEV_MODE
+        if (menu_was_open) {
+            if (dev_paused()) dev_pause_input(pressed[0]);
+            dev_discard_menu_buttons(held);
+            if (!dev_paused()) {
+                dev_cursor = DEV_RESUME;
+                dev_selecting = 0;
+                pending[0] = pending[1] = 0;
+            }
+            if (dev_target < 0) mf_music_update(game.started, game.paused, 0, now);
+            if (game.stage != MF_STAGE_LEVEL2_ENTRY) break;
+            held[0] = held[1] = pressed[0] = pressed[1] = 0;
+        }
 #endif
 #if MF_BRUCE_RUNTIME
         if(game.started && !game.paused && game.stage==MF_STAGE_LEVEL1) {
@@ -789,6 +901,10 @@ static void update(void)
 #endif
         MF_PERF_BEGIN(logic_start);
         mf_game_step_inputs(&game,held,pressed,(sampled_input[0].connected?1u:0u)|(sampled_input[1].connected?2u:0u));
+#if MF_DEV_MODE
+        if (game.stage == MF_STAGE_LEVEL1 && !game.paused)
+            current_section = mf_section_current(&game, current_section);
+#endif
 #if MF_ARCADE_FX
         spark_explosion=mf_fx_spark_explosion(&game,previous_hits,spark_explosion);
 #endif
@@ -815,6 +931,9 @@ static void update(void)
             mf_enemy_bank_retire();
 #endif
             mf_parallax_leave(); /* Release Phase 3A CPU decode cache before Level 2. */
+#if MF_DEV_MODE
+            dev_draw_menu();
+#endif
             stage2_owned=1;pending[0]=pending[1]=0;
             mf_ws_runtime_begin(game.players[1].active,&street_palette,now);return;
         }

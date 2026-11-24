@@ -12,6 +12,7 @@ on:
         required: true
         default: arcade-impact-fx
         options:
+          - dev-toolkit-phase1a
           - level1-human-death-combat-sfx
           - level1-ugh-protected-sfx
           - level2-neon-city
@@ -70,6 +71,7 @@ jobs:
         run: |
           export MF_BUILD_BRANCH="$REQUESTED_REF"
           case "$BUILD_PROFILE" in
+            dev-toolkit-phase1a) MF_DEV_MODE=1 bash tools/build-source-complete.sh ;;
             level1-ugh-protected-sfx) bash tools/build-source-complete.sh ;;
             level1-human-death-combat-sfx) bash tools/build-source-complete.sh ;;
             arcade-impact-fx) bash tools/build-arcade-impact-fx.sh --native ;;
@@ -89,6 +91,9 @@ jobs:
           export MF_BUILD_BRANCH="$REQUESTED_REF"
           make check
           make test
+          if [[ "$BUILD_PROFILE" == dev-toolkit-phase1a ]]; then
+            grep -Fx 'Developer mode: 1' build/BUILD-INFO.txt
+          fi
           if [[ "$BUILD_PROFILE" == full-gameplay-sfx2 || "$BUILD_PROFILE" == arcade-impact-fx || "$BUILD_PROFILE" == level1-stage-clear ]]; then
             python3 tools/validate-full-gameplay-sfx2.py --disc
             python3 tools/audit-sprite-memory.py > build/sprite-memory.csv
