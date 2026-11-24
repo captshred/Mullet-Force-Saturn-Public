@@ -383,6 +383,68 @@ static void verify_running_jumps(void)
 }
 #endif
 
+static void verify_arena_progression(void)
+{
+    mf_game game;
+    mf_game_init(&game);
+    game.started = 1;
+    game.camera = MF_BRUCE_CAMERA_MIN;
+    game.vehicle_tick = 1000;
+    game.players[0].x = MF_BRUCE_LOT_FIRST * 256;
+    game.players[1] = game.players[0];
+    game.players[1].x = MF_BRUCE_LOT_RETURN * 256;
+
+    assert(mf_bruce_approach(&game.bruce, &game));
+    game.bruce.ready = 1;
+    mf_game_step(&game, 0, 0);
+    assert(game.events & MF_BRUCE_ENTRANCE_JUMP);
+    assert(game.bruce.active && game.street_spawns_suspended);
+    assert(game.players[1].x == MF_BRUCE_ARENA_REAR * 256);
+
+    /* The bank request remains latched even if a position is outside the lot. */
+    game.players[1].x = (MF_BRUCE_LOT_RETURN - 1) * 256;
+    assert(mf_bruce_approach(&game.bruce, &game));
+    game.camera = MF_BRUCE_CAMERA_MIN;
+    game.players[0].hurt = 2;
+    game.players[0].knockback = -900;
+    mf_game_step_coop(&game, (unsigned[2]){MF_LEFT, MF_LEFT},
+                      (unsigned[2]){0, MF_B});
+    assert(game.players[0].x == MF_BRUCE_ARENA_REAR * 256);
+    assert(game.players[1].x == MF_BRUCE_ARENA_REAR * 256);
+    assert(game.players[1].height > 0);
+
+    /* Advance the approved entrance and join at the far side of the arena. */
+    mf_game_step_inputs(&game, (unsigned[2]){0}, (unsigned[2]){0}, 1);
+    game.players[0].x = MF_BRUCE_ARENA_FRONT * 256;
+    game.camera = MF_BRUCE_CAMERA_MAX;
+    mf_game_step_coop(&game, (unsigned[2]){0, MF_START},
+                      (unsigned[2]){0, MF_START});
+    assert(game.players[1].active);
+    assert(game.players[1].x >= MF_BRUCE_ARENA_REAR * 256);
+    assert(game.players[1].x <= MF_BRUCE_ARENA_FRONT * 256);
+    for (int tick = 0; tick < 68; ++tick) mf_game_step(&game, MF_RIGHT, 0);
+    assert(game.bruce.state == MF_BRUCE_READY);
+    assert(game.players[0].x == MF_BRUCE_ARENA_FRONT * 256);
+
+    mf_bruce_receive(&game.bruce, MF_BRUCE_MAX_HP, 0, 1);
+    for (int tick = 0; tick < 13; ++tick) {
+        mf_game_step(&game, MF_RIGHT, 0);
+        assert(game.bruce.state == MF_BRUCE_FALL);
+        assert(game.players[0].x == MF_BRUCE_ARENA_FRONT * 256);
+        assert(game.camera <= MF_BRUCE_CAMERA_MAX);
+    }
+    mf_game_step(&game, MF_RIGHT, 0);
+    assert(game.bruce.state == MF_BRUCE_DEFEATED);
+    for (int tick = 0; tick < 140; ++tick)
+        mf_game_step_inputs(&game, (unsigned[2]){MF_RIGHT}, (unsigned[2]){0}, 1);
+    assert(game.players[0].x >= MF_BRUCE_ARCADE_DOORS * 256);
+    for (int tick = 0; tick < 550; ++tick) mf_game_step(&game, MF_LEFT, 0);
+    assert(game.players[0].x == MF_BRUCE_ARENA_REAR * 256);
+    assert(game.camera == MF_BRUCE_CAMERA_MIN);
+    assert(game.bruce.state == MF_BRUCE_DEFEATED);
+    assert(game.street_spawns_suspended && mf_enemy_count(&game) == 0);
+}
+
 int main(void)
 {
 #if MF_DASH_ENABLED
@@ -466,7 +528,8 @@ int main(void)
     tick(&bruce,&game,120);
     assert(bruce.state == MF_BRUCE_DEFEATED && mf_bruce_pose(&bruce) == 17);
     game.players[0].x = 2639 * 256;
-    assert(!mf_bruce_approach(&bruce,&game));
+    assert(mf_bruce_approach(&bruce,&game));
+    verify_arena_progression();
     verify_game_dispatch();
     verify_entrance_events();
     verify_bat_interruptions();

@@ -8,7 +8,7 @@
    Keep Bruce's center on the apron and leave the doorway itself free. */
 enum {
     LOT_FIRST = MF_BRUCE_LOT_FIRST, LOT_RETURN = MF_BRUCE_LOT_RETURN,
-    ARCADE_DOORS = MF_BRUCE_ARCADE_DOORS, BRUCE_SPAWN = ARCADE_DOORS - 80, BRUCE_RIGHT = ARCADE_DOORS - 46,
+    ARCADE_DOORS = MF_BRUCE_ARCADE_DOORS, BRUCE_SPAWN = ARCADE_DOORS - 80, BRUCE_RIGHT = MF_BRUCE_ARENA_FRONT,
     LANE_BACK = 168, LANE_FRONT = 229, BRUCE_SPAWN_LANE = 203,
     Q = 256
 };
@@ -21,6 +21,8 @@ static int living(const mf_player *player)
 int mf_bruce_approach(mf_bruce *bruce, const mf_game *game)
 {
     int first = MF_WORLD_RIGHT, last = MF_WORLD_LEFT, i;
+    /* The approach may be abandoned only before the entrance starts. */
+    if (bruce->active) return 1;
     for (i = 0; i < MF_PLAYERS; ++i) {
         const mf_player *player = &game->players[i];
         if (!living(player)) continue;
