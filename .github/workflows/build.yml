@@ -89,6 +89,11 @@ jobs:
           SELECTED_COMMIT: ${{ steps.source.outputs.sha }}
         run: |
           export MF_BUILD_BRANCH="$REQUESTED_REF"
+          if [[ "$BUILD_PROFILE" == level1-bruce-arena-lock ]] &&
+             [[ "$(git rev-parse --is-shallow-repository)" == true ]]; then
+            # Approved audio validators read historical payloads by commit.
+            git fetch --unshallow --no-tags origin "$SELECTED_COMMIT"
+          fi
           make check
           make test
           if [[ "$BUILD_PROFILE" == dev-toolkit-phase1a || "$BUILD_PROFILE" == level1-bruce-arena-lock ]]; then
