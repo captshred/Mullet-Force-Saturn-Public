@@ -130,6 +130,9 @@ typedef struct {
 #if MF_DASH_ENABLED
     unsigned char running_jump[MF_PLAYERS];
 #endif
+#if MF_DEV_MODE
+    int god_mode;
+#endif
 } mf_game;
 #if MF_VEHICLE_AMBUSH
 enum { MF_VEHICLE_TRIGGER_X=2240 };

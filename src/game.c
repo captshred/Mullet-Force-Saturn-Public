@@ -332,7 +332,10 @@ static void hit_sound(mf_game *g,int actor,int health,int inorganic)
 static void player_take_hit(mf_game *g,int i,int damage,int direction)
 {
     mf_player *p=&g->players[i];
-    p->health=clamp(p->health-damage,0,100);
+#if MF_DEV_MODE
+    if (!g->god_mode)
+#endif
+        p->health=clamp(p->health-damage,0,100);
 #if MF_DASH_ENABLED
     dash_clear(&g->dash[i]);
     g->running_jump[i]=0;
@@ -888,11 +891,19 @@ mf_section mf_section_current(const mf_game *g, mf_section previous)
     return MF_SECTION_OPENING;
 }
 
+void mf_dev_refill_health(mf_game *g)
+{
+    int i;
+    for (i = 0; i < MF_PLAYERS; ++i)
+        if (living(&g->players[i])) g->players[i].health = 100;
+}
+
 void mf_section_init(mf_game *g, mf_section section)
 {
     const mf_section_definition *def = &sections[section];
-    int coop = g->players[1].active, debug = g->debug;
+    int coop = g->players[1].active, debug = g->debug, god_mode = g->god_mode;
     mf_game_init(g);
+    g->god_mode = god_mode;
     g->started = 1;
     g->debug = debug;
     g->camera = def->camera;

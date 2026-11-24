@@ -36,15 +36,21 @@ static inline void mf_fx_draw_drum(const mf_drum *d,int impact,int explosion,
         jo_sprite_draw3D2(sprite,x-16,y-40,depth-1);
 }
 
-static inline void mf_fx_draw_spark(const mf_game *g,int impact,int explosion,
-                                    int is_explosion,int depth)
+static inline void mf_fx_draw_spark_at(const mf_game *g,int impact,int explosion,
+                                       int is_explosion,int depth,int camera)
 {
 #if MF_ARCADE_FX
     int sprite=is_explosion?explosion:impact;
 #else
     int sprite=impact;(void)explosion;(void)is_explosion;
 #endif
-    if(g->spark)jo_sprite_draw3D2(sprite,g->spark_x-g->camera-16,
-                                mf_world_screen_y(g->spark_x,g->spark_y,g->camera)-g->spark_z-16,depth);
+    if(g->spark)jo_sprite_draw3D2(sprite,g->spark_x-camera-16,
+                                mf_world_screen_y(g->spark_x,g->spark_y,camera)-g->spark_z-16,depth);
+}
+
+static inline void mf_fx_draw_spark(const mf_game *g,int impact,int explosion,
+                                    int is_explosion,int depth)
+{
+    mf_fx_draw_spark_at(g,impact,explosion,is_explosion,depth,g->camera);
 }
 #endif

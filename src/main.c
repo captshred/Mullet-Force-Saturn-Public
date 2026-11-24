@@ -37,13 +37,19 @@ static volatile int stage2_owned;
 static mf_game game;
 
 #if MF_DEV_MODE
-enum { DEV_RESUME, DEV_SELECT, DEV_RESTART, DEV_SKIP, DEV_MENU_COUNT };
+enum {
+    DEV_RESUME, DEV_SELECT, DEV_RESTART, DEV_SKIP,
+    DEV_GOD, DEV_REFILL, DEV_FREE_CAMERA, DEV_MENU_COUNT
+};
 static const char *const dev_options[] = {
-    "RESUME GAME", "SECTION SELECT", "RESTART SECTION", "LEVEL SKIP"
+    "RESUME GAME", "SECTION SELECT", "RESTART SECTION", "LEVEL SKIP",
+    "GOD MODE: OFF", "REFILL HEALTH", "FREE CAMERA"
 };
 static mf_section current_section;
 static int dev_target = -1, dev_cursor, dev_selecting, dev_menu_visible;
 static unsigned dev_release[MF_PLAYERS];
+static int dev_camera = -1;
+static int dev_god_visible;
 
 static int dev_paused(void)
 {
@@ -53,6 +59,12 @@ static int dev_paused(void)
 static void dev_draw_menu(void)
 {
     int row, count;
+    int show_god = game.god_mode && game.started && !game.paused &&
+                   game.stage == MF_STAGE_LEVEL1;
+    if (show_god != dev_god_visible) {
+        jo_print(2, 26, show_god ? "GOD MODE" : "        ");
+        dev_god_visible = show_god;
+    }
     if (!dev_paused() && !dev_menu_visible) return;
     for (row = 11; row <= 20; ++row) jo_clear_screen_line(row);
     dev_menu_visible = dev_paused();
@@ -61,11 +73,17 @@ static void dev_draw_menu(void)
         jo_print(5, 11, "LOADING SECTION");
         return;
     }
+    if (dev_camera >= 0) {
+        jo_printf(5, 11, "FREE CAMERA  X %04d", dev_camera);
+        jo_print(5, 20, "LEFT/RIGHT  A FAST  B/START EXIT");
+        return;
+    }
     jo_print(5, 11, dev_selecting ? "SECTION SELECT" : "DEVELOPER MENU");
     count = dev_selecting ? MF_SECTION_COUNT : DEV_MENU_COUNT;
     for (row = 0; row < count; ++row)
         jo_printf(5, 12 + row, "%s %s", row == dev_cursor ? ">" : " ",
-                  dev_selecting ? mf_section_name((mf_section)row) : dev_options[row]);
+                  dev_selecting ? mf_section_name((mf_section)row) :
+                  row == DEV_GOD && game.god_mode ? "GOD MODE: ON" : dev_options[row]);
     jo_print(5, 20, "UP/DOWN  A SELECT  B BACK");
 }
 
@@ -97,10 +115,30 @@ static void dev_pause_input(unsigned buttons)
         dev_selecting = 1;
         dev_cursor = current_section;
     } else if (dev_cursor == DEV_RESTART) dev_target = current_section;
+    else if (dev_cursor == DEV_GOD) game.god_mode ^= 1;
+    else if (dev_cursor == DEV_REFILL) mf_dev_refill_health(&game);
+    else if (dev_cursor == DEV_FREE_CAMERA) dev_camera = game.camera;
     else {
         unsigned shortcut[2] = {MF_X, 0};
         mf_dev_stage_skip(&game, shortcut);
     }
+}
+/* Cull distant sprites before their world offsets reach VDP1 coordinates. */
+static int dev_camera_visible(int screen_x)
+{
+    return dev_camera < 0 || (screen_x >= -192 && screen_x <= 512);
+}
+
+static void dev_camera_input(unsigned held, unsigned pressed)
+{
+    int direction = !!(held & MF_RIGHT) - !!(held & MF_LEFT);
+    if (pressed & (MF_B | MF_START)) {
+        dev_camera = -1;
+        return;
+    }
+    dev_camera += direction * ((held & MF_A) ? 8 : 2);
+    if (dev_camera < 0) dev_camera = 0;
+    if (dev_camera > MF_WORLD_CAMERA_MAX) dev_camera = MF_WORLD_CAMERA_MAX;
 }
 #endif
 
@@ -455,18 +493,26 @@ static void draw_game(void)
 {
     MF_PERF_BEGIN(render_start);
     int i,j,x,y,depth,mode,engaged;
-    mf_street_draw(street,street_palette.id,game.camera);
+    int camera = game.camera;
+#if MF_DEV_MODE
+    if (dev_camera >= 0) camera = dev_camera;
+#endif
+    mf_street_draw(street,street_palette.id,camera);
 #if MF_VEHICLE_AMBUSH
-    if(game.vehicle_dir){
-        int ground=mf_world_screen_y(game.vehicle_x,game.vehicle_lane,game.camera);
+    if(game.vehicle_dir
+#if MF_DEV_MODE
+       && dev_camera_visible(game.vehicle_x-camera)
+#endif
+    ){
+        int ground=mf_world_screen_y(game.vehicle_x,game.vehicle_lane,camera);
         jo_sprite_set_palette(street_palette.id);
         if(game.vehicle_dir<0)jo_sprite_enable_horizontal_flip();
-        jo_sprite_draw3D2(vehicle_sprite,game.vehicle_x-game.camera-96,ground-68,depth_key(ground,0));
+        jo_sprite_draw3D2(vehicle_sprite,game.vehicle_x-camera-96,ground-68,depth_key(ground,0));
         jo_sprite_disable_horizontal_flip();
     }
 #endif
     for(i=0;i<3;i++) {
-        mf_drum *d=&game.drums[i];x=d->x/256-game.camera;y=mf_world_screen_y(d->x/256,d->y/256,game.camera);depth=depth_key(y,0);
+        mf_drum *d=&game.drums[i];x=d->x/256-camera;y=mf_world_screen_y(d->x/256,d->y/256,camera);depth=depth_key(y,0);
         if(x<-32 || x>352)continue;
         if(d->hp || d->respawn<20)draw_shadow(x,y,0);
         if(d->hp && !(d->flash&1))jo_sprite_draw3D2(drum[3-d->hp],x-16,y-46,depth);
@@ -474,7 +520,7 @@ static void draw_game(void)
     }
     for(j=0;j<MF_ENEMIES;j++) {
         mf_enemy *e=&game.enemies[j];int frame=mf_enemy_frame(&game,j);
-        x=e->x/256-game.camera;y=mf_world_screen_y(e->x/256,e->y/256,game.camera);
+        x=e->x/256-camera;y=mf_world_screen_y(e->x/256,e->y/256,camera);
         if(e->state==MF_ENEMY_ABSENT || x<-100 || x>420)continue;
 #if MF_RICKY_ENEMY
         draw_shadow(x,y,game.enemy_class[j]==MF_ENEMY_RICKY && game.ricky_jump[j].active && e->state==MF_ENEMY_ACTIVE?24+game.ricky_jump[j].height:0);
@@ -501,8 +547,8 @@ static void draw_game(void)
     }
 #if MF_BRUCE_RUNTIME
     if(game.bruce.active && mf_enemy_bank_current()==&mf_bruce_bank_spec) {
-        x=game.bruce.x/256-game.camera;
-        y=mf_world_screen_y(game.bruce.x/256,game.bruce.y/256,game.camera);
+        x=game.bruce.x/256-camera;
+        y=mf_world_screen_y(game.bruce.x/256,game.bruce.y/256,camera);
         if(x>=-112 && x<=432) {
             draw_shadow(x,y,game.bruce.height);
             mf_bruce_draw(&game.bruce,x,y,depth_key(y,0));
@@ -515,7 +561,11 @@ static void draw_game(void)
         mf_player *p=&game.players[j];int frame=mf_player_frame(&game,j);
         const short (*anchor)[2]=j?chuck_anchor:buck_anchor;
         if(!p->active)continue;
-        x=p->x/256-game.camera;y=mf_world_screen_y(p->x/256,p->y/256,game.camera);draw_shadow(x,y,p->height/256);
+        x=p->x/256-camera;
+#if MF_DEV_MODE
+        if (!dev_camera_visible(x)) continue;
+#endif
+        y=mf_world_screen_y(p->x/256,p->y/256,camera);draw_shadow(x,y,p->height/256);
 /* PLAYERHURT BEGIN */
 #if MF_PLAYER_HURT
         int hurt_visible=p->health>0 && p->hurt>0;
@@ -602,11 +652,18 @@ static void draw_game(void)
         }
     }
     for(j=0;j<MF_PLAYERS;j++)if(game.players[j].charge>=MF_TORCH_CUE_TICKS && (game.ticks&4)){
-        mf_player *p=&game.players[j];jo_sprite_set_palette(fire_palette.id);
-        y=mf_world_screen_y(p->x/256,p->y/256,game.camera);
-        jo_sprite_draw3D2(charge_cue,p->x/256-game.camera+p->facing*20-4,y-49,depth_key(y,-2));
+        mf_player *p=&game.players[j];
+#if MF_DEV_MODE
+        if (!dev_camera_visible(p->x/256-camera)) continue;
+#endif
+        jo_sprite_set_palette(fire_palette.id);
+        y=mf_world_screen_y(p->x/256,p->y/256,camera);
+        jo_sprite_draw3D2(charge_cue,p->x/256-camera+p->facing*20-4,y-49,depth_key(y,-2));
     }
-    mf_fx_draw_spark(&game,spark,explosion,spark_explosion,depth_key(mf_world_screen_y(game.spark_x,game.spark_y,game.camera),-1));
+#if MF_DEV_MODE
+    if (dev_camera_visible(game.spark_x-camera))
+#endif
+    mf_fx_draw_spark_at(&game,spark,explosion,spark_explosion,depth_key(mf_world_screen_y(game.spark_x,game.spark_y,camera),-1),camera);
     health_bar(16,25,80,game.players[0].health,100);
     jo_print(2,1,"BUCK");jo_printf(14,1,"%06d",game.score);
     jo_printf(2,2,"HP %03d",game.players[0].health);
@@ -617,7 +674,7 @@ static void draw_game(void)
     jo_clear_screen_line(5);
     for(j=0;j<MF_ENEMIES;j++) {
         mf_enemy *e=&game.enemies[j];
-        engaged=e->state!=MF_ENEMY_ABSENT && e->x/256>game.camera-40 && e->x/256<game.camera+360;
+        engaged=e->state!=MF_ENEMY_ABSENT && e->x/256>camera-40 && e->x/256<camera+360;
         if(engaged) {
             /* Keep the approved solo layout; fit all three co-op bars inside
                the 320px/40-column display, including after P2 disconnects. */
@@ -630,7 +687,7 @@ static void draw_game(void)
 #if MF_LEVEL1_STAGE_CLEAR
 #if MF_LEVEL1_WORLD_FLOW
     jo_printf(14,3,"KOs %04d",game.stage_kills);
-    jo_print(14,4,game.camera==MF_WORLD_CAMERA_MAX?"TEST END   ":mf_world_camera_y(game.camera)>0?"DIAGONAL   ":game.camera>960?"INTERSECT  ":game.camera>320?"NEON STRIP ":"           ");
+    jo_print(14,4,camera==MF_WORLD_CAMERA_MAX?"TEST END   ":mf_world_camera_y(camera)>0?"DIAGONAL   ":camera>960?"INTERSECT  ":camera>320?"NEON STRIP ":"           ");
 #else
     jo_printf(14,3,"KOs %02d/40",game.stage_kills);
 #endif
@@ -865,6 +922,16 @@ static void update(void)
 #endif
 #if MF_DEV_MODE
         int menu_was_open = dev_paused();
+        if (dev_camera >= 0) {
+            dev_camera_input(held[0], pressed[0]);
+            mf_music_update(game.started, game.paused,
+                            game.vehicle_dir ? MF_VEHICLE_PASS : 0, now);
+            if (dev_camera >= 0) continue;
+            dev_discard_menu_buttons(held);
+            for (j = 0; j < MF_PLAYERS; ++j)
+                dev_release[j] |= held[j] & (MF_LEFT | MF_RIGHT);
+            break;
+        }
 #endif
 #if MF_LEVEL2_WINGSUIT
         mf_dev_stage_skip(&game,pressed);
@@ -904,8 +971,8 @@ static void update(void)
         MF_PERF_BEGIN(logic_start);
         mf_game_step_inputs(&game,held,pressed,(sampled_input[0].connected?1u:0u)|(sampled_input[1].connected?2u:0u));
 #if MF_DEV_MODE
-        if (game.stage == MF_STAGE_LEVEL1 && !game.paused)
-            current_section = mf_section_current(&game, current_section);
+        if (game.stage != MF_STAGE_LEVEL1) game.god_mode = 0;
+        else if (!game.paused) current_section = mf_section_current(&game, current_section);
 #endif
 #if MF_ARCADE_FX
         spark_explosion=mf_fx_spark_explosion(&game,previous_hits,spark_explosion);

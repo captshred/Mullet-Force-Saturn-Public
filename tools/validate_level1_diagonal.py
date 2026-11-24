@@ -94,7 +94,7 @@ BRUCE_ASSET_TREE = "84dd2903d3f8120e663a718d025a8ce9eb235f06"
 BRUCE_RUNTIME_DELTA = {
     # Phase 1A feature branch changes are source-only. Audio and art locks
     # remain subject to the existing byte checks.
-    ".github/workflows/build.yml", "src/dev_sections.h", "src/music.c",
+    ".github/workflows/build.yml", "src/dev_sections.h", "src/music.c", "src/arcade_fx.h",
     "tools/build.sh", "tests/dev_sections_test.c",
     "src/enemy_sprite_bank.c", "src/enemy_sprite_bank.h",
     "src/bruce.c", "src/bruce.h", "src/game.h", "src/ricky_animation.c",

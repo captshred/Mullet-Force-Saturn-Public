@@ -57,6 +57,44 @@ static void test_section(mf_game *game, mf_section section, int coop)
     }
 }
 
+static void test_god_and_refill(void)
+{
+    mf_game game, expected;
+    mf_game_init(&game);
+    assert(!game.god_mode);
+    game.god_mode = 1;
+    mf_section_init(&game, MF_SECTION_VEHICLE);
+    mf_game_step_coop(&game, (unsigned[2]){0, MF_START}, (unsigned[2]){0, MF_START});
+    assert(game.god_mode && game.players[1].active);
+    game.players[0].y = game.players[1].y = 214 * 256;
+    game.players[1].invulnerable = 0;
+    for (int tick = 0; tick < 185; ++tick) mf_game_step(&game, 0, 0);
+    assert(game.vehicle_hits == 3u);
+    assert(game.players[0].health == 100 && game.players[1].health == 100);
+
+    game.god_mode = 0;
+    mf_section_init(&game, MF_SECTION_VEHICLE);
+    game.players[0].y = game.players[1].y = 214 * 256;
+    for (int tick = 0; tick < 185; ++tick) mf_game_step(&game, 0, 0);
+    assert(game.players[0].health == 50 && game.players[1].health == 50);
+
+    game.paused = 1;
+    expected = game;
+    expected.players[0].health = expected.players[1].health = 100;
+    mf_dev_refill_health(&game);
+    assert(memcmp(&game, &expected, sizeof game) == 0);
+    game.players[1].health = 0;
+    game.players[1].defeated = 10;
+    mf_dev_refill_health(&game);
+    assert(!game.players[1].health && game.players[1].defeated == 10);
+
+    game.god_mode = 1;
+    mf_section_init(&game, MF_SECTION_BRUCE);
+    assert(game.god_mode);
+    mf_game_init(&game);
+    assert(!game.god_mode);
+}
+
 int main(void)
 {
     mf_game game;
@@ -73,5 +111,6 @@ int main(void)
             test_section(&game, MF_SECTION_VEHICLE, coop);
         }
     }
+    test_god_and_refill();
     return 0;
 }

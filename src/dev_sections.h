@@ -16,6 +16,7 @@ typedef enum {
 
 const char *mf_section_name(mf_section section);
 mf_section mf_section_current(const mf_game *game, mf_section previous);
+void mf_dev_refill_health(mf_game *game);
 void mf_section_init(mf_game *game, mf_section section);
 #endif
 
