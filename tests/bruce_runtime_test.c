@@ -271,10 +271,11 @@ static void verify_counter_vulnerability_and_pursuit(void)
     assert(b.state==MF_BRUCE_HURT && b.height==25 && b.health==0);
     tick(&b,&g,19);
     assert(b.state==MF_BRUCE_DEFEATED && !b.impact);
+    g.players[0].x=MF_BRUCE_ARENA_FRONT*256;
     b=(mf_bruce){.active=1,.ready=1,.health=75,.state=MF_BRUCE_READY,
-                 .x=3049*256,.y=168*256,.target=-1,.attack_cycle=1};
+                 .x=(MF_BRUCE_ARENA_FRONT-90)*256,.y=168*256,.target=-1};
     tick(&b,&g,80);
-    assert(b.x<=3049*256 && b.y>=216*256 && b.y<=229*256 && b.state==MF_BRUCE_PUNCH);
+    assert(b.x<=MF_BRUCE_ARENA_FRONT*256 && b.y>=216*256 && b.y<=229*256 && b.state==MF_BRUCE_PUNCH);
     b.state=MF_BRUCE_PUNCH;b.timer=52;b.health=38;
     tick(&b,&g,1);assert(b.cooldown==26);
     b.state=MF_BRUCE_PUNCH;b.timer=52;b.health=37;
@@ -416,7 +417,7 @@ static void verify_arena_progression(void)
     /* Advance the approved entrance and join at the far side of the arena. */
     mf_game_step_inputs(&game, (unsigned[2]){0}, (unsigned[2]){0}, 1);
     game.players[0].x = MF_BRUCE_ARENA_FRONT * 256;
-    game.camera = MF_BRUCE_CAMERA_MAX;
+    game.camera = MF_WORLD_CAMERA_MAX;
     mf_game_step_coop(&game, (unsigned[2]){0, MF_START},
                       (unsigned[2]){0, MF_START});
     assert(game.players[1].active);
@@ -431,7 +432,7 @@ static void verify_arena_progression(void)
         mf_game_step(&game, MF_RIGHT, 0);
         assert(game.bruce.state == MF_BRUCE_FALL);
         assert(game.players[0].x == MF_BRUCE_ARENA_FRONT * 256);
-        assert(game.camera <= MF_BRUCE_CAMERA_MAX);
+        assert(game.camera <= MF_WORLD_CAMERA_MAX);
     }
     mf_game_step(&game, MF_RIGHT, 0);
     assert(game.bruce.state == MF_BRUCE_DEFEATED);

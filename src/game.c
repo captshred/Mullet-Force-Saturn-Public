@@ -147,14 +147,9 @@ static int bruce_arena_active(const mf_game *g)
     return g->stage == MF_STAGE_LEVEL1 && g->bruce.active;
 }
 
-static int bruce_arena_front(const mf_game *g)
+static void contain_arena_player(mf_player *p)
 {
-    return g->bruce.state == MF_BRUCE_DEFEATED ? MF_WORLD_RIGHT : MF_BRUCE_ARENA_FRONT;
-}
-
-static void contain_arena_player(const mf_game *g, mf_player *p)
-{
-    p->x = clamp(p->x, MF_BRUCE_ARENA_REAR * 256, bruce_arena_front(g) * 256);
+    p->x = clamp(p->x, MF_BRUCE_ARENA_REAR * 256, MF_BRUCE_ARENA_FRONT * 256);
 }
 #endif
 static unsigned punk_roll(mf_punk_ai *a)
@@ -272,7 +267,7 @@ static void recover_player(mf_game *g,int index,int joining)
     *p=(mf_player){0};p->active=1;p->health=100;p->x=x*256;p->y=y*256;
     p->facing=1;p->invulnerable=120;p->a_blocked=1;
 #if MF_BRUCE_RUNTIME
-    if(bruce_arena_active(g))contain_arena_player(g,p);
+    if(bruce_arena_active(g))contain_arena_player(p);
 #endif
     /* Recovery never resets another player, an enemy, barrels or the score. */
 }
@@ -1374,7 +1369,7 @@ void mf_game_step_inputs(mf_game *g,const unsigned held[2],const unsigned presse
 #if MF_BRUCE_RUNTIME
     if(bruce_arena_active(g)) {
         for(i=0;i<MF_PLAYERS;i++)
-            if(g->players[i].active)contain_arena_player(g,&g->players[i]);
+            if(g->players[i].active)contain_arena_player(&g->players[i]);
     }
 #endif
     /* Shared camera tether, no physical body collision or friendly fire. Both
@@ -1418,8 +1413,8 @@ void mf_game_step_inputs(mf_game *g,const unsigned held[2],const unsigned presse
             /* A trailing co-op fighter can still be at the lot approach.
                Bring them to the rear edge once, using the shared arena. */
             for(i=0;i<MF_PLAYERS;i++)
-                if(g->players[i].active)contain_arena_player(g,&g->players[i]);
-            g->camera=clamp(g->camera,MF_BRUCE_CAMERA_MIN,MF_BRUCE_CAMERA_MAX);
+                if(g->players[i].active)contain_arena_player(&g->players[i]);
+            g->camera=clamp(g->camera,MF_BRUCE_CAMERA_MIN,MF_WORLD_CAMERA_MAX);
         }
         for(i=0;i<MF_PLAYERS;i++) {
             int damage;
@@ -1461,12 +1456,10 @@ void mf_game_step_inputs(mf_game *g,const unsigned held[2],const unsigned presse
 #if MF_LEVEL1_WORLD_FLOW
     {
         int i,minx=MF_WORLD_RIGHT,maxx=MF_WORLD_LEFT,count=0,target,delta;
-        int camera_min=g->camera_floor,camera_max=MF_WORLD_CAMERA_MAX;
+        int camera_min=g->camera_floor;
 #if MF_BRUCE_RUNTIME
-        if(bruce_arena_active(g)) {
-            if(camera_min<MF_BRUCE_CAMERA_MIN)camera_min=MF_BRUCE_CAMERA_MIN;
-            if(g->bruce.state!=MF_BRUCE_DEFEATED)camera_max=MF_BRUCE_CAMERA_MAX;
-        }
+        if(bruce_arena_active(g) && camera_min<MF_BRUCE_CAMERA_MIN)
+            camera_min=MF_BRUCE_CAMERA_MIN;
 #endif
         for(i=0;i<MF_PLAYERS;i++)if(living(&g->players[i])) {
             int x=g->players[i].x/256;if(x<minx)minx=x;if(x>maxx)maxx=x;++count;
@@ -1474,7 +1467,7 @@ void mf_game_step_inputs(mf_game *g,const unsigned held[2],const unsigned presse
         if(count) {
             target=count==1?minx-142:(minx+maxx)/2-160;
             if(target>minx-26)target=minx-26;
-            target=clamp(target,camera_min,camera_max);
+            target=clamp(target,camera_min,MF_WORLD_CAMERA_MAX);
             delta=clamp(target-g->camera,-MF_WORLD_CAMERA_STEP,MF_WORLD_CAMERA_STEP);
             g->camera+=delta;
             if(mf_world_checkpoint(g->camera)>g->camera_floor)g->camera_floor=mf_world_checkpoint(g->camera);

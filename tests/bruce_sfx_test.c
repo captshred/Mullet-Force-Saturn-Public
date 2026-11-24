@@ -4,40 +4,43 @@
 
 #define MF_BRUCE_RUNTIME 1
 #define MF_VEHICLE_AMBUSH 1
+#define MF_DEV_MODE 1
 char *jo_fs_read_file_in_dir(const char *,const char *,int *);
 int SND_CtrlDirMidi(int,int,int,int,int,int);
 #include "../src/music.c"
 
-static int mode,starts,stops,last_song,last_priority,uploads,fail_start,fail_stop;
+static int modes[8],starts,stops,last_song,last_priority,uploads,fail_start,fail_stop;
+static int laugh_stops, overlap_starts, combat_starts;
 
 void SND_GetSeqStat(SndSeqStat *status,int port)
 {
-    assert(port==BRUCE_SFX_PORT);
-    status->mode=mode;
+    status->mode=modes[port];
 }
 
 int SND_SetSeqVl(int port,int volume,int fade)
 {
-    assert(port==BRUCE_SFX_PORT && (volume==105 || volume==MF_SFX_VOLUME) && !fade);
+    assert(port>=0 && port<8 && volume>=0 && !fade);
     return SND_RET_SET;
 }
 
 int SND_StartSeq(int port,int bank,int song,int priority)
 {
-    assert(port==BRUCE_SFX_PORT && ((bank==2 && song>=0 && song<4) || (bank==0 && song==8)));
+    assert(port>=0 && port<8 && bank>=0 && bank<=2);
     if(fail_start)return 1;
     last_song=song;
     last_priority=priority;
-    mode=SND_MD_PLAY;
+    modes[port]=SND_MD_PLAY;
+    if(port==BRUCE_OVERLAP_PORT && bank==2)++overlap_starts;
+    if(port==5 && bank==0)++combat_starts;
     ++starts;
     return SND_RET_SET;
 }
 
 int SND_StopSeq(int port)
 {
-    assert(port==BRUCE_SFX_PORT);
     if(fail_stop)return 1;
-    mode=SND_MD_STOP;
+    if(port==BRUCE_SFX_PORT && bruce_voice==BRUCE_LAUGH_SONG)++laugh_stops;
+    modes[port]=SND_MD_STOP;
     ++stops;
     return SND_RET_SET;
 }
@@ -70,6 +73,8 @@ void slDMACopy(void *src,void *dst,unsigned bytes)
     ++uploads;
 }
 void slDMAWait(void){}
+int SND_PauseSeq(int port){assert(port!=BRUCE_SFX_PORT && port!=BRUCE_OVERLAP_PORT);return SND_RET_SET;}
+int SND_ContSeq(int port){assert(port!=BRUCE_SFX_PORT && port!=BRUCE_OVERLAP_PORT);return SND_RET_SET;}
 
 int main(void)
 {
@@ -89,44 +94,55 @@ int main(void)
     bruce_audio_update(MF_BRUCE_SFX_LAND|MF_BRUCE_SFX_HURT|MF_BRUCE_SFX_LAUGH,113,0,0);
     bruce_audio_update(MF_BRUCE_SFX_CHARGE,114,0,0);
     assert(!stops && starts==1 && bruce_laugh_pending);
-    mode=SND_MD_STOP;
+    modes[BRUCE_SFX_PORT]=SND_MD_STOP;
     bruce_audio_update(0,130,0,0);
     assert(starts==1);
     bruce_audio_update(0,190,0,0);
-    assert(starts==2 && last_song==BRUCE_LAUGH_SONG && !bruce_laugh_pending);
+    assert(starts==2 && last_song==BRUCE_LAUGH_SONG && last_priority==MF_SFX_PRIORITY);
+    assert(!bruce_laugh_pending && bruce_laugh_played);
+
+    music_state=MUSIC_BRUCE;
+    mf_music_update(1,0,MF_BRUCE_SFX_CHARGE|MF_COMBAT_JAB(0),191);
+    assert(combat_starts==1 && !laugh_stops && bruce_voice==BRUCE_LAUGH_SONG);
     fail_stop=1;
-    bruce_audio_update(MF_BRUCE_SFX_DEATH|MF_BRUCE_SFX_LAUGH,191,0,0);
-    assert(!stops && starts==2 && !bruce_laugh_pending);
+    mf_music_update(1,0,MF_BRUCE_SFX_DEATH|MF_BRUCE_SFX_LAUGH,192);
+    assert(!overlap_starts && !laugh_stops && !bruce_laugh_pending);
     fail_stop=0;
-    bruce_audio_update(0,192,1,0);
-    assert(!stops && starts==2); /* Protected legacy death owns its own port. */
-    bruce_audio_update(0,193,0,0);
-    assert(stops==1 && starts==2);
-    bruce_audio_update(0,196,0,0);
-    assert(starts==3 && last_song==BRUCE_HURT_SONG && last_priority==MF_SFX_PRIORITY);
-    assert(!mf_music_bruce_bank(0,197) && uploads==1);
-    mode=SND_MD_STOP;
-    assert(mf_music_bruce_bank(0,237) && uploads==2 && bruce_tone_owner==0);
-    assert(mf_music_bruce_bank(1,240) && uploads==3);
-    bruce_audio_update(MF_BRUCE_SFX_CHARGE,241,0,0);
-    assert(starts==4 && last_song==BRUCE_CHARGE_SONG);
-    assert(!mf_music_bruce_bank(0,242) && stops==2);
-    assert(!mf_music_bruce_bank(0,244));
-    assert(mf_music_bruce_bank(0,245) && uploads==4);
-    assert(mf_music_bruce_bank(1,250) && uploads==5);
-    bruce_audio_update(MF_BRUCE_SFX_JUMP,251,0,0);
-    assert(starts==5);
-    assert(!bruce_legacy_death_update(MF_COMBAT_HUMAN_DEATH(0),252));
-    assert(!death_pending && !death_active && starts==5 && stops==2);
-    assert(!mf_music_bruce_bank(0,253) && stops==3);
-    assert(mf_music_bruce_bank(0,256) && uploads==6);
-    assert(bruce_legacy_death_update(MF_COMBAT_HUMAN_DEATH(1),257));
-    assert(starts==6 && last_song==8 && death_active);
-    assert(mf_music_bruce_bank(1,258)==MF_BRUCE_BANK_WAIT && uploads==6);
-    assert(bruce_legacy_death_update(0,258));
-    mode=SND_MD_STOP;
-    assert(bruce_legacy_death_update(0,304) && !death_active);
-    assert(!bruce_legacy_death_update(0,305));
-    assert(mf_music_bruce_bank(1,305)==MF_BRUCE_BANK_TRANSFERRED && uploads==7);
-    puts("PASS Bruce cue arbitration, independent control, PCM completion and reversible bank guards");
+    mf_music_update(1,0,0,193);
+    mf_music_update(1,1,0,196);
+    assert(overlap_starts==1 && last_song==BRUCE_HURT_SONG);
+    assert(modes[BRUCE_SFX_PORT]==SND_MD_PLAY && modes[BRUCE_OVERLAP_PORT]==SND_MD_PLAY);
+    mf_music_update(1,0,0,197);
+    modes[BRUCE_OVERLAP_PORT]=SND_MD_STOP;
+    modes[BRUCE_SFX_PORT]=SND_MD_STOP;
+    mf_music_update(1,0,0,236);
+    assert(bruce_voice==BRUCE_LAUGH_SONG && !laugh_stops);
+    assert(mf_music_bruce_bank(0,236)==MF_BRUCE_BANK_WAIT);
+    mf_music_update(1,0,0,245);
+    assert(bruce_voice<0 && bruce_overlap==BRUCE_OVERLAP_IDLE && !laugh_stops);
+    bruce_audio_update(MF_BRUCE_SFX_LAUGH,246,0,0);
+    assert(bruce_voice<0 && !bruce_laugh_pending);
+    assert(mf_music_bruce_bank(0,247)==MF_BRUCE_BANK_TRANSFERRED && uploads==2);
+
+    /* Legacy POOWAH still owns control 7 until its full natural completion. */
+    assert(bruce_legacy_death_update(MF_COMBAT_HUMAN_DEATH(1),250));
+    assert(last_song==8 && death_active);
+    assert(mf_music_bruce_bank(1,251)==MF_BRUCE_BANK_WAIT && uploads==2);
+    assert(bruce_legacy_death_update(0,251));
+    modes[BRUCE_SFX_PORT]=SND_MD_STOP;
+    assert(bruce_legacy_death_update(0,297) && !death_active);
+    assert(!bruce_legacy_death_update(0,298));
+    assert(mf_music_bruce_bank(1,298)==MF_BRUCE_BANK_TRANSFERRED && uploads==3);
+
+    /* Two successive section restarts clear both leased controls and one-shot state. */
+    for(unsigned now=300;now<320;now+=10){
+        bruce_audio_update(MF_BRUCE_SFX_LAUGH,now,0,0);
+        bruce_audio_update(MF_BRUCE_SFX_DEATH,now+1,0,0);
+        bruce_audio_update(0,now+4,0,0);
+        assert(bruce_voice==BRUCE_LAUGH_SONG && bruce_overlap==BRUCE_OVERLAP_PLAY);
+        assert(!mf_music_section_reset(now+5,0));
+        assert(mf_music_section_reset(now+8,0));
+        assert(bruce_voice<0 && !bruce_laugh_played && bruce_overlap==BRUCE_OVERLAP_IDLE);
+    }
+    puts("PASS Bruce laugh protection, combat overlap, lethal cue, legacy POOWAH and repeated resets");
 }

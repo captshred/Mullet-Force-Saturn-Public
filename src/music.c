@@ -125,7 +125,11 @@ static void car_sound_update(int in_pass,int requested,int paused)
 #if MF_BRUCE_RUNTIME && MF_VEHICLE_AMBUSH
 /* The pinned driver has eight playable SEQ controls. Bruce owns control 7
    during his encounter. The protected POOWAH dispatcher uses it on the street. */
-enum { BRUCE_SFX_PORT=7, BRUCE_SFX_BANK=2, BRUCE_SFX_SEQ_ADDR=CAR_TON_ADDR+MF_BRUCE_TON_BYTES };
+enum { BRUCE_SFX_PORT=7, BRUCE_OVERLAP_PORT=3, BRUCE_SFX_BANK=2,
+       BRUCE_SFX_SEQ_ADDR=CAR_TON_ADDR+MF_BRUCE_TON_BYTES };
+enum { BRUCE_OVERLAP_IDLE, BRUCE_OVERLAP_STOP, BRUCE_OVERLAP_START, BRUCE_OVERLAP_PLAY };
+static int bruce_overlap, bruce_overlap_seen, bruce_laugh_played;
+static unsigned bruce_overlap_at;
 /* Song IDs start at zero independently of the SCSP addresses. */
 enum { BRUCE_JUMP_SONG, BRUCE_CHARGE_SONG, BRUCE_HURT_SONG, BRUCE_LAUGH_SONG, BRUCE_DEATH_CUE };
 typedef char bruce_sfx_ram_bound[BRUCE_SFX_SEQ_ADDR+MF_BRUCE_SEQ_BYTES<=0x80000?1:-1];
@@ -142,24 +146,55 @@ static int bruce_cd_upload(const char *name,unsigned size,unsigned address)
     return upload_data(data,bytes,size,address);
 }
 
-static int bruce_voice_reap(unsigned now)
+static int bruce_sample_done(int port,int song,unsigned now,int *seen,unsigned *started)
 {
     SndSeqStat status;
     int mode;
-    if(bruce_voice<0)return 1;
-    SND_GetSeqStat(&status,BRUCE_SFX_PORT);
+    SND_GetSeqStat(&status,port);
     mode=SND_SEQ_STAT_MODE(status);
-    if(mode!=SND_MD_STOP && !bruce_seen){
-        bruce_seen=1;
-        bruce_voice_at=now;
+    if(mode!=SND_MD_STOP && !*seen){
+        *seen=1;
+        *started=now;
     }
-    if(mode==SND_MD_STOP &&
-       now-bruce_voice_at >= (unsigned)(bruce_seen ?
-           bruce_sfx_ticks[bruce_voice==BRUCE_DEATH_CUE?BRUCE_HURT_SONG:bruce_voice]+3 : 120)){
-        bruce_voice=-1;
-        return 1;
+    /* The score has a guard after the PCM. Check both real driver status
+       and the sample-derived floor, including an asynchronous start. */
+    return mode==SND_MD_STOP &&
+        now-*started >= (unsigned)(*seen ? bruce_sfx_ticks[song]+(song==BRUCE_LAUGH_SONG?0:3) : 120);
+}
+
+static int bruce_voice_reap(unsigned now)
+{
+    if(bruce_voice<0)return 1;
+    if(!bruce_sample_done(BRUCE_SFX_PORT,
+        bruce_voice==BRUCE_DEATH_CUE?BRUCE_HURT_SONG:bruce_voice,
+        now,&bruce_seen,&bruce_voice_at))return 0;
+    bruce_voice=-1;
+    return 1;
+}
+
+/* After a lethal hit Bruce can no longer issue a landing cue. Borrow the
+   world-effects control for his existing death cue during a protected laugh. */
+static void bruce_overlap_update(unsigned now)
+{
+    SndSeqStat status;
+    if(bruce_overlap==BRUCE_OVERLAP_STOP){
+        if(SND_StopSeq(BRUCE_OVERLAP_PORT)!=SND_RET_SET)return;
+        combat[2]=(combat_sound){.pending=-1};
+        bruce_overlap_at=now;
+        bruce_overlap=BRUCE_OVERLAP_START;
+    }else if(bruce_overlap==BRUCE_OVERLAP_START){
+        if(now-bruce_overlap_at<3)return;
+        SND_GetSeqStat(&status,BRUCE_OVERLAP_PORT);
+        if(SND_SEQ_STAT_MODE(status)!=SND_MD_STOP)return;
+        if(SND_SetSeqVl(BRUCE_OVERLAP_PORT,105,0)!=SND_RET_SET ||
+           SND_StartSeq(BRUCE_OVERLAP_PORT,BRUCE_SFX_BANK,BRUCE_HURT_SONG,MF_SFX_PRIORITY)!=SND_RET_SET)return;
+        bruce_overlap_seen=0;
+        bruce_overlap_at=now;
+        bruce_overlap=BRUCE_OVERLAP_PLAY;
+    }else if(bruce_overlap==BRUCE_OVERLAP_PLAY &&
+        bruce_sample_done(BRUCE_OVERLAP_PORT,BRUCE_HURT_SONG,now,&bruce_overlap_seen,&bruce_overlap_at)){
+        bruce_overlap=BRUCE_OVERLAP_IDLE;
     }
-    return 0;
 }
 
 static int bruce_stop_voice(unsigned now)
@@ -193,11 +228,17 @@ static void bruce_audio_update(unsigned events,unsigned now,int legacy_death,int
     int cue=-1;
     bruce_voice_reap(now);
     if(bruce_tone_owner!=1)return;
+    if((events&MF_BRUCE_SFX_LAUGH) && !bruce_laugh_played)
+        bruce_laugh_pending=1;
     if(events&MF_BRUCE_SFX_DEATH){
-        bruce_pending=BRUCE_DEATH_CUE;
-        bruce_laugh_pending=0;
-    }else if(!paused && !legacy_death && bruce_pending!=BRUCE_DEATH_CUE){
-        if(events&MF_BRUCE_SFX_LAUGH)bruce_laugh_pending=1;
+        if(bruce_voice==BRUCE_LAUGH_SONG || bruce_laugh_pending){
+            if(bruce_overlap==BRUCE_OVERLAP_IDLE)bruce_overlap=BRUCE_OVERLAP_STOP;
+            bruce_pending=-1;
+        }else bruce_pending=BRUCE_DEATH_CUE;
+    }
+    bruce_overlap_update(now);
+    if(!(events&MF_BRUCE_SFX_DEATH) && !paused && !legacy_death &&
+       bruce_pending!=BRUCE_DEATH_CUE && !bruce_laugh_pending && bruce_voice!=BRUCE_LAUGH_SONG){
         if(events&(MF_BRUCE_SFX_JUMP|MF_BRUCE_ENTRANCE_JUMP))cue=BRUCE_JUMP_SONG;
         else if(events&MF_BRUCE_SFX_CHARGE)cue=BRUCE_CHARGE_SONG;
         else if((events&MF_BRUCE_SFX_HURT) && bruce_voice<0)cue=BRUCE_HURT_SONG;
@@ -210,14 +251,14 @@ static void bruce_audio_update(unsigned events,unsigned now,int legacy_death,int
     if(bruce_pending>=0 && bruce_pending!=BRUCE_DEATH_CUE && now-bruce_pending_at>4)
         bruce_pending=-1;
     if(legacy_death || paused)return;
-    if(bruce_pending<0 && bruce_laugh_pending && bruce_voice<0){
+    if(bruce_laugh_pending && bruce_voice<0 && bruce_pending!=BRUCE_DEATH_CUE){
         bruce_pending=BRUCE_LAUGH_SONG;
         bruce_pending_at=now;
     }
     if(bruce_pending<0)return;
     if(bruce_voice>=0){
-        /* Preserve WOOPAH against nonlethal overlaps. The laugh yields
-           to an attack warning, and normal battle ports are never stopped. */
+        if(bruce_voice==BRUCE_LAUGH_SONG)return;
+        /* Preserve WOOPAH against nonlethal overlaps. */
         if(bruce_cue_priority[bruce_pending]<=bruce_cue_priority[bruce_voice])return;
         if(!bruce_stop_voice(now))return;
     }
@@ -225,23 +266,26 @@ static void bruce_audio_update(unsigned events,unsigned now,int legacy_death,int
     if(SND_SetSeqVl(BRUCE_SFX_PORT,105,0)!=SND_RET_SET)return;
     if(SND_StartSeq(BRUCE_SFX_PORT,BRUCE_SFX_BANK,
                     bruce_pending==BRUCE_DEATH_CUE?BRUCE_HURT_SONG:bruce_pending,
-                    bruce_pending==BRUCE_DEATH_CUE?MF_SFX_PRIORITY:29)==SND_RET_SET){
+                    (bruce_pending==BRUCE_DEATH_CUE || bruce_pending==BRUCE_LAUGH_SONG)?MF_SFX_PRIORITY:29)==SND_RET_SET){
         bruce_voice=bruce_pending;
         bruce_voice_at=now;
         bruce_seen=0;
         bruce_pending=-1;
         bruce_stop_guard=0;
-        if(bruce_voice==BRUCE_LAUGH_SONG)bruce_laugh_pending=0;
+        if(bruce_voice==BRUCE_LAUGH_SONG){
+            bruce_laugh_pending=0;
+            bruce_laugh_played=1;
+        }
     }
 }
 
 static int bruce_release_bank(unsigned now)
 {
-    if(bruce_pending==BRUCE_DEATH_CUE)return 0;
+    if(bruce_pending==BRUCE_DEATH_CUE || bruce_overlap!=BRUCE_OVERLAP_IDLE)return 0;
     bruce_pending=-1;
     bruce_laugh_pending=0;
     if(!bruce_voice_reap(now) &&
-       (bruce_voice==BRUCE_DEATH_CUE || !bruce_stop_voice(now)))return 0;
+       (bruce_voice==BRUCE_DEATH_CUE || bruce_voice==BRUCE_LAUGH_SONG || !bruce_stop_voice(now)))return 0;
     return bruce_stop_complete(now);
 }
 
@@ -267,6 +311,7 @@ int mf_music_bruce_bank(int requested,unsigned now)
         }
     }
     bruce_tone_owner=requested;
+    if(requested)bruce_laugh_played=0;
     return MF_BRUCE_BANK_TRANSFERRED;
 }
 
@@ -453,7 +498,8 @@ int mf_music_section_reset(unsigned now, int post_bruce)
     }
     death_pending = death_prepared = death_active = death_seen = death_retiring = 0;
     bruce_voice = bruce_pending = -1;
-    bruce_seen = bruce_stop_guard = bruce_laugh_pending = 0;
+    bruce_seen = bruce_stop_guard = bruce_laugh_pending = bruce_laugh_played = 0;
+    bruce_overlap = BRUCE_OVERLAP_IDLE;
     stopped = 0;
     return 1;
 }
@@ -495,6 +541,12 @@ void mf_music_update(int started,int paused,int events,unsigned int now)
     if(paused!=paused_state || pause_target>=0) {
         if(pause_target!=paused){pause_target=paused;pause_mask=0;}
         for(i=1;i<7;i++)if(i!=4 && !(pause_mask&(1u<<i))) {
+#if MF_BRUCE_RUNTIME && MF_VEHICLE_AMBUSH
+            if(i==BRUCE_OVERLAP_PORT && bruce_overlap!=BRUCE_OVERLAP_IDLE){
+                pause_mask|=1u<<i;
+                continue;
+            }
+#endif
             if((paused?SND_PauseSeq(i):SND_ContSeq(i))==SND_RET_SET)pause_mask|=1u<<i;
         }
         if(pause_mask!=0x6e)return;
@@ -527,7 +579,11 @@ void mf_music_update(int started,int paused,int events,unsigned int now)
     }
     for(i=0;i<3;i++){
 #if MF_VEHICLE_AMBUSH
-        if(i==2 && car_sound_playing)continue;
+        if(i==2 && (car_sound_playing
+#if MF_BRUCE_RUNTIME
+                   || bruce_overlap!=BRUCE_OVERLAP_IDLE
+#endif
+                   ))continue;
 #endif
         combat_update(i,i==2?(int)(events&(MF_WORLD_IMPACT|MF_BRUCE_SFX_LAND|MF_VEHICLE_WARNING)):events,now,elapsed);
     }
