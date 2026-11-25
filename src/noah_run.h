@@ -4,17 +4,26 @@
 #if MF_NOAH_RUN
 #include <string.h>
 #include "noah_run_data.h"
+#include "intersection_data.h"
 
 /* One cache per actor, populated before gameplay. Each VDP1 pair holds the
    current pose and a spare upload target. The IDs and dimensions never move. */
-static unsigned int noah_buck[4][MF_NOAH_BUCK_BYTES / 4];
-static unsigned int noah_chuck[4][MF_NOAH_CHUCK_BYTES / 4];
+/* Stay below the in-place panorama expansion in low work RAM, and stage
+   DMA through high work RAM so the existing SGL DMA source rules apply. */
+#define MF_NOAH_CACHE_ADDRESS 0x00240000u
+#define MF_NOAH_CACHE_BYTES (4u * (MF_NOAH_BUCK_BYTES + MF_NOAH_CHUCK_BYTES))
+#if MF_NOAH_CACHE_ADDRESS + MF_NOAH_CACHE_BYTES > 0x00300000u - MF_INTERSECTION_BLOCKS * 512u
+#error Noah RUN cache overlaps the panorama
+#endif
+static unsigned int noah_dma[MF_NOAH_FRAME_MAX / 4];
 static int noah_ids[2][2][MF_NOAH_PARTS];
 static unsigned char noah_front[2], noah_cached[2][2];
 
 static unsigned char *noah_source(int actor, int frame)
 {
-    return (unsigned char *)(actor ? noah_chuck[frame] : noah_buck[frame]);
+    unsigned offset = actor ? 4u * MF_NOAH_BUCK_BYTES + frame * MF_NOAH_CHUCK_BYTES
+                            : frame * MF_NOAH_BUCK_BYTES;
+    return (unsigned char *)(MF_NOAH_CACHE_ADDRESS + offset);
 }
 
 static unsigned noah_band_bytes(int actor, int part)
@@ -35,7 +44,8 @@ static int noah_load(int *last)
             if ((unsigned)size != expected) return 0;
         }
         for (int slot = 0; slot < 2; ++slot) {
-            unsigned char *pixels = noah_source(actor, slot);
+            unsigned char *pixels = (unsigned char *)noah_dma;
+            memcpy(pixels, noah_source(actor, slot), expected);
             for (int part = 0; part < MF_NOAH_PARTS; ++part) {
                 jo_img image;
                 image.width = noah_bands[actor][part].width;
@@ -46,6 +56,7 @@ static int noah_load(int *last)
                 noah_ids[actor][slot][part] = *last = id;
                 pixels += noah_band_bytes(actor, part);
             }
+            slDMAWait();
             noah_cached[actor][slot] = slot;
         }
     }
@@ -65,7 +76,9 @@ static void noah_draw(int actor, int frame, int center, int ground, int directio
                restarts and write only after the completed-draw fence. */
             JO_VDP1_PTMR = 0;
             if (JO_VDP1_EDSR & 2u) {
-                unsigned char *pixels = noah_source(actor, frame);
+                unsigned char *pixels = (unsigned char *)noah_dma;
+                memcpy(pixels, noah_source(actor, frame),
+                       actor ? MF_NOAH_CHUCK_BYTES : MF_NOAH_BUCK_BYTES);
                 for (int part = 0; part < MF_NOAH_PARTS; ++part) {
                     int id = noah_ids[actor][spare][part];
                     unsigned bytes = noah_band_bytes(actor, part);
