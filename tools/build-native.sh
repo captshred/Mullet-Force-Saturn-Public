@@ -322,6 +322,11 @@ fi
 if [[ ${MF_BRUCE_RUNTIME:-0} == 1 && ${MF_VEHICLE_AMBUSH:-0} == 1 ]]; then
     sha256sum assets/bruce-sfx/* >> build/SOURCE-SHA256SUMS.txt
 fi
+if [[ ${MF_NOAH_RUN:-0} == 1 ]]; then
+    [[ $enemy_banks == 1 && $run_bat == 1 && $combat == 1 ]]
+    printf '#define MF_NOAH_RUN 1\n' >> build/build-info.h
+    sha256sum assets/noah-run/* >> build/SOURCE-SHA256SUMS.txt
+fi
 source_hash=$(sha256sum build/SOURCE-SHA256SUMS.txt | cut -d' ' -f1)
 printf '#define MF_BUILD_SOURCE "%s"\n' "$source_hash" >> build/build-info.h
 printf 'Game: MULLET FORCE\nScene: Neon District playable prototype\nCommit: %s\nBranch: %s\nSDK: 556d081146211b6a1cfa6591d70f9487d406758b\n' \
@@ -362,6 +367,7 @@ rm -rf build/cd/COMBAT
 if [[ $combat == 1 ]]; then
     mkdir -p build/cd/COMBAT
     cp "$combat_dir"/*.TGA build/cd/COMBAT/
+    if [[ ${MF_NOAH_RUN:-0} == 1 ]]; then cp assets/noah-run/*.BIN build/cd/COMBAT/; fi
     cp docs/combat-animation-prototype.md build/COMBAT-ANIMATION-README.md
 fi
 if [[ $momentum == 1 ]]; then cp docs/bat-strike-momentum.md build/BAT-MOMENTUM-README.md; fi

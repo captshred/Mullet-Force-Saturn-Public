@@ -91,6 +91,12 @@ PHASE_DELTA |= HQ_DELTA
 
 
 BRUCE_ASSET_TREE = "84dd2903d3f8120e663a718d025a8ce9eb235f06"
+NOAH_RUN_DELTA = {
+    "src/animation_preview.c", "src/arcade_fx_config.h", "src/enemy_bank_config.h",
+    "src/noah_run.h", "src/noah_run_data.h", "tools/pack-noah-run.py",
+    "assets/noah-run/manifest.json",
+} | {f"assets/noah-run/N{actor}{frame:02}.BIN" for actor in ("B", "C") for frame in range(1, 5)}
+
 BRUCE_RUNTIME_DELTA = {
     # Phase 1A feature branch changes are source-only. Audio and art locks
     # remain subject to the existing byte checks.
@@ -115,7 +121,7 @@ def bruce_scope():
     assert git("rev-parse", "HEAD:assets/bruce").decode().strip() == BRUCE_ASSET_TREE
     assert not git("diff", "HEAD", "--", "assets/bruce"), "approved Bruce assets changed"
     assets = set(git("ls-tree", "-r", "--name-only", "HEAD", "assets/bruce").decode().splitlines())
-    return BRUCE_RUNTIME_DELTA | assets
+    return BRUCE_RUNTIME_DELTA | assets | NOAH_RUN_DELTA
 
 
 def validate_hq_scope():

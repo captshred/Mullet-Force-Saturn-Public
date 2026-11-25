@@ -48,6 +48,11 @@ static int rbv_ids[MF_RBV_NEW];
 #endif
 #if MF_RUN_BAT
 #include "running_data.h"
+#include "noah_run.h"
+#if MF_NOAH_RUN
+#undef MF_RUN_BYTES
+#define MF_RUN_BYTES MF_NOAH_RUN_BYTES
+#endif
 #else
 #define MF_RUN_NEW 0
 #define MF_RUN_BYTES 0u
@@ -106,8 +111,12 @@ static int pd_ids[MF_PD_NEW],pd_loaded;
 /* PLAYERDEATH END */
 static unsigned end_of(int id)
 {
+    unsigned bpp = 1;
+#if MF_NOAH_RUN
+    if (__jo_sprite_pic[id].color_mode == COL_32K) bpp = 2;
+#endif
     return (unsigned)((unsigned long)jo_sprite_get_raw_data(id)-JO_VDP1_VRAM)
-        +((jo_sprite_get_width(id)*jo_sprite_get_height(id)+31u)&~31u);
+        +((jo_sprite_get_width(id)*jo_sprite_get_height(id)*bpp+31u)&~31u);
 }
 static void resource_info(int rid,const char **name,int *width,int *height,unsigned *bytes)
 {
@@ -145,7 +154,13 @@ static int load_bank(int full)
 {
     int rid,w,h;unsigned bytes,needed=0,end=end_of(last_resource);
     const char *name;
+#if MF_NOAH_RUN
+    needed = MF_NOAH_RUN_BYTES;
+#endif
     for(rid=0;rid<MF_REVIEW_RESOURCES;rid++) {
+#if MF_NOAH_RUN
+        if(rid>=81)break;
+#endif
 #if MF_ORIGINAL_THREE_WALK
         if(!full && rid<81 && !original_three_required[rid])continue;
 #elif MF_SWAGGER_WALK
@@ -167,6 +182,9 @@ static int load_bank(int full)
     if(needed)jo_set_tga_default_palette(resource_palette);
     for(rid=0;rid<MF_REVIEW_RESOURCES;rid++) {
         int id;
+#if MF_NOAH_RUN
+        if(rid>=81)break;
+#endif
 #if MF_ORIGINAL_THREE_WALK
         if(!full && rid<81 && !original_three_required[rid])continue;
 #elif MF_SWAGGER_WALK
@@ -181,6 +199,9 @@ static int load_bank(int full)
         resource_ids[rid]=id;last_resource=id;
     }
     if(needed)jo_set_tga_default_palette(JO_NULL);
+#if MF_NOAH_RUN
+    if(!noah_load(&last_resource))return 0;
+#endif
     texture_bytes=end_of(last_resource)-0x10000u;
 #if MF_ORIGINAL_THREE_WALK
     return texture_bytes==MF_CP_EXTRA-MF_FX_SAVED_BYTES-MF_ENEMY_DEFERRED_BYTES-MF_HUD_PANEL_SAVED_BYTES-MF_LEGACY_SAVED_BYTES-MF_LEGACY_PLAYER_SAVED_BYTES-MF_PH_REMOVED+MF_PH_EXTRA-MF_PD_REMOVED+MF_PD_EXTRA+MF_RUN_BYTES+(full?MF_ORIGINAL_THREE_FULL_BYTES:MF_ORIGINAL_THREE_BOOT_BYTES)-MF_HT_REPLACED-MF_HJ_REPLACED;
@@ -532,7 +553,14 @@ int mf_animation_draw_actor(int actor,int frame,int center,int ground,int direct
 #if MF_ORIGINAL_THREE_WALK
 #if MF_RUN_BAT
     if(frame>=22 || (frame>=12 && frame<15))return 0;
+#if MF_NOAH_RUN
+    if(frame>=18){
+        noah_draw(actor,frame-18,center,ground,direction,depth);
+        return 1;
+    }
+#else
     if(frame>=18)pieces=run_parts[actor][frame-18];else
+#endif
 #else
     if(frame>=18 || (frame>=12 && frame<15))return 0;
 #endif
@@ -562,9 +590,16 @@ int mf_animation_draw_actor(int actor,int frame,int center,int ground,int direct
 }
 void mf_animation_draw(const int street[5],int street_palette_id)
 {
-    int line,actor,part;
+    int line,actor;
+#if !MF_NOAH_RUN
+    int part;
+#endif
     const int centers[2]={90,226};
     jo_sprite_restore_sprite_scale();jo_sprite_disable_horizontal_flip();mf_street_draw(street,street_palette_id,280);jo_sprite_set_palette(palette_id);
+#if MF_NOAH_RUN
+    for(actor=0;actor<2;actor++)
+        mf_animation_draw_actor(actor,current_frame(actor),centers[actor],210,facing,230);
+#else
 #if MF_RUNNING_BAT_VISUALS
     for(actor=0;actor<2;actor++){int frame=current_frame(actor);if(frame>=18)rbv_carry_draw(actor,frame-18,centers[actor],210,facing,230);}
 #endif
@@ -585,6 +620,7 @@ void mf_animation_draw(const int street[5],int street_palette_id)
         x=facing>0?centers[actor]-64+x:centers[actor]+64-x-w;
         jo_sprite_draw3D2(resource_ids[rid],x,210-92+y,230);
     }
+#endif
     jo_sprite_disable_horizontal_flip();jo_sprite_restore_sprite_scale();
     jo_clear_screen_line(2);jo_clear_screen_line(4);jo_clear_screen_line(6);for(line=25;line<30;line++)jo_clear_screen_line(line);
 #if MF_RUN_BAT
