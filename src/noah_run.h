@@ -23,7 +23,12 @@ static unsigned char *noah_source(int actor, int frame)
 {
     unsigned offset = actor ? 4u * MF_NOAH_BUCK_BYTES + frame * MF_NOAH_CHUCK_BYTES
                             : frame * MF_NOAH_BUCK_BYTES;
+#ifdef MF_NOAH_HOST_CACHE
+    static unsigned char cache[MF_NOAH_CACHE_BYTES];
+    return cache + offset;
+#else
     return (unsigned char *)(MF_NOAH_CACHE_ADDRESS + offset);
+#endif
 }
 
 static unsigned noah_band_bytes(int actor, int part)

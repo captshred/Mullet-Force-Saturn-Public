@@ -94,7 +94,7 @@ BRUCE_ASSET_TREE = "84dd2903d3f8120e663a718d025a8ce9eb235f06"
 NOAH_RUN_DELTA = {
     "src/animation_preview.c", "src/arcade_fx_config.h", "src/enemy_bank_config.h",
     "src/noah_run.h", "src/noah_run_data.h", "tools/pack-noah-run.py",
-    "assets/noah-run/manifest.json",
+    "assets/noah-run/manifest.json", "tests/enemy_banks/jo/jo.h", "tests/enemy_banks/trace.c",
 } | {f"assets/noah-run/N{actor}{frame:02}.BIN" for actor in ("B", "C") for frame in range(1, 5)}
 
 BRUCE_RUNTIME_DELTA = {

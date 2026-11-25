@@ -35,3 +35,33 @@ void jo_sprite_free_from(int id)
     count=id;
     cursor=__jo_sprite_def[id-1].adr*8+((__jo_sprite_def[id-1].width*__jo_sprite_def[id-1].height*(__jo_sprite_pic[id-1].color_mode==COL_256?1:2)+31)&~31);
 }
+
+#if MF_NOAH_RUN
+char *jo_fs_read_file_in_dir(const char *name, const char *dir, int *length)
+{
+    char path[128];
+    snprintf(path,sizeof(path),"build/cd/%s/%s",dir,name);
+    FILE *file=fopen(path,"rb");
+    if(!file)return NULL;
+    assert(fseek(file,0,SEEK_END)==0);
+    *length=(int)ftell(file);
+    rewind(file);
+    char *data=malloc(*length);
+    assert(data && fread(data,1,*length,file)==(size_t)*length);
+    fclose(file);
+    return data;
+}
+
+void slDMACopy(void *source, void *destination, unsigned size)
+{
+    assert(bank_mock_ptmr==0 && (bank_mock_edsr&2));
+    for(int id=0;id<count;id++)if(__jo_sprite_pic[id].data==destination){
+        assert(size==bytes[id] && payload_sizes[id]<=size);
+        memcpy(payloads[id],source,payload_sizes[id]);
+        return;
+    }
+    assert(!"unknown sprite DMA target");
+}
+
+void slDMAWait(void){}
+#endif
