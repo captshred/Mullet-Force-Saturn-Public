@@ -399,15 +399,25 @@ static void load_assets(void)
     asset_stage=600;
     for(i=0;i<3;i++) drum[i]=load(dr[i]);
     shadow=load("SHADOW.TGA"); spark=load("HIT.TGA");
-    /* Small opaque HUD and title panel; all texture allocation is budgeted. */
-    pixels=jo_malloc(256*40*sizeof(*pixels));
+    /* Share one scratch allocation between the two sequential uploads. */
+    enum {
+        bar_width = 80, bar_height = 8,
+        panel_width = MF_HUD_PANEL_WIDTH, panel_height = 40,
+        bar_pixels = bar_width * bar_height,
+        panel_pixels = panel_width * panel_height
+    };
+    pixels=jo_malloc((bar_pixels > panel_pixels ? bar_pixels : panel_pixels) * sizeof(*pixels));
     if(!pixels) {asset_failure(610,"HUD MEMORY",0);return;}
-    img.width=80; img.height=8; img.data=pixels;
-    for(i=0;i<80*8;i++) pixels[i]=(i/80==0 || i/80==7 || i%80==0 || i%80==79)?JO_COLOR_RGB(164,201,195):JO_COLOR_RGB(64,187,155);
+    img.width=bar_width; img.height=bar_height; img.data=pixels;
+    for(i=0;i<bar_pixels;i++)
+        pixels[i]=(i/bar_width==0 || i/bar_width==bar_height-1 || i%bar_width==0 || i%bar_width==bar_width-1)
+            ?JO_COLOR_RGB(164,201,195):JO_COLOR_RGB(64,187,155);
     bar=jo_sprite_add(&img);
     if(bar<0)asset_failure(620,"HUD BAR",0);
-    img.width=MF_HUD_PANEL_WIDTH; img.height=40;
-    for(i=0;i<MF_HUD_PANEL_WIDTH*40;i++) pixels[i]=(i/MF_HUD_PANEL_WIDTH==0 || i/MF_HUD_PANEL_WIDTH==39)?JO_COLOR_RGB(124,66,112):JO_COLOR_RGB(12,18,34);
+    img.width=panel_width; img.height=panel_height;
+    for(i=0;i<panel_pixels;i++)
+        pixels[i]=(i/panel_width==0 || i/panel_width==panel_height-1)
+            ?JO_COLOR_RGB(124,66,112):JO_COLOR_RGB(12,18,34);
     panel=jo_sprite_add(&img);
     if(panel<0)asset_failure(621,"HUD PANEL",0);
     jo_free(pixels);
