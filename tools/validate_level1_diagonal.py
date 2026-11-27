@@ -87,6 +87,7 @@ HQ_DELTA |= PERFORMANCE_DELTA | VEHICLE_DELTA | CLARITY_REVIEW | LINE_REVIEW | M
     "downloads/mullet-force-downhill-clarity.zip",
     "downloads/mullet-force-horizontal-line-restoration.zip",
 }
+HQ_DELTA.add("tests/ricky/jump-render.inc")
 PHASE_DELTA |= HQ_DELTA
 
 
