@@ -4,6 +4,7 @@ import argparse
 import hashlib
 import importlib
 from pathlib import Path
+import os
 import subprocess
 import tempfile
 
@@ -76,6 +77,23 @@ def test_current():
         subprocess.run([exe], cwd=ROOT, check=True)
 
 
+def stage_approved_fixture(reference, env):
+    # The pinned scripts predate --stage-only. Run their staging commands
+    # in the historical tree and stop at the Saturn compilation boundary.
+    profile_path = "tools/build-source-complete.sh"
+    native_path = "tools/build-native.sh"
+    profile = (reference / profile_path).read_text()
+    native = (reference / native_path).read_text()
+    entry = "bash tools/build.sh --native"
+    boundary = "\nmake -C build -f ../make/saturn.mk "
+    if profile.count(entry) != 1 or native.count(boundary) != 1:
+        raise RuntimeError("Historical staging entry point or native build boundary changed")
+    profile = profile.replace(entry, 'bash -c "$1" tools/build-native.sh')
+    staging = native.split(boundary, 1)[0]
+    subprocess.run(["bash", "-c", profile, profile_path, staging],
+                   cwd=reference, env=env, check=True)
+
+
 def test_approved():
     with tempfile.TemporaryDirectory(prefix="mf-e108-approved-") as folder:
         reference = Path(folder)
@@ -88,9 +106,16 @@ def test_approved():
                        cwd=reference, check=True)
         verify_baseline(reference)
         subprocess.run(["git", "checkout", "--quiet", "--detach", BASE], cwd=reference, check=True)
-        for name in (".deps", "build"):
-            (reference / name).symlink_to(ROOT / name, target_is_directory=True)
-        subprocess.run(["make", "test"], cwd=reference, check=True)
+        (reference / ".deps").symlink_to(ROOT / ".deps", target_is_directory=True)
+        # GNU make can also forward command-line MF_* overrides through MAKEFLAGS.
+        env = {name: value for name, value in os.environ.items()
+               if not name.startswith("MF_") and name not in {"MAKEFLAGS", "MFLAGS", "MAKEOVERRIDES"}}
+        stage_approved_fixture(reference, env)
+        # Historical link-budget assertions still inspect the candidate's
+        # native link. Share only those inputs, leaving staging isolated.
+        for name in ("game.elf", "game.raw", "game.map"):
+            (reference / "build" / name).symlink_to(ROOT / "build" / name)
+        subprocess.run(["make", "test"], cwd=reference, env=env, check=True)
 
 
 def main():

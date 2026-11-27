@@ -89,7 +89,7 @@ HQ_DELTA |= PERFORMANCE_DELTA | VEHICLE_DELTA | CLARITY_REVIEW | LINE_REVIEW | M
 }
 RESOURCE_CLEANUP_DELTA = {
     "tools/stage-production-resources.py",
-    "tools/test-production-resources.py",
+    "tools/test-production-resources.py", "tools/validate-e108-root-cause.py",
 }
 HQ_DELTA |= RESOURCE_CLEANUP_DELTA
 PHASE_DELTA |= HQ_DELTA
