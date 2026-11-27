@@ -46,13 +46,13 @@ static int ca_last_run[2];
 #include "running_bat_visual_data.h"
 static int rbv_ids[MF_RBV_NEW];
 #endif
-#if MF_RUN_BAT
-#include "running_data.h"
-#include "noah_run.h"
 #if MF_NOAH_RUN
-#undef MF_RUN_BYTES
+#include "noah_run.h"
+/* Noah keeps its sprite handles outside resource_ids. */
+#define MF_RUN_NEW 0
 #define MF_RUN_BYTES MF_NOAH_RUN_BYTES
-#endif
+#elif MF_RUN_BAT
+#include "running_data.h"
 #else
 #define MF_RUN_NEW 0
 #define MF_RUN_BYTES 0u
@@ -131,19 +131,19 @@ static void resource_info(int rid,const char **name,int *width,int *height,unsig
         if(rid>=42+MF_POLISH_NEW)p=&swagger_resources[rid-42-MF_POLISH_NEW];
         else
 #endif
-#if MF_RUN_BAT
+#if MF_RUN_BAT && !MF_NOAH_RUN
         if(rid>=81)p=&run_resources[rid-81];else
 #endif
         p=&polish_resources[rid-42];
         *name=p->name;*width=p->width;*height=p->height;*bytes=p->bytes;
 /* PLAYERHURT BEGIN */
-#if MF_PLAYER_HURT
+#if MF_PLAYER_HURT && !MF_NOAH_RUN
         if(rid==99)*name="RC0.TGA";
         if(rid==100)*name="RC1.TGA";
 #endif
 /* PLAYERHURT END */
 /* PLAYERDEATH BEGIN */
-#if MF_PLAYER_DEATH
+#if MF_PLAYER_DEATH && !MF_NOAH_RUN
         if(rid==99)*name="RD0.TGA";
         if(rid==100)*name="RD1.TGA";
 #endif
@@ -158,9 +158,6 @@ static int load_bank(int full)
     needed = MF_NOAH_RUN_BYTES;
 #endif
     for(rid=0;rid<MF_REVIEW_RESOURCES;rid++) {
-#if MF_NOAH_RUN
-        if(rid>=81)break;
-#endif
 #if MF_ORIGINAL_THREE_WALK
         if(!full && rid<81 && !original_three_required[rid])continue;
 #elif MF_SWAGGER_WALK
@@ -182,9 +179,6 @@ static int load_bank(int full)
     if(needed)jo_set_tga_default_palette(resource_palette);
     for(rid=0;rid<MF_REVIEW_RESOURCES;rid++) {
         int id;
-#if MF_NOAH_RUN
-        if(rid>=81)break;
-#endif
 #if MF_ORIGINAL_THREE_WALK
         if(!full && rid<81 && !original_three_required[rid])continue;
 #elif MF_SWAGGER_WALK
