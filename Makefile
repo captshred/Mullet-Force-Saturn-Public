@@ -3,6 +3,7 @@
 check:
 	python3 tools/level1-sfx-pcm8-pass1.py --pass2 --reset-wingsuit --diagonal --medium-guitar --mix-pass1 --disc
 	python3 tools/validate_level1_diagonal.py --medium-guitar --mix-pass1
+	@if grep -qx "#define MF_NOAH_RUN 1" build/build-info.h; then python3 tools/validate-noah-disc-e1.py --disc build/mullet-force.bin; fi
 test:
 	$(CC) -std=c99 -Wall -Wextra -Werror -DMF_DEV_MODE=1 -DMF_DASH_ENABLED=1 -DMF_LEVEL1_STAGE_CLEAR=1 -DMF_BRUCE_RUNTIME=1 -DMF_VEHICLE_AMBUSH=1 -DMF_LEVEL1_WORLD_FLOW=1 -Isrc tests/dev_sections_test.c src/bruce.c src/game.c -o /tmp/mf-dev-sections
 	/tmp/mf-dev-sections

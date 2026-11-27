@@ -508,6 +508,10 @@ fi
 rm -f build/cd/EXPLODE.TGA
 if [[ $arcade_fx == 1 ]]; then cp assets/arcade-fx/EXPLODE.TGA build/cd/; fi
 python3 tools/stage-wingsuit-assets.py "$wingsuit" build/cd
+if [[ ${MF_NOAH_RUN:-0} == 1 ]]; then
+    rm -f build/cd/RN23.TGA
+    python3 tools/validate-noah-disc-e1.py --stage build/cd
+fi
 if [[ $performance_audit == 1 ]]; then printf "Performance audit diagnostics: enabled (P1 Y)\n" >> build/BUILD-INFO.txt; fi
 make -C build -f ../make/saturn.mk MAKEFILE=../make/saturn.mk -j2 MF_DEV_MODE="$dev_mode" MF_PERFORMANCE_AUDIT="$performance_audit" MF_BRUCE_RUNTIME="${MF_BRUCE_RUNTIME:-0}" MF_VEHICLE_AMBUSH="${MF_VEHICLE_AMBUSH:-0}" MF_RICKY_ENEMY="$ricky" MF_DEV_STAGE_SKIP="$dev_skip" MF_LEVEL2_WINGSUIT="$wingsuit" MF_LEVEL1_STAGE_CLEAR="$stage_clear" MF_PUNCH_COMBO="$combo" MF_FAST_RUNNING_BAT="$fast_bat" MF_JAB_COHESION="$jab" MF_ATTACK_SEQUENCE="$sequence" MF_BAT_MOMENTUM="$momentum" MF_COMBAT_ANIMATION="$combat" MF_RUNNING_BAT_VISUALS="$visual" MF_RUN_BAT="$run_bat" MF_DASH_ENABLED="$dash" MF_DASH_PRESET="$dash_num" game.iso
 cp build/game.iso build/mullet-force.bin
