@@ -2,6 +2,9 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 mkdir -p build/cd
+[[ $# == 0 || ( $# == 1 && $1 == --stage-only ) ]] || exit 1
+resource_cleanup=${MF_PRODUCTION_RESOURCE_CLEANUP:-0}
+[[ $resource_cleanup == 0 || $resource_cleanup == 1 ]] || exit 1
 performance_audit=${MF_PERFORMANCE_AUDIT:-0}
 [[ $performance_audit == 0 || $performance_audit == 1 ]] || { echo "MF_PERFORMANCE_AUDIT must be 0 or 1" >&2; exit 1; }
 ricky=${MF_RICKY_ENEMY:-0}
@@ -327,6 +330,19 @@ if [[ ${MF_NOAH_RUN:-0} == 1 ]]; then
     printf '#define MF_NOAH_RUN 1\n' >> build/build-info.h
     sha256sum assets/noah-run/* >> build/SOURCE-SHA256SUMS.txt
 fi
+if [[ $resource_cleanup == 1 ]]; then
+    # The exclusion list assumes the complete Noah, Bruce and Level 2 profile.
+    [[ ${MF_NOAH_RUN:-0} == 1 && ${MF_BRUCE_RUNTIME:-0} == 1 &&
+       ${MF_VEHICLE_AMBUSH:-0} == 1 && $ricky == 1 && $legacy_cleanup == 1 &&
+       $legacy_phase2 == 1 && $duplicate_cleanup == 1 && $live == 1 &&
+       $wingsuit == 1 && $player_death == 1 && $original == 1 &&
+       $run_bat == 1 && $sequence == 1 && $hq_torch == 1 && $cphq == 1 ]] || {
+        echo "Production resource cleanup requires the complete Noah profile." >&2
+        exit 1
+    }
+    printf '#define MF_PRODUCTION_RESOURCE_CLEANUP 1\n' >> build/build-info.h
+    sha256sum tools/stage-production-resources.py >> build/SOURCE-SHA256SUMS.txt
+fi
 source_hash=$(sha256sum build/SOURCE-SHA256SUMS.txt | cut -d' ' -f1)
 printf '#define MF_BUILD_SOURCE "%s"\n' "$source_hash" >> build/build-info.h
 printf 'Game: MULLET FORCE\nScene: Neon District playable prototype\nCommit: %s\nBranch: %s\nSDK: 556d081146211b6a1cfa6591d70f9487d406758b\n' \
@@ -508,6 +524,8 @@ fi
 rm -f build/cd/EXPLODE.TGA
 if [[ $arcade_fx == 1 ]]; then cp assets/arcade-fx/EXPLODE.TGA build/cd/; fi
 python3 tools/stage-wingsuit-assets.py "$wingsuit" build/cd
+if [[ $resource_cleanup == 1 ]]; then python3 tools/stage-production-resources.py build/cd; fi
+if [[ ${1:-} == --stage-only ]]; then exit 0; fi
 if [[ $performance_audit == 1 ]]; then printf "Performance audit diagnostics: enabled (P1 Y)\n" >> build/BUILD-INFO.txt; fi
 make -C build -f ../make/saturn.mk MAKEFILE=../make/saturn.mk -j2 MF_DEV_MODE="$dev_mode" MF_PERFORMANCE_AUDIT="$performance_audit" MF_BRUCE_RUNTIME="${MF_BRUCE_RUNTIME:-0}" MF_VEHICLE_AMBUSH="${MF_VEHICLE_AMBUSH:-0}" MF_RICKY_ENEMY="$ricky" MF_DEV_STAGE_SKIP="$dev_skip" MF_LEVEL2_WINGSUIT="$wingsuit" MF_LEVEL1_STAGE_CLEAR="$stage_clear" MF_PUNCH_COMBO="$combo" MF_FAST_RUNNING_BAT="$fast_bat" MF_JAB_COHESION="$jab" MF_ATTACK_SEQUENCE="$sequence" MF_BAT_MOMENTUM="$momentum" MF_COMBAT_ANIMATION="$combat" MF_RUNNING_BAT_VISUALS="$visual" MF_RUN_BAT="$run_bat" MF_DASH_ENABLED="$dash" MF_DASH_PRESET="$dash_num" game.iso
 cp build/game.iso build/mullet-force.bin

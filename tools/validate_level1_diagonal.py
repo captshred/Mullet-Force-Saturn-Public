@@ -87,6 +87,11 @@ HQ_DELTA |= PERFORMANCE_DELTA | VEHICLE_DELTA | CLARITY_REVIEW | LINE_REVIEW | M
     "downloads/mullet-force-downhill-clarity.zip",
     "downloads/mullet-force-horizontal-line-restoration.zip",
 }
+RESOURCE_CLEANUP_DELTA = {
+    "tools/stage-production-resources.py",
+    "tools/test-production-resources.py",
+}
+HQ_DELTA |= RESOURCE_CLEANUP_DELTA
 PHASE_DELTA |= HQ_DELTA
 
 
@@ -239,6 +244,8 @@ def validate(medium_guitar=False, mix_pass1=False):
     disc = (ROOT / "build/mullet-force.bin").read_bytes()
     root = list(directory_records(disc, disc[16*2048+156:16*2048+190]))
     # Count both ISO directory records for "." and "..", as GFS does.
+    if "#define MF_PRODUCTION_RESOURCE_CLEANUP 1" in (ROOT / "build/build-info.h").read_text().splitlines():
+        assert len(root) <= 256, f"Production root has {len(root)} GFS records"
     visible = {name for name, _ in root[:256]}
     audio = {"CUSTOM.MAP", "FX.SEQ", "FX.TON", "STAGE.SEQ", "STAGE.TON"}
     if (ROOT / "build/cd/CARPASS.TON").exists():

@@ -400,7 +400,9 @@ static void load_assets(void)
     for(i=0;i<3;i++) drum[i]=load(dr[i]);
     shadow=load("SHADOW.TGA"); spark=load("HIT.TGA");
     /* Small opaque HUD and title panel; all texture allocation is budgeted. */
-    pixels=jo_malloc(256*40*sizeof(*pixels));
+    enum { hud_bar_pixels = 80 * 8, hud_panel_pixels = MF_HUD_PANEL_WIDTH * 40 };
+    pixels=jo_malloc((hud_bar_pixels > hud_panel_pixels ? hud_bar_pixels : hud_panel_pixels)
+                     * sizeof(*pixels));
     if(!pixels) {asset_failure(610,"HUD MEMORY",0);return;}
     img.width=80; img.height=8; img.data=pixels;
     for(i=0;i<80*8;i++) pixels[i]=(i/80==0 || i/80==7 || i%80==0 || i%80==79)?JO_COLOR_RGB(164,201,195):JO_COLOR_RGB(64,187,155);
