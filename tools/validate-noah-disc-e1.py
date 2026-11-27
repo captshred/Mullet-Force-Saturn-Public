@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify the legacy RUN exclusion from the Noah disc against the approved asset layout."""
+"""Verify legacy RUN and VDP1 street exclusions from the Noah disc against the approved asset layout."""
 import argparse
 from hashlib import sha256
 from pathlib import Path
@@ -7,18 +7,22 @@ from pathlib import Path
 from wingsuit_disc import GFS_LIMIT, SECTOR, directory_records
 
 LEGACY_RUN = frozenset(f"RN{index:02}.TGA" for index in range(24))
+LEGACY_STREET = frozenset(f"ST{index}.TGA" for index in range(1, 5))
 # Payloads come from the Phase D (26ca8b5) staging inventory. Record order
 # comes from the approved e0c65d3f disc with the same asset inventory.
-# Both fingerprints omit RN00–RN23; the executable payload varies per build.
-APPROVED_PAYLOADS = "a60d202f91d54d16007c70561fb072cfc4b3139e0f162252e335278e451cd3db"
-APPROVED_RECORDS = "d70c208aa58fabee474ee8ec13dfc22816988631b1c84b18b7cc40c90db0727a"
+# Both fingerprints omit LEGACY_RUN and LEGACY_STREET.
+# The executable payload varies per build.
+APPROVED_PAYLOADS = "e75ea2d1a1ee8225362d3b45397890a772f3b9ac1ebf5267edc90799fb3bf3fa"
+APPROVED_RECORDS = "c045f24ecba51127805df2489d96401941cee3e9d89742482cbc77908216c629"
 ROOT_LOOKUPS = {
     "0.BIN": 2, "ALEVEL2": 42, "CARPASS.TON": 65,
-    "CICELL.BIN": 82, "CIMAP.BIN": 83, "COMBAT": 85, "CUSTOM.MAP": 108,
-    "FX.SEQ": 131, "FX.TON": 132, "IXMAP.BIN": 144, "IXOFF.BIN": 145,
-    "IXPACK.BIN": 146, "NSPAL.BIN": 166, "RBV00.TGA": 209, "RICKY": 223,
-    "SHADOW.TGA": 224, "ST0.TGA": 225, "STAGE.SEQ": 230, "STAGE.TON": 231,
-    "STCELLS.BIN": 232,
+    "CICELL.BIN": 82, "CIMAP.BIN": 83, "COMBAT": 85, "COMBO": 86,
+    "CUSTOM.MAP": 108, "FX.SEQ": 131, "FX.TON": 132, "HQDEATH": 140, "HQHURT": 141,
+    "HQJUMP": 142, "HQTORCH": 143, "IXMAP.BIN": 144, "IXOFF.BIN": 145,
+    "IXPACK.BIN": 146, "LCMAP.BIN": 147, "LCSKY.BIN": 148, "NSPAL.BIN": 166,
+    "RBV00.TGA": 209, "RICKY": 223,
+    "SHADOW.TGA": 224, "ST0.TGA": 225, "STAGE.SEQ": 226, "STAGE.TON": 227,
+    "STCELLS.BIN": 228,
 }
 ROOT_BYTES = 6 * SECTOR
 BOOT_EXECUTABLE_LBA = 39
@@ -38,9 +42,10 @@ def payload_digest(files):
 
 
 def validate_payloads(files):
-    remaining = LEGACY_RUN.intersection(files)
-    assert not remaining, f"Legacy RUN textures still present: {sorted(remaining)}"
-    assert len(files) == 419, f"Expected 419 assets, found {len(files)}"
+    assert "ST0.TGA" in files, "Startup requires ST0.TGA"
+    remaining = (LEGACY_RUN | LEGACY_STREET).intersection(files)
+    assert not remaining, f"Excluded textures still present: {sorted(remaining)}"
+    assert len(files) == 415, f"Expected 415 assets, found {len(files)}"
     assert payload_digest(files) == APPROVED_PAYLOADS, "Approved disc payload inventory differs"
 
 
@@ -99,7 +104,7 @@ def inspect_disc(image, removed=()):
 def validate_disc(image):
     files, metadata, names, root_bytes = inspect_disc(image)
     assert len(names) <= GFS_LIMIT, "Root directory exceeds the GFS window"
-    assert len(names) == 241 and root_bytes == ROOT_BYTES, "Root directory geometry changed"
+    assert len(names) == 237 and root_bytes == ROOT_BYTES, "Root directory geometry changed"
     for name, index in ROOT_LOOKUPS.items():
         assert index < GFS_LIMIT and names[index] == name, (name, index)
     assert sha256("".join(metadata).encode()).hexdigest() == APPROVED_RECORDS, "ISO directory records or order changed"
@@ -114,7 +119,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     if args.stage:
         validate_stage(args.stage)
-        print("PASS Noah E2 staging: only RN00.TGA through RN23.TGA excluded")
+        print("PASS Noah F1 staging: exactly the legacy RUN and ST1–ST4 textures excluded")
     else:
         validate_disc(args.disc.read_bytes())
-        print("PASS Noah E2 disc: exact assets and directory records, required lookups within GFS window")
+        print("PASS Noah F1 disc: exact assets and directory records, required lookups within GFS window")
