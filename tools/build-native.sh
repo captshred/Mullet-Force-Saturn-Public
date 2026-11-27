@@ -509,7 +509,7 @@ rm -f build/cd/EXPLODE.TGA
 if [[ $arcade_fx == 1 ]]; then cp assets/arcade-fx/EXPLODE.TGA build/cd/; fi
 python3 tools/stage-wingsuit-assets.py "$wingsuit" build/cd
 if [[ ${MF_NOAH_RUN:-0} == 1 ]]; then
-    rm -f build/cd/RN23.TGA
+    rm -f build/cd/RN{00..23}.TGA
     python3 tools/validate-noah-disc-e1.py --stage build/cd
 fi
 if [[ $performance_audit == 1 ]]; then printf "Performance audit diagnostics: enabled (P1 Y)\n" >> build/BUILD-INFO.txt; fi
