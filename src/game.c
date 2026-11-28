@@ -2,6 +2,9 @@
 #include "game.h"
 #include "bruce.h"
 #include "dev_sections.h"
+#if MF_LEVEL1_PROGRESSION
+#include "level1_progression_config.h"
+#endif
 /* JAB BEGIN */
 #include "punch_combo.h"
 #include "jab_repeat.h"
@@ -152,6 +155,62 @@ static void contain_arena_player(mf_player *p)
     p->x = clamp(p->x, MF_BRUCE_ARENA_REAR * 256, MF_BRUCE_ARENA_FRONT * 256);
 }
 #endif
+#if MF_LEVEL1_PROGRESSION
+static const mf_encounter_definition *encounter(const mf_game *g)
+{
+    return &mf_encounters[g->encounter_index];
+}
+
+static int encounter_locked(const mf_game *g)
+{
+    return g->stage == MF_STAGE_LEVEL1 && !g->bruce.active && !g->encounter_cleared;
+}
+
+int mf_encounter_quota(const mf_game *g)
+{
+    return encounter(g)->quota;
+}
+
+int mf_encounter_go(const mf_game *g)
+{
+    return g->started && !g->paused && g->stage == MF_STAGE_LEVEL1 &&
+           !g->bruce.active && !g->bruce.approach && g->encounter_cleared;
+}
+
+int mf_encounter_config_valid(void)
+{
+    unsigned vehicle_rows=0;
+    if(mf_encounters[0].activation_x!=MF_WORLD_LEFT)return 0;
+    for(unsigned i=0;i<MF_ENCOUNTER_COUNT;i++) {
+        const mf_encounter_definition *e=&mf_encounters[i];
+        int next=i+1<MF_ENCOUNTER_COUNT?mf_encounters[i+1].activation_x:MF_BRUCE_LOT_FIRST;
+        if(!e->name || !*e->name || e->activation_x>=next || e->quota<1 || e->quota>99 ||
+           e->restart_x<e->activation_x || e->restart_x>e->player_limit ||
+           e->player_limit>=next || e->camera_limit<0 ||
+           e->camera_limit>=MF_BRUCE_CAMERA_MIN || e->camera_limit<e->activation_x-26 ||
+           e->camera_limit+294<e->player_limit || e->camera_limit+160>e->player_limit || e->restart_x-142>e->camera_limit ||
+           (i && e->camera_limit<mf_encounters[i-1].camera_limit) ||
+           e->spawn_delay<1 || e->spawn_delay>600 || e->spawn_jitter<0 || e->spawn_jitter>600 ||
+           e->pair_percent<0 || e->pair_percent>100 ||
+           !e->enemy_types || (e->enemy_types&~(MF_ENCOUNTER_PUNK|MF_ENCOUNTER_RICKY)) ||
+           (e->dependencies&~MF_ENCOUNTER_WAIT_VEHICLE))return 0;
+        if(e->dependencies&MF_ENCOUNTER_WAIT_VEHICLE) {
+            if(MF_VEHICLE_TRIGGER_X<e->activation_x || MF_VEHICLE_TRIGGER_X>e->player_limit ||
+               e->restart_x>MF_VEHICLE_TRIGGER_X)return 0;
+            ++vehicle_rows;
+        }
+    }
+    return vehicle_rows==1;
+}
+
+static int live_enemies(const mf_game *g)
+{
+    int count=0;
+    for(int i=0;i<MF_ENEMIES;i++)if(g->enemies[i].hp>0 && g->enemies[i].state!=MF_ENEMY_ABSENT)++count;
+    return count;
+}
+#endif
+
 static unsigned punk_roll(mf_punk_ai *a)
 {
     a->rng=a->rng*1664525u+1013904223u;return a->rng;
@@ -188,14 +247,29 @@ static void enemy_spawn(mf_game *g,int index,int initial)
     {
         static const int lanes[4]={168,188,209,229};
         int n,best=-1,bx=0,by=0;
+#if MF_LEVEL1_PROGRESSION
+        int alone=!live_enemies(g);
+#endif
         for(n=0;n<12;n++) {
             int x,cy,quality=10000,k;
             unsigned pick=g->spawn_rng=g->spawn_rng*1664525u+1013904223u;
             cy=lanes[(pick>>16)&3];
 #if MF_LEVEL1_WORLD_FLOW
             x=(n&1)?g->camera+384+(int)((pick>>8)&31u):g->camera-96;
+#if !MF_LEVEL1_PROGRESSION
             if(!(n&1) && x<g->camera_floor+MF_WORLD_LEFT)continue;
+#endif
             if(x<MF_ENEMY_WORLD_LEFT || x>MF_ENEMY_WORLD_RIGHT)continue;
+#if MF_LEVEL1_PROGRESSION
+            /* Keep the normal offscreen entry where there is room. Sample
+               the visible road too so a fighter waiting at the gate can
+               always get another opponent without walking back. */
+            if(n>=4) {
+                x=n<8?g->camera+26:g->camera+294;
+                cy=lanes[n&3];
+            }
+            x=clamp(x,g->camera_floor+MF_WORLD_LEFT,encounter(g)->player_limit);
+#endif
 #else
             if(n<8)x=clamp(g->camera+((n&1)?344:-24),MF_WORLD_LEFT,MF_WORLD_RIGHT);
             else {x=clamp(g->camera+48+(int)((pick>>8)%225u),MF_WORLD_LEFT,MF_WORLD_RIGHT);cy=(n&1)?229:168;}
@@ -203,7 +277,11 @@ static void enemy_spawn(mf_game *g,int index,int initial)
             for(k=0;k<MF_PLAYERS;k++)if(living(&g->players[k])) {
                 int dx=abs_i(x-g->players[k].x/256),dy=abs_i(cy-g->players[k].y/256);
                 int d=dx+2*dy;
+#if MF_LEVEL1_PROGRESSION
+                if(alone ? (dx<48 && dy<24) : (dx<80 && dy<40))d=0;
+#else
                 if(dx<80 && dy<40)d=0;
+#endif
                 if(d<quality)quality=d;
             }
             for(k=0;k<MF_ENEMIES;k++)if(k!=index && g->enemies[k].state!=MF_ENEMY_ABSENT) {
@@ -212,7 +290,11 @@ static void enemy_spawn(mf_game *g,int index,int initial)
             }
             if(quality>best){best=quality;bx=x;by=cy;}
         }
+#if MF_LEVEL1_PROGRESSION
+        if(best<(alone?48:110))return;
+#else
         if(best<110)return; /* Retry later; fairness wins over a deadline. */
+#endif
         left=bx;right=by;
     }
 #endif
@@ -233,6 +315,11 @@ static void enemy_spawn(mf_game *g,int index,int initial)
     /* Two CP, mixed, then two Ricky are possible without consuming spawn_rng. */
     g->ricky_punch[index]=0;g->ricky_jump[index]=(mf_ricky_jump){0};
     if((g->ricky_spawns++%8u)>=5u)g->enemy_class[index]=MF_ENEMY_RICKY;
+#if MF_LEVEL1_PROGRESSION
+    if(!(encounter(g)->enemy_types&(1u<<g->enemy_class[index])))
+        g->enemy_class[index]=encounter(g)->enemy_types&MF_ENCOUNTER_PUNK?
+            MF_ENEMY_CORPORATE_PUNK:MF_ENEMY_RICKY;
+#endif
 #endif
     *e=(mf_enemy){0};e->x=(initial?(index?530:390):(right>=left?MF_WORLD_RIGHT:26))*256;
     e->y=(index?218:y)*256;e->hp=MF_ENEMY_MAX_HP;e->facing=g->players[0].x<e->x?-1:1;
@@ -269,6 +356,10 @@ static void recover_player(mf_game *g,int index,int joining)
 #if MF_BRUCE_RUNTIME
     if(bruce_arena_active(g))contain_arena_player(p);
 #endif
+#if MF_LEVEL1_PROGRESSION
+    if(encounter_locked(g) && p->x>encounter(g)->player_limit*256)
+        p->x=encounter(g)->player_limit*256;
+#endif
     /* Recovery never resets another player, an enemy, barrels or the score. */
 }
 void mf_game_init(mf_game *g)
@@ -277,6 +368,9 @@ void mf_game_init(mf_game *g)
     for(i=0;i<MF_DRUMS;i++)drum_reset(&g->drums[i],i);
 #if MF_LEVEL1_STAGE_CLEAR
     g->spawn_rng=0x4d554c4cu;g->spawn_wait=60;
+#if MF_LEVEL1_PROGRESSION
+    g->spawn_wait=encounter(g)->spawn_delay;
+#endif
     for(i=0;i<MF_ENEMIES;i++)g->enemies[i].state=MF_ENEMY_ABSENT;
 #else
     for(i=0;i<MF_ENEMIES;i++){g->enemies[i].state=MF_ENEMY_ABSENT;g->enemies[i].timer=1;}
@@ -293,6 +387,9 @@ static void stage_defeat(mf_game *g,int index)
 #endif
         ))return;
     ++g->stage_kills;
+#if MF_LEVEL1_PROGRESSION
+    if(encounter_locked(g) && g->encounter_kos<encounter(g)->quota)++g->encounter_kos;
+#endif
 #if !MF_LEVEL1_WORLD_FLOW
     if(g->stage_kills==MF_STAGE_KILL_TARGET) {
         g->stage=MF_STAGE_SETTLING;g->stage_timer=MF_STAGE_SETTLE_TICKS;
@@ -302,10 +399,20 @@ static void stage_defeat(mf_game *g,int index)
 }
 static void stage_spawns(mf_game *g)
 {
+    int i,free_slots;
+#if MF_LEVEL1_PROGRESSION
+    const mf_encounter_definition *e=encounter(g);
+    int delay=e->spawn_delay, jitter=e->spawn_jitter+1, pair_percent=e->pair_percent;
+#else
     static const int low[4]={90,66,45,30},span[4]={61,55,46,37},pairs[4]={25,40,50,65};
-    int i,phase=clamp(g->stage_kills/10,0,3),free_slots=0;
+    int phase=clamp(g->stage_kills/10,0,3);
+    int delay=low[phase], jitter=span[phase], pair_percent=pairs[phase];
+#endif
     unsigned roll;
     if(g->stage!=MF_STAGE_LEVEL1 || g->street_spawns_suspended)return;
+#if MF_LEVEL1_PROGRESSION
+    if(!encounter_locked(g) || live_enemies(g)>=e->quota-g->encounter_kos)return;
+#endif
     if(g->spawn_wait>0 && --g->spawn_wait>0)return;
     free_slots=mf_enemy_limit(g)-mf_enemy_count(g);
     if(free_slots<=0)return;
@@ -313,10 +420,10 @@ static void stage_spawns(mf_game *g)
     enemy_spawn(g,i,0);
     if(g->enemies[i].state==MF_ENEMY_ABSENT){g->spawn_wait=15;return;}
     roll=g->spawn_rng=g->spawn_rng*1664525u+1013904223u;
-    if(!g->spawn_pair && free_slots==2 && (int)((roll>>8)%100u)<pairs[phase]) {
+    if(!g->spawn_pair && free_slots==2 && (int)((roll>>8)%100u)<pair_percent) {
         g->spawn_pair=1;g->spawn_wait=18+(int)((roll>>16)%19u);
     }else {
-        g->spawn_pair=0;g->spawn_wait=low[phase]+(int)((roll>>16)%(unsigned)span[phase]);
+        g->spawn_pair=0;g->spawn_wait=delay+(int)((roll>>16)%(unsigned)jitter);
     }
 }
 #endif
@@ -392,6 +499,43 @@ int mf_vehicle_warning_lane(const mf_game *g)
            tick<=vehicle_passes[pass].start)return vehicle_passes[pass].lane;
     return 0;
 }
+
+#if MF_LEVEL1_PROGRESSION
+static void encounter_advance(mf_game *g)
+{
+    unsigned next=g->encounter_index+1;
+    if(!g->encounter_cleared || g->bruce.active || next>=MF_ENCOUNTER_COUNT)return;
+    for(int i=0;i<MF_PLAYERS;i++) {
+        if(living(&g->players[i]) && g->players[i].x>=mf_encounters[next].activation_x*256) {
+            g->encounter_index=next;
+            g->encounter_kos=g->encounter_cleared=0;
+            g->spawn_wait=encounter(g)->spawn_delay;
+            g->spawn_pair=0;
+            return;
+        }
+    }
+}
+
+static void encounter_clear(mf_game *g)
+{
+    if(!encounter_locked(g) || g->encounter_kos<encounter(g)->quota || mf_enemy_count(g))return;
+    if((encounter(g)->dependencies&MF_ENCOUNTER_WAIT_VEHICLE) && g->vehicle_tick<=VEHICLE_END)return;
+    g->encounter_cleared=1;
+}
+
+static void encounter_solo_limit(mf_game *g)
+{
+    if(live_enemies(g)<=mf_enemy_limit(g))return;
+    int retired=-1, farthest=-1;
+    for(int i=0;i<MF_ENEMIES;i++) {
+        mf_enemy *e=&g->enemies[i];
+        if(e->hp<=0 || e->state==MF_ENEMY_ABSENT)continue;
+        int distance=abs_i(e->x-g->players[0].x);
+        if(distance>farthest){retired=i;farthest=distance;}
+    }
+    if(retired>=0)g->enemies[retired]=(mf_enemy){0};
+}
+#endif
 
 static int vehicle_contact(int x,int y,int height,unsigned pass,int left,int right)
 {
@@ -926,6 +1070,24 @@ void mf_section_init(mf_game *g, mf_section section)
         g->players[1].invulnerable = 0;
     }
     if (section > MF_SECTION_VEHICLE) g->vehicle_tick = VEHICLE_END + 1;
+#if MF_LEVEL1_PROGRESSION
+    while(g->encounter_index+1<MF_ENCOUNTER_COUNT &&
+          mf_encounters[g->encounter_index+1].activation_x<=def->entry)
+        ++g->encounter_index;
+    const mf_encounter_definition *e=encounter(g);
+    g->spawn_wait=e->spawn_delay;
+    if(section>=MF_SECTION_BRUCE)g->encounter_cleared=1;
+    else {
+        /* A tuned gate can move behind a fixed developer landmark. A
+           section reset must still start inside its selected encounter. */
+        g->camera=clamp(g->camera,0,e->camera_limit);
+        g->camera_floor=mf_world_checkpoint(g->camera);
+        int right=clamp(e->player_limit,g->camera+26,g->camera+294);
+        for(int i=0;i<MF_PLAYERS;i++)
+            if(g->players[i].active)
+                g->players[i].x=clamp(g->players[i].x,(g->camera+26)*256,right*256);
+    }
+#endif
     if (section >= MF_SECTION_BRUCE) g->street_spawns_suspended = 1;
     if (section == MF_SECTION_APRON) {
         g->bruce.active = 1;
@@ -935,6 +1097,25 @@ void mf_section_init(mf_game *g, mf_section section)
         g->bruce.facing = -1;
     }
 }
+#if MF_LEVEL1_PROGRESSION
+int mf_encounter_restart(mf_game *g)
+{
+    if(g->bruce.active || g->players[0].x>=MF_BRUCE_LOT_FIRST*256 ||
+       (living(&g->players[1]) && g->players[1].x>=MF_BRUCE_LOT_FIRST*256))return 0;
+    unsigned index=g->encounter_index;
+    const mf_encounter_definition *e=encounter(g);
+    mf_section_init(g,MF_SECTION_OPENING);
+    g->encounter_index=index;
+    g->spawn_wait=e->spawn_delay;
+    g->camera=clamp(e->restart_x-142,0,e->camera_limit);
+    g->camera_floor=mf_world_checkpoint(g->camera);
+    g->players[0].x=e->restart_x*256;
+    if(g->players[1].active)
+        g->players[1].x=clamp(e->restart_x+(index?-36:40),g->camera+26,e->player_limit)*256;
+    if(e->activation_x>MF_VEHICLE_TRIGGER_X)g->vehicle_tick=VEHICLE_END+1;
+    return 1;
+}
+#endif
 #endif
 
 #if MF_BRUCE_RUNTIME && MF_VEHICLE_AMBUSH
@@ -1024,7 +1205,13 @@ static void player_step(mf_game *g,int index,unsigned held,unsigned pressed)
         return;
     }
     if(p->landing)--p->landing;
-    if(p->hurt){--p->hurt;p->x=clamp(p->x+p->knockback,MF_WORLD_LEFT*256,MF_WORLD_RIGHT*256);p->knockback=p->knockback*3/4;}
+    if(p->hurt){
+        int hi=MF_WORLD_RIGHT;
+#if MF_LEVEL1_PROGRESSION
+        if(encounter_locked(g))hi=encounter(g)->player_limit;
+#endif
+        --p->hurt;p->x=clamp(p->x+p->knockback,MF_WORLD_LEFT*256,hi*256);p->knockback=p->knockback*3/4;
+    }
     else{
         if(!p->torch){
         /* Jump wins over an ordinary grounded punch at every animation tick.
@@ -1112,6 +1299,9 @@ static void player_step(mf_game *g,int index,unsigned held,unsigned pressed)
         int lo=(g->camera+26)*256,hi=(g->camera+294)*256;
         const mf_player *other=&g->players[1-index];
         if(hi>MF_WORLD_RIGHT*256)hi=MF_WORLD_RIGHT*256;
+#if MF_LEVEL1_PROGRESSION
+        if(encounter_locked(g) && hi>encounter(g)->player_limit*256)hi=encounter(g)->player_limit*256;
+#endif
         if(living(other)) {
             if(p->x>=other->x && dx>0 && other->x+MF_WORLD_PAIR_SPAN*256<hi)hi=other->x+MF_WORLD_PAIR_SPAN*256<p->x?p->x:other->x+MF_WORLD_PAIR_SPAN*256;
             if(p->x<other->x && dx<0 && other->x-MF_WORLD_PAIR_SPAN*256>lo)lo=other->x-MF_WORLD_PAIR_SPAN*256>p->x?p->x:other->x-MF_WORLD_PAIR_SPAN*256;
@@ -1365,7 +1555,13 @@ void mf_game_step_inputs(mf_game *g,const unsigned held[2],const unsigned presse
     }
     if(g->hitstop){--g->hitstop;for(i=0;i<MF_PLAYERS;i++)if(g->players[i].active)g->players[i].buffered|=pressed[i]&(MF_A|MF_B);torch_events(g);return;}
     ++g->ticks;if(g->spark)--g->spark;
+#if MF_LEVEL1_PROGRESSION
+    encounter_solo_limit(g);
+#endif
     for(i=0;i<MF_PLAYERS;i++)player_step(g,i,held[i],pressed[i]);
+#if MF_LEVEL1_PROGRESSION
+    encounter_advance(g);
+#endif
 #if MF_BRUCE_RUNTIME
     if(bruce_arena_active(g)) {
         for(i=0;i<MF_PLAYERS;i++)
@@ -1387,7 +1583,14 @@ void mf_game_step_inputs(mf_game *g,const unsigned held[2],const unsigned presse
     }
     for(i=0;i<MF_PLAYERS;i++){player_hits(g,&g->players[i]);torch_hits(g,&g->players[i]);}
     MF_PERF_BEGIN(ai_start);
-    for(i=0;i<MF_ENEMIES;i++)enemy_step(g,i);
+    for(i=0;i<MF_ENEMIES;i++) {
+        enemy_step(g,i);
+#if MF_LEVEL1_PROGRESSION
+        if(encounter_locked(g) && g->enemies[i].hp>0)
+            g->enemies[i].x=clamp(g->enemies[i].x,(g->camera_floor+MF_WORLD_LEFT)*256,
+                                  encounter(g)->player_limit*256);
+#endif
+    }
 #if MF_BRUCE_RUNTIME
     if(g->stage==MF_STAGE_LEVEL1 && g->bruce.ready) {
         mf_bruce *bruce=&g->bruce;
@@ -1451,6 +1654,9 @@ void mf_game_step_inputs(mf_game *g,const unsigned held[2],const unsigned presse
     torch_events(g);
 #if MF_VEHICLE_AMBUSH
     vehicle_step(g);
+#if MF_LEVEL1_PROGRESSION
+    encounter_clear(g);
+#endif
     if(g->vehicle_tick>0 && g->vehicle_tick<=VEHICLE_END)return;
 #endif
 #if MF_LEVEL1_WORLD_FLOW
@@ -1467,7 +1673,11 @@ void mf_game_step_inputs(mf_game *g,const unsigned held[2],const unsigned presse
         if(count) {
             target=count==1?minx-142:(minx+maxx)/2-160;
             if(target>minx-26)target=minx-26;
-            target=clamp(target,camera_min,MF_WORLD_CAMERA_MAX);
+            int camera_max=MF_WORLD_CAMERA_MAX;
+#if MF_LEVEL1_PROGRESSION
+            if(encounter_locked(g))camera_max=encounter(g)->camera_limit;
+#endif
+            target=clamp(target,camera_min,camera_max);
             delta=clamp(target-g->camera,-MF_WORLD_CAMERA_STEP,MF_WORLD_CAMERA_STEP);
             g->camera+=delta;
             if(mf_world_checkpoint(g->camera)>g->camera_floor)g->camera_floor=mf_world_checkpoint(g->camera);

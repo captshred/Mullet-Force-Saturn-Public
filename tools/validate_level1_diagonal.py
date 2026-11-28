@@ -89,6 +89,10 @@ HQ_DELTA |= PERFORMANCE_DELTA | VEHICLE_DELTA | CLARITY_REVIEW | LINE_REVIEW | M
 }
 HQ_DELTA.add("tests/ricky/jump-render.inc")
 HQ_DELTA.update({"tools/validate-noah-disc-e1.py", "tools/validate-e108-root-cause.py"})
+HQ_DELTA.update({
+    "src/level1_progression_config.h", "src/dev_sections.h",
+    "tests/level1_progression_test.c", "docs/level1-progression-p1.md",
+})
 PHASE_DELTA |= HQ_DELTA
 
 

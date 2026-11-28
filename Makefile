@@ -5,6 +5,8 @@ check:
 	python3 tools/validate_level1_diagonal.py --medium-guitar --mix-pass1
 	@if grep -qx "#define MF_NOAH_RUN 1" build/build-info.h; then python3 tools/validate-noah-disc-e1.py --disc build/mullet-force.bin; fi
 test:
+	$(CC) -std=c99 -Wall -Wextra -Werror -DMF_LEVEL1_PROGRESSION=1 -DMF_DEV_MODE=1 -DMF_LEVEL2_WINGSUIT=1 -DMF_DEV_STAGE_SKIP=1 -DMF_DASH_ENABLED=1 -DMF_LEVEL1_STAGE_CLEAR=1 -DMF_BRUCE_RUNTIME=1 -DMF_VEHICLE_AMBUSH=1 -DMF_RICKY_ENEMY=1 -Isrc tests/level1_progression_test.c src/bruce.c -o /tmp/mf-level1-progression
+	/tmp/mf-level1-progression
 	$(CC) -std=c99 -Wall -Wextra -Werror -DMF_DEV_MODE=1 -DMF_DASH_ENABLED=1 -DMF_LEVEL1_STAGE_CLEAR=1 -DMF_BRUCE_RUNTIME=1 -DMF_VEHICLE_AMBUSH=1 -DMF_LEVEL1_WORLD_FLOW=1 -Isrc tests/dev_sections_test.c src/bruce.c src/game.c -o /tmp/mf-dev-sections
 	/tmp/mf-dev-sections
 	$(CC) -std=c99 -Wall -Wextra -Werror -DMF_LEVEL1_STAGE_CLEAR=1 -DMF_LEVEL2_WINGSUIT=1 -DMF_DEV_STAGE_SKIP=1 -Isrc tests/dev_stage_skip_test.c -o /tmp/mf-pause-skip

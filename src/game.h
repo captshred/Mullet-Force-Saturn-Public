@@ -7,6 +7,12 @@
 #include "stage_config.h"
 #include "ricky_config.h"
 #include "world_config.h"
+#ifndef MF_LEVEL1_PROGRESSION
+#define MF_LEVEL1_PROGRESSION 0
+#endif
+#if MF_LEVEL1_PROGRESSION && (!MF_LEVEL1_WORLD_FLOW || !MF_LEVEL1_STAGE_CLEAR || !MF_BRUCE_RUNTIME || !MF_VEHICLE_AMBUSH || !MF_RICKY_ENEMY)
+#error Encounter progression requires the complete Level 1 world, vehicle and Bruce profile
+#endif
 /* 24.8 ground coordinates, fixed 60 Hz NTSC simulation. */
 #define MF_SCALE 256
 #define MF_DRUMS 3
@@ -133,7 +139,16 @@ typedef struct {
 #if MF_DEV_MODE
     int god_mode;
 #endif
+#if MF_LEVEL1_PROGRESSION
+    unsigned encounter_index;
+    int encounter_kos, encounter_cleared;
+#endif
 } mf_game;
+#if MF_LEVEL1_PROGRESSION
+int mf_encounter_quota(const mf_game *g);
+int mf_encounter_go(const mf_game *g);
+int mf_encounter_config_valid(void);
+#endif
 #if MF_VEHICLE_AMBUSH
 enum { MF_VEHICLE_TRIGGER_X=2240 };
 int mf_vehicle_warning_lane(const mf_game *g);

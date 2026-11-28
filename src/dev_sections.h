@@ -18,6 +18,9 @@ const char *mf_section_name(mf_section section);
 mf_section mf_section_current(const mf_game *game, mf_section previous);
 void mf_dev_refill_health(mf_game *game);
 void mf_section_init(mf_game *game, mf_section section);
+#if MF_LEVEL1_PROGRESSION
+int mf_encounter_restart(mf_game *game);
+#endif
 #endif
 
 #endif

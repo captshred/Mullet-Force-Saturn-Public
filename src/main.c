@@ -245,6 +245,9 @@ static void load_assets(void)
     static const char *dr[]={"DR0.TGA","DR1.TGA","DR2.TGA"};
     jo_color *pixels;
     jo_img img;
+#if MF_LEVEL1_PROGRESSION
+    if(!mf_encounter_config_valid()){asset_failure(109,"ENCOUNTER CONFIG",0);return;}
+#endif
     if(!create_palette(&street_palette,100))return;
     if(!mf_street_load(&street_palette,street)){asset_failure(110,"STREET",0);return;}
     if(!create_palette(&buck_palette,200))return;
@@ -709,7 +712,14 @@ static void draw_game(void)
     }
 #if MF_LEVEL1_STAGE_CLEAR
 #if MF_LEVEL1_WORLD_FLOW
+#if MF_LEVEL1_PROGRESSION
+    if(game.stage==MF_STAGE_LEVEL1 && !game.bruce.active)
+        jo_printf(14,3,"KO %02d/%02d  ",game.encounter_kos,mf_encounter_quota(&game));
+    else jo_printf(14,3,"KOs %04d  ",game.stage_kills);
+    jo_print(34,3,mf_encounter_go(&game) && !(game.ticks & 16)?"GO >":"    ");
+#else
     jo_printf(14,3,"KOs %04d",game.stage_kills);
+#endif
     jo_print(14,4,camera==MF_WORLD_CAMERA_MAX?"TEST END   ":mf_world_camera_y(camera)>0?"DIAGONAL   ":camera>960?"INTERSECT  ":camera>320?"NEON STRIP ":"           ");
 #else
     jo_printf(14,3,"KOs %02d/40",game.stage_kills);
@@ -825,7 +835,10 @@ static void update(void)
         last_vblank = now;
         if (mf_music_section_reset(now, dev_target == MF_SECTION_APRON)) {
             current_section = (mf_section)dev_target;
-            mf_section_init(&game, current_section);
+#if MF_LEVEL1_PROGRESSION
+            if(dev_selecting || dev_cursor != DEV_RESTART || !mf_encounter_restart(&game))
+#endif
+                mf_section_init(&game, current_section);
             spark_explosion = 0;
             dev_cursor = DEV_RESUME;
             dev_selecting = 0;
