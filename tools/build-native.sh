@@ -514,6 +514,9 @@ if [[ ${MF_NOAH_RUN:-0} == 1 ]]; then
         # ST0.TGA is required by the VDP2 startup name lookup.
         rm -f build/cd/ST{1..4}.TGA
     fi
+    if [[ $city == 1 ]]; then
+        rm -f build/cd/{STCELLS,STMAP,STPAL}.BIN
+    fi
     python3 tools/validate-noah-disc-e1.py --stage build/cd
 fi
 if [[ $performance_audit == 1 ]]; then printf "Performance audit diagnostics: enabled (P1 Y)\n" >> build/BUILD-INFO.txt; fi
